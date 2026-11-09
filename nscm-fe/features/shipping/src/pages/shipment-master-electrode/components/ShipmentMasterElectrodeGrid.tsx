@@ -49,6 +49,18 @@ const str = (v: unknown): string =>
 //   formatItem 으로 직접 칠하되, 색은 표준과 일치시킨다(비표준 #FFFDE7 사용 금지).
 const EDITABLE_CELL_BG = '#fff8cd';
 
+// MATERIAL 셀 Delete 시 함께 비울 **자재 파생칸**(Material 팝업이 채운 10칸 중 자재 식별분).
+//   Division/PlantSite 는 자재와 무관한 사용자 선택값이라 유지한다.
+const MATERIAL_CLEAR_COLUMNS = [
+  'MATERIAL_ID',
+  'MODEL_ID',
+  'CELL_TYPE',
+  'NICK_NAME',
+  'ELECTRODE_TYPE',
+  'ITEM_UOM',
+  'UOM_CONVERT_IN_TACT_TIME',
+] as const;
+
 // AS-IS spdMain "Ship Master Elec" (단일 그리드 25열). 조회=전체 lock, Edit/Insert=지정칸만 편집(editLock).
 //   셀 콤보 5종은 공용 DataGrid 가 admin 메타(cellCboDataTp + PARAM2/9/10)로 자동 배선(useRowParamCombos).
 //   화면은 (a) 모드×행상태 편집잠금(beginningEdit) (b) MATERIAL 셀팝업 (c) 파생·cascade 클리어(cellEditEnded)만 담당.
@@ -74,15 +86,18 @@ export const ShipmentMasterElectrodeGrid = ({
     [division]
   );
 
-  // POST_OPER -> POST_OPER_LT 파생 원천 (design 03 §1.2/§3.2 cs:615~623).
-  //   ELECTRODE_POST_OPER_CODE lookup: SEGMENT1=DIVISION_ID / SEGMENT2=CODE(POST_OPER) / SEGMENT5=LT.
+  // POST_OPER -> POST_OPER_LT 파생 원천 (design 03 §1.2/§3.2 cs:615~623, AS-IS dtElectrodePostOperCode).
+  //   lookup ELECTRODE_POST_OPER_CODE 는 PR_GET_LOOKUP_INFO_LIST 가 **헤더(SCM_ADM_LOOKUP_MASTER)가
+  //   정한 컬럼명**으로 동적 생성해 내려준다(실측 2026-11-06): SEGMENT1→DIVISION_ID / SEGMENT2→CODE /
+  //   SEGMENT5→LT. raw `SEGMENT1/2/5` 로 읽으면 전부 undefined → 키가 'undefined|undefined' 가 돼
+  //   LT 가 영영 안 채워졌다(사용자 신고 2026-11-06 — Post Oper 선택 시 LT 미입력). 헤더 컬럼명으로 읽는다.
   const [postOperLookup] = useTabLookupQueries({ filters: [{ lookupType: LOOKUP.POST_OPER }] });
   const postOperLtMap = useMemo(() => {
     const m = new Map<string, string>();
     (postOperLookup ?? []).forEach(r => {
-      const div = str(r.SEGMENT1);
-      const code = str(r.SEGMENT2);
-      if (code) m.set(`${div}|${code}`, str(r.SEGMENT5));
+      const div = str(r.DIVISION_ID);
+      const code = str(r.CODE);
+      if (code) m.set(`${div}|${code}`, str(r.LT));
     });
     return m;
   }, [postOperLookup]);
@@ -243,6 +258,23 @@ export const ShipmentMasterElectrodeGrid = ({
     g.cellEditEnded.addHandler(applyDerivations);
     g.pastedCell.addHandler(pastedCellHandler);
 
+    // MATERIAL 셀 삭제 — Material 은 팝업 전용이라 타이핑으로 못 지운다(AS-IS KeyPress 차단 cs:646~657).
+    //   한번 넣으면 못 지운다는 신고(2026-11-06)로 Delete/Backspace 에 MATERIAL + 자재 파생칸을 비우는
+    //   편의를 추가한다(AS-IS 엔 없던 TO-BE 편의). 편집가능 **신규행**에서만, Division/PlantSite 는 유지.
+    const keyDownHandler = (e: KeyboardEvent) => {
+      if (e.key !== 'Delete' && e.key !== 'Backspace') return;
+      const sel = g.selection;
+      const binding = g.columns[sel.col]?.binding ?? '';
+      if (!isMaterialPopupColumn(binding)) return;
+      const row = GridUtils.getRow(g, sel.row) as Record<string, unknown> | undefined;
+      if (!row || !isInsertRow(row) || !isEditMode) return;
+      MATERIAL_CLEAR_COLUMNS.forEach(k => setRowCell(row, k, ''));
+      e.preventDefault();
+      e.stopPropagation();
+      g.invalidate();
+    };
+    g.hostElement?.addEventListener('keydown', keyDownHandler, true);
+
     return () => {
       try {
         g.beginningEdit?.removeHandler(beginningEditHandler);
@@ -250,6 +282,7 @@ export const ShipmentMasterElectrodeGrid = ({
         g.formatItem?.removeHandler(formatItemHandler);
         g.cellEditEnded?.removeHandler(applyDerivations);
         g.pastedCell?.removeHandler(pastedCellHandler);
+        g.hostElement?.removeEventListener('keydown', keyDownHandler, true);
       } catch {
         /* unmount race */
       }

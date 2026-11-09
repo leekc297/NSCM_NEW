@@ -1,0 +1,16 @@
+{
+ "screen": "SCP0131",
+ "generated": "2026-11-07 19:45:20",
+ "vars": {
+  "dtMyDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "PARAM:Division",
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SCP0131_SalesSitePriority.cs:155 ← SCP0131_SalesSitePriority.cs:40",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  }
+ }
+}

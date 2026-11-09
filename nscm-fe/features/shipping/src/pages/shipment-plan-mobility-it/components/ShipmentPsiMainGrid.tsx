@@ -52,6 +52,14 @@ interface Props {
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
+// WH_IN 수량 입력 제한 — 정수만, 최대 10자리(음수 부호는 저장 시 차단)
+const MAX_QTY_DIGITS = 10;
+const QTY_PATTERN = new RegExp(`^-?\\d{1,${MAX_QTY_DIGITS}}$`);
+const sanitizeQty = (v: string): string => {
+  const digits = v.replace(/\D/g, '').slice(0, MAX_QTY_DIGITS);
+  return v.trim().startsWith('-') ? `-${digits}` : digits;
+};
+
 type DynKind = 'D' | 'W' | 'M' | 'B';
 const kindOf = (binding: string): DynKind | undefined =>
   binding.startsWith('D_')
@@ -346,15 +354,73 @@ export const ShipmentPsiMainGrid = ({
     //   W_/M_ 합계·과거 셀까지 허용한다. 편집 불가 셀에 값이 덮이는 것을 막는다(편집 게이트와 세트).
     const pastingCellHandler = (
       sender: FlexGridType,
-      e: { row: number; col: number; cancel: boolean }
+      e: { row: number; col: number; cancel: boolean; data: unknown }
     ) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
       if (!isMainCellEditable(row, binding, editableRef.current)) {
         e.cancel = true;
+        return;
       }
+      // 붙여넣기 값도 정수 10자리만 받는다. 콤마는 떼고 넣는다.
+      const pasted = str(e.data).replace(/,/g, '').trim();
+      if (pasted === '') return;
+      if (QTY_PATTERN.test(pasted)) e.data = pasted;
+      else e.cancel = true;
     };
     g.pastingCell.addHandler(pastingCellHandler);
+
+    const isQtyCell = (sender: FlexGridType, r: number, c: number): boolean => {
+      const binding = sender.columns[c]?.binding ?? '';
+      const row = GridUtils.getRow(sender, r) as Record<string, unknown> | undefined;
+      return isMainCellEditable(row, binding, editableRef.current);
+    };
+
+    // 수량 셀 키 입력 제한 — 숫자와 맨 앞 '-' 외 문자는 키 단계에서 버리고 10자리를 넘기지 않는다.
+    const qtyKeyHandler = (ev: KeyboardEvent) => {
+      if (ev.ctrlKey || ev.metaKey || ev.altKey || ev.key.length !== 1) return;
+      const sel = g.selection;
+      if (!sel || sel.row < 0 || sel.col < 0 || !isQtyCell(g, sel.row, sel.col)) return;
+      const edt = g.activeEditor;
+      const value = edt?.value ?? '';
+      const selStart = edt?.selectionStart ?? 0;
+      const selEnd = edt?.selectionEnd ?? 0;
+      const remaining = value.slice(0, selStart) + value.slice(selEnd);
+      let allow = false;
+      if (/\d/.test(ev.key)) allow = remaining.replace(/\D/g, '').length < MAX_QTY_DIGITS;
+      else if (ev.key === '-') allow = !edt || (selStart === 0 && !remaining.includes('-'));
+      if (allow) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+    };
+    g.hostElement.addEventListener('keydown', qtyKeyHandler, true);
+
+    // 한글 IME 입력, 편집창 안 붙여넣기 등 키 단계를 거치지 않는 입력은 편집창 값을 바로 정리한다.
+    const prepareCellForEditHandler = (sender: FlexGridType, e: { row: number; col: number }) => {
+      if (!isQtyCell(sender, e.row, e.col)) return;
+      const edt = sender.activeEditor;
+      if (!edt) return;
+      const clean = () => {
+        const v = sanitizeQty(edt.value);
+        if (v !== edt.value) edt.value = v;
+      };
+      edt.addEventListener('input', ev => {
+        if (!(ev as InputEvent).isComposing) clean();
+      });
+      edt.addEventListener('compositionend', clean);
+    };
+    g.prepareCellForEdit.addHandler(prepareCellForEditHandler);
+
+    // 최종 방어 — 그래도 형식이 맞지 않으면 편집을 취소해 이전 값을 유지한다.
+    const qtyEditEndingHandler = (
+      sender: FlexGridType,
+      e: { row: number; col: number; cancel: boolean }
+    ) => {
+      if (e.cancel || !isQtyCell(sender, e.row, e.col)) return;
+      const v = (sender.activeEditor?.value ?? '').replace(/,/g, '').trim();
+      if (v !== '' && !QTY_PATTERN.test(v)) e.cancel = true;
+    };
+    g.cellEditEnding.addHandler(qtyEditEndingHandler);
 
     const formatItemHandler = (
       sender: FlexGridType,
@@ -538,6 +604,9 @@ export const ShipmentPsiMainGrid = ({
         g.loadedRows?.removeHandler(applyMerge);
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastingCell?.removeHandler(pastingCellHandler);
+        g.hostElement?.removeEventListener('keydown', qtyKeyHandler, true);
+        g.prepareCellForEdit?.removeHandler(prepareCellForEditHandler);
+        g.cellEditEnding?.removeHandler(qtyEditEndingHandler);
         g.formatItem?.removeHandler(formatItemHandler);
         g.hostElement?.removeEventListener('dblclick', dblClickHandler);
         g.hostElement?.removeEventListener('click', clickHandler);

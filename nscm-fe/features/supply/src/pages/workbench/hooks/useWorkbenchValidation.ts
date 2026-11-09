@@ -31,6 +31,7 @@ import {
   EXISTING_ROW_REQUIRED_MSG,
   INSERT_REQUIRED_COLUMNS,
   ITEM_EXISTENCE_CHECK,
+  MKT_FCST_REQUIRED_82,
   MKT_FCST_REQUIRED_SMALL,
   MSG,
   PLAN_START_REVERSE_CHECK,
@@ -152,11 +153,14 @@ export const useWorkbenchValidation = () => {
         if (crud !== 'I' && crud !== 'M' && crud !== 'D') continue;
 
         if (crud === 'I') {
-          // 1. 신규 입력 필수 공백
+          // 1. 신규 입력 필수 공백 — MKT FCST 는 division 3분기(cs:929·938·948, E20260901-000686):
+          //   '40' = PLANT_SITE_ID·CELL_PROD_SITE_ID 제외, '82' = PLANT_SITE_ID 만 제외, 그 외 = 전건.
           const baseRequired =
             tab === TABS.MKT_FCST && sources.divisionId === DIVISION_CODE.SMALL
               ? MKT_FCST_REQUIRED_SMALL
-              : INSERT_REQUIRED_COLUMNS[tab];
+              : tab === TABS.MKT_FCST && sources.divisionId === DIVISION_CODE.DIV_82
+                ? MKT_FCST_REQUIRED_82
+                : INSERT_REQUIRED_COLUMNS[tab];
           // STOCK + 81_UC 는 LINE_ID·BEFORE_DEGAS 도 필수다(cs:1268~1273). 비UC 는 '-' 강제라 제외.
           const required =
             tab === TABS.STOCK && sources.divisionId === DIVISION_CODE.UC

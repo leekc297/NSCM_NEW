@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 320,
+  "at": "2026-11-07T08:47:45.226Z",
+  "user": "minyonglee1",
+  "test": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 267,
+  "at": "2026-11-07T08:47:58.535Z",
+  "user": "minyonglee1",
+  "test": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 287,
+  "at": "2026-11-07T08:48:00.074Z",
+  "user": "minyonglee1",
+  "test": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회"
+ }
+]

@@ -125,7 +125,7 @@ export const ALL_SENTINEL = 'ALL';
 //   TO-BE 미등록 AS-IS 코드는 문구기준 재매핑(자매 SCP0048 G-6 선례 준용). 재매핑분은 04_react-gap 에 기록.
 export const MSG = {
   REQUIRE_DIVISION: 'MSG00097', // 권한 division 없음(R-AUTH, design/01 §2.7)
-  SAVE_RESULT: 'MSG00004', // 저장 성공(design/03 §4.2 "S"=성공 → MSG00004)
+  SAVE_RESULT: 'MSG00002', // 저장 성공 → "Saved successfully."(design/03 §4.2 "S"=성공). AS-IS MSG00004는 TO-BE에서 "No changes to save."라 의미 오매칭 — MSG00002로 교정(2026-11-03)
   SAVE_ERROR: 'MSG00006', // 저장 에러(O_RESULT_CODE≠S, design/03 §4.2)
   NO_CHANGE: 'MSG00133', // 수정 내용 없음
   // Edit 진입 시 데이터 없음(R-EDIT, cs:428~432). AS-IS MSG00259 는 TO-BE 미등록 → 문구기준 재매핑
@@ -138,17 +138,17 @@ export const MSG = {
   //   MSG01222("Can not modify its Valid." 3언어 등록)로 통일(자매 SCP0048 G-6).
   VALID_REVERT: 'MSG01222',
   // 저장검증 N0~N9(design/03 §3-4). AS-IS MSG 코드 그대로 유지(TO-BE 등록 실측분).
-  N0_ELECTRODE_ITEM: 'MSG00257', // 신규행 ITEM_ID 가 전극아이템 목록에 없음
-  N1_END_OVERLAP: 'MSG00212', // 시작일 동일·종료일 상이(중첩 종료일)
-  N2_START_OVERLAP: 'MSG00213', // 종료일 동일·시작일 상이(중첩 시작일)
-  N3_PLANT_DUP: 'MSG00214', // 동일기간 PlantSite 중복
-  N4_PRIORITY_DUP: 'MSG00215', // 동일기간 Priority 중복
-  N5_PERIOD_OVERLAP: 'MSG00216', // 중첩기간
-  N6_CONTINUITY: 'MSG00217', // 기간 연속성(종료일+1 = 다음 시작일)
-  N7_PRIORITY_POSITIVE: 'MSG00107', // Priority 양의 정수
+  N0_ELECTRODE_ITEM: 'MSG01019', // 신규행 ITEM_ID 가 전극아이템 목록에 없음
+  N1_END_OVERLAP: 'MSG01129', // 시작일 동일·종료일 상이(중첩 종료일)
+  N2_START_OVERLAP: 'MSG01130', // 종료일 동일·시작일 상이(중첩 시작일)
+  N3_PLANT_DUP: 'MSG01131', // 동일기간 PlantSite 중복
+  N4_PRIORITY_DUP: 'MSG01132', // 동일기간 Priority 중복
+  N5_PERIOD_OVERLAP: 'MSG00700', // 중첩기간
+  N6_CONTINUITY: 'MSG01133', // 기간 연속성(종료일+1 = 다음 시작일)
+  N7_PRIORITY_POSITIVE: 'MSG01134', // Priority 양의 정수
   N8_DATE_ORDER: 'MSG00219', // from>to
   N8_DATE_RANGE: 'MSG00048', // 날짜범위(<17530101 / 공백)
-  N9_PRIORITY_ONE: 'MSG00220', // 동일기간 Priority=1 존재
+  N9_PRIORITY_ONE: 'MSG01137', // 동일기간 Priority=1 존재
 } as const;
 
 /**

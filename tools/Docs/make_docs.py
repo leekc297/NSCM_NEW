@@ -16,6 +16,8 @@
         MD/CSV 가 정본이고 Excel 은 읽는 사람용 사본이다. 원천이 없는 시트는 비우지 않고 "원천 없음" 을 적는다.
 """
 import sys, os, re, csv, json, datetime, glob
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Harness', 'verify'))  # asis_variant
+from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 sys.path.insert(0, HERE); import doc_archive  # noqa: E402
 try:
@@ -226,7 +228,7 @@ class Src:
                     pd_ = f"nscm-fe/features/{r.get('feature', '')}/src/pages/{r.get('page_dir', '')}"
                     if (r.get('menu_id') or '').upper() == ID and r.get('feature') and os.path.isdir(os.path.join(ROOT, pd_)):
                         self.page_dir = pd_; break
-        self.cur_files = [f for f in self.files if f.get('variant') == 'current']
+        self.cur_files = [f for f in self.files if is_main(f, self.pack)]
         self.divisions = [c for c in (self.grid[0].keys() if self.grid else []) if c not in ('sheet', 'sheet_rule', 'column', 'label', 'source')]
         self.has_agent = bool(self.md['analysis'] or self.md['screen_design'])
     def safe_name(self):
@@ -333,7 +335,7 @@ def build_design(S):
     if not areas and S.controls:
         kids = {}
         for c in S.controls:
-            if c.get('variant') != 'current': continue
+            if not is_main(c, S.pack): continue
             kids.setdefault(c.get('parent') or '(최상위)', []).append(f"{S.label_of(c.get('name')) or c.get('name')}({ctrl_kind(c.get('type'))})")
         for p, ks in kids.items(): areas.append([p, ', '.join(ks)])
     for a in areas: sb.row(a)
@@ -354,7 +356,7 @@ def build_design(S):
             sb.row([r[2] or r[0], kind, (r[6] if len(r) > 6 else ''), do, ('필수' if len(r) > 4 and r[4] == '필수' else '') + (f' · 초기값 {r[3]}' if len(r) > 3 and r[3] not in ('-', '') else '')]); n += 1
     if not n:
         for c in S.controls:
-            if c.get('variant') == 'current' and ctrl_kind(c.get('type')) in ('기간 선택', '날짜 선택', '다중 선택 목록', '콤보', '체크박스', '입력칸', '선택 버튼'):
+            if is_main(c, S.pack) and ctrl_kind(c.get('type')) in ('기간 선택', '날짜 선택', '다중 선택 목록', '콤보', '체크박스', '입력칸', '선택 버튼'):
                 sb.row([S.label_of(c.get('name')) or c.get('name'), ctrl_kind(c.get('type')), '', '', '']); n += 1
     if not n: sb.note('조회조건 원천 없음')
     sb.gap(); sb.sec('버튼'); sb.hdr(['버튼', '처리', '호출 SP', '결과 반영', '비고'])
@@ -364,7 +366,7 @@ def build_design(S):
             if len(r) >= 5: sb.row([r[0], r[2], r[3], r[4], '']); nb += 1
     if not nb:
         for c in S.controls:
-            if c.get('variant') == 'current' and ctrl_kind(c.get('type')) == '버튼': sb.row([c.get('name'), '', '', '', '']); nb += 1
+            if is_main(c, S.pack) and ctrl_kind(c.get('type')) == '버튼': sb.row([c.get('name'), '', '', '', '']); nb += 1
     if not nb: sb.note('버튼 원천 없음')
     # 5.GRID
     sb = SB(wb.create_sheet('5.GRID'), [26, 24, 30, 12, 12, 12, 12, 30]); sb.title('5. 그리드')
@@ -387,7 +389,7 @@ def build_design(S):
     acts_by_handler = {row[1]: row for t in md_tables(find_sec(S.sec['screen_design'], '액션 명세')) for row in t[1:] if len(row) > 2}
     i = 0
     for e in S.events:
-        if e.get('variant') not in ('current', '', None): continue
+        if not is_main(e, S.pack): continue
         i += 1; h = e.get('handler') or ''; a = acts_by_handler.get(h) or acts_by_handler.get(e.get('target'))
         tgt = e.get('target') or ''; tgt_l = S.label_of(tgt.replace('this.', '')) or tgt.replace('this.', '') or '화면'
         sb.row([f'E{i:02d}', tgt_l, ev_ko(e.get('event')), (a[2] if a else ''), (a[3] if a and len(a) > 3 else ''), (a[4] if a and len(a) > 4 else '')])
@@ -463,7 +465,7 @@ def build_analysis(S):
     sb = SB(wb.create_sheet('8.가시성_LAYER종속'), [26, 52, 40]); sb.title('8. 화면 요소의 표시 · 숨김 규칙'); sb.hdr(['화면 요소', '표시 규칙', '근거'])
     n8 = 0
     for c in S.controls:
-        if c.get('variant') != 'current': continue
+        if not is_main(c, S.pack): continue
         k = ctrl_kind(c.get('type'))
         if k in ('조회조건 영역', '영역', '그룹 영역', '탭', '분할 영역'): sb.row([S.label_of(c.get('name')) or c.get('name'), f'{k} — 하위 요소를 담는 컨테이너', '화면 구성']); n8 += 1
     for x in md_prose(find_sec(S.sec['web_components'], '표시 차이')) + md_prose(find_sec(S.sec['screen_design'], '미확정')): sb.row([x]); n8 += 1

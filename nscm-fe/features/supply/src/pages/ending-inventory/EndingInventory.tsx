@@ -11,7 +11,7 @@ import { useMessageStore, useUIStore } from '@shared/stores';
 
 import { EndingInventoryForm } from './components/EndingInventoryForm';
 import { EndingInventoryGrid } from './components/EndingInventoryGrid';
-import { MENU_ID, MSG, SEARCH_MODE, SHEETS } from './ending-inventory.constants';
+import { LBL, MENU_ID, MSG, SEARCH_MODE, SHEETS } from './ending-inventory.constants';
 import { useEndingInventoryStore } from './useEndingInventoryStore';
 
 // AS-IS: SCP0085_EndingInventory.cs — 조회 전용 Report. Find + Excel 실동작 / Edit·Save NO-OP.
@@ -74,6 +74,18 @@ export const EndingInventory = ({ tabId, title }: PageProps<MENU_ID>) => {
   }, [searchParams.mode, monthData, dailyData, filters]);
 
   const handleSearch = () => {
+    // 조회 필수값 검증(AS-IS checkRequiredOfSearch, cs:405) — 활성 모드 기간 피커가 비면 조회 차단.
+    //   일별=Date / 월마감=Month. MSG00429({0}=기간 라벨)로 안내하고 중단.
+    const isDaily = searchParams.mode === SEARCH_MODE.DAILY;
+    const periodValue = isDaily ? searchParams.date : searchParams.month;
+    if (!periodValue) {
+      const label = isDaily ? t(LBL.DATE, '_Date') : t(LBL.MONTH, '_Month');
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED_FIELD, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', label),
+      });
+      return;
+    }
     setFilters();
     void fetchStaticColumns();
   };

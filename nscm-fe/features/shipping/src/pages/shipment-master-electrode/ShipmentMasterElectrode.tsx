@@ -398,6 +398,11 @@ export const ShipmentMasterElectrode = ({ tabId, title }: PageProps<MENU_ID>) =>
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
+        // F10(조회조건 초기화) — 사용자 요청 2026-11-06: 서버 개인화 초기화에 더해 **즉시 한번** 화면
+        //   조회조건도 기본값으로 되돌린다(store reset() → Form effect 가 Division 을 첫 권한값으로 재시드,
+        //   나머지 Plant Site/Material/Nickname/Model 은 비우고 그리드도 초기화). staticColumns 는
+        //   MotherStore.resetSearchCondition 가 보존(SCP0124/SSP0017 동일 패턴).
+        resetConditionOnClient
       />
       {/* Edit 버튼 없음 — 2026-09-23 사용자 결정. 화면 진입이 곧 편집 모드이고, AS-IS 가 Edit 클릭 시
           수행하던 SSP Planner 권한체크는 위 마운트 effect 로 옮겼다. admin 버튼 메타의 EDIT 행은

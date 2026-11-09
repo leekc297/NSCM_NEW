@@ -28,13 +28,13 @@ const LOCKED_ALWAYS: ReadonlySet<string> = new Set([
   'PRE_KEY_VALUES',
 ]);
 
-// ITEM_ID 는 텍스트 직접입력이 아니라 더블클릭 팝업으로만 채워진다(design 01 §2 L9, 02 §4.6) —
-//   신규행·기존행 모두 셀 편집기는 열지 않는다(팝업 경로만 허용).
-const POPUP_ONLY: ReadonlySet<string> = new Set(['ITEM_ID']);
-
+// ITEM_ID 는 FPTextModal 셀(DB 메타 CELL_CONTROL_OBJECT_TYPE_CODE='FPTextModal' + INPUT_TP_CD='M'
+//   실측 2026-11-05) — 키인 + 더블클릭 팝업 동시 허용이라 편집기 진입을 막지 않는다. 팝업은
+//   handleDblClick, 키인은 기본 텍스트 편집이 담당한다([[grid-modal-cell-type-keyin-mapping]]).
+//   자매 SCP0127 precedeSafetyStockDayEditLock(ITEM_ID ∈ EDITABLE_COLUMNS)과 동형.
 export const isMainCellEditable = (binding: string, row: WijmoRowItem | undefined): boolean => {
   if (!row) return false;
-  return !LOCKED_ALWAYS.has(binding) && !POPUP_ONLY.has(binding);
+  return !LOCKED_ALWAYS.has(binding);
 };
 
 // 신규행 기본값 — GAP-06 해소(본 회차 AS-IS 원문 `.cs:507-515` 직접 대조 완료). defaultData.Add

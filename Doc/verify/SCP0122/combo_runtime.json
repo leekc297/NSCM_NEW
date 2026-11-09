@@ -1,5 +1,5 @@
 {
- "at": "2026-11-04T09:53:19.729Z",
+ "at": "2026-11-08T02:45:40.884Z",
  "search": {
   "Div": {
    "label": "Div",
@@ -179,77 +179,6 @@
   }
  },
  "combos": [
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPMZ_PRS_CD'\",\"mnuId\":\"SCP0122\"}",
-   "status": 200,
-   "n": 1,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "P001",
-     "v": "SCP 엔진 최적화 프로세스"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"ActivityCode\",\"mnuId\":\"SCP0122\"}",
-   "status": 200,
-   "n": 9,
-   "keys": [
-    "CODE",
-    "AUTO_YN",
-    "CONFIRM_YN",
-    "PROGRAM_NAME",
-    "LINK_UI_TYPE",
-    "OPTION_YN",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "A001",
-     "v": "Master Validation"
-    },
-    {
-     "c": "A002",
-     "v": "Create Plan ID"
-    },
-    {
-     "c": "A003",
-     "v": "Engine Run"
-    },
-    {
-     "c": "A004",
-     "v": "Plan Out Review and Amend"
-    },
-    {
-     "c": "A005",
-     "v": "FP Target I/F"
-    },
-    {
-     "c": "A006",
-     "v": "Release"
-    },
-    {
-     "c": "A007",
-     "v": "Input Constraint"
-    },
-    {
-     "c": "A008",
-     "v": "Constraint Validation"
-    },
-    {
-     "c": "A009",
-     "v": "Ship Plan Semi Cut-Off (To Packer)"
-    }
-   ],
-   "user": "minyonglee1"
-  },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"PlanGroup_SCP_ALL\",\"mnuId\":\"SCP0122\"}",
@@ -450,6 +379,60 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"ActivityCode\",\"mnuId\":\"SCP0122\"}",
+   "status": 200,
+   "n": 9,
+   "keys": [
+    "CODE",
+    "AUTO_YN",
+    "CONFIRM_YN",
+    "PROGRAM_NAME",
+    "LINK_UI_TYPE",
+    "OPTION_YN",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "A001",
+     "v": "Master Validation"
+    },
+    {
+     "c": "A002",
+     "v": "Create Plan ID"
+    },
+    {
+     "c": "A003",
+     "v": "Engine Run"
+    },
+    {
+     "c": "A004",
+     "v": "Plan Out Review and Amend"
+    },
+    {
+     "c": "A005",
+     "v": "FP Target I/F"
+    },
+    {
+     "c": "A006",
+     "v": "Release"
+    },
+    {
+     "c": "A007",
+     "v": "Input Constraint"
+    },
+    {
+     "c": "A008",
+     "v": "Constraint Validation"
+    },
+    {
+     "c": "A009",
+     "v": "Ship Plan Semi Cut-Off (To Packer)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0122\"}",
    "status": 200,
    "n": 14,
@@ -529,6 +512,23 @@
     {
      "c": "EE_HG",
      "v": "EE_HG Electrode(HG)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPMZ_PRS_CD'\",\"mnuId\":\"SCP0122\"}",
+   "status": 200,
+   "n": 1,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "P001",
+     "v": "SCP 엔진 최적화 프로세스"
     }
    ],
    "user": "minyonglee1"

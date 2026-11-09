@@ -1,0 +1,219 @@
+{
+ "mid": "SSP0025",
+ "asis_id": "SSP0025",
+ "account": "minyonglee1",
+ "group": "ADMIN",
+ "results": [
+  {
+   "kind": "SEARCH",
+   "target": "Div",
+   "label": "Div*",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 8,
+   "asis_src": "UP_FX_GetCommonDataList MyDivision @InitControls (SSP0025_ShipmentRequestorPIC.cs:133 ← SSP0025_ShipmentReques)",
+   "asis_n": 8,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 8건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "공통 8건이 ORDER BY ['ATTRIBUTE1'] 키 순서(동률 내부 순서는 기준 없음)",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SSP0025_ShipmentRequestorPIC.cs:133) = TO-BE 표시 NAME (CODE≠NAME 후보 8/8건 확인)"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Plant Site",
+   "label": "Plant Site",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 9,
+   "asis_src": "UP_FX_GetCommonDataList PlantCell @SetChangedControl (SSP0025_ShipmentRequestorPIC.cs:141 ← SSP0025_ShipmentReques)",
+   "asis_n": 7,
+   "rep": "NAME",
+   "branches": 2,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 7건 집합 일치 · 분기 원천 2종 중 가장 가까운 원천 기준(분기 선택은 C2 행에서 판정)",
+   "b3": "PASS",
+   "b3_why": "공통 7건이 ORDER BY ['SITE_DESCRIPTION'] 키 순서(동률 내부 순서는 기준 없음)",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCheckedList.DataSource → row[1]=NAME) = TO-BE 표시 NAME (CODE≠NAME 후보 7/7건 확인)",
+   "cr": [
+    "CR-002"
+   ]
+  },
+  {
+   "kind": "CASCADE",
+   "target": "Plant Site",
+   "label": "Plant Site",
+   "scenario": "상위 Div=40",
+   "tobe_n": 6,
+   "asis_src": "UP_FX_GetCommonDataList PlantCell @SetChangedControl (SSP0025_ShipmentRequestorPIC.cs:141 ← SSP0025_ShipmentReques)",
+   "asis_n": 4,
+   "rep": "NAME",
+   "branches": 2,
+   "asis_only": [
+    "AZ00-A"
+   ],
+   "tobe_only": [
+    "AC00-A"
+   ],
+   "asis_only_n": 1,
+   "tobe_only_n": 1,
+   "explain": {
+    "AZ00-A": "설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ10-A' 가 AS-IS 마스터에서 조회 안 됨)",
+    "AC00-A": "설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ10-A' 가 AS-IS 마스터에서 조회 안 됨)"
+   },
+   "b4": "판정필요",
+   "why": "[CR-002 확정 규칙 대상 — Team(DEPT) 콤보·cascade 의 원천은 모든 화면에서 SCM_MST_SITE_ITEM(SSPM).DEPT_ID 로 ] AS-IS 와의 차이가 이 규칙에 따른 변경인지 확인 · AS-IS 4건 vs TO-BE 6건 · 차이 2건 설명 불가: AZ00-A: 설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ10-A' 가 AS-IS 마스터에서 조회 안 됨); AC00-A: 설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ10-A' 가 AS-IS 마스터에서 조회 안 됨) · 분기 원천 2종 중 가장 가까운 원천 기준(분기 선택은 C2 행에서 판정)",
+   "b3": "PASS",
+   "b3_why": "공통 3건이 ORDER BY ['SITE_DESCRIPTION'] 키 순서(동률 내부 순서는 기준 없음)",
+   "cr": [
+    "CR-002"
+   ]
+  },
+  {
+   "kind": "GRID",
+   "target": "DIVISION_ID",
+   "label": "Div",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 8,
+   "asis_src": "UP_FX_GetCommonDataList MyDivision @InsertRow (SSP0025_ShipmentRequestorPIC.cs:318 ← SSP0025_ShipmentReques)",
+   "asis_n": 8,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 8건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "공통 8건이 ORDER BY ['ATTRIBUTE1'] 키 순서(동률 내부 순서는 기준 없음)"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "DIVISION_ID",
+   "label": "Div",
+   "scenario": "기존행(DIVISION_ID=81, ITEM_ID=APCAN1146A)",
+   "tobe_n": 8,
+   "asis_src": "UP_FX_GetCommonDataList MyDivision @InsertRow (SSP0025_ShipmentRequestorPIC.cs:318 ← SSP0025_ShipmentReques)",
+   "asis_n": 8,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 8건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "공통 8건이 ORDER BY ['ATTRIBUTE1'] 키 순서(동률 내부 순서는 기준 없음)"
+  },
+  {
+   "kind": "GRID",
+   "target": "SITE_DESCRIPTION",
+   "label": "Plant Site",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 9,
+   "asis_src": "UP_FX_GetCommonDataList PlantCell @InsertRow (SSP0025_ShipmentRequestorPIC.cs:320 ← SSP0025_ShipmentReques)",
+   "asis_n": 7,
+   "rep": "NAME",
+   "branches": 2,
+   "asis_only": [
+    "HQ07-A"
+   ],
+   "tobe_only": [
+    "AC00-A"
+   ],
+   "asis_only_n": 1,
+   "tobe_only_n": 1,
+   "explain": {
+    "HQ07-A": "설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ11-A' 가 AS-IS 마스터에서 조회 안 됨)",
+    "AC00-A": "설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ11-A' 가 AS-IS 마스터에서 조회 안 됨)"
+   },
+   "b4": "판정필요",
+   "why": "AS-IS 7건 vs TO-BE 9건 · 차이 2건 설명 불가: HQ07-A: 설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ11-A' 가 AS-IS 마스터에서 조회 안 됨); AC00-A: 설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ11-A' 가 AS-IS 마스터에서 조회 안 됨) · 분기 원천 2종 중 가장 가까운 원천 기준(분기 선택은 C2 행에서 판정)",
+   "b3": "PASS",
+   "b3_why": "공통 6건이 ORDER BY ['SITE_DESCRIPTION'] 키 순서(동률 내부 순서는 기준 없음)"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "SITE_DESCRIPTION",
+   "label": "Plant Site",
+   "scenario": "기존행(DIVISION_ID=81, ITEM_ID=APCAN1146A)",
+   "tobe_n": 9,
+   "asis_src": "UP_FX_GetCommonDataList PlantCell @SpdMain_CellClick (SSP0025_ShipmentRequestorPIC.cs:640 ← SSP0025_ShipmentReques)",
+   "asis_n": 7,
+   "rep": "NAME",
+   "branches": 2,
+   "asis_only": [
+    "HQ07-A"
+   ],
+   "tobe_only": [
+    "AC00-A"
+   ],
+   "asis_only_n": 1,
+   "tobe_only_n": 1,
+   "explain": {
+    "HQ07-A": "설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ11-A' 가 AS-IS 마스터에서 조회 안 됨)",
+    "AC00-A": "설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ11-A' 가 AS-IS 마스터에서 조회 안 됨)"
+   },
+   "b4": "판정필요",
+   "why": "[CR-002 확정 규칙 대상 — Team(DEPT) 콤보·cascade 의 원천은 모든 화면에서 SCM_MST_SITE_ITEM(SSPM).DEPT_ID 로 ] AS-IS 와의 차이가 이 규칙에 따른 변경인지 확인 · AS-IS 7건 vs TO-BE 9건 · 차이 2건 설명 불가: HQ07-A: 설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ11-A' 가 AS-IS 마스터에서 조회 안 됨); AC00-A: 설명 불가(조건 해석 검증 실패 — 공통 후보 'HQ11-A' 가 AS-IS 마스터에서 조회 안 됨) · 분기 원천 2종 중 가장 가까운 원천 기준(분기 선택은 C2 행에서 판정)",
+   "b3": "PASS",
+   "b3_why": "공통 6건이 ORDER BY ['SITE_DESCRIPTION'] 키 순서(동률 내부 순서는 기준 없음)",
+   "cr": [
+    "CR-002"
+   ]
+  },
+  {
+   "kind": "GRID",
+   "target": "VALID_YN",
+   "label": "Active",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 2,
+   "asis_src": "STATIC YesOrNo @SheetMeta (SCM_MST_SHEET_COLUMNS SSP0025/Shipment Requestor PIC/VALID_Y)",
+   "asis_n": 2,
+   "rep": "CODE",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 2건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "고정 목록 순서 일치: TO-BE ['Y', 'N'] / AS-IS ['Y', 'N']"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "VALID_YN",
+   "label": "Active",
+   "scenario": "기존행(DIVISION_ID=81, ITEM_ID=APCAN1146A)",
+   "tobe_n": 2,
+   "asis_src": "STATIC YesOrNo @SheetMeta (SCM_MST_SHEET_COLUMNS SSP0025/Shipment Requestor PIC/VALID_Y)",
+   "asis_n": 2,
+   "rep": "CODE",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 2건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "고정 목록 순서 일치: TO-BE ['Y', 'N'] / AS-IS ['Y', 'N']",
+   "cr": [
+    "CR-059"
+   ]
+  }
+ ]
+}

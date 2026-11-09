@@ -19,7 +19,11 @@ export enum SHEETS {
   //   시트 바인딩 2행만 신규 등록한다(06_register_plan_id_create_popup.sql).
   PLAN_ID_INFO = 'planIdInfo', // 팝업 초기정보 조회 (5커서)
   PLAN_ID_CREATE = 'planIdCreate', // 팝업 Plan ID 생성 저장
+  PLAN_ID_CREATE_82 = 'planIdCreate82',
 }
+
+// Create Plan ID 팝업에서 LINK/Pack-Module/Cell 3단 전용 레이아웃·저장 프로시저를 쓰는 division.
+export const DIVISION_ESS = '82';
 
 // FE 응답 키 = SCM_ADM_PROC_M.COL_NM 실측값. 커서 인자명(O_RC1)과 별개 축이며 이 화면은 o_rc1 이
 //   아니다 — 자매 SCP0122 의 'o_rc1' 을 복사하면 rows 가 항상 빈 배열(hook #80, design 03 §4.1).
@@ -38,6 +42,7 @@ export const PLAN_ID_INFO_RESPONSE_SET = {
   FP_PLAN: 'fpPlanList', // O_RC3 CODE·NAME·PLAN_TYPE (FP/SSP 후보)
   SCP_PLAN: 'scpPlanList', // O_RC4 CODE·NAME·PLAN_TYPE(SCP) 후보
   PLAN_INFO: 'planInfo', // O_RC5 기생성 Plan ID 상세(조회모드에서만 1행)
+  PARAM_LIST: 'pramTpList',
 } as const;
 
 // admin SCM_MST_SHEET_COLUMNS.SHEET_NAME (AS-IS 시트명 그대로, DB 실측). 컬럼 메타 조회 sheetNm.
@@ -60,6 +65,13 @@ export const COMBO = {
   //   row.CODE 가 항상 undefined 가 된다(LookupResponse 가 인덱스 시그니처라 type-check 로도 안 잡힌다).
   //   LookupCommon 콤보 SQL 은 `SEGMENT1 CODE, SEGMENT2 NAME` 별칭을 보장한다(design 02 §5 데이터계약 #4).
   LOOKUP_COMMON: 'LookupCommon',
+  // PlanControlGrid OPMZ_PLAN_ID 셀 콤보(design 03 §1.3, SCM_MST_SHEET_COLUMNS.CELL_CBO_DATA_TP).
+  //   실측(Network admin/combo?src=grid 요청 본문) comboId='PlanID_SCP_ALL' — design 문서의 약칭
+  //   "PlanID" 가 아니다. 행 파라미터(PARAM10='D') 콤보라 useRowParamCombos 가 src='grid' 로 조회하고
+  //   queryKey 가 ['combo', scope, param, 'grid'] 다 — tabId prefix 가 아니라 A002 Create Plan ID
+  //   저장 후 invalidateQueries({queryKey:[tabId]}) 로는 갱신되지 않는다. useInvalidateCombos(comboId
+  //   매칭) 로 따로 무효화해야 새 Plan ID 가 탭을 나갔다 들어오지 않아도 드롭다운에 바로 보인다.
+  PLAN_ID: 'PlanID_SCP_ALL',
 } as const;
 
 // 일단위 Plan Date 운영 Division 집합 — 실측 2행(81_UC, EE_UC). SEGMENT2 가 '-' 라 표시용이
@@ -163,7 +175,7 @@ export const MSG = {
   NO_AUTH_DIVISION: 'MSG00667',
   NO_SAVE_PERMISSION: 'MSG01125',
   SELECT_REQUIRED: 'MSG01122', // AS-IS MSG00093 "Select {0}."
-  CONFIRM_RUN: 'MSG01456', // AS-IS MSG00183 "Do you want to run?"
+  CONFIRM_RUN: 'MSG00033', // AS-IS MSG00183 "Do you want to run?"
   CONFIRM_CONFIRM: 'MSG01197', // AS-IS MSG00184 "Do you want to confirm?"
   CONFIRM_RELEASE: 'MSG01438', // AS-IS MSG00465 "Do you want to release?"
   CONFIRM_RERUN: 'MSG01439', // AS-IS MSG00466 재실행 확인
@@ -177,12 +189,12 @@ export const MSG = {
   //   CONFIRM_CONFIRM(MSG01197)과 동일 코드라 "이전 Activity 미완료" 자리에 "Confirm하시겠습니까?"가
   //   떴다(실사용자 재현 확인). MAX(MSG_ID)='MSG01478' 재확인 후 MSG01479~84 로 재채번
   //   (`design/08_fix_msg_code_collision.sql`, DB 미반영 — 적용 전까지 KO/EN/CN 번들 fallback 으로 동작).
-  PRE_ACTIVITY_NOT_DONE: 'MSG01479', // B11
-  PLAN_ID_ALREADY_PROCESSED: 'MSG01480', // B24
-  ENGINE_RUN_NOT_EXECUTED: 'MSG01481', // B30 · B37
-  SAVE_CONFIRMED: 'MSG01482', // 저장 성공 — confirm_yn='Y'
-  SAVE_EXECUTED: 'MSG01483', // 저장 성공 — A003·A004·A005·A009 + A002 팝업 Plan ID 생성(AS-IS "Executed.")
-  SAVE_RELEASED: 'MSG01484', // 저장 성공 — A006
+  PRE_ACTIVITY_NOT_DONE: 'MSG01490', // B11
+  PLAN_ID_ALREADY_PROCESSED: 'MSG01491', // B24
+  ENGINE_RUN_NOT_EXECUTED: 'MSG01492', // B30 · B37
+  SAVE_CONFIRMED: 'MSG01493', // 저장 성공 — confirm_yn='Y'
+  SAVE_EXECUTED: 'MSG01494', // 저장 성공 — A003·A004·A005·A009 + A002 팝업 Plan ID 생성(AS-IS "Executed.")
+  SAVE_RELEASED: 'MSG01495', // 저장 성공 — A006
   // A002 팝업 Frozen Period 검증 — 시작일 > 종료일 금지(AS-IS MSG00108, TO-BE 동일 코드 실재).
   INVALID_PERIOD: 'MSG00108',
 } as const;

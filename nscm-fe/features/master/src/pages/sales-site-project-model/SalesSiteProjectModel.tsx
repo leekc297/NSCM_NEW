@@ -246,7 +246,9 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   _artifacts/_deploy_packages/DMF0005_BTN_INSERT_DELETE_20261007/ (SAVE 보유 5그룹에 동일 부여).
   const hotkeyConfig: HotkeyConfig = {
     insert: hasButton('INSERT') ? handleInsert : false,
-    save: hasButton('SAVE') ? handleSave : false,
+    // Save 는 시트 단위 — 메뉴 단위면 modelChange SAVE 와 합쳐져 group menu 에서 production SAVE 만
+    //   꺼도 버튼이 남는다. 하단(Purchase) 저장도 production/SAVE 로 나가므로 어느 탭이든 production 기준.
+    save: hasButton('SAVE', SHEETS.PRODUCTION) ? handleSave : false,
     search: handleSubmit,
     delete: hasButton('DELETE') ? handleDelete : false,
     manual: false,

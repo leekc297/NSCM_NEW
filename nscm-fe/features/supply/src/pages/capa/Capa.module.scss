@@ -9,6 +9,15 @@
   }
 }
 
+// 조회 전용 안내 — 버튼·요약 배지와 분리된 전체 폭 단독 줄, 가운데 정렬(2026-11-05).
+.readonlyNotice {
+  margin: 4px 8px 0;
+  padding: 6px 12px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 // 저장 진행 스피너 — 조회 로딩과 동일한 딤 오버레이 + 중앙 원형(기준: shipment-change-request-plan actionSpinner).
 .actionSpinner {
   position: absolute;

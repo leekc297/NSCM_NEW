@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 294,
+  "at": "2026-11-07T08:22:17.466Z",
+  "user": "minyonglee1",
+  "test": "D6 Insert 위치·상태 = AS-IS"
+ }
+]

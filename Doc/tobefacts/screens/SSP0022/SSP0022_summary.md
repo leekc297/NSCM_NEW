@@ -1,57 +1,64 @@
 # SSP0022 — To-Be Fact Pack 요약
 
 - page_key: `shipping/shipment-request-electrode` · feature: shipping · As-is Fact Pack 있음
-- 파일 19 · 엔드포인트 호출 15 (미해결 1, 주석 속 0) · 이벤트 54 · 컴포넌트 사용 97 · 하드코딩 컬럼 3 · 메시지 47
-- Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 3건
+- 파일 22 · 엔드포인트 호출 19 (미해결 1, 주석 속 0) · 이벤트 74 · 컴포넌트 사용 127 · 하드코딩 컬럼 5 · 메시지 53
+- Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 5건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/shipping/src/pages/shipment-request-electrode/components/ExcelUploadModal.module.scss | component | 47 |
 | features/shipping/src/pages/shipment-request-electrode/components/ExcelUploadModal.tsx | component | 308 |
-| features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | component | 128 |
-| features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailGrid.tsx | component | 97 |
+| features/shipping/src/pages/shipment-request-electrode/components/modals/BodItemModal.tsx | component | 289 |
+| features/shipping/src/pages/shipment-request-electrode/components/modals/ShipmentRequestInsertModal.module.scss | component | 23 |
+| features/shipping/src/pages/shipment-request-electrode/components/modals/ShipmentRequestInsertModal.tsx | component | 490 |
+| features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | component | 165 |
+| features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailGrid.tsx | component | 173 |
 | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.module.scss | component | 29 |
-| features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | component | 406 |
-| features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | component | 349 |
+| features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | component | 437 |
+| features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | component | 520 |
 | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeStockGrid.tsx | component | 44 |
 | features/shipping/src/pages/shipment-request-electrode/index.ts | index | 2 |
-| features/shipping/src/pages/shipment-request-electrode/shipment-request-electrode.constants.ts | constants | 211 |
-| features/shipping/src/pages/shipment-request-electrode/shipment-request-electrode.types.ts | types | 58 |
+| features/shipping/src/pages/shipment-request-electrode/shipment-request-electrode.constants.ts | constants | 256 |
+| features/shipping/src/pages/shipment-request-electrode/shipment-request-electrode.types.ts | types | 87 |
 | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.module.scss | style | 25 |
-| features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | page | 678 |
-| features/shipping/src/pages/shipment-request-electrode/useShipmentRequestElectrodeStore.ts | store | 394 |
+| features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | page | 923 |
+| features/shipping/src/pages/shipment-request-electrode/useShipmentRequestElectrodeStore.ts | store | 379 |
 | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.dynamicColumn.ts | util | 76 |
-| features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.editLock.ts | util | 33 |
+| features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.editLock.ts | util | 121 |
 | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.footerSum.ts | util | 78 |
-| features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.save.ts | util | 200 |
+| features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.save.ts | util | 332 |
 | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.spreadHeader.ts | util | 235 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | /SSP0022/{sheetName}/EXCEL/excel-upload | http | 1 | N | ExcelUploadModal.tsx:133 |
-| (useTabComboQueries) | hook | 4 | Y | ShipmentRequestElectrodeForm.tsx:59 ShipmentRequestElectrodeForm.tsx:68 ShipmentRequestElectrodeForm.tsx:72 ShipmentRequestElectrodeForm.tsx:76 |
-| SSP0022/main//call-proc | hook | 1 | Y | ShipmentRequestElectrode.tsx:134 |
-| SSP0022/requestDetail//call-proc | hook | 1 | Y | ShipmentRequestElectrode.tsx:141 |
-| SSP0022/stockDetail//call-proc | hook | 1 | Y | ShipmentRequestElectrode.tsx:151 |
-| SSP0022/spreadTitle//call-proc | hook | 1 | Y | ShipmentRequestElectrode.tsx:163 |
-| SSP0022/requestDetailExcel//call-proc | hook | 1 | Y | ShipmentRequestElectrode.tsx:213 |
-| /SSP0022/main/EXCEL/call-proc | http | 1 | Y | ShipmentRequestElectrode.tsx:437 |
-| /admin/menu/SSP0022/search-conditions | http | 1 | Y | useShipmentRequestElectrodeStore.ts:147 |
-| /admin/menu/SSP0022/column | http | 1 | Y | useShipmentRequestElectrodeStore.ts:358 |
-| /admin/menu/SSP0022/measure | http | 1 | Y | useShipmentRequestElectrodeStore.ts:374 |
-| /SSP0022/main/SAVE/call-proc | http | 1 | Y | shipment-request-electrode.save.ts:189 |
+| SSP0022/bodItemPopup//call-proc | hook | 1 | Y | BodItemModal.tsx:115 |
+| (useTabLookupQueries) | hook | 1 | Y | ShipmentRequestInsertModal.tsx:130 |
+| SSP0022/bodItemPopup/SEARCH/call-proc | callProc | 1 | Y | ShipmentRequestInsertModal.tsx:186 |
+| (useTabComboQueries) | hook | 4 | Y | ShipmentRequestElectrodeForm.tsx:69 ShipmentRequestElectrodeForm.tsx:93 ShipmentRequestElectrodeForm.tsx:97 ShipmentRequestElectrodeForm.tsx:101 |
+| /SSP0022/main/USER_CHECK/call-proc | http | 1 | Y | ShipmentRequestElectrode.tsx:91 |
+| SSP0022/main//call-proc | hook | 1 | Y | ShipmentRequestElectrode.tsx:188 |
+| SSP0022/requestDetail//call-proc | hook | 1 | Y | ShipmentRequestElectrode.tsx:195 |
+| SSP0022/stockDetail//call-proc | hook | 1 | Y | ShipmentRequestElectrode.tsx:205 |
+| SSP0022/spreadTitle//call-proc | hook | 1 | Y | ShipmentRequestElectrode.tsx:217 |
+| SSP0022/requestDetailExcel//call-proc | hook | 1 | Y | ShipmentRequestElectrode.tsx:267 |
+| /SSP0022/main/EXCEL/call-proc | http | 1 | Y | ShipmentRequestElectrode.tsx:613 |
+| /admin/menu/SSP0022/search-conditions | http | 1 | Y | useShipmentRequestElectrodeStore.ts:154 |
+| /admin/menu/SSP0022/column | http | 1 | Y | useShipmentRequestElectrodeStore.ts:343 |
+| /admin/menu/SSP0022/measure | http | 1 | Y | useShipmentRequestElectrodeStore.ts:359 |
+| /SSP0022/main/SAVE/call-proc | http | 1 | Y | shipment-request-electrode.save.ts:197 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
 |---|---|---|---|
 | main | divisionId companyId plantId cellType planStartYyyymmdd fromYyyymmdd toYyyymmdd modelId itemId nickName sesUserId mnuId sheetName realFlag myModelChk partLeaderChk teamLeaderChk delegateChk nonChk | o_rc1 | PKG_SSP0022 PKG_DM0003 PKG_SSP0002 P_SSP0022_GET_SHIPMENT_PSI P_SSP0022_GET_REQUEST_DETAIL P_SSP0022_GET_STOCK_DETAIL P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN P_SSP0022_GET_SHEET_CALENDAR_3SPAN P_SSP0022_GET_ITEM_POPUP |
-| requestDetail | divisionId companyId modelId itemId nickName fromYyyymmdd toYyyymmdd sesUserId mnuId | o_rc1 | PKG_SSP0022 PKG_DM0003 PKG_SSP0002 P_SSP0022_GET_SHIPMENT_PSI P_SSP0022_GET_REQUEST_DETAIL P_SSP0022_GET_STOCK_DETAIL P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN P_SSP0022_GET_SHEET_CALENDAR_3SPAN P_SSP0022_GET_ITEM_POPUP |
+| requestDetail | divisionId companyId modelId itemId nickName fromYyyymmdd toYyyymmdd requestorId sesUserId mnuId | o_rc1 | PKG_SSP0022 PKG_DM0003 PKG_SSP0002 P_SSP0022_GET_SHIPMENT_PSI P_SSP0022_GET_REQUEST_DETAIL P_SSP0022_GET_STOCK_DETAIL P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN P_SSP0022_GET_SHEET_CALENDAR_3SPAN P_SSP0022_GET_ITEM_POPUP |
 | stockDetail | divisionId companyId planStartYyyymmdd plantId cellType modelId itemId lotId sesUserId mnuId | o_rc1 | PKG_SSP0022 PKG_DM0003 PKG_SSP0002 P_SSP0022_GET_SHIPMENT_PSI P_SSP0022_GET_REQUEST_DETAIL P_SSP0022_GET_STOCK_DETAIL P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN P_SSP0022_GET_SHEET_CALENDAR_3SPAN P_SSP0022_GET_ITEM_POPUP |
 | requestDetailExcel | divisionId companyId modelId itemId sesUserId mnuId | o_rc1 | PKG_SSP0022 PKG_DM0003 PKG_SSP0002 P_SSP0022_GET_SHIPMENT_PSI P_SSP0022_GET_REQUEST_DETAIL P_SSP0022_GET_STOCK_DETAIL P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN P_SSP0022_GET_SHEET_CALENDAR_3SPAN P_SSP0022_GET_ITEM_POPUP |
 | spreadTitle | fromYyyymmdd toYyyymmdd | o_rc1 | PKG_SSP0022 PKG_DM0003 PKG_SSP0002 P_SSP0022_GET_SHIPMENT_PSI P_SSP0022_GET_REQUEST_DETAIL P_SSP0022_GET_STOCK_DETAIL P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN P_SSP0022_GET_SHEET_CALENDAR_3SPAN P_SSP0022_GET_ITEM_POPUP |
-| bodItemPopup | divisionId modelId itemId sesUserId | o_rc1 | PKG_SSP0022 PKG_DM0003 PKG_SSP0002 P_SSP0022_GET_SHIPMENT_PSI P_SSP0022_GET_REQUEST_DETAIL P_SSP0022_GET_STOCK_DETAIL P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN P_SSP0022_GET_SHEET_CALENDAR_3SPAN P_SSP0022_GET_ITEM_POPUP |
+| bodItemPopup | divisionId fromSiteId toSiteId itemId bodId incoterms transportMode planStartYyyymmdd | o_rc1 | P_SSP0022_GET_ITEM_POPUP PKG_SSP0022 PKG_DM0003 PKG_SSP0002 P_SSP0022_GET_SHIPMENT_PSI P_SSP0022_GET_REQUEST_DETAIL P_SSP0022_GET_STOCK_DETAIL P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN P_SSP0022_GET_SHEET_CALENDAR_3SPAN |
 
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
@@ -60,80 +67,101 @@
 | Button | onClick | <arrow> handleValidate | jsx | features/shipping/src/pages/shipment-request-electrode/components/ExcelUploadModal.tsx | 255 |
 | Button | onClick | <arrow> handleSave | jsx | features/shipping/src/pages/shipment-request-electrode/components/ExcelUploadModal.tsx | 263 |
 | Button | onClick | handleClose | jsx | features/shipping/src/pages/shipment-request-electrode/components/ExcelUploadModal.tsx | 267 |
-| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 55 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 78 |
-| Button | onClick | onItemSearch2 | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 74 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 104 |
-| Button | onClick | onModelSearch2 | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 100 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 117 |
-| Button | onClick | onDetailSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 122 |
-| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailGrid.tsx | 91 |
-| DataGrid | beginningEdit | handleBeginningEdit | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailGrid.tsx | 93 |
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 140 |
-| CustomDropdown | onChange | <arrow> handleDivisionChange | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 160 |
-| CustomDropdown | onChange | <arrow> handleCompanyChange | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 175 |
-| CustomDropdown | onChange | <arrow> setSearchParams,option.split(',').filter,option.split | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 194 |
-| CustomDropdown | onChange | <arrow> setSearchParams,option.split(',').filter,option.split | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 217 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 233 |
-| CustomDropdown | onChange | <arrow> handlePlanDateChange | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 253 |
-| PeriodField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 267 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 291 |
-| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 287 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 319 |
-| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 315 |
-| input | onChange | <arrow> setBohMode | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 340 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 372 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 377 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 382 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 387 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 392 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 397 |
-| g | updatedLayout | applyBohSumVisibility | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 84 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 185 |
-| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 224 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 259 |
-| g.hostElement | dblclick | dblclickHandler | addEventListener | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 312 |
-| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 344 |
+| SearchArea | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/modals/BodItemModal.tsx | 189 |
+| InputField | onChange | <arrow> setItemId | jsx | features/shipping/src/pages/shipment-request-electrode/components/modals/BodItemModal.tsx | 230 |
+| InputField | onKeyDown | <arrow> handleSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/modals/BodItemModal.tsx | 231 |
+| Button | onClick | handleOk | jsx | features/shipping/src/pages/shipment-request-electrode/components/modals/BodItemModal.tsx | 274 |
+| Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-request-electrode/components/modals/BodItemModal.tsx | 281 |
+| g | cellEditEnded | onEdit | addHandler | features/shipping/src/pages/shipment-request-electrode/components/modals/ShipmentRequestInsertModal.tsx | 301 |
+| Button | onClick | <arrow> handleSave | jsx | features/shipping/src/pages/shipment-request-electrode/components/modals/ShipmentRequestInsertModal.tsx | 461 |
+| Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-request-electrode/components/modals/ShipmentRequestInsertModal.tsx | 468 |
+| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 61 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 84 |
+| Button | onClick | onItemSearch2 | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 80 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 110 |
+| Button | onClick | onModelSearch2 | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 106 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 137 |
+| Button | onClick | onRequestorSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 133 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 153 |
+| Button | onClick | onDetailSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailBar.tsx | 159 |
+| g | beginningEdit | beginningEdit | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailGrid.tsx | 123 |
+| g | pastingCell | beginningEdit | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailGrid.tsx | 124 |
+| g | formatItem | paint | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailGrid.tsx | 125 |
+| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeDetailGrid.tsx | 168 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 178 |
+| CustomDropdown | onChange | <arrow> handleDivisionChange | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 191 |
+| CustomDropdown | onChange | <arrow> handleCompanyChange | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 206 |
+| CustomDropdown | onChange | <arrow> setSearchParams,option.split(',').filter,option.split | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 225 |
+| CustomDropdown | onChange | <arrow> setSearchParams,option.split(',').filter,option.split | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 248 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 264 |
+| CustomDropdown | onChange | <arrow> handlePlanDateChange | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 284 |
+| PeriodField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 298 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 322 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 318 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 350 |
+| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 346 |
+| input | onChange | <arrow> setBohMode | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 371 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 403 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 408 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 413 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 418 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 423 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeForm.tsx | 428 |
+| g | updatedLayout | applyBohSumVisibility | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 123 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 232 |
+| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 271 |
+| g | formatItem | markTrigger | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 296 |
+| g | beginningEdit | beginningEdit | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 335 |
+| g | pastingCell | beginningEdit | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 337 |
+| g | formatItem | paint | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 381 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 425 |
+| g.hostElement | dblclick | dblclickHandler | addEventListener | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 478 |
+| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeMainGrid.tsx | 515 |
 | DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-electrode/components/ShipmentRequestElectrodeStockGrid.tsx | 40 |
-| ShipmentRequestElectrodeForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 504 |
-| ShipmentRequestElectrodeForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 505 |
-| ShipmentRequestElectrodeForm | onModelSearch | <arrow> setOpenModel | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 506 |
-| ShipmentRequestElectrodeMainGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 534 |
-| ShipmentRequestElectrodeDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 545 |
-| ShipmentRequestElectrodeDetailBar | onItemSearch2 | <arrow> setOpenDetailItem | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 546 |
-| ShipmentRequestElectrodeDetailBar | onModelSearch2 | <arrow> setOpenDetailModel | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 547 |
-| TabWrapper | onTabClick | <arrow> setActiveDetailTab | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 552 |
-| ShipmentRequestElectrodeStockGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 562 |
-| ShipmentRequestElectrodeDetailGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 573 |
-| ShipmentRequestElectrodeDetailGrid | onItemCellDoubleClick | handleItemCellDoubleClick | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 574 |
-| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,setOpenMeasure | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 651 |
-| ExcelUploadModal | onSave | handleExcelUploadSave | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 666 |
-| ExcelUploadModal | onUploaded | <arrow> setActiveDetailTab,handleSearch | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 667 |
+| ShipmentRequestElectrodeForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 692 |
+| ShipmentRequestElectrodeForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 693 |
+| ShipmentRequestElectrodeForm | onModelSearch | <arrow> setOpenModel | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 694 |
+| ShipmentRequestElectrodeMainGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 729 |
+| ShipmentRequestElectrodeMainGrid | onCellDoubleClick | handleMainCellDoubleClick | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 730 |
+| ShipmentRequestElectrodeDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 742 |
+| ShipmentRequestElectrodeDetailBar | onItemSearch2 | <arrow> setOpenDetailItem | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 743 |
+| ShipmentRequestElectrodeDetailBar | onModelSearch2 | <arrow> setOpenDetailModel | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 744 |
+| ShipmentRequestElectrodeDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 745 |
+| TabWrapper | onTabClick | <arrow> setActiveDetailTab | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 750 |
+| ShipmentRequestElectrodeStockGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 760 |
+| ShipmentRequestElectrodeDetailGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 772 |
+| ShipmentRequestElectrodeDetailGrid | onItemCellDoubleClick | handleItemCellDoubleClick | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 773 |
+| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,setOpenMeasure | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 863 |
+| ExcelUploadModal | onSave | handleExcelUploadSave | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 878 |
+| ExcelUploadModal | onUploaded | <arrow> setActiveDetailTab,setFilters,refetchMain,setDetailFilters,refetchRequestDetail | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 879 |
+| ShipmentRequestInsertModal | onSaved | <arrow> setOpenRequestInsert,setFilters,refetchMain | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 901 |
+| BodItemModal | onSelect | handleBodItemSelected | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 918 |
 | g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.footerSum.ts | 67 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
-| FormItem | 16 |
-| Grid | 10 |
-| Button | 8 |
-| CustomDropdown | 6 |
+| FormItem | 21 |
+| Grid | 14 |
+| Button | 13 |
+| CustomDropdown | 9 |
+| InputField | 7 |
+| DataGrid | 6 |
 | Checkbox | 6 |
-| InputField | 5 |
-| DataGrid | 4 |
-| FunctionSearchIcon | 4 |
+| FunctionSearchIcon | 5 |
 | MaterialByDivisionModal | 4 |
+| CustomDialog | 3 |
 | TextField | 3 |
 | Stack | 3 |
+| ProgressIndicator | 2 |
 | ControlConfirmIcon | 2 |
+| SearchArea | 2 |
 | Panel | 2 |
 | TabItem | 2 |
-| CustomDialog | 1 |
-| ProgressIndicator | 1 |
 | FileUploader | 1 |
 | Label | 1 |
+| ResultArea | 1 |
 | PeriodRangePicker | 1 |
-| SearchArea | 1 |
 | PeriodField | 1 |
 | IcMeasureSelect | 1 |
 | FileExceldownloadIcon | 1 |
@@ -148,14 +176,19 @@
 | TabWrapper | 1 |
 | ShipmentRequestElectrodeStockGrid | 1 |
 | ShipmentRequestElectrodeDetailGrid | 1 |
+| SsoUserModal | 1 |
 | MeasureSelectModal | 1 |
 | ExcelUploadModal | 1 |
+| ShipmentRequestInsertModal | 1 |
+| BodItemModal | 1 |
 
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
 | resultColumns | MESSAGE_TEXT | Check | 240 | true |  |  | meta-shape | features/shipping/src/pages/shipment-request-electrode/components/ExcelUploadModal.tsx | 84 |
 | resultColumns | `ATTRIBUTE${i + 1}` | label | 110 | true |  |  | meta-map | features/shipping/src/pages/shipment-request-electrode/components/ExcelUploadModal.tsx | 93 |
+| column | colNm | colLblNm | colWth | true |  |  | meta-map | features/shipping/src/pages/shipment-request-electrode/components/modals/BodItemModal.tsx | 58 |
+| col | colNm | colLblNm | width | true |  |  | meta-map | features/shipping/src/pages/shipment-request-electrode/components/modals/ShipmentRequestInsertModal.tsx | 76 |
 | buildDynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| 'SUM' : 'SUM' | 90 | true |  |  | object | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.spreadHeader.ts | 117 |
 
 ## 7. 메시지 코드
@@ -170,6 +203,8 @@
 | LBL00755 | 1 |
 | LBL00756 | 1 |
 | LBL00757 | 1 |
+| MSG00071 | 1 |
+| MSG00429 | 1 |
 | LBL00641 | 1 |
 | LBL00047 | 1 |
 | LBL00022 | 1 |
@@ -181,6 +216,7 @@
 | LBL00618 | 1 |
 | LBL00767 | 1 |
 | LBL01090 | 1 |
+| LBL01108 | 1 |
 | LBL01116 | 1 |
 | LBL00112 | 1 |
 | LBL00664 | 1 |
@@ -202,12 +238,15 @@
 | MSG00108 | 1 |
 | MSG01187 | 1 |
 | MSG00323 | 1 |
-| MSG00324 | 1 |
+| MSG01321 | 1 |
 | MSG00042 | 1 |
+| MSG00194 | 1 |
+| MSG01261 | 1 |
+| MSG00312 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0023(15), SSP0026(12), SSP0022(9), SSP0021(3), SSP0015(3), COM0013(2), DMF0082(1), SCP0025(1)
-- SP/PKG: PKG_SSP0022(10), P_SSP0022_GET_STOCK_DETAIL(3), P_SSP0022_SAVE_SHIPMENT_REQUEST(3), PKG_DM0003(3), PKG_SSP0002(3), PR_CHECK_MNU_BTN_AUTH(2), P_SSP0022_GET_SHIPMENT_PSI(2), P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN(2), P_SSP0022_GET_SHEET_CALENDAR_3SPAN(2), P_SSP0022_GET_ITEM_POPUP(2), P_PLAN_START_YYYYMMDD(2), P_ITEM_ID(2), PR_GET_EXCEL_UPLOAD_RESULT(1), P_FROM(1), P_SSP0022_GET_REQUEST_DETAIL(1), P_SSP0022_GET_BOD_ITEM_VALID_CHECK(1), P_DM0003_GET_BUCKET_TYPE_CODE(1), P_SSP0002_GET_USER_INFO_LIST(1), P_SSP0022_SHIPMENT_REQUEST_EXCEL_UPLOAD(1), P_NON_CHK(1), P_ACTIVE_FLAG(1), P_DIVISION_ID(1), P_COMPANY_ID(1), P_SCM_SITE_ID(1), P_PLANT_ID(1), P_MODEL_ID(1), P_FROM_SITE(1), P_TO_SITE(1), P_ETA_DATE(1), P_BOD_ID(1), P_INCOTERMS(1), P_TRANSPORT_MODE(1), P_CREATED_BY(1)
+- 화면ID: SSP0023(17), SSP0022(16), SSP0026(15), SSP0021(7), SSP0015(6), SSP0024(2), SSP0025(2), COM0013(2), SSP0060(2), SSP0045(1), DM0003(1), SSP0002(1), DMF0082(1), SCP0025(1)
+- SP/PKG: PKG_SSP0022(10), P_SSP0022_SAVE_SHIPMENT_REQUEST(7), PKG_SSP0002(5), P_PLAN_START_YYYYMMDD(3), P_SSP0200_USER_CHECK(3), PR_CHECK_MNU_BTN_AUTH(2), SSP0022_GET_ITEM_POPUP(2), P_INCOTERMS(2), P_TRANSPORT_MODE(2), P_REAL_FLAG(2), P_SSP0022_GET_SHIPMENT_PSI(2), P_SSP0022_GET_STOCK_DETAIL(2), P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN(2), P_SSP0022_GET_SHEET_CALENDAR_3SPAN(2), P_SSP0022_GET_ITEM_POPUP(2), PKG_DM0003(2), P_SSP0002_GET_USER_INFO_LIST(2), SSP0002_GET_USER_INFO_LIST(2), P_ITEM_ID(2), PR_GET_EXCEL_UPLOAD_RESULT(1), P_FROM(1), P_SSP0022_GET_REQUEST_DETAIL(1), P_SSP0022_GET_BOD_ITEM_VALID_CHECK(1), DM0003_GET_BUCKET_TYPE_CODE(1), P_SSP0022_SHIPMENT_REQUEST_EXCEL_UPLOAD(1), P_NON_CHK(1), P_REQUESTOR_ID(1), P_ACTIVE_FLAG(1), P_DIVISION_ID(1), P_COMPANY_ID(1), P_SCM_SITE_ID(1), P_PLANT_ID(1), P_MODEL_ID(1), P_FROM_SITE(1), P_TO_SITE(1), P_ETA_DATE(1), P_BOD_ID(1), P_CREATED_BY(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)
 

@@ -81,7 +81,7 @@ K5,K,특수 편집기 동작(리치텍스트 등),O2,E2E,공통 컴포넌트,서
 L2,L,입력 중 불필요 재렌더·깜박임 0,O2,E2E,공통,조회조건·셀 입력 중 그리드 이동·깜박임 0
 M4,M,팝업 상태·선택값 반영,O1+O2,E2E,AS-IS 팝업 로직,팝업 선택값 즉시 셀 반영 · Close 후 재오픈 시 미저장 편집 초기화
 C6,C,무변경 편집 종료 시 연쇄 미발동,O1,E2E,AS-IS ComboSelChange·Changed 는 값 변경 때만 발동,원천 셀 편집기를 열었다 값 변경 없이 닫으면(Esc·Tab) 대상 셀 값이 그대로 — 초기화되면 결함
-MS1,M,메시지 의미 대조(AS-IS MSG_ID → 같은 뜻의 TO-BE MSG_ID),O1,STATIC,AS-IS TB_FX_MessageInfo 문구 ↔ TO-BE SCM_ADM_MSG_M 문구(msgmap) · TO-BE FE/PKG 사용 ID,"AS-IS 메시지와 같은 의미의 TO-BE MSG_ID 를 사용(ID 동일 여부 무관) · 같은 ID 가 TO-BE 에서 다른 뜻이면 오류"
+MS1,M,메시지 의미 대조(AS-IS MSG_ID → 같은 뜻의 TO-BE MSG_ID),O1,STATIC,AS-IS TB_FX_MessageInfo 문구 ↔ TO-BE SCM_ADM_MSG_M 문구(msgmap) · TO-BE FE/PKG 사용 ID,AS-IS 메시지와 같은 의미의 TO-BE MSG_ID 를 사용(ID 동일 여부 무관) · 같은 ID 가 TO-BE 에서 다른 뜻이면 오류
 DB-SYN,A,DB 객체·메타·시노님 오류(앱 계정 접근),O3,STATIC+E2E,syn_check.py(PROC·COMBO·META) · syn_fix.py · E2E fixture dberr,BE 계정(SCMP_APP)이 쓰는 PKG·테이블/뷰·시노님·권한이 있고 VALID 하며 메뉴·PROC_M·SHEET_COLUMNS 메타가 있어야 테스트가 돈다 — 없거나 오류면 차단(조치 필요 1번 + CheckList 재작성 요청)
 K6,K,상단·하단 그리드 연동(상단 클릭/더블클릭 → 하단 조회) 시 상단 안정,O3,E2E,사용자 지시 2026-10-29(SCP0020 상단 깜빡임),상단 행 클릭/더블클릭으로 하단을 조회할 때 상단 그리드가 재조회·재렌더(깜빡임)·행 비움 없이 유지
 G9,G,텍스트 조회조건 콤마 다중값 입력 조회,O1+O2,E2E,확정 요구(CR-040)·SSP45REQ-8/14 공통요건·AS-IS 복수 입력 처리,"텍스트 조건에 a,b 입력 → 두 값 모두 조회·결과가 그 값들만 · 팝업 조회조건도 같음(공통 컴포넌트)"
@@ -91,4 +91,5 @@ F10,F,저장 트랜잭션 원자성(내부 COMMIT·자율 트랜잭션 0),O1+O3,
 H11,H,처리 중 로딩 표시(스피너),O2,E2E,공통 UI 규칙 · GAP 자체결함 3·7·16,조회·저장·배치 실행 등 서버 호출 중 스피너가 표시되고 완료·오류 시 사라짐 — 장기 실행 버튼 클릭 후 무반응 0
 H12,H,그리드 좌측 고정 컬럼 = META FIXED_FLAG,O1+O2,META+E2E,SHEET_COLUMNS FIXED_FLAG · AS-IS 고정 컬럼,FIXED_FLAG=Y 마지막 컬럼까지 좌측 고정 · 가로 스크롤 시 유지 · 컬럼 셋팅에 포함
 G10,G,팝업 연결 텍스트 조회조건 Enter → 팝업 열기,O1+O2,E2E,AS-IS 팝업 연결 입력칸 Enter 처리 · GAP DMF0072 F-09·DMF0074 F-07,팝업이 연결된 조회조건 입력칸에서 Enter(한글 조합 중 제외) 시 그 팝업이 열리고(아이콘 클릭과 같은 동작) 입력값은 팝업 조건으로 전달(G5) — Enter 무동작이면 FAIL
-H13,H,음수 글자색 빨강,O1,E2E,AS-IS NumberCellType.NegativeRed=true(SpreadInfo.cs:4369 프레임워크 기본) · cell_rules negative_red,"숫자 컬럼(정적·동적 피벗)의 음수 값 셀 글자색이 빨강 — 표본 없으면 편집 가능 셀에 -1 입력해 측정 후 복원"
+H13,H,음수 글자색 빨강,O1,E2E,AS-IS NumberCellType.NegativeRed=true(SpreadInfo.cs:4369 프레임워크 기본) · cell_rules negative_red,숫자 컬럼(정적·동적 피벗)의 음수 값 셀 글자색이 빨강 — 표본 없으면 편집 가능 셀에 -1 입력해 측정 후 복원
+SC1,H,조회조건 구성(사용여부·EDIT 형태),O2,E2E,search_cond.csv 기준표(SCP_화면별 조회조건 정리 List 시트 · CR-071 · CR-098),"Excel 조회조건 정리 대조 = 사용여부(기준표 제외 조건 잔존 smoke gone · USE 조건 누락) + EDIT 형태까지만 — 조회조건 순서는 판정 대상 제외(NA · 실측 순서는 참고, CR-098 사용자 지시 2026-11-09 · 11-06 'Excel 순서와 다르면 FAIL' 폐기)"

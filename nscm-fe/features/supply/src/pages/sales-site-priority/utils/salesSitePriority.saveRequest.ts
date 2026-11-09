@@ -35,8 +35,10 @@ interface FieldSpec {
 }
 
 // 날짜 표시값(FPDateText 'yyyy-MM-dd' 또는 'yyyy-MM-dd HH:mm:ss') → 저장 포맷 YYYYMMDD(숫자만 8자리).
-//   AS-IS .Replace("-","").Substring(0,8) 등가.
-const ymd8 = (v: unknown): string => safeString(v).replace(/\D/g, '').slice(0, 8);
+//   AS-IS .Replace("-","").Substring(0,8) 등가. 저장검증(From>To)도 동일 정규화를 공유한다 — GET 은
+//   'yyyy-MM-dd HH:mm:ss'(시간부 포함), 붙여넣기 셀은 복사원 포맷 그대로라, 문자열 원형 비교는
+//   포맷·구분자·시간부 불일치에 깨진다(useSalesSitePriorityValidation 재사용).
+export const ymd8 = (v: unknown): string => safeString(v).replace(/\D/g, '').slice(0, 8);
 
 const PRE_DELIM = '|';
 const preToken = (row: Row, idx: number): string =>

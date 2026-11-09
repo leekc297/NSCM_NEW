@@ -1,0 +1,68 @@
+// AS-IS InitSpreadDateColumn(cs:361-363, S04/R04) — 3단 일자 헤더 글자색.
+//   `DAY_CODE='SAT'` → Blue / `'SUN'` → Red. W_/M_ 행은 DAY_CODE 가 비어 대상이 아니다.
+//   inline style 금지(convert-core §2.1) — formatItem 이 classList 로 토글한다.
+.satHeader {
+  color: #1565c0;
+}
+
+.sunHeader {
+  color: #d32f2f;
+}
+
+// AS-IS Set_MeasureColor(cs:1071-1076, R15/G10) — `SCP_PLAN` 행에서 모델/공장이 바뀌는 지점의
+//   그룹 상단 경계선(AS-IS BevelBorder). 행 그룹의 시작을 시각적으로 끊어 준다.
+//   AS-IS 범위는 `ITEM_ID ~ 마지막 컬럼`(cs:1073-1075)이라 `DIVISION_ID` 칸은 제외된다 — 판정은 formatItem.
+//   색·굵기는 AS-IS 인자 그대로다: cs:1039
+//   `new BevelBorder(BevelBorderType.Raised, Color.Black, Color.Black, 1, false, true, false, false)`
+//   = 검정 1px, top only. hook #95(grid-cell-backcolor-standard)는 셀 **배경색** 규약이라 경계선은
+//   적용 대상이 아니다 — AS-IS 값을 그대로 재현한다(iter-2 L-03).
+.groupBoundary {
+  border-top: 1px solid #000000;
+}
+
+// 편집 가능 셀 — AS-IS UnLockColor `#FFFF86`(연노랑)의 TO-BE 대응(hook #95 Yellow).
+//   색은 NSCM 표준 토큰 `$wj-editable-cell`(foundation _variables.scss:58 = #fff8cd, 공용
+//   `.wj-cell-editable` 와 동일)과 일치시킨다 — 비표준 #FFFDE7 사용 금지(자매 SSP0024 동일).
+//   필수: `!important` — 공용 `.wj-cell.wj-alt`(특이성 0,2,0, 배경 흰색 통일 2026-07-09)가
+//   이 단일 클래스(0,1,0) 배경을 이겨 홀수(alt) 행에서 노랑이 흰색으로 덮인다. 공용 `.wj-cell-editable`
+//   은 `.wj-cell` 아래 중첩(0,2,0)이라 이기지만 Module 클래스는 그럴 수 없어 !important 로 올린다.
+.editableCell {
+  background-color: #fff8cd !important;
+}
+
+// AS-IS cs:1090 (R15-b) — Frozen 이전(확정) 구간 회색 RGB(242,242,242).
+//   !important 이유는 `.editableCell` 주석 참조(alt 행 zebra 배경이 덮는 것 방지).
+.frozenPastCell {
+  background-color: #f2f2f2 !important;
+}
+
+// AS-IS cs:914 (R13/S37/V-E12) — 저장 시 음수로 판정된 셀 배경. AS-IS 는 `ControlColor.InvalidColor`
+//   = 청록(92,209,229)이지만, TO-BE 는 '에러=빨강' 직관 + '음수=빨강' 테마 일치를 위해 분홍/빨강을
+//   쓴다(사용자 결정 2026-10-20 — AS-IS 청록 파리티보다 가독성 우선). 비AS-IS 색은 의도된 선택이다.
+//   !important 이유는 `.editableCell` 주석 참조(alt 행 zebra 배경이 덮는 것 방지).
+.negativeCell {
+  background-color: #ffcdd2 !important;
+}
+
+// AS-IS `SetReNumerCellType` 4-인자 오버로드(`SpreadInfo.cs:11013`)의 `NumberCellType.NegativeRed = true`
+//   대응 — 기간셀 음수는 **입력 즉시** 빨간 글자로 보인다(cs:355·359 가 전 기간칼럼에 이 셀타입을 건다).
+//   저장 시점 배경(`negativeCell`, R13)과는 별개 축이다: 이쪽은 글자색이고 저장 전에도 상시 적용된다.
+//   CommonCheckList "음수 빨간색" 항목의 실제 대응부다(react-gap-audit iter-3 N-04).
+//   색은 NSCM 공통 표준 `NEGATIVE_TEXT_COLOR`(foundation gridNegativeText.ts = #c0392b, 전 화면
+//   동일 톤)과 일치시킨다 — 비표준 #d32f2f 사용 금지.
+.negativeValue {
+  color: #c0392b;
+}
+
+// AS-IS cs:189-193 + cs:807-824 (R18/G13) — 신규행 `TR_MODE` 셀의 `edit.png` 우측정렬 배경.
+//   "이 셀을 클릭하면 BOD 팝업이 열린다"는 유일한 시각 단서라 누락하면 진입 경로가 보이지 않는다.
+//   이미지 자산 대신 동일 의미의 유니코드 연필 글리프를 우측에 배치한다(assets 추가 없이 등가 어포던스).
+.trModeEditable {
+  cursor: pointer;
+
+  &::after {
+    content: '\270E';
+    float: right;
+    color: #616161;
+  }
+}

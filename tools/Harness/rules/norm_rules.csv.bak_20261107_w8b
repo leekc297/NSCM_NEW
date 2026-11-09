@@ -1,0 +1,7 @@
+﻿col_pattern,num_scale,trim,upper,date_fmt,sentinel_class,compare,note
+^(createdby|lastupdatedby|creationdate|lastupdatedate|createddate|updateddate|regdate|moddate|createuser|updateuser)$,,Y,N,sec,DATA,N,감사 컬럼 — 누가/언제 저장했는지라 환경마다 다르고 E2E 실저장이 바꾼다(2026-11-06 SCP0127 실측: 불일치 4셀 전부 LAST_UPDATED_BY/DATE) → 값 비교 제외(별도 보고)
+^(deptnameko|deptnameen|deptname|teamname|teamnameko)$,,Y,N,sec,DATA,N,부서(팀)명 컬럼 — AS-IS DEV MSSQL 은 부서 매핑(SSO_DEPT) 미적재라 전부 '-' ↔ 사내 TO-BE 는 팀명(2026-11-06 SCP0016 452셀 전부 · 사용자 판정 2-a 결함 아님) → 값 비교 제외(별도 보고)
+(yyyymmdd|_dt$|date$|ymd$),,Y,N,day,DATA,Y,날짜 컬럼 — AS-IS date ↔ Oracle DATE 00:00:00 차이 흡수(day)
+(qty|amt|rate|ratio|pct|cnt|count|value|val|price|cost|day|days)$,6,Y,N,sec,DATA,Y,수치 컬럼 — 소수 6자리 반올림(golden.nval 과 동일)
+(_id|code|cd|no|type|stage|site|group|gr|measure)$,,Y,N,sec,PK_NOTNULL,Y,키 성격 컬럼 — NOT NULL 키의 '/' 초기값은 빈 값과 동치(2026-10-15 센티널 룰 · '-' 원데이터는 리터럴 유지)
+.*,6,Y,N,sec,DATA,Y,기본 — trim · 수치 6자리 · ''≡NULL · '-' 리터럴 유지

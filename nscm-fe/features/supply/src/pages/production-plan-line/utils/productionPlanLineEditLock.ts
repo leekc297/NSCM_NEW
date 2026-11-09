@@ -12,6 +12,8 @@ import {
   OP_GROUP_CELL,
   OP_GROUP_ELECTRODE,
   PLAN_TYPE_EXCLUDE_FIX,
+  PLAN_TYPE_READONLY,
+  PLAN_TYPE_STAGE_ORDER,
 } from '../production-plan-line.constants';
 
 type Row = Record<string, unknown>;
@@ -54,11 +56,15 @@ export const isPivotVisible = (binding: string, bucket: BUCKET_TYPE, chkSum: boo
 };
 
 // bucket 별 사용자 편집 가능한 pivot kind — SUM 컬럼은 항상 잠금(design 01 F3 / 03 §3 #5/#6).
-//   Daily→D_ 편집(W_/M_ SUM 잠금) · Weekly→W_ 편집(M_ SUM 잠금) · Monthly→M_ 편집.
+//   Daily→D_ 편집(W_/M_ SUM 잠금) · Weekly→W_ 편집(M_ SUM 잠금) · Monthly→편집 불가(읽기전용).
+//   AS-IS SetLockSumColumn(cs:1155~1197) 은 Daily 가 아닌 전 bucket(Weekly·Monthly)에서 M_(월SUM)을
+//   잠근다. Monthly 는 보이는 컬럼이 M_ 뿐이라(SetSpreadColumn cs:1244~1254: D_·W_ 숨김) 전부 잠겨
+//   편집 가능한 셀이 없다 — Monthly 는 집계 조회 전용(사용자 확인 2026-11-04). 따라서 편집 kind 는
+//   null 로 두어 어떤 pivot 컬럼과도 매칭되지 않게 한다(isPivotCellEditable 이 전건 잠금 처리).
 export const editablePivotKindForBucket = (bucket: BUCKET_TYPE): PivotKind => {
   if (bucket === BUCKET_TYPE.DAILY) return 'D';
   if (bucket === BUCKET_TYPE.WEEKLY) return 'W';
-  return 'M';
+  return null; // Monthly — M_(월SUM) 항상 잠금 → 편집 불가(AS-IS 1:1)
 };
 
 // ===== 과거 기간 pivot 잠금 (design 01 F2 startEditIdx / 03 §3 #4) =====
@@ -113,8 +119,12 @@ export const buildFixKey = (row: Record<string, unknown>): string => {
 export interface EditContext {
   lastPlanType: string; // 조회결과의 최종 PlanType
   hasFn: boolean; // 조회결과에 PlanType='FN' 존재
+  // 선택 plan stage 가 편집 가능한지 — Form 이 Plan-type 콤보(선택값+옵션)로 판정(isStageEditableFor).
+  //   false 면 그리드 전건 읽기전용. (1) FN 조회 · (2) 콤보에 다음 단계 존재 시 잠금(사용자 지시 2026-11-04, FE 전용).
+  isStageEditable: boolean;
 }
 export const isRowEditable = (row: Row, ctx: EditContext, editInfo: EditInfoMap): boolean => {
+  if (!ctx.isStageEditable) return false; // 선택 stage 잠금(FN 조회 또는 콤보에 다음 단계 존재) → 전건 편집 불가
   if (s(row.MEASURE) !== EDITABLE_MEASURE) return false; // PROD_PLAN_AMEND 행만
   const info = editInfo.get(s(row.CP_KEY));
   if (!info) return false; // EDIT_INFO 미반환 버전 = 편집불가(서버 is_editable 원천 없음)
@@ -197,4 +207,25 @@ export const canFixUnfixNew = (ctx: FixEnableContext): boolean => {
   if (ctx.planSeq !== ctx.latestPlanSeq) return false; // 마지막 SEQ
   if ((PLAN_TYPE_EXCLUDE_FIX as readonly string[]).includes(ctx.planType)) return false; // FN/TE 제외
   return true;
+};
+
+// ===== 선택 plan stage 편집가능 판정 (요청1, 사용자 지시 2026-11-04 — FE 전용, SP/BE 무관) =====
+//   그리드를 수정 못하게 막는 두 경우:
+//     (1) FN 으로 조회한 경우.
+//     (2) 조회조건 Plan-type 선택지(콤보)에 "다음 단계" 계획이 있는 경우.
+//   계획 순서: TE → PR → MA → SE → FN (PLAN_TYPE_STAGE_ORDER). "다음 단계" = 선택보다 뒤 순서의 type.
+//   따라서 editable ⟺ 선택 ≠ FN 그리고 선택보다 뒤 단계가 콤보 옵션에 없음(= 선택이 최후 단계).
+//   availablePlanTypes = 현재 plan-date 로 좁혀진 Plan-type 콤보 옵션 코드 목록.
+export const isStageEditableFor = (
+  selectedPlanType: string,
+  availablePlanTypes: string[]
+): boolean => {
+  if (!selectedPlanType) return false;
+  if (selectedPlanType === PLAN_TYPE_READONLY) return false; // (1) FN 조회 → 수정 불가
+  const order = PLAN_TYPE_STAGE_ORDER as readonly string[];
+  const rankOf = (t: string): number => order.indexOf(t);
+  const selRank = rankOf(selectedPlanType);
+  if (selRank < 0) return false; // 순서 미등록 type 방어
+  // (2) 선택보다 뒤 단계가 옵션에 하나라도 있으면 잠금(= 선택이 최후 단계여야 편집가능).
+  return !availablePlanTypes.some(t => rankOf(t) > selRank);
 };

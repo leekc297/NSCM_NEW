@@ -434,7 +434,7 @@ export const VersionModal = ({
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t('LBL00513', 'Version')}</h2>
+          <h2 className='headerTitle'>{t('LBL00606', 'Version')}</h2>
         </div>
       }
       customContentArea={

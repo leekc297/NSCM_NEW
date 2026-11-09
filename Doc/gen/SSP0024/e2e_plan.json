@@ -1,0 +1,323 @@
+{
+  "menuId": "SSP0024",
+  "page": "ShipmentMasterElectrode",
+  "feature": "shipping",
+  "routePath": "shipping/shipment-master-electrode",
+  "asisName": "ShipmentMasterElectrode",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "cboPlantSite"
+    },
+    {
+      "key": "itemIds",
+      "label": "Material",
+      "lbl": "LBL00021",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtMaterialId"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtModelId"
+    }
+  ],
+  "buttons": [],
+  "sheets": [
+    {
+      "name": "Project",
+      "key": "PROJECT",
+      "popup": false,
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": [
+        "CELL_TYPE",
+        "DIVISION_ID",
+        "DIVISION_NAME",
+        "ELECTRODE_TYPE",
+        "ITEM_UOM",
+        "MATERIAL_ID",
+        "MODEL_ID",
+        "NICK_NAME",
+        "PLANT_SITE_CODE",
+        "PLANT_SITE_ID",
+        "UOM_CONVERT_IN_TACT_TIME"
+      ],
+      "labels": [
+        "Cell Type",
+        "division",
+        "division",
+        "Electrode Type",
+        "UOM",
+        "Material",
+        "Model",
+        "Nick Name",
+        "Plant Site Code",
+        "Plant Site",
+        "Pancake (m/cell)"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Ship Master Elec",
+      "key": "SHIP_MASTER_ELEC",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "BOX_PER_CUT",
+        "BUILDING",
+        "BUILDING_DESC",
+        "CELL_TYPE",
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DIVISION_ID",
+        "DOM_EXP_TYPE_CODE",
+        "ELECTRODE_TYPE",
+        "ITEM_UOM",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "MATERIAL_ID",
+        "MODEL_ID",
+        "NICK_NAME",
+        "PACKAGE_TYPE_CODE",
+        "PC_ROLL_LENGTH",
+        "PLANT_SITE_CODE",
+        "PLANT_SITE_ID",
+        "POST_OPER",
+        "POST_OPER_LT",
+        "REMARKS",
+        "STEELCRATE_PER_CUT",
+        "STEELRACK_PER_CUT",
+        "UOM_CONVERT_IN_TACT_TIME"
+      ],
+      "labels": [
+        "Box/Cut*",
+        "Building*",
+        "Building Desc.",
+        "Cell Type",
+        "Created By",
+        "Creation Date",
+        "Div*",
+        "DOM/EXP.*",
+        "Electrode Type",
+        "UOM",
+        "Last Update Date",
+        "Last Updated By",
+        "Material*",
+        "Model",
+        "Nick Name",
+        "Package Type*",
+        "Pancake Roll Length",
+        "Plant Site Code",
+        "Plant Site*",
+        "Post Oper.*",
+        "Post Oper.LT(Day)",
+        "Remarks",
+        "Steelcrate/Cut*",
+        "Steelrack/Cut*",
+        "Pancake (m/cell)"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+      "sheet": "Project",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0024.P_SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_DIVISION",
+      "sheet": "Project",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0024.P_SCM0001_GET_DIVISION",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Project",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0024.P_",
+      "entries": []
+    },
+    {
+      "sp": "SSP0024_GET_SHIP_MASTER",
+      "sheet": "Ship Master Elec",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0024.P_SSP0024_GET_SHIP_MASTER",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0024_SAVE_SHIP_MASTER",
+      "sheet": "Project",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0024.P_SSP0024_SAVE_SHIP_MASTER",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0002_GET_USER_INFO_LIST",
+      "sheet": "Project",
+      "btn": "USER_INFO_LIST",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0024.P_SSP0002_GET_USER_INFO_LIST",
+      "entries": [
+        "button:EditButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+        "biz:CommonData.CommonDataList [code=PlantSiteByDivision]",
+        "SCM.SCM0001_GET_DIVISION",
+        "biz:CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation]"
+      ]
+    },
+    {
+      "name": "handleClbDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation]"
+      ]
+    },
+    {
+      "name": "handleSpdMainCell",
+      "target": "spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainComboSelChange",
+      "target": "spdMain",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainClipboardPasted",
+      "target": "spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainKeyPress",
+      "target": "spdMain",
+      "event": "KeyPress",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMaterialId",
+      "target": "this.btnMaterialId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleModelId",
+      "target": "this.btnModelId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

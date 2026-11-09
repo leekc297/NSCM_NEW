@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { ADMIN_SHEET_NAME, MENU_ID, SHEETS, TACT_MODE } from './tact-time.constants';
 import type { MainRow, SearchCondition } from './tact-time.types';
@@ -50,8 +50,9 @@ interface Action {
 const ARRAY_KEYS = new Set<string>(['plantSiteIds', 'lineIds']);
 
 const initSearch: SearchCondition = {
-  // 기본 사업부 = 세션 division (formation 표준). 없으면 '40' fallback.
-  divisionId: useSessionStore.getState().session.div ?? '40',
+  // 기본 사업부 = Division 콤보(ESS) 첫 항목(Form 자동선택). AS-IS SCP0020 은 GetDivisionESS 바인딩 후
+  //   첫 행 선택(세션 미사용, cs:217) — session.div deviation 제거(2026-11-05).
+  divisionId: '',
   plantSiteIds: [],
   lineIds: [],
   operationGroupId: 'P', // AS-IS 기본값 = P(Packer). ALL 옵션 없음 (cs:221 setListBox false).

@@ -45,8 +45,8 @@ DMF0003,,DOM_EXP,Customs Handbook,L,DMF0003_SspSyncPopUp.cs:142,,,,대응 메타
 DMF0003,,YYYYMMDD,YYYYMMDD,L,DMF0003_SspSyncPopUp.cs:143,,,,대응 메타 시트 없음,NA,TO-BE 대응 메타 시트 없음(AS-IS 시트 )
 DMF0003,,SYNC_QTY,Sync Qty,R,DMF0003_SspSyncPopUp.cs:144,,,,대응 메타 시트 없음,NA,TO-BE 대응 메타 시트 없음(AS-IS 시트 )
 DMF0003,,QTY,DP Qty,R,DMF0003_SspSyncPopUp.cs:145,,,,대응 메타 시트 없음,NA,TO-BE 대응 메타 시트 없음(AS-IS 시트 )
-DMF0003,Car Fcst,MAJOR_CAT,대분류,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Car Fcst),DMF0081,Car Fcst,C,메타 DMF0081/Car Fcst,PASS,AS-IS center ↔ TO-BE center
-DMF0003,Car Fcst,MINOR_CAT,소분류,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Car Fcst),DMF0081,Car Fcst,C,메타 DMF0081/Car Fcst,FAIL,AS-IS left ↔ TO-BE center — 정렬 다름
+DMF0003,Car Fcst,MAJOR_CAT,대분류,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Car Fcst),DMF0003,Car Fcst,C,메타 DMF0003/Car Fcst,PASS,AS-IS center ↔ TO-BE center
+DMF0003,Car Fcst,MINOR_CAT,소분류,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Car Fcst),DMF0003,Car Fcst,L,메타 DMF0003/Car Fcst,PASS,AS-IS left ↔ TO-BE left
 DMF0003,Customer Demand Analysis,DEMAND_OPERATION,수요/운영,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Customer Demand Analysis),DMF0003,Customer Demand Analysis,C,메타 DMF0003/Customer Demand Analysis,PASS,AS-IS center ↔ TO-BE center
 DMF0003,Customer Demand Analysis,DESC,상세내용,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Customer Demand Analysis),DMF0003,Customer Demand Analysis,C,메타 DMF0003/Customer Demand Analysis,PASS,AS-IS center ↔ TO-BE center
 DMF0003,Customer Demand Analysis,IMPUTATION_YN,귀책여부,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Customer Demand Analysis),DMF0003,Customer Demand Analysis,C,메타 DMF0003/Customer Demand Analysis,PASS,AS-IS center ↔ TO-BE center
@@ -57,7 +57,7 @@ DMF0003,Customer Demand Analysis,MKT_FCST,고객수요계획,C,META SCM_MST_SHEE
 DMF0003,Customer Demand Analysis,PROJECT_CODE,PROJECT_CODE,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Customer Demand Analysis),DMF0003,Customer Demand Analysis,C,메타 DMF0003/Customer Demand Analysis,PASS,AS-IS center ↔ TO-BE center
 DMF0003,Customer Demand Analysis,VARIATION_FACTOR,상세변동요인,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Customer Demand Analysis),DMF0003,Customer Demand Analysis,C,메타 DMF0003/Customer Demand Analysis,PASS,AS-IS center ↔ TO-BE center
 DMF0003,Customer Demand Analysis,YYYYMM,YYYYMM,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Customer Demand Analysis),DMF0003,Customer Demand Analysis,C,메타 DMF0003/Customer Demand Analysis,PASS,AS-IS center ↔ TO-BE center
-DMF0003,Mkt Fcst,APPLICATION,Application,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
+DMF0003,Mkt Fcst,APPLICATION,Application,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,,메타 DMF0003/Mkt Fcst,NA,TO-BE DMF0003/Mkt Fcst 에 컬럼 없음 — 표시 구성(A5)에서 판정
 DMF0003,Mkt Fcst,AS_FROM_SITE,AS From Site,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,C,메타 DMF0003/Mkt Fcst,PASS,AS-IS center ↔ TO-BE center
 DMF0003,Mkt Fcst,AS_YN,AS_YN,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,C,메타 DMF0003/Mkt Fcst,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
 DMF0003,Mkt Fcst,ATTR1,ATTR1,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,C,메타 DMF0003/Mkt Fcst,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
@@ -71,7 +71,7 @@ DMF0003,Mkt Fcst,CELL_TYPE,Product Group,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mk
 DMF0003,Mkt Fcst,CITY_NAME,City,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
 DMF0003,Mkt Fcst,COUNTRY_NAME,Country,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
 DMF0003,Mkt Fcst,CUST_GROUP,Cust Group,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
-DMF0003,Mkt Fcst,CUST_GROUP_DTL,Cust Group Detail,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
+DMF0003,Mkt Fcst,CUST_GROUP_DTL,Cust Group Detail,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,,메타 DMF0003/Mkt Fcst,NA,TO-BE DMF0003/Mkt Fcst 에 컬럼 없음 — 표시 구성(A5)에서 판정
 DMF0003,Mkt Fcst,DEPT_ID,Department,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
 DMF0003,Mkt Fcst,DEPT_NAME_KO,Department,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
 DMF0003,Mkt Fcst,DIVISION_ID,Division*,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
@@ -110,10 +110,10 @@ DMF0003,Mkt Fcst,OWNER,Owner,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0
 DMF0003,Mkt Fcst,PLANT_SITE_ID,Plant Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
 DMF0003,Mkt Fcst,PROJECT_CODE,Project Code*,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
 DMF0003,Mkt Fcst,PROJECT_NAME,Project,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
-DMF0003,Mkt Fcst,PROJECT_OWNER,Project Owner,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
-DMF0003,Mkt Fcst,PROJECT_STATUS,Project Status,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
-DMF0003,Mkt Fcst,PROJECT_S_OP_REPORT,Project(S&OP Report),L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
-DMF0003,Mkt Fcst,ROUTE,Channel,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
+DMF0003,Mkt Fcst,PROJECT_OWNER,Project Owner,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,,메타 DMF0003/Mkt Fcst,NA,TO-BE DMF0003/Mkt Fcst 에 컬럼 없음 — 표시 구성(A5)에서 판정
+DMF0003,Mkt Fcst,PROJECT_STATUS,Project Status,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,,메타 DMF0003/Mkt Fcst,NA,TO-BE DMF0003/Mkt Fcst 에 컬럼 없음 — 표시 구성(A5)에서 판정
+DMF0003,Mkt Fcst,PROJECT_S_OP_REPORT,Project(S&OP Report),L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,,메타 DMF0003/Mkt Fcst,NA,TO-BE DMF0003/Mkt Fcst 에 컬럼 없음 — 표시 구성(A5)에서 판정
+DMF0003,Mkt Fcst,ROUTE,Channel,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,,메타 DMF0003/Mkt Fcst,NA,TO-BE DMF0003/Mkt Fcst 에 컬럼 없음 — 표시 구성(A5)에서 판정
 DMF0003,Mkt Fcst,SCM_SITE_ID,Sales Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
 DMF0003,Mkt Fcst,SCM_SITE_ID40,Sales Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,L,메타 DMF0003/Mkt Fcst,PASS,AS-IS left ↔ TO-BE left
 DMF0003,Mkt Fcst,SENDER_NAME,Sender Name,C,META SCM_MST_SHEET_COLUMNS(DMF0003/Mkt Fcst),DMF0003,Mkt Fcst,C,메타 DMF0003/Mkt Fcst,PASS,AS-IS center ↔ TO-BE center

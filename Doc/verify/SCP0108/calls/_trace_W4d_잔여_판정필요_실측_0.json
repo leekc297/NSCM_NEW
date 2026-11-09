@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0108",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"fromYyyymm\":\"202611\",\"programId\":\"SCP0108\",\"sheetName\":\"MAIN\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 151,
+  "at": "2026-11-09T01:18:05.448Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 757,
+  "dur": 372,
+  "at": "2026-11-09T01:18:08.628Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 757,
+  "dur": 335,
+  "at": "2026-11-09T01:18:15.190Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 757,
+  "dur": 396,
+  "at": "2026-11-09T01:18:28.720Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ }
+]

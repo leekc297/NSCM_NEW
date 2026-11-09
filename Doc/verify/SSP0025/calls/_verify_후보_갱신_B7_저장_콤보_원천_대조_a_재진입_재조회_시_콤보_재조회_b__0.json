@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 381,
+  "at": "2026-11-09T02:34:07.845Z",
+  "user": "minyonglee1",
+  "test": "후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 18,
+  "dur": 574,
+  "at": "2026-11-09T02:34:11.721Z",
+  "user": "minyonglee1",
+  "test": "후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)"
+ }
+]

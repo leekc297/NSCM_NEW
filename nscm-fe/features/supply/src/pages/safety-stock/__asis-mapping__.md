@@ -80,7 +80,7 @@ L190~325, L1090~1131)을 직접 read 해 아래와 같이 정정했다(goal.md v
 | msgId (line) | AS-IS 의미 | TO-BE 구현 | 상태 |
 |---|---|---|:--:|
 | MSG00001(643) | 9개 필수값(value_type/division_id/opmz_plan_gr_id/scm_site_id/item_id/stage/from~to/apl_qty/valid_yn) 공백 차단 | `safetyStockSaveValidation.ts validateSafetyStockRow` 필수값 검사 | 구현 |
-| MSG00260(690) | 기존 동일건 존재 시(삭제 아니면) 저장 차단 | `findDuplicateSafetyStockRows` — PK 8컬럼 조합 신규행 중복 검사(클라측 best-evidence, `filterCalls#5 sb.ToString()` 원식 미확인이라 서버 SP 검증과 대사 필요) | 구현(확인 필요 — 서버측 대사) |
+| MSG00260→**MSG00428**(690) | 기존 동일건 존재 시(삭제 아니면) 저장 차단. AS-IS `GMessageBox("MSG00260")`="신규 입력 데이터 중 중복된 데이터가 있습니다." — TO-BE Oracle 에서 MSG00260 은 무관한 "중복된 조합이 존재합니다…"로 재번호돼 문구 역조회로 **MSG00428** 확정(DB 실측 2026-11-05) | `findDuplicateSafetyStockRows` — 로드된 전체 행 받아 PK 8컬럼 조합 빈도>1 로 중복 검사(기존행+신규/수정행 충돌 포함, dirtyRows-only 결함 수정 2026-11-05, 자매 SCP0127 동형) | 구현 |
 | MSG00046(711) | FROM/TO 날짜 형식 파싱 실패(`DateTime.ParseExact(v,"yyyyMMdd",null)` catch, MSG00219 대소비교와 별개 가드) — 본 회차 원문 재확인(.cs:700-713) 결과 "Work Date" 라는 별도 필드가 아니라 FROM_YYYYMMDD/TO_YYYYMMDD 자체의 형식 오류 가드로 확정 | **구현(본 회차)** — `safetyStockSaveValidation.ts validateSafetyStockRow`에 `isValidYyyymmdd` 형식 검증 추가, 필수값 검사 다음·MSG00219 대소비교 이전 순서로 배선(AS-IS 순서 재현) | 구현 |
 | MSG00219(719) | From > To 날짜 역전 차단 | `validateSafetyStockRow` FROM_YYYYMMDD/TO_YYYYMMDD 비교 | 구현 |
 | MSG00085(728) | 적용수량(APL_QTY) 음수 차단 | `validateSafetyStockRow` APL_QTY < 0 검사 | 구현 |

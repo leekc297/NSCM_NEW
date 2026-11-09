@@ -1,12 +1,14 @@
 // AS-IS InitSpreadDateColumn(cs:361-363, S04/R04) — 3단 일자 헤더 글자색.
 //   `DAY_CODE='SAT'` → Blue / `'SUN'` → Red. W_/M_ 행은 DAY_CODE 가 비어 대상이 아니다.
 //   inline style 금지(convert-core §2.1) — formatItem 이 classList 로 토글한다.
+//   필수: `!important` — 공용 `.wj-cell.wj-header`(특이성 0,2,0, 글자색 #000000)가 이 단일
+//   Module 클래스(0,1,0)를 이겨 글자색이 검정으로 덮인다(`.editableCell` 주석과 동일 사유).
 .satHeader {
-  color: #1565c0;
+  color: #1565c0 !important;
 }
 
 .sunHeader {
-  color: #d32f2f;
+  color: #d32f2f !important;
 }
 
 // AS-IS Set_MeasureColor(cs:1071-1076, R15/G10) — `SCP_PLAN` 행에서 모델/공장이 바뀌는 지점의
@@ -36,12 +38,11 @@
   background-color: #f2f2f2 !important;
 }
 
-// AS-IS cs:914 (R13/S37/V-E12) — 저장 시 음수로 판정된 셀 배경. AS-IS 는 `ControlColor.InvalidColor`
-//   = 청록(92,209,229)이지만, TO-BE 는 '에러=빨강' 직관 + '음수=빨강' 테마 일치를 위해 분홍/빨강을
-//   쓴다(사용자 결정 2026-10-20 — AS-IS 청록 파리티보다 가독성 우선). 비AS-IS 색은 의도된 선택이다.
+// AS-IS cs:914 (R13/S37/V-E12) — 저장 시 음수로 판정된 셀 배경. AS-IS `ControlColor.InvalidColor`
+//   = 청록 RGB(92,209,229) = #5CD1E5(ControlColor.cs:55) 를 그대로 재현한다 — AS-IS 파리티.
 //   !important 이유는 `.editableCell` 주석 참조(alt 행 zebra 배경이 덮는 것 방지).
 .negativeCell {
-  background-color: #ffcdd2 !important;
+  background-color: #5cd1e5 !important;
 }
 
 // AS-IS `SetReNumerCellType` 4-인자 오버로드(`SpreadInfo.cs:11013`)의 `NumberCellType.NegativeRed = true`

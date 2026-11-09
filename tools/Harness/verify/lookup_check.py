@@ -10,6 +10,7 @@
   한계: 코드 칸 = 후보와 가장 많이 겹치는 SEGMENT(유형마다 다름) · 덤프 시점의 행 상태 1건만 잰다
 """
 import csv, json, os, re, sys
+from asis_variant import is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
@@ -101,7 +102,7 @@ def main(mid):
     from facts_cellclear import const_map
     cmap = {}
     for f in csv.DictReader(open(os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', mid, 'files.csv'), encoding='utf-8-sig', newline='')):
-        if f.get('variant') in ('current', 'shared') and f['file'].endswith('.cs') and not f['file'].endswith('.Designer.cs'):
+        if is_cur(f) and f['file'].endswith('.cs') and not f['file'].endswith('.Designer.cs'):
             for k, v in const_map(f['file'].replace('\\', '/')).items():
                 cmap.setdefault(k, v)
     with connect('tobe') as cx:

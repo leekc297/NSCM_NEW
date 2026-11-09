@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SCP0122",
  "asis_id": "SCP0122",
- "generated": "2026-11-04T19:34:38",
+ "generated": "2026-11-08T22:09:22",
  "mapping_file": "nscm-fe\\features\\supply\\src\\pages\\plan-activity-mgmt\\__asis-mapping__.md",
  "rows": 276,
  "fe_rows": 33,
@@ -10,36 +10,34 @@
  "fe_page": "nscm-fe\\features\\supply\\src\\pages\\plan-activity-mgmt",
  "fe_mapping_missing": false,
  "verdict": {
-  "FAIL": 125,
-  "검증완료": 78,
-  "미검증": 60,
+  "미검증": 163,
+  "검증완료": 87,
+  "FAIL": 13,
   "해당없음": 13
  },
  "instances": 283,
  "instance_result": {
-  "NA": 72,
-  "PASS": 163,
-  "REVIEW": 17,
-  "FAIL": 6,
+  "NA": 74,
+  "PASS": 165,
+  "REVIEW": 18,
   "NOPATH": 6,
-  "ERROR": 19
+  "ERROR": 19,
+  "FAIL": 1
  },
  "by_layer": {
   "동적 생성·조회": {
-   "NA": 30,
-   "PASS": 29,
-   "REVIEW": 14,
-   "ERROR": 5,
-   "FAIL": 4
+   "NA": 31,
+   "PASS": 30,
+   "REVIEW": 15,
+   "ERROR": 6
   },
   "정적 디자인": {
-   "PASS": 66,
-   "ERROR": 1,
+   "PASS": 65,
+   "ERROR": 2,
    "REVIEW": 3
   },
   "권한": {
-   "FAIL": 1,
-   "PASS": 1
+   "PASS": 2
   },
   "콤보 후보": {
    "PASS": 2,
@@ -55,9 +53,8 @@
    "PASS": 3
   },
   "편집·검증": {
-   "NA": 18,
-   "PASS": 30,
-   "ERROR": 2,
+   "NA": 19,
+   "PASS": 31,
    "NOPATH": 1
   },
   "CRUD": {
@@ -120,7 +117,8 @@
    "PASS": 15
   },
   "D1": {
-   "PASS": 10
+   "PASS": 9,
+   "NA": 1
   },
   "D3": {
    "NA": 2,
@@ -146,7 +144,7 @@
   },
   "E4": {
    "NA": 12,
-   "ERROR": 2
+   "PASS": 2
   },
   "E5": {
    "NOPATH": 1
@@ -196,13 +194,13 @@
    "PASS": 17
   },
   "I1": {
-   "PASS": 1
+   "ERROR": 1
   },
   "J1": {
    "PASS": 1
   },
   "J2": {
-   "FAIL": 1
+   "PASS": 1
   },
   "K-SA": {
    "PASS": 1
@@ -222,20 +220,19 @@
    "REVIEW": 3
   },
   "X-REOPEN": {
-   "FAIL": 1
+   "PASS": 1
   },
   "X-ROW": {
    "PASS": 6,
-   "ERROR": 5,
-   "REVIEW": 2,
-   "FAIL": 3,
-   "NA": 2
+   "ERROR": 6,
+   "REVIEW": 3,
+   "NA": 3
   }
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "ERROR": 40,
-  "REVIEW": 33,
-  "NOPATH": 4
+  "REVIEW": 59,
+  "NOPATH": 6,
+  "ERROR": 139
  }
 }

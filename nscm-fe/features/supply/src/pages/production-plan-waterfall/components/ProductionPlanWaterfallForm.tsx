@@ -64,7 +64,12 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
   const isEe = isEeDivision(sc.divisionId);
 
   // 콤보 — 부모값 파라미터 재조회(cascade). isEe 로 opGroup/plantSite/line SQL_ID 스왑(별개 코드셋, 이름 대조 금지).
-  //   Line 파라미터에 plantSite 미포함(design 02 §3 파리티 — 수동 plantSite 변경 시 Line 재조회 금지).
+  //   Line 은 PlantSite(@scmSiteId)에도 종속한다 — AS-IS clbPlantSite_SelectedIndexChanged → RefreshLine(cs:876
+  //   배선, 2297~2300)이 선택 PlantSite(SITE_ID)로 Line 을 필터한다(RefreshLine cs:1281~: EE={DIVISION,OPERATION_GROUP,
+  //   SITE_ID} / 비EE={DIVISION,SITE_ID}). 배포 CMBO SQL 두 개 다 @scmSiteId 토큰 보유(ora.py 실측 2026-11-09:
+  //   LineProdPlanLine_SCP C.SCM_SITE_ID / LineByOperationAddOSP_SCP B.SCM_SITE_ID 3 UNION). plantSiteIds 를 실어
+  //   react-query 키에 포함 → PlantSite 변경 시 Line 재조회 = cascade. 빈 선택은 '' → Oracle `'' IS NULL`=TRUE → 전체.
+  //   (design 02 §3 의 "plantSite 미종속" 서술은 clbPlantSite 핸들러를 주석처리로 오독한 것 — 실소스는 배선됨.)
   const [divisions, operationGroups, plantSites, lines, versions, buckets] = useTabComboQueries({
     filters: [
       { comboId: COMBO.DIVISION, mnuId: MENU_ID },
@@ -73,8 +78,13 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
         ? { comboId: COMBO.PLANT_SITE_EE, attribute2: sc.divisionId, segment2: sc.operationGroupId }
         : { comboId: COMBO.PLANT_SITE, divisionId: sc.divisionId, operationGroup: sc.operationGroupId },
       isEe
-        ? { comboId: COMBO.LINE_EE, attribute2: sc.divisionId, operationGroup: sc.operationGroupId }
-        : { comboId: COMBO.LINE, divisionId: sc.divisionId },
+        ? {
+            comboId: COMBO.LINE_EE,
+            attribute2: sc.divisionId,
+            operationGroup: sc.operationGroupId,
+            scmSiteId: sc.plantSiteIds.join(','),
+          }
+        : { comboId: COMBO.LINE, divisionId: sc.divisionId, scmSiteId: sc.plantSiteIds.join(',') },
       { comboId: COMBO.VERSION, divisionId: sc.divisionId },
       COMBO.BUCKET,
     ],
@@ -97,7 +107,7 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
   // Division 권한 게이트(design 01 L1, SetDivisionAuthCheck cs:211~212) — 권한 Division 0건이면 조회영역
   //   입력 disable + 조회 미발사 + 권한없음 안내 1회. divisions 로드 완료(undefined 아님) 후에만 판정해
   //   콤보 조회 중 오차단 방지. 메시지 = MSG00667('No authority assigned.', AS-IS MSG00097 의도 매칭 TO-BE
-  //   코드, Hook #114 — 자매 inventory-trend 선례). MyDivisionInEE_SCP 는 EE 미제외라 클라 추가 필터 없음.
+  //   코드, Hook #114 — 자매 inventory-trend 선례). Division_SCP 는 EE 미제외라 클라 추가 필터 없음.
   const noDivisionAuth = divisions !== undefined && divisionOptions.length === 0;
   useEffect(() => {
     if (noDivisionAuth) {
@@ -154,7 +164,11 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
     disabled?: boolean,
     allOption = true,
     required?: boolean,
-    placeholder?: string
+    placeholder?: string,
+    // sortByLabel=false 면 서버 순서(콤보 SQL ORDER BY) 보존. 순서가 무의미한 코드 목록
+    //   (PlantSite/Line/Electrode)은 기본 true(label 정렬), Version 처럼 SQL ORDER BY 자체가
+    //   의미(최신 먼저)인 콤보는 false 로 서버 순서를 유지한다.
+    sortByLabel = true
   ) => (
     <Grid size={3}>
       <FormItem
@@ -168,7 +182,7 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
             allOption={allOption}
             useClearIcon
             limitTags={1}
-            sortBy='label'
+            {...(sortByLabel ? { sortBy: 'label' as const } : {})}
             disabled={disabled || noDivisionAuth}
             value={value.length ? value.join(',') : 'ALL'}
             options={options}
@@ -238,8 +252,12 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
             v => setOperationGroup(v),
             true
           )}
+          {/* PlantSite 변경 = Line 재조회(위 콤보 filters 의 @scmSiteId 종속) + Line 선택 초기화.
+              AS-IS clbPlantSite_SelectedIndexChanged → RefreshLine(cs:2297~2300)은 Line 을 재populate 하며
+              기존 Line 선택을 ALL 기본으로 되돌린다(setListBox isAddAll=true). 그리드는 비우지 않는다(AS-IS 파리티 —
+              clbPlantSite 핸들러는 InitSpread 미호출, Division/OpGroup 변경과 달리 재조회만 요구). */}
           {multi(t(LBL.PLANT_SITE, '_Plant Site'), sc.plantSiteIds, plantSiteOptions, v =>
-            set({ plantSiteIds: v })
+            set({ plantSiteIds: v, lineIds: [] })
           )}
           {/* Electrode — enable=isEe(division), 비EE 면 disable+clear(design 01 L8). */}
           {multi(
@@ -313,7 +331,9 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
               placeholder='' 로 미선택을 공백 표시한다(자매 SCP0018 과 동일 패턴 — 다중선택 기본 'ALL' 표시 억제).
               미선택 조회는 필수값 게이트(versionNos.length===0)로 차단되므로 공백 초기값과 양립한다. */}
           {/* 라벨 'Ver.' 는 하드코딩(사용자 지시 2026-11-02, SCP0016 패턴 일치) — DB/번들 미등록 약어, KO/EN/CN 동일 표기라 i18n 불요. */}
-          {multi('Ver.', sc.versionNos, versionOptions, setVersions, undefined, true, true, '')}
+          {/* sortByLabel=false — WaterfallVer2_SCP 가 ORDER BY PLAN_START_YYYYMMDD DESC(최신 먼저, ora.py 실측
+              2026-11-04)로 내려주므로 label 오름차순(최신 맨 아래)으로 덮지 않고 서버 순서를 보존한다. */}
+          {multi('Ver.', sc.versionNos, versionOptions, setVersions, undefined, true, true, '', false)}
           <PeriodField
             gridSize={3}
             start={sc.fromYyyymmdd}

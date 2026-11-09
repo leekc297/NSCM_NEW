@@ -1,0 +1,76 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-08T11:50:00+09:00",
+ "producer": "run_verify",
+ "id": "SCP0037",
+ "skip_e2e": false,
+ "started": "2026-11-08 11:47:56",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-d73d9696",
+   "class": "SC1",
+   "msg": "SCP0037 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E smoke/auth 요약 + Excel 조회조건 정리(List 시트)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-eed95e79",
+   "class": "E1",
+   "msg": "Operation LT.LT_DAY (LT(Day)*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-08 11:49"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [],
+ "summary": {
+  "rows": 1706,
+  "PASS": 695,
+  "FAIL": 2,
+  "판정필요": 20,
+  "미검증": 98,
+  "해당없음": 891,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1138,
+   "없음(미검증)": 98,
+   "사람": 23,
+   "기계(상속·집계)": 427,
+   "없음(판정 대기)": 20
+  },
+  "fail_listed": 2,
+  "coverage": {
+   "rules": 91,
+   "measured": 441,
+   "not_run_error": 52,
+   "na": 300,
+   "suspect_na100": []
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0037_OperationLt_CheckList_v24.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0037_OperationLt_ActionItemList_v24.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0037/e2e_results.json"
+  }
+ ],
+ "note": ""
+}

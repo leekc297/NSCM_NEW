@@ -9,6 +9,7 @@ import { sessionTimeZone } from '@foundation/utils';
 import { MainTitle, SsoUserModal, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { ProgressIndicator } from '@shared/lges';
+import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ConfirmDetailPanel } from './components/ConfirmDetailPanel';
@@ -593,47 +594,62 @@ export const ShipmentChangeRequestConfirmSsp0003 = ({ tabId, title }: PageProps<
         ]}
       />
 
-      <div className={styles.mainGrid}>
-        <ShipmentChangeRequestConfirmSsp0003MainGrid
-          rows={mainRows}
-          gridRef={mainGridRef}
-          gridFilterRef={mainFilterRef}
-          division={gridDivision}
-          adminColumns={staticColumns[SHEETS.MAIN]}
-          onRowDblClick={handleRowDblClick}
-        />
-      </div>
+      {/* 상(마스터 그리드) / 하(Request Confirm Detail 폼 + 디테일 그리드) 2분할 — 경계를 드래그해 상하 크기 조절.
+          자매 SSP0200/SSP0201 과 같은 PanelGroup 방식이다. 폼은 하단 패널 안에서 자연 높이로 고정되고
+          남는 높이를 디테일 그리드가 갖으므로, 스플리터는 사실상 두 그리드만 늘이고 줄인다. */}
+      <div className={styles.splitWrapper}>
+        <PanelGroup className={styles.panelGroup} orientation='vertical'>
+          <Panel defaultSize='45%' minSize='15%'>
+            <div className={styles.mainPane}>
+              <ShipmentChangeRequestConfirmSsp0003MainGrid
+                rows={mainRows}
+                gridRef={mainGridRef}
+                gridFilterRef={mainFilterRef}
+                division={gridDivision}
+                adminColumns={staticColumns[SHEETS.MAIN]}
+                onRowDblClick={handleRowDblClick}
+              />
+            </div>
+          </Panel>
 
-      <div className={styles.detailForm}>
-        <ConfirmDetailPanel
-          detail={detail}
-          rejectReason={rejectReason}
-          rejectEnabled={rejectEnabled}
-          onRejectReasonChange={setRejectReason}
-        />
-      </div>
+          <PanelSeparator className={styles.splitBar} />
 
-      <div className={styles.subGrid}>
-        <ShipmentChangeRequestConfirmSsp0003SubGrid
-          rows={subRows}
-          gridRef={subGridRef}
-          gridFilterRef={subFilterRef}
-          division={gridDivision}
-          changeType={changeType}
-          adminColumns={staticColumns[SHEETS.SUB]}
-          checkedIds={checkedIds}
-          chkEditable={chkEditable}
-          onToggle={toggleCheck}
-          onToggleAll={check => {
-            // 전체선택/해제 — 활성(status else/Q)일 때만. 전체 = 현재 서브행 CONFIRM_ID 전건.
-            const ids = check
-              ? (subRows as unknown as Record<string, unknown>[]).map(r =>
-                  str(r[SUB_COL.CONFIRM_ID])
-                )
-              : [];
-            setCheckedIds(ids);
-          }}
-        />
+          <Panel defaultSize='55%' minSize='30%'>
+            <div className={styles.detailPane}>
+              <div className={styles.detailForm}>
+                <ConfirmDetailPanel
+                  detail={detail}
+                  rejectReason={rejectReason}
+                  rejectEnabled={rejectEnabled}
+                  onRejectReasonChange={setRejectReason}
+                />
+              </div>
+
+              <div className={styles.subPane}>
+                <ShipmentChangeRequestConfirmSsp0003SubGrid
+                  rows={subRows}
+                  gridRef={subGridRef}
+                  gridFilterRef={subFilterRef}
+                  division={gridDivision}
+                  changeType={changeType}
+                  adminColumns={staticColumns[SHEETS.SUB]}
+                  checkedIds={checkedIds}
+                  chkEditable={chkEditable}
+                  onToggle={toggleCheck}
+                  onToggleAll={check => {
+                    // 전체선택/해제 — 활성(status else/Q)일 때만. 전체 = 현재 서브행 CONFIRM_ID 전건.
+                    const ids = check
+                      ? (subRows as unknown as Record<string, unknown>[]).map(r =>
+                          str(r[SUB_COL.CONFIRM_ID])
+                        )
+                      : [];
+                    setCheckedIds(ids);
+                  }}
+                />
+              </div>
+            </div>
+          </Panel>
+        </PanelGroup>
       </div>
 
       {/* Requestor 검색 — 공용 SsoUserModal(AS-IS UserInfoPopup, SSO=false 단일선택). */}

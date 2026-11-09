@@ -50,7 +50,7 @@ export const isEeDivision = (division: string): boolean =>
 // 조회조건 콤보 ID — DB 실측 등록 확인(SCM_ADM_CMBO_SQL_M USE_YN='Y', ora.py, design 02 §2/§5).
 //   parameterized 재조회 콤보(부모값 파라미터로 하위 재조회) — react-query 키에 부모값 포함.
 export const COMBO = {
-  DIVISION: 'MyDivisionInEE_SCP', // 권한 division(EE 포함 — 이름 함정, EE 미제외). @mnuId
+  DIVISION: 'Division_SCP', // AS-IS SCP0016 = BLUtils.GetDivision(false,"") → Type.Division(133) → UP_FX_GetCommonDataList_SCP @Code='Division' → FN_GET_DIVISION, ORDER BY ATTRIBUTE1(기본 81). 권한 WHERE 는 MyDivisionInEE_SCP 와 동일하고 정렬만 ATTRIBUTE1 → Division_SCP 가 등가(이전 MyDivisionInEE_SCP 는 ORDER BY DIVISION_ID·기본 40 로 불일치). EE 포함. @mnuId
   OP_GROUP_EE: 'OperationGroupEE_SCP', // EE (SEGMENT1 IN ('A','E'))
   OP_GROUP: 'OperationGroup_SCP', // 비EE (SEGMENT1 IN ('P','A'))
   VERSION: 'WaterfallVer_FG2_SCP', // @divisionId=division. CODE=SP_W_YYYYMMDD, 최신10

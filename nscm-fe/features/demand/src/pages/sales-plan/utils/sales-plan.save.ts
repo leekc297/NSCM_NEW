@@ -2,7 +2,8 @@
 //   근거(라인 = AS-IS DMF0021_SalesPlan.cs):
 //     · 수집 단위       : (행 × 변경 기간셀) flat. I=값 존재 전량 / M=활성 버킷 Red(변경) 셀만 (L2514~2537
 //       — D_ 컬럼 / 비Red 셀 / 버킷 불일치(W_↔M_) 셀 수집 제외 = silent skip).
-//     · 빈값→'0' 치환   : [E20251125-000694] + 값 '0' & action≠D → 셀 action 'D' 전환 (L2553~2572).
+//     · 빈값→'0' 치환   : [E20251125-000694] (L2553~2572). AS-IS 의 값 '0' → 셀 action 'D' 전환은
+//       따르지 않는다 — 0 도 값 0 으로 저장한다(2026-11-04, DMF0042 Business Plan 과 같은 규칙).
 //     · Catch_Up 음수   : 40 && Catch_Up && Price<0 → MSG00085 {0} (L2587).
 //     · 변경 0건 행     : iDateCount==0 → MSG00146 {line} (L2666. TO-BE 는 사내 MSG00670 재매핑 —
 //       MSG.LINE_NO_CHANGE 가 단일 원천이므로 코드/테스트에 ID 리터럴 금지).
@@ -19,7 +20,7 @@ import { dynKindOf } from './sales-plan.editLock';
 
 // SAVE 한 row(= 행 × 기간셀) 의 업무 데이터 16키(감사 2키는 payload 조립 시 추가).
 export interface SaveUnfoldRow {
-  activeFlag: string; // 'I'(신규) / 'M'(수정) / 'D'(0값 — 셀 단위 삭제 전환)
+  activeFlag: string; // 'I'(신규) / 'M'(수정) — 0·빈칸도 값 0 으로 저장(삭제 전환 없음)
   divisionId: string;
   projectCode: string; // 40=END_CUSTOMER40 값 / 81·82=PROJECT_CODE
   scmSiteId: string;
@@ -91,8 +92,8 @@ const identityOf = (
 
 /**
  * 변경된 모든 행/셀 → SaveUnfoldRow 목록 (+ 조립 단계 검증 — Catch_Up 음수 / 라인 변경 0건).
- *   - 신규 행(insertedRows): 활성 버킷 kind 의 값 존재 셀 전량 → 'I' (0값 → 'D').
- *   - 수정 행(editedChanges): EditTracker 추적 셀 중 활성 버킷 kind 만 → 'M' (빈값→'0'→'D').
+ *   - 신규 행(insertedRows): 활성 버킷 kind 의 값 존재 셀 전량 → 'I' (0 도 그대로 'I').
+ *   - 수정 행(editedChanges): EditTracker 추적 셀 중 활성 버킷 kind 만 → 'M' (빈값은 0 으로 저장).
  *   - 버킷 불일치 셀(silent skip)·D_ 셀 제외 — AS-IS L2514~2537.
  */
 export const buildUnfoldRows = (params: {
@@ -124,7 +125,10 @@ export const buildUnfoldRows = (params: {
     // 버킷 태그 원문 그대로 1건 전송 (AS-IS SaveData L2512~2663: Monthly=M_ 태그 1건, W_ skip).
     //   SAVE SP 는 태그당 1행 저장(월→주 fan-out 없음) — FE 배분 금지.
     out.push({
-      activeFlag: qty === '0' ? 'D' : rowFlag, // 값 '0' → 'D' 전환 (L2571)
+      // 0 도 값으로 저장한다 (2026-11-04 — 종전 '0' → 'D' 셀 단위 삭제 전환(AS-IS L2571) 제거.
+      //   DMF0042 Business Plan 과 같은 규칙). 빈칸으로 지운 셀도 qtyOf 가 '0' 으로 바꿔 0 으로 저장된다.
+      //   저장된 데이터는 삭제하지 않는다 — Delete 버튼은 저장 전 신규 행만 지운다.
+      activeFlag: rowFlag,
       ...identity,
       yyyymmdd: saveTag,
       qty,
@@ -153,7 +157,7 @@ export const buildUnfoldRows = (params: {
     }
   }
 
-  // (2) 수정 행 — EditTracker 변경 셀 중 활성 버킷 kind 만 (현재 값 전송 — 빈 셀 '0'→'D' 포함)
+  // (2) 수정 행 — EditTracker 변경 셀 중 활성 버킷 kind 만 (현재 값 전송 — 빈 셀은 0 으로 저장)
   for (const [row, changedBindings] of editedChanges) {
     if (row.CRUD_TYPE === 'I') continue; // 신규는 (1) 에서 처리
     lineNo += 1;

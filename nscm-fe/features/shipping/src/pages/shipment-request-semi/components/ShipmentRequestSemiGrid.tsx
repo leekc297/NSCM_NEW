@@ -18,10 +18,9 @@ import { GridUtils, type EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
-import type {
-  BUCKET_TYPE} from '../shipment-request-semi.constants';
 import {
   ADMIN_SHEET_NAME,
+  BUCKET_TYPE,
   CELL_PLANT_SITE_DIVISIONS,
   COLUMN,
   COMBO,
@@ -147,6 +146,34 @@ export const ShipmentRequestSemiGrid = ({
     () => buildPivotColumns(pivotCols, baseVisible),
     [pivotCols, baseVisible]
   );
+
+  // AS-IS SetSpreadColumn Monthly 분기(cs:1159-1166) 파리티 — bucket=Monthly 일 때 D_/W_ 를 숨기고
+  //   **MEASURE 이후의 비-pivot 메타 컬럼을 켠다**. 그 범위에 실제로 걸리는 숨김 컬럼은 메타 순서상
+  //   MEASURE(16) 뒤의 `BOD_FROM_YYYYMMDD`/`BOD_TO_YYYYMMDD`(30) 둘뿐이다(SCM_MST_SHEET_COLUMNS 실측).
+  //   필수: AS-IS 의 Monthly `else` 는 이 두 칸을 `Visible=true` 로 켜지만, Daily/Weekly 분기는
+  //   D_/W_/M_ 접두만 토글하고 BOD 메타컬럼은 **전혀 건드리지 않는다**. 그래서 한 번 Monthly 로
+  //   켜진 두 칸은 Daily/Weekly 로 되돌려도 다시 숨지 않고 **계속 보인다**(사용자 확인 2026-11-05).
+  //   따라서 `bucketType === MONTHLY` 조건이 아니라 "조회 이후 Monthly 가 한 번이라도 선택됐는가"
+  //   래치로 유지한다. 래치는 새 조회(pivotCols 교체)에서 초기화 — AS-IS 가 재조회 시 시트를
+  //   designer 기본(숨김)으로 다시 세우는 것과 등가.
+  //   필수: `display`·`visible` **둘 다** true 로 켠다. admin 메타는 이 두 칸을 `display:false`,
+  //   `visible:false` 로 내리는데, 공용 DataGrid 의 최종 렌더 필터가
+  //   `Boolean(column.display) && column.visible !== false`(DataGrid.tsx:902)라 `visible` 만
+  //   올리면 `display:false` 에서 그대로 걸러져 안 나온다(2026-11-04 네트워크 실측).
+  const bodShownRef = useRef(false);
+  useEffect(() => {
+    bodShownRef.current = false; // 새 조회 = 시트 재구성 → 래치 초기화
+  }, [pivotCols]);
+  if (bucketType === BUCKET_TYPE.MONTHLY) bodShownRef.current = true;
+  const resolvedStaticColumns = useMemo<RawFlexGridColumnConfig[]>(() => {
+    if (!bodShownRef.current) return adminColumns;
+    const bodCols: readonly string[] = [COLUMN.BOD_FROM_YYYYMMDD, COLUMN.BOD_TO_YYYYMMDD];
+    return adminColumns.map(col =>
+      bodCols.includes(col.colNm ?? '') ? { ...col, visible: true, display: true } : col
+    );
+    // bodShownRef 는 ref 라 deps 에서 빠지지만, bucketType 변화가 리렌더를 유발해 래치 최신값으로 재평가된다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [adminColumns, bucketType]);
 
   // 드릴다운 override(binding → visible). Bucket/Sum/조회 변경 시 초기화 = base 로 복귀(design 03 §2.6
   //   "SetSpreadColumn 재실행이 드릴다운을 덮는다"). State 가 아니라 Ref 다 — setState 로 바꾸면
@@ -495,7 +522,7 @@ export const ShipmentRequestSemiGrid = ({
       itemsSource={rows as unknown as WijmoRowItem[]}
       // 열고정은 공용 DataGrid 가 메타 `FIXED_FLAG='Y'`(=MEASURE)를 읽어 산출한다 —
       //   `frozenColumns` 리터럴 지정 금지(design 01 §2.1 R01 / hook #66).
-      staticColumns={adminColumns}
+      staticColumns={resolvedStaticColumns}
       dynamicColumns={dynamicColumns}
       // 메타 셀 콤보의 `@mnuId` / `@divisionId` 해소 — 값·근거는 위 COMBO_PARAMS 주석 참조.
       comboParams={COMBO_PARAMS}

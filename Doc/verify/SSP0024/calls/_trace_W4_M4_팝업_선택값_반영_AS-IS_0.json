@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 296,
+  "at": "2026-11-09T02:08:54.950Z",
+  "user": "minyonglee1",
+  "test": "W4 M4 팝업 선택값 반영 = AS-IS"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 191,
+  "dur": 340,
+  "at": "2026-11-09T02:08:58.204Z",
+  "user": "minyonglee1",
+  "test": "W4 M4 팝업 선택값 반영 = AS-IS"
+ }
+]

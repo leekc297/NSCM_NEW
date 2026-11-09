@@ -47,11 +47,13 @@ const groupKey = (r: MainRow): string =>
     r.SCM_SITE_ID ?? ''
   )}^${String(r.PROJECT_CODE ?? '')}`;
 
-// FROM/TO 는 R-ORG 파생(ORG_*) 우선, 없으면 원 셀에서 8자리 정규화.
-const fromOf = (r: MainRow): string =>
-  toYmd8((r as Record<string, unknown>).ORG_FROM_YYYYMMDD) || toYmd8(r.FROM_YYYYMMDD);
-const toOf = (r: MainRow): string =>
-  toYmd8((r as Record<string, unknown>).ORG_TO_YYYYMMDD) || toYmd8(r.TO_YYYYMMDD);
+// FROM/TO 는 반드시 라이브 셀(FROM/TO_YYYYMMDD)에서 8자리 정규화한다. ORG_* 는 서버 GET 이
+//   내려주는 원본(pre-edit) 스냅샷이라 사용자가 셀을 수정해도 갱신되지 않는다 — 과거 구현이
+//   ORG_* 를 우선 읽어, 기존행에서 TO 를 FROM 보다 이르게 고쳐도 검증(N8 f>tv 등)이 스냅샷
+//   원본을 보고 통과시켜 그대로 저장되던 버그가 있었다(2026-11-09 신고). 신규행은 ORG_* 가 없어
+//   정상 동작했다. 라이브 셀은 Date(FPDate 편집값)여도 toYmd8 가 8자리로 정규화한다.
+const fromOf = (r: MainRow): string => toYmd8(r.FROM_YYYYMMDD);
+const toOf = (r: MainRow): string => toYmd8(r.TO_YYYYMMDD);
 
 // 자리수는 맞지만(toYmd8) 실제 달력에 없는 날짜(예: 20261251) 차단 — Date UTC 라운드트립.
 const isValidYmd8 = (ymd8: string): boolean => {
@@ -65,7 +67,7 @@ const isValidYmd8 = (ymd8: string): boolean => {
 // div=81 필수 체크의 "미입력" 판정(N10). '/'(NO_VALUE_PLACEHOLDER)는 null 회피용 기본값이자
 //   그 자체로 유효한 저장값이라 미입력이 아니다(사용자 확인 2026-10-19). 공백/null 과 AS-IS 기존
 //   placeholder '-'(DB 레거시 데이터)만 미입력으로 본다.
-const isSalesSiteBlank = (v: unknown): boolean => {
+const isSalesSiteBlank = (v: WijmoPrimitive | undefined): boolean => {
   const s = String(v ?? '').trim();
   return s === '' || s === '-';
 };

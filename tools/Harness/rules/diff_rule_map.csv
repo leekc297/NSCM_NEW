@@ -1,0 +1,5 @@
+diff_item,rule_id,verdict_map,target_tpl,expected,basis
+KEYSET,A1,PASS=PASS;DIFF=PASS;ROWS_ONLY=판정필요;ASIS_ONLY=판정필요;TOBE_ONLY=판정필요;COLS=PASS;SKIP=ERROR;ERR=ERROR,{sp} 결과 행·키 집합(공통 {common} · AS-IS 전용 {asis_only} · TO-BE 전용 {tobe_only}),같은 인자 조회 결과의 키 집합이 AS-IS 와 같다 — 단독행 차이는 데이터 차이(DEV MSSQL≠사내 Oracle)일 수 있어 판정필요(사용자 결정 2026-11-06),detect_rules A1 조회 건수 AS-IS 일치
+VALUES,A7,PASS=PASS;DIFF=FAIL;ROWS_ONLY=판정필요;COLS=PASS;SKIP=ERROR;ERR=ERROR,{sp} 공통행 컬럼 값(공통 {common}행 · 불일치 셀 {diff_cells}),키가 같은 행의 모든 공통 컬럼 값이 AS-IS 와 같다(정규화 norm_rules.csv 적용) — 불일치 셀은 diff/<proc>.csv 에 키|컬럼|AS-IS|TO-BE,detect_rules A7 컬럼별 결과 값 일치
+COLSET,A5,PASS=PASS;DIFF=PASS;ROWS_ONLY=PASS;COLS=판정필요;SKIP=ERROR;ERR=ERROR,{sp} 결과 컬럼 집합(AS-IS 전용 {cols_only_a} · TO-BE 전용 {cols_only_t}),결과셋 컬럼 집합이 별칭(col_alias.csv) 적용 후 AS-IS 와 같다 — 차이는 설계 변경일 수 있어 판정필요,detect_rules A5 표시 컬럼 구성
+ORDER,A6,PASS=PASS;DIFF=판정필요;NA=NA;ROWS_ONLY=NA;SKIP=ERROR;ERR=ERROR,{sp} 공통·유일 행 상대 순서,공통·유일 행의 상대 순서가 AS-IS 와 같다(순서 차이는 CR-075·사용자 결정 10-30 에 따라 판정필요),detect_rules A6 결과 행 정렬 순서

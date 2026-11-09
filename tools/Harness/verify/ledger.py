@@ -19,18 +19,21 @@ import json
 import os
 import re
 import sys
+from asis_variant import is_main, is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 HERE = os.path.dirname(os.path.abspath(__file__))
 P = lambda *a: os.path.join(ROOT, *a)
 
 COLS = ['row_id', 'source', 'family', 'rule_id', 'axis', 'area', 'target', 'condition', 'oracle', 'expected', 'asis_ref', 'method',
-        'tobe_ref', 'result', 'evidence', 'fix_layer', 'fix_class', 'defect_ref', 'note']
+        'tobe_ref', 'result', 'evidence', 'fix_layer', 'fix_class', 'defect_ref', 'note',
+        # 2026-11-06 W8-A(플랜 1-2): 오라클 분류 · 3-증거(기대값 원천·증거 경로·전제) · 적용성 — judge.py 가 채우고 evidence_gate 가 FAIL 발행 조건으로 쓴다
+        'oracle_class', 'expect_src', 'evidence_ref', 'precond', 'applicable', 'applicable_why']
 
 # 축: 1 디자인·다국어 / 2 AS-IS 로직 / 3 SMOKE / 4 CRUD / 5 권한별 CRUD
 AXIS_BY_FAMILY = {'A': '3', 'B': '3', 'C': '2', 'D': '4', 'E': '4', 'F': '4', 'G': '3', 'H': '1', 'I': '1', 'J': '5', 'K': '3', 'L': '3', 'M': '4', 'N': '2'}
 # 화면 전체 단위로 항상 확인하는 규칙(요소별 행과 별개)
-SCREEN_RULES = ['DB-SYN', 'K6', 'A1', 'A2', 'A4', 'A5', 'F1', 'F2', 'F4', 'F5', 'F6', 'G3', 'H4', 'H7', 'I1', 'I2', 'I3', 'I4', 'J1', 'J2', 'K1', 'K2', 'K3', 'E6', 'L1']  # E6 셀 키 입력(IME·자동완성) 2026-10-28 — 입력 그리드 없으면 E2E 가 NA
+SCREEN_RULES = ['DB-SYN', 'K6', 'A1', 'A2', 'A4', 'A5', 'F1', 'F2', 'F4', 'F5', 'F6', 'G3', 'H4', 'H7', 'I1', 'I2', 'I3', 'I4', 'J1', 'J2', 'K1', 'K2', 'K3', 'E6', 'L1', 'SC1']  # E6 셀 키 입력(IME·자동완성) 2026-10-28 — 입력 그리드 없으면 E2E 가 NA · SC1 조회조건 순서(2026-11-07 T159: 대조표에 SC1 걸리는 행이 없는 화면(SCP0127)은 smoke 기준표 순서 FAIL 이 원장에 못 들어왔다)
 # 조회조건 유형별 규칙
 SEARCH_COMBO_RULES = ['B1', 'B2', 'B3', 'B4', 'B6', 'B7', 'G1', 'G2', 'G4', 'G7', 'H5']  # G7 = 표시값 형식(combo_oracle) · B7 = 후보 갱신(b7_check + E2E) 2026-10-28
 SEARCH_TEXT_RULES = ['G1', 'G2', 'G4', 'G5', 'H5', 'G8', 'G9']  # G8 대소문자 무시 · G9 콤마 다중값(2026-10-30 SSP45 공통요건 7·8·13·14)
@@ -62,6 +65,9 @@ def main():
     asis_id = (a.asis or mid).upper()
     sdir = P('Doc', 'asisfacts', 'screens', asis_id)  # 아래 F9 블록 등이 쓴다(2026-10-31 정의 전 참조로 Bucket 화면 원장 생성이 죽던 결함)
     sys.path.insert(0, HERE); from asis_live import dead_methods, dead_sps, sp_base
+    import oracle_class as _OC; import applicability as _AP  # W8-A: 규칙 → 오라클 분류(Doc/verify/_oracle_class.csv) · 결함 일반화 행의 적용성(화면 사실)
+    _oc = _OC.load()
+    if not _oc: print('  [WARN] Doc/verify/_oracle_class.csv 없음 — 전 행 oracle_class=HOLD(python tools/Harness/verify/oracle_class.py --init)')
     dead = dead_methods(asis_id)  # 실행되지 않는 AS-IS 메서드 — 그 문장은 AS-IS 사실이 아니라 원장 행을 만들지 않는다(2026-10-30 SCP0041 SaveData · KEEP 9/E16)
     dsp = dead_sps(asis_id)  # 호출이 전부 죽은 메서드 안에만 있는 SP — golden·정렬 SP 행도 만들지 않는다
     gold = [g for g in read_csv(P('Doc', 'golden', 'golden_cases.csv')) if sp_base(g.get('asis_sp')) not in dsp]
@@ -84,11 +90,13 @@ def main():
             'area': area, 'target': target, 'condition': condition, 'oracle': oracle or r.get('oracle', ''),
             'expected': expected or r.get('how', ''), 'asis_ref': asis_ref, 'method': method or r.get('method', ''),
             'tobe_ref': '', 'result': 'NOT_RUN', 'evidence': '', 'fix_layer': '', 'fix_class': '', 'defect_ref': defect_ref, 'note': note,
+            'oracle_class': 'RULE' if source == 'CONFIRMED' else _oc.get(rule_id, 'HOLD'), 'expect_src': '', 'evidence_ref': '', 'precond': '', 'applicable': '', 'applicable_why': '',
         })
 
     # 1) 화면 단위 규칙
     for rule_id in SCREEN_RULES:
-        add('RULE_SCREEN', rule_id, f'{mid} 화면', area='화면')
+        # 기대 원천 = 규칙 정의(엔진 갭 카탈로그·문서 결함 유형) — 비워 두면 derive_expect_src 가 GENERAL 로 보아 실측 FAIL 을 '근거 불충분' ERROR 로 강등했다(2026-11-07 SCP0127 L1·K3)
+        add('RULE_SCREEN', rule_id, f'{mid} 화면', area='화면', asis_ref=f'규칙 {rule_id} 정의 · 결함원장 유형(Doc/verify/_engine_gap.csv)')
     # F8 감사 필드 · F7 저장 연계 — 저장 SP 가 있는 화면(golden SAVE 케이스)만 1행씩 (2026-10-27 · save_audit.py 판정)
     has_save_proc = any((r.get('menu_id') or '').upper() == mid and r.get('proc') and re.search(r'SAVE|INS|UPD|DEL', r.get('btn') or '', re.I) and (r.get('use_yn') or 'Y') != 'N' for r in read_csv(P('Doc', 'tobefacts', 'db', 'proc_meta.csv')))
     if has_save_proc:  # 골든 SAVE 케이스가 없어도 PROC_M 에 저장 배선이 있으면 대상(2026-10-31 SCP0096 등 F6·F7·F8 행 미생성 결함)
@@ -295,6 +303,8 @@ def main():
     # 1-c) 2026-10-30 WP9 — 종전 impl=N 규칙의 원장 행(검사기 신설): H11 로딩 표시 · C5 그리드 간 연동 · J3 권한별 편집 · H12 고정 컬럼 · G10 팝업 Enter · M2 특수 버튼 · F10 저장 원자성
     #   (D2 = D1 동적 컬럼 COND 로 · B5 = B4 필터 원천 대조로 · A9 = 동적 헤더 검사 — 각각 기존 행이 맡는다)
     add('RULE_SCREEN', 'H11', f'{mid} 화면', area='화면', expected='조회·저장 요청 중 로딩 표시(progressbar/스피너)가 보이고 완료 후 사라짐 · 서버 호출 중 무반응 0', method='E2E')
+    # P7(b) 2026-11-06: 필수 조건 알림을 검사기가 자동으로 채워 넘긴 사실을 기록 — 'Ver. ALL 인데 선택 요구' 같은 기본값 결함을 자동 채움이 우회해 PASS 로 만들지 않게(SCP0016)
+    add('RULE_SCREEN', 'G6', f'{mid} 필수 조건 자동 채움(검사기 우회 기록)', area='조회조건', expected='필수 조건 알림이 떠서 검사기가 후보로 자동 채운 횟수 0 — 있으면 그 조건의 기본값·ALL 처리가 결함일 수 있음(사람 판정)', method='E2E')
     plan_p = P('Doc', 'e2e', 'specs', f'{mid}.plan.json')
     try:
         plan = json.load(open(plan_p, encoding='utf-8')) if os.path.exists(plan_p) else {}
@@ -306,8 +316,34 @@ def main():
     add('RULE_SCREEN', 'H12', f'{mid} 화면', area='그리드', expected=(f"좌측 고정 컬럼 = SHEET_COLUMNS FIXED_FLAG=Y ({len(fixed_cols)}개: {', '.join(fixed_cols[:8])})" if fixed_cols else '좌측 고정 컬럼 = SHEET_COLUMNS FIXED_FLAG=Y 0개(고정 없음)'),
         asis_ref=f"TO-BE SHEET_COLUMNS FIXED_FLAG · {mid}", method='META+E2E', note=json.dumps({'fixed': fixed_cols}, ensure_ascii=False))
     add('RULE_SCREEN', 'J3', f'{mid} 화면', area='화면', expected='AS-IS 잠금 규칙에 GROUP 조건이 있는 컬럼 — 다른 권한 그룹 계정으로 로그인해도 그 계정의 AS-IS 기대와 편집 가능 여부가 같음', method='E2E', note='D1 RULES 에 GROUP 이 있는 컬럼만 · 계정 풀(plan.accounts)에서 admin 아닌 메뉴 접근 가능 계정 1개')
+    # 2026-11-06(SCP0037 Material·SCP0016 PJT G10 허위 FAIL): Enter→팝업 기대는 AS-IS 원문에 그 컨트롤의 KeyDown/KeyUp/KeyPress 연결이 있고
+    #   핸들러 본문에 Enter 키 처리가 있을 때만 만든다(주석 코드 제외 · 공용 UsrMultiLineEditor Enter 처리는 주석). GAP-410/427 은 DMF0072·0074 전용 근거였다
+    def _asis_src():
+        txt = ''
+        for fr in read_csv(os.path.join(sdir, 'files.csv')):
+            if not is_main(fr, sdir) or not str(fr.get('file') or '').endswith('.cs'):
+                continue
+            try:
+                t = open(P('GSCM', *re.split(r'[\\/]', fr['file'])), encoding='utf-8', errors='replace').read()
+            except OSError:
+                continue
+            txt += '\n' + re.sub(r'/\*.*?\*/', '', re.sub(r'//[^\n]*', '', t), flags=re.S)
+        return txt
+    _src_all = _asis_src()
+    def _asis_enter_popup(ctrl):
+        if not ctrl or not _src_all:
+            return None  # 판단 근거 없음 — 종전대로 행 생성
+        hs = re.findall(r'\b' + re.escape(ctrl) + r'\s*\.\s*Key(?:Down|Up|Press)\s*\+=\s*(?:new\s+[\w.]+\s*\(\s*)?(?:this\.)?(\w+)', _src_all)
+        for h in hs:
+            m = re.search(r'\b' + re.escape(h) + r'\s*\([^)]*\)\s*\{', _src_all)
+            body = _src_all[m.end():m.end() + 3000] if m else ''
+            if re.search(r'Keys\.(Enter|Return)|\(char\)\s*13|KeyChar\s*==\s*13', body):
+                return True
+        return False
     for f in plan.get('fields') or []:
         if f.get('popup') and (f.get('kind') in ('text', 'popup', 'single') or re.search(r'text|popup', str(f.get('component') or ''), re.I)) and not f.get('excluded'):
+            if _asis_enter_popup(f.get('asis')) is False:
+                continue  # AS-IS 에 Enter 팝업 동작 없음(아이콘 클릭만) — 대상 아님
             add('SEARCH', 'G10', f"조회조건 {f.get('label') or f.get('asis')}", area='조회조건', expected='입력칸에서 Enter(한글 조합 중 제외) → 연결 팝업 열림(아이콘 클릭과 같음)', asis_ref=f"AS-IS {f.get('asis')} 팝업 연결 입력칸 · plan.json fields", method='E2E', note=json.dumps({'labels': f.get('labels') or [f.get('label')]}, ensure_ascii=False))
     for b in plan.get('buttons') or []:
         if b.get('kind') == 'subtitle-custom' and b.get('tobe'):
@@ -350,7 +386,7 @@ def main():
     sc = [r for r in read_csv(P('tools', 'Harness', 'rules', 'search_cond.csv')) if r.get('menu_id', '').upper() == mid and r.get('usage') == 'USE']
     if not sc:
         sdir0 = P('Doc', 'asisfacts', 'screens', asis_id)
-        ctls = [c for c in read_csv(os.path.join(sdir0, 'controls.csv')) if c.get('variant') == 'current']
+        ctls = [c for c in read_csv(os.path.join(sdir0, 'controls.csv')) if is_main(c, sdir0)]
         parent = {c['name']: c['parent'] for c in ctls}
         panels = {c['name'] for c in ctls if c['type'].endswith('UsrConditionPanel')}
 
@@ -358,7 +394,7 @@ def main():
             p_ = parent.get(n, '')
             return depth < 8 and (p_ in panels or (p_ in parent and in_panel(p_, depth + 1)))
         label = {}
-        props = [x for x in read_csv(os.path.join(sdir0, 'props.csv')) if x.get('variant') == 'current']
+        props = [x for x in read_csv(os.path.join(sdir0, 'props.csv')) if is_main(x, sdir0)]
         item_ctl = {x['target']: x['value'].replace('this.', '') for x in props if x['prop'] == 'Control'}
         for x in props:
             if x['prop'] == 'Text' and x['target'] in item_ctl:
@@ -463,8 +499,16 @@ def main():
             if e and e[k] == 'NONE':
                 continue  # AS-IS 에 InsertButton 이 없는 화면 — 신규행 D1 행을 만들지 않는다(2026-10-31 SCP0041)
             if e and col.upper() in popup_cols and e[k] == 'Y':
-                add('COLUMN', 'D1', t, condition=cond, expected=f"팝업 입력(직접 편집 차단·더블클릭 팝업) — AS-IS {popup_cols[col.upper()]}",
-                    asis_ref=f"{e.get('ref', '')} · {popup_cols[col.upper()]} · {tobe}", area='그리드')
+                # T114(2026-11-06 SCP0131 ITEM_ID): AS-IS 셀이 일반 텍스트 셀(cell_rules TEXT · CELL=-)이고 편집 가능(e[k]=Y)이면 AS-IS 도 직접 입력이 된다
+                #   (더블클릭 팝업은 보조 입력) → '직접 편집 차단' 기대가 아니라 '팝업 보조 입력' — TO-BE 가 직접+팝업이든 팝업 전용(CR-072)이든 정상(잘못된 값 처리는 E7)
+                _acr = cr.get(col.upper()) or cr.get(col) or {}
+                _plain = (_acr.get('cell_type') or 'TEXT').upper() in ('TEXT', '') and 'CELL=-' in (_acr.get('ref') or 'CELL=-')
+                if _plain:
+                    add('COLUMN', 'D1', t, condition=cond, expected=f"팝업 보조 입력(직접 입력 허용 + 더블클릭 팝업) — AS-IS 일반 텍스트 셀(CELL=-) · {popup_cols[col.upper()]}",
+                        asis_ref=f"{e.get('ref', '')} · {popup_cols[col.upper()]} · AS-IS cell_rules {_acr.get('cell_type') or 'TEXT'} {(_acr.get('ref') or '')[:60]} · {tobe}", area='그리드')
+                else:
+                    add('COLUMN', 'D1', t, condition=cond, expected=f"팝업 입력(직접 편집 차단·더블클릭 팝업) — AS-IS {popup_cols[col.upper()]}",
+                        asis_ref=f"{e.get('ref', '')} · {popup_cols[col.upper()]} · AS-IS cell_rules {_acr.get('cell_type') or '-'} · {tobe}", area='그리드')
                 # E7(2026-10-30 SSP45 공통요건 23): 팝업으로 고르는 셀에 직접 입력(key-in)이 열리면 잘못된 값은 되돌림/검증 메시지로 차단돼야 한다 — 직접 편집이 막혀 있으면 경로 없음(PASS)
                 add('COLUMN', 'E7', t, condition=cond, expected=f"팝업 입력 컬럼 Key-in 검증 — 직접 입력이 열리면 후보 밖 값은 되돌림 또는 검증 메시지(저장 차단) · 직접 입력 차단이면 대상 없음 — AS-IS {popup_cols[col.upper()]}",
                     asis_ref=f"{e.get('ref', '')} · {popup_cols[col.upper()]} · {tobe}", area='그리드')
@@ -541,7 +585,7 @@ def main():
         _nm = re.sub(r'^조회조건\s*', '', _r['target']).strip()
         add('RULE_SCREEN', 'G1', f'{mid} 텍스트 부분일치 {_nm}', condition='값의 일부만 입력해 조회', area='조회조건', expected='부분일치(Like) — 그 값을 가진 행 포함 · 조건 밖 행 0', method='E2E', note='전용')
     # 4) AS-IS 액션 — 현행(current)·공유(shared) 파일만(legacy 사본 제외)
-    cur_files = {f['file'] for f in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'files.csv')) if f.get('variant') in ('current', 'shared')}
+    cur_files = {f['file'] for f in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'files.csv')) if is_cur(f)}
     acts = [x for x in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'actions.csv')) if (not cur_files or x['file'] in cur_files) and (x['class'], x['method']) not in dead]
     # MS1(2026-10-28) — MESSAGE 문장 밖(LOCAL 변수 commMsgCode · BRANCH errCode 분기 등)에만 나오는 AS-IS MSG_ID 도 의미 대조 대상(SCP0007 MSG00043·MSG00106)
     for x in acts:
@@ -662,6 +706,34 @@ def main():
         add('CONFIRMED', r.get('rule_id', 'O2'), r.get('target', ''), condition=r.get('condition', ''), expected=r.get('requirement', ''),
             asis_ref=f"확정규칙 {r.get('req_id', '')} (출처 {r.get('origin', '')})", area='확정규칙', oracle='O2', method=r.get('method', ''))
 
+    # 7) W8-C 스냅샷 형상 행(2026-11-06 플랜 3-3) — Doc/e2e/specs/_snap.spec.ts 가 target '<ID> 스냅샷 <종류> <범위>' 로 찾는다(범위 계산은 스펙 divList 와 동일: sample.div + accounts[].divisions ≤3)
+    _sdivs = []
+    _s0 = (plan.get('sample') or {}).get('div') if isinstance(plan.get('sample'), dict) else None
+    if _s0: _sdivs.append(str(_s0))
+    for _a in plan.get('accounts') or []:
+        for _d in _a.get('divisions') or []:
+            if str(_d) not in _sdivs: _sdivs.append(str(_d))
+    _sdivs = _sdivs[:3] or ['']
+    for _d in _sdivs:
+        _sc = f'Div {_d}' if _d else 'Div'
+        add('RULE_SCREEN', 'G4', f'{mid} 스냅샷 조회조건 {_sc}', condition=f'{_sc} 선택 · 조회 전 · 조회영역 펼침', area='조회조건',
+            expected='조회영역 접근성 트리(라벨·순서·컨트롤 종류)가 승인 골든과 같음 — 첫 골든은 AS-IS 유래 기대(search_cond.csv tobe_seq·plan.json fields)와 snap_validate 대조 뒤 사람이 승인',
+            asis_ref='AS-IS plan.json fields/condOrder(search_cond.csv tobe_seq · AS-IS 라벨) · 스냅샷 골든', method='E2E-SNAP')
+        add('RULE_SCREEN', 'K4', f'{mid} 스냅샷 버튼 {_sc}', condition=f'{_sc} 선택 · 화면 열림', area='버튼', expected='버튼 바 접근성 트리(버튼 이름·순서)가 승인 골든과 같음',
+            asis_ref='AS-IS plan.json buttons/menuBtnCodes(AS-IS 버튼 메서드 · btn_auth) · 스냅샷 골든', method='E2E-SNAP')
+    for _sh in (plan.get('mainSheets') or [{'name': 'main'}]):
+        _nm = _sh.get('name') or 'main'
+        add('RULE_SCREEN', 'A5', f'{mid} 스냅샷 헤더 {_nm}', condition='조회 후 그리드 헤더(Wijmo 모델 전 컬럼 · 동적 토큰 정규화)', area='그리드',
+            expected='헤더 행·칸 텍스트가 승인 골든과 같음(expectedCols/headerSpec 와 snap_validate 대조 뒤 승인)', asis_ref='AS-IS plan.json expectedCols/headerSpec(SHEET_COLUMNS · AS-IS SetSheetHeaderColumn) · 스냅샷 골든', method='E2E-SNAP')
+    for _f in plan.get('fields') or []:
+        if _f.get('popup') and not _f.get('excluded') and (_f.get('labels') or _f.get('label')):
+            _lb = (_f.get('labels') or [_f.get('label')])[0]
+            add('RULE_SCREEN', 'H6', f'{mid} 스냅샷 팝업 {_lb}', condition=f"조회조건 '{_lb}' 돋보기 팝업 열림", area='팝업', expected='팝업 접근성 트리(제목·조건·버튼 순서·No 컬럼)가 승인 골든과 같음',
+                asis_ref='AS-IS facts_popup(AS-IS 팝업 폼 · tobe_catalog) · 디자인 룰 CR-005 · 스냅샷 골든', method='E2E-SNAP')
+    for _w in ('1920', '1366'):
+        add('RULE_SCREEN', 'H4', f'{mid} 스냅샷 화면샷 {_w}', condition=f'뷰포트 {_w}×1080 · 조회 후 · 조회영역+헤더 띠(기간·건수·셀 마스크)', area='화면',
+            expected='화면샷이 승인 골든과 같음(maxDiffPixelRatio 0.002) — 골든은 사용자 승인본', asis_ref='TO-BE 룰 디자인 H4(레이아웃) · 스냅샷 골든(사용자 승인)', method='E2E-SNAP')
+
     out_dir = P('Doc', 'verify', mid)
     os.makedirs(out_dir, exist_ok=True)
     out = os.path.join(out_dir, 'verify_ledger.csv')
@@ -678,6 +750,24 @@ def main():
         for k in ('fix_layer', 'fix_class'):
             if p.get(k):
                 r[k] = p[k]
+    # 2026-11-08 T165: 사람이 판정한 행(수동)이 생성 경로 변경으로 새 원장에서 사라지면 판정이 소리 없이 증발한다(SCP0084 SC1 T-cd8baac8 사용자 FAIL — T159 가 RULE_SCREEN SC1 을 만들자
+    #   대조표 SC1 인스턴스가 그 행에 연결돼 TRACE 행이 더 생성되지 않음 · regress 오라클은 원장에 없는 행을 대조하지 않아 위반 0) → 이전 행을 그대로 이월하고 note 에 남긴다. 사람이 새 판 사용자판정 열에서 해소하면 그때 사라진다
+    _now = {r['row_id'] for r in rows}; _carried = 0
+    for _prev_id, p in prev.items():
+        if _prev_id in _now or not (p.get('tobe_ref') or '').startswith('수동'):
+            continue
+        q = dict(p); q['note'] = ((q.get('note') or '') + ' | 이월: 이전 원장의 사용자 판정 행 — 이번 생성에서 같은 행이 만들어지지 않아 보존(T165)')[:600]
+        for k in COLS:
+            q.setdefault(k, '')
+        rows.append(q); _carried += 1
+    if _carried:
+        print(f'  사용자 판정 이월 {_carried}행(생성 경로 소멸 · T165)')
+    # W8-A 적용성(플랜 1-4): 결함 일반화·결함원장·확정규칙·화면 규칙 행마다 이 화면에 그 기능이 있는지(디스크 사실만 · 없으면 UNKNOWN) → judge 가 N 행을 NA '대상 없음' 으로 둔다
+    try:
+        _apc, _ = _AP.apply(rows, mid, asis_id)
+        print('  적용성: ' + ' · '.join(f'{k} {v}' for k, v in sorted(_apc.items())))
+    except Exception as _ex:
+        print(f'  [WARN] 적용성 판정 실패(전 행 공란=UNKNOWN 취급): {_ex}')
     with open(out, 'w', encoding='utf-8-sig', newline='') as f:
         w = csv.DictWriter(f, fieldnames=COLS)
         w.writeheader()

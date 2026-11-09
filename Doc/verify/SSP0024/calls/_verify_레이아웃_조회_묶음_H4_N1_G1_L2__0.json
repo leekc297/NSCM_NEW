@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 296,
+  "at": "2026-11-09T02:39:13.748Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 191,
+  "dur": 331,
+  "at": "2026-11-09T02:39:17.071Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81_HG\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 296,
+  "at": "2026-11-09T02:39:20.434Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ }
+]

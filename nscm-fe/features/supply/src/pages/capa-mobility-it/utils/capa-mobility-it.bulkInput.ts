@@ -59,11 +59,16 @@ const WEEKDAY_INDEX: Partial<Record<BulkType, number>> = {
   [BULK_TYPE.SAT]: 6,
 };
 
-/** 팝업 Type 선택지 — AS-IS 와 같은 9개를 항상 보인다. DAILY_CAPA 에 요일을 고르면 검증(validateBulkType)이 거부한다. */
-export const BULK_TYPE_OPTIONS: { label: string; value: BulkType }[] = Object.values(BULK_TYPE).map(type => ({
-  label: type,
-  value: type,
-}));
+/**
+ * 팝업 Type 선택지 — SCP0098 은 월(M_) 단위 화면이라 범위 지정 2개만 노출하고 명칭도 Month 로 쓴다
+ *   (사용자 지시 2026-11-04 — AS-IS 9옵션[EveryDay/SelectDay/Mon~Sun]에서 축소·개명).
+ *   value 는 EveryDay/SelectDay 를 유지한다(applyBulkInput 의 RANGE_TYPES·SELECT_DAY 분기가 의존).
+ *   요일(Mon~Sun) Type 과 그 처리(matchesWeekday/WEEKDAY_INDEX)는 일(D_) 전용이라 월 화면에선 미노출.
+ */
+export const BULK_TYPE_OPTIONS: { label: string; value: BulkType }[] = [
+  { label: 'Every Month', value: BULK_TYPE.EVERY_DAY },
+  { label: 'Select Month', value: BULK_TYPE.SELECT_DAY },
+];
 
 interface BulkInputArgs {
   grid: FlexGrid;

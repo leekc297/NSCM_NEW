@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 295,
+  "at": "2026-11-07T08:37:06.539Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3017,
+  "dur": 252,
+  "at": "2026-11-07T08:37:13.838Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ }
+]

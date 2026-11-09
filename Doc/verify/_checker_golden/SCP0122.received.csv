@@ -1,0 +1,17 @@
+﻿row_id,rule_id,target,result,evidence_head,saved_at,approved_by,approved_at,verdict_src
+V-6ec80739,J2,SCP0122 화면,PASS,E2E auth authorized=true notFound=false menuAccess=Y tobeGroups=ADMIN|GUEST|SSP ,2026-11-08 22:09,,,received
+V-cfe5831b,A7,[DMF0035 결함 유형] 결과 컬럼 값(Plan Type=MKT FCST Version 컬럼 등),NA,규칙 A7 대상 일치 1행이 모두 NA — [V-1934eacc] SCP0122_GET_PLAN_ACTIVITY_MGMT:  | 검사기(tool,2026-11-08 22:09,,,received
+T-541a6795,A1,"`BLUtils.GetDivision(false,"""")` → `Division_SCP` · cs:40,126",판정필요,"행 집계 — 대조표 `BLUtils.GetDivision(false,"""")` → `Division_SCP` 'cs:40,126' 의 A1 1요소",2026-11-08 22:09,,,received
+T-111d7ffa,A1,"`GetPlanGroupByUserID()` Tables[3] → `PlanGroup_SCP_ALL` · cs:53,129,174",판정필요,"행 집계 — 대조표 `GetPlanGroupByUserID()` Tables[3] → `PlanGroup_SCP_ALL` 'cs:53,129,1",2026-11-08 22:09,,,received
+T-1b716d1b,A1,"`Data.Common(LookupCommon,false,""OPMZ_PRS_CD"")` · cs:47,127",판정필요,"행 집계 — 대조표 `Data.Common(LookupCommon,false,""OPMZ_PRS_CD"")` 'cs:47,127' 의 A1 1요소:",2026-11-08 22:09,,,received
+T-0ba50f6d,A1,"`ClbDivision_SelectedIndexChanged`→`RefreshPlanGroupByDivisi · cs:544,169-175,54",판정필요,"행 집계 — 대조표 `ClbDivision_SelectedIndexChanged`→`RefreshPlanGroupByDivisi 'cs:544,",2026-11-08 22:09,,,received
+T-ae5bc4c7,A1,`CboPlanGroup_SelectedIndexChanged`→`ClearDataSource` · cs:551-554,판정필요,행 집계 — 대조표 `CboPlanGroup_SelectedIndexChanged`→`ClearDataSource` 'cs:551-554' 의 ,2026-11-08 22:09,,,received
+T-ce60c735,A1,"`SetDivisionAuthCheck`(`dtMyDivision.Rows.Count==0`, `usrLay · cs:123-124",판정필요,"행 집계 — 대조표 `SetDivisionAuthCheck`(`dtMyDivision.Rows.Count==0`, `usrLay 'cs:123-",2026-11-08 22:09,,,received
+T-a21da12d,A1,`RefreshPlanGroupByDivision` DIVISION_ID='' 필터 → 후보 0 · cs:169-172,판정필요,행 집계 — 대조표 `RefreshPlanGroupByDivision` DIVISION_ID='' 필터 → 후보 0 'cs:169-172' 의 ,2026-11-08 22:09,,,received
+T-8fb206b5,A1,"`LockColumn(0,MaxCol,true)` 조회직후 전체잠금 · cs:342",판정필요,"행 집계 — 대조표 `LockColumn(0,MaxCol,true)` 조회직후 전체잠금 'cs:342' 의 A1 1요소: REVIEW:1 · F",2026-11-08 22:09,,,received
+T-6c008842,A1,중복체크(I행 PRS_CD+PLAN_GR_ID+ACTV_CD) MSG00443 · cs:453,판정필요,행 집계 — 대조표 중복체크(I행 PRS_CD+PLAN_GR_ID+ACTV_CD) MSG00443 'cs:453' 의 A1 1요소: REVIEW,2026-11-08 22:09,,,received
+T-9555c5b0,A1,MSG00097 · 권한 Division 없음,판정필요,행 집계 — 대조표 MSG00097 '권한 Division 없음' 의 A1 1요소: REVIEW:1 · FAIL 요소: PKG_SCP0122.P,2026-11-08 22:09,,,received
+T-f090f5cb,A1,COMMON:UC-07 · 필터 걸린 상태 재조회 시 조회되고 필터도 그대로 적용(rebindFilterColumns),판정필요,행 집계 — 대조표 COMMON:UC-07 '필터 걸린 상태 재조회 시 조회되고 필터도 그대로 적용(rebindFilterColumns' 의 A,2026-11-08 22:09,,,received
+T-c64588b2,X-ROW,SCP0122_PlanActivityMgmt.FindButton,판정필요,진입점 집계 3검사 — PASS:2 · REVIEW:1,2026-11-08 22:09,,,received
+T-7b11916e,A1,PKG_SCP0122.P_SCP0122_GET_PLAN_ACTIVITY_MGMT,판정필요,golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/SCP0122/SCP0122_GET_PLAN_ACTIVITY_,2026-11-08 22:09,,,received
+T-39d1db98,X-ROW,SCP0122_PlanActivityMgmt.FindData_Main,판정필요,진입점 집계 10검사 — PASS:7 · NA:2 · REVIEW:1,2026-11-08 22:09,,,received

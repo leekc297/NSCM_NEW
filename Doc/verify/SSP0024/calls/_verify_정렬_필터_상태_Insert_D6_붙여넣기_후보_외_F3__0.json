@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 408,
+  "at": "2026-11-09T02:56:32.384Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 191,
+  "dur": 346,
+  "at": "2026-11-09T02:56:33.480Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 422,
+  "at": "2026-11-09T02:56:40.480Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 191,
+  "dur": 914,
+  "at": "2026-11-09T02:56:41.374Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 354,
+  "at": "2026-11-09T02:56:47.039Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 191,
+  "dur": 307,
+  "at": "2026-11-09T02:56:47.372Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ }
+]

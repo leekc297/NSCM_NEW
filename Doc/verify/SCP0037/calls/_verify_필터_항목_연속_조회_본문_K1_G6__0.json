@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 311,
+  "at": "2026-11-07T08:38:51.458Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 294,
+  "at": "2026-11-07T08:38:52.875Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"E2E\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3017,
+  "dur": 287,
+  "at": "2026-11-07T08:38:54.415Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 296,
+  "at": "2026-11-07T08:40:26.178Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ }
+]

@@ -286,8 +286,12 @@ export const ShipmentRequestorPic = ({ tabId, title }: PageProps<MENU_ID>) => {
     (filters[SHEETS.MAIN] as { divisionId?: string } | undefined)?.divisionId
   );
 
-  // 신규행 추가 — 빈 행 + 기본값(상위행 복사 아님, design 03 §5.2). DIVISION_ID=확정 division(위 주석).
-  //   VALID_YN='Y'(R7). AS-IS 신규행은 콤보/팝업으로 채운다 — 여기선 division·valid 만 초기 세팅.
+  // 신규행 추가 — 빈 행 + 기본값(상위행 복사 아님, design 03 §5.2).
+  //   VALID_YN='Y'(R7)만 초기 세팅. DIVISION_ID 는 **비워 둔다** — AS-IS InsertRow(cs:318·327)가
+  //   Division 셀을 콤보로만 만들고 값은 시드하지 않아, 사용자가 직접 콤보에서 고른다. Division 을
+  //   미리 바인딩하면 AS-IS 와 달라지고(2026-11-03 사용자 지적) R10(Division 선택 전 종속셀 차단)·
+  //   R14(Division 변경 시 7칸 reset) 가드가 사실상 死코드가 된다. confirmedDivision 은 '조회 완료'
+  //   전제(AS-IS IsLock==false) 가드로만 쓰고 셀 값으로는 넣지 않는다.
   const handleInsert = () => {
     const grid = gridRef.current;
     if (!grid) return;
@@ -298,7 +302,6 @@ export const ShipmentRequestorPic = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     GridAction.addRow(grid, {
-      DIVISION_ID: confirmedDivision,
       VALID_YN: INSERT_DEFAULT_VALID_YN,
     } as unknown as Partial<MainRow>);
   };

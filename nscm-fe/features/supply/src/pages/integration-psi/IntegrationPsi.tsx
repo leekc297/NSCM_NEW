@@ -437,11 +437,12 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
     search: handleSearch,
     // Reset Condition(F10) — 화면 조회조건 값 초기화(공용 F10 은 서버 저장분만 지움, 2026-10-14~).
     resetCondition: handleResetCondition,
-    // 신규/저장/삭제 = 버튼 코드별 권한으로 게이트(TO-BE 룰 2026-10-26 — 기능 있음 × 권한 있음 일 때만 노출; design 01 R11/R14).
-    insert: hasButton('INSERT') ? handleInsert : false,
+    // 신규/저장 = 화면 update 권한(SAVE)으로 게이트(design 01 R11/R14).
+    insert: hasButton('SAVE') ? handleInsert : false,
     save: hasButton('SAVE') ? handleSave : false,
     // Delete — AS-IS 는 NO-OP(본문 공백 cs:536~539)지만 사용자 지시로 "미저장 신규행 삭제"만 허용한다.
-    delete: hasButton('DELETE') ? handleDelete : false,
+    //   Insert 와 같은 SAVE 권한으로 게이트한다(권한 없는 사용자는 Insert 자체가 불가 → 지울 신규행도 없다).
+    delete: hasButton('SAVE') ? handleDelete : false,
     manual: false,
     upload: false,
   };

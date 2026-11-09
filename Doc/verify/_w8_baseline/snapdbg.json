@@ -1,0 +1,22 @@
+{
+ "authorized": true,
+ "body": {
+  "ms": 73,
+  "lines": 322,
+  "head": "- banner:\n  - link \"SCM 공급망관리시스템 Supply Chain Management system\":\n    - /url: /view/SCP0127\n  - navigation:\n    - link \"Demand\":\n      - /url: /view/SCP0127\n    - link \"Supply\":\n      - /url: /view/SCP0127\n    - link \"Shipping\":\n      - /url: /view/SCP0127\n    - link \"Authority\":\n      - /url: /view"
+ },
+ "searchArea_first": {
+  "ms": 30015,
+  "err": "TimeoutError: locator.ariaSnapshot: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[class*=\"SearchArea\"], [class*=\"searchArea\"], form').first()\n"
+ },
+ "searchArea_visible": {
+  "ms": 30023,
+  "err": "TimeoutError: locator.ariaSnapshot: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[class*=\"SearchArea\"]:visible, [class*=\"searchArea\"]:visible').first()\n"
+ },
+ "counts": {
+  "all": 0,
+  "visible": 0,
+  "form": 0
+ },
+ "classes": []
+}

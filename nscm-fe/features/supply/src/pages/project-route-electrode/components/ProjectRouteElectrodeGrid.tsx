@@ -1,6 +1,7 @@
 import {
   CellType,
   DataMap,
+  type CellEditEndingEventArgs,
   type CellRangeEventArgs,
   type FlexGrid,
   type FormatItemEventArgs,
@@ -30,7 +31,35 @@ import {
   SHEETS,
 } from '../project-route-electrode.constants';
 import type { MainRow } from '../project-route-electrode.types';
-import { deriveOrgDates, deriveTactTimeFlag } from '../utils/projectRouteElectrode.derive';
+import {
+  deriveOrgDates,
+  deriveTactTimeFlag,
+  isCalendarYmd8,
+  isPartialYmdValid,
+} from '../utils/projectRouteElectrode.derive';
+
+// 입력 제한 대상 컬럼(QA I-01/I-02).
+const DATE_INPUT_COLUMNS = ['FROM_YYYYMMDD', 'TO_YYYYMMDD'];
+const PRIORITY_COLUMN = 'PRIORITY';
+const PRIORITY_MAX_DIGITS = 9;
+
+// 마스크(0000-00-00) 편집기에 숫자 하나를 넣은 뒤의 날짜 8칸. 선택 영역은 비우고 커서 이후 첫 숫자칸에 넣는다.
+const nextDateSlots = (input: HTMLInputElement, key: string): (string | null)[] => {
+  const text = input.value;
+  const start = input.selectionStart ?? text.length;
+  const end = input.selectionEnd ?? start;
+  const slots: (string | null)[] = [];
+  const slotPos: number[] = [];
+  for (let i = 0; i < 10 && slots.length < 8; i += 1) {
+    if (i === 4 || i === 7) continue;
+    const c = text.charAt(i);
+    slots.push(/\d/.test(c) && !(i >= start && i < end && end > start) ? c : null);
+    slotPos.push(i);
+  }
+  const target = slotPos.findIndex(p => p >= start);
+  if (target >= 0) slots[target] = key;
+  return slots;
+};
 
 interface Props {
   gridRef: MutableRefObject<FlexGrid<MainRow> | undefined>;
@@ -286,6 +315,80 @@ export const ProjectRouteElectrodeGrid = ({
       }
     };
   }, [gridRef, editMode, swapPlantCombo]);
+
+  // 입력 제한(QA I-01/I-02). 날짜는 달력에 있는 날짜만, Priority 는 숫자만 받는다.
+  //   부적합 값은 편집 취소로 이전 값으로 되돌린다. 빈값(지우기)은 허용.
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const cellEditEndingHandler = (s: FlexGrid<MainRow>, e: CellEditEndingEventArgs) => {
+      if (e.cancel) return;
+      const binding = s.columns[e.col]?.binding ?? '';
+      const text = String((s.activeEditor as HTMLInputElement | null)?.value ?? '').trim();
+      if (binding === PRIORITY_COLUMN) {
+        // 기존 로직 주석 보존 (2026-11-04) 시작
+        // if (text !== '' && !/^\d+$/.test(text.replace(/,/g, ''))) e.cancel = true;
+        // 기존 로직 주석 보존 (2026-11-04) 끝
+        // 정수만, 마이너스 허용, 최대 9자리.
+        if (text !== '' && !/^-?\d{1,9}$/.test(text.replace(/,/g, ''))) e.cancel = true;
+        return;
+      }
+      if (DATE_INPUT_COLUMNS.includes(binding)) {
+        const digits = text.replace(/\D/g, '');
+        if (digits !== '' && !isCalendarYmd8(digits)) e.cancel = true;
+      }
+    };
+    // 기존 로직 주석 보존 (2026-11-04) 시작
+    // // Priority 셀에서 숫자 외 문자(소수점 포함) 키 입력을 막는다. 편집 시작 키도 포함.
+    // const keydownHandler = (ev: KeyboardEvent) => {
+    //   if (ev.ctrlKey || ev.metaKey || ev.altKey || ev.key.length !== 1) return;
+    //   const col = grid.activeEditor ? grid.editRange?.col : grid.selection?.col;
+    //   if (col == null || grid.columns[col]?.binding !== PRIORITY_COLUMN) return;
+    //   if (!/^\d$/.test(ev.key)) {
+    //     ev.preventDefault();
+    //     ev.stopPropagation();
+    //   }
+    // };
+    // 기존 로직 주석 보존 (2026-11-04) 끝
+    // Priority 는 숫자와 맨 앞 마이너스만, 최대 9자리. 날짜는 달력에 없는 값이 되는 키를 무시한다(AS-IS 방식).
+    const keydownHandler = (ev: KeyboardEvent) => {
+      if (ev.ctrlKey || ev.metaKey || ev.altKey || ev.key.length !== 1) return;
+      const col = grid.activeEditor ? grid.editRange?.col : grid.selection?.col;
+      const binding = col == null ? '' : (grid.columns[col]?.binding ?? '');
+      const input = grid.activeEditor as HTMLInputElement | null;
+      const block = () => {
+        ev.preventDefault();
+        ev.stopPropagation();
+      };
+      if (binding === PRIORITY_COLUMN) {
+        if (!/^[\d-]$/.test(ev.key)) return block();
+        if (!input) return;
+        const start = input.selectionStart ?? input.value.length;
+        const end = input.selectionEnd ?? start;
+        const rest = input.value.slice(0, start) + input.value.slice(end);
+        if (ev.key === '-') {
+          if (start !== 0 || rest.includes('-')) block();
+          return;
+        }
+        if (rest.replace(/\D/g, '').length >= PRIORITY_MAX_DIGITS) block();
+        return;
+      }
+      if (DATE_INPUT_COLUMNS.includes(binding) && input && /^\d$/.test(ev.key)) {
+        if (!isPartialYmdValid(nextDateSlots(input, ev.key))) block();
+      }
+    };
+    const host = grid.hostElement;
+    grid.cellEditEnding.addHandler(cellEditEndingHandler);
+    host?.addEventListener('keydown', keydownHandler, true);
+    return () => {
+      try {
+        grid.cellEditEnding.removeHandler(cellEditEndingHandler);
+      } catch {
+        /* unmount race */
+      }
+      host?.removeEventListener('keydown', keydownHandler, true);
+    };
+  }, [gridRef, editMode]);
 
   // 저장검증 실패 셀 배경 강조(design/03 §3-4, AS-IS SetBGColor(InvalidColor)).
   //   뷰행 index 로 DOM 을 직접 칠하면 스크롤 시 셀 DOM 이 재활용돼 강조가 어긋난다 → formatItem 이

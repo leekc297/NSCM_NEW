@@ -38,8 +38,9 @@
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
 |---|---|---|---|
-| main | divisionId fromYyyymmdd toYyyymmdd bizType projectCode itemId versionNo electype iso programId sheetName | o_rc1 | SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL PKG_COM0000 P_SCP0009_GET_SHEET_CALENDAR_3SPAN PKG_SCP0016 |
+| main | divisionId fromYyyymmdd toYyyymmdd bizType projectCode itemId versionNo electype programId sheetName | o_rc1 | SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL PKG_COM0000 P_SCP0009_GET_SHEET_CALENDAR_3SPAN PKG_SCP0016 |
 | spreadTitle | startYyyymmdd endYyyymmdd | o_rc1 | SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL PKG_COM0000 P_SCP0009_GET_SHEET_CALENDAR_3SPAN PKG_SCP0016 |
+| spreadTitleIso | startYyyymmdd endYyyymmdd | o_rc1 | PKG_COM0000 P_SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO P_USER_ID SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL P_SCP0009_GET_SHEET_CALENDAR_3SPAN PKG_SCP0016 |
 
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |

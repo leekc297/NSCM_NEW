@@ -123,12 +123,17 @@ Demand Grouping · Characteristic Capacity · Outsourcing Capacity · Model Allo
 
 > SCP·SSP 화면은 **조회조건 기준표**(`tools/Harness/rules/search_cond.csv` · `tools/VibeManager/rules/40_SEARCH_COND.md`, 룰 E11)에 `USE` 로 정의된 조건만, `tobe_order` 순서대로, `tobe_name` 라벨로 구현한다.
 > 이것은 TO-BE 룰이므로 **기준표 라벨이 AS-IS 명칭과 달라도 정합검증은 PASS** 다(예 Division→Div. · Input Status→Status · Valid→Active). 기준표가 제외·이동(DROP/SUNSET/MERGED/BUTTON_AREA/IN_CALENDAR/COLUMN_PERSONAL/COMMON_BUTTON)한 AS-IS 조건이 조회영역에 없는 것도 결함이 아니다(NA).
-> **결함**은 ① 기준표 조건 누락 ② 기준표에 없는 조건 노출 ③ 순서 다름 ④ 라벨이 기준표와 다름(AS-IS 명칭 그대로 쓴 경우 포함) 뿐이다.
+> **결함**은 ① 기준표 조건 누락 ② 기준표에 없는 조건 노출 ③ 라벨이 기준표와 다름(AS-IS 명칭 그대로 쓴 경우 포함) ④ EDIT 형태(입력 유형: 선택/텍스트 · 단일/다중 · 검색/달력)가 기준표와 다름 뿐이다.
+>
+> ⭐ **CR-098 (사용자 지시 2026-11-09 · SCP0084 CheckList 조치 필요 1건 '오류 아닌 정상')**: Excel 조회조건 정리 대조는 **사용여부·EDIT 형태까지만** 판정한다. **조회조건 순서는 판정 대상 제외** — 화면 순서가 Excel List 시트 순서(`tobe_seq`)·정렬원칙 순서(`tobe_order`)·AS-IS 배치 어느 것과 달라도 FAIL·판정필요로 쓰지 않고 NA(실측 순서는 참고 증거로만 보존). 2026-11-06 지시 'Excel 순서와 다르면 FAIL' 은 폐기. 생성(gen.js) 시 기준표 순서 배치는 설계 기본값으로 유지(판정 아님).
+> ⚠ 한계(2026-11-09 실측): EDIT 형태의 Excel(`tobe_type1`/`tobe_type2`/`tobe_func`) ↔ 화면 컨트롤 유형 **대조 검사는 엔진에 아직 없다**(judge·smoke 에서 `tobe_type*` 참조 0건). smoke 조건 사이클의 유형 식별(combo/checkbox/radio/popup/text/period)은 동작 시험용이며 Excel 대조 판정이 아니다.
 
 | 하네스 | 판정 |
 |---|---|
-| `judge.py` STATIC H5(라벨)·G4(순서) | 원장 SEARCH 행 ↔ `search_cond.csv` (`tobe_name`·`tobe_order`). 증거에 AS-IS 명칭 병기(`AS-IS 'Valid' → 기준표 명칭(TO-BE 룰 CR-071)`) |
-| `check.js` SC1·SC2 | 순서 다름 / 기준표 제외 조건 잔존 → 생성본 BLOCK·기존 WARN |
+| `judge.py` STATIC H5(라벨)·G4(순서) | 원장 SEARCH 행 ↔ `search_cond.csv` (`tobe_name`·`tobe_order`). 증거에 AS-IS 명칭 병기(`AS-IS 'Valid' → 기준표 명칭(TO-BE 룰 CR-071)`). **G4 순서 차이 = NA(CR-098)** |
+| `judge.py` SC1 (smoke 반입 · `order_rule`) | smoke `order` = NA(참고 실측 보존) · `gone`(기준표 제외 조건 잔존) 만 FAIL — CR-098 |
+| `mapping_trace.py` SC1 / `smoke-extra.ts` (기준표 순서) | 순서 항목 verdict = NA(`[판정 제외·참고 CR-098]`) |
+| `check.js` SC1·SC2 | SC1 순서 다름 → **참고 WARN(생성본도 BLOCK 아님 · CR-098)** / SC2 기준표 제외 조건 잔존 → 생성본 BLOCK·기존 WARN |
 | `mapping_trace.py` `sc_excl` | 기준표가 제외한 AS-IS 조회조건 컨트롤의 COND 검사(G4·G1·G6·SC1·C1·C4·B*) = NA(정적) — 검증 엔진이 '칸 없음' FAIL 로 덮지 않음(judge 보존) |
 | `confirmed_requirements.csv` | CR-071 (scope SCP;SSP) |
 | `_trace.spec.ts` H5 COL(그리드 헤더) | **그리드 컬럼 라벨 확장(2026-10-27 사용자 의견)**: 조회조건으로도 쓰이는 컬럼의 헤더가 기준표 라벨과 같거나(예 SSP Incoterms), 그 외 컬럼 헤더가 SHEET_COLUMNS 메타 라벨과 같으면 AS-IS 명칭과 달라도 **PASS**(종전 '판정필요' 폐지) |
@@ -136,5 +141,6 @@ Demand Grouping · Characteristic Capacity · Outsourcing Capacity · Model Allo
 
 ## §5. 변경 이력
 - **2026-07-13** 신설 — 사용자 요청 "차후 UI 수정, 개발 시 사용할 수 있도록 rule 로 정리". 원본 xlsx List 시트 953행 전수 변환 + 패턴 집계(명칭 rename 13쌍 / 유형 4패턴 / 팝업 3패턴) + 카운트 1:1 검증.
+| 2026-11-09 | §4.5 CR-098 — Excel 조회조건 정리 대조 = 사용여부·EDIT 형태까지만, 조회조건 순서는 판정 대상 제외(NA). 사용자 지시(SCP0084 조치 필요 1건 SC1 '오류 아닌 정상'). 하네스: judge order_rule·smoke 반입 · mapping_trace · smoke-extra.ts · check.js SC1 BLOCK→WARN · detect_rules/fix_recipes SC1 정의 갱신 |
 | 2026-10-27 | §4.5 확장 — 그리드 컬럼 헤더 라벨 = 기준표/메타 라벨이면 PASS(CR-071 확장, `_trace.spec.ts` H5 COL) |
 | 2026-10-26 | §4.5 신설 — SCP·SSP 조회조건 기준표 = TO-BE 판정 룰(CR-071): 기준표 라벨·순서·구성이 AS-IS 와 달라도 PASS · 기준표 제외 조건 NA · 하네스(judge H5/G4 · check.js SC1/SC2 · mapping_trace sc_excl) 등록 |

@@ -13,6 +13,7 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { ComboResponse, RawFlexGridColumnConfig } from '@foundation/models';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { GridUtils, buildNoColumn, withRowNo } from '@foundation/utils';
 import { CustomDropdown, SearchArea, DataGrid, CustomDialog, ResultArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -471,6 +472,7 @@ export const ItemByDivisionModal = ({
                 {showDivision && (
                   <Grid size={4}>
                     <FormItem
+                      className={commonStyles.formItem}
                       label={t('LBL00001', '_Div.')}
                       labelAlign='right'
                       render={() => (
@@ -489,6 +491,7 @@ export const ItemByDivisionModal = ({
                 {showTeam && (
                   <Grid size={4}>
                     <FormItem
+                      className={commonStyles.formItem}
                       label={t('LBL00044', '_Team')}
                       labelAlign='right'
                       render={() => (
@@ -521,6 +524,7 @@ export const ItemByDivisionModal = ({
                 {showEndCustomer && (
                   <Grid size={4}>
                     <FormItem
+                      className={commonStyles.formItem}
                       label={t('LBL00080', '_End Customer')}
                       labelAlign='right'
                       render={() => (
@@ -543,6 +547,7 @@ export const ItemByDivisionModal = ({
                 {showSalesSite && (
                   <Grid size={4}>
                     <FormItem
+                      className={commonStyles.formItem}
                       label={t('LBL00011', '_Sales Site')}
                       labelAlign='right'
                       render={() => (
@@ -565,6 +570,7 @@ export const ItemByDivisionModal = ({
                 {showProject && searchParam.divisionId !== '40' && (
                   <Grid size={4}>
                     <FormItem
+                      className={commonStyles.formItem}
                       label={t('LBL00012', '_Project')}
                       labelAlign='right'
                       render={() => (
@@ -576,6 +582,7 @@ export const ItemByDivisionModal = ({
                 {showModel && (
                   <Grid size={4}>
                     <FormItem
+                      className={commonStyles.formItem}
                       label={t('LBL00618', '_Model/Nickname')}
                       labelAlign='right'
                       render={() => (
@@ -592,6 +599,7 @@ export const ItemByDivisionModal = ({
                 {useItemTypeFilter && (
                   <Grid size={4}>
                     <FormItem
+                      className={commonStyles.formItem}
                       label={t('LBL00068', '_Item Type')}
                       labelAlign='right'
                       render={() => (

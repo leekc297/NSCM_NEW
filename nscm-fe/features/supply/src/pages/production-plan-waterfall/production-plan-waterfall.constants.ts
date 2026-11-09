@@ -43,7 +43,10 @@ export const isEeDivision = (division: string): boolean =>
 // 조회조건 콤보 ID — DB 실측 등록 확인(SCM_ADM_CMBO_SQL_M USE_YN='Y', ora.py, design 02 §2/§5).
 //   parameterized 재조회 콤보(부모값을 파라미터로 실어 하위 콤보 재조회) — react-query 키에 부모값 포함.
 export const COMBO = {
-  DIVISION: 'MyDivisionInEE_SCP', // 권한 division(EE 포함 — 이름 함정, EE 미제외). @mnuId
+  // 권한 division(EE 포함) · @mnuId. Division_SCP 는 MyDivisionInEE_SCP 와 후보집합 1:1 동일(권한 WHERE·EE포함·
+  //   VALID_YN 동일 + SCM_MST_DIVISION DIVISION_ID당 1행 — ora.py 실측 2026-11-04)이고, ORDER BY 만 ATTRIBUTE1
+  //   (업무순 81,40,82,EE…)로 달라 AS-IS 사업부 표시순서와 일치한다. 코드순(40 먼저) MyDivisionInEE_SCP 에서 교체.
+  DIVISION: 'Division_SCP',
   OP_GROUP_EE: 'OperationGroupEE_SCP', // EE (SEGMENT1 IN ('A','E'))
   OP_GROUP: 'OperationGroup_SCP', // 비EE (SEGMENT1 IN ('P','A'))
   PLANT_SITE_EE: 'PlantSiteProdPlan_SCP', // EE — @attribute2=division, @segment2=opGroup

@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0108",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"fromYyyymm\":\"202611\",\"programId\":\"SCP0108\",\"sheetName\":\"MAIN\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 142,
+  "at": "2026-11-09T01:07:40.363Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "SCM0002",
+  "sheet": "CapaItemPopup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCM0002/CapaItemPopup/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"itemId\":\"\"}",
+  "status": 200,
+  "rows": 9613,
+  "dur": 525,
+  "at": "2026-11-09T01:07:43.783Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "SCM0002",
+  "sheet": "CapaItemPopup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCM0002/CapaItemPopup/SEARCH/call-proc",
+  "postData": "{}",
+  "status": 200,
+  "rows": 36366,
+  "dur": 1068,
+  "at": "2026-11-09T01:07:44.242Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ }
+]

@@ -40,11 +40,7 @@
 | /DMF0068/ContributeSalesList/DELETE/call-proc | http | 1 | Y | demand-manager.api.ts:58 |
 
 ## 3. procedures.d.ts 등재 시트
-| sheet | request_keys | response_cursors | sp_hints |
-|---|---|---|---|
-| ContributeSalesList | divisionId versionNo fromDt toDt | o_rc1 o_rc2 | PKG_DMF0068 P_DMF0068_GET_ORDERLIST P_DMF0068_GET_CONT_VIEW_VERSIONPOPUP P_DMF0068_GET_LOOKUPPROJECT P_DMF0068_SAVE_ORDERLIST_JSON P_DMF0068_DEL_ORDERLIST_JSON |
-| versionPopup | startYyyymmdd endYyyymmdd divisionId versionType description | o_rc1 | PKG_DMF0068 P_DMF0068_GET_ORDERLIST P_DMF0068_GET_CONT_VIEW_VERSIONPOPUP P_DMF0068_GET_LOOKUPPROJECT P_DMF0068_SAVE_ORDERLIST_JSON P_DMF0068_DEL_ORDERLIST_JSON |
-| lookupProject | divisionId versionNo | o_rc1 | PKG_DMF0068 P_DMF0068_GET_ORDERLIST P_DMF0068_GET_CONT_VIEW_VERSIONPOPUP P_DMF0068_GET_LOOKUPPROJECT P_DMF0068_SAVE_ORDERLIST_JSON P_DMF0068_DEL_ORDERLIST_JSON |
+(없음)
 
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
@@ -106,7 +102,7 @@
 | code | count |
 |---|---|
 | LBL00112 | 1 |
-| LBL00513 | 1 |
+| LBL00606 | 1 |
 | LBL00013 | 2 |
 | LBL00664 | 1 |
 | LBL00001 | 1 |

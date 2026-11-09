@@ -59,6 +59,24 @@ export const SalesSitePriorityGrid = ({
     };
     g.beginningEdit.addHandler(beginningEditHandler);
 
+    // PRIO_RANK 는 1 이상의 정수만 허용 — 편집 중 소수점/부호 키 입력 자체를 막는다(AS-IS 등가).
+    //   AS-IS 메타는 PRIO_RANK 가 FPNumber/DATA_SCALE_NUMBER=NULL 이고, FarPoint NumberCellType 은
+    //   DecimalPlaces 미지정 시 기본 0 이라 소수 입력이 애초에 안 된다(asis.py 실측). TO-BE 공통
+    //   columnMapping 은 scale==null 이면 편집기를 안 붙여 소수가 입력되므로(구조적 갭), 이 화면에서
+    //   소수점(. ,)·부호(- +)·e 키를 keydown 단계에서 차단한다. 셀 정렬·편집기는 공통 경로 그대로 둔다
+    //   (InputNumber 편집기 교체는 숫자 우측정렬 부작용이 있어 쓰지 않는다). 붙여넣기 등 키입력을 우회하는
+    //   경로는 저장검증(useSalesSitePriorityValidation, Number.isInteger, MSG01190)이 막는 이중 안전망.
+    const BLOCKED_PRIO_KEYS = new Set(['.', ',', '-', '+', 'e', 'E']);
+    const keydownHandler = (ev: KeyboardEvent) => {
+      if (!g.activeEditor) return;
+      const binding = g.columns[g.selection.col]?.binding ?? '';
+      if (binding !== 'PRIO_RANK') return;
+      if (BLOCKED_PRIO_KEYS.has(ev.key)) {
+        ev.preventDefault();
+      }
+    };
+    g.hostElement.addEventListener('keydown', keydownHandler);
+
     // 붙여넣기 Plan Group 표시명(NAME) -> 코드(CODE) 변환(AS-IS SpdMain_ClipboardPasted l1050~1070,
     //   validations#10~#12/events#5 — 원본 확인 결과 붙여넣기 이벤트가 하는 일은 이 변환뿐이다.
     //   From/To 검증은 붙여넣기 경로에 없다, __asis-mapping__.md 갱신).
@@ -92,6 +110,7 @@ export const SalesSitePriorityGrid = ({
       try {
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastedCell?.removeHandler(pastedCellHandler);
+        g.hostElement?.removeEventListener('keydown', keydownHandler);
         g.hostElement?.removeEventListener('dblclick', dblclickHandler);
       } catch {
         /* unmount race */

@@ -83,7 +83,7 @@ export const MODEL_POPUP_COLUMNS: ItemModalColumn[] = [
  * ⭐ Model 팝업 가로 폭 — CustomDialog 표준 프리셋 값(기본 1000 → 600, 실제 렌더는 ×1.5).
  *   검색조건 3개·컬럼 5개로 좁힌 이 화면에서만 적용(dialogSize prop). 다른 호출처는 1000 유지.
  */
-export const MODEL_POPUP_WIDTH = 600;
+export const MODEL_POPUP_WIDTH = 800;
 
 /**
  * Owner 를 한 명만 등록할 수 있는 division — 2명 이상 선택하고 OK 하면 팝업에서 경고.

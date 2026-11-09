@@ -1,0 +1,31 @@
+{
+ "kind": "헤더",
+ "scope": "PRECEDE / SAFETY STOCK DAY",
+ "columns": [
+  "Create By",
+  "Creation Date",
+  "Division",
+  "Valid From",
+  "Model",
+  "Last Update Date",
+  "Last Update By",
+  "Plan Group",
+  "PLAN_GROUP_NAME",
+  "PRE_KEY_VALUES",
+  "SCM site",
+  "Stage",
+  "Valid To",
+  "Day",
+  "Active",
+  "Description",
+  "Type"
+ ],
+ "meta_hidden": [
+  "PLAN_GROUP_NAME",
+  "PRE_KEY_VALUES"
+ ],
+ "headerSpec": null,
+ "dynamicHeader": false,
+ "src": "plan.json mainSheets[PRECEDE / SAFETY STOCK DAY].labels(AS-IS 헤더)",
+ "note": "동적 기간 컬럼은 {YM}/{YMD}/{W} 토큰 · TO-BE 추가 컬럼(이름 컬럼 등)은 extra 로 보고(결함 아님 · 사람 확인)"
+}

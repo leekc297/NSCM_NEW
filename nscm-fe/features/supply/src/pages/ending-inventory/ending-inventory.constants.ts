@@ -41,6 +41,11 @@ export const COMBO = {
   //   규약 — 콤보 관련 SP 는 SCM_ADM_CMBO_SQL_M 로 이관). @yyyymmdd 기간 스코프(월 _R / 일 _R_D).
   //   CODE=ATTRIBUTE3, NAME=ATTRIBUTE3+' '+ATTRIBUTE4. p_profit_center 로 전송.
   PROFIT_CENTER: 'SCP0085_GET_SEARCH_INFO',
+  // Month 범위·기본값 — AS-IS SCP0085 가 SCP0084_GET_MONTH_RANGE(SetMonthRange cs:494~513)를 재사용한다.
+  //   단일 행 MIN_YYYYMM/MAX_YYYYMM(= SELECT MIN/MAX(YYYYMM) FROM SCP_ANL_LONG_TERM_STOCK)를 반환.
+  //   기본값=MAX_YYYYMM, 월 피커 상한=MAX_YYYYMM(하한은 AS-IS 하드코딩 '2021-12'). CMBO_SQL_M 이관완료
+  //   (SCP0084 와 공용 — 동일 SP). 형제 long-term-stock(SCP0084) 선례 패턴.
+  MONTH_RANGE: 'SCP0084_GET_MONTH_RANGE',
 } as const;
 
 // 조회조건 LOOKUP ID (SCM_ADM_LOOKUP_MASTER_DETAIL) — Item Type 콤보의 옵션 출처.
@@ -50,10 +55,12 @@ export const LOOKUP = {
   ITEM_TYPE: 'ITEM_TYPE',
 } as const;
 
-// monthPicker 범위 하한 — AS-IS `monthPicker.MonthMin = "2021-12"`(cs:404). 상한/기본값은 AS-IS 가
-//   SCP0084_GET_MONTH_RANGE.MAX_YYYYMM 를 쓰나(cs:399~405) PKG_SCP0084 미배포(goal.md ② C1) →
-//   convert-sp 배포 전까지 현재월을 상한/기본으로 폴백한다(런타임 조회는 SP 배포 후 재판정).
+// monthPicker 범위 하한 — AS-IS `monthPicker.MonthMin = "2021-12"`(cs:510). 상한/기본값은
+//   COMBO.MONTH_RANGE(SCP0084_GET_MONTH_RANGE, PKG_SCP0084 배포완료·CMBO_SQL_M 이관)의 MAX_YYYYMM 로
+//   런타임 적용한다(Form 월범위 effect). 범위 미도착/조회실패 시에만 아래 하한연도로 폴백.
 export const MONTH_MIN_YEAR = 2021;
+// 월 하한(클램프) — AS-IS MonthMin "2021-12" = YYYYMM '202112'. onChange 클램프 하한에 사용.
+export const MONTH_MIN = '202112';
 
 // i18n (Hook #114 — AS-IS MSG_ID 그대로 쓰지 않고 문구로 TO-BE 코드 역조회).
 //   REQUIRE_DIVISION: TO-BE 등록됨(MSG00097 = 'Please select Division.').
@@ -65,6 +72,9 @@ export const MONTH_MIN_YEAR = 2021;
 export const MSG = {
   REQUIRE_DIVISION: 'MSG00097',
   EXCEL_NO_DATA: 'MSG00719',
+  // 조회 필수값(AS-IS checkRequiredOfSearch, cs:405) — 활성 모드 기간 피커 미입력 차단.
+  //   MSG00429 KO "{0} 값은 필수 입력 항목입니다." / EN "{0} value is required."({0}=기간 라벨 치환)
+  REQUIRED_FIELD: 'MSG00429',
   // ERP 집계 안내문(SCM_ADM_MSG_M 실측 — 조회조건 아래 한 줄). 모드별로 문구가 다르다.
   //   월마감: MSG01371 '월마감 기준 데이터는 매월 본사 4 영업일에 집계하며, ERP(ZMMCMR6014) 전월말 재고를 가져옵니다.'
   //   일별  : MSG01370 '일별 기준 데이터는 매일 각 법인별 시업시간 기준 ERP(ZMMCMR6014) 재고를 가져옵니다.'
@@ -96,6 +106,7 @@ export const DEVALUATION_AGE_LABEL = 'Devaluation Age';
 export const COL = {
   YYYYMM: 'YYYYMM',
   YYYYMMDD: 'YYYYMMDD',
+  VALUATION_TYPE: 'VALUATION_TYPE', // Valuation Type — MONTH 모드만 표시(일별 숨김)
   DIVISION_ID: 'DIVISION_ID', // Div
   PLANT_NAME: 'PLANT_NAME', // Plant Site
   PLANT_ID: 'PLANT_ID', // Plant

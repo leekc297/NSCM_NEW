@@ -2,7 +2,9 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { stripRequiredMark } from '@foundation/utils';
 
 import {
+  DATE_VALIDATE_COLUMNS,
   DECIMAL_SCALE_COLUMNS,
+  INTEGER_COLUMNS,
   MAX_DECIMAL_SCALE,
   MSG,
   NON_NEGATIVE_COLUMNS,
@@ -20,6 +22,7 @@ import {
   isElectrodeCapaRow,
   previousKeyOf,
   toStoredDateValue,
+  weekKeyOf,
 } from '../utils/optCapa.save';
 
 /**
@@ -65,6 +68,8 @@ interface ValidateArgs {
   sourceRows: readonly GridRow[];
   /** 값 검증 오류 메시지의 `{0}` 에 넣을 컬럼 라벨 원천. */
   staticColumns: readonly RawFlexGridColumnConfig[];
+  /** No Work + Bucket=Week — 키중복을 Week 키({@link weekKeyOf})로 본다. */
+  isWeekNoWork?: boolean;
 }
 
 /** AS-IS `string.IsNullOrWhiteSpace`(cs:1582·1590) 등가. */
@@ -175,7 +180,24 @@ export const useOptCapaValidation = () => {
     sheet,
     dirtyRows,
     sourceRows,
-  }: Pick<ValidateArgs, 'sheet' | 'dirtyRows' | 'sourceRows'>): ValidationFailure | undefined => {
+    isWeekNoWork,
+  }: Pick<
+    ValidateArgs,
+    'sheet' | 'dirtyRows' | 'sourceRows' | 'isWeekNoWork'
+  >): ValidationFailure | undefined => {
+    // Week 행은 `PRE_KEY_VALUES` 로 원본 키를 알 수 없어 라이브 그리드의 다른 행과 직접 대조한다.
+    //   삭제 표시 행은 대조하지 않는다. 문구는 Day 와 같게 신규/수정으로 가른다.
+    if (isWeekNoWork) {
+      const liveRows = sourceRows.filter(row => !isDelete(row));
+      for (const row of dirtyRows) {
+        if (isDelete(row)) continue;
+        const key = weekKeyOf(row);
+        if (liveRows.some(other => other !== row && weekKeyOf(other) === key)) {
+          return { msgId: isInsert(row) ? MSG.DUPLICATE_NEW : MSG.DUPLICATE_KEY_CHANGED };
+        }
+      }
+      return undefined;
+    }
     const persistedKeys = new Set(
       sourceRows.filter(row => !isInsert(row)).map(row => previousKeyOf(sheet, row))
     );
@@ -263,12 +285,7 @@ export const useOptCapaValidation = () => {
     staticColumns,
   }: Pick<ValidateArgs, 'sheet' | 'dirtyRows' | 'staticColumns'>): ValidationFailure | undefined => {
     const label = (binding: string): string => labelOf(staticColumns, binding);
-    const dateColumns =
-      sheet === SHEETS.NO_WORK
-        ? [COLUMN.NO_WORK_DATE]
-        : sheet === SHEETS.SOP_EOP
-          ? [COLUMN.DATE]
-          : [];
+    const dateColumns = DATE_VALIDATE_COLUMNS[sheet];
 
     /**
      * Daily Capa 는 AS-IS 가 `M_MIN`/`LANE` 을 **전극 분기 안에서만**, `CAPA` 를 **그 반대 분기
@@ -315,6 +332,15 @@ export const useOptCapaValidation = () => {
         //   MSG.UTIL_RT_NEGATIVE 주석 참조). 다른 NUMERIC_PARSE_COLUMNS 는 위 AS-IS 음수 허용이 그대로 적용된다.
         if (binding === COLUMN.UTIL_RT && parsed < 0) {
           return { msgId: MSG.UTIL_RT_NEGATIVE, arg: label(binding) };
+        }
+      }
+      for (const binding of INTEGER_COLUMNS) {
+        const raw = row[binding];
+        if (raw === undefined || isBlank(raw)) continue;
+        if (!inAsisBranch(binding, row)) continue;
+        const parsed = parseNumber(raw);
+        if (parsed === undefined || !Number.isInteger(parsed)) {
+          return { msgId: MSG.INVALID_NUMBER, arg: `${label(binding)} : ${str(raw)}` };
         }
       }
       for (const binding of DECIMAL_SCALE_COLUMNS) {

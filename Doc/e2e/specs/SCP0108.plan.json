@@ -1,0 +1,615 @@
+{
+  "id": "SCP0108",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0108",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plan Month",
+    "Ver.",
+    "Status",
+    "Operation group",
+    "Site",
+    "Plant",
+    "Building",
+    "Line",
+    "Operation",
+    "Basic Nickname",
+    "Bottleneck",
+    "Line Type"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "CapaLobReport",
+  "routePath": "supply/capa-lob-report",
+  "asisName": "CAPA_LOB_Report",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "Div → Div. · 명칭",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "version",
+      "label": "Plan Month",
+      "lbl": "LBL00053",
+      "kind": "single",
+      "component": "VersionField",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboVersion",
+      "tobeLabel": "Plan Month",
+      "catalog": "Plan Month → Plan Month",
+      "labels": [
+        "Plan Month"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "versionSeq",
+      "label": "Ver.",
+      "lbl": "LBL00031",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboVersionSeq",
+      "tobeLabel": "Version.",
+      "catalog": "",
+      "labels": [
+        "Ver.",
+        "Version."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "planType",
+      "label": "_plan_type",
+      "lbl": "LBL00040",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtPlanType",
+      "tobeLabel": "Plan Type",
+      "catalog": "",
+      "labels": [
+        "Plant",
+        "Plan Type",
+        "_plan_type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "divisionType",
+      "label": "Operation group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "RadioGroup",
+      "comboId": "",
+      "popup": false,
+      "asis": "rgrpDivisionType",
+      "tobeLabel": "Operation group",
+      "catalog": "",
+      "labels": [
+        "Operation group"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "siteIds",
+      "label": "Site",
+      "lbl": "LBL00015",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbSite",
+      "tobeLabel": "Site",
+      "catalog": "Site → Site",
+      "labels": [
+        "Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant",
+      "lbl": "LBL00030",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlant",
+      "tobeLabel": "Plant",
+      "catalog": "Plant → Plant",
+      "labels": [
+        "Plant"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "factory",
+      "label": "Building",
+      "lbl": "LBL00008",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFactory",
+      "tobeLabel": "Building",
+      "catalog": "Building → Building",
+      "labels": [
+        "Building"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "line",
+      "label": "Line",
+      "lbl": "LBL00010",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbLine",
+      "tobeLabel": "Line",
+      "catalog": "Line → Line",
+      "labels": [
+        "Line"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "operation",
+      "label": "Operation",
+      "lbl": "LBL00009",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbOperation",
+      "tobeLabel": "Operation",
+      "catalog": "Operation → Operation",
+      "labels": [
+        "Operation"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Basic Nickname",
+      "lbl": "LBL00054",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtItem",
+      "tobeLabel": "Basic Nickname",
+      "catalog": "Basic Nickname → Basic Nickname · 유형",
+      "labels": [
+        "Basic Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "bottleneck",
+      "label": "Bottleneck",
+      "lbl": "LBL00055",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboBottleneck",
+      "tobeLabel": "Bottleneck",
+      "catalog": "Bottleneck → Bottleneck",
+      "labels": [
+        "Bottleneck"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "electrodeType",
+      "label": "Line Type",
+      "lbl": "LBL00056",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbElectrodeType",
+      "tobeLabel": "Line Type",
+      "catalog": "Line Type → Line Type",
+      "labels": [
+        "Line Type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "progressStatus",
+      "label": "Status",
+      "lbl": "LBL00014",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboProgressStatus",
+      "tobeLabel": "Status",
+      "catalog": "Status → Status",
+      "labels": [
+        "Status"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "LOB Report",
+  "asisMapping": "features\\supply\\src\\pages\\capa-lob-report\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "column",
+      "label": "Column",
+      "lbl": "LBL00711",
+      "kind": "subtitle-custom",
+      "tobe": "COLUMN_SETUP",
+      "asis": "btnColumn"
+    },
+    {
+      "key": "itemId",
+      "label": "Item Id",
+      "lbl": "LBL01142",
+      "kind": "field-popup",
+      "tobe": "FunctionSearchIcon",
+      "asis": "btnItemId"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "CURRENT",
+      "key": "CURRENT",
+      "labels": [
+        "Company",
+        "Div",
+        "Line Type",
+        "Line",
+        "Line Name",
+        "Basic Nickname",
+        "Operation",
+        "Operation Name",
+        "Plant",
+        "Plant Name",
+        "Site",
+        "Site Name",
+        "Ver",
+        "Seq"
+      ]
+    },
+    {
+      "name": "CUTOFF",
+      "key": "CUTOFF",
+      "labels": [
+        "Company",
+        "Div",
+        "DV",
+        "Line Type",
+        "Line",
+        "Line Name",
+        "Basic Nickname",
+        "Operation",
+        "Operation Name",
+        "Plant",
+        "Plant Name",
+        "Site",
+        "Site Name",
+        "Ver",
+        "Seq"
+      ]
+    },
+    {
+      "name": "MAIN",
+      "key": "MAIN",
+      "labels": [
+        "Company",
+        "Div",
+        "Line Type",
+        "Building",
+        "Building",
+        "Line",
+        "Line",
+        "Basic Nickname",
+        "Operation",
+        "Plant",
+        "Plant",
+        "Site",
+        "Site",
+        "Ver",
+        "Seq"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": false,
+  "hasSpreadTitle": true,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "CURRENT",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0108.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0104_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0108.P_SCP0104_GET_SPREAD_TITLE",
+      "entries": [
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:this.cboDivision.SelectedIndexChanged",
+        "event:this.cboVersion.SelectedIndexChanged",
+        "event:this.cboVersionSeq.SelectedIndexChanged",
+        "event:this.rgrpDivisionType.SelectedIndexChanged"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "CURRENT": {
+      "40": [
+        "Div",
+        "Plant Name",
+        "Line Name",
+        "Basic Nickname",
+        "Operation Name",
+        "Line Type"
+      ],
+      "81": [
+        "Div",
+        "Plant Name",
+        "Line Name",
+        "Basic Nickname",
+        "Operation Name",
+        "Line Type"
+      ],
+      "82": [
+        "Div",
+        "Plant Name",
+        "Line Name",
+        "Basic Nickname",
+        "Operation Name",
+        "Line Type"
+      ]
+    },
+    "CUTOFF": {
+      "40": [
+        "Div",
+        "Plant Name",
+        "Line Name",
+        "Basic Nickname",
+        "Operation Name",
+        "Line Type"
+      ],
+      "81": [
+        "Div",
+        "Plant Name",
+        "Line Name",
+        "Basic Nickname",
+        "Operation Name",
+        "Line Type"
+      ],
+      "82": [
+        "Div",
+        "Plant Name",
+        "Line Name",
+        "Basic Nickname",
+        "Operation Name",
+        "Line Type"
+      ]
+    },
+    "MAIN": {
+      "40": [],
+      "81": [],
+      "82": []
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": {
+    "titles": [
+      {
+        "sp": "SCP0104_GET_SPREAD_TITLE",
+        "members": [
+          "GetSpdTitle"
+        ]
+      }
+    ],
+    "dbLoop": [],
+    "titleSheets": [
+      "spreadTitle"
+    ],
+    "titlePairs": [
+      {
+        "sheet": "spreadTitle",
+        "btn": "SEARCH"
+      }
+    ],
+    "staticBindings": [
+      "DIVISION_ID",
+      "PLANT_NAME",
+      "LINE_NAME",
+      "NICK_NAME",
+      "OPERATION_NAME",
+      "VER_ID",
+      "VER_SEQ",
+      "COMPANY_ID",
+      "SITE_ID",
+      "SITE_NAME",
+      "PLANT_ID",
+      "LINE_ID",
+      "OPERATION_ID",
+      "ELTR_LN_TP_CD",
+      "DV",
+      "FACTORY_ID",
+      "FACTORY_NAME"
+    ]
+  },
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "DELETE",
+        "SEARCH",
+        "INSERT",
+        "EXCEL"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "DELETE",
+      "SEARCH",
+      "INSERT",
+      "EXCEL"
+    ],
+    "CAPA Planner": [
+      "INSERT",
+      "EXCEL",
+      "SEARCH",
+      "DELETE"
+    ],
+    "FP Planner": [
+      "DELETE",
+      "INSERT",
+      "EXCEL",
+      "SEARCH"
+    ],
+    "FP Viewer": [
+      "DELETE",
+      "INSERT",
+      "SEARCH",
+      "EXCEL"
+    ],
+    "SCM PI Admin": [
+      "DELETE",
+      "SEARCH",
+      "INSERT",
+      "EXCEL"
+    ],
+    "SCM Viewer": [
+      "EXCEL",
+      "DELETE",
+      "INSERT",
+      "SEARCH"
+    ],
+    "SCP Planner": [
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "EXCEL"
+    ],
+    "SCP Tester": [
+      "DELETE",
+      "SEARCH",
+      "INSERT",
+      "EXCEL"
+    ]
+  },
+  "menuBtnCodes": [
+    "DELETE",
+    "SEARCH",
+    "INSERT",
+    "EXCEL"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

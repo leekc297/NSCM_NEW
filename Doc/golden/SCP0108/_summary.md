@@ -1,0 +1,7 @@
+# 골든 테스트 요약 2026-11-09 10:07
+
+PASS 0 · COLS 0 · ROWS 0 · DIFF 0 · ERR 0 · SKIP 1
+
+| 화면 | As-is SP | To-Be PROC | 판정 |
+|---|---|---|---|
+| SCP0108 | SCP0104_GET_SPREAD_TITLE | PKG_SCP0104.P_SCP0104_GET_SPREAD_TITLE | SKIP |

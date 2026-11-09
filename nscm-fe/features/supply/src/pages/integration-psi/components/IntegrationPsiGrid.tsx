@@ -314,10 +314,15 @@ export const IntegrationPsiGrid = ({
       if (binding === 'BOH_QTY') return isBohCellEditable(row, lockCtxRef.current);
       // LINE_ID 셀 — 신규행 전용(위에서 처리). 저장된 행의 Line 은 AS-IS 도 잠겨 있다(cs:550 LockColumn 범위).
       if (binding === 'LINE_ID') return false;
-      // pivot(YYYYMM) 기간셀 — L2~L23 잠금 규칙. 고정 컬럼은 전건 잠금.
+      // pivot(YYYYMM) 기간셀 — AS-IS EditButton 권한 2-분기(SCP0111_IntegrationPSI.cs 실측).
       if (!isPivotColumn(binding, fixedBindingsRef.current)) return false;
-      if (isPivotCellLocked(row, lockCtxRef.current)) return false;
-      // AS-IS 셀단위 빈값 잠금(L4/L9/L13/L18) — 편집 가능 행이라도 그 달 값이 없으면 잠금(값 있는 셀만 편집).
+      // ① ADMIN(System Administrator, cs:573-589): 측정값 제한 없이 값(공백 아님) 셀 편집. 측정값 행
+      //    잠금(isPivotCellLocked)을 건너뛴다 — "Admin 권한의 경우 전체 컬럼 edit"(2024-07-31).
+      // ② 그 외(일반/PI Admin/Planner, cs:603-739): 측정값/seqFlag/division 행 잠금 적용.
+      if (!lockCtxRef.current.auth.isAdmin && isPivotCellLocked(row, lockCtxRef.current)) {
+        return false;
+      }
+      // 공통: 셀단위 빈값 잠금(cs:587/662/703 qty=="" → lock) — 값 있는 셀만 편집(0 은 값 있음).
       return !isPivotCellValueEmpty(row, binding);
     };
 
@@ -460,12 +465,13 @@ export const IntegrationPsiGrid = ({
       }
 
       if (!isPivotColumn(binding, fixedBindingsRef.current)) return; // 고정 컬럼은 색상 대상 아님
-      // 편집가능 pivot 셀 = **노랑**(BOH 편집가능과 동일 wj-cell-editable), 잠금 셀 = **흰색**(사용자 지시 2026-11-02).
-      //   종전엔 ESS 조건색(연두)만 칠하고 그 외는 흰색으로 덮어, 공용이 입힌 노랑까지 지워져 "편집가능인데 흰색"인
-      //   셀이 생겼다(PROD_PLAN seqFlag[0]≠2 등). 편집 여부로 노랑/흰색을 직접 결정한다.
-      //   잠금 = 행단위 규칙(isPivotCellLocked) **또는** AS-IS 셀단위 빈값(L4/L9/L13/L18) — 값 있는 셀만 노랑.
+      // 편집가능 pivot 셀 = **노랑**(BOH 편집가능과 동일 wj-cell-editable), 잠금 셀 = **흰색**.
+      //   AS-IS EditButton 권한 2-분기와 동일 기준으로 노랑/흰색 결정(isCellEditable 과 1:1):
+      //   ① ADMIN(System Administrator): 측정값 제한 없이 값(공백 아님)이면 노랑(cs:573-589).
+      //   ② 그 외: 측정값 행 잠금(isPivotCellLocked) + 공통 빈값 잠금(cs:587/662/703).
       const locked =
-        isPivotCellLocked(row, ctx) || isPivotCellValueEmpty(row, binding);
+        (!ctx.auth.isAdmin && isPivotCellLocked(row, ctx)) ||
+        isPivotCellValueEmpty(row, binding);
       if (locked) {
         ev.cell.classList.remove('wj-cell-editable'); // 공용이 입힌 노랑 제거
         ev.cell.style.backgroundColor = '#ffffff'; // 잠금 = 평평한 흰색(테마 얼룩무늬 제거)

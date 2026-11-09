@@ -72,16 +72,18 @@ export const LBL = {
   ITEM: 'LBL00618',
 } as const;
 
-// AS-IS validations(00_checklist.md §4d 하단 표, 12건 전량 SaveData 소속) MSG ID 매핑 — AS-IS
-//   번호 그대로 이관(design 문서가 실측한 msgId, SCP0127 과 달리 이 화면은 AS-IS 번호 자체가
-//   Roslyn validations 배열에서 confirmed 라 역매핑 대상 아님).
+// AS-IS validations(00_checklist.md §4d 하단 표, 12건 전량 SaveData 소속) MSG ID 매핑.
+//   DUPLICATE_EXISTS 는 AS-IS 번호(MSG00260) 그대로 이관했으나 TO-BE Oracle 에서 MSG00260 이
+//   무관한 "중복된 조합이 존재합니다(Division/Project/Item/일자/Measure)." 로 재번호돼 오매핑이었다 —
+//   AS-IS 문구 "신규 입력 데이터 중 중복된 데이터가 있습니다." 역조회로 MSG00428 확정(DB 실측
+//   2026-11-05, 자매 SCP0127 동일 정정). 감사가 AS-IS 번호로 되돌리지 말 것.
 // AS-IS `.cs:704-711` DateTime.ParseExact(v_from_yyyymmdd/v_to_yyyymmdd,"yyyyMMdd",null) catch
 //   블록에서 발생(MSG00219 날짜 대소비교와 별개 — 형식 자체 파싱 실패 가드). GAP-05 재확인 완료
 //   (본 회차 AS-IS 원문 직접 read), safetyStockSaveValidation.ts 에 배선.
 export const MSG = {
   REQUIRED_FIELDS: 'MSG00001', // 9개 필수값(value_type/division/plan_gr/site/item/stage/from~to/qty/valid_yn) 공백
-  DUPLICATE_EXISTS: 'MSG00260', // 기존 동일건 존재 시(삭제 아니면) 저장 차단
-  INVALID_DATE_FORMAT: 'MSG00046', // From/To 날짜 형식 파싱 실패(.cs:704-711 catch) — MSG00219 대소비교와 별개
+  DUPLICATE_EXISTS: 'MSG00428', // 기존 동일건 존재 시(삭제 아니면) 저장 차단(AS-IS MSG00260 재번호 → MSG00428)
+  INVALID_DATE_FORMAT: 'MSG00611', // From/To 날짜 형식 파싱 실패(.cs:704-711 catch) — MSG00219 대소비교와 별개
   DATE_RANGE_INVALID: 'MSG00219', // From > To 날짜 역전 차단
   QTY_NEGATIVE: 'MSG00085', // 적용수량 음수 차단
   ITEM_NOT_FOUND: 'MSG00458', // 대상 Item 존재하지 않음

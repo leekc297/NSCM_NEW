@@ -1,0 +1,481 @@
+{
+  "id": "SSP0024",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SSP0024",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plant Site",
+    "Material",
+    "Model/Nickname"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "ShipmentMasterElectrode",
+  "routePath": "shipping/shipment-master-electrode",
+  "asisName": "ShipmentMasterElectrode",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "cboPlantSite",
+      "tobeLabel": "Plant Site",
+      "catalog": "",
+      "labels": [
+        "Plant Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Material",
+      "lbl": "LBL00021",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtMaterialId",
+      "tobeLabel": "Material",
+      "catalog": "",
+      "labels": [
+        "Material"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtModelId",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "",
+  "asisMapping": "features\\shipping\\src\\pages\\shipment-master-electrode\\__asis-mapping__.md",
+  "buttons": [],
+  "mainSheets": [
+    {
+      "name": "Project",
+      "key": "PROJECT",
+      "labels": [
+        "Cell Type",
+        "division",
+        "division",
+        "Electrode Type",
+        "UOM",
+        "Material",
+        "Model",
+        "Nick Name",
+        "Plant Site Code",
+        "Plant Site",
+        "Pancake (m/cell)"
+      ]
+    },
+    {
+      "name": "Ship Master Elec",
+      "key": "SHIP_MASTER_ELEC",
+      "labels": [
+        "Box/Cut*",
+        "Building*",
+        "Building Desc.",
+        "Cell Type",
+        "Created By",
+        "Creation Date",
+        "Div*",
+        "DOM/EXP.*",
+        "Electrode Type",
+        "UOM",
+        "Last Update Date",
+        "Last Updated By",
+        "Material*",
+        "Model",
+        "Nick Name",
+        "Package Type*",
+        "Pancake Roll Length",
+        "Plant Site Code",
+        "Plant Site*",
+        "Post Oper.*",
+        "Post Oper.LT(Day)",
+        "Remarks",
+        "Steelcrate/Cut*",
+        "Steelrack/Cut*",
+        "Pancake (m/cell)"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+      "sheet": "Project",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0024.P_SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_DIVISION",
+      "sheet": "Project",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0024.P_SCM0001_GET_DIVISION",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Project",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0024.P_",
+      "entries": []
+    },
+    {
+      "sp": "SSP0024_GET_SHIP_MASTER",
+      "sheet": "Ship Master Elec",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0024.P_SSP0024_GET_SHIP_MASTER",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0024_SAVE_SHIP_MASTER",
+      "sheet": "Project",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0024.P_SSP0024_SAVE_SHIP_MASTER",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0002_GET_USER_INFO_LIST",
+      "sheet": "Project",
+      "btn": "USER_INFO_LIST",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0024.P_SSP0002_GET_USER_INFO_LIST",
+      "entries": [
+        "button:EditButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Project": {
+      "40": [],
+      "81": [],
+      "82": []
+    },
+    "Ship Master Elec": {
+      "40": [
+        "Div*",
+        "Plant Site Code",
+        "Plant Site*",
+        "Material*",
+        "Model",
+        "Cell Type",
+        "Nick Name",
+        "Electrode Type",
+        "UOM",
+        "Post Oper.*",
+        "Post Oper.LT(Day)",
+        "Pancake (m/cell)",
+        "Pancake Roll Length",
+        "Package Type*",
+        "Steelcrate/Cut*",
+        "Box/Cut*",
+        "Steelrack/Cut*",
+        "DOM/EXP.*",
+        "Building*",
+        "Building Desc.",
+        "Remarks",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Plant Site Code",
+        "Plant Site*",
+        "Material*",
+        "Model",
+        "Cell Type",
+        "Nick Name",
+        "Electrode Type",
+        "UOM",
+        "Post Oper.*",
+        "Post Oper.LT(Day)",
+        "Pancake (m/cell)",
+        "Pancake Roll Length",
+        "Package Type*",
+        "Steelcrate/Cut*",
+        "Box/Cut*",
+        "Steelrack/Cut*",
+        "DOM/EXP.*",
+        "Building*",
+        "Building Desc.",
+        "Remarks",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Plant Site Code",
+        "Plant Site*",
+        "Material*",
+        "Model",
+        "Cell Type",
+        "Nick Name",
+        "Electrode Type",
+        "UOM",
+        "Post Oper.*",
+        "Post Oper.LT(Day)",
+        "Pancake (m/cell)",
+        "Pancake Roll Length",
+        "Package Type*",
+        "Steelcrate/Cut*",
+        "Box/Cut*",
+        "Steelrack/Cut*",
+        "DOM/EXP.*",
+        "Building*",
+        "Building Desc.",
+        "Remarks",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jinhuannj",
+      "name": "근환",
+      "groups": [
+        "SSP Planner"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "SSP Planner"
+      },
+      "roleNote": "PLANNER",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json areas.SSP",
+      "tobeGroups": [
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "INSERT",
+        "DELETE",
+        "EDIT",
+        "USER_CHECK",
+        "EXCEL",
+        "SEARCH",
+        "SAVE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "INSERT",
+      "SEARCH",
+      "SAVE",
+      "EXCEL",
+      "DELETE",
+      "EDIT",
+      "USER_CHECK"
+    ],
+    "CAPA Planner": [
+      "SEARCH",
+      "DELETE",
+      "INSERT",
+      "EXCEL",
+      "USER_CHECK",
+      "SAVE"
+    ],
+    "DM ADMIN": [
+      "EXCEL",
+      "SEARCH",
+      "USER_CHECK",
+      "DELETE",
+      "SAVE",
+      "INSERT"
+    ],
+    "DM Planner": [
+      "INSERT",
+      "SEARCH",
+      "USER_CHECK",
+      "DELETE",
+      "SAVE",
+      "EXCEL"
+    ],
+    "DM Viewer": [
+      "EXCEL",
+      "SEARCH",
+      "USER_CHECK",
+      "SAVE",
+      "INSERT",
+      "DELETE"
+    ],
+    "FP Planner": [
+      "INSERT",
+      "DELETE",
+      "SAVE",
+      "USER_CHECK",
+      "EDIT",
+      "EXCEL",
+      "SEARCH"
+    ],
+    "FP Viewer": [
+      "INSERT",
+      "USER_CHECK",
+      "EXCEL",
+      "SEARCH",
+      "DELETE",
+      "SAVE"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "USER_CHECK",
+      "SAVE",
+      "INSERT",
+      "EXCEL",
+      "EDIT",
+      "DELETE"
+    ],
+    "SCM Viewer": [
+      "DELETE",
+      "USER_CHECK",
+      "SAVE",
+      "SEARCH",
+      "INSERT",
+      "EXCEL"
+    ],
+    "SCP Planner": [
+      "USER_CHECK",
+      "SEARCH",
+      "SAVE",
+      "INSERT",
+      "DELETE",
+      "EXCEL"
+    ],
+    "SCP Tester": [
+      "USER_CHECK",
+      "SAVE",
+      "DELETE",
+      "INSERT",
+      "EXCEL",
+      "SEARCH"
+    ],
+    "SSP Planner": [
+      "INSERT",
+      "DELETE",
+      "EDIT",
+      "USER_CHECK",
+      "EXCEL",
+      "SEARCH",
+      "SAVE"
+    ],
+    "SSP Viewer": [
+      "EXCEL",
+      "INSERT",
+      "SAVE",
+      "SEARCH",
+      "DELETE",
+      "USER_CHECK"
+    ]
+  },
+  "menuBtnCodes": [
+    "INSERT",
+    "SEARCH",
+    "SAVE",
+    "EXCEL",
+    "DELETE",
+    "EDIT",
+    "USER_CHECK"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

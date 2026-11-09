@@ -1,9 +1,9 @@
 {
  "id": "DMF0042",
  "asis": "DMF0042",
- "at": "2026-11-05 13:12:58",
+ "at": "2026-11-09 14:08:50",
  "has_asis": true,
- "tobe_cols": 60,
+ "tobe_cols": 52,
  "buttons": [
   "COLUMN_SETUP",
   "CUTOFF",
@@ -42,13 +42,13 @@
    "why_not": []
   },
   "p_combo": {
-   "rows": 32,
+   "rows": 42,
    "why_not": []
   },
   "p_decimal": {
    "rows": 0,
    "why_not": [
-    "cell_rules.csv 없음(소수 자릿수 사실 없음)"
+    "기존 행 편집 숫자 칸 중 소수 자릿수 > 0 없음"
    ]
   },
   "p_reqfp": {
@@ -143,8 +143,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 48,
-   "used": 44
+   "rows": 58,
+   "used": 54
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -155,7 +155,7 @@
    "used": 0
   }
  },
- "rows": 48,
- "rows_used": 44,
+ "rows": 58,
+ "rows_used": 54,
  "dup_of_hand": 4
 }

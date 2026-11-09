@@ -25,6 +25,7 @@ import sys
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from facts_combosrc import strip_comments  # noqa: E402
+from asis_variant import is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 MODS = r'(?:public|private|protected|internal|static|async|override|virtual|new|sealed|partial|extern|unsafe|abstract)'
 NOT_TYPE = {'return', 'await', 'new', 'else', 'throw', 'yield', 'case', 'goto', 'in', 'is', 'as', 'out', 'ref', 'using', 'lock', 'if', 'while', 'foreach', 'for', 'switch'}  # 'return Foo(' 같은 호출을 선언으로 오인 금지
@@ -50,7 +51,7 @@ def dead_methods(asis):
     cand = {(r['class'], r['method']) for r in ents if r['entry_kind'] == 'unreached'} - live
     cand = {k for k in cand if k[1] != '.ctor'}
     if not cand: return {}
-    cur = {f['file'] for f in _rd(os.path.join(sd, 'files.csv')) if f.get('variant') in ('current', 'shared')}
+    cur = {f['file'] for f in _rd(os.path.join(sd, 'files.csv')) if is_cur(f)}
     # 메서드 본문 범위(파일별 문장 줄 최소~최대) — 참조가 어느 메서드 안에 있는지 판정
     rng = collections.defaultdict(list)  # basename → [(lo, hi, (cls, meth))]
     files = {}

@@ -47,7 +47,7 @@ export const DemandManagerForm = ({ onSearch, onOpenVersionModal, onChangeVersio
           {/* size=3 — DMF0020 sales-future-price 의 VersionField(gridSize=3)와 동일 폭 */}
           <Grid size={3}>
             <FormItem
-              label={t('LBL00513', 'Version')}
+              label={t('LBL00606', 'Version')}
               labelAlign='right'
               required
               className={commonStyles.formItem}

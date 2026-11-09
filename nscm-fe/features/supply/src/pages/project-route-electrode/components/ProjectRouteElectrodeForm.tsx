@@ -246,9 +246,15 @@ export const ProjectRouteElectrodeForm = ({ onSearch }: Props) => {
         preSearchParams={{
           divisionId: plantSiteDivisionFilter,
           scpModuleType: MENU_ID,
-          operationGroup: '',
+          // operationGroup: '', // 기존 로직 주석 보존 (2026-11-04)
+          operationGroup: searchParams.operationGroup,
           itemId: searchParams.itemId ?? '',
         }}
+        operationGroupLabel={
+          operationGroupOptions.find(
+            o => o.value === (searchParams.operationGroup || ALL_SENTINEL)
+          )?.label
+        }
         multiCheckbox
         multiDivision
       />

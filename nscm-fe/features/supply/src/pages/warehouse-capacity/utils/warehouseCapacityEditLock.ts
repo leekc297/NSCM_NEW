@@ -38,9 +38,10 @@ export const clampNonNegative = (raw: unknown): { value: number; coerced: boolea
 };
 
 // Warehouse Item Mapping 시트 전용(design 03 §1.2 #7~9, AS-IS SCP0133_WarehouseCapacity.cs:512-532).
-//   STOR_LOC_NAME 컬럼은 division 에 '81_UC' 가 포함될 때만 표시(그 외 division 은 숨김) —
-//   admin 메타 속성 리터럴 덮어쓰기가 아니라, 표시할 컬럼 목록 자체에서 제외하는 방식(project-route
-//   ProjectRouteMainGrid.tsx R-DYN 선례와 동일 패턴).
+//   STOR_LOC_NAME 컬럼은 division 에 '81_UC' 가 포함될 때만 표시(그 외 division 은 숨김) — AS-IS
+//   `SetVisibleSheetColumn(STOR_LOC_NAME, 80, true/false)`처럼 너비를 직접 덮어씀. admin 메타는
+//   VISIBLE_FLAG='N'/COLUMN_WIDTH=0 고정이라 컬럼 목록에서 빼고 넣는 것만으론 안 보인다
+//   (WarehouseItemMappingGrid.tsx columns useMemo 가 colWth/visible 을 직접 덮어쓴다).
 export const STOR_LOC_NAME_DIVISION_KEYWORD = '81_UC';
 export const isStorLocNameVisible = (divisionId: string): boolean =>
   divisionId.includes(STOR_LOC_NAME_DIVISION_KEYWORD);

@@ -50,23 +50,14 @@
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
 |---|---|---|---|
-| TAB1 | sesDivisionId userGroup | data | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| TAB2 | divisionId endCustomer dpjtAuthType dpjtRegStatus regCompDateFr regCompDateTo | data | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| POP1_TREE | sesDivisionId | data | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| POP1_GRID1 | userInfo deptId sesDivisionId | data | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| POP1_GRID2 | dpjtKey sesDivisionId | data | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| POP1_GRID3 | dpjtKey sesDivisionId | data | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| POP1_GRID4 | dpjtKey sesDivisionId | data | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| POP2_GRID5 | divisionId dpjtKey | data | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| period | frBucket frDateVal frBucketType toBucket toDateVal toBucketType | data | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| project | sesDivisionId sesUserId sesMenuId sesUserGrId | projectList | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| myProject | divisionId endCustomer dpjtAuthType dpjtRegStatus regCompDateFr regCompDateTo sesUserId | myProjectList | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| popupOrg | sesDivisionId sesUserId | orgList | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| popupUser | userInfo deptId sesDivisionId sesUserId | userList | P_SDM1010_GET_POP_USER_BY_DEPT PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| popupAuthWrite | pjtKey sesDivisionId sesUserId | authWriteList | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| popupAuthRead | pjtKey sesDivisionId sesUserId | authReadList | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| popupAuthReq | pjtKey sesDivisionId sesUserId | authRequestList | PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
-| popupMyWork | divisionId pjtKey sesUserId | scheduleList | SDM1010_GET_POP_MY_WORK PKG_SDM1010 PKG_SDM1010_NEW_CONTRACT |
+| project | sesDivisionId sesUserId sesMenuId sesUserGrId | projectList |  |
+| myProject | divisionId endCustomer dpjtAuthType dpjtRegStatus regCompDateFr regCompDateTo sesUserId | myProjectList |  |
+| popupOrg | sesDivisionId sesUserId | orgList |  |
+| popupUser | userInfo deptId sesDivisionId sesUserId | userList | P_SDM1010_GET_POP_USER_BY_DEPT |
+| popupAuthWrite | pjtKey sesDivisionId sesUserId | authWriteList |  |
+| popupAuthRead | pjtKey sesDivisionId sesUserId | authReadList |  |
+| popupAuthReq | pjtKey sesDivisionId sesUserId | authRequestList |  |
+| popupMyWork | divisionId pjtKey sesUserId | scheduleList | SDM1010_GET_POP_MY_WORK |
 
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
@@ -155,7 +146,7 @@
 ## 7. 메시지 코드
 | code | count |
 |---|---|
-| MSG00913 | 1 |
+| MSG00717 | 1 |
 | MSG00014 | 6 |
 | MSG00712 | 3 |
 | MSG00713 | 3 |

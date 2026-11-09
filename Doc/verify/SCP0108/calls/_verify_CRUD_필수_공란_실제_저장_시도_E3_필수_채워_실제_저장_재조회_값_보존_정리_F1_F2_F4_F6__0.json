@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0108",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"fromYyyymm\":\"202611\",\"programId\":\"SCP0108\",\"sheetName\":\"MAIN\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 154,
+  "at": "2026-11-09T01:19:28.428Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 757,
+  "dur": 372,
+  "at": "2026-11-09T01:19:29.693Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ }
+]

@@ -56,7 +56,17 @@ export const usePlanGroupDashboardStore = createPersistedStoreWithTab<
 >(
   (set, get) => ({
     ...initPlanGroupDashboardState(),
-    reset: () => set(initPlanGroupDashboardState()),
+    // F10(조회조건 초기화) 전용 — 사용자 지시(2026-11-05): "div 제외 나머지 조회조건 초기화". SubTitle
+    //   resetConditionOnClient 경로가 이 reset() 을 부른다. 현재 Division 값을 보존한 채 나머지
+    //   (PlanGroup/Plant/Completed/기간)와 그리드(filters)만 기본값으로 되돌린다. divisionId 를 '' 로
+    //   비우면 Form 재시드 effect 가 "첫 권한 Division" 으로 되돌려 사용자가 고른 Division 이 바뀌므로
+    //   보존한다(staticColumns/initialized 는 MotherStore.resetSearchCondition 가 별도 보존).
+    reset: () => {
+      const keepDivision = get().searchParams.divisionId;
+      const fresh = initPlanGroupDashboardState();
+      fresh.searchParams.divisionId = keepDivision;
+      set(fresh);
+    },
     setOpenSearchArea: open => {
       set(state => {
         state.isOpenSearchArea = open ?? !state.isOpenSearchArea;
@@ -67,6 +77,10 @@ export const usePlanGroupDashboardStore = createPersistedStoreWithTab<
     setSearchParams: searchParams => {
       set(state => {
         state.searchParams = { ...get().searchParams, ...searchParams };
+        // AS-IS 파리티(사용자 지시 2026-11-05): Plan Group 변경 시 그리드를 비운다
+        //   (`CboPlanGroup_SelectedIndexChanged → SpreadInfo.ClearDataSource`, cs:373-376). Plant/
+        //   Completed/기간 변경은 AS-IS 가 그리드를 비우지 않으므로 그대로 둔다(그 축은 Search 로만 갱신).
+        if ('planGroupId' in searchParams) state.filters = undefined;
       });
     },
     // Division 변경(싱글 콤보) = TO-BE 공통 요건: Division·기간(start/end)을 제외한 검색조건을 전부
@@ -77,14 +91,14 @@ export const usePlanGroupDashboardStore = createPersistedStoreWithTab<
     //   (MSG00704)는 Form 의 onChange 가 confirmIfDirtyKey 로 처리한다(commit 51d4e9fa 패턴) —
     //   이 화면은 그리드 read-only 라 실제 dirty 는 없지만 공통 패턴을 동일하게 둔다(SCP0025 선례).
     //   하위 콤보 'ALL' 초기화는 종전 cascade-combo-filter §1.2/§1.4 의무를 포함한다.
+    //   사용자 지시(2026-11-05): Division 변경 시 **기간(Period)도 함께 기본값으로 초기화**한다 — AS-IS
+    //   ClbDivision_SelectedIndexChanged 는 기간을 보존했으나, TO-BE 는 Division 전환을 "조회조건 리셋"
+    //   으로 통일해 기간도 초기값(today-7~today)으로 되돌린다. 종전 startDate/endDate 보존을 제거한다.
     setDivision: divisionId => {
       set(state => {
-        const cur = get().searchParams;
         state.searchParams = {
-          ...initSearchParams(), // Division·기간 제외 전 조건 초기화(planGroup/plant/completed → 'ALL')
+          ...initSearchParams(), // Division 제외 전 조건 초기화(planGroup/plant/completed → 'ALL', 기간 → 기본값)
           divisionId,
-          startDate: cur.startDate,
-          endDate: cur.endDate,
         };
         state.filters = undefined; // 그리드 초기화 — 재조회(Search) 전까지 빈 상태
       });

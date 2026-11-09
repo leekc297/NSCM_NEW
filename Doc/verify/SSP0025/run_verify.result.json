@@ -1,0 +1,921 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-09T11:50:54+09:00",
+ "producer": "run_verify",
+ "id": "SSP0025",
+ "skip_e2e": false,
+ "started": "2026-11-09 11:03:55",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-ba998255",
+   "class": "F1",
+   "msg": "SSP0025 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-73ae37f0",
+   "class": "F5",
+   "msg": "SSP0025 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a5043f1c",
+   "class": "D6",
+   "msg": "SSP0025 시나리오 [자동] 선택 행 위로 Insert",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e401c028",
+   "class": "F1",
+   "msg": "SSP0025 시나리오 [자동] 기존 행 Delete → D 저장 요청",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-58e57a6b",
+   "class": "G8",
+   "msg": "조회조건 Material",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f743fe58",
+   "class": "B2",
+   "msg": "Shipment Requestor PIC.SITE_DESCRIPTION (Plant Site*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f8e3734d",
+   "class": "E7",
+   "msg": "Shipment Requestor PIC.USER_ID (User ID*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-159f0981",
+   "class": "E7",
+   "msg": "Shipment Requestor PIC.USER_ID (User ID*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-540b5971",
+   "class": "E7",
+   "msg": "Shipment Requestor PIC.PART_LEADER (Part Leader)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d6dfabeb",
+   "class": "E7",
+   "msg": "Shipment Requestor PIC.PART_LEADER (Part Leader)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-92c4580d",
+   "class": "E7",
+   "msg": "Shipment Requestor PIC.TEAM_LEADER (Team Leader)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1463d632",
+   "class": "E7",
+   "msg": "Shipment Requestor PIC.TEAM_LEADER (Team Leader)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fa5d4af0",
+   "class": "H1",
+   "msg": ".MODEL_ID (Model)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC align_check (ZIOUI1 SHEET_COLUMNS)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0834b71f",
+   "class": "E4",
+   "msg": "MSG00004",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9ae33640",
+   "class": "E4",
+   "msg": "MSG00284",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e2ffc896",
+   "class": "H6",
+   "msg": "popup.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-97ed4734",
+   "class": "H6",
+   "msg": "new UserInfoPopup()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-81497250",
+   "class": "H6",
+   "msg": "popup.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ed6e2a1b",
+   "class": "H6",
+   "msg": "new UserInfoPopup()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-466afccb",
+   "class": "H6",
+   "msg": "popup.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a1a6a97f",
+   "class": "H6",
+   "msg": "new UserInfoPopup()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-883bdd72",
+   "class": "H6",
+   "msg": "popup.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-eefcf578",
+   "class": "B2",
+   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-674c3eda",
+   "class": "B2",
+   "msg": "[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9710dc94",
+   "class": "C3",
+   "msg": "[DMF0020 결함 유형] Team·End Customer 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6a77bc91",
+   "class": "B2",
+   "msg": "[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-33299f4e",
+   "class": "D6",
+   "msg": "[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5561da15",
+   "class": "D6",
+   "msg": "[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3f81ff90",
+   "class": "C3",
+   "msg": "[DMF0042 결함 유형] Sales Site·End Customer 셀",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4cd6a150",
+   "class": "C3",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-82fb0256",
+   "class": "H6",
+   "msg": "[DMF0005 결함 유형] Team 팝업 조건(Team ID/Team Name)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c7cb89d9",
+   "class": "F1",
+   "msg": "[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-178ddbe6",
+   "class": "C3",
+   "msg": "[SCP0007 결함 유형] Insert 행 To Site 콤보·City",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-969da3be",
+   "class": "D6",
+   "msg": "[DMF0005 결함 일반화] Insert 행 위치 · 셀 병합(FPMerge) 그룹",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9d217550",
+   "class": "C3",
+   "msg": "[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJECT_OWNER·BIZ_TYPE) · Model 팝업(ITEM_ID → ITEM_TYPE) · Sales Site(SCM_SITE_ID → VMI_YN·VMI_STD_DIO) 자동 채움",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5ed9eb47",
+   "class": "B2",
+   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-33b5f218",
+   "class": "D6",
+   "msg": "그리드 Insert 신규행 위치",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1f4e30ba",
+   "class": "F5",
+   "msg": "SSP0025 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f95e2155",
+   "class": "C3",
+   "msg": "SITE_DESCRIPTION",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-aca453cd",
+   "class": "C3",
+   "msg": "R15 ComboSelChange 가드(행0) · cs:674",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-52765be1",
+   "class": "H6",
+   "msg": "R21 이미지셀 아이콘 · cs:162~164,347~353",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3aa5ef26",
+   "class": "C3",
+   "msg": "CellClick 순수가드(619/674) · cs:619,674",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e53b2a1c",
+   "class": "E4",
+   "msg": "MSG00004",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-89fdf2c9",
+   "class": "X-ROW",
+   "msg": "SSP0025_ItembyDivisionPopup.DefineProperty",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-da75f148",
+   "class": "A10",
+   "msg": "SSP0025 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3abf8778",
+   "class": "X-ROW",
+   "msg": "SSP0025_ItembyDivisionPopup.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-042263f6",
+   "class": "X-ROW",
+   "msg": "SSP0025_ItembyDivisionPopup.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ef878212",
+   "class": "X-ROW",
+   "msg": "SSP0025_ItembyDivisionPopup.Form_Load",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5079aed8",
+   "class": "X-ROW",
+   "msg": "SSP0025_ItembyDivisionPopup.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-18233ab3",
+   "class": "X-ROW",
+   "msg": "SSP0025_ItembyDivisionPopup.InitSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b1052149",
+   "class": "C3",
+   "msg": "SSP0025_ShipmentRequestorPIC.CboDivision_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fac42c99",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.DefineProperty",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7e9b2cd8",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-cbbacf81",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.FindData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4d281353",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.Form_Load",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1a419be2",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d5c45c7e",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.InitSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c1818288",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.InsertButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4ce90d92",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-51aa1216",
+   "class": "E4",
+   "msg": "MSG00284",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-592e7cdf",
+   "class": "C3",
+   "msg": "SSP0025_ShipmentRequestorPIC.SetChangedControl",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c8f15225",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.SpdMain_CellClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-24b369d1",
+   "class": "C3",
+   "msg": "ITEM_ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-65452d3e",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.SpdMain_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-70d545b2",
+   "class": "X-ROW",
+   "msg": "SSP0025_ShipmentRequestorPIC.SpdMain_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-786b2fac",
+   "class": "H6",
+   "msg": "SSP0025 팝업 UserInfoPopup CELL:USER_ID COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-b6f614de",
+   "class": "K3",
+   "msg": "SSP0025 팝업 UserInfoPopup CELL:USER_ID GRID_KEYS",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-244c827a",
+   "class": "H6",
+   "msg": "SSP0025 팝업 UserInfoPopup CELL:PART_LEADER COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-e58cdda7",
+   "class": "K3",
+   "msg": "SSP0025 팝업 UserInfoPopup CELL:PART_LEADER GRID_KEYS",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-2ca884c2",
+   "class": "H6",
+   "msg": "SSP0025 팝업 UserInfoPopup CELL:TEAM_LEADER COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-b2e8d4ac",
+   "class": "K3",
+   "msg": "SSP0025 팝업 UserInfoPopup CELL:TEAM_LEADER GRID_KEYS",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-75b8b6b9",
+   "class": "H5",
+   "msg": "SSP0025 팝업 (TO-BE 메타 팝업) CELL:ITEM_ID TITLE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-09 11:50"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 F6 — Doc/verify/SSP0025/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 2059,
+  "PASS": 880,
+  "FAIL": 72,
+  "판정필요": 20,
+  "미검증": 141,
+  "해당없음": 946,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1287,
+   "없음(미검증)": 141,
+   "사람": 2,
+   "없음(판정 대기)": 20,
+   "기계(상속·집계)": 606,
+   "출처 미기록": 3
+  },
+  "fail_listed": 72,
+  "coverage": {
+   "rules": 91,
+   "measured": 609,
+   "not_run_error": 120,
+   "na": 391,
+   "suspect_na100": [
+    "F6"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SSP0025_ShipmentRequestorPic_CheckList_v1.xlsx",
+  "ActionItemList": "Doc/CheckList/SSP0025_ShipmentRequestorPic_ActionItemList_v1.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SSP0025/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 F6 — Doc/verify/SSP0025/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+}

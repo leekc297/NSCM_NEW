@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 200,
+  "at": "2026-11-07T13:11:38.707Z",
+  "user": "minyonglee1",
+  "test": "셀 편집 표시·값 유지(A2·F6)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 3210,
+  "at": "2026-11-07T13:11:41.603Z",
+  "user": "minyonglee1",
+  "test": "셀 편집 표시·값 유지(A2·F6)"
+ }
+]

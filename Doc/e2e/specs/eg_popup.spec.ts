@@ -10,7 +10,7 @@ import type { Locator } from '@playwright/test';
 import { test } from '../../../tools/E2E/fixtures/test';
 import type { Nscm } from '../../../tools/E2E/lib/nscm';
 import { CFG } from '../../../tools/E2E/lib/nscm';
-import { probe } from '../../../tools/E2E/lib/probe';
+import { parseCsv, probe } from '../../../tools/E2E/lib/probe';
 import { ensureRows } from '../../../tools/E2E/lib/smoke-extra';
 import { applyPopDomMutations, cellPoint, clickPopHeader, closePopup, dialogCount, dragPopup, hasMut, installPopMutations, mainColumn, mainPopRoot, mainPopTrigger, mainPopupConds, measure, orderCheck, pickRows, PopNet, popDisplay, popRowCount, popRows, popSearch, POPMUT, resizePopup, selectedRows, setText, filterByF4, sortByF3, settle, tagTop, waitPopRows, waitPopup, type PopCond, type PopMeasure } from '../../../tools/E2E/lib/popupprobe';
 
@@ -36,9 +36,10 @@ try {
     }
   }
 } catch { /* 메타 없음 */ }
+test.beforeEach(({ nscm }) => { CUR.nscm = nscm; });
 const PLAN = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')); } catch { return null; } })() as { fields?: { label?: string; labels?: string[]; asis?: string; excluded?: boolean; excludedWhy?: string }[]; buttons?: { label?: string; asis?: string }[] } | null;
 
-type Row = { screen: string; call: number; cls: string; trig: string; check: string; egs: string[]; result: 'PASS' | 'FAIL' | 'ERROR' | 'NA' | '판정필요'; expected: string; actual: string; basis: string; at: string; mut: string };
+type Row = { screen: string; call: number; cls: string; trig: string; check: string; egs: string[]; result: 'PASS' | 'FAIL' | 'ERROR' | 'NA' | '판정필요'; expected: string; actual: string; basis: string; mctx?: { calls: number; rows: number; req: number }; at: string; mut: string };
 const results: Row[] = [];
 const rowsets: { call: number; cls: string; trig: string; account: string; rows: number; body: string; url: string; title: string; buttons: string[]; columns: string[]; sample: string[] }[] = [];
 function flush() {
@@ -54,12 +55,15 @@ const nrm = (s: string) => String(s || '').toLowerCase().replace(/[^a-z0-9가-�
 const ACCOUNT = (process.env.E2E_ACCOUNT || CFG.defaultAccount || '').toLowerCase();
 const LOAD_RX = /Timeout \d+ms exceeded|net::ERR_|ERR_CONNECTION|ECONN/i;
 
+// P1(2026-11-06 근본 보완): 측정 맥락 — 이 테스트에서 지금까지 나간 call-proc 수·조회 응답 최대 행·필수 조건 자동 채움 횟수. judge 가 '측정 전제 미충족' FAIL 을 ERROR 로 돌리는 근거
+const CUR: { nscm: Nscm | null } = { nscm: null };
+const mctxOf = () => { const n = CUR.nscm; if (!n) return undefined; const rows = n.calls.reduce((m, c) => Math.max(m, c.rows == null ? -1 : Number(c.rows)), -1); return { calls: n.calls.length, rows, req: (n as unknown as { requiredNotes?: string[] }).requiredNotes?.length || 0 }; };
 function makePut(i: number, c: Call) {
   const trig = `${c.trigger.kind}:${c.trigger.column || c.trigger.cond_label || c.trigger.button_text || c.trigger.control}`;
   return (check: string, egs: string[], result: Row['result'], expected: string, actual: string, basis: string) => {
     let res = result; let act = actual;
     if (res === 'FAIL' && !basis) { res = 'ERROR'; act = `[근거 불충분] ${act}`; }
-    results.push({ screen: ID, call: i, cls: c.cls, trig, check, egs, result: res, expected, actual: act.slice(0, 900), basis, at: new Date().toISOString(), mut: POPMUT.join(',') });
+    results.push({ screen: ID, call: i, cls: c.cls, trig, check, egs, result: res, expected, actual: act.slice(0, 900), basis, at: new Date().toISOString(), mut: POPMUT.join(','), mctx: mctxOf()});
   };
 }
 
@@ -202,6 +206,9 @@ async function prepare(nscm: Nscm, c: Call): Promise<{ ok: boolean; why: string;
 const OK_RX = /^(확인|OK|Confirm|Select|선택|Apply|적용)$/i; const CL_RX = /^(Close|닫기|Cancel|취소)$/i;
 
 // ─── 측정 묶음: 표준(제목·버튼·No.·건수) ───
+// AS-IS 트리거 버튼 → TO-BE 공용 모달 컴포넌트(tools/Harness/rules/tobe_catalog.csv asis_types 'button:^btnX$') — 2026-11-06
+const CATALOG: { name: string; rx: RegExp }[] = (() => { try { return parseCsv(fs.readFileSync(path.join(ROOT, 'tools', 'Harness', 'rules', 'tobe_catalog.csv'), 'utf8').replace(/^\uFEFF/, '')).flatMap(r => String(r.asis_types || '').split(/[|;]/).map(t => t.trim()).filter(t => /^button:/.test(t)).map(t => { try { return { name: r.name, rx: new RegExp(t.replace(/^button:/, ''), 'i') }; } catch { return null; } }).filter((x): x is { name: string; rx: RegExp } => !!x)); } catch { return []; } })();
+function catalogModalFor(c: Call): string | null { const ctl = c.trigger.control || ''; if (c.trigger.kind !== 'BTN' && !/^btn/i.test(ctl)) return null; const hit = CATALOG.find(e => e.rx.test(ctl)); return hit ? hit.name : null; }
 function checkStatic(put: ReturnType<typeof makePut>, m: PopMeasure, c: Call, k: Klass) {
   // 제목 — 문서 SCPSSP-16 · 공통 I2
   const ttlBad = !m.title ? '제목 없음' : m.underscore.length ? `'_' 폴백 [${m.underscore.join(', ')}]` : m.codes.length ? `코드 노출 [${m.codes.join(', ')}]` : /^_/.test(m.title) ? `제목 '_' 접두 '${m.title}'` : '';
@@ -209,6 +216,12 @@ function checkStatic(put: ReturnType<typeof makePut>, m: PopMeasure, c: Call, k:
   // 팝업 정체 — AS-IS 제목 ↔ TO-BE 제목(토큰)
   const asisT = (k.title || '').replace(/popup/ig, ' ');
   if (!k.in_pack || !asisT.trim()) put('IDENTITY', ['EG135'], 'NA', 'AS-IS 팝업 제목과 같은 팝업', `AS-IS 제목 facts 없음(${k.in_pack ? '디자이너 제목 빈값' : 'AS-IS 원문 없음'}) · TO-BE '${m.title}'`, '');
+  else if (catalogModalFor(c)) {
+    // 2026-11-06(SCP0016 22번 허위 FAIL): AS-IS 공용 팝업(TitleSetForm 등)은 TO-BE 룰로 공용 모달(tobe_catalog.csv asis_types button:^btnMeasure$ → MeasureSelectModal)로 대체된다 — 제목 토큰 비교 대신 대응표
+    const comp = catalogModalFor(c)!; const compToks = comp.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase().split(/\s+/).filter(t => t.length >= 3 && t !== 'modal');
+    const b = m.title.toLowerCase(); const hit = compToks.filter(t => b.includes(t));
+    put('IDENTITY', ['EG135'], m.title ? 'PASS' : 'ERROR', `AS-IS 팝업 '${k.title}'(${c.cls}) → TO-BE 룰 공용 모달 ${comp}(tobe_catalog.csv 대응표)`, m.title ? `TO-BE 제목 '${m.title}' · 대응 컴포넌트 ${comp} · 제목 토큰 일치 [${hit.join(',')}] — AS-IS 와 달라도 TO-BE 룰 대체라 오류 아님` : '[측정 경로 없음] 모달 제목 없음', `${c.asis_ref} · tools/Harness/rules/tobe_catalog.csv`);
+  }
   else {
     const toks = (s: string) => s.toLowerCase().split(/[^a-z0-9가-힣]+/).filter(t => t.length >= 3 && !['popup', 'the', 'and', 'for', 'list', 'select'].includes(t));
     const a = toks(asisT); const b = toks(m.title); const hit = a.filter(t => b.some(u => u.includes(t) || t.includes(u)));
@@ -591,8 +604,9 @@ async function runPick(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
   // 조회 — 선택값이 메인 조회 요청에 깨끗한 키로
   if (c.trigger.kind === 'COND' && afterOk) {
     const b0 = nscm.calls.length; await nscm.search().catch(() => undefined); await probe.waitRows(p, 60_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined);
-    const call = nscm.calls.slice(b0).find(x => /SEARCH/i.test(x.btn)); const n2 = await probe.rowCount(p); const body = call?.body || '';
-    const carried = body.includes(afterOk.split(',')[0]); const paren = /"[^"]*\([^"]*\)[^"]*"/.test(body.replace(/"[^"]*(date|name)[^"]*"\s*:\s*"[^"]*"/ig, ''));
+    // 2026-11-06(SCP0016 EG-1b7c9ab9 허위 FAIL): 조회 1회에 call-proc 가 여러 개(spreadTitle 캘린더 + main) — 첫 호출만 보면 선택값이 안 실린 것으로 오판 → 이번 조회의 모든 SEARCH 호출 중 값이 실린 것을 본다
+    const calls = nscm.calls.slice(b0).filter(x => /SEARCH/i.test(x.btn)); const n2 = await probe.rowCount(p); const key0 = afterOk.split(',')[0]; const call = calls.find(x => (x.body || '').includes(key0)) || calls[0]; const body = call?.body || '';
+    const carried = calls.some(x => (x.body || '').includes(key0)); const paren = /"[^"]*\([^"]*\)[^"]*"/.test(body.replace(/"[^"]*(date|name)[^"]*"\s*:\s*"[^"]*"/ig, ''));
     put('PICK_SEARCH', ['EG251', 'EG004'], !call ? 'ERROR' : carried && !paren ? (n2 > 0 ? 'PASS' : '판정필요') : 'FAIL', '선택값으로 메인 조회 — 본문 키에 표시용 괄호 없음 · 행 > 0', `요청 값 포함 ${carried} · 괄호 ${paren} · 행 ${n2} · 본문 ${body.slice(0, 240)}`, '문서 GAP-439');
     // AS-IS 재조회·정렬 후처리
     if (c.after.length) put('AFTER_SORT', ['EG033'], '판정필요', `AS-IS 팝업 후 ${c.after[0].raw.slice(0, 80)}(${c.after[0].ref})`, `조회 ${n2}행 — 후처리 재현 대조 미구현`, c.after[0].ref);
@@ -609,7 +623,8 @@ async function runPick(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
     else {
       const pd = await pickRows(p, o2.dlg, TAG, [0], 'dbl');
       if (!pd.closed && await o2.dlg.isVisible().catch(() => false)) { put('PICK_DBL', ['EG093'], '판정필요', '더블클릭 → OK 와 같은 결과', `더블클릭 후 닫히지 않음 — AS-IS 더블클릭 확정 여부 ${(k_close(c).length ? k_close(c)[0].ref : 'facts 없음')}`, ''); await closePopup(p, o2.dlg); }
-      else { await p.waitForTimeout(300); const afterDbl = await readTarget(nscm, c, o2); put('PICK_DBL', ['EG093'], afterDbl === afterOk ? 'PASS' : 'FAIL', `더블클릭 결과 = OK 결과('${afterOk}')`, `더블클릭 '${afterDbl}'`, '문서 GAP-19'); }
+      // 2026-11-07 T133(SCP0131 PICK_DBL 허위 FAIL): OK 경로가 ERROR(대상 '' — PICK_OK 측정 실패)면 비교 기준이 없다 → FAIL 이 아니라 ERROR
+      else { await p.waitForTimeout(300); const afterDbl = await readTarget(nscm, c, o2); put('PICK_DBL', ['EG093'], !afterOk ? 'ERROR' : afterDbl === afterOk ? 'PASS' : 'FAIL', !afterOk ? '[측정 실패] OK 경로 결과 없음(PICK_OK 측정 실패) — 더블클릭 결과 대조 불가' : `더블클릭 결과 = OK 결과('${afterOk}')`, `더블클릭 '${afterDbl}'`, '문서 GAP-19'); }
     }
   }
   state.popup = false;
@@ -763,14 +778,21 @@ async function runCell(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
     const ok = await probe.setByEditor(p, row, col, bad); await p.waitForTimeout(800); await p.keyboard.press('Tab').catch(() => undefined); await p.waitForTimeout(500);
     const msg = await nscm.alertText().catch(() => ''); await nscm.clearDialogs().catch(() => undefined);
     const after = (await probe.value(p, row, col)) ?? '';
-    let bodyHasBad = false; let saveNote = '';
+    let bodyHasBad = false; let saveNote = ''; let serverRejected = false;
     if (after === bad && await nscm.subButtonVisible('Save').catch(() => false)) {
       const m1 = net.mark(); await nscm.subButton('Save').click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(1_200);
       const yes = p.getByRole('button', { name: /^(확인|OK|Yes|예|Confirm)$/i }).last(); if (await yes.isVisible().catch(() => false)) await yes.click({ timeout: 2_000 }).catch(() => undefined);
       await settle(p, net, m1, 15_000); const sv = net.since(m1).filter(r => /SAVE|INS|UPD/i.test(r.btn + r.url)); bodyHasBad = sv.some(r => r.body.includes(bad));
-      saveNote = ` · Save 요청 ${sv.length}건 · 잘못된 값 포함 ${bodyHasBad} · 알림 '${(await nscm.alertText().catch(() => '')).slice(0, 80)}'`; await nscm.clearDialogs().catch(() => undefined);
+      const alertAfter = (await nscm.alertText().catch(() => '')) || '';
+      // 서버(SP) 검증으로 거부된 저장 — 요청은 갔지만 오류 응답/오류 알림이 있고 성공 알림이 아니면 '잘못된 값이 저장되지 않음'(AS-IS 는 FE 사전검증 MSG00458 · 2026-11-06 SCP0127 E7 보완 = PKG SAVE 품목 검증)
+      serverRejected = bodyHasBad && (sv.some(r => r.status >= 400) || (!!alertAfter && !/(저장(이|되|을)|success|완료|saved)/i.test(alertAfter)));
+      // 2026-11-07 T147: 어떤 요청을 저장 요청으로 셌는지(btn/url) 증거에 남긴다 — SCP0131 'Save 요청 1건(응답 200)' 인데 BE·SCM_COM_SQL_LOG 에 SAVE 호출 0건(11:21~11:28 실측)이라 포착 대상 확인 불가였다
+      saveNote = ` · Save 요청 ${sv.length}건(응답 ${sv.map(r => r.status).join(',') || '-'} · ${sv.map(r => (r.btn ? `${r.sheet}/${r.btn}` : r.url).slice(0, 60)).join(' | ') || '-'}) · 잘못된 값 포함 ${bodyHasBad} · 알림 '${alertAfter.slice(0, 80)}'${serverRejected ? ' · 서버 검증 거부(저장 안 됨)' : ''}`; await nscm.clearDialogs().catch(() => undefined);
     }
-    put('CELL_BADKEY', ['EG176'], !ok ? 'ERROR' : bodyHasBad ? 'FAIL' : after === bad && !msg ? '판정필요' : 'PASS', '팝업 셀 Key-in 잘못된 값 → 되돌림/메시지 · 저장 본문에 안 실림', `입력 '${bad}' → 값 '${after}' · 메시지 '${msg.slice(0, 80)}'${saveNote}`, '문서 SSP45REQ-23');
+    // 2026-11-07 T147: eg 실행은 VERIFY_NO_SAVE=1(fixtures/test.ts:77 — 저장 call-proc 를 픽스처가 가로채 200) → 서버(PKG) 검증 거부는 이 경로에서 관측 불가.
+    //   가짜 저장을 '잘못된 값이 저장됨' FAIL 로 보던 결함(SCP0131 v7 EG-8044996f · BE·SCM_COM_SQL_LOG 에 SAVE 0건 실측) → FE 사전검증 없음은 사실로 남기되 판정필요(사용자 결정) · 서버 검증은 실저장 경로에서
+    const fakeSave = !!(process.env.VERIFY_NO_SAVE || process.env.CL_FAKE_SAVE);
+    put('CELL_BADKEY', ['EG176'], !ok ? 'ERROR' : bodyHasBad && !serverRejected ? (fakeSave ? '판정필요' : 'FAIL') : after === bad && !msg && !serverRejected ? '판정필요' : 'PASS', '팝업 셀 Key-in 잘못된 값 → 되돌림/메시지 · 저장 본문에 안 실림(서버 검증 거부 포함)', `입력 '${bad}' → 값 '${after}' · 메시지 '${msg.slice(0, 80)}'${saveNote}${fakeSave && bodyHasBad ? ' · [서버 검증 미측정] VERIFY_NO_SAVE — 저장 요청은 픽스처가 가로채 200 반환(실 BE 미도달) · FE 사전검증(AS-IS MSG00458) 없음은 사실 · PKG 검증 결과는 실저장 경로(@verify F1·DB 보완 검증 호출)로 확인' : ''}`, '문서 SSP45REQ-23');
   } else put('CELL_BADKEY', ['EG176'], 'NA', 'Key-in 잘못된 값', `FPTextModal 아님/편집 불가 (메타 ${ctlTypes.join(',')} · 편집 ${edit})`, '');
   void state;
 }

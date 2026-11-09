@@ -158,7 +158,7 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
     if (!modelId && !itemId && !nickName) {
       void setAlert({
         type: 'alert',
-        content: t('MSG00327', 'Model, Material, Nick Name 중 하나는 필수 입력입니다.'),
+        content: t('MSG01324', 'Model, Material, Nick Name 중 하나는 필수 입력입니다.'),
       });
       return;
     }

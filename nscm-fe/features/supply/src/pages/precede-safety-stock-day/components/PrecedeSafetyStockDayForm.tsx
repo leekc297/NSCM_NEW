@@ -137,6 +137,7 @@ export const PrecedeSafetyStockDayForm = ({ tabId }: PrecedeSafetyStockDayFormPr
                 className={commonStyles.formItem}
                 label={t(LBL.DIVISION, '_Div')}
                 labelAlign='right'
+                required
                 render={() => (
                   <CustomDropdown
                     value={searchParams.divisionId}
@@ -256,7 +257,9 @@ export const PrecedeSafetyStockDayForm = ({ tabId }: PrecedeSafetyStockDayFormPr
             </Grid>
             <Grid size={3}>
               <PeriodRangePicker
+                className={commonStyles.formItem}
                 label={t(LBL.PERIOD, '_Period')}
+                required
                 start={searchParams.periodFrom}
                 end={searchParams.periodTo}
                 onChange={(start, end) => setSearchParams({ periodFrom: start, periodTo: end })}

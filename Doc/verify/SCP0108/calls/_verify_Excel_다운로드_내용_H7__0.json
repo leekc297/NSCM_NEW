@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0108",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"fromYyyymm\":\"202611\",\"programId\":\"SCP0108\",\"sheetName\":\"MAIN\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 139,
+  "at": "2026-11-09T01:38:57.858Z",
+  "user": "minyonglee1",
+  "test": "Excel 다운로드 내용(H7)"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 757,
+  "dur": 406,
+  "at": "2026-11-09T01:38:59.479Z",
+  "user": "minyonglee1",
+  "test": "Excel 다운로드 내용(H7)"
+ }
+]

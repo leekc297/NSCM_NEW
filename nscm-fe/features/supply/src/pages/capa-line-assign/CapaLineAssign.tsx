@@ -163,8 +163,6 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const divisionType = sc.divisionType;
   const isEltr = divisionType === DIVISION_TYPE.ELTR;
-  // 탭 줄(탭 버튼 오른쪽)에 표시할 현재 모드 텍스트(표시 전용) — 탭 라벨에 넣으면 remount 되므로 라벨 밖에 둔다.
-  const tabModeLabel = isEltr ? TAB_MODE_LABEL.ELTR : TAB_MODE_LABEL.ASSEMBLY;
   const assignSheet = ASSIGN_SHEET_BY_DIVISION_TYPE[divisionType];
   const sopSheet = SOP_SHEET_BY_DIVISION_TYPE[divisionType];
   const linePopupSheet = LINE_SHEET_BY_DIVISION_TYPE[divisionType];
@@ -783,6 +781,14 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const activeColumns = staticColumns[activeSheet];
 
+  /**
+   * ELTR/ASSEMBLY 하위 탭 라벨 — 표시 전용(사용자 지시 2026-11-04).
+   * AS-IS 는 Division Type(Electrode/Cell/Module-Pack) 라디오로 시트를 '교체'한다(둘 다 띄우지 않는다).
+   * 그 거동 그대로, 현재 모드 1개만(`isEltr ? ELTR : ASSEMBLY`) 안쪽 TabWrapper 에 넣어 탭 아래 탭으로
+   * 보이게 하고(SCP0055 Shipment(Allo) Report 와 동일한 중첩 TabWrapper 패턴), Division 변경 시 라벨만 바뀐다.
+   */
+  const modeTabLabel = isEltr ? TAB_MODE_LABEL.ELTR : TAB_MODE_LABEL.ASSEMBLY;
+
   return (
     <>
       <MainTitle
@@ -805,47 +811,54 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
       />
 
       {/*
-        탭 2개. `persist` 로 비활성 탭을 언마운트하지 않는다 — 재마운트 시 헤더높이·머지가 타이밍으로
-        깨진다(§5-8). 탭 전환에 자동 조회를 붙이지 않는다(R-11 — AS-IS `tbcAll` 이벤트 0건).
+        상위 탭(Line Assign/SOP). `persist` 로 비활성 탭을 언마운트하지 않는다 — 재마운트 시 헤더높이·머지가
+        타이밍으로 깨진다(§5-8). 탭 전환에 자동 조회를 붙이지 않는다(R-11 — AS-IS `tbcAll` 이벤트 0건).
+        각 상위 탭 안에 중첩 TabWrapper(ELTR/ASSEMBLY 단일 탭)를 둬 '탭 아래 탭' 외형을 만든다 —
+        SCP0055 Shipment(Allo) Report 와 동일한 패턴. 안쪽 탭은 현재 Division 모드 1개만 표시(교체식).
       */}
       <div className={styles.tabArea}>
         <TabWrapper
           persist
           activeTabIndex={activeTab}
           setActiveTabIndex={index => setActiveTab(index as TabIndex)}
-          // 탭 버튼들 오른쪽에 현재 Division 모드(ELTR/ASSEMBLY)를 텍스트로 표시 — 탭 라벨에 넣으면
-          //   TabWrapper 가 라벨을 persist key 로 써 그리드가 remount 되므로 라벨 밖인 rightSlot 에 둔다.
-          rightSlot={tabModeLabel}
         >
           <TabItem label={t(LBL.TAB_LINE_ASSIGN, '_Line Assign')}>
-            <CapaLineAssignGrid
-              sheet={assignSheet}
-              data={assignRows}
-              gridRef={assignGridRef}
-              gridFilterRef={assignFilterRef}
-              editTrackerRef={assignTrackerRef}
-              adminColumns={staticColumns[assignSheet]}
-              userColumnLayout={userColumnLayout[assignSheet]}
-              dateColumns={dateColumns}
-              editMode={editable}
-              comboSources={comboSources}
-              dummyCodes={dummyCodes}
-              onCellDblClick={handleAssignCellDblClick}
-              onUnknownItemName={handleUnknownItemName}
-            />
+            <TabWrapper>
+              <TabItem label={modeTabLabel}>
+                <CapaLineAssignGrid
+                  sheet={assignSheet}
+                  data={assignRows}
+                  gridRef={assignGridRef}
+                  gridFilterRef={assignFilterRef}
+                  editTrackerRef={assignTrackerRef}
+                  adminColumns={staticColumns[assignSheet]}
+                  userColumnLayout={userColumnLayout[assignSheet]}
+                  dateColumns={dateColumns}
+                  editMode={editable}
+                  comboSources={comboSources}
+                  dummyCodes={dummyCodes}
+                  onCellDblClick={handleAssignCellDblClick}
+                  onUnknownItemName={handleUnknownItemName}
+                />
+              </TabItem>
+            </TabWrapper>
           </TabItem>
           {/* SOP 탭 라벨은 `SCM_ADM_MSG_M` 에 등가 LBL 이 없다 — 임의 등록 금지, 영문 fallback 유지. */}
           <TabItem label={FALLBACK_LABEL.TAB_SOP}>
-            <CapaLineSopGrid
-              sheet={sopSheet}
-              data={sopRows}
-              gridRef={sopGridRef}
-              gridFilterRef={sopFilterRef}
-              editTrackerRef={sopTrackerRef}
-              adminColumns={staticColumns[sopSheet]}
-              userColumnLayout={userColumnLayout[sopSheet]}
-              editMode={editable}
-            />
+            <TabWrapper>
+              <TabItem label={modeTabLabel}>
+                <CapaLineSopGrid
+                  sheet={sopSheet}
+                  data={sopRows}
+                  gridRef={sopGridRef}
+                  gridFilterRef={sopFilterRef}
+                  editTrackerRef={sopTrackerRef}
+                  adminColumns={staticColumns[sopSheet]}
+                  userColumnLayout={userColumnLayout[sopSheet]}
+                  editMode={editable}
+                />
+              </TabItem>
+            </TabWrapper>
           </TabItem>
         </TabWrapper>
       </div>

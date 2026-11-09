@@ -11,6 +11,7 @@ import {
   useSaveWithValidation,
   useTabBtnPermissions,
   useTabComboQueries,
+  useTabLookupQueries,
   useTabProcQuery,
 } from '@shared/hooks';
 import { useMessageStore, useSessionStore, useUIStore } from '@shared/stores';
@@ -23,6 +24,7 @@ import {
   COMBO,
   INSERT_BLOCKED_OPERATION_GROUPS,
   ITEM_LIST_KEY,
+  // LBL, // 기존 로직 주석 보존 (2026-11-04)
   MENU_ID,
   MSG,
   MSG_VALIDATION_FALLBACK,
@@ -31,6 +33,7 @@ import {
   NEW_ROW_DEFAULT_SCM_SITE_ID,
   NEW_ROW_DEFAULT_VALID_YN,
   OPERATION_GROUP_ELECTRODE,
+  OPERATION_GROUP_LOOKUP,
   RESPONSE_SET,
   SHEETS,
 } from './project-route-electrode.constants';
@@ -73,6 +76,30 @@ export const ProjectRouteElectrode = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ITEM_ID 셀 팝업(R-DBLCLICK) — ElectrodeItembyDivisionPopup. 어느 행에서 열렸는지 추적한다.
   //   전극 전용 화면이라 SalesSite(div=81) 셀 팝업은 없다(자매 SCP0048 과 다른 지점).
   const [popupRow, setPopupRow] = useState<MainRow | null>(null);
+
+  // 셀 팝업이 메인 검색조건(Operation Group, Model)을 물려받게 한다(QA I-03). 라벨은 Form 과 같은 lookup.
+  const [operationGroupsRaw] = useTabLookupQueries({ filters: [OPERATION_GROUP_LOOKUP] });
+  // 기존 로직 주석 보존 (2026-11-04) 시작
+  // const popupOperationGroupLabel = useMemo(() => {
+  //   const code = searchParams.operationGroup;
+  //   if (!code) return t(LBL.ALL, '_ALL');
+  //   const hit = (operationGroupsRaw ?? []).find(
+  //     r => safeString((r as Record<string, unknown>).CODE) === code
+  //   );
+  //   return hit ? safeString((hit as Record<string, unknown>).NAME) : code;
+  // }, [searchParams.operationGroup, operationGroupsRaw, t]);
+  // 기존 로직 주석 보존 (2026-11-04) 끝
+  // 셀 팝업은 Operation Group 을 Electrode 로 고정한다. 비전극 Model 을 고르면 저장이 실패하기 때문.
+  const popupOperationGroupLabel = useMemo(() => {
+    const hit = (operationGroupsRaw ?? []).find(
+      r => safeString((r as Record<string, unknown>).CODE) === OPERATION_GROUP_ELECTRODE
+    );
+    return hit
+      ? safeString((hit as Record<string, unknown>).NAME)
+      : NEW_ROW_DEFAULT_OPERATION_GROUP_NAME;
+  }, [operationGroupsRaw]);
+  // 검색조건 Model 은 다건 CSV 일 수 있다. 팝업 SP 는 LIKE 단건이라 단건일 때만 넘긴다.
+  const popupSearchItemId = searchParams.itemId.includes(',') ? '' : searchParams.itemId;
 
   const { data: mainData } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
@@ -321,9 +348,15 @@ export const ProjectRouteElectrode = ({ tabId, title }: PageProps<MENU_ID>) => {
         preSearchParams={{
           divisionId: String(popupRow?.DIVISION_ID ?? ''),
           scpModuleType: MENU_ID,
-          operationGroup: '',
-          itemId: String(popupRow?.ITEM_ID ?? ''),
+          // 기존 로직 주석 보존 (2026-11-04) 시작
+          // operationGroup: '',
+          // itemId: String(popupRow?.ITEM_ID ?? ''),
+          // 기존 로직 주석 보존 (2026-11-04) 끝
+          // operationGroup: searchParams.operationGroup, // 기존 로직 주석 보존 (2026-11-04)
+          operationGroup: OPERATION_GROUP_ELECTRODE,
+          itemId: String(popupRow?.ITEM_ID ?? '') || popupSearchItemId,
         }}
+        operationGroupLabel={popupOperationGroupLabel}
       />
     </>
   );

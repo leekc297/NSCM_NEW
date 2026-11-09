@@ -1,7 +1,7 @@
 # DMF0042 — To-Be Fact Pack 요약
 
 - page_key: `demand/business-plan` · feature: demand · As-is Fact Pack 있음
-- 파일 39 · 엔드포인트 호출 25 (미해결 1, 주석 속 2) · 이벤트 62 · 컴포넌트 사용 84 · 하드코딩 컬럼 8 · 메시지 61
+- 파일 39 · 엔드포인트 호출 25 (미해결 1, 주석 속 2) · 이벤트 62 · 컴포넌트 사용 85 · 하드코딩 컬럼 8 · 메시지 60
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 8건
 
 ## 1. 파일
@@ -10,13 +10,13 @@
 | features/demand/src/pages/business-plan/business-plan.constants.ts | constants | 201 |
 | features/demand/src/pages/business-plan/business-plan.types.ts | types | 63 |
 | features/demand/src/pages/business-plan/BusinessPlan.module.scss | style | 167 |
-| features/demand/src/pages/business-plan/BusinessPlan.tsx | page | 700 |
+| features/demand/src/pages/business-plan/BusinessPlan.tsx | page | 703 |
 | features/demand/src/pages/business-plan/components/BusinessPlanForm.module.scss | component | 8 |
 | features/demand/src/pages/business-plan/components/BusinessPlanForm.tsx | component | 430 |
-| features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | component | 1145 |
+| features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | component | 1160 |
 | features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | component | 311 |
 | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.module.scss | component | 38 |
-| features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | component | 847 |
+| features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | component | 850 |
 | features/demand/src/pages/business-plan/components/modals/exchangeRateModalStore.ts | store | 33 |
 | features/demand/src/pages/business-plan/components/modals/index.ts | index | 4 |
 | features/demand/src/pages/business-plan/components/modals/MeasureSelectModal.tsx | component | 268 |
@@ -40,7 +40,7 @@
 | features/demand/src/pages/business-plan/utils/business-plan.merge.test.ts | test | 59 |
 | features/demand/src/pages/business-plan/utils/business-plan.merge.ts | util | 132 |
 | features/demand/src/pages/business-plan/utils/business-plan.save.test.ts | test | 197 |
-| features/demand/src/pages/business-plan/utils/business-plan.save.ts | util | 225 |
+| features/demand/src/pages/business-plan/utils/business-plan.save.ts | util | 226 |
 | features/demand/src/pages/business-plan/utils/business-plan.searchCombos.ts | util | 103 |
 | features/demand/src/pages/business-plan/utils/business-plan.spread.test.ts | test | 101 |
 | features/demand/src/pages/business-plan/utils/business-plan.spread.ts | util | 180 |
@@ -53,8 +53,8 @@
 | DMF0042/dayRange//call-proc | hook | 1 | Y | BusinessPlan.tsx:82 |
 | DMF0042/Biz Plan//call-proc | hook | 1 | Y | BusinessPlan.tsx:102 |
 | DMF0042/spreadTitle//call-proc | hook | 1 | Y | BusinessPlan.tsx:111 |
-| (useTabComboQueries) | hook | 10 | Y | BusinessPlan.tsx:141 BusinessPlan.tsx:144 BusinessPlanForm.tsx:97 BusinessPlanForm.tsx:107 BusinessPlanForm.tsx:124 BusinessPlanGrid.tsx:182 |
-| DMF0042/futurePriceData//call-proc | hook | 1 | Y | ExchangeRateModal.tsx:169 |
+| (useTabComboQueries) | hook | 10 | Y | BusinessPlan.tsx:141 BusinessPlan.tsx:144 BusinessPlanForm.tsx:97 BusinessPlanForm.tsx:107 BusinessPlanForm.tsx:124 BusinessPlanGrid.tsx:183 |
+| DMF0042/futurePriceData//call-proc | hook | 1 | Y | ExchangeRateModal.tsx:170 |
 | DMF0042/mdfVersion//call-proc | hook | 2 | Y | ReplaceByCutoffModal.tsx:102 VersionCutoffModal.tsx:128 |
 | /admin/menu/DMF0042/search-conditions | http | 1 | Y | useBusinessPlanStore.ts:283 |
 | /admin/menu/DMF0042/column | http | 1 | Y | useBusinessPlanStore.ts:359 |
@@ -80,12 +80,12 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| BusinessPlanForm | onSearch | handleSearch | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 621 |
-| BusinessPlanForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 622 |
-| BusinessPlanGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 652 |
-| BusinessPlanModals | onClose | <arrow> setPopupRow,closers[key] | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 668 |
-| BusinessPlanModals | onRefetch | <arrow> refetch,Promise.resolve | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 681 |
-| BusinessPlanModals | onSettingChanged | clearGridOnSettingChange | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 695 |
+| BusinessPlanForm | onSearch | handleSearch | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 624 |
+| BusinessPlanForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 625 |
+| BusinessPlanGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 655 |
+| BusinessPlanModals | onClose | <arrow> setPopupRow,closers[key] | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 671 |
+| BusinessPlanModals | onRefetch | <arrow> refetch,Promise.resolve | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 684 |
+| BusinessPlanModals | onSettingChanged | clearGridOnSettingChange | jsx | features/demand/src/pages/business-plan/BusinessPlan.tsx | 698 |
 | CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/demand/src/pages/business-plan/components/BusinessPlanForm.tsx | 165 |
 | SearchArea | onSearch | onSearch | jsx | features/demand/src/pages/business-plan/components/BusinessPlanForm.tsx | 203 |
 | CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,String,onDivisionChange | jsx | features/demand/src/pages/business-plan/components/BusinessPlanForm.tsx | 220 |
@@ -97,30 +97,30 @@
 | OwnerField | onChange | <arrow> set | jsx | features/demand/src/pages/business-plan/components/BusinessPlanForm.tsx | 372 |
 | Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/business-plan/components/BusinessPlanForm.tsx | 410 |
 | Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/business-plan/components/BusinessPlanForm.tsx | 418 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 574 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 635 |
-| g | pastingCell | beginningEditHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 637 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 750 |
-| g | pastedCell | pastedCellHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 760 |
-| g | selectionChanged | selectionChangedHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 787 |
-| g.hostElement | click | clickAsDblHandler | addEventListener | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 890 |
-| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 894 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 997 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1047 |
-| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1110 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 580 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 646 |
+| g | pastingCell | beginningEditHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 648 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 761 |
+| g | pastedCell | pastedCellHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 771 |
+| g | selectionChanged | selectionChangedHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 798 |
+| g.hostElement | click | clickAsDblHandler | addEventListener | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 903 |
+| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 907 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1010 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1060 |
+| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1123 |
 | ColumnLayoutModal | onSave | <arrow> onSettingChanged,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | 209 |
 | MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,alertSaveFailed | jsx | features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | 256 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 400 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 441 |
-| g | pastedCell | pastedHandler | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 445 |
-| g | updatedLayout | normalizeHeader | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 563 |
-| SearchArea | onSearch | handleFind | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 743 |
-| CustomDropdown | onChange | <arrow> setApplied,String | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 758 |
-| PeriodField | onChange | <arrow> setApplied,toYm | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 771 |
-| Button | onClick | handleInsert | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 813 |
-| Button | onClick | handleDelete | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 822 |
-| Button | onClick | <arrow> handleSave | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 831 |
-| Button | onClick | <arrow> modalClose | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 839 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 401 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 442 |
+| g | pastedCell | pastedHandler | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 446 |
+| g | updatedLayout | normalizeHeader | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 564 |
+| SearchArea | onSearch | handleFind | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 744 |
+| CustomDropdown | onChange | <arrow> setApplied,String | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 759 |
+| PeriodField | onChange | <arrow> setApplied,toYm | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 772 |
+| Button | onClick | handleInsert | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 816 |
+| Button | onClick | handleDelete | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 825 |
+| Button | onClick | <arrow> handleSave | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 834 |
+| Button | onClick | <arrow> modalClose | jsx | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 842 |
 | ColumnSelectDualList | onToggleLeft | toggleLeft | jsx | features/demand/src/pages/business-plan/components/modals/MeasureSelectModal.tsx | 229 |
 | ColumnSelectDualList | onToggleRight | toggleRight | jsx | features/demand/src/pages/business-plan/components/modals/MeasureSelectModal.tsx | 230 |
 | ColumnSelectDualList | onToggleAllLeft | toggleAllLeft | jsx | features/demand/src/pages/business-plan/components/modals/MeasureSelectModal.tsx | 231 |
@@ -159,6 +159,7 @@
 | ResultArea | 3 |
 | Checkbox | 2 |
 | ControlConfirmIcon | 2 |
+| IcExchangeRate | 1 |
 | IcGridColumnSetup | 1 |
 | MainTitle | 1 |
 | BusinessPlanForm | 1 |
@@ -183,9 +184,9 @@
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
 | buildGroupKeyOf | column?.binding ?? '' |  |  | column?.visible !== false |  |  | object | features/demand/src/pages/business-plan/BusinessPlan.tsx | 170 |
-| mainDynamicColumns | m.binding | tag.kind === 'M' ? m.leaf \|\| String(tag.month).padStart(2, ' | 90 | true |  |  | object | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 376 |
-| gridStaticColumns | c.key | c.header | c.width | true |  |  | meta-map | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 303 |
-| gridDynamicColumns | `M_${ym}` | ym.slice(4, 6) | 90 | true |  |  | object | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 346 |
+| mainDynamicColumns | m.binding | tag.kind === 'M' ? m.leaf \|\| String(tag.month).padStart(2, ' | 90 | true |  |  | object | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 377 |
+| gridStaticColumns | c.key | c.header | c.width | true |  |  | meta-map | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 304 |
+| gridDynamicColumns | `M_${ym}` | ym.slice(4, 6) | 90 | true |  |  | object | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 347 |
 | sourceRows | m.colNm | m.colLblNm \|\| m.colNm |  | Y\|N |  |  | meta-map | features/demand/src/pages/business-plan/components/modals/MeasureSelectModal.tsx | 59 |
 | gridStaticColumns | c.key | c.header | c.width | true |  |  | meta-map | features/demand/src/pages/business-plan/components/modals/ReplaceByCutoffModal.tsx | 118 |
 | gridStaticColumns | c.key | c.header | c.width | true |  |  | meta-map | features/demand/src/pages/business-plan/components/modals/VersionCutoffModal.tsx | 144 |
@@ -210,7 +211,7 @@
 | MSG00675 | 1 |
 | MSG00680 | 1 |
 | MSG00618 | 2 |
-| LBL00661 | 4 |
+| LBL00661 | 3 |
 | LBL00605 | 2 |
 | LBL00684 | 1 |
 | LBL00112 | 1 |
@@ -239,11 +240,11 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | action: () => setOpenMeasureSelect(true), | features/demand/src/pages/business-plan/BusinessPlan.tsx | 574 |
-| jsx | iconComponent: <IcMeasureSelect />, | features/demand/src/pages/business-plan/BusinessPlan.tsx | 575 |
-| code | ⭐ 개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 (동적 기간 컬럼은 위에서 return). | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 555 |
-| code | `let s = getMergedRange(cells, C, d, false); | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 764 |
-| code | 예전처럼 `if (!g) return;` 으로 포기하면 deps(displayRows)가 다시 바뀌지 않는 한 핸들러가 | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 373 |
+| code | action: () => setOpenMeasureSelect(true), | features/demand/src/pages/business-plan/BusinessPlan.tsx | 577 |
+| jsx | iconComponent: <IcMeasureSelect />, | features/demand/src/pages/business-plan/BusinessPlan.tsx | 578 |
+| code | ⭐ 개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 (동적 기간 컬럼은 위에서 return). | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 560 |
+| code | `let s = getMergedRange(cells, C, d, false); | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 775 |
+| code | 예전처럼 `if (!g) return;` 으로 포기하면 deps(displayRows)가 다시 바뀌지 않는 한 핸들러가 | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 374 |
 | code | 저장된 컬럼 개인화(titleSet) 복원 — fetchStaticColumns 가 await 후 메타에 적용. | features/demand/src/pages/business-plan/useBusinessPlanStore.ts | 93 |
 | endpoint | ⭐ master hook §2.3 — Column 동적 fetch (SHEET_COLUMNS 63건, division 서버 직접 비교 — hook #113). | features/demand/src/pages/business-plan/useBusinessPlanStore.ts | 351 |
 | endpoint | ⭐ master hook §5 — Measure 동적 fetch (SHEET_MEASURE 9건 — Measure Select 팝업 대상) | features/demand/src/pages/business-plan/useBusinessPlanStore.ts | 430 |

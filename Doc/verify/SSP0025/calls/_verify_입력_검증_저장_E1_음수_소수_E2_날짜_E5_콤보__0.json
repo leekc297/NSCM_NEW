@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 997,
+  "at": "2026-11-09T02:14:01.152Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 18,
+  "dur": 562,
+  "at": "2026-11-09T02:14:01.805Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 18,
+  "dur": 406,
+  "at": "2026-11-09T02:14:14.215Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 18,
+  "dur": 362,
+  "at": "2026-11-09T02:14:29.458Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 18,
+  "dur": 345,
+  "at": "2026-11-09T02:14:30.319Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ }
+]

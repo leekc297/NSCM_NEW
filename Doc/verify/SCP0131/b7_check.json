@@ -1,0 +1,86 @@
+{
+ "menu_id": "SCP0131",
+ "asis_id": "SCP0131",
+ "generated": "2026-11-07 19:45:30",
+ "a": {
+  "verdict": "판정필요",
+  "note": "저장 SP SCP0131_SAVE_SALES_SITE_PRIORITY 대상 SCP_OPMZ_SALES_SITE_PRIORITY 와 콤보 원천 8종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 6종: clbPlanGroup, clbSite, ScmSite, PlanGroup, ValidYn, OPMZ_PLAN_GR_ID",
+  "save_tables": [
+   "SCP_OPMZ_SALES_SITE_PRIORITY"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "cboDivision",
+    "label": "Division*",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=Division 분기 + FN_GET_DIVISION 원문",
+    "tables": [
+     "FN_GET_DIVISION",
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbPlanGroup",
+    "label": "Plan Group",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbSite",
+    "label": "SCM Site",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "ScmSite",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "Division",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=Division 분기 + FN_GET_DIVISION 원문",
+    "tables": [
+     "FN_GET_DIVISION",
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "PlanGroup",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "ValidYn",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "OPMZ_PLAN_GR_ID",
+    "label": "Plan Group*",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   }
+  ]
+ }
+}

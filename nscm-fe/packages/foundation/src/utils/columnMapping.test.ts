@@ -1,5 +1,6 @@
 import { DataType } from '@mescius/wijmo';
 import { CellRange, FlexGrid, type DataMap } from '@mescius/wijmo.grid';
+import { InputNumber } from '@mescius/wijmo.input';
 import { describe, expect, it } from 'vitest';
 
 import { CELL_CONTROL_TYPE, CRUD_TYPE } from '@foundation/constants';
@@ -649,6 +650,36 @@ describe('숫자 전용 컬럼 (Cell object = FPNumber)', () => {
 
     expect(ok).toBe(true);
     expect(items[0].YYYY).toBe(2027);
+  });
+
+  // 글자수 제한(DATA_MAX_LENGTH) — Wijmo 는 커스텀 editor(InputNumber)가 붙으면 Column.maxLength 를
+  //   무시하므로, 숫자 셀은 maxLength 를 값 범위(min/max)로 환산해 자릿수를 막는다(SCP0128 APL_QTY 실사고).
+  const numberMeta = (c: Partial<RawFlexGridColumnConfig>): RawFlexGridColumnConfig[] => [
+    col({ colNm: 'APL_QTY', cellCtrlObjTpCd: CELL_CONTROL_TYPE.NUMBER, scale: 0, ...c }),
+  ];
+
+  it('dataMaxLength 를 숫자 editor 의 값 범위(±(10^N - 1))로 환산해 자릿수를 제한한다', () => {
+    const [column] = mapRawColumnsToWijmoColumns(numberMeta({ dataMaxLength: 4 }));
+    const editor = column.editor as InputNumber;
+
+    expect(editor.max).toBe(9999);
+    expect(editor.min).toBe(-9999);
+  });
+
+  it('16자리 이상이면 상한을 JS 안전정수(MAX_SAFE_INTEGER)로 클램프한다 — 정밀도 깨짐 방지', () => {
+    const [column] = mapRawColumnsToWijmoColumns(numberMeta({ dataMaxLength: 16 }));
+    const editor = column.editor as InputNumber;
+
+    expect(editor.max).toBe(Number.MAX_SAFE_INTEGER);
+    expect(editor.min).toBe(-Number.MAX_SAFE_INTEGER);
+  });
+
+  it('dataMaxLength 미지정이면 숫자 editor 범위를 걸지 않는다 (무제한)', () => {
+    const [column] = mapRawColumnsToWijmoColumns(numberMeta({}));
+    const editor = column.editor as InputNumber;
+
+    expect(editor.max).toBeNull();
+    expect(editor.min).toBeNull();
   });
 
   // 증상 대조 — Cell object 가 비어 있는 메타(옛 캐시 포함)로는 문자가 그대로 들어간다.

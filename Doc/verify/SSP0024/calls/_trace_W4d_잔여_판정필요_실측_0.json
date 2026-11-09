@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 295,
+  "at": "2026-11-09T02:10:45.986Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 191,
+  "dur": 519,
+  "at": "2026-11-09T02:10:49.303Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 191,
+  "dur": 355,
+  "at": "2026-11-09T02:13:57.978Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ }
+]

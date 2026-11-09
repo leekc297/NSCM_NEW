@@ -828,5 +828,124 @@
    "SCM_SYS_LOG_BATCH",
    "SCM_ADM_EXCEL_UPLOAD"
   ]
+ },
+ "SCP0122": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SCP0122.P_SCP0122_SAVE_PLAN_ACTIVITY_MGMT 의 DML 대상(깊이 3). 대표 SCP_OPMZ_PLAN_GR_ACTV_M PK",
+  "keys": [
+   "OPMZ_PRS_CD",
+   "OPMZ_PLAN_GR_ID",
+   "OPMZ_ACTV_CD"
+  ],
+  "vary": [
+   "OPMZ_PRS_CD"
+  ],
+  "tables": [
+   "SCP_OPMZ_PLAN_GR_ACTV_M",
+   "SCP_OPMZ_PLAN_GR_ACTV_H"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SCP0037": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT 의 DML 대상(깊이 3). 대표 SCP_MST_OPERATION_LT PK",
+  "keys": [
+   "DIVISION_ID",
+   "SCM_SITE_ID",
+   "ITEM_ID",
+   "LT_OPERATION"
+  ],
+  "vary": [
+   "SCM_SITE_ID"
+  ],
+  "tables": [
+   "SCP_MST_OPERATION_LT_H",
+   "SCP_MST_OPERATION_LT"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SCP0127": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SCP0127.P_SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY 의 DML 대상(깊이 3). 대표 SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY PK",
+  "keys": [
+   "DIVISION_ID",
+   "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID",
+   "STAGE",
+   "ITEM_ID",
+   "VALUE_TYPE",
+   "FROM_YYYYMMDD",
+   "TO_YYYYMMDD"
+  ],
+  "vary": [
+   "SCM_SITE_ID"
+  ],
+  "tables": [
+   "SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SCP0131": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SCP0131.P_SCP0131_SAVE_SALES_SITE_PRIORITY 의 DML 대상(깊이 3). 대표 SCP_OPMZ_SALES_SITE_PRIORITY PK",
+  "keys": [
+   "DIVISION_ID",
+   "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID",
+   "ITEM_ID",
+   "FROM_YYYYMMDD",
+   "TO_YYYYMMDD"
+  ],
+  "vary": [
+   "SCM_SITE_ID"
+  ],
+  "tables": [
+   "SCP_OPMZ_SALES_SITE_PRIORITY"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SSP0024": {
+  "mode": "editonly",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "키가 화면 컬럼 아님 · 대표 SSP_MST_SHIP_MASTER_EE(PK);화면에 없는 키 SCM_SITE_ID,ITEM_ID",
+  "tables": [
+   "SSP_MST_SHIP_MASTER_EE_H",
+   "SSP_MST_SHIP_MASTER_EE"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SSP0025": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SSP0025.P_SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC 의 DML 대상(깊이 3). 대표 SSP_MST_MODEL_USER_EE PK",
+  "keys": [
+   "DIVISION_ID",
+   "TO_SITE",
+   "ITEM_ID",
+   "USER_ID"
+  ],
+  "vary": [
+   "TO_SITE"
+  ],
+  "tables": [
+   "SSP_MST_MODEL_USER_EE"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
  }
 }

@@ -1,0 +1,4 @@
+﻿row_id,rule_id,target,result,evidence_head,saved_at,approved_by,approved_at,verdict_src
+T-561c65ba,SC1,SCP0037 화면,FAIL,조회조건 순서가 Excel 과 다름 — 화면 operation → div → plantsite → material → active ↔ Excel,2026-11-07 18:24,,,received
+V-6d30ddef,F6,SCP0037 빈값 저장,ERROR,[검증엔진 미기동] 검증엔진 테스트 '저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장' 이 측정 전에 실패해 이 행은 실행되지 않음 — Ti,2026-11-07 18:24,,,received
+V-a7d94ca1,F1,SCP0037 2행 동시 저장,ERROR,[검증엔진 미기동] 검증엔진 테스트 '저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장' 이 측정 전에 실패해 이 행은 실행되지 않음 — Ti,2026-11-07 18:24,,,received

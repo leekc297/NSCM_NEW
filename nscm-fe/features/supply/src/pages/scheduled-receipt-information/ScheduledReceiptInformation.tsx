@@ -124,11 +124,12 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
   // 저장 성공 후처리 — 기본 useProcMutation onSuccess(invalidate+toast)는 editTracker 를 비우지
   //   않아, 저장 뒤에도 그리드가 dirty(신규행 CRUD_TYPE='I')로 남고 재조회 시 수정중 확인(MSG00703)이
   //   뜬다(형제 demand-exception/group-code-management 선례). 저장 시트의 editTracker 를 clearChanges
-  //   하고 두 시트를 재조회한다.
-  const handleSaveSuccess = (sheetIndex: SHEET_INDEX) => {
+  //   하고, AS-IS(.cs:1262 FindData_Main)대로 **저장한 활성 시트만** 재조회한다(queryKey=[tabId,sheetName]).
+  //   이전엔 [tabId] 로 두 시트를 모두 재조회했다(불필요한 비활성 시트 재조회) — AS-IS 등가로 좁힘.
+  const handleSaveSuccess = (sheetIndex: SHEET_INDEX, sheetName: SHEETS) => {
     setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
     editTrackerRefs[sheetIndex].current?.clearChanges();
-    void queryClient.invalidateQueries({ queryKey: [tabId] });
+    void queryClient.invalidateQueries({ queryKey: [tabId, sheetName] });
   };
 
   const { data: virtualBomData } = useTabProcQuery<MENU_ID, SHEETS.VIRTUAL_BOM>({
@@ -173,7 +174,7 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
             t('MSG00003', '_저장에 실패하였습니다.')
         );
       }
-      handleSaveSuccess(sheetIndex);
+      handleSaveSuccess(sheetIndex, sheetName);
     } catch (error) {
       void setAlert({
         type: 'alert',

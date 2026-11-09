@@ -1,0 +1,326 @@
+[
+ {
+  "row_id": "V-0e8aa03c",
+  "result": "PASS",
+  "evidence": "조회조건 Div: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-abc37e26",
+  "result": "PASS",
+  "evidence": "조회조건 Div 후보 14건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-50f61bae",
+  "result": "PASS",
+  "evidence": "조회조건 Div 후보 14건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-87c64c28",
+  "result": "PASS",
+  "evidence": "조회조건 Plan Group: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-787760c0",
+  "result": "PASS",
+  "evidence": "조회조건 Plan Group SELECT ALL — 클릭1: 13/13 선택",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-447f92c5",
+  "result": "PASS",
+  "evidence": "조회조건 Plan Group 후보 15건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-cd4d84d1",
+  "result": "PASS",
+  "evidence": "조회조건 Plan Group 후보 15건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-9002cf39",
+  "result": "PASS",
+  "evidence": "조회조건 SCM Site: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-ed6a8522",
+  "result": "PASS",
+  "evidence": "조회조건 SCM Site SELECT ALL — 클릭1: 13/13 선택",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-53d4109d",
+  "result": "PASS",
+  "evidence": "조회조건 SCM Site 후보 486건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-fa69ae32",
+  "result": "PASS",
+  "evidence": "조회조건 SCM Site 후보 486건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-3a356688",
+  "result": "PASS",
+  "evidence": "조회조건 Stage: 다중선택 기대 false/화면 false · ALL 기대 false/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-8dd66e83",
+  "result": "PASS",
+  "evidence": "조회조건 Stage 후보 10건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-096fbf46",
+  "result": "PASS",
+  "evidence": "조회조건 Stage 후보 10건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-6bbace6b",
+  "result": "PASS",
+  "evidence": "조회조건 Type: 다중선택 기대 false/화면 false · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-4c3b9705",
+  "result": "PASS",
+  "evidence": "조회조건 Type 후보 2건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-e7b128cc",
+  "result": "PASS",
+  "evidence": "조회조건 Type 후보 2건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-83b7ed86",
+  "result": "PASS",
+  "evidence": "조회조건 Active: 다중선택 기대 false/화면 false · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-9f585d23",
+  "result": "PASS",
+  "evidence": "조회조건 Active 후보 2건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-a4732e9e",
+  "result": "PASS",
+  "evidence": "조회조건 Active 후보 2건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-885e8924",
+  "result": "판정필요",
+  "evidence": "선택 확인 실패(도구) — 체크된 항목 [SELECT ALL, MI00-P] · 조회 요청에 'MI00-P' 있음 · 결과 2행 · 요청 main/SEARCH {\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"MI00-P\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"perio",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 3,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-1b8f484e",
+  "result": "판정필요",
+  "evidence": "'Div' 단일선택 콤보 — 단일 조건 프로브 미구현",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-a6593ee3",
+  "result": "판정필요",
+  "evidence": "선택 확인 실패(도구) — 체크된 항목 [SELECT ALL, E161A] · 조회 요청에 'PG0002' 있음 · 결과 1행 · 요청 main/SEARCH {\"divisionId\":\"81\",\"planGroupId\":\"PG0002\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"perio",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 3,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-c9cdf483",
+  "result": "판정필요",
+  "evidence": "'Stage' 단일선택 콤보 — 단일 조건 프로브 미구현",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-1776df35",
+  "result": "판정필요",
+  "evidence": "'Model/Nickname' 과 같은 이름의 결과 컬럼 없음 — 조건 ↔ 컬럼 대응 확인 필요",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-340d0fd8",
+  "result": "판정필요",
+  "evidence": "'Type' 단일선택 콤보 — 단일 조건 프로브 미구현",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-7cf8cf31",
+  "result": "PASS",
+  "evidence": "필수 조건 자동 채움 0건 — 조회가 기본값으로 바로 됨",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ }
+]

@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 185,
+  "at": "2026-11-07T13:14:43.237Z",
+  "user": "minyonglee1",
+  "test": "필터 유지 재조회(K1)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 3261,
+  "at": "2026-11-07T13:14:46.204Z",
+  "user": "minyonglee1",
+  "test": "필터 유지 재조회(K1)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 190,
+  "at": "2026-11-07T13:14:50.506Z",
+  "user": "minyonglee1",
+  "test": "필터 유지 재조회(K1)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 3158,
+  "at": "2026-11-07T13:14:53.347Z",
+  "user": "minyonglee1",
+  "test": "필터 유지 재조회(K1)"
+ }
+]

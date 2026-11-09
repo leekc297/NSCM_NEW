@@ -77,12 +77,16 @@ export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
   //   미선택일 때만 설정 → 사용자가 고른 값은 재실행돼도 덮지 않는다(자매 ShipmentPsiForm I17 동일).
   //   dep 은 목록 '값 시그니처' — length 만 보면 길이가 같은 목록 교체에서 재선택이 안 된다.
   const planDateValueSig = planDateOptions.map(o => o.value).join('|');
+  // F10(조회조건 초기화)로 Plan Date 가 비워지면 다시 기본값(목록 첫 행=최신 Plan)으로 채운다
+  //   (사용자 요청 2026-11-05 — Plan Date 는 빈값이 아니라 초기값으로 복귀). 그래서 목록 시그니처뿐
+  //   아니라 planStartYyyymmdd 도 dep 에 둔다. 빈값 가드가 사용자 선택값은 덮지 않으므로(채워진 뒤엔
+  //   no-op) 재실행돼도 멱등하다.
   useEffect(() => {
     if (planDateOptions.length > 0 && !sc.planStartYyyymmdd) {
       set({ planStartYyyymmdd: planDateOptions[0].value });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planDateValueSig]);
+  }, [planDateValueSig, sc.planStartYyyymmdd]);
 
   return (
     <SearchArea

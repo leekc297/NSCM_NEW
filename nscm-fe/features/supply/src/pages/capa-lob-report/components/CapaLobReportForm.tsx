@@ -28,12 +28,13 @@ interface Props {
 /**
  * 조회조건 14필드 (design 02 §1 / §5.3).
  *
- * 단 구성 — 사용자 지정 배치(2026-10-19). 줄당 4필드·각 size 3 으로 12칸을 채워 줄 경계를 고정한다:
- *   `conditions`      1단 = Division(3) · Plan Month(3) · Version+Plan Type(3, 한 칸에 콤보+RP 회색칸) · Status(3) = 12
- *   `conditions`      2단 = Site(3) · Plant(3) · Building(3) · Line(3) = 12
- *   `extraConditions` 3단 = Operation group(3) · Operation(3) · Line Type(3) · Basic Nickname+팝업(3) = 12
- *   `extraConditions` 4단 = Bottleneck(3) = 3
- * Operation/Line Type 은 Electrode 모드에서 숨어 3단에 빈칸이 생길 수 있다(동적 가시성 — 아래).
+ * 단 구성 — AS-IS LOB Report 조회조건 순서 그대로(2026-11-04, 명칭·타입 유지). 줄당 4필드·각 size 3 으로 12칸을 채워 줄 경계를 고정한다.
+ * 접기 경계: AS-IS 3행(Site~Line Type)부터 접힌다(사용자 지정) — `conditions`(항상 노출) = AS-IS 1·2행, `extraConditions`(확장 접기) = AS-IS 3행:
+ *   `conditions`      1단 = Operation group(3) · Basic Nickname+팝업(3) · Bottleneck(3) · 빈칸 spacer(3) = 12  // AS-IS 1행은 3필드뿐
+ *   `conditions`      2단 = Division(3) · Plan Month(3) · Version+Plan Type(3, 한 칸에 콤보+RP 회색칸) · Status(3) = 12
+ *   `extraConditions` 3단 = Site(3) · Plant(3) · Building(3) · Line(3) = 12
+ *   `extraConditions` 4단 = Operation(3) · Line Type(3) = 6
+ * Operation/Line Type 은 Electrode 모드에서 숨어 4단에 빈칸이 생길 수 있다(동적 가시성 — 아래).
  *
  * 동적 가시성 2규칙의 **조건식 비대칭을 통일하지 않는다**(01 L-16/L-17):
  *   showOperation     = divisionType !== 'ELTR'
@@ -132,12 +133,89 @@ export const CapaLobReportForm = ({ combos, onSearch, onOpenItemPopup, disabled 
       onSearch={onSearch}
       conditions={
         <>
-          {/* 1단 — Division / Plan Month / Version / Status (사용자 지정 순서).
-              Plan Type(라벨없는 readonly)·Bottleneck 은 4단으로 옮긴다. 각 size 3 으로 12칸을 채워 줄 경계를 고정한다. */}
+          {/* 1단 — Operation group / Basic Nickname / Bottleneck (AS-IS row0 순서 그대로, 2026-11-04).
+              AS-IS LOB Report 조회조건 순서를 따른다: Operation group 선두 -> Basic Nickname -> Bottleneck.
+              AS-IS 1행은 이 3필드뿐이라 4번째 칸은 빈칸(spacer)으로 두어 Division 을 2행 선두로 내린다.
+              명칭·타입은 기존 유지. 각 size 3.
+              DivisionType — AS-IS row0 선두(dsn:707-716). `lciDivisionType.TextVisible=false` 라 라벨이 없었으나(01 L-11),
+              검색조건 라벨을 `LBL00027`("Operation group")로 지정(사용자 DB 실측). Electrode/Cell/Module.Pack 은 이 필드의 선택지다. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t('LBL00641', { defaultValue: 'Division' })}
+              label={t('LBL00027', 'Operation group')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  disabled={disabled}
+                  value={sp.divisionType}
+                  options={divisionTypeOptions}
+                  // AS-IS 파리티: Electrode 항목은 선택 불가(회색)로 둔다 — AS-IS Designer 가
+                  //   `RadioGroupItem(null, "Electrode", false)`(dsn:671, 3번째 인자 enabled=false)로
+                  //   이 항목만 영구 비활성 생성한다. Cell/Module·Pack 만 선택 가능.
+                  getOptionDisabled={option => option.value === DIVISION_TYPE.ELTR}
+                  onChange={(_, picked) => handleDivisionTypeChange(String(picked ?? ''))}
+                />
+              )}
+            />
+          </Grid>
+          {/* Basic Nickname — 라벨은 DivisionType 과 무관하게 고정이다(01 L-18: `ItemNames` 참조 0건.
+              자매 SCP0105 의 동적 라벨 규칙은 이 화면에 없다).
+              입력창 + 팝업 아이콘은 한 덩어리로 묶는다(`popupSearchField`) — 독립 버튼 컴포넌트 금지(L-19).
+              팝업 트리거는 **아이콘 클릭 단독**이다 — AS-IS `txtItem` 은 순수 TextBox 이고 더블클릭
+              이벤트 배선이 0건이다(cs:1604~1612 / dsn:524~529). `onDoubleClick` 을 달면 AS-IS 에 없던
+              초과 동작이 된다(iter-1 G-10). */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t('LBL00054', '_Basic Nickname')}
+              labelAlign='right'
+              render={() => (
+                <InputField
+                  fullWidth
+                  className={commonStyles.popupSearchField}
+                  value={sp.nickName}
+                  disabled={disabled}
+                  onChange={event => setSearchParams({ nickName: event.target.value })}
+                  InputProps={{
+                    endAdornment: (
+                      <Button
+                        appearance='outlined'
+                        priority='normal'
+                        disabled={disabled}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onOpenItemPopup}
+                      />
+                    ),
+                  }}
+                />
+              )}
+            />
+          </Grid>
+          {/* Bottleneck — 'ALL' 선두 옵션이 기본 선택이고 전송 시 `''` 로 치환된다(02 §2.6). */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t('LBL00055', '_Bottleneck')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  disabled={disabled}
+                  value={sp.bottleneckFlag}
+                  options={combos.bottleneckOptions}
+                  onChange={(_, picked) => setSearchParams({ bottleneckFlag: String(picked ?? '') })}
+                />
+              )}
+            />
+          </Grid>
+          {/* AS-IS 1행은 3필드뿐 — 빈 칸으로 12칸을 채워 Division 을 2행 선두로 내린다(줄 경계 고정). */}
+          <Grid size={3} />
+
+          {/* 2단 — Division / Plan Month / Version(+RP) / Status (AS-IS row1 순서 그대로). 각 size 3 = 12. */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              // 'Div' 라벨 — LBL00001(실측 KO 'Div' / EN·CN 'Div.', 하우스 컨벤션) 재사용. 자매 화면 공통 패턴(사용자 지시 2026-11-04).
+              label={t('LBL00001', { defaultValue: 'Div' })}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -174,7 +252,8 @@ export const CapaLobReportForm = ({ combos, onSearch, onOpenItemPopup, disabled 
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t('LBL00606', '_Version')}
+              // 'Ver.' 는 SCM_ADM_MSG_M 미등록(실측) — 자매 SCP0105(capa-teep-report)와 동일하게 리터럴 지정(사용자 지시 2026-11-04).
+              label='Ver.'
               labelAlign='right'
               render={() => (
                 <Box sx={{ display: 'flex', gap: 0.5, width: '100%', minWidth: 0 }}>
@@ -209,7 +288,12 @@ export const CapaLobReportForm = ({ combos, onSearch, onOpenItemPopup, disabled 
             />
           </Grid>
 
-          {/* 2단 — Site / Plant / Building / Line.
+        </>
+      }
+      extraConditions={
+        <>
+          {/* 3단 — Site / Plant / Building / Line (AS-IS row2 선두 = 접기 시작 지점, 2026-11-04).
+              사용자 지정: AS-IS 3행(Site~Line Type)부터 접힌다. 보이는 영역은 1·2단(Operation group~Status)뿐.
               상위 변경 시 하위 선택을 전부 비운다 — AS-IS `setListBox` 재바인딩이 체크를 지운다(02 §3.4).
               단 **Line Type 은 건드리지 않는다**: AS-IS clbSite~clbLine 핸들러(cs:1533~1557)가
               `RefreshElectrodeType` 를 호출하지 않아 재바인딩이 없고 체크가 그대로 유지된다
@@ -319,28 +403,8 @@ export const CapaLobReportForm = ({ combos, onSearch, onOpenItemPopup, disabled 
               )}
             />
           </Grid>
-        </>
-      }
-      extraConditions={
-        <>
-          {/* 3단 — Operation group / Operation(동적) / Line Type(동적) / Basic Nickname+팝업 (사용자 지정 순서).
-              DivisionType — AS-IS row0 선두(dsn:707-716). `lciDivisionType.TextVisible=false` 라 라벨이 없었으나(01 L-11),
-              검색조건 라벨을 `LBL00027`("Operation group")로 지정(사용자 DB 실측). Electrode/Cell/Module.Pack 은 이 필드의 선택지다. */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t('LBL00027', 'Operation group')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  disabled={disabled}
-                  value={sp.divisionType}
-                  options={divisionTypeOptions}
-                  onChange={(_, picked) => handleDivisionTypeChange(String(picked ?? ''))}
-                />
-              )}
-            />
-          </Grid>
+          {/* 4단 — Operation(동적) / Line Type(동적) (AS-IS row2 말단).
+              Operation — divisionType !== 'ELTR' 에서만 표시(showOperation). ELTR 모드에선 이 칸이 빈칸이 된다. */}
           <Grid size={3}>
             {showOperation && (
               <FormItem
@@ -363,6 +427,8 @@ export const CapaLobReportForm = ({ combos, onSearch, onOpenItemPopup, disabled 
               />
             )}
           </Grid>
+          {/* 4단 — Line Type(동적). divisionType === 'CELL' 에서만 표시(showElectrodeType).
+              Module/Pack·Electrode 모드에선 4단이 빈칸이 된다(동적 가시성 — 위 docstring 2규칙 참조). */}
           <Grid size={3}>
             {showElectrodeType && (
               <FormItem
@@ -385,56 +451,6 @@ export const CapaLobReportForm = ({ combos, onSearch, onOpenItemPopup, disabled 
                 )}
               />
             )}
-          </Grid>
-          {/* Basic Nickname — 라벨은 DivisionType 과 무관하게 고정이다(01 L-18: `ItemNames` 참조 0건.
-              자매 SCP0105 의 동적 라벨 규칙은 이 화면에 없다).
-              입력창 + 팝업 아이콘은 한 덩어리로 묶는다(`popupSearchField`) — 독립 버튼 컴포넌트 금지(L-19).
-              팝업 트리거는 **아이콘 클릭 단독**이다 — AS-IS `txtItem` 은 순수 TextBox 이고 더블클릭
-              이벤트 배선이 0건이다(cs:1604~1612 / dsn:524~529). `onDoubleClick` 을 달면 AS-IS 에 없던
-              초과 동작이 된다(iter-1 G-10). */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t('LBL00054', '_Basic Nickname')}
-              labelAlign='right'
-              render={() => (
-                <InputField
-                  fullWidth
-                  className={commonStyles.popupSearchField}
-                  value={sp.nickName}
-                  disabled={disabled}
-                  onChange={event => setSearchParams({ nickName: event.target.value })}
-                  InputProps={{
-                    endAdornment: (
-                      <Button
-                        appearance='outlined'
-                        priority='normal'
-                        disabled={disabled}
-                        iconComponent={<FunctionSearchIcon appearance='lined' />}
-                        onClick={onOpenItemPopup}
-                      />
-                    ),
-                  }}
-                />
-              )}
-            />
-          </Grid>
-          {/* 4단 — Bottleneck (Plan Type 은 Version 과 한 칸으로 묶었다 — 1단 참조). */}
-          {/* Bottleneck — 'ALL' 선두 옵션이 기본 선택이고 전송 시 `''` 로 치환된다(02 §2.6). */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t('LBL00055', '_Bottleneck')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  disabled={disabled}
-                  value={sp.bottleneckFlag}
-                  options={combos.bottleneckOptions}
-                  onChange={(_, picked) => setSearchParams({ bottleneckFlag: String(picked ?? '') })}
-                />
-              )}
-            />
           </Grid>
         </>
       }

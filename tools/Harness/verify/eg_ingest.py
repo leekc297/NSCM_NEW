@@ -163,14 +163,16 @@ def main():
         rd = csv.DictReader(f); fields = rd.fieldnames; rows = [r for r in rd if not r['row_id'].startswith('EG-')]  # 이전 반입분은 다시 만든다
     out, unmapped = [], []
 
+    cur = {'mctx': None}  # P1(2026-11-06): 지금 반입 중인 검사기 결과 행의 측정 맥락
     def add(check_key, rule, target, cond, expected, asis, result, evidence, tag, defect=''):
         if '결함원장' not in (asis or '') and 'AS-IS' not in (asis or ''):  # FAIL 계약의 기대값 출처 — 이 검사기들은 3개 문서 결함 유형에서 나왔다(2026-11-02 CN 'Condition' 이 근거 없음 ERROR)
             asis = (asis + ' · ' if asis else '') + '결함원장 유형(Doc/verify/_engine_gap.csv)'
         r = {k: '' for k in fields}
         r.update({'row_id': rid(mid, check_key), 'source': 'RULE_SCREEN', 'family': rule[:1], 'rule_id': rule, 'target': target, 'condition': cond, 'expected': expected, 'asis_ref': asis, 'method': 'E2E', 'result': 'NOT_RUN', 'defect_ref': defect, 'area': tag})
-        rows.append(r); out.append({'row_id': r['row_id'], 'result': result, 'evidence': evidence[:1500], 'tobe_ref': f'E2E @{tag}'})
+        rows.append(r); out.append({'row_id': r['row_id'], 'result': result, 'evidence': evidence[:1500], 'tobe_ref': f'E2E @{tag}', 'mctx': cur.get('mctx')})
 
     for x in pop:
+        cur['mctx'] = x.get('mctx') if isinstance(x, dict) else None
         if x.get('mut'):
             continue  # 변이 실행 결과는 공식 판정이 아니다
         check = x.get('check', ''); rule = popup_rule(check)
@@ -181,6 +183,7 @@ def main():
             res = '판정필요'; ev = '[SORT 기준 차이 → 판정필요] ' + ev  # judge SORT_REVIEW_TAG 와 같은 표시 — 판정필요로 남는다
         add(f"P|{x.get('call')}|{x.get('trig')}|{check}", rule, f"{mid} 팝업 {x.get('cls', '')} {x.get('trig', '')} {check}", ' '.join(x.get('egs') or []), x.get('expected', ''), x.get('basis', ''), res, ev, 'eg-popup')
     for x in auth:
+        cur['mctx'] = x.get('mctx') if isinstance(x, dict) else None
         eg = x.get('eg', ''); rule = AUTH_RULE.get(eg, '')
         if not rule:
             unmapped.append(eg); continue
@@ -236,6 +239,15 @@ def main():
     for r in rows:
         seen[r['row_id']] = r
     rows = list(seen.values()); last = {o['row_id']: o for o in out}
+    # 적용성(applicability) — 이 단계에서 새로 생긴 EG- 행은 ledger.py 의 적용성 판정을 거치지 않아 applicable 이 비었다(2026-11-07 SCP0016 E3 14행: 저장 없는 조회 화면인데 판정필요)
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import applicability as _AP
+        need = [r for r in rows if not (r.get('applicable') or '').strip()]
+        if need:
+            cnt, _ = _AP.apply(need, mid, '')
+            print(f"[eg_ingest] 적용성 보충 {len(need)}행 → {cnt}")
+    except Exception as _ex:
+        print(f'[eg_ingest] 적용성 보충 실패(무시): {_ex}')
     with open(lp, 'w', encoding='utf-8-sig', newline='') as f:
         w = csv.DictWriter(f, fieldnames=fields); w.writeheader(); w.writerows(rows)
     ej = os.path.join(vd, 'e2e_results.json'); prev = load(ej); keep = [e for e in prev if not str(e.get('row_id', '')).startswith('EG-')]

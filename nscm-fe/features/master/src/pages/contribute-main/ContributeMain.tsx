@@ -272,19 +272,25 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 동적 권한 (admin SYS0009 USE_YN + USER_GR 권한 동시 반영). hasButton('SEARCH'/'SAVE') 적용.
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    save: hasButton('SAVE') ? handleSave : false,
+    // Save 는 시트 단위 — 메뉴 단위면 version SAVE 와 합쳐져 group menu 에서 ContributeMain SAVE 만
+    //   꺼도 버튼이 남는다(저장은 ContributeMain/SAVE 로 간다).
+    save: hasButton('SAVE', SHEETS.MAIN) ? handleSave : false,
     insert: false,
     delete: false,
     manual: false,
     upload: false,
   };
 
-  const customButtons = [
-    {
-      label: t('LBL00604', '_Contribution Version'),
-      action: () => setVersionModalOpen(true),
-    },
-  ];
+  // VERSION_MGMT = AS-IS btnCutOff 대응 코드(__asis-mapping__ §E #5). 같은 그룹에 부여된
+  //   VERSION_MGT 는 FE 미사용 중복 등록이다.
+  const customButtons = hasButton('VERSION_MGMT')
+    ? [
+        {
+          label: t('LBL00604', '_Contribution Version'),
+          action: () => setVersionModalOpen(true),
+        },
+      ]
+    : [];
 
   // 화면 진입 + Year 자동 선택 직후 자동 조회 trigger (AS-IS Form_Load + InitControls)
   // useEffect(() => {

@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "COM0005",
+  "sheet": "projectByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0005/projectByDivision/SEARCH/call-proc",
+  "postData": "{}",
+  "status": 200,
+  "rows": 1,
+  "dur": 155,
+  "at": "2026-11-07T12:44:59.544Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0005",
+  "sheet": "projectByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0005/projectByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"etc\":\"N\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 188,
+  "at": "2026-11-07T12:44:59.615Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"itemId\":\"\",\"scpModuleType\":\"SCP0016\"}",
+  "status": 200,
+  "rows": 23310,
+  "dur": 1129,
+  "at": "2026-11-07T12:45:02.277Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ }
+]

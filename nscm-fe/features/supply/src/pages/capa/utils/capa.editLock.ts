@@ -240,7 +240,7 @@ export const isCellEditable = (row: CapaRow, binding: string, ctx: EditContext):
   const scopes = branchScopesOf(row, ctx);
   if (scopes.length === 0) return false;
 
-  if (binding === 'CONFIRM_FLAG') return String(row.ROW_RANKING ?? '') === '1';
+  if (binding === 'CONFIRM_FLAG') return false; //return String(row.ROW_RANKING ?? '') === '1'; 
   if (binding === 'LANE_QTY') {
     return isLaneQtyRow(row) && scopes.some(sc => sc.laneQty) && ctx.laneQtyCandidateCountOf(row) > 0;
   }

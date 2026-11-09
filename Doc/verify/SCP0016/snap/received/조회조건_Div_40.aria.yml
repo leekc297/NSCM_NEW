@@ -1,0 +1,35 @@
+- img
+- text: Div
+- combobox: 40 Mobility & IT Battery
+- button "Open"
+- img
+- text: Operation group
+- combobox: Pack
+- button "Open"
+- text: PJT
+- textbox
+- button
+- text: Model/Nickname
+- textbox
+- button
+- text: Electrode
+- combobox "ALL" [disabled]
+- button "Open" [disabled]
+- img
+- text: Ver.
+- combobox "ALL"
+- button "Open"
+- text: Bucket
+- combobox: Daily
+- button "Open"
+- img
+- text: Period
+- textbox "YYYY.MM.DD": 2026.11.07
+- text: ~
+- textbox "YYYY.MM.DD": 2027.11.07
+- button "Search(F5)"
+- button
+- separator
+- checkbox "Sum"
+- text: Sum
+# visual-order: Div > Operation group > PJT > Model/Nickname > Electrode > Ver. > Bucket > Period > Sum

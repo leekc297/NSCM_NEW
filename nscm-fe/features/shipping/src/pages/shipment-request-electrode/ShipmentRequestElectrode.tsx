@@ -8,21 +8,31 @@ import { apiClient } from '@foundation/apis';
 import { IcMeasureSelect } from '@foundation/assets';
 import { CRUD_MSG } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import { useMutation } from '@foundation/query-client';
+import { useMutation, useQuery } from '@foundation/query-client';
 import { GridAction, type EditTracker } from '@foundation/utils';
-import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
+import { MainTitle, SsoUserModal, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ExcelUploadModal } from './components/ExcelUploadModal';
+import { BodItemModal, type BodItemSelection } from './components/modals/BodItemModal';
+import { ShipmentRequestInsertModal } from './components/modals/ShipmentRequestInsertModal';
 import { ShipmentRequestElectrodeDetailBar } from './components/ShipmentRequestElectrodeDetailBar';
 import { ShipmentRequestElectrodeDetailGrid } from './components/ShipmentRequestElectrodeDetailGrid';
 import { ShipmentRequestElectrodeForm } from './components/ShipmentRequestElectrodeForm';
 import { ShipmentRequestElectrodeMainGrid } from './components/ShipmentRequestElectrodeMainGrid';
 import { ShipmentRequestElectrodeStockGrid } from './components/ShipmentRequestElectrodeStockGrid';
-import { ADMIN_SHEET_NAME, LBL, MENU_ID, MSG, SHEETS } from './shipment-request-electrode.constants';
+import {
+  ADMIN_SHEET_NAME,
+  LBL,
+  MENU_ID,
+  MSG,
+  SHEETS,
+  STANDARD_MANUAL_URL,
+  USER_CHECK_BTN,
+} from './shipment-request-electrode.constants';
 import type {
   RequestDetailRow,
   ShipmentPsiRow,
@@ -43,6 +53,7 @@ import {
   type SaveRow,
   type SaveResult,
   str,
+  submitMainSave,
   submitShipmentRequestSave,
 } from './utils/shipment-request-electrode.save';
 import type { SpreadTitleRow } from './utils/shipment-request-electrode.spreadHeader';
@@ -66,8 +77,43 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
   //   TO-BE 버튼권한 모델로 대체되고, Stock Detail 읽기전용(MSG00109)은 isStockDetailCellEditable=false 로 상시 적용.
   const canEdit = hasButton('SAVE');
 
+  // bRealFlag(AS-IS cs:3743-3750) — 최신 Plan Date(index0) 선택 여부. Form PlanDate 핸들러가 세팅.
+  const realFlag = useShipmentRequestElectrodeStore(state => state.realFlag);
+
+  // GetSSPUserCheck(AS-IS EditButton 가드①, cs:1482-1489) — SSP0002_GET_USER_INFO_LIST 로 SSP 등록 사용자 확인.
+  //   o_rc1 0행 or 403(USER_CHECK 권한 없음) 이면 비SSP → 편집 차단(MSG01261). 체크 전(undefined)엔 낙관적 허용.
+  //   백엔드 실측(2026-11-04): PKG_SSP0002 proc·공용 API P_SSP0200_USER_CHECK 는 배포돼 있고, SSP0022 에만
+  //   USER_CHECK 버튼+그룹권한 2행이 미등록이라 현재 403 → isSspUser=false. 그 메타 2행 등록 시 자동 동작(자매 SSP0021 동형).
+  const { data: sspUserCheck } = useQuery({
+    queryKey: [tabId, 'sspUserCheck', session.userId],
+    queryFn: async () => {
+      try {
+        const res = await apiClient.post<{ o_rc1?: unknown[] }>(
+          `/${MENU_ID}/${SHEETS.MAIN}/${USER_CHECK_BTN}/call-proc`,
+          { userId: session.userId ?? '', language: session.langCd ?? '', ssoUserYn: 'N' }
+        );
+        if (res.status >= 400 || Number(res.data?.code)) return false;
+        const rows = res.data?.result?.o_rc1 ?? [];
+        return rows.length > 0;
+      } catch {
+        return false;
+      }
+    },
+    enabled: !!session.userId,
+    staleTime: Infinity,
+  });
+  const isSspUser = sspUserCheck !== false;
+
+  // 메인 pivot 편집 전역 게이트 — 편집계 권한(canEdit=SAVE) · 최신 Plan(realFlag) · SSP 등록(isSspUser).
+  //   AS-IS EditButton 모드토글은 미이식(convert-core §2.4) — 진입 즉시 이 조건이면 편집 가능. 셀 범위는 editLock.
+  const mainEditable = canEdit && realFlag && isSspUser;
+  // 하단 요청상세 편집 게이트 — 상단과 동일 축. AS-IS EditButton 은 GetSSPUserCheck(cs:1482, fps 분기 前 공통)와
+  //   bRealFlag(cs:1672, spdDetail 분기)를 요청상세 편집에도 적용한다. 재고상세 읽기전용은 editLock 이 상시 처리.
+  const detailEditable = canEdit && realFlag && isSspUser;
+
   const gridRefMain = useRef<FlexGrid<ShipmentPsiRow>>();
   const gridFilterRefMain = useRef<FlexGridFilter>();
+  const editTrackerRefMain = useRef<EditTracker<ShipmentPsiRow>>();
   const gridRefRequest = useRef<FlexGrid<RequestDetailRow>>();
   const gridFilterRefRequest = useRef<FlexGridFilter>();
   const editTrackerRefRequest = useRef<EditTracker<RequestDetailRow>>();
@@ -106,9 +152,17 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
   const [openModel, setOpenModel] = useState(false);
   const [openDetailItem, setOpenDetailItem] = useState(false);
   const [openDetailModel, setOpenDetailModel] = useState(false);
+  // Requestor 팝업(btnRequestor, 요청상세 탭 전용) — 공용 SsoUserModal(AS-IS UserInfoPopup).
+  const [openRequestor, setOpenRequestor] = useState(false);
   // Measure 설정(btnMeasure) / Excel Upload(btnExcelUpload) 팝업 열림 상태.
   const [openMeasure, setOpenMeasure] = useState(false);
   const [openExcelUpload, setOpenExcelUpload] = useState(false);
+  // ETA 요청 입력 팝업(메인 pivot R_SHIP_REQ_ETA 셀 더블클릭, AS-IS SSP0022_ShipmentRequestPopup).
+  const [openRequestInsert, setOpenRequestInsert] = useState(false);
+  const [requestInsertRow, setRequestInsertRow] = useState<ShipmentPsiRow | null>(null);
+  // 요청상세 ITEM_ID 더블클릭 → BOD/Item 선택 팝업(AS-IS SSP0022_BodItemPopup). 선택 행으로 ITEM_ID~CONFIRM_DAY 채움.
+  const [openBodItem, setOpenBodItem] = useState(false);
+  const [bodItemRow, setBodItemRow] = useState<RequestDetailRow | null>(null);
 
   // mount — SubTitle F6 저장 조회조건 복원(1회, conditionsRestored 가드).
   useEffect(() => {
@@ -239,13 +293,20 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
     [searchParams]
   );
 
-  // R1: Find 버튼(상단 툴바/SearchArea) — 가드 없이 전체 재조회(design 01 R1).
+  // 신규행 FROM_SITE/TO_SITE 셀콤보 필터(@segment5=division, @segment4=company) — AS-IS InsertRow 가 clbDivision/
+  //   clbCompany 로 PlantByElectordeShipFromSite/ToSite 를 조회한 것 등가(cs:1454-1455). 신규행 DIVISION_ID=
+  //   buildNewRow(searchParams.divisionId)와 정합. 참조 고정(useMemo)으로 DataGrid 콤보 재조회 깜빡임 방지.
+  const detailComboParams = useMemo(
+    () => ({ segment5: searchParams.divisionId, segment4: searchParams.companyId }),
+    [searchParams.divisionId, searchParams.companyId]
+  );
+
+  // R1: Find 버튼(상단 툴바/SearchArea) — AS-IS FindButton()→FindData_Main() 과 동일하게 상단 메인
+  //   pivot(+spreadTitle 헤더)만 재조회한다. 상세(요청/재고)는 하단 2차 Search(handleDetailSearch)·엑셀
+  //   업로드 경로에서만 조회한다(상단 Find 로 하단까지 딸려 조회되던 AS-IS 이탈 교정 2026-11-03, 자매 SSP0023 동일).
   const handleSearch = () => {
     const isSame = setFilters();
-    if (isSame) {
-      void refetchMain();
-      void refetchRequestDetail();
-    }
+    if (isSame) void refetchMain();
   };
 
   // 하단 2차 Search 버튼(btnSearch) — AS-IS BtnSearch_Click(cs:3785-3803)은 활성 상세 시트만 재조회한다
@@ -286,32 +347,80 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
     }
   };
 
-  // R6: Insert — 요청상세 탭 + 편집권한(canEdit) 가드, 미충족 시 조용히 무시(AS-IS InsertRow 선행가드 cs:1449 등가).
-  //   신규행 DIVISION_ID 자동세팅 + EDIT_FLAG='N'(buildNewRow), CRUD_TYPE='I' 는 GridAction.addRow 가 부여하고
-  //   5컬럼 lock(INSERT_LOCK_COLUMNS)은 editLock 이 isNewRow 로 처리한다(design 01 R6 / 03 §3 규칙#8).
+  // R6: Insert — 요청상세 탭 + 편집게이트(detailEditable) 가드, 미충족 시 조용히 무시(AS-IS InsertRow 선행가드 cs:1449 등가).
+  //   신규행 DIVISION_ID 자동세팅(buildNewRow, EDIT_FLAG 는 설정 안 함 — addRowSet 차단 회피), CRUD_TYPE='I' 는
+  //   GridAction.addRow 가 부여하고 5컬럼 lock(INSERT_LOCK_COLUMNS)은 editLock 이 isNewRow 로 처리한다(design 01 R6 / 03 §3 규칙#8).
   //   한계(04 후속): FROM_SITE/TO_SITE 런타임 셀콤보 주입·ITEM_ID BOD 팝업 조회는 미배선(아래 C1~C4 선행 가드만 반영).
   const handleInsert = () => {
-    if (!canEdit || activeDetailTab !== 'requestDetail') return;
+    if (!detailEditable || activeDetailTab !== 'requestDetail') return;
     const grid = gridRefRequest.current;
     if (!grid) return;
-    GridAction.addRow(grid, buildNewRow(searchParams.divisionId) as never, 'above', true);
+    // 공용 addRow 의 "전 행 EDIT_FLAG='N' → 추가 차단" 가드를 건너뛴다(skipEditFlagGuard). 이 화면의 요청상세는
+    //   조회 데이터가 전부 EDIT_FLAG='N'(신규 미확정)로 내려올 수 있는데(2026-11-04 네트워크 실측), AS-IS InsertRow
+    //   (cs:1447-1472)에는 그런 가드가 없어 항상 삽입된다. addRow 대신 addRowSet 을 직접 호출해 플래그를 넘긴다.
+    GridAction.addRowSet(grid, [buildNewRow(searchParams.divisionId) as never], 'above', {
+      preserveMergeManager: true,
+      skipEditFlagGuard: true,
+    });
   };
 
-  // R7: Delete — 완전 NO-OP(명시적 무동작 함수, false/키생략 금지, design 01 R7).
+  // R7: Delete — AS-IS DeleteButton() 은 빈 override(기능 없음, cs:1476-1478). 기능 없는 버튼은 노출하지 않는
+  //   원칙(auth-button.md AUTH-03/04)에 따라 admin 버튼메타에서 main/DELETE 등록을 제거(05_register.sql +
+  //   07_remove_delete_button.sql)하고, 노출은 hasButton 으로만 제어한다 — 미등록이면 hasButton('DELETE')=false 라
+  //   SubTitle 이 Delete 버튼을 렌더하지 않는다(design 01 R7 의 "inert 버튼 상시 노출"에서 2026-11-05 변경).
   const handleDelete = () => undefined;
 
   // C1~C4: ITEM_ID 셀 팝업 선행필수(design 01 §2 / 03 §1.2, AS-IS cs:1015~1042). From Site→To Site→Incoterms→
   //   Trans Mode 순으로 첫 번째 빈 칸을 "First, select {0}"(MSG01126 — AS-IS MSG00098 미등록 등가)로 차단한다.
   //   선행값 충족 시 BOD/Item 팝업 조회로 이어가야 하나(04 후속), 선행필수 validation 은 우선 반영한다.
   const handleItemCellDoubleClick = (row: RequestDetailRow) => {
-    if (!canEdit) return;
+    if (!detailEditable) return;
+    // AS-IS SpdDetail_CellDoubleClick(cs:1046)은 action=='I'(신규행)에서만 BOD/Item 팝업을 연다.
+    if (str(row.CRUD_TYPE) !== 'I') return;
+    // C1~C4 선행필수(From Site→To Site→Incoterms→Trans Mode) — 미충족 시 "First, select {0}" 후 차단(cs:1015-1042).
     const missing = firstMissingPrerequisite(row as SaveRow);
-    if (!missing) return;
-    const label = gridRefRequest.current?.getColumn(missing)?.header ?? missing;
-    void setAlert({
-      type: 'alert',
-      content: t(MSG.PREREQUISITE, 'First, select {0}.').replace('{0}', label),
-    });
+    if (missing) {
+      const label = gridRefRequest.current?.getColumn(missing)?.header ?? missing;
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PREREQUISITE, 'First, select {0}.').replace('{0}', label),
+      });
+      return;
+    }
+    // 선행 충족 → BOD/Item 선택 팝업(SSP0022_BodItemPopup).
+    setBodItemRow(row);
+    setOpenBodItem(true);
+  };
+
+  // BOD/Item 팝업 선택 확정 — AS-IS cs:1063-1068(ITEM_ID/MODEL_ID SetValue) + FindData_BOD(INCOTERMS/TRANSPORT/BOD_ID/
+  //   CONFIRM_DAY). 전용 BodItemModal 이 GET_ITEM_POPUP(route 조회) 행으로 6칸을 모두 담아 돌려주므로 선택 1회로 채운다.
+  //   값은 행 객체에 직접 써 setCellData coerce 경로를 피하고 invalidate(신규행 CRUD='I' 라 EditTracker/저장이 그대로 수집).
+  const handleBodItemSelected = (picked: BodItemSelection) => {
+    const r = bodItemRow as Record<string, unknown> | null;
+    if (!r) return;
+    r.ITEM_ID = picked.ITEM_ID;
+    r.MODEL_ID = picked.MODEL_ID;
+    r.INCOTERMS = picked.INCOTERMS;
+    r.TRANSPORT_MODE = picked.TRANSPORT_MODE;
+    r.BOD_ID = picked.BOD_ID;
+    r.CONFIRM_DAY = picked.CONFIRM_DAY;
+    gridRefRequest.current?.invalidate();
+  };
+
+  // 메인 pivot Shipment Request ETA(R_SHIP_REQ_ETA) 셀 더블클릭 → ETA 요청 입력 팝업(AS-IS SpdMain_CellDoubleClick
+  //   → ShipmentRequestPopup). measure 행 가드는 MainGrid 가 적용하고, 여기서 AS-IS bRealFlag + 편집권한 가드를 건다.
+  //   bRealFlag(실시간 Plan Date) 는 이 화면의 realFlag 가 현재 'Y' 고정(store setFilters)이라 canEdit 로만 가른다
+  //   — 과거 Plan Date 미실시간 판정(MSG00312)은 realFlag 배선과 함께 후속(화면 공통 미완, 범위 밖).
+  const handleMainCellDoubleClick = (row: ShipmentPsiRow) => {
+    if (!canEdit) return;
+    // AS-IS SpdMain_CellDoubleClick(cs:1368-1372) — bRealFlag==false(과거/CutOff Plan Date)면 MSG00312 후 차단.
+    //   AS-IS 는 더블클릭(명시 제스처) 시 알럿을 띄웠다 — 인라인 편집 차단(무알럿)과 달리 여기선 그대로 재현한다.
+    if (!realFlag) {
+      void setAlert({ type: 'alert', content: t(MSG.NOT_REAL_TIME, 'It is not real time data.') });
+      return;
+    }
+    setRequestInsertRow(row);
+    setOpenRequestInsert(true);
   };
 
   // 요청상세 저장 mutation — call-proc 이 '^'-폴딩 단일 객체를 받는 특수형태라 useMutation 으로 직접 배선하고
@@ -332,13 +441,14 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
         void refetchRequestDetail();
         return;
       }
-      // S7: 'X' = 표준정보 미등록(route/BOD NULL) — AS-IS MSG00324(TO-BE 미등록 → 영문 fallback).
+      // S7: 'X' = 기준정보(route/BOD) 미등록 — AS-IS SaveData_Detail(cs:2736)은 MSG00324 를 예/아니오로 띄우고
+      //   '예' 면 base.AddHelpButton("Standard Information SSP Manual") 로 매뉴얼을 연다. TO-BE 는 MSG01321
+      //   (예/아니오) + onConfirm 으로 매뉴얼 새 탭(선례 ShipmentPlan, 팝업과 동형).
       if (result.code === 'X') {
         void setAlert({
-          type: 'alert',
-          content:
-            result.message ||
-            t(MSG.STANDARD_INFO, 'Standard information is not registered. Please check the references.'),
+          type: 'confirm',
+          content: t(MSG.STANDARD_INFO, 'Standard information is not registered. Would you like to view the reference?'),
+          onConfirm: () => window.open(STANDARD_MANUAL_URL, '_blank', 'noopener,noreferrer'),
         });
         return;
       }
@@ -407,6 +517,72 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
       },
       changed as never
     );
+  };
+
+  // R8/R12: Save(메인 pivot = spdMain) — AS-IS SaveData(cs:2729-2924). **확인창 없이** 변경 X_D_ 셀을 즉시 저장한다
+  //   (요청상세 SaveData_Detail 과 달리 Yes/No 확인창 없음 — 통일 금지, design 01 R12). 변경 0건이면 MSG00005.
+  //   수집 단위는 셀(= R_SHIP_REQ_ETA 행 × 변경된 X_D_ 일 셀, EditTracker 변경맵). 결과 S/X/else 분기는 요청상세와 동형.
+  const handleMainSave = () => {
+    const grid = gridRefMain.current;
+    if (!grid) return;
+    grid.finishEditing();
+    const source = (grid.collectionView?.sourceCollection ?? []) as SaveRow[];
+    const changed = (editTrackerRefMain.current?.getOriginalValues() ?? new Map()) as ReadonlyMap<
+      object,
+      Record<string, unknown>
+    >;
+    void (async () => {
+      const { result, count } = await submitMainSave(source, changed, {
+        companyId: searchParams.companyId,
+        userId: str(session.userId),
+      });
+      // 변경 셀 0건 — AS-IS iCount==0 → MSG00005(cs:2905-2908).
+      if (count === 0) {
+        void setAlert({
+          type: 'alert',
+          content: t(CRUD_MSG.NO_CHANGES.id, CRUD_MSG.NO_CHANGES.fallback),
+        });
+        return;
+      }
+      if (!result.ok) {
+        void setAlert({
+          type: 'alert',
+          content: result.message || t(CRUD_MSG.SAVE_FAIL.id, CRUD_MSG.SAVE_FAIL.fallback),
+        });
+        return;
+      }
+      // 'S' 성공 — MSG00004 저장건수 대신 공용 SAVED(요청상세 저장과 동일 방침). 성공 후 메인 재조회(cs:2863-2865).
+      if (result.code === 'S') {
+        void setToast({ type: 'success', message: t(CRUD_MSG.SAVED.id, CRUD_MSG.SAVED.fallback) });
+        GridAction.discardChanges(gridRefMain.current, editTrackerRefMain.current);
+        const isSameMain = setFilters();
+        if (isSameMain) void refetchMain();
+        return;
+      }
+      // 'X' = 표준정보(route/BOD) 미등록 — AS-IS MSG00324(예 → 매뉴얼). TO-BE MSG01321 + onConfirm 매뉴얼 탭(요청상세 동형).
+      if (result.code === 'X') {
+        void setAlert({
+          type: 'confirm',
+          content: t(MSG.STANDARD_INFO, 'Standard information is not registered. Would you like to view the reference?'),
+          onConfirm: () => window.open(STANDARD_MANUAL_URL, '_blank', 'noopener,noreferrer'),
+        });
+        return;
+      }
+      // 'N'/'F'/그 외 = 서버 오류(AS-IS 서버 메시지 패스스루 / MSG00042).
+      void setAlert({
+        type: 'alert',
+        content:
+          result.message ||
+          t(MSG.SYSTEM_ERROR, 'A system error occurred. Capture the screen and contact the administrator.'),
+      });
+    })();
+  };
+
+  // Save 라우팅(design 01 R8, cs:1772-1783) — 활성 그리드가 메인 pivot(spdMain)이면 메인 저장(확인창 없음),
+  //   상세(spdDetail)면 요청상세 저장(확인창 있음). 활성 그리드 미확정이면 요청상세 경로(편집 대상 기본 시트).
+  const handleSaveRouted = () => {
+    if (activeGrid === 'spdMain') handleMainSave();
+    else void handleSave();
   };
 
   // btnMeasure(design 01 R13) — spdDetail 활성이면 no-op(AS-IS), 그 외 Measure 설정 팝업.
@@ -482,11 +658,23 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
     },
   ];
 
+  // Sort(F3)/Filter(F4) 대상 그리드 라우팅 — 상단 툴바(SubTitle)의 grid/gridFilter 는 **포커스된 그리드**를
+  //   따른다(코드베이스 표준: SSP0026 pack `grid={activeMainSheet===…}`, SSP0060 ProductionPlan
+  //   `grid={focusedSheet===MAIN?…}`, SalesSite `grid={gridRefs[activeTab]}`). 상단 메인 pivot 은 그 자체로
+  //   툴바를 쓰고, 하단 상세(Stock/Request)는 전용 툴바가 없어 종전엔 sort/filter 가 닿지 않았다. activeGrid
+  //   (각 그리드 onFocus 가 세팅)이 spdDetail 이면 현재 활성 상세 탭(activeDetailTab)의 그리드로 라우팅한다.
+  const activeDetailGridRef =
+    activeDetailTab === 'stockDetail' ? gridRefStock : gridRefRequest;
+  const activeDetailFilterRef =
+    activeDetailTab === 'stockDetail' ? gridFilterRefStock : gridFilterRefRequest;
+  const toolbarGridRef = activeGrid === 'spdDetail' ? activeDetailGridRef : gridRefMain;
+  const toolbarFilterRef = activeGrid === 'spdDetail' ? activeDetailFilterRef : gridFilterRefMain;
+
   const hotkeyConfig: HotkeyConfig = {
     search: () => handleSearch(),
     insert: hasButton('INSERT') ? handleInsert : (() => undefined),
-    delete: () => handleDelete(),
-    save: hasButton('SAVE') ? () => void handleSave() : (() => undefined),
+    delete: hasButton('DELETE') ? handleDelete : false,
+    save: hasButton('SAVE') ? handleSaveRouted : (() => undefined),
     manual: false,
     upload: false,
   };
@@ -508,8 +696,11 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
       )}
       <SubTitle
         menuId={MENU_ID}
-        grid={gridRefMain}
-        gridFilter={gridFilterRefMain}
+        grid={toolbarGridRef}
+        gridFilter={toolbarFilterRef}
+        // 건수 배지는 포커스와 무관하게 항상 메인 pivot 기준으로 고정(SubTitle countGrid 용도) —
+        //   grid 가 하단으로 라우팅돼도 상단 툴바 줄의 건수는 메인 조회 건수를 가리킨다.
+        countGrid={gridRefMain}
         dataCount={mainRowsShown.length}
         excelFileName='Shipment Request(Electrode)'
         useHotkey
@@ -524,7 +715,11 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
               rows={mainRowsShown}
               gridRef={gridRefMain}
               gridFilterRef={gridFilterRefMain}
+              editTrackerRef={editTrackerRefMain}
               staticColumns={staticColumns[SHEETS.MAIN]}
+              mainEditable={mainEditable}
+              periodStart={searchParams.fromYyyymmdd}
+              periodEnd={searchParams.toYyyymmdd}
               bohMode={bohMode}
               bucketType={searchParams.bucketType}
               sumChecked={searchParams.sumChecked}
@@ -532,6 +727,7 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
               planDate={searchParams.planDate}
               spreadTitle={spreadTitleRows}
               onFocus={() => setActiveGrid('spdMain')}
+              onCellDoubleClick={handleMainCellDoubleClick}
             />
           </div>
         </Panel>
@@ -540,11 +736,13 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
           {/* .gridArea(flex column + height:100% + overflow:hidden) 로 감싸야 TabWrapper/FlexGrid 높이가
               제약되어 wijmo 가 ColumnFooter(Sum) 공간을 확보·바닥 고정한다(자매 SSP0026 동일). */}
           <div className={styles.gridArea}>
-            {/* 2차 조회조건 바(usrLayoutControl3) — Material[팝업]·Nick Name·Lot ID·Search. 활성 Detail 탭 재조회. */}
+            {/* 2차 조회조건 바(usrLayoutControl3) — Material[팝업]·Model/Nickname[팝업]·Search 공통 +
+                탭별 토글: 요청상세 = Shipment ETA·Requestor[팝업] / 재고상세 = Lot ID(AS-IS cs:1357-1382). */}
             <ShipmentRequestElectrodeDetailBar
               onDetailSearch={handleDetailSearch}
               onItemSearch2={() => setOpenDetailItem(true)}
               onModelSearch2={() => setOpenDetailModel(true)}
+              onRequestorSearch={() => setOpenRequestor(true)}
             />
             {/* AS-IS 탭 순서(CreateSpread cs:574-575, 기본 활성 cs:595): Stock Detail(0) → Shipment Request Detail(1). */}
             <TabWrapper
@@ -569,7 +767,8 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
                   gridFilterRef={gridFilterRefRequest}
                   editTrackerRef={editTrackerRefRequest}
                   staticColumns={staticColumns[SHEETS.REQUEST_DETAIL]}
-                  isEditMode={canEdit}
+                  isEditMode={detailEditable}
+                  comboParams={detailComboParams}
                   onFocus={() => setActiveGrid('spdDetail')}
                   onItemCellDoubleClick={handleItemCellDoubleClick}
                 />
@@ -642,6 +841,19 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
         }}
       />
 
+      {/* Requestor 검색(하단 btnRequestor, 요청상세 탭 전용) — 공용 SsoUserModal(AS-IS UserInfoPopup, SSP0026 동일).
+          선택 사용자 "이름"(언어별 KO/EN)을 requestor 에 반영 — 그 이름 문자열이 조회 파라미터(P_REQUESTOR_ID,
+          design 02 §4.6 주의 — ID 아님). ssoUserYn='N'(등록 사용자 SCM_ADM_USER_M 기준). */}
+      <SsoUserModal
+        open={openRequestor}
+        modalClose={() => setOpenRequestor(false)}
+        setSelectedValue={(userId, userNm, userEngNm) => {
+          setSearchParams({ requestor: (session.langCd === 'KO' ? userNm : userEngNm) || userId });
+          setOpenRequestor(false);
+        }}
+        ssoUserYn='N'
+      />
+
       {/* Measure 설정 팝업(btnMeasure) — OK 시 visibleMeasures 반영 → 메인 행(MEASURE) 필터. 공용 MeasureSelectModal. */}
       <MeasureSelectModal
         open={openMeasure}
@@ -665,12 +877,45 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
         )}
         onSave={handleExcelUploadSave}
         onUploaded={() => {
-          // 업로드 후 현재 조회조건으로 재조회(AS-IS FindData). bare refetchMain 은 아직 Search 전이면
-          //   store filters 가 undefined 라 빈 body(content-length 0)로 나가 0건이 된다(2026-10-27 실측).
-          //   setFilters 로 현재 searchParams 를 조건에 싣는 handleSearch 를 써야 업로드분이 보인다.
+          // 업로드 후 재조회 — AS-IS btnExcelUpload(R3, cs:4195-4197)은 FindData_Request_Detail()+FindData_Main()
+          //   을 함께 부른다. 상단 Find(handleSearch)는 이제 메인만 조회하므로, 업로드 경로는 요청상세
+          //   (setDetailFilters)까지 명시 재조회한다. bare refetch 는 Search 전이면 filters undefined 라 빈 body
+          //   (0건)로 나가므로(2026-10-27 실측) setFilters/setDetailFilters 로 현재 조건을 싣는다.
           setActiveDetailTab('requestDetail');
-          handleSearch();
+          const isSameMain = setFilters();
+          if (isSameMain) void refetchMain();
+          const { sameReq } = setDetailFilters('requestDetail');
+          if (sameReq) void refetchRequestDetail();
         }}
+      />
+
+      {/* ETA 요청 입력 팝업(메인 pivot Shipment Request ETA 셀 더블클릭) — AS-IS SSP0022_ShipmentRequestPopup.
+          더블클릭한 레인(Div/Model/Material/From/To/Incoterms/TransMode) 고정 + Shipment Date·Qty 입력 → 저장
+          (P_SSP0022_SAVE_SHIPMENT_REQUEST, active_flag='M'). 성공 시 메인 재조회. */}
+      <ShipmentRequestInsertModal
+        open={openRequestInsert}
+        modalClose={() => setOpenRequestInsert(false)}
+        row={requestInsertRow}
+        companyId={searchParams.companyId}
+        planDate={searchParams.planDate}
+        onSaved={() => {
+          setOpenRequestInsert(false);
+          const isSameMain = setFilters();
+          if (isSameMain) void refetchMain();
+        }}
+      />
+
+      {/* 요청상세 ITEM_ID 더블클릭 → BOD/Item 선택 팝업(AS-IS "Model by DivisionPopup" = SSP0022_BodItemPopup).
+          화면 전용 모달(shipping 표준 — SSP0024/0025/0045/0026 동형): GET_ITEM_POPUP route(From+To Site) 조회로
+          Item+Model+BOD 후보를 보이고, 선택 1회로 ITEM_ID/MODEL_ID/INCOTERMS/TRANSPORT_MODE/BOD_ID/CONFIRM_DAY 채움
+          (AS-IS cs:1063-1068 + FindData_BOD 등가). 신규행('I')에서만 진입. 공용 MaterialByDivisionModal/ModelByDivisionPopup
+          은 각각 자재/모델 한 코드만·site 결합이 달라 SSP0022 결합·route 동작과 1:1 이 아니라 전용으로 둔다. */}
+      <BodItemModal
+        open={openBodItem}
+        modalClose={() => setOpenBodItem(false)}
+        row={bodItemRow}
+        planDate={searchParams.planDate}
+        onSelect={handleBodItemSelected}
       />
     </>
   );

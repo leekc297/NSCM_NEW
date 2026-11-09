@@ -1,0 +1,4 @@
+﻿kind,target,result,why
+TITLESET_MIG,SCP0016,ERROR,"[확인 대상] 이관 대상 1705행 중 TO-BE 없음 1622행(예 [('aswkim', 'M', 'BALANCE'), ('aswkim', 'M', 'INTRANSIT'), ('aswkim', 'M', 'MKT_FCST')]) · AS-IS 전체 2054행 — AS-IS 접속이 개발 DB 라 이관 원천 일치 미확인"
+TITLESET_REQ,SCP0016.Waterfall Shipment Plan,NA,전 Division 공통 필수 컬럼 없음(USER_SELECTABLE_FLAG=N)
+MEASURE_ORDER,SCP0016.main,NA,이 사용자 Measure 셋팅 없음 · 사용자 

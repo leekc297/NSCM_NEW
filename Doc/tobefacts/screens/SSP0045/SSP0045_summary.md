@@ -9,9 +9,9 @@
 |---|---|---|
 | features/shipping/src/pages/shipment-request-semi/components/modals/BodItemRouteModal.module.scss | component | 18 |
 | features/shipping/src/pages/shipment-request-semi/components/modals/BodItemRouteModal.tsx | component | 261 |
-| features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | component | 349 |
-| features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.module.scss | component | 69 |
-| features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | component | 511 |
+| features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | component | 351 |
+| features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.module.scss | component | 70 |
+| features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | component | 538 |
 | features/shipping/src/pages/shipment-request-semi/hooks/useShipmentRequestSemiSave.ts | hook | 183 |
 | features/shipping/src/pages/shipment-request-semi/hooks/useShipmentRequestSemiValidation.ts | hook | 71 |
 | features/shipping/src/pages/shipment-request-semi/index.ts | index | 2 |
@@ -21,14 +21,14 @@
 | features/shipping/src/pages/shipment-request-semi/useShipmentRequestSemiStore.ts | store | 266 |
 | features/shipping/src/pages/shipment-request-semi/utils/shipmentRequestSemi.columns.ts | util | 279 |
 | features/shipping/src/pages/shipment-request-semi/utils/shipmentRequestSemi.editLock.ts | util | 111 |
-| features/shipping/src/pages/shipment-request-semi/utils/shipmentRequestSemi.save.ts | util | 199 |
+| features/shipping/src/pages/shipment-request-semi/utils/shipmentRequestSemi.save.ts | util | 219 |
 | features/shipping/src/pages/shipment-request-semi/__asis-mapping__.md | mapping | 320 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | SSP0045/bodPopup//call-proc | hook | 1 | Y | BodItemRouteModal.tsx:80 |
-| (useTabComboQueries) | hook | 4 | Y | ShipmentRequestSemiForm.tsx:71 ShipmentRequestSemiForm.tsx:79 ShipmentRequestSemiForm.tsx:98 ShipmentRequestSemiGrid.tsx:173 |
+| (useTabComboQueries) | hook | 4 | Y | ShipmentRequestSemiForm.tsx:71 ShipmentRequestSemiForm.tsx:79 ShipmentRequestSemiForm.tsx:98 ShipmentRequestSemiGrid.tsx:200 |
 | /SSP0045/main/SAVE/call-proc | http | 1 | Y | useShipmentRequestSemiSave.ts:86 |
 | SSP0045/main//call-proc | hook | 1 | Y | ShipmentRequestSemi.tsx:108 |
 | SSP0045/calendar//call-proc | hook | 1 | Y | ShipmentRequestSemi.tsx:117 |
@@ -49,22 +49,22 @@
 | SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 179 |
 | CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 198 |
 | CustomDropdown | onChange | <arrow> setOperationGroup,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 221 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 243 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 278 |
-| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 274 |
-| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 295 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 312 |
-| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 338 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 302 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 318 |
-| g | pastingCell | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 320 |
-| g | cellEditEnding | clampQtyOnCommit | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 337 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 350 |
-| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 372 |
-| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 389 |
-| g | updatedLayout | applyDrillVisibility | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 438 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 477 |
-| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 507 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 251 |
+| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 247 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 272 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 299 |
+| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 319 |
+| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 340 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 329 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 345 |
+| g | pastingCell | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 347 |
+| g | cellEditEnding | clampQtyOnCommit | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 364 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 377 |
+| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 399 |
+| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 416 |
+| g | updatedLayout | applyDrillVisibility | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 465 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 504 |
+| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 534 |
 | ShipmentRequestSemiForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-request-semi/ShipmentRequestSemi.tsx | 321 |
 | ShipmentRequestSemiForm | onModelSearch | <arrow> setModelPopupOpen | jsx | features/shipping/src/pages/shipment-request-semi/ShipmentRequestSemi.tsx | 322 |
 | ShipmentRequestSemiGrid | onBodCellClick | setBodPopupRow | jsx | features/shipping/src/pages/shipment-request-semi/ShipmentRequestSemi.tsx | 348 |
@@ -127,7 +127,7 @@
 | MSG00699 | 1 |
 | MSG01126 | 1 |
 | MSG00428 | 1 |
-| MSG00071 | 1 |
+| MSG00014 | 1 |
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: SSP0045(10), SSP0024(2), SSP0200(2), SSP0060(2), SCP0033(1), SSP0025(1), COM0013(1), SCP0020(1), SSP0005(1), SSP0202(1), SCP0123(1), SCP0025(1)

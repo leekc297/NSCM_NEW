@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0127",
+  "sheet": "init",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/init/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 2835,
+  "dur": 301,
+  "at": "2026-11-08T07:20:18.476Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261109\",\"periodTo\":\"20271108\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 239,
+  "at": "2026-11-08T07:20:21.610Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ }
+]

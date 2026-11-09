@@ -36,6 +36,10 @@ const str = (v: unknown): string =>
 
 const DRILLDOWN_COLUMNS = new Set<string>([DRILLDOWN.INCOTERMS, DRILLDOWN.CHANGE_REQ_NO]);
 
+// 2단 머지헤더 행 높이(px) — 기본(24px/행)으로는 2~3줄 라벨(Biz Name/Expected Shipping Date/
+//   Change Request No 등)이 눌린다. 단독 컬럼은 2단 세로병합이라 총 2×34=68px 확보된다.
+const HEADER_ROW_HEIGHT = 34;
+
 // AS-IS spdMain "Shipment Plan Confirm Detail" (47컬럼, 전량 읽기전용 cs:439). 동적 PIVOT 없음(03 §2).
 //   컬럼셋/2단 머지헤더/FIXED(INCOTERMS)/FCST_TYPE lookup 콤보는 admin SCM_MST_SHEET_COLUMNS 메타가 authoritative
 //   (design 03 §0: 47행 배포됨) — 하드코딩 fallback 없음(#130, 47행 수기 전사 = anti-simplification 위반).
@@ -118,10 +122,25 @@ export const ShipmentPlanConfirmDetailGrid = ({
     };
     g.hostElement.addEventListener('click', clickHandler);
 
+    // 헤더 행 높이 ↑ — 공용 컬럼메타가 헤더 각 행에 **명시 height(2단=24px/행)를 인라인으로 박아** 두므로
+    //   rows.defaultSize 로는 안 먹는다(실측 2026-11-03). 각 행의 .height 를 직접 지정해야 한다.
+    //   columnGroups 재적용 때 24px 로 원복되므로 datamap 재부착과 같이 updatedLayout 마다 재적용한다.
+    const applyHeaderHeight = () => {
+      const hdrRows = g.columnHeaders?.rows;
+      if (!hdrRows) return;
+      for (let i = 0; i < hdrRows.length; i++) {
+        const r = hdrRows[i];
+        if (r && Math.round(r.height ?? 0) !== HEADER_ROW_HEIGHT) r.height = HEADER_ROW_HEIGHT;
+      }
+    };
+    g.updatedLayout.addHandler(applyHeaderHeight);
+    applyHeaderHeight();
+
     return () => {
       try {
         g.formatItem?.removeHandler(formatItemHandler);
         g.hostElement?.removeEventListener('click', clickHandler);
+        g.updatedLayout?.removeHandler(applyHeaderHeight);
       } catch {
         /* unmount race */
       }

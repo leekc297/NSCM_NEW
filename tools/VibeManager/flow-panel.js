@@ -49,7 +49,9 @@ function stageStatus(p, id) {
   const rep = rd(path.join(g, 'REPAIR.md')); s.repair = /\*\*PASS\*\*/.test(rep) ? 'ok' : (/NEEDS_HUMAN|사람 확인 큐/.test(rep) ? 'bad' : (rep ? 'warn' : 'none'));
   const pk = rd(path.join(g, 'CHECK_PKG.md')).match(/BLOCK (\d+) \/ WARN (\d+)/); s.pkg = pk ? (Number(pk[1]) === 0 ? 'ok' : 'bad') : (has(path.join(g, `${id}_PKG.sql`)) ? 'warn' : 'none'); s.pkgN = pk ? `${pk[1]}/${pk[2]}` : '';
   s.reg = has(path.join(g, `${id}_registration.sql`)) ? (has(path.join(g, `${id}_revert.sql`)) ? 'ok' : 'warn') : 'none';
-  const e2e = csvObjs(path.join(p.e2eOutDir, 'results', '_summary.csv')).filter(r => (r.menu_id || '').toUpperCase() === id);
+  // 1.9.42(2026-11-06): 화면 폴더 요약 Doc/e2e/results/<ID>/_summary.csv 우선 · 없으면(전환 전) 공용 색인
+  const e2eF = [path.join(p.e2eOutDir, 'results', id, '_summary.csv'), path.join(p.e2eOutDir, 'results', '_summary.csv')].find(f => has(f)) || '';
+  const e2e = csvObjs(e2eF).filter(r => (r.menu_id || '').toUpperCase() === id);
   // 종류별: 결과 있음 → PASS 비율로 ok/warn/bad · 결과 없고 스펙만 있음 → warn(미실행) · 스펙도 없음 → none. s.e2e = 전체 합(구 호환)
   for (const k of E2E_KINDS) {
     const rows = e2e.filter(r => (r.kind || '').toLowerCase() === k);

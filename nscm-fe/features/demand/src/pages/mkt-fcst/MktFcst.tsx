@@ -857,7 +857,9 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     search: hasButton('SEARCH') ? handleSearch : false,
     insert: editable && hasButton('INSERT') ? handleInsert : false,
     delete: editable && hasButton('DELETE') ? handleDelete : false,
-    save: editable && hasButton('SAVE') ? handleSave : false,
+    // Save 는 시트 단위 — 메뉴 단위면 custDemand/prPopup/titleSet SAVE 와 합쳐져 group menu 에서
+    //   Mkt Fcst SAVE 만 꺼도 버튼이 남는다(저장은 Mkt Fcst/SAVE 로 간다).
+    save: editable && hasButton('SAVE', SHEETS.MAIN) ? handleSave : false,
     manual: false,
     upload: false,
   };

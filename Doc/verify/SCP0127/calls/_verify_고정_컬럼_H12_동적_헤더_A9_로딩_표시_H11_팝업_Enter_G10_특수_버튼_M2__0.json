@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0127",
+  "sheet": "init",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/init/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 2835,
+  "dur": 290,
+  "at": "2026-11-07T12:19:15.816Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 216,
+  "at": "2026-11-07T12:19:16.966Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ }
+]

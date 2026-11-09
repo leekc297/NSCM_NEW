@@ -132,7 +132,7 @@ def main():
         # CR-075(2026-10-28 사용자): 그리드에 표시되는 조회 SP = PROC_M 의 sheet 가 SHEET_COLUMNS 메타를 가진 시트. 결과 1행 집계·룩업 SP 는 대상 아님
         grid_sheets = {r['sheet_name'] for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'sheet_columns.csv')) if r.get('program_id', '').upper() == mid}
         sheet_of = {tail(r['proc']): r.get('sheet', '') for r in pm_all if r.get('menu_id', '').upper() == mid}
-        gold = {tail(g.get('asis_sp', '')): g for g in rdcsv(os.path.join(DOC, 'golden', '_summary.csv')) if g.get('screen', '').upper() == mid}
+        gold = {tail(g.get('asis_sp', '')): g for g in rdcsv(__import__('e2e_paths').golden_path(mid)) if g.get('screen', '').upper() == mid}  # 2026-11-06 화면 폴더 골든 요약 우선
         pkg_msgs = []  # MS1(메시지 의미 대조)용 — TO-BE PKG 본문이 쓰는 MSG ID
         for sp, rs in by_sp.items():
             tp = tobe_proc(sp)

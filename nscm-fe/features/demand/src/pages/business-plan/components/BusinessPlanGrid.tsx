@@ -30,6 +30,7 @@ import {
   GRID_CASCADE_FILTERS,
   GRID_EDIT_COMBO,
   MSG,
+  SHEETS,
 } from '../business-plan.constants';
 import type { BusinessPlanRow, SpreadTitleRow } from '../business-plan.types';
 import styles from '../BusinessPlan.module.scss';
@@ -483,6 +484,8 @@ export const BusinessPlanGrid = ({
       const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: BusinessPlanRow })?.dataItem;
       const isDyn = !staticBindingSet.has(binding) && !!dynKindOf(binding);
       const isInsert = rowItem?.CRUD_TYPE === 'I';
+      // 그리드가 읽기전용(main SAVE 권한 없음, saveAuth 자동 잠금)이면 편집가능(노란) 표시를 하지 않는다.
+      const readOnly = g.isReadOnly;
 
       if (isDyn) {
         // ⭐ editLock R1~R4 — 편집가능 Yellow / 과거 Gray / 그 외 White (#95 — 전체회색·inline 금지)
@@ -494,7 +497,7 @@ export const BusinessPlanGrid = ({
           cutoff: cutoffRef.current,
           window: windowRef.current,
         });
-        toggleClass(e.cell, 'wj-cell-editable', state.editable);
+        toggleClass(e.cell, 'wj-cell-editable', state.editable && !readOnly);
         toggleClass(e.cell, 'wj-cell-non-editable', !state.editable && state.isPast);
         // ⭐ 변경 셀 Red (AS-IS SetCellColor Red — EditTracker 단일 소스 + 신규 행 입력 셀)
         const tracked =
@@ -524,6 +527,7 @@ export const BusinessPlanGrid = ({
       //   insertStaticEditable 은 '직접 입력 가능' 판정이라 이 컬럼들에 false 를 주는 게 맞다
       //   (beginningEdit 의 타이핑 차단이 그 값을 쓴다) — 표시 판정에서만 따로 더한다.
       const isModalCell =
+        !readOnly &&
         isInsert &&
         ((binding === 'PROJECT_CODE' && !isDiv40(division) && !isDiv82(division)) ||
           (binding === 'PROJECT_CODE82' && isDiv82(division)) ||
@@ -531,7 +535,8 @@ export const BusinessPlanGrid = ({
           (binding === 'ITEM_ID40' && isDiv40(division)));
 
       if (rowItem) {
-        const editable = isInsert ? insertStaticEditable(binding, rowItem, division) : false;
+        const editable =
+          !readOnly && isInsert ? insertStaticEditable(binding, rowItem, division) : false;
         toggleClass(e.cell, 'wj-cell-editable', editable || isModalCell);
         toggleClass(e.cell, 'wj-cell-non-editable', false);
         toggleClass(e.cell, 'wj-cell-popup', false); // wrapper 자동 토글 무력화 (전용 span 사용)
@@ -559,7 +564,8 @@ export const BusinessPlanGrid = ({
       const personalColor = colorMetaRef.current.get(binding);
       //   팝업 셀도 편집 가능 취급 — 개인화 배경색이 Yellow 를 덮지 않게 한다.
       const insertEditable =
-        (!!rowItem && isInsert && insertStaticEditable(binding, rowItem, division)) || isModalCell;
+        (!readOnly && !!rowItem && isInsert && insertStaticEditable(binding, rowItem, division)) ||
+        isModalCell;
       if (!insertEditable && personalColor?.cell) {
         e.cell.style.setProperty('background-color', personalColor.cell, 'important');
       } else {
@@ -581,6 +587,11 @@ export const BusinessPlanGrid = ({
       const col = s.columns[e.col];
       const binding = col.binding ?? '';
       const row = s.rows[e.row].dataItem as BusinessPlanRow | undefined;
+      // 읽기전용(main SAVE 권한 없음) — 아래 분기의 e.cancel=false 가 붙여넣기 잠금을 뒤집지 않도록 먼저 차단.
+      if (s.isReadOnly) {
+        e.cancel = true;
+        return;
+      }
 
       if (staticBindingSet.has(binding)) {
         // 모달 셀(Model ITEM_ID/ITEM_ID40 · Project PROJECT_CODE/PROJECT_CODE82) — 신규행에서
@@ -835,6 +846,8 @@ export const BusinessPlanGrid = ({
         return;
       }
       if (ht.cellType !== CellType.Cell) return;
+      // 읽기전용(main SAVE 권한 없음)이면 셀 입력 팝업을 띄우지 않는다. 위 헤더 드릴다운은 조회 기능이라 유지.
+      if (g.isReadOnly) return;
       // 데이터 셀 — 신규(I) 행만 (AS-IS 조기 가드 IsLock || Action!='I' L1643)
       const binding = g.columns[ht.col]?.binding ?? '';
       const row = g.rows[ht.row]?.dataItem as BusinessPlanRow | undefined;
@@ -1134,6 +1147,8 @@ export const BusinessPlanGrid = ({
       dynamicColumns={mainDynamicColumns}
       itemsSource={rows as unknown as WijmoRowItem[]}
       autoGenerateColumns={false}
+      // 읽기전용 자동 잠금을 Biz Plan 시트 SAVE 권한으로 판정(메뉴 단위면 exchangeRate/titleSet SAVE 와 섞임)
+      saveAuth={{ sheetName: SHEETS.MAIN }}
       // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
       //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
       //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.

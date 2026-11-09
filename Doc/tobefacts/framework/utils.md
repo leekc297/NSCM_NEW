@@ -1,4 +1,4 @@
-# utils (273)
+# utils (274)
 
 사용 수 내림차순. **신규 화면은 여기 있는 것만 쓴다** — 없으면 사전(map_control.csv) 보완 제안이 먼저(룰 23).
 
@@ -37,31 +37,34 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **CRUD_TYPE** | `@foundation/constants` | 67 |  |  |
-| **CRUD_MSG** | `@foundation/constants` | 19 |  | CRUD 흐름에서 공통으로 사용하는 메시지 정의입니다. |
+| **CRUD_TYPE** | `@foundation/constants` | 76 |  |  |
+| **CRUD_MSG** | `@foundation/constants` | 20 |  | CRUD 흐름에서 공통으로 사용하는 메시지 정의입니다. |
 | **API_CONFIG** | `@foundation/constants` | 1 |  |  |
 | **CACHE_MAX_AGE** | `@foundation/lib` | 0 |  | 캐시 유지시간(8시간). gcTime 과 PersistQueryClientProvider 의 persist maxAge 를 동일하게 유지해야 영속화가 정상 동작한다(react-query: persist 하려면 gcTime >= maxAge 필요). P |
 | **NEGATIVE_TEXT_COLOR** | `@foundation/utils` | 0 |  | 음수 셀 = 빨간 글자 — 그리드 공통 규약 (REQ:CHAT-20260820-6). mkt-fcst / demand-manager / contribute-view / sales-reports / etc-sales-reports 가 각자 같은 코드를  |
 | **ROUTE_PATHS** | `@foundation/constants` | 0 |  | 라우트 경로 상수 화면(mnuId)별 경로 매핑은 DB 로 이관됨 — SCM_ADM_MNU_M.ROUTE_PATH (세션 메뉴 응답의 menu.routePath 를 viewRegistry.resolveView 가 해석). 여기에는 메뉴 데이터가 아닌  |
 | **ROW_NO_BINDING** | `@foundation/utils` | 0 |  | No 컬럼/헤더 — SYS0011 그리드 공통 (사용자 요구 2026-06-28), 팝업(*Modal.tsx) 그리드 공통 적용 // (2026-09-03)으로 foundation 으로 승격. // · 체크박스 없는 그리드: rowHeader 인덱스  |
 | **VOLATILE_QUERY_OPTIONS** | `@foundation/lib` | 0 |  | 콤보/룩업 전용 캐시 정책 — useCustomQueryClient 의 콤보/룩업 훅에서 스프레드한다. staleTime: 0 = 화면을 새로 열 때(fresh mount)마다 다시 받는다. MDI 는 keep-alive 라 이미 열린 탭은 리마운트되 |
-| **CELL_INPUT_EDIT_TYPE** | `@foundation/constants` | 70 |  |  |
-| **CELL_CONTROL_TYPE** | `@foundation/constants` | 42 |  |  |
-| **BUTTON_TYPE** | `@foundation/constants` | 14 |  |  |
+| **CELL_INPUT_EDIT_TYPE** | `@foundation/constants` | 78 |  |  |
+| **CELL_CONTROL_TYPE** | `@foundation/constants` | 47 |  |  |
+| **BUTTON_TYPE** | `@foundation/constants` | 20 |  |  |
 | **Hotkeys** | `@foundation/models` | 0 |  |  |
 | **HTTP_STATUS** | `@foundation/constants` | 0 |  |  |
-| **safeString** | `@foundation/utils` | 50 |  | unknown 값을 표시·비교용 문자열로 안전 변환. 왜 필요한가 — SP 커서 행의 값 타입은 `unknown`(또는 WijmoPrimitive) 이라 `String(v ?? '')` 를 쓰면 린트 규칙 `no-base-to-string` 이 막는다 |
-| **attachRowNoHeader** | `@foundation/utils` | 22 |  | (체크박스 없는 그리드) 기존 rowHeader 순번(1,2,3…) 컬럼의 좌상단 코너 헤더(TopLeft 패널)에 // 'No' 라벨 추가. CellType.TopLeft 로 코너 셀 직접 타겟 (formatItem 1회 부착 가드 + invalid |
-| **toGridNumber** | `@foundation/utils` | 19 |  | 셀 표시값 → 숫자. 콤마 제거, 숫자가 아니면 0 (문자/코드 컬럼은 자연히 음수 판정에서 빠진다). |
-| **buildNoColumn** | `@foundation/utils` | 17 |  | (체크박스 그리드) No 데이터 컬럼 — itemsSource 의 ROW_NO 값 표시. |
-| **paintNegativeText** | `@foundation/utils` | 17 |  | 음수면 빨간 글자, 아니면 원복. 필수: 음수가 아닐 때 반드시 지운다 — Wijmo 는 셀 DOM 을 재사용하므로 칠하기만 하면 스크롤 뒤 엉뚱한 셀에 색이 남는다. 필수: important 로 넣는다 — 편집/잠금 셀 클래스(.wj-cell-edi |
-| **withRowNo** | `@foundation/utils` | 17 |  | itemsSource 각 행에 ROW_NO(=index+1) 주입 (읽기전용 그리드라 무해). |
-| **isInsertRow** | `@foundation/utils` | 11 |  | 신규 입력행(CRUD_TYPE='I') 판정 — 값이 같아도 인접 행과 병합하지 않기 위한 공통 가드. // 병합되면 owner(상단 행)가 편집을 대표해 기존 행이 함께 바뀌는 문제로 이어진다. // mkt-fcst/sales-plan 등 Hiera |
+| **safeString** | `@foundation/utils` | 56 |  | unknown 값을 표시·비교용 문자열로 안전 변환. 왜 필요한가 — SP 커서 행의 값 타입은 `unknown`(또는 WijmoPrimitive) 이라 `String(v ?? '')` 를 쓰면 린트 규칙 `no-base-to-string` 이 막는다 |
+| **attachRowNoHeader** | `@foundation/utils` | 26 |  | (체크박스 없는 그리드) 기존 rowHeader 순번(1,2,3…) 컬럼의 좌상단 코너 헤더(TopLeft 패널)에 // 'No' 라벨 추가. CellType.TopLeft 로 코너 셀 직접 타겟 (formatItem 1회 부착 가드 + invalid |
+| **toGridNumber** | `@foundation/utils` | 21 |  | 셀 표시값 → 숫자. 콤마 제거, 숫자가 아니면 0 (문자/코드 컬럼은 자연히 음수 판정에서 빠진다). |
+| **paintNegativeText** | `@foundation/utils` | 19 |  | 음수면 빨간 글자, 아니면 원복. 필수: 음수가 아닐 때 반드시 지운다 — Wijmo 는 셀 DOM 을 재사용하므로 칠하기만 하면 스크롤 뒤 엉뚱한 셀에 색이 남는다. 필수: important 로 넣는다 — 편집/잠금 셀 클래스(.wj-cell-edi |
+| **buildNoColumn** | `@foundation/utils` | 18 |  | (체크박스 그리드) No 데이터 컬럼 — itemsSource 의 ROW_NO 값 표시. |
+| **withRowNo** | `@foundation/utils` | 18 |  | itemsSource 각 행에 ROW_NO(=index+1) 주입 (읽기전용 그리드라 무해). |
+| **isInsertRow** | `@foundation/utils` | 17 |  | 신규 입력행(CRUD_TYPE='I') 판정 — 값이 같아도 인접 행과 병합하지 않기 위한 공통 가드. // 병합되면 owner(상단 행)가 편집을 대표해 기존 행이 함께 바뀌는 문제로 이어진다. // mkt-fcst/sales-plan 등 Hiera |
 | **sessionTimeZone** | `@foundation/utils` | 10 |  | SP 의 `p_time_zone`(또는 콤보 `@timeZone`) 인자로 보낼 사용자 타임존 코드. AS-IS 는 로그인 때 `TB_FX_User.TimeZone` 을 `UserInfoContext` 에 담아 모든 저장 SP 에 `p_time_zon |
 | **keepRowVisibleUnderFilter** | `@foundation/utils` | 6 |  | 필터가 걸린 상태에서 추가한 신규행이 화면에서 사라지는 문제 보정. FlexGridFilter._filter 는 `grid._newAddedRowsSet`(WeakSet) 에 든 행을 조건 검사 없이 통과시킨다 — 편집한 행이 필터 때문에 눈앞에서 사 |
-| **ensureTopLeftMergeManager** | `@foundation/utils` | 4 |  |  |
-| **parseComboFilterBindings** | `@foundation/utils` | 4 |  | 셀 콤보 행 단위 필터 조건 (컬럼 메타 ATTRIBUTE2) 을 파싱한다. 문법: `'행컬럼:콤보컬럼'`, 조건이 여럿이면 콤마로 잇는다. 예) `'DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER'` 형식에  |
+| **parseComboFilterBindings** | `@foundation/utils` | 6 |  | 셀 콤보 행 단위 필터 조건 (컬럼 메타 ATTRIBUTE2) 을 파싱한다. 문법: `'행컬럼:콤보컬럼'`, 조건이 여럿이면 콤마로 잇는다. 예) `'DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER'` 형식에  |
+| **ensureTopLeftMergeManager** | `@foundation/utils` | 5 |  |  |
 | **buildLeafColumnDataMap** | `@foundation/utils` | 2 |  | 콤보 컬럼의 DataMap 을 만든다 — 행 파라미터(PARAM10='D')면 getRowParamDataMap, 아니면 getDataMap. toLeafColumn 이 컬럼 config 에 dataMap 을 굽는 것과 같은 판정이다. 공용 DataG |
+| **rebindFilterColumns** | `@foundation/utils` | 2 |  | columnGroups 재대입으로 버려진 Column 을 붙들고 있는 필터를 현재 컬럼에 다시 묶는다. wijmo 의 `set columnGroups(e){ this.columns.clear(); this._grpHdl.createColumnGroup |
+| **rowParamValues** | `@foundation/utils` | 2 |  | 행 파라미터 콤보의 SQL 바인드 값 — PARAM2 의 `행컬럼:바인드명` 을 바인드명 기준으로 접는다. 한 바인드명에 행 컬럼을 여러 개 걸 수 있다. 같은 뜻의 값이 division 에 따라 다른 컬럼으로 내려오는 경우가 있어서다 — End Cu |
+| **sortComboDisplayNames** | `@foundation/utils` | 2 |  | 표시 목록 정렬 — 숫자 -> 영어 -> 한글 -> 그 외, 같은 갈래 안에서는 사전순. 주의: 공용 콤보(getDataMap/getRowParamDataMap)는 더 이상 이 정렬을 쓰지 않는다. AS-IS 처럼 콤보 SQL/서버 응답 순서를 그대로 |
 | **stripRequiredMark** | `@foundation/utils` | 2 |  | 라벨 끝 필수표시(`*`)를 떼어낸 표시용 라벨. |
 | **captureGridFilter** | `@foundation/utils` | 1 |  | 조회로 데이터가 다시 실리기 직전의 컬럼 필터를 떠 둔다 (restoreGridFilter 와 한 쌍). wijmo 는 `itemsSourceChanged` 에서 필터를 통째로 비운다(FlexGridFilter 생성자가 clear 를 직접 건다). 이 |
 | **captureGridSort** | `@foundation/utils` | 1 |  | `itemsSource` 가 새 배열로 갈리기 직전, 사용자가 헤더 클릭으로 건 정렬을 떠 둔다 (`restoreGridSort` 와 한 쌍 — `captureGridFilter`/`restoreGridFilter` 의 정렬판). wijmo `Flex |
@@ -69,11 +72,8 @@ props/params:
 | **filterComboRowsByRowItem** | `@foundation/utils` | 1 |  | 행 컨텍스트로 콤보 후보를 좁힌다 — 드롭다운 후보와 값 유효성 판정의 **단일 기준**. 표시(getDataMap)와 상위 변경 시 하위 값 정리(comboCascade)가 같은 함수를 써야 "드롭다운에 뜨는 값 = 셀에 남을 수 있는 값" 불변식이 |
 | **getInsertAnchor** | `@foundation/utils` | 1 |  | `pinInsertedRow` 로 등록해 둔 앵커를 조회한다 — 이 행이 아직 저장 전 신규행이고 pin 이 걸려 있으면 그 앵커 객체를, 아니면 `undefined` 를 돌려준다. 용도: 화면이 자체적으로 행 배열을 재정렬해야 하는 경우(예: for |
 | **isRowParamCombo** | `@foundation/utils` | 1 |  | 행 파라미터 콤보 판정 — 컬럼 메타 PARAM10(ATTRIBUTE10) 이 'D' 인 콤보 컬럼. D 면 PARAM2 오른쪽이 "콤보 결과 컬럼명" 이 아니라 "콤보 SQL 바인드명" 으로 해석된다. 같은 슬롯에 두 문법이 겹치므로 판정이 곧 해석 |
-| **rebindFilterColumns** | `@foundation/utils` | 1 |  | columnGroups 재대입으로 버려진 Column 을 붙들고 있는 필터를 현재 컬럼에 다시 묶는다. wijmo 의 `set columnGroups(e){ this.columns.clear(); this._grpHdl.createColumnGroup |
 | **restoreGridFilter** | `@foundation/utils` | 1 |  | captureGridFilter 로 떠 둔 필터를 새로 실린 데이터 위에 다시 적용한다. 지금 그리드에 없는 컬럼의 필터는 버린다. wijmo 는 binding 으로 컬럼을 못 찾으면 화면에 없는 Column 을 즉석에서 만들어 필터를 붙이는데(set |
 | **restoreGridSort** | `@foundation/utils` | 1 |  | `captureGridSort` 로 떠 둔 정렬을 새로 실린 데이터 위에 다시 적용한다. 지금 그리드에 없는 컬럼을 가리키는 정렬은 버린다 — division 전환처럼 컬럼 구성이 바뀌는 조회에서 존재하지 않는 컬럼을 정렬 대상으로 복원하면 보이지도  |
-| **rowParamValues** | `@foundation/utils` | 1 |  | 행 파라미터 콤보의 SQL 바인드 값 — PARAM2 의 `행컬럼:바인드명` 을 바인드명 기준으로 접는다. 한 바인드명에 행 컬럼을 여러 개 걸 수 있다. 같은 뜻의 값이 division 에 따라 다른 컬럼으로 내려오는 경우가 있어서다 — End Cu |
-| **sortComboDisplayNames** | `@foundation/utils` | 1 |  | 표시 목록 정렬 — 숫자 -> 영어 -> 한글 -> 그 외, 같은 갈래 안에서는 사전순. 주의: 공용 콤보(getDataMap/getRowParamDataMap)는 더 이상 이 정렬을 쓰지 않는다. AS-IS 처럼 콤보 SQL/서버 응답 순서를 그대로 |
 | **camelCase** | `@foundation/utils` | 0 |  |  |
 | **capitalize** | `@foundation/utils` | 0 |  | 문자열 유틸리티 |
 | **clamp** | `@foundation/utils` | 0 |  |  |
@@ -117,9 +117,9 @@ props/params:
 | **rowParamValue** | `@foundation/utils` | 0 |  | 행 파라미터 값 정규화 — 조회 파라미터와 조합 키가 같은 규칙을 쓰도록 한 곳에 둔다. |
 | **setQueryErrorHandler** | `@foundation/lib` | 0 |  |  |
 | **shouldPersistQuery** | `@foundation/lib` | 0 |  | IndexedDB 영속 대상 필터(PersistQueryClientProvider 의 dehydrateOptions). 기본 규칙(성공한 쿼리만 영속)은 유지하고, 콤보/룩업만 제외한다. 제외하지 않으면 새로고침해도 옛날 콤보가 복원돼 위 staleT |
-| **apiClient** | `@foundation/apis` | 306 |  |  |
-| **i18n** | `@foundation/lib` | 17 |  |  |
-| **queryClient** | `@foundation/lib` | 11 |  |  |
+| **apiClient** | `@foundation/apis` | 318 |  |  |
+| **i18n** | `@foundation/lib` | 20 |  |  |
+| **queryClient** | `@foundation/lib` | 12 |  |  |
 | **mockApiClient** | `@foundation/apis` | 0 |  |  |
 | **primary** | `@foundation/styles` | 0 |  |  |
 | **secondary** | `@foundation/styles` | 0 |  |  |
@@ -142,6 +142,75 @@ props/params:
 ```ts
 (value: unknown): number
 ```
+
+### paintNegativeText  <sub>packages/foundation/src/utils/gridNegativeText.ts:38</sub>
+
+```ts
+(cell: HTMLElement, value: number): void
+```
+
+props/params:
+
+- `accessKey: string — The **`HTMLElement.accessKey`** property sets the keystroke which a user can press to jump to a given element. [MDN Reference](https://developer.mozilla.org/doc`
+- `accessKeyLabel: string — The **`HTMLElement.accessKeyLabel`** read-only property returns a string containing the element's browser-assigned access key (if any); otherwise it returns an `
+- `autocapitalize: string — The **`autocapitalize`** property of the HTMLElement interface represents the element's capitalization behavior for user input. [MDN Reference](https://develope`
+- `autocorrect: boolean — The **`autocorrect`** property of the HTMLElement interface controls whether or not autocorrection of editable text is enabled for spelling and/or punctuation e`
+- `dir: string — The **`HTMLElement.dir`** property indicates the text writing directionality of the content of the current element. [MDN Reference](https://developer.mozilla.or`
+- `draggable: boolean — The **`draggable`** property of the HTMLElement interface gets and sets a Boolean primitive indicating if the element is draggable. [MDN Reference](https://deve`
+- `hidden: boolean — The HTMLElement property **`hidden`** reflects the value of the element's `hidden` attribute. [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLEle`
+- `inert: boolean — The HTMLElement property **`inert`** reflects the value of the element's `inert` attribute. [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLEleme`
+- `innerText: string — The **`innerText`** property of the HTMLElement interface represents the rendered text content of a node and its descendants. [MDN Reference](https://developer.`
+- `lang: string — The **`lang`** property of the HTMLElement interface indicates the base language of an element's attribute values and text content, in the form of a MISSING: RF`
+- `offsetHeight: number — The **`offsetHeight`** read-only property of the HTMLElement interface returns the height of an element, including vertical padding and borders, as an integer. `
+- `offsetLeft: number — The **`offsetLeft`** read-only property of the HTMLElement interface returns the number of pixels that the _upper left corner_ of the current element is offset `
+- `offsetParent: Element — The **`HTMLElement.offsetParent`** read-only property returns a reference to the element which is the closest (nearest in the containment hierarchy) positioned `
+- `offsetTop: number — The **`offsetTop`** read-only property of the HTMLElement interface returns the distance from the outer border of the current element (including its margin) to `
+- `offsetWidth: number — The **`offsetWidth`** read-only property of the HTMLElement interface returns the layout width of an element as an integer. [MDN Reference](https://developer.mo`
+- `outerText: string — The **`outerText`** property of the HTMLElement interface returns the same value as HTMLElement.innerText. [MDN Reference](https://developer.mozilla.org/docs/We`
+- `popover: string — The **`popover`** property of the HTMLElement interface gets and sets an element's popover state via JavaScript (`'auto'`, `'hint'`, or `'manual'`), and can be `
+- `spellcheck: boolean — The **`spellcheck`** property of the HTMLElement interface represents a boolean value that controls the spell-checking hint. [MDN Reference](https://developer.m`
+- `title: string — The **`HTMLElement.title`** property represents the title of the element: the text usually displayed in a 'tooltip' popup when the mouse is over the node. [MDN `
+- `translate: boolean — The **`translate`** property of the HTMLElement interface indicates whether an element's attribute values and the values of its Text node children are to be tra`
+- `writingSuggestions: string — The **`writingSuggestions`** property of the HTMLElement interface is a string indicating if browser-provided writing suggestions should be enabled under the sc`
+- `attachInternals: () => ElementInternals — The **`HTMLElement.attachInternals()`** method returns an ElementInternals object. [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/attach`
+- `click: () => void — The **`HTMLElement.click()`** method simulates a mouse click on an element. [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/click)`
+- `hidePopover: () => void — The **`hidePopover()`** method of the HTMLElement interface hides a popover element (i.e., one that has a valid `popover` attribute) by removing it from the top`
+- `showPopover: () => void — The **`showPopover()`** method of the HTMLElement interface shows a Popover_API element (i.e., one that has a valid `popover` attribute) by adding it to the top`
+- `togglePopover: (options?: boolean) => boolean — The **`togglePopover()`** method of the HTMLElement interface toggles a Popover_API element (i.e., one that has a valid `popover` attribute) between the hidden `
+- `addEventListener: { <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, e —  The **`addEventListener()`** method of the EventTarget interface sets up a function that will be called whenever the specified event is delivered to the target`
+- `removeEventListener: { <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, e —  The **`removeEventListener()`** method of the EventTarget interface removes an event listener previously registered with EventTarget.addEventListener() from th`
+- `attributes: NamedNodeMap — The **`Element.attributes`** property returns a live collection of all attribute nodes registered to the specified node. [MDN Reference](https://developer.mozil`
+- `classList: DOMTokenList — The **`Element.classList`** is a read-only property that returns a live DOMTokenList collection of the `class` attributes of the element. [MDN Reference](https:`
+- `className: string — The **`className`** property of the of the specified element. [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/className)`
+- `clientHeight: number — The **`clientHeight`** read-only property of the Element interface is zero for elements with no CSS or inline layout boxes; otherwise, it's the inner height of `
+- `clientLeft: number — The **`clientLeft`** read-only property of the Element interface returns the width of the left border of an element in pixels. [MDN Reference](https://developer`
+- `clientTop: number — The **`clientTop`** read-only property of the Element interface returns the width of the top border of an element in pixels. [MDN Reference](https://developer.m`
+- `clientWidth: number — The **`clientWidth`** read-only property of the Element interface is zero for inline elements and elements with no CSS; otherwise, it's the inner width of an el`
+- `currentCSSZoom: number — The **`currentCSSZoom`** read-only property of the Element interface provides the 'effective' CSS `zoom` of an element, taking into account the zoom applied to `
+- `id: string — The **`id`** property of the Element interface represents the element's identifier, reflecting the **`id`** global attribute. [MDN Reference](https://developer.`
+- `innerHTML: string — The **`innerHTML`** property of the Element interface gets or sets the HTML or XML markup contained within the element. [MDN Reference](https://developer.mozill`
+- `localName: string — The **`Element.localName`** read-only property returns the local part of the qualified name of an element. [MDN Reference](https://developer.mozilla.org/docs/We`
+- `namespaceURI: string — The **`Element.namespaceURI`** read-only property returns the namespace URI of the element, or `null` if the element is not in a namespace. [MDN Reference](http`
+- `onfullscreenchange: (this: Element, ev: Event) => any — [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/fullscreenchange_event)`
+- `onfullscreenerror: (this: Element, ev: Event) => any — [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/fullscreenerror_event)`
+- `outerHTML: string — The **`outerHTML`** attribute of the Element DOM interface gets the serialized HTML fragment describing the element including its descendants. [MDN Reference](h`
+- `ownerDocument: Document — The read-only **`ownerDocument`** property of the Node interface returns the top-level document object of the node. [MDN Reference](https://developer.mozilla.or`
+- `part: DOMTokenList — The **`part`** property of the Element interface represents the part identifier(s) of the element (i.e., set using the `part` attribute), returned as a DOMToken`
+- `prefix: string — The **`Element.prefix`** read-only property returns the namespace prefix of the specified element, or `null` if no prefix is specified. [MDN Reference](https://`
+- `scrollHeight: number — The **`scrollHeight`** read-only property of the Element interface is a measurement of the height of an element's content, including content not visible on the `
+- `scrollLeft: number — The **`scrollLeft`** property of the Element interface gets or sets the number of pixels by which an element's content is scrolled from its left edge. [MDN Refe`
+- `scrollTop: number — The **`scrollTop`** property of the Element interface gets or sets the number of pixels by which an element's content is scrolled from its top edge. [MDN Refere`
+- `scrollWidth: number — The **`scrollWidth`** read-only property of the Element interface is a measurement of the width of an element's content, including content not visible on the sc`
+- `shadowRoot: ShadowRoot — The `Element.shadowRoot` read-only property represents the shadow root hosted by the element. [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element`
+- `slot: string — The **`slot`** property of the Element interface returns the name of the shadow DOM slot the element is inserted in. [MDN Reference](https://developer.mozilla.o`
+- `tagName: string — The **`tagName`** read-only property of the Element interface returns the tag name of the element on which it's called. [MDN Reference](https://developer.mozill`
+- `attachShadow: (init: ShadowRootInit) => ShadowRoot — The **`Element.attachShadow()`** method attaches a shadow DOM tree to the specified element and returns a reference to its ShadowRoot. [MDN Reference](https://d`
+- `checkVisibility: (options?: CheckVisibilityOptions) => boolean — The **`checkVisibility()`** method of the Element interface checks whether the element is visible. [MDN Reference](https://developer.mozilla.org/docs/Web/API/El`
+- `closest: { <K extends keyof HTMLElementTagNameMap>(selector: K): HTMLElementTagNameMap[K] — The **`closest()`** method of the Element interface traverses the element and its parents (heading toward the document root) until it finds a node that matches `
+- `computedStyleMap: () => StylePropertyMapReadOnly — The **`computedStyleMap()`** method of the Element interface returns a StylePropertyMapReadOnly interface which provides a read-only representation of a CSS dec`
+- `getAttribute: (qualifiedName: string) => string — The **`getAttribute()`** method of the element. [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/getAttribute)`
+- `getAttributeNS: (namespace: string, localName: string) => string — The **`getAttributeNS()`** method of the Element interface returns the string value of the attribute with the specified namespace and name. [MDN Reference](http`
+- `getAttributeNames: () => string[] — The **`getAttributeNames()`** method of the array. [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/getAttributeNames)`
 
 ### buildNoColumn  <sub>packages/foundation/src/utils/gridRowNo.ts:16</sub>
 
@@ -213,75 +282,6 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### paintNegativeText  <sub>packages/foundation/src/utils/gridNegativeText.ts:38</sub>
-
-```ts
-(cell: HTMLElement, value: number): void
-```
-
-props/params:
-
-- `accessKey: string — The **`HTMLElement.accessKey`** property sets the keystroke which a user can press to jump to a given element. [MDN Reference](https://developer.mozilla.org/doc`
-- `accessKeyLabel: string — The **`HTMLElement.accessKeyLabel`** read-only property returns a string containing the element's browser-assigned access key (if any); otherwise it returns an `
-- `autocapitalize: string — The **`autocapitalize`** property of the HTMLElement interface represents the element's capitalization behavior for user input. [MDN Reference](https://develope`
-- `autocorrect: boolean — The **`autocorrect`** property of the HTMLElement interface controls whether or not autocorrection of editable text is enabled for spelling and/or punctuation e`
-- `dir: string — The **`HTMLElement.dir`** property indicates the text writing directionality of the content of the current element. [MDN Reference](https://developer.mozilla.or`
-- `draggable: boolean — The **`draggable`** property of the HTMLElement interface gets and sets a Boolean primitive indicating if the element is draggable. [MDN Reference](https://deve`
-- `hidden: boolean — The HTMLElement property **`hidden`** reflects the value of the element's `hidden` attribute. [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLEle`
-- `inert: boolean — The HTMLElement property **`inert`** reflects the value of the element's `inert` attribute. [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLEleme`
-- `innerText: string — The **`innerText`** property of the HTMLElement interface represents the rendered text content of a node and its descendants. [MDN Reference](https://developer.`
-- `lang: string — The **`lang`** property of the HTMLElement interface indicates the base language of an element's attribute values and text content, in the form of a MISSING: RF`
-- `offsetHeight: number — The **`offsetHeight`** read-only property of the HTMLElement interface returns the height of an element, including vertical padding and borders, as an integer. `
-- `offsetLeft: number — The **`offsetLeft`** read-only property of the HTMLElement interface returns the number of pixels that the _upper left corner_ of the current element is offset `
-- `offsetParent: Element — The **`HTMLElement.offsetParent`** read-only property returns a reference to the element which is the closest (nearest in the containment hierarchy) positioned `
-- `offsetTop: number — The **`offsetTop`** read-only property of the HTMLElement interface returns the distance from the outer border of the current element (including its margin) to `
-- `offsetWidth: number — The **`offsetWidth`** read-only property of the HTMLElement interface returns the layout width of an element as an integer. [MDN Reference](https://developer.mo`
-- `outerText: string — The **`outerText`** property of the HTMLElement interface returns the same value as HTMLElement.innerText. [MDN Reference](https://developer.mozilla.org/docs/We`
-- `popover: string — The **`popover`** property of the HTMLElement interface gets and sets an element's popover state via JavaScript (`'auto'`, `'hint'`, or `'manual'`), and can be `
-- `spellcheck: boolean — The **`spellcheck`** property of the HTMLElement interface represents a boolean value that controls the spell-checking hint. [MDN Reference](https://developer.m`
-- `title: string — The **`HTMLElement.title`** property represents the title of the element: the text usually displayed in a 'tooltip' popup when the mouse is over the node. [MDN `
-- `translate: boolean — The **`translate`** property of the HTMLElement interface indicates whether an element's attribute values and the values of its Text node children are to be tra`
-- `writingSuggestions: string — The **`writingSuggestions`** property of the HTMLElement interface is a string indicating if browser-provided writing suggestions should be enabled under the sc`
-- `attachInternals: () => ElementInternals — The **`HTMLElement.attachInternals()`** method returns an ElementInternals object. [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/attach`
-- `click: () => void — The **`HTMLElement.click()`** method simulates a mouse click on an element. [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/click)`
-- `hidePopover: () => void — The **`hidePopover()`** method of the HTMLElement interface hides a popover element (i.e., one that has a valid `popover` attribute) by removing it from the top`
-- `showPopover: () => void — The **`showPopover()`** method of the HTMLElement interface shows a Popover_API element (i.e., one that has a valid `popover` attribute) by adding it to the top`
-- `togglePopover: (options?: boolean) => boolean — The **`togglePopover()`** method of the HTMLElement interface toggles a Popover_API element (i.e., one that has a valid `popover` attribute) between the hidden `
-- `addEventListener: { <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, e —  The **`addEventListener()`** method of the EventTarget interface sets up a function that will be called whenever the specified event is delivered to the target`
-- `removeEventListener: { <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, e —  The **`removeEventListener()`** method of the EventTarget interface removes an event listener previously registered with EventTarget.addEventListener() from th`
-- `attributes: NamedNodeMap — The **`Element.attributes`** property returns a live collection of all attribute nodes registered to the specified node. [MDN Reference](https://developer.mozil`
-- `classList: DOMTokenList — The **`Element.classList`** is a read-only property that returns a live DOMTokenList collection of the `class` attributes of the element. [MDN Reference](https:`
-- `className: string — The **`className`** property of the of the specified element. [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/className)`
-- `clientHeight: number — The **`clientHeight`** read-only property of the Element interface is zero for elements with no CSS or inline layout boxes; otherwise, it's the inner height of `
-- `clientLeft: number — The **`clientLeft`** read-only property of the Element interface returns the width of the left border of an element in pixels. [MDN Reference](https://developer`
-- `clientTop: number — The **`clientTop`** read-only property of the Element interface returns the width of the top border of an element in pixels. [MDN Reference](https://developer.m`
-- `clientWidth: number — The **`clientWidth`** read-only property of the Element interface is zero for inline elements and elements with no CSS; otherwise, it's the inner width of an el`
-- `currentCSSZoom: number — The **`currentCSSZoom`** read-only property of the Element interface provides the 'effective' CSS `zoom` of an element, taking into account the zoom applied to `
-- `id: string — The **`id`** property of the Element interface represents the element's identifier, reflecting the **`id`** global attribute. [MDN Reference](https://developer.`
-- `innerHTML: string — The **`innerHTML`** property of the Element interface gets or sets the HTML or XML markup contained within the element. [MDN Reference](https://developer.mozill`
-- `localName: string — The **`Element.localName`** read-only property returns the local part of the qualified name of an element. [MDN Reference](https://developer.mozilla.org/docs/We`
-- `namespaceURI: string — The **`Element.namespaceURI`** read-only property returns the namespace URI of the element, or `null` if the element is not in a namespace. [MDN Reference](http`
-- `onfullscreenchange: (this: Element, ev: Event) => any — [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/fullscreenchange_event)`
-- `onfullscreenerror: (this: Element, ev: Event) => any — [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/fullscreenerror_event)`
-- `outerHTML: string — The **`outerHTML`** attribute of the Element DOM interface gets the serialized HTML fragment describing the element including its descendants. [MDN Reference](h`
-- `ownerDocument: Document — The read-only **`ownerDocument`** property of the Node interface returns the top-level document object of the node. [MDN Reference](https://developer.mozilla.or`
-- `part: DOMTokenList — The **`part`** property of the Element interface represents the part identifier(s) of the element (i.e., set using the `part` attribute), returned as a DOMToken`
-- `prefix: string — The **`Element.prefix`** read-only property returns the namespace prefix of the specified element, or `null` if no prefix is specified. [MDN Reference](https://`
-- `scrollHeight: number — The **`scrollHeight`** read-only property of the Element interface is a measurement of the height of an element's content, including content not visible on the `
-- `scrollLeft: number — The **`scrollLeft`** property of the Element interface gets or sets the number of pixels by which an element's content is scrolled from its left edge. [MDN Refe`
-- `scrollTop: number — The **`scrollTop`** property of the Element interface gets or sets the number of pixels by which an element's content is scrolled from its top edge. [MDN Refere`
-- `scrollWidth: number — The **`scrollWidth`** read-only property of the Element interface is a measurement of the width of an element's content, including content not visible on the sc`
-- `shadowRoot: ShadowRoot — The `Element.shadowRoot` read-only property represents the shadow root hosted by the element. [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element`
-- `slot: string — The **`slot`** property of the Element interface returns the name of the shadow DOM slot the element is inserted in. [MDN Reference](https://developer.mozilla.o`
-- `tagName: string — The **`tagName`** read-only property of the Element interface returns the tag name of the element on which it's called. [MDN Reference](https://developer.mozill`
-- `attachShadow: (init: ShadowRootInit) => ShadowRoot — The **`Element.attachShadow()`** method attaches a shadow DOM tree to the specified element and returns a reference to its ShadowRoot. [MDN Reference](https://d`
-- `checkVisibility: (options?: CheckVisibilityOptions) => boolean — The **`checkVisibility()`** method of the Element interface checks whether the element is visible. [MDN Reference](https://developer.mozilla.org/docs/Web/API/El`
-- `closest: { <K extends keyof HTMLElementTagNameMap>(selector: K): HTMLElementTagNameMap[K] — The **`closest()`** method of the Element interface traverses the element and its parents (heading toward the document root) until it finds a node that matches `
-- `computedStyleMap: () => StylePropertyMapReadOnly — The **`computedStyleMap()`** method of the Element interface returns a StylePropertyMapReadOnly interface which provides a read-only representation of a CSS dec`
-- `getAttribute: (qualifiedName: string) => string — The **`getAttribute()`** method of the element. [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/getAttribute)`
-- `getAttributeNS: (namespace: string, localName: string) => string — The **`getAttributeNS()`** method of the Element interface returns the string value of the attribute with the specified namespace and name. [MDN Reference](http`
-- `getAttributeNames: () => string[] — The **`getAttributeNames()`** method of the array. [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/getAttributeNames)`
-
 ### withRowNo  <sub>packages/foundation/src/utils/gridRowNo.ts:31</sub>
 
 ```ts
@@ -340,13 +340,7 @@ props/params:
 <T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, row: T): void
 ```
 
-### ensureTopLeftMergeManager  <sub>packages/foundation/src/utils/mergeManager.ts:38</sub>
-
-```ts
-(grid: FlexGrid): void
-```
-
-### parseComboFilterBindings  <sub>packages/foundation/src/utils/columnMapping.ts:137</sub>
+### parseComboFilterBindings  <sub>packages/foundation/src/utils/columnMapping.ts:151</sub>
 
 ```ts
 (bindingString?: string): Record<string, string>
@@ -416,13 +410,77 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### buildLeafColumnDataMap  <sub>packages/foundation/src/utils/columnMapping.ts:638</sub>
+### ensureTopLeftMergeManager  <sub>packages/foundation/src/utils/mergeManager.ts:38</sub>
+
+```ts
+(grid: FlexGrid): void
+```
+
+### buildLeafColumnDataMap  <sub>packages/foundation/src/utils/columnMapping.ts:652</sub>
 
 ```ts
 (column: RawFlexGridColumnConfig): any
 ```
 
-### stripRequiredMark  <sub>packages/foundation/src/utils/columnMapping.ts:655</sub>
+### rebindFilterColumns  <sub>packages/foundation/src/utils/gridAction.ts:91</sub>
+
+```ts
+<T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, gridFilter?: any): boolean
+```
+
+### rowParamValues  <sub>packages/foundation/src/utils/columnMapping.ts:241</sub>
+
+```ts
+(bindings: Record<string, string>, rowItem: any): Record<string, string>
+```
+
+### sortComboDisplayNames  <sub>packages/foundation/src/utils/columnMapping.ts:532</sub>
+
+```ts
+(names: string[]): string[]
+```
+
+props/params:
+
+- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
+- `toString: () => string — Returns a string representation of an array.`
+- `toLocaleString: { (): string; (locales: string`
+- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
+- `pop: () => string — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `push: (...items: string[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
+- `concat: { (...items: ConcatArray<string>[]): string[]; (...items: (string`
+- `ConcatArray< — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
+- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
+- `reverse: () => string[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
+- `shift: () => string — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `slice: (start?: number, end?: number) => string[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
+- `sort: (compareFn?: (a: string, b: string) => number) => string[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
+- `splice: { (start: number, deleteCount?: number): string[]; (start: number, deleteCount:  — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
+- `unshift: (...items: string[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
+- `indexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
+- `lastIndexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
+- `every: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Determines whether all the members of an array satisfy the specified test.`
+- `some: (predicate: (value: string, index: number, array: string[]) => unknown, thisArg? — Determines whether the specified callback function returns true for any element of an array.`
+- `forEach: (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?:  — Performs the specified action for each element in an array.`
+- `map: <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?:  — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
+- `filter: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Returns the elements of an array that meet the condition specified in a callback function.`
+- `reduce: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
+- `reduceRight: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
+- `find: { <S extends string>(predicate: (value: string, index: number, obj: string[]) => — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
+- `findIndex: (predicate: (value: string, index: number, obj: string[]) => unknown, thisArg?:  — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
+- `fill: (value: string, start?: number, end?: number) => string[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
+- `copyWithin: (target: number, start: number, end?: number) => string[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
+- `entries: () => ArrayIterator<[number, string]> — Returns an iterable of key, value pairs for every entry in the array`
+- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
+- `values: () => ArrayIterator<string> — Returns an iterable of values in the array`
+- `includes: (searchElement: string, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
+- `flatMap: <U, This = undefined>(callback: (this: This, value: string, index: number, array — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
+- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
+- `at: (index: number) => string — Returns the item located at the specified index.`
+- `__@iterator@896: () => ArrayIterator<string> — Iterator`
+- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
+
+### stripRequiredMark  <sub>packages/foundation/src/utils/columnMapping.ts:669</sub>
 
 ```ts
 (label?: string): string
@@ -510,7 +568,7 @@ props/params:
 <T extends WijmoRowItem = WijmoRowItem>(row: T, binding: string, tracker: EditTracker<T>): void
 ```
 
-### filterComboRowsByRowItem  <sub>packages/foundation/src/utils/columnMapping.ts:266</sub>
+### filterComboRowsByRowItem  <sub>packages/foundation/src/utils/columnMapping.ts:280</sub>
 
 ```ts
 (comboRows: ComboResponse[], bindingString: string, rowItem: WijmoRowItem): ComboResponse[]
@@ -561,16 +619,10 @@ props/params:
 <T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, row: T): T
 ```
 
-### isRowParamCombo  <sub>packages/foundation/src/utils/columnMapping.ts:203</sub>
+### isRowParamCombo  <sub>packages/foundation/src/utils/columnMapping.ts:217</sub>
 
 ```ts
 (column: RawFlexGridColumnConfig): boolean
-```
-
-### rebindFilterColumns  <sub>packages/foundation/src/utils/gridAction.ts:91</sub>
-
-```ts
-<T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, gridFilter?: any): boolean
 ```
 
 ### restoreGridFilter  <sub>packages/foundation/src/utils/gridAction.ts:158</sub>
@@ -584,58 +636,6 @@ props/params:
 ```ts
 (grid: FlexGrid, snapshot: GridSortSnapshot[]): boolean
 ```
-
-### rowParamValues  <sub>packages/foundation/src/utils/columnMapping.ts:227</sub>
-
-```ts
-(bindings: Record<string, string>, rowItem: any): Record<string, string>
-```
-
-### sortComboDisplayNames  <sub>packages/foundation/src/utils/columnMapping.ts:518</sub>
-
-```ts
-(names: string[]): string[]
-```
-
-props/params:
-
-- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
-- `toString: () => string — Returns a string representation of an array.`
-- `toLocaleString: { (): string; (locales: string`
-- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
-- `pop: () => string — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
-- `push: (...items: string[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
-- `concat: { (...items: ConcatArray<string>[]): string[]; (...items: (string`
-- `ConcatArray< — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
-- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
-- `reverse: () => string[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
-- `shift: () => string — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
-- `slice: (start?: number, end?: number) => string[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
-- `sort: (compareFn?: (a: string, b: string) => number) => string[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
-- `splice: { (start: number, deleteCount?: number): string[]; (start: number, deleteCount:  — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
-- `unshift: (...items: string[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
-- `indexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
-- `lastIndexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
-- `every: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Determines whether all the members of an array satisfy the specified test.`
-- `some: (predicate: (value: string, index: number, array: string[]) => unknown, thisArg? — Determines whether the specified callback function returns true for any element of an array.`
-- `forEach: (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?:  — Performs the specified action for each element in an array.`
-- `map: <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?:  — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
-- `filter: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Returns the elements of an array that meet the condition specified in a callback function.`
-- `reduce: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
-- `reduceRight: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
-- `find: { <S extends string>(predicate: (value: string, index: number, obj: string[]) => — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
-- `findIndex: (predicate: (value: string, index: number, obj: string[]) => unknown, thisArg?:  — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
-- `fill: (value: string, start?: number, end?: number) => string[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
-- `copyWithin: (target: number, start: number, end?: number) => string[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
-- `entries: () => ArrayIterator<[number, string]> — Returns an iterable of key, value pairs for every entry in the array`
-- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
-- `values: () => ArrayIterator<string> — Returns an iterable of values in the array`
-- `includes: (searchElement: string, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
-- `flatMap: <U, This = undefined>(callback: (this: This, value: string, index: number, array — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
-- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
-- `at: (index: number) => string — Returns the item located at the specified index.`
-- `__@iterator@896: () => ArrayIterator<string> — Iterator`
-- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
 ### camelCase  <sub>packages/foundation/src/utils/string.ts:13</sub>
 
@@ -847,7 +847,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<LiveColumnLike> — Iterator of values in the array.`
 - `__@unscopables@898: { readonly [x: number]: boolean; readonly length?: boolean; toString?: boolean;  — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### comboCacheKey  <sub>packages/foundation/src/utils/columnMapping.ts:186</sub>
+### comboCacheKey  <sub>packages/foundation/src/utils/columnMapping.ts:200</sub>
 
 ```ts
 (comboId: string, lookupType: string): string
@@ -917,13 +917,13 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### comboKeyOfColumn  <sub>packages/foundation/src/utils/columnMapping.ts:190</sub>
+### comboKeyOfColumn  <sub>packages/foundation/src/utils/columnMapping.ts:204</sub>
 
 ```ts
 (column: RawFlexGridColumnConfig): string
 ```
 
-### comboLookupType  <sub>packages/foundation/src/utils/columnMapping.ts:178</sub>
+### comboLookupType  <sub>packages/foundation/src/utils/columnMapping.ts:192</sub>
 
 ```ts
 (column: RawFlexGridColumnConfig): string
@@ -935,7 +935,7 @@ props/params:
 <T extends WijmoRowItem = WijmoRowItem>(row: T, binding: string, tracker: EditTracker<T>): void
 ```
 
-### filterComboRowsByCascade  <sub>packages/foundation/src/utils/columnMapping.ts:315</sub>
+### filterComboRowsByCascade  <sub>packages/foundation/src/utils/columnMapping.ts:329</sub>
 
 ```ts
 <T extends Record<string, unknown>>(comboRows: T[], row: Record<string, unknown>, rules: readonly ComboCascadeRule[]): T[]
@@ -981,7 +981,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<T> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### findStaleComboCells  <sub>packages/foundation/src/utils/columnMapping.ts:357</sub>
+### findStaleComboCells  <sub>packages/foundation/src/utils/columnMapping.ts:371</sub>
 
 ```ts
 (columns: RawFlexGridColumnConfig[], comboRowsByComboId: Record<string, ComboResponse[]>, row: WijmoRowItem, changedBinding: string): StaleComboCell[]
@@ -1026,7 +1026,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<RawFlexGridColumnConfig> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### findStaleRowParamComboCells  <sub>packages/foundation/src/utils/columnMapping.ts:436</sub>
+### findStaleRowParamComboCells  <sub>packages/foundation/src/utils/columnMapping.ts:450</sub>
 
 ```ts
 (columns: RawFlexGridColumnConfig[], rowParamByBinding: Record<string, Record<string, ComboResponse[]>>, insertRowParamByBinding: Record<string, Record<string, ComboResponse[]>>, row: WijmoRowItem, changedBinding: string): RowParamStaleResult
@@ -1142,7 +1142,7 @@ props/params:
 - `toISOString: () => string — Returns a date as a string value in ISO format.`
 - `toJSON: (key?: any) => string — Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization.`
 - `getVarDate: () => VarDate`
-- `__@toPrimitive@2355: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
+- `__@toPrimitive@2356: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
 
 ### formatDateTime  <sub>packages/foundation/src/utils/date.ts:9</sub>
 
@@ -1199,7 +1199,7 @@ props/params:
 - `toISOString: () => string — Returns a date as a string value in ISO format.`
 - `toJSON: (key?: any) => string — Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization.`
 - `getVarDate: () => VarDate`
-- `__@toPrimitive@2355: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
+- `__@toPrimitive@2356: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
 
 ### formatNumber  <sub>packages/foundation/src/utils/number.ts:5</sub>
 
@@ -1223,7 +1223,7 @@ props/params:
 (): string
 ```
 
-### hasRequiredMark  <sub>packages/foundation/src/utils/columnMapping.ts:652</sub>
+### hasRequiredMark  <sub>packages/foundation/src/utils/columnMapping.ts:666</sub>
 
 ```ts
 (label?: string): boolean
@@ -1293,7 +1293,7 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### insertComboId  <sub>packages/foundation/src/utils/columnMapping.ts:170</sub>
+### insertComboId  <sub>packages/foundation/src/utils/columnMapping.ts:184</sub>
 
 ```ts
 (column: RawFlexGridColumnConfig): string
@@ -1585,7 +1585,7 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### mapRawColumnsToWijmoColumns  <sub>packages/foundation/src/utils/columnMapping.ts:766</sub>
+### mapRawColumnsToWijmoColumns  <sub>packages/foundation/src/utils/columnMapping.ts:782</sub>
 
 ```ts
 (sourceColumns: RawFlexGridColumnConfig[]): FlexGridColumnConfig[]
@@ -1630,7 +1630,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<RawFlexGridColumnConfig> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### normalizeDynamicColumns  <sub>packages/foundation/src/utils/columnMapping.ts:752</sub>
+### normalizeDynamicColumns  <sub>packages/foundation/src/utils/columnMapping.ts:768</sub>
 
 ```ts
 (columns: FlexGridColumnConfig[]): FlexGridColumnConfig[]
@@ -1675,7 +1675,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<FlexGridColumnConfig> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### orderComboDisplayNames  <sub>packages/foundation/src/utils/columnMapping.ts:532</sub>
+### orderComboDisplayNames  <sub>packages/foundation/src/utils/columnMapping.ts:546</sub>
 
 ```ts
 (names: string[]): string[]
@@ -1953,13 +1953,13 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<T> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### rowParamKey  <sub>packages/foundation/src/utils/columnMapping.ts:249</sub>
+### rowParamKey  <sub>packages/foundation/src/utils/columnMapping.ts:263</sub>
 
 ```ts
 (bindings: Record<string, string>, rowItem: any): string
 ```
 
-### rowParamValue  <sub>packages/foundation/src/utils/columnMapping.ts:210</sub>
+### rowParamValue  <sub>packages/foundation/src/utils/columnMapping.ts:224</sub>
 
 ```ts
 (rowItem: any, binding: string): string
@@ -1981,14 +1981,14 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **MSG** | `features/master/src/components` | 246 |  | AS-IS SaveData 검증 메시지(cs L1114/1128/1206/1213/1219 그대로). |
-| **MSG** | `features/master/src/components` | 246 |  |  |
-| **COMBO** | `features/master/src/components` | 118 |  | 조회조건 cascade 콤보(6단, DB 실측 확정 — 전부 이미 등록돼 있음, 2026-09-22 ora.py). // AS-IS Data_SCP.Common(...)="_SCP" / Data.Common(...)=무접미(scp-combo-sqlid |
+| **MSG** | `features/master/src/components` | 262 |  | AS-IS SaveData 검증 메시지(cs L1114/1128/1206/1213/1219 그대로). |
+| **MSG** | `features/master/src/components` | 262 |  |  |
+| **COMBO** | `features/master/src/components` | 122 |  | 조회조건 cascade 콤보(6단, DB 실측 확정 — 전부 이미 등록돼 있음, 2026-09-22 ora.py). // AS-IS Data_SCP.Common(...)="_SCP" / Data.Common(...)=무접미(scp-combo-sqlid |
 | **REPORT_TYPE** | `features/master/src/components` | 6 |  |  |
-| **MODAL_OWNER** | `features/master/src/components` | 2 |  |  |
+| **MODAL_OWNER** | `features/master/src/components` | 4 |  |  |
+| **ITEM_MODAL_CONDITION** | `features/master/src/components` | 2 |  | 팝업 검색조건 식별자 — visibleConditions prop 으로 호출 화면별 노출을 고른다. (문자열 리터럴 대신 이 상수를 쓸 것 — 오타는 "조건이 조용히 사라짐" 으로만 드러난다.) |
 | **DYN_MONTH_PREFIX** | `features/master/src/components` | 1 |  | 동적 PIVOT 월 컬럼 prefix(AS-IS 'M_' 접두, SP1 SELECT 'M_'+A.YYYYMM 그대로). |
 | **FP_INSTANCE_ENDPOINT** | `features/master/src/components` | 1 |  |  |
-| **ITEM_MODAL_CONDITION** | `features/master/src/components` | 1 |  | 팝업 검색조건 식별자 — visibleConditions prop 으로 호출 화면별 노출을 고른다. (문자열 리터럴 대신 이 상수를 쓸 것 — 오타는 "조건이 조용히 사라짐" 으로만 드러난다.) |
 | **AUTH_GROUP** | `features/master/src/components` | 0 |  | PlannerTypeLogic(cs L936-995)이 비교하는 그룹명. AS-IS는 SCP_CAPA_bool 판정에 'SCP Planner'와 // 'CAPA Planner'를 OR로 동일 취급하나, TO-BE SCM_ADM_USER_GR_M에 'C |
 | **CALENDAR_MONTHS_SPAN** | `features/master/src/components` | 0 |  | AS-IS SP1(@p_end_month = DATEADD(MM,41,today)) — 당월 포함 42개월(0~41개월 뒤까지) 조회. |
 | **CASCADE_LEVELS** | `features/master/src/components` | 0 |  | 등록된 cascade 단계. code/name 은 그 단계가 콤보에서 읽는 컬럼이며, 몇 번째 단계로 쓰이든 항상 이 이름 그대로다. 마지막 단계만 CODE / NAME 으로 읽던 규약은 없앴다 - 콤보 SQL 은 전 단계를 풀네임 컬럼으로 내려준다. |
@@ -2035,6 +2035,7 @@ props/params:
 | **MODAL_SHEET_PROJECT_BY_DIVISION** | `features/master/src/components` | 0 |  |  |
 | **MODAL_SHEET_RATE** | `features/master/src/components` | 0 |  |  |
 | **MODAL_SHEET_REGION** | `features/master/src/components` | 0 |  |  |
+| **MODAL_SHEET_SAVE** | `features/master/src/components` | 0 |  | 저장 sheet (version/SAVE) — Insert/Delete/Save 버튼 권한도 이 시트 단위로 판정한다. |
 | **MODAL_SHEET_SLOC** | `features/master/src/components` | 0 |  |  |
 | **MODAL_SHEET_TEAM** | `features/master/src/components` | 0 |  |  |
 | **MODAL_SHEET_YEAR** | `features/master/src/components` | 0 |  |  |
@@ -2047,9 +2048,10 @@ props/params:
 | **SHEET_NEW_MODEL** | `features/master/src/components` | 0 |  |  |
 | **SMALL_DIVISION_WILDCARD** | `features/master/src/components` | 0 |  | 좁은 조회에서 "조건 없음"을 뜻하는 값. 넓은 조회는 빈 문자열을 조건 없음으로 받지만 좁은 쪽은 규약이 다르다. project/item 조건이 AND (EXISTS (... WHERE D.PROJECT_CODE LIKE P.TOKEN \|\| '% |
 | **VERSION_ACTION** | `features/master/src/components` | 0 |  |  |
-| **SHEET_INDEX** | `features/master/src/components` | 50 |  |  |
-| **buildComboOptions** | `features/master/src/components` | 15 |  | 콤보 행을 좁혀 드롭다운 옵션으로. 규칙은 이 파일 헤더 참조. division 은 축 이름이 고정이라 편의로 따로 받는다. 아예 안 넘기면 그 축이 없는 것으로 본다 - DIVISION_ID 컬럼을 내려주지 않는 FilterMyDivision 이 그 |
-| **toSelectedCodes** | `features/master/src/components` | 9 |  | 실제로 고른 코드만 남긴다. 전체선택('ALL')과 전체해제는 필터상 같다 - 둘 다 빈 배열이 되어 그 축이 미적용된다 (GetDMInnerTable 진입부의 'ALL' -> '' 치환과 같은 결과). |
+| **SHEET_INDEX** | `features/master/src/components` | 54 |  |  |
+| **buildComboOptions** | `features/master/src/components` | 19 |  | 콤보 행을 좁혀 드롭다운 옵션으로. 규칙은 이 파일 헤더 참조. division 은 축 이름이 고정이라 편의로 따로 받는다. 아예 안 넘기면 그 축이 없는 것으로 본다 - DIVISION_ID 컬럼을 내려주지 않는 FilterMyDivision 이 그 |
+| **toSelectedCodes** | `features/master/src/components` | 11 |  | 실제로 고른 코드만 남긴다. 전체선택('ALL')과 전체해제는 필터상 같다 - 둘 다 빈 배열이 되어 그 축이 미적용된다 (GetDMInnerTable 진입부의 'ALL' -> '' 치환과 같은 결과). |
+| **cell** | `features/master/src/components` | 5 |  | 콤보 셀 값 읽기. 콤보 응답은 컬럼에 따라 NUMBER 로 내려오기도 해서 문자열로 맞춰야 Set 비교가 성립한다 (SearchFields.cellValue 와 같은 사정). |
 | **buildSalesSiteOptions** | `features/master/src/components` | 1 |  | 'SalesSite' 콤보 -> Sales Site 드롭다운 옵션. |
 | **logSearchReset** | `features/master/src/components` | 1 |  | // [reset] 상위 조회조건 변경 -> 하위 값 재세팅 // |
 | **blankValue** | `features/master/src/components` | 0 |  | 하위 단계 초기화 값 — 배열 필드면 빈 배열, 문자열 필드면 'ALL'. 둘 다 필터 미적용이다. |
@@ -2060,7 +2062,6 @@ props/params:
 | **callTransfer** | `features/master/src/components` | 0 |  |  |
 | **callVersionAction** | `features/master/src/components` | 0 |  |  |
 | **callVersionActionBp** | `features/master/src/components` | 0 |  |  |
-| **cell** | `features/master/src/components` | 0 |  | 콤보 셀 값 읽기. 콤보 응답은 컬럼에 따라 NUMBER 로 내려오기도 해서 문자열로 맞춰야 Set 비교가 성립한다 (SearchFields.cellValue 와 같은 사정). |
 | **excludeEeDivision** | `features/master/src/components` | 0 |  | BLUtils.GetDivisionWithoutEE 화면측 후처리(SCP0006 project-route.constants.ts EXCLUDE_EE_DIVISION // 과 동일 규칙 — 화면이 달라 공유 유틸로 승격하지 않고 그대로 복제한다, Har |
 | **hasLaneQtyCandidate** | `features/master/src/components` | 0 |  | dtLaneQtyOfLineAssign 존재검증(cs L629-635 등, EditButton 전용 — CODE 값 매칭 없이 "후보가 있는가"만 // 본다. SaveData 검증(handleSave 의 buildSaveEntries)은 CODE==현 |
 | **isAlwaysEditableBinding** | `features/master/src/components` | 0 |  | Mail Req 체크박스 — 권한 무관 항상 편집가능(cs 전 분기 공통 LockRange(REQUEST_CHK,...,false)). |
@@ -2160,6 +2161,12 @@ props/params:
 - `at: (index: number) => string — Returns the item located at the specified index.`
 - `__@iterator@896: () => ArrayIterator<string> — Iterator of values in the array.`
 - `__@unscopables@898: { readonly [x: number]: boolean; readonly length?: boolean; toString?: boolean;  — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
+
+### cell  <sub>features/master/src/components/searchFields/CascadeFields.utils.ts:180</sub>
+
+```ts
+(row: Row, column: string): string
+```
 
 ### buildSalesSiteOptions  <sub>features/master/src/components/searchFields/SearchFields.utils.ts:111</sub>
 
@@ -2371,12 +2378,6 @@ props/params:
 - `versionNo: string`
 - `versionDescription: string`
 - `actionType: string`
-
-### cell  <sub>features/master/src/components/searchFields/CascadeFields.utils.ts:180</sub>
-
-```ts
-(row: Row, column: string): string
-```
 
 ### excludeEeDivision  <sub>features/master/src/components/capaNewModelPopup/capa-new-model-popup.constants.ts:88</sub>
 
@@ -2878,24 +2879,24 @@ props/params:
 | **STANDARD_COLORS** | `@shared/components` | 0 |  | 표준 색 (엑셀 "표준 색" 행). |
 | **THEME_COLORS** | `@shared/components` | 0 |  | 개인화 색 선택 팔레트/hex 유틸 (ColorPickerButton 전용). // 테마 색 기준 행 (Office 유사 10색) — 각 열마다 명도(tint/shade) 변형을 생성한다. |
 | **VARIANT_LEVELS** | `@shared/components` | 0 |  | 테마색 그리드 명도 레벨. 0 = 기준행, +값 = tint(밝게), -값 = shade(어둡게). |
-| **SHEETS** | `@shared/components` | 616 |  |  |
-| **SHEETS** | `@shared/components` | 616 |  |  |
-| **SHEETS** | `@shared/components` | 616 |  |  |
-| **RESPONSE_SET** | `@shared/components` | 95 |  |  |
-| **RESPONSE_SET** | `@shared/components` | 95 |  |  |
-| **RESPONSE_SET** | `@shared/components` | 95 |  |  |
+| **SHEETS** | `@shared/components` | 646 |  |  |
+| **SHEETS** | `@shared/components` | 646 |  |  |
+| **SHEETS** | `@shared/components` | 646 |  |  |
+| **RESPONSE_SET** | `@shared/components` | 98 |  |  |
+| **RESPONSE_SET** | `@shared/components` | 98 |  |  |
+| **RESPONSE_SET** | `@shared/components` | 98 |  |  |
 | **MoveType** | `@shared/components` | 0 |  |  |
-| **createPersistedStoreWithTab** | `@shared/stores` | 138 |  | 탭 내부 페이지 스토어 선언시 사용. 현재 오픈된 tabId에 따른 멀티톤 인스턴스 생성. use...Store.getState() 사용 불가. 영속화하지 않는다(sessionStorage 미저장). - 탭 전환 시 상태 유지는 MDI keep-ali |
-| **confirmIfDirtyKey** | `@shared/stores` | 67 |  | dirty 면 상황에 맞는 confirm 을 띄우고 사용자의 선택을 반환한다. dirty 아니면 즉시 true. 사용처: 조회 실행 전(SubTitle/SearchArea), MDI 탭 닫기 전, 다이얼로그 닫기 전. 확인을 누르면 등록된 변경을 실제 |
-| **tabDirtyKey** | `@shared/stores` | 67 |  | MDI 탭 단위 키 (TabIdContext 의 tabId) |
-| **saveTitleSet** | `@shared/components` | 36 |  | 컬럼/Measure 개인화 영구 저장(SCM_MST_TITLESET_USER) — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset). ⚠️ 모든 값은 같은 길이의 '^' delim 문자열 — 순서가 곧 컬럼 대응 (SP 는 |
-| **createPersistedStore** | `@shared/stores` | 22 |  | 전역 스토어 선언시 사용. 싱글톤 스토어 빌더 use...Store.getState() 사용 가능 |
-| **toColumnLayoutSettings** | `@shared/components` | 22 |  | 화면 grid 메타(SHEET_COLUMNS) → 팝업 initialSettings/defaultSettings 변환. titleSet SP 계약(COLUMN_NAME/COLUMN_LABEL)에는 width/color 가 없으므로, 팝업의 Width  |
-| **buildSavePayload** | `@shared/components` | 18 |  | 저장 payload 구성 — 표시 컬럼 1..n → 숨김 컬럼 후행 → 비표시 0. hiddenNames = 팝업 dual list 에서 감춘 컬럼(MEASURE 등). 사용자가 좌/우로 옮길 수 없으므로 USER_FLAG 를 항상 'Y' 로 고정한다 |
+| **createPersistedStoreWithTab** | `@shared/stores` | 142 |  | 탭 내부 페이지 스토어 선언시 사용. 현재 오픈된 tabId에 따른 멀티톤 인스턴스 생성. use...Store.getState() 사용 불가. 영속화하지 않는다(sessionStorage 미저장). - 탭 전환 시 상태 유지는 MDI keep-ali |
+| **confirmIfDirtyKey** | `@shared/stores` | 72 |  | dirty 면 상황에 맞는 confirm 을 띄우고 사용자의 선택을 반환한다. dirty 아니면 즉시 true. 사용처: 조회 실행 전(SubTitle/SearchArea), MDI 탭 닫기 전, 다이얼로그 닫기 전. 확인을 누르면 등록된 변경을 실제 |
+| **tabDirtyKey** | `@shared/stores` | 72 |  | MDI 탭 단위 키 (TabIdContext 의 tabId) |
+| **saveTitleSet** | `@shared/components` | 38 |  | 컬럼/Measure 개인화 영구 저장(SCM_MST_TITLESET_USER) — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset). ⚠️ 모든 값은 같은 길이의 '^' delim 문자열 — 순서가 곧 컬럼 대응 (SP 는 |
+| **createPersistedStore** | `@shared/stores` | 23 |  | 전역 스토어 선언시 사용. 싱글톤 스토어 빌더 use...Store.getState() 사용 가능 |
+| **toColumnLayoutSettings** | `@shared/components` | 23 |  | 화면 grid 메타(SHEET_COLUMNS) → 팝업 initialSettings/defaultSettings 변환. titleSet SP 계약(COLUMN_NAME/COLUMN_LABEL)에는 width/color 가 없으므로, 팝업의 Width  |
+| **buildSavePayload** | `@shared/components` | 19 |  | 저장 payload 구성 — 표시 컬럼 1..n → 숨김 컬럼 후행 → 비표시 0. hiddenNames = 팝업 dual list 에서 감춘 컬럼(MEASURE 등). 사용자가 좌/우로 옮길 수 없으므로 USER_FLAG 를 항상 'Y' 로 고정한다 |
 | **formatTotalCases** | `@shared/hooks` | 6 |  | TitleArea `totalCases` 에 넘길 건수 — 천 단위 쉼표(12345 → '12,345'). 디자인 시스템은 totalCases 를 서식 없이 그대로 그린다(타입은 number 지만 렌더는 children 출력뿐). 그래서 쉼표를 붙인  |
 | **fetchTitleSet** | `@shared/components` | 5 |  | 컬럼/Measure 개인화 조회 — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset/search). ⭐ 화면별 `{menuId}/titleSet/SEARCH/call-proc` 을 쓰면 SCM_ADM_MNU_BTN_MPG_ |
-| **applyGridLayout** | `@shared/components` | 3 |  | admin 컬럼 메타 위에 사용자 레이아웃(표시/순서/폭)을 덮어쓴다. sales-future-price `applyLayoutToColumns` 와 동일 계약을 공통화한 것: - 레이아웃에 있는 컬럼: visible = USER_FLAG, 폭 ove |
-| **fetchGridLayout** | `@shared/components` | 3 |  | 저장된 레이아웃 조회 + 파싱. `null` = 없음/실패 → 적용하지 않음(admin 메타 그대로). |
+| **applyGridLayout** | `@shared/components` | 4 |  | admin 컬럼 메타 위에 사용자 레이아웃(표시/순서/폭)을 덮어쓴다. sales-future-price `applyLayoutToColumns` 와 동일 계약을 공통화한 것: - 레이아웃에 있는 컬럼: visible = USER_FLAG, 폭 ove |
+| **fetchGridLayout** | `@shared/components` | 4 |  | 저장된 레이아웃 조회 + 파싱. `null` = 없음/실패 → 적용하지 않음(admin 메타 그대로). |
 | **isoWeeksOfMonth** | `@shared/lib` | 2 |  | yyyymm 의 ISO 주 분해 — 달력 순서, 월경계 주는 "월내 기여 일수"만 계상. 주 태그의 yyyymm 은 항상 입력 월 (GET_SPREAD_TITLE 월경계 분할 규약과 동일). |
 | **registerDirtyCheck** | `@shared/stores` | 2 |  | dirty 판정 함수를 키들에 등록한다. 반환된 함수로 해제(그리드 언마운트 시). 같은 그리드가 tab 키와 scope 키(다이얼로그 안일 때)에 동시 등록될 수 있다 — 다이얼로그의 편집분도 "탭을 닫으면 사라지는 변경" 이므로 탭 집계에 포함하는 |
 | **registerDirtyReset** | `@shared/stores` | 2 |  | 미저장 변경 되돌리기 함수를 키들에 등록한다. 등록 규약은 registerDirtyCheck 과 동일. confirm 에서 사용자가 "확인"(= 버리고 진행)을 누르면 이 함수들이 호출된다. 그리드는 DataGrid 가 자동 등록하므로, 화면은 그리드 |
@@ -3240,7 +3241,7 @@ props/params:
 - `columnType: string — 'C' = 컬럼 / 'M' = measure (화면에 따라 'main' 등 자체 값).`
 - `divisionId: string`
 
-### applyGridLayout  <sub>packages/shared/src/components/organisms/data-grid/titleSetApi.ts:213</sub>
+### applyGridLayout  <sub>packages/shared/src/components/organisms/data-grid/titleSetApi.ts:215</sub>
 
 ```ts
 (columns: RawFlexGridColumnConfig[], layout: GridLayoutRow[]): RawFlexGridColumnConfig[]
@@ -3285,7 +3286,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<RawFlexGridColumnConfig> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### fetchGridLayout  <sub>packages/shared/src/components/organisms/data-grid/titleSetApi.ts:195</sub>
+### fetchGridLayout  <sub>packages/shared/src/components/organisms/data-grid/titleSetApi.ts:197</sub>
 
 ```ts
 (key: GridLayoutKey): Promise<GridLayoutRow[]>
@@ -4159,7 +4160,7 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### fetchColumnMeta  <sub>packages/shared/src/components/organisms/data-grid/titleSetApi.ts:126</sub>
+### fetchColumnMeta  <sub>packages/shared/src/components/organisms/data-grid/titleSetApi.ts:128</sub>
 
 ```ts
 (params: { menuId: string; sheetName: string; divisionId: string; }): Promise<ColumnMetaRow[]>
@@ -4818,7 +4819,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<ColumnLayoutRow> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### parseGridLayout  <sub>packages/shared/src/components/organisms/data-grid/titleSetApi.ts:180</sub>
+### parseGridLayout  <sub>packages/shared/src/components/organisms/data-grid/titleSetApi.ts:182</sub>
 
 ```ts
 (rows: Record<string, string>[]): GridLayoutRow[]

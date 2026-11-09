@@ -1,362 +1,363 @@
 ﻿row_id,source,check,instance,result
 controls,FE 대조표,X-LOC,X-LOC|ROW:controls,PASS
-controls,FE 대조표,X-ROW,X-ROW|ENTRY:controls,REVIEW
+controls,FE 대조표,X-ROW,X-ROW|ENTRY:controls,NA
 events,FE 대조표,X-LOC,X-LOC|ROW:events,REVIEW
-events,FE 대조표,H2,H2|ROW:events,REVIEW
-events,FE 대조표,H4,H4|SCREEN,NOT_RUN
+events,FE 대조표,H2,H2|ROW:events,ERROR
+events,FE 대조표,H4,H4|SCREEN,PASS
 events,FE 대조표,H3,H3|ROW:events,NA
 validations,FE 대조표,X-LOC,X-LOC|ROW:validations,REVIEW
-validations,FE 대조표,G1,G1|ROW:validations,REVIEW
+validations,FE 대조표,G1,G1|ROW:validations,ERROR
 validations,FE 대조표,A1,A1|ROW:validations,NA
-validations,FE 대조표,J2,J2|SCREEN,NOT_RUN
-validations,FE 대조표,E4,E4|MSG:MSG01410,NOT_RUN
-validations,FE 대조표,E4,E4|MSG:MSG00423,NOT_RUN
-validations,FE 대조표,I1,I1|SCREEN,NOT_RUN
+validations,FE 대조표,J2,J2|SCREEN,PASS
+validations,FE 대조표,E4,E4|MSG:MSG01410,NA
+validations,FE 대조표,E4,E4|MSG:MSG00423,NA
+validations,FE 대조표,I1,I1|SCREEN,ERROR
 validations,FE 대조표,H10,H10|SCREEN,PASS
 validations,FE 대조표,E3,E3|ROW:validations,NA
 gridSignals,FE 대조표,X-LOC,X-LOC|ROW:gridSignals,REVIEW
-gridSignals,FE 대조표,D1,D1|ROW:gridSignals,NA
+gridSignals,FE 대조표,D1,D1|ROW:gridSignals,ERROR
 gridSignals,FE 대조표,D3,D3|ROW:gridSignals,NA
 gridSignals,FE 대조표,H3,H3|ROW:gridSignals,NA
-gridSignals,FE 대조표,H2,H2|ROW:gridSignals,REVIEW
-gridSignals,FE 대조표,F1,F1|SCREEN,NOT_RUN
-gridSignals,FE 대조표,F5,F5|SCREEN,NOT_RUN
-gridSignals,FE 대조표,J2,J2|SCREEN,NOT_RUN
+gridSignals,FE 대조표,H2,H2|ROW:gridSignals,ERROR
+gridSignals,FE 대조표,F1,F1|SCREEN,NA
+gridSignals,FE 대조표,F5,F5|SCREEN,FAIL
+gridSignals,FE 대조표,J2,J2|SCREEN,PASS
 gridColumns,FE 대조표,X-LOC,X-LOC|ROW:gridColumns,REVIEW
-gridColumns,FE 대조표,X-ROW,X-ROW|ENTRY:gridColumns,REVIEW
-spCalls,FE 대조표,X-LOC,X-LOC|ROW:spCalls,FAIL
-spCalls,FE 대조표,A5,A5|ROW:spCalls,REVIEW
-spCalls,FE 대조표,H5,H5|ROW:spCalls,REVIEW
-spCalls,FE 대조표,H2,H2|ROW:spCalls,REVIEW
+gridColumns,FE 대조표,X-ROW,X-ROW|ENTRY:gridColumns,NA
+spCalls,FE 대조표,X-LOC,X-LOC|ROW:spCalls,PASS
+spCalls,FE 대조표,A5,A5|ROW:spCalls,PASS
+spCalls,FE 대조표,H5,H5|ROW:spCalls,PASS
+spCalls,FE 대조표,H2,H2|ROW:spCalls,ERROR
 entryPoints,FE 대조표,X-LOC,X-LOC|ROW:entryPoints,REVIEW
-entryPoints,FE 대조표,G4,G4|ROW:entryPoints,REVIEW
-entryPoints,FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-entryPoints,FE 대조표,G1,G1|ROW:entryPoints,REVIEW
-entryPoints,FE 대조표,G6,G6|ROW:entryPoints,REVIEW
-entryPoints,FE 대조표,H6,H6|ROW:entryPoints,REVIEW
-entryPoints,FE 대조표,G5,G5|ROW:entryPoints,REVIEW
-entryPoints,FE 대조표,M4,M4|ROW:entryPoints,REVIEW
+entryPoints,FE 대조표,G4,G4|ROW:entryPoints,FAIL
+entryPoints,FE 대조표,SC1,SC1|SCREEN,NA
+entryPoints,FE 대조표,G1,G1|ROW:entryPoints,ERROR
+entryPoints,FE 대조표,G6,G6|ROW:entryPoints,NA
+entryPoints,FE 대조표,H6,H6|ROW:entryPoints,WARN
+entryPoints,FE 대조표,G5,G5|ROW:entryPoints,NA
+entryPoints,FE 대조표,M4,M4|ROW:entryPoints,ERROR
 entryPoints,FE 대조표,D4,D4|ROW:entryPoints,NA
-entryPoints,FE 대조표,D6,D6|SCREEN,NOT_RUN
-entryPoints,FE 대조표,J2,J2|SCREEN,NOT_RUN
-entryPoints,FE 대조표,F1,F1|SCREEN,NOT_RUN
-entryPoints,FE 대조표,F5,F5|SCREEN,NOT_RUN
+entryPoints,FE 대조표,D6,D6|SCREEN,ERROR
+entryPoints,FE 대조표,J2,J2|SCREEN,PASS
+entryPoints,FE 대조표,F1,F1|SCREEN,NA
+entryPoints,FE 대조표,F5,F5|SCREEN,FAIL
 entryPoints,FE 대조표,A1,A1|ROW:entryPoints,NA
 comboCalls,FE 대조표,X-LOC,X-LOC|ROW:comboCalls,REVIEW
-comboCalls,FE 대조표,X-ROW,X-ROW|ENTRY:comboCalls,REVIEW
+comboCalls,FE 대조표,X-ROW,X-ROW|ENTRY:comboCalls,NA
 filterCalls,FE 대조표,X-LOC,X-LOC|ROW:filterCalls,PASS
-filterCalls,FE 대조표,X-ROW,X-ROW|ENTRY:filterCalls,REVIEW
+filterCalls,FE 대조표,X-ROW,X-ROW|ENTRY:filterCalls,NA
 buttonGuards,FE 대조표,X-LOC,X-LOC|ROW:buttonGuards,REVIEW
-buttonGuards,FE 대조표,F1,F1|SCREEN,NOT_RUN
-buttonGuards,FE 대조표,F5,F5|SCREEN,NOT_RUN
-buttonGuards,FE 대조표,J2,J2|SCREEN,NOT_RUN
+buttonGuards,FE 대조표,F1,F1|SCREEN,NA
+buttonGuards,FE 대조표,F5,F5|SCREEN,FAIL
+buttonGuards,FE 대조표,J2,J2|SCREEN,PASS
 popups,FE 대조표,X-LOC,X-LOC|ROW:popups,PASS
-popups,FE 대조표,H6,H6|ROW:popups,REVIEW
-popups,FE 대조표,G5,G5|ROW:popups,REVIEW
-popups,FE 대조표,M4,M4|ROW:popups,REVIEW
+popups,FE 대조표,H6,H6|ROW:popups,WARN
+popups,FE 대조표,G5,G5|ROW:popups,NA
+popups,FE 대조표,M4,M4|ROW:popups,ERROR
 extractionLimits,FE 대조표,X-LOC,X-LOC|ROW:extractionLimits,REVIEW
-extractionLimits,FE 대조표,X-ROW,X-ROW|ENTRY:extractionLimits,REVIEW
+extractionLimits,FE 대조표,X-ROW,X-ROW|ENTRY:extractionLimits,NA
 `CapaLobReport.tsx`,FE 대조표,X-LOC,X-LOC|ROW:`CapaLobReport.tsx`,PASS
 `CapaLobReport.tsx`,FE 대조표,A1,A1|ROW:`CapaLobReport.tsx`,NA
 `CapaLobReport.tsx`,FE 대조표,A6,A6|ROW:`CapaLobReport.tsx`,NA
-`CapaLobReport.tsx`,FE 대조표,F4,F4|ROW:`CapaLobReport.tsx`,REVIEW
+`CapaLobReport.tsx`,FE 대조표,F4,F4|ROW:`CapaLobReport.tsx`,NA
 `CapaLobReport.tsx`,FE 대조표,DB-SYN,DB-SYN|ROW:`CapaLobReport.tsx`,PASS
 `CapaLobReport.tsx`,FE 대조표,D4,D4|ROW:`CapaLobReport.tsx`,NA
-`CapaLobReport.tsx`,FE 대조표,D6,D6|SCREEN,NOT_RUN
-`CapaLobReport.tsx`,FE 대조표,J2,J2|SCREEN,NOT_RUN
-`CapaLobReport.tsx`,FE 대조표,F1,F1|SCREEN,NOT_RUN
-`CapaLobReport.tsx`,FE 대조표,F5,F5|SCREEN,NOT_RUN
-`CapaLobReport.tsx`,FE 대조표,G1,G1|ROW:`CapaLobReport.tsx`,REVIEW
+`CapaLobReport.tsx`,FE 대조표,D6,D6|SCREEN,ERROR
+`CapaLobReport.tsx`,FE 대조표,J2,J2|SCREEN,PASS
+`CapaLobReport.tsx`,FE 대조표,F1,F1|SCREEN,NA
+`CapaLobReport.tsx`,FE 대조표,F5,F5|SCREEN,FAIL
+`CapaLobReport.tsx`,FE 대조표,G1,G1|ROW:`CapaLobReport.tsx`,ERROR
 `capa-lob-report.constants.ts`,FE 대조표,X-LOC,X-LOC|ROW:`capa-lob-report.constants.ts`,PASS
-`capa-lob-report.constants.ts`,FE 대조표,A5,A5|ROW:`capa-lob-report.constants.ts`,REVIEW
-`capa-lob-report.constants.ts`,FE 대조표,H5,H5|ROW:`capa-lob-report.constants.ts`,REVIEW
-`capa-lob-report.constants.ts`,FE 대조표,H2,H2|ROW:`capa-lob-report.constants.ts`,REVIEW
+`capa-lob-report.constants.ts`,FE 대조표,A5,A5|ROW:`capa-lob-report.constants.ts`,PASS
+`capa-lob-report.constants.ts`,FE 대조표,H5,H5|ROW:`capa-lob-report.constants.ts`,PASS
+`capa-lob-report.constants.ts`,FE 대조표,H2,H2|ROW:`capa-lob-report.constants.ts`,ERROR
 `capa-lob-report.types.ts`,FE 대조표,X-LOC,X-LOC|ROW:`capa-lob-report.types.ts`,PASS
-`capa-lob-report.types.ts`,FE 대조표,G1,G1|ROW:`capa-lob-report.types.ts`,REVIEW
+`capa-lob-report.types.ts`,FE 대조표,G1,G1|ROW:`capa-lob-report.types.ts`,ERROR
 `capa-lob-report.types.ts`,FE 대조표,A1,A1|ROW:`capa-lob-report.types.ts`,NA
-`capa-lob-report.types.ts`,FE 대조표,J2,J2|SCREEN,NOT_RUN
+`capa-lob-report.types.ts`,FE 대조표,J2,J2|SCREEN,PASS
 `useCapaLobReportStore.ts`,FE 대조표,X-LOC,X-LOC|ROW:`useCapaLobReportStore.ts`,PASS
-`useCapaLobReportStore.ts`,FE 대조표,X-ROW,X-ROW|ENTRY:`useCapaLobReportStore.ts`,REVIEW
+`useCapaLobReportStore.ts`,FE 대조표,X-ROW,X-ROW|ENTRY:`useCapaLobReportStore.ts`,NA
 `hooks/useCapaLobReportCombos.ts`,FE 대조표,X-LOC,X-LOC|ROW:`hooks/useCapaLobReportCombos.ts`,PASS
-`hooks/useCapaLobReportCombos.ts`,FE 대조표,X-ROW,X-ROW|ENTRY:`hooks/useCapaLobReportCombos.ts`,REVIEW
+`hooks/useCapaLobReportCombos.ts`,FE 대조표,X-ROW,X-ROW|ENTRY:`hooks/useCapaLobReportCombos.ts`,NA
 `hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,X-LOC,X-LOC|ROW:`hooks/useCapaLobReportConditionEffects.ts`,PASS
-`hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,A5,A5|ROW:`hooks/useCapaLobReportConditionEffects.ts`,REVIEW
-`hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,H5,H5|ROW:`hooks/useCapaLobReportConditionEffects.ts`,REVIEW
-`hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,H2,H2|ROW:`hooks/useCapaLobReportConditionEffects.ts`,REVIEW
+`hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,A5,A5|ROW:`hooks/useCapaLobReportConditionEffects.ts`,PASS
+`hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,H5,H5|ROW:`hooks/useCapaLobReportConditionEffects.ts`,PASS
+`hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,H2,H2|ROW:`hooks/useCapaLobReportConditionEffects.ts`,ERROR
 `hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,A1,A1|ROW:`hooks/useCapaLobReportConditionEffects.ts`,NA
 `hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,A6,A6|ROW:`hooks/useCapaLobReportConditionEffects.ts`,NA
-`hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,F4,F4|ROW:`hooks/useCapaLobReportConditionEffects.ts`,REVIEW
+`hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,F4,F4|ROW:`hooks/useCapaLobReportConditionEffects.ts`,NA
 `hooks/useCapaLobReportConditionEffects.ts`,FE 대조표,DB-SYN,DB-SYN|ROW:`hooks/useCapaLobReportConditionEffects.ts`,PASS
 `utils/capaLobReport.combos.ts`,FE 대조표,X-LOC,X-LOC|ROW:`utils/capaLobReport.combos.ts`,PASS
-`utils/capaLobReport.combos.ts`,FE 대조표,X-ROW,X-ROW|ENTRY:`utils/capaLobReport.combos.ts`,REVIEW
+`utils/capaLobReport.combos.ts`,FE 대조표,X-ROW,X-ROW|ENTRY:`utils/capaLobReport.combos.ts`,NA
 `utils/capaLobReport.dateColumns.ts`,FE 대조표,X-LOC,X-LOC|ROW:`utils/capaLobReport.dateColumns.ts`,PASS
-`utils/capaLobReport.dateColumns.ts`,FE 대조표,X-ROW,X-ROW|ENTRY:`utils/capaLobReport.dateColumns.ts`,REVIEW
+`utils/capaLobReport.dateColumns.ts`,FE 대조표,X-ROW,X-ROW|ENTRY:`utils/capaLobReport.dateColumns.ts`,NA
 `utils/capaLobReport.cursors.ts`,FE 대조표,X-LOC,X-LOC|ROW:`utils/capaLobReport.cursors.ts`,PASS
-`utils/capaLobReport.cursors.ts`,FE 대조표,X-ROW,X-ROW|ENTRY:`utils/capaLobReport.cursors.ts`,REVIEW
+`utils/capaLobReport.cursors.ts`,FE 대조표,X-ROW,X-ROW|ENTRY:`utils/capaLobReport.cursors.ts`,NA
 `components/CapaLobReportForm.tsx`,FE 대조표,X-LOC,X-LOC|ROW:`components/CapaLobReportForm.tsx`,PASS
-`components/CapaLobReportForm.tsx`,FE 대조표,K-SA,K-SA|SCREEN,NOT_RUN
-`components/CapaLobReportForm.tsx`,FE 대조표,G3,G3|SCREEN,NOT_RUN
-`components/CapaLobReportForm.tsx`,FE 대조표,G4,G4|ROW:`components/CapaLobReportForm.tsx`,REVIEW
-`components/CapaLobReportForm.tsx`,FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-`components/CapaLobReportForm.tsx`,FE 대조표,G1,G1|ROW:`components/CapaLobReportForm.tsx`,REVIEW
-`components/CapaLobReportForm.tsx`,FE 대조표,G6,G6|ROW:`components/CapaLobReportForm.tsx`,REVIEW
+`components/CapaLobReportForm.tsx`,FE 대조표,K-SA,K-SA|SCREEN,PASS
+`components/CapaLobReportForm.tsx`,FE 대조표,G3,G3|SCREEN,PASS
+`components/CapaLobReportForm.tsx`,FE 대조표,G4,G4|ROW:`components/CapaLobReportForm.tsx`,FAIL
+`components/CapaLobReportForm.tsx`,FE 대조표,SC1,SC1|SCREEN,NA
+`components/CapaLobReportForm.tsx`,FE 대조표,G1,G1|ROW:`components/CapaLobReportForm.tsx`,ERROR
+`components/CapaLobReportForm.tsx`,FE 대조표,G6,G6|ROW:`components/CapaLobReportForm.tsx`,NA
 `components/CapaLobReportForm.tsx`,FE 대조표,A1,A1|ROW:`components/CapaLobReportForm.tsx`,NA
-`components/CapaLobReportForm.tsx`,FE 대조표,J2,J2|SCREEN,NOT_RUN
+`components/CapaLobReportForm.tsx`,FE 대조표,J2,J2|SCREEN,PASS
 `components/CapaLobReportGrid.tsx`,FE 대조표,X-LOC,X-LOC|ROW:`components/CapaLobReportGrid.tsx`,PASS
 `components/CapaLobReportGrid.tsx`,FE 대조표,H3,H3|ROW:`components/CapaLobReportGrid.tsx`,NA
-`components/CapaLobReportGrid.tsx`,FE 대조표,H2,H2|ROW:`components/CapaLobReportGrid.tsx`,REVIEW
+`components/CapaLobReportGrid.tsx`,FE 대조표,H2,H2|ROW:`components/CapaLobReportGrid.tsx`,ERROR
 `components/modals/CapaLobReportItemPopup.tsx`,FE 대조표,X-LOC,X-LOC|ROW:`components/modals/CapaLobReportItemPopup.tsx`,PASS
-`components/modals/CapaLobReportItemPopup.tsx`,FE 대조표,H6,H6|ROW:`components/modals/CapaLobReportItemPopup.tsx`,REVIEW
-`components/modals/CapaLobReportItemPopup.tsx`,FE 대조표,G5,G5|ROW:`components/modals/CapaLobReportItemPopup.tsx`,REVIEW
-`components/modals/CapaLobReportItemPopup.tsx`,FE 대조표,M4,M4|ROW:`components/modals/CapaLobReportItemPopup.tsx`,REVIEW
+`components/modals/CapaLobReportItemPopup.tsx`,FE 대조표,H6,H6|ROW:`components/modals/CapaLobReportItemPopup.tsx`,WARN
+`components/modals/CapaLobReportItemPopup.tsx`,FE 대조표,G5,G5|ROW:`components/modals/CapaLobReportItemPopup.tsx`,NA
+`components/modals/CapaLobReportItemPopup.tsx`,FE 대조표,M4,M4|ROW:`components/modals/CapaLobReportItemPopup.tsx`,ERROR
 `components/modals/CapaLobReportColumnModal.tsx`,FE 대조표,X-LOC,X-LOC|ROW:`components/modals/CapaLobReportColumnModal.tsx`,PASS
-`components/modals/CapaLobReportColumnModal.tsx`,FE 대조표,H6,H6|BTN:btnColumn,NOPATH
-`components/modals/CapaLobReportColumnModal.tsx`,FE 대조표,G5,G5|BTN:btnColumn,NOPATH
-`components/modals/CapaLobReportColumnModal.tsx`,FE 대조표,M4,M4|BTN:btnColumn,NOT_RUN
-(1) **Division 권한 0건**,FE 대조표,X-LOC,X-LOC|ROW:(1) **Division 권한 0건**,FAIL
+`components/modals/CapaLobReportColumnModal.tsx`,FE 대조표,H6,H6|BTN:btnColumn,NA
+`components/modals/CapaLobReportColumnModal.tsx`,FE 대조표,G5,G5|BTN:btnColumn,PASS
+`components/modals/CapaLobReportColumnModal.tsx`,FE 대조표,M4,M4|BTN:btnColumn,REVIEW
+(1) **Division 권한 0건**,FE 대조표,X-LOC,X-LOC|ROW:(1) **Division 권한 0건**,NA
 (1) **Division 권한 0건**,FE 대조표,D4,D4|ROW:(1) **Division 권한 0건**,NA
-(1) **Division 권한 0건**,FE 대조표,D6,D6|SCREEN,NOT_RUN
-(1) **Division 권한 0건**,FE 대조표,J2,J2|SCREEN,NOT_RUN
-(1) **Division 권한 0건**,FE 대조표,F1,F1|SCREEN,NOT_RUN
-(1) **Division 권한 0건**,FE 대조표,F5,F5|SCREEN,NOT_RUN
-(1) **Division 권한 0건**,FE 대조표,G1,G1|ROW:(1) **Division 권한 0건**,REVIEW
+(1) **Division 권한 0건**,FE 대조표,D6,D6|SCREEN,ERROR
+(1) **Division 권한 0건**,FE 대조표,J2,J2|SCREEN,PASS
+(1) **Division 권한 0건**,FE 대조표,F1,F1|SCREEN,NA
+(1) **Division 권한 0건**,FE 대조표,F5,F5|SCREEN,FAIL
+(1) **Division 권한 0건**,FE 대조표,G1,G1|ROW:(1) **Division 권한 0건**,ERROR
 (1) **Division 권한 0건**,FE 대조표,A1,A1|ROW:(1) **Division 권한 0건**,NA
-(1) **Division 권한 0건**,FE 대조표,E4,E4|MSG:MSG00667,NOT_RUN
-(1) **Division 권한 0건**,FE 대조표,E4,E4|MSG:MSG00097,NOT_RUN
-(1) **Division 권한 0건**,FE 대조표,I1,I1|SCREEN,NOT_RUN
+(1) **Division 권한 0건**,FE 대조표,E4,E4|MSG:MSG00667,NA
+(1) **Division 권한 0건**,FE 대조표,E4,E4|MSG:MSG00097,NA
+(1) **Division 권한 0건**,FE 대조표,I1,I1|SCREEN,ERROR
 (1) **Division 권한 0건**,FE 대조표,H10,H10|SCREEN,PASS
-(2) **버튼 ACL**,FE 대조표,X-LOC,X-LOC|ROW:(2) **버튼 ACL**,FAIL
+(2) **버튼 ACL**,FE 대조표,X-LOC,X-LOC|ROW:(2) **버튼 ACL**,NA
 (2) **버튼 ACL**,FE 대조표,D4,D4|ROW:(2) **버튼 ACL**,NA
-(2) **버튼 ACL**,FE 대조표,D6,D6|SCREEN,NOT_RUN
-(2) **버튼 ACL**,FE 대조표,J2,J2|SCREEN,NOT_RUN
-(2) **버튼 ACL**,FE 대조표,F1,F1|SCREEN,NOT_RUN
-(2) **버튼 ACL**,FE 대조표,F5,F5|SCREEN,NOT_RUN
-(2) **버튼 ACL**,FE 대조표,E4,E4|MSG:MSG00096,NOT_RUN
-(2) **버튼 ACL**,FE 대조표,I1,I1|SCREEN,NOT_RUN
+(2) **버튼 ACL**,FE 대조표,D6,D6|SCREEN,ERROR
+(2) **버튼 ACL**,FE 대조표,J2,J2|SCREEN,PASS
+(2) **버튼 ACL**,FE 대조표,F1,F1|SCREEN,NA
+(2) **버튼 ACL**,FE 대조표,F5,F5|SCREEN,FAIL
+(2) **버튼 ACL**,FE 대조표,E4,E4|MSG:MSG00096,NA
+(2) **버튼 ACL**,FE 대조표,I1,I1|SCREEN,ERROR
 (2) **버튼 ACL**,FE 대조표,H10,H10|SCREEN,PASS
 (2) **버튼 ACL**,FE 대조표,D3,D3|ROW:(2) **버튼 ACL**,NA
-(2) **버튼 ACL**,FE 대조표,H2,H2|ROW:(2) **버튼 ACL**,REVIEW
-(3) **시트 잠금**,FE 대조표,X-LOC,X-LOC|ROW:(3) **시트 잠금**,FAIL
-(3) **시트 잠금**,FE 대조표,A5,A5|ROW:(3) **시트 잠금**,REVIEW
-(3) **시트 잠금**,FE 대조표,H5,H5|ROW:(3) **시트 잠금**,REVIEW
-(3) **시트 잠금**,FE 대조표,H2,H2|ROW:(3) **시트 잠금**,REVIEW
-(3) **시트 잠금**,FE 대조표,D1,D1|ROW:(3) **시트 잠금**,NA
+(2) **버튼 ACL**,FE 대조표,H2,H2|ROW:(2) **버튼 ACL**,ERROR
+(3) **시트 잠금**,FE 대조표,X-LOC,X-LOC|ROW:(3) **시트 잠금**,NA
+(3) **시트 잠금**,FE 대조표,A5,A5|ROW:(3) **시트 잠금**,PASS
+(3) **시트 잠금**,FE 대조표,H5,H5|ROW:(3) **시트 잠금**,PASS
+(3) **시트 잠금**,FE 대조표,H2,H2|ROW:(3) **시트 잠금**,ERROR
+(3) **시트 잠금**,FE 대조표,D1,D1|ROW:(3) **시트 잠금**,ERROR
 (3) **시트 잠금**,FE 대조표,D3,D3|ROW:(3) **시트 잠금**,NA
-(3) **시트 잠금**,FE 대조표,F1,F1|SCREEN,NOT_RUN
-(3) **시트 잠금**,FE 대조표,F2,F2|SCREEN,NOPATH
-(3) **시트 잠금**,FE 대조표,J2,J2|SCREEN,NOT_RUN
+(3) **시트 잠금**,FE 대조표,F1,F1|SCREEN,NA
+(3) **시트 잠금**,FE 대조표,F2,F2|SCREEN,NA
+(3) **시트 잠금**,FE 대조표,J2,J2|SCREEN,PASS
 (3) **시트 잠금**,FE 대조표,D4,D4|ROW:(3) **시트 잠금**,NA
-(3) **시트 잠금**,FE 대조표,D6,D6|SCREEN,NOT_RUN
-(3) **시트 잠금**,FE 대조표,F5,F5|SCREEN,NOT_RUN
-(3) **시트 잠금**,FE 대조표,E4,E4|MSG:MSG00008,NOT_RUN
-(3) **시트 잠금**,FE 대조표,E4,E4|MSG:MSG00009,NOT_RUN
-(3) **시트 잠금**,FE 대조표,E4,E4|MSG:MSG00010,NOT_RUN
-(3) **시트 잠금**,FE 대조표,E4,E4|MSG:MSG01044,NOT_RUN
-(3) **시트 잠금**,FE 대조표,E4,E4|MSG:MSG01045,NOT_RUN
-(3) **시트 잠금**,FE 대조표,I1,I1|SCREEN,NOT_RUN
+(3) **시트 잠금**,FE 대조표,D6,D6|SCREEN,ERROR
+(3) **시트 잠금**,FE 대조표,F5,F5|SCREEN,FAIL
+(3) **시트 잠금**,FE 대조표,E4,E4|MSG:MSG00008,NA
+(3) **시트 잠금**,FE 대조표,E4,E4|MSG:MSG00009,NA
+(3) **시트 잠금**,FE 대조표,E4,E4|MSG:MSG00010,NA
+(3) **시트 잠금**,FE 대조표,E4,E4|MSG:MSG01044,NA
+(3) **시트 잠금**,FE 대조표,E4,E4|MSG:MSG01045,NA
+(3) **시트 잠금**,FE 대조표,I1,I1|SCREEN,ERROR
 (3) **시트 잠금**,FE 대조표,H10,H10|SCREEN,PASS
 (3) **시트 잠금**,FE 대조표,E3,E3|ROW:(3) **시트 잠금**,NA
 ADMIN,FE 대조표,X-LOC,X-LOC|ROW:ADMIN,REVIEW
 ADMIN,FE 대조표,D4,D4|ROW:ADMIN,NA
-ADMIN,FE 대조표,D6,D6|SCREEN,NOT_RUN
-ADMIN,FE 대조표,J2,J2|SCREEN,NOT_RUN
-ADMIN,FE 대조표,F1,F1|SCREEN,NOT_RUN
-ADMIN,FE 대조표,F5,F5|SCREEN,NOT_RUN
-ADMIN,FE 대조표,G1,G1|ROW:ADMIN,REVIEW
+ADMIN,FE 대조표,D6,D6|SCREEN,ERROR
+ADMIN,FE 대조표,J2,J2|SCREEN,PASS
+ADMIN,FE 대조표,F1,F1|SCREEN,NA
+ADMIN,FE 대조표,F5,F5|SCREEN,FAIL
+ADMIN,FE 대조표,G1,G1|ROW:ADMIN,ERROR
 ADMIN,FE 대조표,A1,A1|ROW:ADMIN,NA
 CAPA Planner,FE 대조표,X-LOC,X-LOC|ROW:CAPA Planner,REVIEW
-CAPA Planner,FE 대조표,X-ROW,X-ROW|ENTRY:CAPA Planner,REVIEW
+CAPA Planner,FE 대조표,X-ROW,X-ROW|ENTRY:CAPA Planner,NA
 SCM PI Admin,FE 대조표,X-LOC,X-LOC|ROW:SCM PI Admin,REVIEW
 SCM PI Admin,FE 대조표,D4,D4|ROW:SCM PI Admin,NA
-SCM PI Admin,FE 대조표,D6,D6|SCREEN,NOT_RUN
-SCM PI Admin,FE 대조표,J2,J2|SCREEN,NOT_RUN
-SCM PI Admin,FE 대조표,F1,F1|SCREEN,NOT_RUN
-SCM PI Admin,FE 대조표,F5,F5|SCREEN,NOT_RUN
-SCM PI Admin,FE 대조표,G1,G1|ROW:SCM PI Admin,REVIEW
+SCM PI Admin,FE 대조표,D6,D6|SCREEN,ERROR
+SCM PI Admin,FE 대조표,J2,J2|SCREEN,PASS
+SCM PI Admin,FE 대조표,F1,F1|SCREEN,NA
+SCM PI Admin,FE 대조표,F5,F5|SCREEN,FAIL
+SCM PI Admin,FE 대조표,G1,G1|ROW:SCM PI Admin,ERROR
 SCM PI Admin,FE 대조표,A1,A1|ROW:SCM PI Admin,NA
 SCP Tester,FE 대조표,X-LOC,X-LOC|ROW:SCP Tester,REVIEW
-SCP Tester,FE 대조표,X-ROW,X-ROW|ENTRY:SCP Tester,REVIEW
+SCP Tester,FE 대조표,X-ROW,X-ROW|ENTRY:SCP Tester,NA
 FP Planner,FE 대조표,X-LOC,X-LOC|ROW:FP Planner,REVIEW
-FP Planner,FE 대조표,G1,G1|ROW:FP Planner,REVIEW
+FP Planner,FE 대조표,G1,G1|ROW:FP Planner,ERROR
 FP Planner,FE 대조표,A1,A1|ROW:FP Planner,NA
-FP Planner,FE 대조표,J2,J2|SCREEN,NOT_RUN
+FP Planner,FE 대조표,J2,J2|SCREEN,PASS
 FP Viewer,FE 대조표,X-LOC,X-LOC|ROW:FP Viewer,REVIEW
-FP Viewer,FE 대조표,G1,G1|ROW:FP Viewer,REVIEW
+FP Viewer,FE 대조표,G1,G1|ROW:FP Viewer,ERROR
 FP Viewer,FE 대조표,A1,A1|ROW:FP Viewer,NA
-FP Viewer,FE 대조표,J2,J2|SCREEN,NOT_RUN
+FP Viewer,FE 대조표,J2,J2|SCREEN,PASS
 SCM Viewer,FE 대조표,X-LOC,X-LOC|ROW:SCM Viewer,REVIEW
-SCM Viewer,FE 대조표,G1,G1|ROW:SCM Viewer,REVIEW
+SCM Viewer,FE 대조표,G1,G1|ROW:SCM Viewer,ERROR
 SCM Viewer,FE 대조표,A1,A1|ROW:SCM Viewer,NA
-SCM Viewer,FE 대조표,J2,J2|SCREEN,NOT_RUN
+SCM Viewer,FE 대조표,J2,J2|SCREEN,PASS
 SCP Planner,FE 대조표,X-LOC,X-LOC|ROW:SCP Planner,REVIEW
-SCP Planner,FE 대조표,G1,G1|ROW:SCP Planner,REVIEW
+SCP Planner,FE 대조표,G1,G1|ROW:SCP Planner,ERROR
 SCP Planner,FE 대조표,A1,A1|ROW:SCP Planner,NA
-SCP Planner,FE 대조표,J2,J2|SCREEN,NOT_RUN
+SCP Planner,FE 대조표,J2,J2|SCREEN,PASS
 G1,FE 대조표,X-LOC,X-LOC|ROW:G1,REVIEW
-G1,FE 대조표,A5,A5|COL:ELTR_LN_TP_CD,NOT_RUN
-G1,FE 대조표,H5,H5|COL:ELTR_LN_TP_CD,NOT_RUN
-G1,FE 대조표,H2,H2|COL:ELTR_LN_TP_CD,NOT_RUN
+G1,FE 대조표,A5,A5|COL:ELTR_LN_TP_CD,PASS
+G1,FE 대조표,H5,H5|COL:ELTR_LN_TP_CD,PASS
+G1,FE 대조표,H2,H2|COL:ELTR_LN_TP_CD,ERROR
 G2,FE 대조표,X-LOC,X-LOC|ROW:G2,REVIEW
-G2,FE 대조표,A5,A5|ROW:G2,REVIEW
-G2,FE 대조표,H5,H5|ROW:G2,REVIEW
-G2,FE 대조표,H2,H2|ROW:G2,REVIEW
-G2,FE 대조표,F1,F1|SCREEN,NOT_RUN
-G2,FE 대조표,F5,F5|SCREEN,NOT_RUN
-G2,FE 대조표,J2,J2|SCREEN,NOT_RUN
+G2,FE 대조표,A5,A5|ROW:G2,PASS
+G2,FE 대조표,H5,H5|ROW:G2,PASS
+G2,FE 대조표,H2,H2|ROW:G2,ERROR
+G2,FE 대조표,F1,F1|SCREEN,NA
+G2,FE 대조표,F5,F5|SCREEN,FAIL
+G2,FE 대조표,J2,J2|SCREEN,PASS
 G3,FE 대조표,X-LOC,X-LOC|ROW:G3,REVIEW
-G3,FE 대조표,A5,A5|ROW:G3,REVIEW
-G3,FE 대조표,H5,H5|ROW:G3,REVIEW
-G3,FE 대조표,H2,H2|ROW:G3,REVIEW
+G3,FE 대조표,A5,A5|ROW:G3,PASS
+G3,FE 대조표,H5,H5|ROW:G3,PASS
+G3,FE 대조표,H2,H2|ROW:G3,ERROR
 G4,FE 대조표,X-LOC,X-LOC|ROW:G4,REVIEW
-G4,FE 대조표,A5,A5|ROW:G4,REVIEW
-G4,FE 대조표,H5,H5|ROW:G4,REVIEW
-G4,FE 대조표,H2,H2|ROW:G4,REVIEW
+G4,FE 대조표,A5,A5|ROW:G4,PASS
+G4,FE 대조표,H5,H5|ROW:G4,PASS
+G4,FE 대조표,H2,H2|ROW:G4,ERROR
 G5,FE 대조표,X-LOC,X-LOC|ROW:G5,REVIEW
-G5,FE 대조표,A5,A5|ROW:G5,REVIEW
-G5,FE 대조표,H5,H5|ROW:G5,REVIEW
-G5,FE 대조표,H2,H2|ROW:G5,REVIEW
-G5,FE 대조표,D1,D1|ROW:G5,NA
+G5,FE 대조표,A5,A5|ROW:G5,PASS
+G5,FE 대조표,H5,H5|ROW:G5,PASS
+G5,FE 대조표,H2,H2|ROW:G5,ERROR
+G5,FE 대조표,D1,D1|ROW:G5,ERROR
 G5,FE 대조표,D3,D3|ROW:G5,NA
 G6,FE 대조표,X-LOC,X-LOC|ROW:G6,REVIEW
-G6,FE 대조표,A5,A5|ROW:G6,REVIEW
-G6,FE 대조표,H5,H5|ROW:G6,REVIEW
-G6,FE 대조표,H2,H2|ROW:G6,REVIEW
+G6,FE 대조표,A5,A5|ROW:G6,PASS
+G6,FE 대조표,H5,H5|ROW:G6,PASS
+G6,FE 대조표,H2,H2|ROW:G6,ERROR
 G6,FE 대조표,H3,H3|ROW:G6,NA
 `usrLayoutControl1` / `layoutControlGroup1`,FE 대조표,X-LOC,X-LOC|ROW:`usrLayoutControl1` / `layoutControlGroup1`,REVIEW
-`usrLayoutControl1` / `layoutControlGroup1`,FE 대조표,X-ROW,X-ROW|ENTRY:`usrLayoutControl1` / `layoutControlGroup1`,REVIEW
+`usrLayoutControl1` / `layoutControlGroup1`,FE 대조표,X-ROW,X-ROW|ENTRY:`usrLayoutControl1` / `layoutControlGroup1`,NA
 `imageList1`,FE 대조표,X-LOC,X-LOC|ROW:`imageList1`,REVIEW
-`imageList1`,FE 대조표,X-ROW,X-ROW|ENTRY:`imageList1`,REVIEW
+`imageList1`,FE 대조표,X-ROW,X-ROW|ENTRY:`imageList1`,NA
 `dtFromYYYY`(`YearFromThisYear_SCP_ALL`),FE 대조표,X-LOC,X-LOC|ROW:`dtFromYYYY`(`YearFromThisYear_SCP_ALL`),REVIEW
-`dtFromYYYY`(`YearFromThisYear_SCP_ALL`),FE 대조표,X-ROW,X-ROW|ENTRY:`dtFromYYYY`(`YearFromThisYear_SCP_ALL`),REVIEW
+`dtFromYYYY`(`YearFromThisYear_SCP_ALL`),FE 대조표,X-ROW,X-ROW|ENTRY:`dtFromYYYY`(`YearFromThisYear_SCP_ALL`),NA
 `dtYesOrNo` 필드,FE 대조표,X-LOC,X-LOC|ROW:`dtYesOrNo` 필드,REVIEW
-`dtYesOrNo` 필드,FE 대조표,X-ROW,X-ROW|ENTRY:`dtYesOrNo` 필드,REVIEW
+`dtYesOrNo` 필드,FE 대조표,X-ROW,X-ROW|ENTRY:`dtYesOrNo` 필드,NA
 데드 핸들러 `cboSheetType_SelectedIndexChanged` / `cboFromYYYY_Se,FE 대조표,X-LOC,X-LOC|ROW:데드 핸들러 `cboSheetType_SelectedIndexChanged` / `cboFromYYYY_Se,REVIEW
-데드 핸들러 `cboSheetType_SelectedIndexChanged` / `cboFromYYYY_Se,FE 대조표,C1,C1|ROW:데드 핸들러 `cboSheetType_SelectedIndexChanged` / `cboFromYYYY_Se,REVIEW
+데드 핸들러 `cboSheetType_SelectedIndexChanged` / `cboFromYYYY_Se,FE 대조표,C1,C1|ROW:데드 핸들러 `cboSheetType_SelectedIndexChanged` / `cboFromYYYY_Se,NA
 데드 핸들러 `cboSheetType_SelectedIndexChanged` / `cboFromYYYY_Se,FE 대조표,C4,C4|ROW:데드 핸들러 `cboSheetType_SelectedIndexChanged` / `cboFromYYYY_Se,NA
 `_ASSIGN_PRIORITY` 제외 필터,FE 대조표,X-LOC,X-LOC|ROW:`_ASSIGN_PRIORITY` 제외 필터,REVIEW
-`_ASSIGN_PRIORITY` 제외 필터,FE 대조표,X-ROW,X-ROW|ENTRY:`_ASSIGN_PRIORITY` 제외 필터,REVIEW
+`_ASSIGN_PRIORITY` 제외 필터,FE 대조표,X-ROW,X-ROW|ENTRY:`_ASSIGN_PRIORITY` 제외 필터,NA
 `LockColumn` 컬럼명 상수 배열,FE 대조표,X-LOC,X-LOC|ROW:`LockColumn` 컬럼명 상수 배열,REVIEW
-`LockColumn` 컬럼명 상수 배열,FE 대조표,D1,D1|ROW:`LockColumn` 컬럼명 상수 배열,NA
+`LockColumn` 컬럼명 상수 배열,FE 대조표,D1,D1|ROW:`LockColumn` 컬럼명 상수 배열,ERROR
 `LockColumn` 컬럼명 상수 배열,FE 대조표,D3,D3|ROW:`LockColumn` 컬럼명 상수 배열,NA
 `isEditMode` state,FE 대조표,X-LOC,X-LOC|ROW:`isEditMode` state,REVIEW
-`isEditMode` state,FE 대조표,D1,D1|ROW:`isEditMode` state,NA
+`isEditMode` state,FE 대조표,D1,D1|ROW:`isEditMode` state,ERROR
 `isEditMode` state,FE 대조표,D3,D3|ROW:`isEditMode` state,NA
-`isEditMode` state,FE 대조표,J2,J2|SCREEN,NOT_RUN
+`isEditMode` state,FE 대조표,J2,J2|SCREEN,PASS
 "`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,X-LOC,"X-LOC|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",REVIEW
-"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,A5,"A5|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",REVIEW
-"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,H5,"H5|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",REVIEW
-"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,H2,"H2|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",REVIEW
-"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,D1,"D1|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",NA
+"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,A5,"A5|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",PASS
+"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,H5,"H5|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",PASS
+"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,H2,"H2|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",ERROR
+"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,D1,"D1|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",ERROR
 "`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,D3,"D3|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",NA
-"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,G1,"G1|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",REVIEW
+"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,J2,J2|SCREEN,PASS
+"`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,G1,"G1|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",ERROR
 "`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",FE 대조표,A1,"A1|ROW:`ReadOnlySheetList.Add(CURRENT)` 를 ""읽기전용 시트"" 로 구현",NA
 `frozenColumns={1}` 하드코딩,FE 대조표,X-LOC,X-LOC|ROW:`frozenColumns={1}` 하드코딩,REVIEW
-`frozenColumns={1}` 하드코딩,FE 대조표,A5,A5|COL:ELTR_LN_TP_CD,NOT_RUN
-`frozenColumns={1}` 하드코딩,FE 대조표,H5,H5|COL:ELTR_LN_TP_CD,NOT_RUN
-`frozenColumns={1}` 하드코딩,FE 대조표,H2,H2|COL:ELTR_LN_TP_CD,NOT_RUN
+`frozenColumns={1}` 하드코딩,FE 대조표,A5,A5|COL:ELTR_LN_TP_CD,PASS
+`frozenColumns={1}` 하드코딩,FE 대조표,H5,H5|COL:ELTR_LN_TP_CD,PASS
+`frozenColumns={1}` 하드코딩,FE 대조표,H2,H2|COL:ELTR_LN_TP_CD,ERROR
 `spdMain_TopChange` 스크롤 핸들러,FE 대조표,X-LOC,X-LOC|ROW:`spdMain_TopChange` 스크롤 핸들러,REVIEW
-`spdMain_TopChange` 스크롤 핸들러,FE 대조표,H2,H2|ROW:`spdMain_TopChange` 스크롤 핸들러,REVIEW
-`spdMain_TopChange` 스크롤 핸들러,FE 대조표,H4,H4|SCREEN,NOT_RUN
+`spdMain_TopChange` 스크롤 핸들러,FE 대조표,H2,H2|ROW:`spdMain_TopChange` 스크롤 핸들러,ERROR
+`spdMain_TopChange` 스크롤 핸들러,FE 대조표,H4,H4|SCREEN,PASS
 `spdMain_TopChange` 스크롤 핸들러,FE 대조표,H3,H3|ROW:`spdMain_TopChange` 스크롤 핸들러,NA
 `statusIdx = UIUtils.GetIndexByCode(...)`,FE 대조표,X-LOC,X-LOC|ROW:`statusIdx = UIUtils.GetIndexByCode(...)`,REVIEW
-`statusIdx = UIUtils.GetIndexByCode(...)`,FE 대조표,X-ROW,X-ROW|ENTRY:`statusIdx = UIUtils.GetIndexByCode(...)`,REVIEW
+`statusIdx = UIUtils.GetIndexByCode(...)`,FE 대조표,X-ROW,X-ROW|ENTRY:`statusIdx = UIUtils.GetIndexByCode(...)`,NA
 `_dateStartColIdx` / `_dateEndColIdx`,FE 대조표,X-LOC,X-LOC|ROW:`_dateStartColIdx` / `_dateEndColIdx`,REVIEW
-`_dateStartColIdx` / `_dateEndColIdx`,FE 대조표,X-ROW,X-ROW|ENTRY:`_dateStartColIdx` / `_dateEndColIdx`,REVIEW
+`_dateStartColIdx` / `_dateEndColIdx`,FE 대조표,X-ROW,X-ROW|ENTRY:`_dateStartColIdx` / `_dateEndColIdx`,NA
 AS-IS 헤더 높이 75px(1단 35 + 2·3단 20),FE 대조표,X-LOC,X-LOC|ROW:AS-IS 헤더 높이 75px(1단 35 + 2·3단 20),REVIEW
-AS-IS 헤더 높이 75px(1단 35 + 2·3단 20),FE 대조표,X-ROW,X-ROW|ENTRY:AS-IS 헤더 높이 75px(1단 35 + 2·3단 20),REVIEW
+AS-IS 헤더 높이 75px(1단 35 + 2·3단 20),FE 대조표,X-ROW,X-ROW|ENTRY:AS-IS 헤더 높이 75px(1단 35 + 2·3단 20),NA
 AS-IS 빈 `catch`(`_from_yyyymm` 파싱 실패),FE 대조표,X-LOC,X-LOC|ROW:AS-IS 빈 `catch`(`_from_yyyymm` 파싱 실패),REVIEW
-AS-IS 빈 `catch`(`_from_yyyymm` 파싱 실패),FE 대조표,G1,G1|ROW:AS-IS 빈 `catch`(`_from_yyyymm` 파싱 실패),REVIEW
+AS-IS 빈 `catch`(`_from_yyyymm` 파싱 실패),FE 대조표,G1,G1|ROW:AS-IS 빈 `catch`(`_from_yyyymm` 파싱 실패),ERROR
 AS-IS 빈 `catch`(`_from_yyyymm` 파싱 실패),FE 대조표,A1,A1|ROW:AS-IS 빈 `catch`(`_from_yyyymm` 파싱 실패),NA
-AS-IS 빈 `catch`(`_from_yyyymm` 파싱 실패),FE 대조표,J2,J2|SCREEN,NOT_RUN
+AS-IS 빈 `catch`(`_from_yyyymm` 파싱 실패),FE 대조표,J2,J2|SCREEN,PASS
 Bottleneck **행 인덱스** 대응,FE 대조표,X-LOC,X-LOC|ROW:Bottleneck **행 인덱스** 대응,REVIEW
-Bottleneck **행 인덱스** 대응,FE 대조표,X-ROW,X-ROW|ENTRY:Bottleneck **행 인덱스** 대응,REVIEW
+Bottleneck **행 인덱스** 대응,FE 대조표,X-ROW,X-ROW|ENTRY:Bottleneck **행 인덱스** 대응,NA
 Formation(`AFFFF`) **전역** 제외,FE 대조표,X-LOC,X-LOC|ROW:Formation(`AFFFF`) **전역** 제외,REVIEW
-Formation(`AFFFF`) **전역** 제외,FE 대조표,X-ROW,X-ROW|ENTRY:Formation(`AFFFF`) **전역** 제외,REVIEW
+Formation(`AFFFF`) **전역** 제외,FE 대조표,X-ROW,X-ROW|ENTRY:Formation(`AFFFF`) **전역** 제외,NA
 `CapaLineMasterEE_SCP_ALL` 콤보 스왑,FE 대조표,X-LOC,X-LOC|ROW:`CapaLineMasterEE_SCP_ALL` 콤보 스왑,REVIEW
 `CapaLineMasterEE_SCP_ALL` 콤보 스왑,FE 대조표,D4,D4|ROW:`CapaLineMasterEE_SCP_ALL` 콤보 스왑,NA
-`CapaLineMasterEE_SCP_ALL` 콤보 스왑,FE 대조표,D6,D6|SCREEN,NOT_RUN
-`CapaLineMasterEE_SCP_ALL` 콤보 스왑,FE 대조표,J2,J2|SCREEN,NOT_RUN
+`CapaLineMasterEE_SCP_ALL` 콤보 스왑,FE 대조표,D6,D6|SCREEN,ERROR
+`CapaLineMasterEE_SCP_ALL` 콤보 스왑,FE 대조표,J2,J2|SCREEN,PASS
 `fetchStaticMeasures` / `staticMeasures`,FE 대조표,X-LOC,X-LOC|ROW:`fetchStaticMeasures` / `staticMeasures`,REVIEW
-`fetchStaticMeasures` / `staticMeasures`,FE 대조표,X-ROW,X-ROW|ENTRY:`fetchStaticMeasures` / `staticMeasures`,REVIEW
+`fetchStaticMeasures` / `staticMeasures`,FE 대조표,X-ROW,X-ROW|ENTRY:`fetchStaticMeasures` / `staticMeasures`,NA
 `useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,X-LOC,X-LOC|ROW:`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,REVIEW
-`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,F1,F1|SCREEN,NOT_RUN
-`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,F6,F6|SCREEN,NOPATH
-`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,F4,F4|ROW:`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,REVIEW
+`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,F1,F1|SCREEN,NA
+`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,F6,F6|SCREEN,ERROR
+`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,F4,F4|ROW:`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,NA
 `useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,DB-SYN,DB-SYN|ROW:`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,PASS
-`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,F2,F2|SCREEN,NOPATH
-`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,J2,J2|SCREEN,NOT_RUN
+`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,F2,F2|SCREEN,NA
+`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,J2,J2|SCREEN,PASS
 `useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,E3,E3|ROW:`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,NA
-`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,E4,E4|ROW:`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,REVIEW
+`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,FE 대조표,E4,E4|ROW:`useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRU,NA
 시트 탭 UI(`TabWrapper`/`TabPanel`),FE 대조표,X-LOC,X-LOC|ROW:시트 탭 UI(`TabWrapper`/`TabPanel`),REVIEW
-시트 탭 UI(`TabWrapper`/`TabPanel`),FE 대조표,A5,A5|ROW:시트 탭 UI(`TabWrapper`/`TabPanel`),REVIEW
-시트 탭 UI(`TabWrapper`/`TabPanel`),FE 대조표,H5,H5|ROW:시트 탭 UI(`TabWrapper`/`TabPanel`),REVIEW
-시트 탭 UI(`TabWrapper`/`TabPanel`),FE 대조표,H2,H2|ROW:시트 탭 UI(`TabWrapper`/`TabPanel`),REVIEW
+시트 탭 UI(`TabWrapper`/`TabPanel`),FE 대조표,A5,A5|ROW:시트 탭 UI(`TabWrapper`/`TabPanel`),PASS
+시트 탭 UI(`TabWrapper`/`TabPanel`),FE 대조표,H5,H5|ROW:시트 탭 UI(`TabWrapper`/`TabPanel`),PASS
+시트 탭 UI(`TabWrapper`/`TabPanel`),FE 대조표,H2,H2|ROW:시트 탭 UI(`TabWrapper`/`TabPanel`),ERROR
 Edit 버튼(`customButtons`),FE 대조표,X-LOC,X-LOC|ROW:Edit 버튼(`customButtons`),REVIEW
-Edit 버튼(`customButtons`),FE 대조표,D1,D1|ROW:Edit 버튼(`customButtons`),NA
+Edit 버튼(`customButtons`),FE 대조표,D1,D1|ROW:Edit 버튼(`customButtons`),ERROR
 Edit 버튼(`customButtons`),FE 대조표,D3,D3|ROW:Edit 버튼(`customButtons`),NA
-Edit 버튼(`customButtons`),FE 대조표,J2,J2|SCREEN,NOT_RUN
-Edit 버튼(`customButtons`),FE 대조표,E4,E4|ROW:Edit 버튼(`customButtons`),REVIEW
-Edit 버튼(`customButtons`),FE 대조표,I1,I1|SCREEN,NOT_RUN
+Edit 버튼(`customButtons`),FE 대조표,J2,J2|SCREEN,PASS
+Edit 버튼(`customButtons`),FE 대조표,E4,E4|ROW:Edit 버튼(`customButtons`),NA
+Edit 버튼(`customButtons`),FE 대조표,I1,I1|SCREEN,ERROR
 Edit 버튼(`customButtons`),FE 대조표,H10,H10|SCREEN,PASS
 필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,X-LOC,X-LOC|ROW:필수 조회조건 UI(`*`) · Search 전 alert,REVIEW
-필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,G4,G4|ROW:필수 조회조건 UI(`*`) · Search 전 alert,REVIEW
-필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,G1,G1|ROW:필수 조회조건 UI(`*`) · Search 전 alert,REVIEW
-필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,G6,G6|ROW:필수 조회조건 UI(`*`) · Search 전 alert,REVIEW
+필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,G4,G4|ROW:필수 조회조건 UI(`*`) · Search 전 alert,FAIL
+필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,SC1,SC1|SCREEN,NA
+필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,G1,G1|ROW:필수 조회조건 UI(`*`) · Search 전 alert,ERROR
+필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,G6,G6|ROW:필수 조회조건 UI(`*`) · Search 전 alert,NA
 필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,A1,A1|ROW:필수 조회조건 UI(`*`) · Search 전 alert,NA
-필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,J2,J2|SCREEN,NOT_RUN
+필수 조회조건 UI(`*`) · Search 전 alert,FE 대조표,J2,J2|SCREEN,PASS
 1,FE 대조표,X-LOC,X-LOC|ROW:1,PASS
-1,FE 대조표,X-ROW,X-ROW|ENTRY:1,REVIEW
+1,FE 대조표,X-ROW,X-ROW|ENTRY:1,NA
 2,FE 대조표,X-LOC,X-LOC|ROW:2,REVIEW
-2,FE 대조표,G1,G1|COND:clbSite,NOT_RUN
-2,FE 대조표,G1,G1|COND:clbLine,NOT_RUN
+2,FE 대조표,G1,G1|COND:clbSite,PASS
+2,FE 대조표,G1,G1|COND:clbLine,ERROR
 2,FE 대조표,A1,A1|ROW:2,NA
-2,FE 대조표,J2,J2|SCREEN,NOT_RUN
+2,FE 대조표,J2,J2|SCREEN,PASS
 3,FE 대조표,X-LOC,X-LOC|ROW:3,REVIEW
 3,FE 대조표,D4,D4|ROW:3,NA
-3,FE 대조표,D6,D6|SCREEN,NOT_RUN
-3,FE 대조표,J2,J2|SCREEN,NOT_RUN
-3,FE 대조표,F1,F1|SCREEN,NOT_RUN
-3,FE 대조표,F5,F5|SCREEN,NOT_RUN
-3,FE 대조표,E4,E4|MSG:MSG00096,NOT_RUN
-3,FE 대조표,I1,I1|SCREEN,NOT_RUN
+3,FE 대조표,D6,D6|SCREEN,ERROR
+3,FE 대조표,J2,J2|SCREEN,PASS
+3,FE 대조표,F1,F1|SCREEN,NA
+3,FE 대조표,F5,F5|SCREEN,FAIL
+3,FE 대조표,E4,E4|MSG:MSG00096,NA
+3,FE 대조표,I1,I1|SCREEN,ERROR
 3,FE 대조표,H10,H10|SCREEN,PASS
 4,FE 대조표,X-LOC,X-LOC|ROW:4,REVIEW
-4,FE 대조표,X-ROW,X-ROW|ENTRY:4,REVIEW
+4,FE 대조표,X-ROW,X-ROW|ENTRY:4,NA
 5,FE 대조표,X-LOC,X-LOC|ROW:5,REVIEW
-5,FE 대조표,E4,E4|MSG:MSG01410,NOT_RUN
-5,FE 대조표,I1,I1|SCREEN,NOT_RUN
+5,FE 대조표,E4,E4|MSG:MSG01410,NA
+5,FE 대조표,I1,I1|SCREEN,ERROR
 5,FE 대조표,H10,H10|SCREEN,PASS
 6,FE 대조표,X-LOC,X-LOC|ROW:6,REVIEW
-6,FE 대조표,G1,G1|ROW:6,REVIEW
+6,FE 대조표,G1,G1|ROW:6,ERROR
 6,FE 대조표,A1,A1|ROW:6,NA
-6,FE 대조표,J2,J2|SCREEN,NOT_RUN
-6,FE 대조표,E4,E4|MSG:MSG01390,NOT_RUN
-6,FE 대조표,E4,E4|MSG:MSG00667,NOT_RUN
-6,FE 대조표,I1,I1|SCREEN,NOT_RUN
+6,FE 대조표,J2,J2|SCREEN,PASS
+6,FE 대조표,E4,E4|MSG:MSG01390,NA
+6,FE 대조표,E4,E4|MSG:MSG00667,NA
+6,FE 대조표,I1,I1|SCREEN,ERROR
 6,FE 대조표,H10,H10|SCREEN,PASS
 7,FE 대조표,X-LOC,X-LOC|ROW:7,REVIEW
-7,FE 대조표,G1,G1|ROW:7,REVIEW
+7,FE 대조표,G1,G1|ROW:7,ERROR
 7,FE 대조표,A1,A1|ROW:7,NA
-7,FE 대조표,J2,J2|SCREEN,NOT_RUN
-7,FE 대조표,E4,E4|MSG:MSG01052,NOT_RUN
-7,FE 대조표,I1,I1|SCREEN,NOT_RUN
+7,FE 대조표,J2,J2|SCREEN,PASS
+7,FE 대조표,E4,E4|MSG:MSG01052,NA
+7,FE 대조표,I1,I1|SCREEN,ERROR
 7,FE 대조표,H10,H10|SCREEN,PASS
 ACT:SCP0108_CAPA_LOB_Report..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
 ACT:SCP0108_CAPA_LOB_Report..ctor:857:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
 ACT:SCP0108_CAPA_LOB_Report..ctor:860:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.AfterFindData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1400:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1402:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,ERROR
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1400:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,ERROR
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1402:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,ERROR
 ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1402:2,AS-IS 액션,A1,A1|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,NA
-ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1404:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1406:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1408:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1411:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1414:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1416:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1418:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1404:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,ERROR
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1406:4,AS-IS 액션,D1,D1|LEDGER:V-03468942,ERROR
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1406:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,ERROR
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1408:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,ERROR
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1411:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,ERROR
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1414:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,ERROR
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1416:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,ERROR
+ACT:SCP0108_CAPA_LOB_Report.AfterFindData:1418:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.AfterFindData,ERROR
 ACT:SCP0108_CAPA_LOB_Report.BeforeFindData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.BeforeFindData,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.BeforeFindData:1314:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.BeforeFindData,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.BeforeFindData:1316:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.BeforeFindData,REVIEW
@@ -366,235 +367,242 @@ ACT:SCP0108_CAPA_LOB_Report.ChangeColumnNameToCodeName:888:1,AS-IS 액션,X-ROW,
 ACT:SCP0108_CAPA_LOB_Report.ChangeColumnNameToCodeName:890:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ChangeColumnNameToCodeName,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.ChangeColumnNameToCodeName:893:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ChangeColumnNameToCodeName,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.ChangeColumnNameToCodeName:895:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ChangeColumnNameToCodeName,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList:1146:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList:1148:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList:1149:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1167:1,AS-IS 액션,A5,A5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1167:1,AS-IS 액션,H2,H2|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1167:1,AS-IS 액션,H5,H5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList,NA
+ACT:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList:1146:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList,NA
+ACT:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList:1148:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList,NA
+ACT:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList:1149:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ClearUsrCheckedList,NA
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,ERROR
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1167:1,AS-IS 액션,A5,A5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,NA
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1167:1,AS-IS 액션,H2,H2|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,ERROR
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1167:1,AS-IS 액션,H5,H5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,PASS
 ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1167:1,AS-IS 액션,D5,D5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,NA
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1168:2,AS-IS 액션,A5,A5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1168:2,AS-IS 액션,H2,H2|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1168:2,AS-IS 액션,H5,H5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1168:2,AS-IS 액션,A5,A5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,NA
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1168:2,AS-IS 액션,H2,H2|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,ERROR
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1168:2,AS-IS 액션,H5,H5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,PASS
 ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1168:2,AS-IS 액션,D5,D5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,NA
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1170:3,AS-IS 액션,A5,A5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1170:3,AS-IS 액션,H2,H2|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1170:3,AS-IS 액션,H5,H5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1170:3,AS-IS 액션,A5,A5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,NA
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1170:3,AS-IS 액션,H2,H2|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,ERROR
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1170:3,AS-IS 액션,H5,H5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,PASS
 ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1170:3,AS-IS 액션,D5,D5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,NA
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1172:4,AS-IS 액션,A5,A5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1172:4,AS-IS 액션,H2,H2|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1172:4,AS-IS 액션,H5,H5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1172:4,AS-IS 액션,A5,A5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,NA
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1172:4,AS-IS 액션,H2,H2|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,ERROR
+ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1172:4,AS-IS 액션,H5,H5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,PASS
 ACT:SCP0108_CAPA_LOB_Report.CreateSpread:1172:4,AS-IS 액션,D5,D5|ENTRY:SCP0108_CAPA_LOB_Report.CreateSpread,NA
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1290:1,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1290:1,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1291:2,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1291:2,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1293:3,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1293:3,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1294:4,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1294:4,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1296:5,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1296:5,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1297:6,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1297:6,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1299:7,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1299:7,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1300:8,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1300:8,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1302:9,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1302:9,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1304:10,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1304:10,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Dispose,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Dispose:16:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Dispose:18:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Dispose:20:3,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.FindButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1290:1,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1290:1,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1291:2,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1291:2,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1293:3,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1293:3,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1294:4,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1294:4,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1296:5,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1296:5,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1297:6,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1297:6,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1299:7,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1299:7,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1300:8,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1300:8,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1302:9,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1302:9,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1304:10,AS-IS 액션,F1,F1|SCREEN,NA
+ACT:SCP0108_CAPA_LOB_Report.DeleteButton:1304:10,AS-IS 액션,F5,F5|SCREEN,FAIL
+ACT:SCP0108_CAPA_LOB_Report.Dispose,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Dispose:16:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Dispose:18:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Dispose:20:3,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.FindButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,ERROR
 ACT:SCP0108_CAPA_LOB_Report.FindButton,AS-IS 액션,A1,A1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
 ACT:SCP0108_CAPA_LOB_Report.FindButton,AS-IS 액션,A6,A6|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
-ACT:SCP0108_CAPA_LOB_Report.FindButton,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1270:1,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.FindButton,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1270:1,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
 ACT:SCP0108_CAPA_LOB_Report.FindButton:1270:1,AS-IS 액션,A1,A1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
 ACT:SCP0108_CAPA_LOB_Report.FindButton:1270:1,AS-IS 액션,A6,A6|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1270:1,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1273:2,AS-IS 액션,E4,E4|MSG:MSG00423,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1273:2,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1275:3,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1270:1,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1273:2,AS-IS 액션,G1,G1|LEDGER:V-1f89d394,NA
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1273:2,AS-IS 액션,E4,E4|MSG:MSG00423,NA
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1273:2,AS-IS 액션,I1,I1|SCREEN,ERROR
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1275:3,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
 ACT:SCP0108_CAPA_LOB_Report.FindButton:1275:3,AS-IS 액션,A1,A1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
 ACT:SCP0108_CAPA_LOB_Report.FindButton:1275:3,AS-IS 액션,A6,A6|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1275:3,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1278:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1279:5,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1275:3,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1278:4,AS-IS 액션,E3,E3|LEDGER:V-38a9fb2c,NA
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1278:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,ERROR
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1279:5,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
 ACT:SCP0108_CAPA_LOB_Report.FindButton:1279:5,AS-IS 액션,A1,A1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
 ACT:SCP0108_CAPA_LOB_Report.FindButton:1279:5,AS-IS 액션,A6,A6|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1279:5,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1281:6,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1279:5,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1281:6,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
 ACT:SCP0108_CAPA_LOB_Report.FindButton:1281:6,AS-IS 액션,A1,A1|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
 ACT:SCP0108_CAPA_LOB_Report.FindButton:1281:6,AS-IS 액션,A6,A6|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
-ACT:SCP0108_CAPA_LOB_Report.FindButton:1281:6,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.FindData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.FindData,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.FindButton:1281:6,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindButton,NA
+ACT:SCP0108_CAPA_LOB_Report.FindData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.FindData,NA
 ACT:SCP0108_CAPA_LOB_Report.FindData,AS-IS 액션,A1,A1|ENTRY:SCP0108_CAPA_LOB_Report.FindData,NA
 ACT:SCP0108_CAPA_LOB_Report.FindData,AS-IS 액션,A6,A6|ENTRY:SCP0108_CAPA_LOB_Report.FindData,NA
-ACT:SCP0108_CAPA_LOB_Report.FindData,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindData,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.FindData:1484:1,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindData,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.FindData,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindData,NA
+ACT:SCP0108_CAPA_LOB_Report.FindData:1484:1,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindData,ERROR
 ACT:SCP0108_CAPA_LOB_Report.FindData:1484:1,AS-IS 액션,A1,A1|ENTRY:SCP0108_CAPA_LOB_Report.FindData,NA
 ACT:SCP0108_CAPA_LOB_Report.FindData:1484:1,AS-IS 액션,A6,A6|ENTRY:SCP0108_CAPA_LOB_Report.FindData,NA
-ACT:SCP0108_CAPA_LOB_Report.FindData:1484:1,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindData,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.FindDataMain,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.FindData:1484:1,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindData,NA
+ACT:SCP0108_CAPA_LOB_Report.FindDataMain,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,NA
 ACT:SCP0108_CAPA_LOB_Report.FindDataMain,AS-IS 액션,A1,A1|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,NA
 ACT:SCP0108_CAPA_LOB_Report.FindDataMain,AS-IS 액션,A6,A6|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,NA
-ACT:SCP0108_CAPA_LOB_Report.FindDataMain,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.FindDataMain:1477:1,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.FindDataMain,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,NA
+ACT:SCP0108_CAPA_LOB_Report.FindDataMain:1477:1,AS-IS 액션,G1,G1|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,ERROR
 ACT:SCP0108_CAPA_LOB_Report.FindDataMain:1477:1,AS-IS 액션,A1,A1|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,NA
 ACT:SCP0108_CAPA_LOB_Report.FindDataMain:1477:1,AS-IS 액션,A6,A6|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,NA
-ACT:SCP0108_CAPA_LOB_Report.FindDataMain:1477:1,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.FindDataMain:1477:1,AS-IS 액션,F4,F4|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,NA
 ACT:SCP0108_CAPA_LOB_Report.FindDataMain:1479:2,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCP0108_CAPA_LOB_Report.FindDataMain,PASS
-ACT:SCP0108_CAPA_LOB_Report.Form_Load,AS-IS 액션,G6,G6|COND:rgrpDivisionType,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load,AS-IS 액션,G4,G4|COND:rgrpDivisionType,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load:967:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load:969:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load:970:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load:971:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load:972:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load:973:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load:975:7,AS-IS 액션,G6,G6|COND:rgrpDivisionType,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load:975:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load:975:7,AS-IS 액션,G4,G4|COND:rgrpDivisionType,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.Form_Load:975:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.Form_Load,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.Form_Load,AS-IS 액션,G6,G6|COND:rgrpDivisionType,PASS
+ACT:SCP0108_CAPA_LOB_Report.Form_Load,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Form_Load,AS-IS 액션,G4,G4|COND:rgrpDivisionType,FAIL
+ACT:SCP0108_CAPA_LOB_Report.Form_Load:967:1,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Form_Load:969:2,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Form_Load:970:3,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Form_Load:971:4,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Form_Load:972:5,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Form_Load:973:6,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Form_Load:975:7,AS-IS 액션,G6,G6|COND:rgrpDivisionType,PASS
+ACT:SCP0108_CAPA_LOB_Report.Form_Load:975:7,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.Form_Load:975:7,AS-IS 액션,G4,G4|COND:rgrpDivisionType,FAIL
+ACT:SCP0108_CAPA_LOB_Report.Form_Load:975:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.Form_Load,FAIL
 ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,AS-IS 액션,B4,B4|COL:DIVISION_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,AS-IS 액션,B3,B3|COL:DIVISION_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:138:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:138:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,AS-IS 액션,B4,B4|COL:VER_SEQ,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,AS-IS 액션,B3,B3|COL:DIVISION_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,AS-IS 액션,B3,B3|COL:VER_SEQ,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:138:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:138:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,NA
 ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:142:2,AS-IS 액션,B4,B4|COL:DIVISION_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:142:2,AS-IS 액션,B3,B3|COL:DIVISION_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:144:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:144:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:146:4,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:146:4,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:148:5,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:148:5,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:155:6,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:155:6,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1177:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1179:2,AS-IS 액션,F4,F4|SP:P_SCP0104_GET_SPREAD_TITLE,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:142:2,AS-IS 액션,B4,B4|COL:VER_SEQ,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:142:2,AS-IS 액션,B3,B3|COL:DIVISION_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:142:2,AS-IS 액션,B3,B3|COL:VER_SEQ,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:144:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:144:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:146:4,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:146:4,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:148:5,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:148:5,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:155:6,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus:155:6,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetCurrVersionProgessStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,NA
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1177:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1179:2,AS-IS 액션,F4,F4|SP:P_SCP0104_GET_SPREAD_TITLE,NA
 ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1179:2,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0104_GET_SPREAD_TITLE,PASS
 ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1181:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1181:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1181:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,NA
 ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1182:4,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1182:4,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1182:4,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,NA
 ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1183:5,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1183:5,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1185:6,AS-IS 액션,F4,F4|SP:P_SCP0104_GET_SPREAD_TITLE,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1183:5,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,NA
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1185:6,AS-IS 액션,F4,F4|SP:P_SCP0104_GET_SPREAD_TITLE,NA
 ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1185:6,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0104_GET_SPREAD_TITLE,PASS
 ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1189:7,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1189:7,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1189:7,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,NA
 ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1190:8,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1190:8,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1190:8,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,NA
 ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1190:9,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1190:9,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1190:9,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,NA
 ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1192:10,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1192:10,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.InitControls,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.InitControls,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.InitControls,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitControls:1128:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitControls:1131:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitControls:1133:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitControls:1134:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitControls:1134:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.InitControls,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.InitControls:1136:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitControls:1137:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitControls:1138:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitControls:1139:8,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitControls:1140:9,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitDatasAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.InitDatasAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.InitDatasAll,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:870:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:871:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:872:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:873:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:874:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:875:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:877:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.GetSpdTitle:1192:10,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.GetSpdTitle,NA
+ACT:SCP0108_CAPA_LOB_Report.InitControls,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.InitControls,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1128:1,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1131:2,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1133:3,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1134:4,AS-IS 액션,J1,J1|LEDGER:V-60b26aa8,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1134:4,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1134:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.InitControls,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1136:5,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1137:6,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1138:7,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1139:8,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitControls:1140:9,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitDatasAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.InitDatasAll,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitDatasAll,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:870:1,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:871:2,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:872:3,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:873:4,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:874:5,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:875:6,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitDatasAll:877:7,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:cboVersion,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:cboVersionSeq,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:clbSite,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:clbPlant,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:clbFactory,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:clbLine,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:clbOperation,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:rgrpDivisionType,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:cboVersion,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:cboVersionSeq,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:clbSite,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:clbPlant,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:clbFactory,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:clbLine,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:clbOperation,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:rgrpDivisionType,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:cboDivision,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:cboVersion,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:cboVersionSeq,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:clbSite,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:clbPlant,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:clbFactory,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:clbLine,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:clbOperation,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G6,G6|COND:rgrpDivisionType,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:cboDivision,FAIL
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:cboVersion,FAIL
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:cboVersionSeq,FAIL
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:clbSite,FAIL
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:clbPlant,FAIL
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:clbFactory,FAIL
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:clbLine,FAIL
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:clbOperation,FAIL
+ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|COND:rgrpDivisionType,FAIL
 ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|BTN:btnItemId,NOPATH
 ACT:SCP0108_CAPA_LOB_Report.InitEvent,AS-IS 액션,G4,G4|BTN:btnItem,NOPATH
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1236:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1236:1,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1236:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1236:1,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1236:1,AS-IS 액션,G6,G6|COND:cboDivision,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1236:1,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1236:1,AS-IS 액션,G4,G4|COND:cboDivision,FAIL
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1237:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1237:2,AS-IS 액션,G6,G6|COND:cboVersion,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1237:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1237:2,AS-IS 액션,G4,G4|COND:cboVersion,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1237:2,AS-IS 액션,G6,G6|COND:cboVersion,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1237:2,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1237:2,AS-IS 액션,G4,G4|COND:cboVersion,FAIL
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1238:3,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1238:3,AS-IS 액션,G6,G6|COND:cboVersionSeq,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1238:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1238:3,AS-IS 액션,G4,G4|COND:cboVersionSeq,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1238:3,AS-IS 액션,G6,G6|COND:cboVersionSeq,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1238:3,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1238:3,AS-IS 액션,G4,G4|COND:cboVersionSeq,FAIL
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1239:4,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1239:4,AS-IS 액션,G6,G6|COND:clbSite,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1239:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1239:4,AS-IS 액션,G4,G4|COND:clbSite,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1239:4,AS-IS 액션,G6,G6|COND:clbSite,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1239:4,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1239:4,AS-IS 액션,G4,G4|COND:clbSite,FAIL
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1240:5,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1240:5,AS-IS 액션,G6,G6|COND:clbPlant,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1240:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1240:5,AS-IS 액션,G4,G4|COND:clbPlant,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1240:5,AS-IS 액션,G6,G6|COND:clbPlant,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1240:5,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1240:5,AS-IS 액션,G4,G4|COND:clbPlant,FAIL
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1241:6,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1241:6,AS-IS 액션,G6,G6|COND:clbFactory,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1241:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1241:6,AS-IS 액션,G4,G4|COND:clbFactory,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1241:6,AS-IS 액션,G6,G6|COND:clbFactory,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1241:6,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1241:6,AS-IS 액션,G4,G4|COND:clbFactory,FAIL
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1242:7,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1242:7,AS-IS 액션,G6,G6|COND:clbLine,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1242:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1242:7,AS-IS 액션,G4,G4|COND:clbLine,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1242:7,AS-IS 액션,G6,G6|COND:clbLine,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1242:7,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1242:7,AS-IS 액션,G4,G4|COND:clbLine,FAIL
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1243:8,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1243:8,AS-IS 액션,G6,G6|COND:clbOperation,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1243:8,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1243:8,AS-IS 액션,G4,G4|COND:clbOperation,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1243:8,AS-IS 액션,G6,G6|COND:clbOperation,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1243:8,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1243:8,AS-IS 액션,G4,G4|COND:clbOperation,FAIL
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1245:9,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1245:9,AS-IS 액션,G6,G6|COND:rgrpDivisionType,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1245:9,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1245:9,AS-IS 액션,G4,G4|COND:rgrpDivisionType,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1245:9,AS-IS 액션,G6,G6|COND:rgrpDivisionType,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1245:9,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1245:9,AS-IS 액션,G4,G4|COND:rgrpDivisionType,FAIL
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1247:10,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1247:10,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1247:10,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1249:11,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitEvent:1249:11,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitEvent:1249:11,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1249:11,AS-IS 액션,G4,G4|BTN:btnItemId,NOPATH
 ACT:SCP0108_CAPA_LOB_Report.InitEvent:1249:11,AS-IS 액션,G4,G4|BTN:btnItem,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.InitQueryDics,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.InitQueryDics,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.InitQueryDics,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitQueryDics:865:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.InitSpread,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.InitSpread,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitSpread:1197:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitSpread:1199:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitSpread:1201:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitSpread:1203:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.InitSpread:1205:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.InitQueryDics,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.InitQueryDics,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitQueryDics,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitQueryDics:865:1,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.InitSpread,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitSpread,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitSpread:1197:1,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitSpread:1199:2,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitSpread:1201:3,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitSpread:1203:4,AS-IS 액션,A10,A10|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.InitSpread:1205:5,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0108_CAPA_LOB_Report.RefreshAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshAll:1155:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshAll:1156:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshAll,REVIEW
@@ -602,9 +610,9 @@ ACT:SCP0108_CAPA_LOB_Report.RefreshAll:1157:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP
 ACT:SCP0108_CAPA_LOB_Report.RefreshAll:1158:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshAll:1159:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshAll:1160:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshBottleneck,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshBottleneck,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshBottleneck:882:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshBottleneck,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshBottleneck:882:1,AS-IS 액션,C1,C1|COND:cboBottleneck,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.RefreshBottleneck,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshBottleneck,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshBottleneck:882:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshBottleneck,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshBottleneck:882:1,AS-IS 액션,C1,C1|COND:cboBottleneck,PASS
 ACT:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus:1353:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus:1357:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus,REVIEW
@@ -621,222 +629,237 @@ ACT:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus:1381:12,AS-IS 액션,X-ROW,X
 ACT:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus:1383:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus:1386:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus:1394:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshDateColumnStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshDivision,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshDivision,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshDivision:986:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshDivision,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshDivision:986:1,AS-IS 액션,C1,C1|COND:cboDivision,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1111:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1113:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1115:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1117:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1119:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1119:5,AS-IS 액션,C1,C1|COND:clbElectrodeType,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1121:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll:956:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll:958:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll:960:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll:962:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshFactory,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactory,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshFactory:1076:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactory,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshFactory:1078:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactory,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshFactory:1080:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactory,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshFactory:1081:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactory,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshFactory:1081:4,AS-IS 액션,C1,C1|COND:clbFactory,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.RefreshDivision,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshDivision,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshDivision:986:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshDivision,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshDivision:986:1,AS-IS 액션,C1,C1|COND:cboDivision,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1111:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1113:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1115:3,AS-IS 액션,A6,A6|LEDGER:V-1e5741f0,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1115:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1117:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1119:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1119:5,AS-IS 액션,C1,C1|COND:clbElectrodeType,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeType:1121:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeType,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll:956:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll:958:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll:960:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll:962:4,AS-IS 액션,A6,A6|LEDGER:V-8772d41d,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll:962:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshElectrodeTypeAll,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshFactory,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactory,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshFactory:1076:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactory,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshFactory:1078:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactory,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshFactory:1080:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactory,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshFactory:1081:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactory,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshFactory:1081:4,AS-IS 액션,C1,C1|COND:clbFactory,PASS
 ACT:SCP0108_CAPA_LOB_Report.RefreshFactoryAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactoryAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshFactoryAll:923:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactoryAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshFactoryAll:925:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactoryAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshFactoryAll:927:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshFactoryAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshLine,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshLine:1086:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshLine:1088:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshLine:1090:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshLine:1091:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshLine:1091:4,AS-IS 액션,C1,C1|COND:clbLine,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.RefreshLine,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLine,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshLine:1086:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLine,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshLine:1088:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLine,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshLine:1090:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLine,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshLine:1091:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLine,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshLine:1091:4,AS-IS 액션,C1,C1|COND:clbLine,PASS
 ACT:SCP0108_CAPA_LOB_Report.RefreshLineAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLineAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshLineAll:934:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLineAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshLineAll:936:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLineAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshLineAll:938:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshLineAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperation,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1096:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1098:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1100:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1102:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1104:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1104:5,AS-IS 액션,C1,C1|COND:clbOperation,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1106:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperationAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll:945:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperationAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll:947:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperationAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll:949:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperationAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll:951:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperationAll,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperation,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1096:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1098:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1100:3,AS-IS 액션,A6,A6|LEDGER:V-7c8d8319,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1100:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1102:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1104:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1104:5,AS-IS 액션,C1,C1|COND:clbOperation,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperation:1106:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperation,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperationAll,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll:945:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperationAll,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll:947:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperationAll,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll:949:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperationAll,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll:951:4,AS-IS 액션,A6,A6|LEDGER:V-3320f2bc,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshOperationAll:951:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshOperationAll,NA
 ACT:SCP0108_CAPA_LOB_Report.RefreshPlanType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlanType,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshPlanType:1015:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlanType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshPlant,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshPlant:1066:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshPlant:1068:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshPlant:1070:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshPlant:1071:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshPlant:1071:4,AS-IS 액션,C1,C1|COND:clbPlant,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.RefreshPlant,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlant,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshPlant:1066:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlant,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshPlant:1068:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlant,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshPlant:1070:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlant,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshPlant:1071:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlant,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshPlant:1071:4,AS-IS 액션,C1,C1|COND:clbPlant,PASS
 ACT:SCP0108_CAPA_LOB_Report.RefreshPlantAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlantAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshPlantAll:912:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlantAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshPlantAll:914:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlantAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshPlantAll:916:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshPlantAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1019:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1021:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1023:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1026:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1028:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1031:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1033:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1033:7,AS-IS 액션,C1,C1|COND:cboProgressStatus,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1042:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1044:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1046:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1048:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1050:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1019:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1021:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1023:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1026:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1028:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1031:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1033:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1033:7,AS-IS 액션,C1,C1|COND:cboProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1042:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1044:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1046:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1048:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshProgressStatus:1050:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshProgressStatus,PASS
 ACT:SCP0108_CAPA_LOB_Report.RefreshSheetHeader,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSheetHeader,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshSheetHeader:1211:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSheetHeader,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshSheetHeader:1213:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSheetHeader,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshSheetHeader:1215:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSheetHeader,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshSheetHeader:1231:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSheetHeader,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshSite,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshSite:1056:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshSite:1058:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshSite:1060:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshSite:1061:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshSite:1061:4,AS-IS 액션,C1,C1|COND:clbSite,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.RefreshSite,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSite,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshSite:1056:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSite,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshSite:1058:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSite,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshSite:1060:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSite,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshSite:1061:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSite,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshSite:1061:4,AS-IS 액션,C1,C1|COND:clbSite,PASS
 ACT:SCP0108_CAPA_LOB_Report.RefreshSiteAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSiteAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshSiteAll:901:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSiteAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshSiteAll:903:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSiteAll,REVIEW
 ACT:SCP0108_CAPA_LOB_Report.RefreshSiteAll:905:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshSiteAll,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersion,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersion,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersion:991:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersion,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersion:994:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersion,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersion:996:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersion,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersion:999:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersion,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersion:999:4,AS-IS 액션,C1,C1|COND:cboVersion,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersionSeq,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq:1004:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersionSeq,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq:1006:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersionSeq,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq:1010:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersionSeq,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq:1010:3,AS-IS 액션,C1,C1|COND:cboVersionSeq,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersion,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersion,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersion:991:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersion,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersion:994:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersion,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersion:996:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersion,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersion:999:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersion,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersion:999:4,AS-IS 액션,C1,C1|COND:cboVersion,PASS
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersionSeq,ERROR
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq:1004:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersionSeq,ERROR
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq:1006:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersionSeq,ERROR
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq:1010:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.RefreshVersionSeq,ERROR
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq:1010:3,AS-IS 액션,C1,C1|COND:cboVersionSeq,NA
+ACT:SCP0108_CAPA_LOB_Report.RefreshVersionSeq:1010:3,AS-IS 액션,C2,C2|COL:VER_SEQ,ERROR
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,ERROR
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1435:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1435:1,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1435:1,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1437:2,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1437:2,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1437:2,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1440:3,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1440:3,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1442:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1443:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1444:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1440:3,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1442:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,ERROR
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1443:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,ERROR
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1444:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,ERROR
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1446:7,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1446:7,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1448:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1452:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1446:7,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1448:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,ERROR
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1452:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,ERROR
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1456:10,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1456:10,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1456:10,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1457:11,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1457:11,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1457:11,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1458:12,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1458:12,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1458:12,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1459:13,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1459:13,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1459:13,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1460:14,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1460:14,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1460:14,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1461:15,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1461:15,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1461:15,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1462:16,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1462:16,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1462:16,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1463:17,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1463:17,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1463:17,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1464:18,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1464:18,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1464:18,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1465:19,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1465:19,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1465:19,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1466:20,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1466:20,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1466:20,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1467:21,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1467:21,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1467:21,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1468:22,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1468:22,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1468:22,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1469:23,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1469:23,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1469:23,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1470:24,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1470:24,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1470:24,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
 ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1472:25,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
-ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1472:25,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetSheetMerge,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetSheetMerge,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetQueryInfoGet:1472:25,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetQueryInfoGet,NA
+ACT:SCP0108_CAPA_LOB_Report.SetSheetMerge,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetSheetMerge,ERROR
 ACT:SCP0108_CAPA_LOB_Report.SetSheetMerge:1424:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetSheetMerge,NA
-ACT:SCP0108_CAPA_LOB_Report.SetSheetMerge:1424:1,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetSheetMerge,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetSheetMerge:1424:1,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetSheetMerge,NA
 ACT:SCP0108_CAPA_LOB_Report.SetSheetMerge:1429:2,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetSheetMerge,NA
-ACT:SCP0108_CAPA_LOB_Report.SetSheetMerge:1429:2,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetSheetMerge,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetSheetMerge:1429:2,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetSheetMerge,NA
+ACT:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,ERROR
 ACT:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType:1335:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,NA
-ACT:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType:1335:1,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType:1337:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType:1341:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetVisibleOperation,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleOperation,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType:1335:1,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType:1337:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,ERROR
+ACT:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType:1341:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleElectrodeType,ERROR
+ACT:SCP0108_CAPA_LOB_Report.SetVisibleOperation,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleOperation,ERROR
 ACT:SCP0108_CAPA_LOB_Report.SetVisibleOperation:1323:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleOperation,NA
-ACT:SCP0108_CAPA_LOB_Report.SetVisibleOperation:1323:1,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetVisibleOperation:1325:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetVisibleOperation:1329:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.SetVisibleSheetColumns,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleSheetColumns,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.SetVisibleOperation:1323:1,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.SetVisibleOperation:1325:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleOperation,ERROR
+ACT:SCP0108_CAPA_LOB_Report.SetVisibleOperation:1329:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleOperation,ERROR
+ACT:SCP0108_CAPA_LOB_Report.SetVisibleSheetColumns,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleSheetColumns,ERROR
 ACT:SCP0108_CAPA_LOB_Report.SetVisibleSheetColumns:1347:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleSheetColumns,NA
-ACT:SCP0108_CAPA_LOB_Report.SetVisibleSheetColumns:1347:1,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleSheetColumns,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ShowItem,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ShowItem:1582:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ShowItem:1586:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ShowItem:1588:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ShowItem:1589:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ShowItem:1590:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ShowItem:1592:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ShowItem:1594:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.ShowItem:1600:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1616:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1616:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1616:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.btnColumn_Click,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1617:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1617:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1617:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.btnColumn_Click,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1619:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1619:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1619:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.btnColumn_Click,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1621:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1621:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnItem_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnItem_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1606:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1606:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1608:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1608:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1610:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1610:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1610:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.btnItem_Click,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1493:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.SetVisibleSheetColumns:1347:1,AS-IS 액션,E4,E4|ENTRY:SCP0108_CAPA_LOB_Report.SetVisibleSheetColumns,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1582:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1586:2,AS-IS 액션,G5,G5|LEDGER:V-24ab266b,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1586:2,AS-IS 액션,H6,H6|LEDGER:V-5f9eb5f4,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1586:2,AS-IS 액션,M3,M3|LEDGER:V-61400640,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1586:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1588:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1589:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1590:5,AS-IS 액션,G5,G5|LEDGER:V-512e6195,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1590:5,AS-IS 액션,H6,H6|LEDGER:V-40fcff99,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1590:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1592:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1594:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,NA
+ACT:SCP0108_CAPA_LOB_Report.ShowItem:1600:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.ShowItem,NA
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click,AS-IS 액션,K4,K4|SCREEN,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1616:1,AS-IS 액션,G5,G5|LEDGER:V-6d4ff714,PASS
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1616:1,AS-IS 액션,H6,H6|LEDGER:V-97fa0a50,NA
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1616:1,AS-IS 액션,M3,M3|LEDGER:V-7d095d23,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1616:1,AS-IS 액션,K4,K4|SCREEN,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1616:1,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1616:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.btnColumn_Click,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1617:2,AS-IS 액션,K4,K4|SCREEN,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1617:2,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1617:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.btnColumn_Click,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1619:3,AS-IS 액션,G5,G5|LEDGER:V-81b24bc7,NA
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1619:3,AS-IS 액션,H6,H6|LEDGER:V-dd9b33ea,NA
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1619:3,AS-IS 액션,K4,K4|SCREEN,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1619:3,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1619:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.btnColumn_Click,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1621:4,AS-IS 액션,K4,K4|SCREEN,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnColumn_Click:1621:4,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.btnItem_Click,AS-IS 액션,K4,K4|SCREEN,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnItem_Click,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1606:1,AS-IS 액션,K4,K4|SCREEN,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1606:1,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1608:2,AS-IS 액션,K4,K4|SCREEN,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1608:2,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1610:3,AS-IS 액션,K4,K4|SCREEN,ERROR
+ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1610:3,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.btnItem_Click:1610:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.btnItem_Click,ERROR
+ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,ERROR
+ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1493:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1493:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1493:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1495:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1495:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1495:2,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1495:2,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1496:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1496:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1496:3,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1496:3,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1497:4,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1497:4,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1497:4,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1497:4,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1498:5,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1498:5,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1498:5,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1498:5,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1499:6,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1499:6,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1499:6,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged:1499:6,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboDivision_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged:1566:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged:1566:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged:1566:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged,NA
@@ -846,272 +869,272 @@ ACT:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged:1568:2,AS-IS 액션
 ACT:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged:1570:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged:1570:3,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged:1570:3,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboFromYYYY_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboSheetType_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.cboSheetType_SelectedIndexChanged,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.cboSheetType_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.cboSheetType_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboSheetType_SelectedIndexChanged:1530:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboSheetType_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboSheetType_SelectedIndexChanged:1530:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboSheetType_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboSheetType_SelectedIndexChanged:1530:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboSheetType_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1514:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,ERROR
+ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1514:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1514:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1514:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1516:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1516:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1516:2,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1516:2,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1517:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1517:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1517:3,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1517:3,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1518:4,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1518:4,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1518:4,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged:1518:4,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboVersionSeq_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1504:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,ERROR
+ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1504:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1504:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1504:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1506:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1506:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1506:2,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1506:2,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1507:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1507:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1507:3,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1507:3,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1508:4,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1508:4,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1508:4,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1508:4,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1509:5,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1509:5,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1509:5,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged:1509:5,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.cboVersion_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged:1550:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,ERROR
+ACT:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged:1550:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged:1550:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged:1550:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged:1551:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged:1551:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged:1551:2,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged:1551:2,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbFactory_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged:1556:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged,ERROR
+ACT:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged:1556:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged:1556:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged:1556:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbLine_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged:1561:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged,ERROR
+ACT:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged:1561:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged:1561:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged:1561:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbOperation_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1543:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,ERROR
+ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1543:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1543:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1543:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1544:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1544:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1544:2,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1544:2,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1545:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1545:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1545:3,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged:1545:3,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbPlant_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1535:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,ERROR
+ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1535:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1535:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1535:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1536:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1536:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1536:2,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1536:2,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1537:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1537:3,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1537:3,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1537:3,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1538:4,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1538:4,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1538:4,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged:1538:4,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.clbSite_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.getBottleneck,AS-IS 액션,B4,B4|COND:cboBottleneck,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getBottleneck,AS-IS 액션,B3,B3|COND:cboBottleneck,TODO
+ACT:SCP0108_CAPA_LOB_Report.getBottleneck,AS-IS 액션,B4,B4|COND:cboBottleneck,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getBottleneck,AS-IS 액션,B3,B3|COND:cboBottleneck,PASS
 ACT:SCP0108_CAPA_LOB_Report.getBottleneck:588:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getBottleneck,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getBottleneck:588:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getBottleneck,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getBottleneck:592:2,AS-IS 액션,B4,B4|COND:cboBottleneck,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getBottleneck:592:2,AS-IS 액션,B3,B3|COND:cboBottleneck,TODO
+ACT:SCP0108_CAPA_LOB_Report.getBottleneck:588:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getBottleneck,PASS
+ACT:SCP0108_CAPA_LOB_Report.getBottleneck:592:2,AS-IS 액션,B4,B4|COND:cboBottleneck,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getBottleneck:592:2,AS-IS 액션,B3,B3|COND:cboBottleneck,PASS
 ACT:SCP0108_CAPA_LOB_Report.getBottleneck:594:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getBottleneck,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getBottleneck:594:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getBottleneck,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getBottleneck:594:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getBottleneck,PASS
 ACT:SCP0108_CAPA_LOB_Report.getBottleneck:600:4,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getBottleneck,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getBottleneck:600:4,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getBottleneck,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getBottleneck:600:4,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getBottleneck,PASS
 ACT:SCP0108_CAPA_LOB_Report.getCurrCompany,AS-IS 액션,B4,B4|COL:COMPANY_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrCompany,AS-IS 액션,B3,B3|COL:COMPANY_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:636:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrCompany,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:636:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrCompany,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrCompany,AS-IS 액션,B3,B3|COL:COMPANY_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:636:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrCompany,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:636:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrCompany,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:640:2,AS-IS 액션,B4,B4|COL:COMPANY_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:640:2,AS-IS 액션,B3,B3|COL:COMPANY_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:646:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrCompany,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:646:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrCompany,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:640:2,AS-IS 액션,B3,B3|COL:COMPANY_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:646:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrCompany,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrCompany:646:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrCompany,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrDivision,AS-IS 액션,B4,B4|COL:DIVISION_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrDivision,AS-IS 액션,B3,B3|COL:DIVISION_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:660:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrDivision,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:660:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrDivision,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrDivision,AS-IS 액션,B3,B3|COL:DIVISION_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:660:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrDivision,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:660:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrDivision,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:664:2,AS-IS 액션,B4,B4|COL:DIVISION_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:664:2,AS-IS 액션,B3,B3|COL:DIVISION_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:670:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrDivision,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:670:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrDivision,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:664:2,AS-IS 액션,B3,B3|COL:DIVISION_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:670:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrDivision,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrDivision:670:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrDivision,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,AS-IS 액션,B4,B4|COL:ELTR_LN_TP_CD,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,AS-IS 액션,B3,B3|COL:ELTR_LN_TP_CD,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:804:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:804:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,AS-IS 액션,B3,B3|COL:ELTR_LN_TP_CD,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:804:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:804:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:808:2,AS-IS 액션,B4,B4|COL:ELTR_LN_TP_CD,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:808:2,AS-IS 액션,B3,B3|COL:ELTR_LN_TP_CD,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:814:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:814:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:808:2,AS-IS 액션,B3,B3|COL:ELTR_LN_TP_CD,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:814:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrElectrodeType:814:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrElectrodeType,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrFactory,AS-IS 액션,B4,B4|COL:FACTORY_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrFactory,AS-IS 액션,B3,B3|COL:FACTORY_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:732:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrFactory,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:732:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrFactory,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrFactory,AS-IS 액션,B3,B3|COL:FACTORY_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:732:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrFactory,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:732:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrFactory,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:736:2,AS-IS 액션,B4,B4|COL:FACTORY_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:736:2,AS-IS 액션,B3,B3|COL:FACTORY_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:742:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrFactory,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:742:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrFactory,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:736:2,AS-IS 액션,B3,B3|COL:FACTORY_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:742:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrFactory,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrFactory:742:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrFactory,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrLine,AS-IS 액션,B4,B4|COL:LINE_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrLine,AS-IS 액션,B3,B3|COL:LINE_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrLine:756:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrLine:756:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrLine,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrLine,AS-IS 액션,B3,B3|COL:LINE_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrLine:756:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrLine,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrLine:756:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrLine,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrLine:760:2,AS-IS 액션,B4,B4|COL:LINE_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrLine:760:2,AS-IS 액션,B3,B3|COL:LINE_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrLine:766:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrLine:766:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrLine,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrLine:760:2,AS-IS 액션,B3,B3|COL:LINE_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrLine:766:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrLine,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrLine:766:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrLine,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrNickname,AS-IS 액션,B4,B4|COL:NICK_NAME,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrNickname,AS-IS 액션,B3,B3|COL:NICK_NAME,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:828:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrNickname,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:828:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrNickname,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrNickname,AS-IS 액션,B3,B3|COL:NICK_NAME,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:828:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrNickname,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:828:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrNickname,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:832:2,AS-IS 액션,B4,B4|COL:NICK_NAME,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:832:2,AS-IS 액션,B3,B3|COL:NICK_NAME,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:838:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrNickname,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:838:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrNickname,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:832:2,AS-IS 액션,B3,B3|COL:NICK_NAME,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:838:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrNickname,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrNickname:838:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrNickname,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrOperation,AS-IS 액션,B4,B4|COL:OPERATION_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrOperation,AS-IS 액션,B3,B3|COL:OPERATION_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:780:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:780:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrOperation,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrOperation,AS-IS 액션,B3,B3|COL:OPERATION_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:780:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:780:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrOperation,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:784:2,AS-IS 액션,B4,B4|COL:OPERATION_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:784:2,AS-IS 액션,B3,B3|COL:OPERATION_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:790:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:790:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrOperation,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:784:2,AS-IS 액션,B3,B3|COL:OPERATION_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:790:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrOperation:790:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrOperation,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrPlant,AS-IS 액션,B4,B4|COL:PLANT_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrPlant,AS-IS 액션,B3,B3|COL:PLANT_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:684:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:684:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrPlant,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrPlant,AS-IS 액션,B3,B3|COL:PLANT_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:684:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrPlant,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:684:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrPlant,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:688:2,AS-IS 액션,B4,B4|COL:PLANT_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:688:2,AS-IS 액션,B3,B3|COL:PLANT_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:694:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:694:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrPlant,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:688:2,AS-IS 액션,B3,B3|COL:PLANT_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:694:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrPlant,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrPlant:694:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrPlant,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrSite,AS-IS 액션,B4,B4|COL:SITE_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrSite,AS-IS 액션,B3,B3|COL:SITE_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrSite:708:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrSite:708:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrSite,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrSite,AS-IS 액션,B3,B3|COL:SITE_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrSite:708:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrSite:708:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrSite,NA
 ACT:SCP0108_CAPA_LOB_Report.getCurrSite:712:2,AS-IS 액션,B4,B4|COL:SITE_ID,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getCurrSite:712:2,AS-IS 액션,B3,B3|COL:SITE_ID,TODO
-ACT:SCP0108_CAPA_LOB_Report.getCurrSite:718:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getCurrSite:718:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getDivision,AS-IS 액션,B4,B4|COND:cboDivision,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getDivision,AS-IS 액션,B3,B3|COND:cboDivision,TODO
-ACT:SCP0108_CAPA_LOB_Report.getDivision:194:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getDivision,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getDivision:194:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getDivision,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getDivision:198:2,AS-IS 액션,B4,B4|COND:cboDivision,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getDivision:198:2,AS-IS 액션,B3,B3|COND:cboDivision,TODO
-ACT:SCP0108_CAPA_LOB_Report.getDivision:204:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getDivision,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getDivision:204:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getDivision,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getDivisionType,AS-IS 액션,B4,B4|COND:rgrpDivisionType,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getDivisionType,AS-IS 액션,B3,B3|COND:rgrpDivisionType,TODO
-ACT:SCP0108_CAPA_LOB_Report.getDivisionType:161:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getDivisionType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getDivisionType:161:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getDivisionType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getDivisionType:165:2,AS-IS 액션,B4,B4|COND:rgrpDivisionType,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getDivisionType:165:2,AS-IS 액션,B3,B3|COND:rgrpDivisionType,TODO
-ACT:SCP0108_CAPA_LOB_Report.getDivisionType:171:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getDivisionType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getDivisionType:171:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getDivisionType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getElectrodeType,AS-IS 액션,B4,B4|COND:clbElectrodeType,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getElectrodeType,AS-IS 액션,B3,B3|COND:clbElectrodeType,TODO
-ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:564:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:564:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:568:2,AS-IS 액션,B4,B4|COND:clbElectrodeType,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:568:2,AS-IS 액션,B3,B3|COND:clbElectrodeType,TODO
-ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:574:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:574:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getElectrodeType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getFactory,AS-IS 액션,B4,B4|COND:clbFactory,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getFactory,AS-IS 액션,B3,B3|COND:clbFactory,TODO
-ACT:SCP0108_CAPA_LOB_Report.getFactory:468:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getFactory,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getFactory:468:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getFactory,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getFactory:472:2,AS-IS 액션,B4,B4|COND:clbFactory,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getFactory:472:2,AS-IS 액션,B3,B3|COND:clbFactory,TODO
-ACT:SCP0108_CAPA_LOB_Report.getFactory:478:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getFactory,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getFactory:478:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getFactory,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getCurrSite:712:2,AS-IS 액션,B3,B3|COL:SITE_ID,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getCurrSite:718:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getCurrSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getCurrSite:718:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getCurrSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivision,AS-IS 액션,B4,B4|COND:cboDivision,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivision,AS-IS 액션,B3,B3|COND:cboDivision,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivision:194:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getDivision,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivision:194:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getDivision,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivision:198:2,AS-IS 액션,B4,B4|COND:cboDivision,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivision:198:2,AS-IS 액션,B3,B3|COND:cboDivision,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivision:204:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getDivision,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivision:204:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getDivision,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivisionType,AS-IS 액션,B4,B4|COND:rgrpDivisionType,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivisionType,AS-IS 액션,B3,B3|COND:rgrpDivisionType,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivisionType:161:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getDivisionType,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivisionType:161:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getDivisionType,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivisionType:165:2,AS-IS 액션,B4,B4|COND:rgrpDivisionType,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivisionType:165:2,AS-IS 액션,B3,B3|COND:rgrpDivisionType,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivisionType:171:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getDivisionType,NA
+ACT:SCP0108_CAPA_LOB_Report.getDivisionType:171:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getDivisionType,NA
+ACT:SCP0108_CAPA_LOB_Report.getElectrodeType,AS-IS 액션,B4,B4|COND:clbElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.getElectrodeType,AS-IS 액션,B3,B3|COND:clbElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:564:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:564:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:568:2,AS-IS 액션,B4,B4|COND:clbElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:568:2,AS-IS 액션,B3,B3|COND:clbElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:574:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.getElectrodeType:574:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getElectrodeType,NA
+ACT:SCP0108_CAPA_LOB_Report.getFactory,AS-IS 액션,B4,B4|COND:clbFactory,NA
+ACT:SCP0108_CAPA_LOB_Report.getFactory,AS-IS 액션,B3,B3|COND:clbFactory,NA
+ACT:SCP0108_CAPA_LOB_Report.getFactory:468:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getFactory,NA
+ACT:SCP0108_CAPA_LOB_Report.getFactory:468:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getFactory,NA
+ACT:SCP0108_CAPA_LOB_Report.getFactory:472:2,AS-IS 액션,B4,B4|COND:clbFactory,NA
+ACT:SCP0108_CAPA_LOB_Report.getFactory:472:2,AS-IS 액션,B3,B3|COND:clbFactory,NA
+ACT:SCP0108_CAPA_LOB_Report.getFactory:478:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getFactory,NA
+ACT:SCP0108_CAPA_LOB_Report.getFactory:478:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getFactory,NA
 ACT:SCP0108_CAPA_LOB_Report.getItemId,AS-IS 액션,B4,B4|COND:txtItem,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getItemId,AS-IS 액션,B3,B3|COND:txtItem,TODO
-ACT:SCP0108_CAPA_LOB_Report.getItemId:540:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getItemId,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getItemId:540:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getItemId,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getItemId,AS-IS 액션,B3,B3|COND:txtItem,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getItemId:540:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getItemId,NA
+ACT:SCP0108_CAPA_LOB_Report.getItemId:540:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getItemId,NA
 ACT:SCP0108_CAPA_LOB_Report.getItemId:544:2,AS-IS 액션,B4,B4|COND:txtItem,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getItemId:544:2,AS-IS 액션,B3,B3|COND:txtItem,TODO
-ACT:SCP0108_CAPA_LOB_Report.getItemId:550:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getItemId,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getItemId:550:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getItemId,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getLine,AS-IS 액션,B4,B4|COND:clbLine,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getLine,AS-IS 액션,B3,B3|COND:clbLine,TODO
-ACT:SCP0108_CAPA_LOB_Report.getLine:492:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getLine:492:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getLine:496:2,AS-IS 액션,B4,B4|COND:clbLine,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getLine:496:2,AS-IS 액션,B3,B3|COND:clbLine,TODO
-ACT:SCP0108_CAPA_LOB_Report.getLine:502:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getLine:502:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getLine,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getOperation,AS-IS 액션,B4,B4|COND:clbOperation,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getOperation,AS-IS 액션,B3,B3|COND:clbOperation,TODO
-ACT:SCP0108_CAPA_LOB_Report.getOperation:516:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getOperation:516:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getOperation:520:2,AS-IS 액션,B4,B4|COND:clbOperation,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getOperation:520:2,AS-IS 액션,B3,B3|COND:clbOperation,TODO
-ACT:SCP0108_CAPA_LOB_Report.getOperation:526:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getOperation:526:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getOperation,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getPlanType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.getPlanType,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getItemId:544:2,AS-IS 액션,B3,B3|COND:txtItem,NOPATH
+ACT:SCP0108_CAPA_LOB_Report.getItemId:550:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getItemId,NA
+ACT:SCP0108_CAPA_LOB_Report.getItemId:550:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getItemId,NA
+ACT:SCP0108_CAPA_LOB_Report.getLine,AS-IS 액션,B4,B4|COND:clbLine,NA
+ACT:SCP0108_CAPA_LOB_Report.getLine,AS-IS 액션,B3,B3|COND:clbLine,NA
+ACT:SCP0108_CAPA_LOB_Report.getLine:492:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getLine,NA
+ACT:SCP0108_CAPA_LOB_Report.getLine:492:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getLine,NA
+ACT:SCP0108_CAPA_LOB_Report.getLine:496:2,AS-IS 액션,B4,B4|COND:clbLine,NA
+ACT:SCP0108_CAPA_LOB_Report.getLine:496:2,AS-IS 액션,B3,B3|COND:clbLine,NA
+ACT:SCP0108_CAPA_LOB_Report.getLine:502:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getLine,NA
+ACT:SCP0108_CAPA_LOB_Report.getLine:502:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getLine,NA
+ACT:SCP0108_CAPA_LOB_Report.getOperation,AS-IS 액션,B4,B4|COND:clbOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.getOperation,AS-IS 액션,B3,B3|COND:clbOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.getOperation:516:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.getOperation:516:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.getOperation:520:2,AS-IS 액션,B4,B4|COND:clbOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.getOperation:520:2,AS-IS 액션,B3,B3|COND:clbOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.getOperation:526:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.getOperation:526:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getOperation,NA
+ACT:SCP0108_CAPA_LOB_Report.getPlanType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.getPlanType,NA
 ACT:SCP0108_CAPA_LOB_Report.getPlanType:255:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getPlanType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getPlanType:255:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getPlanType,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getPlant,AS-IS 액션,B4,B4|COND:clbPlant,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getPlant,AS-IS 액션,B3,B3|COND:clbPlant,TODO
-ACT:SCP0108_CAPA_LOB_Report.getPlant:444:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getPlant:444:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getPlant:448:2,AS-IS 액션,B4,B4|COND:clbPlant,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getPlant:448:2,AS-IS 액션,B3,B3|COND:clbPlant,TODO
-ACT:SCP0108_CAPA_LOB_Report.getPlant:454:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getPlant:454:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getPlant,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getProgressStatus,AS-IS 액션,B4,B4|COND:cboProgressStatus,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getProgressStatus,AS-IS 액션,B3,B3|COND:cboProgressStatus,TODO
-ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:269:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:269:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:273:2,AS-IS 액션,B4,B4|COND:cboProgressStatus,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:273:2,AS-IS 액션,B3,B3|COND:cboProgressStatus,TODO
-ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:279:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:279:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getProgressStatus,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getShopGroup,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.getShopGroup,REVIEW
+ACT:SCP0108_CAPA_LOB_Report.getPlanType:255:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getPlanType,NA
+ACT:SCP0108_CAPA_LOB_Report.getPlant,AS-IS 액션,B4,B4|COND:clbPlant,NA
+ACT:SCP0108_CAPA_LOB_Report.getPlant,AS-IS 액션,B3,B3|COND:clbPlant,NA
+ACT:SCP0108_CAPA_LOB_Report.getPlant:444:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getPlant,NA
+ACT:SCP0108_CAPA_LOB_Report.getPlant:444:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getPlant,NA
+ACT:SCP0108_CAPA_LOB_Report.getPlant:448:2,AS-IS 액션,B4,B4|COND:clbPlant,NA
+ACT:SCP0108_CAPA_LOB_Report.getPlant:448:2,AS-IS 액션,B3,B3|COND:clbPlant,NA
+ACT:SCP0108_CAPA_LOB_Report.getPlant:454:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getPlant,NA
+ACT:SCP0108_CAPA_LOB_Report.getPlant:454:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getPlant,NA
+ACT:SCP0108_CAPA_LOB_Report.getProgressStatus,AS-IS 액션,B4,B4|COND:cboProgressStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.getProgressStatus,AS-IS 액션,B3,B3|COND:cboProgressStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:269:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getProgressStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:269:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getProgressStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:273:2,AS-IS 액션,B4,B4|COND:cboProgressStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:273:2,AS-IS 액션,B3,B3|COND:cboProgressStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:279:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getProgressStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.getProgressStatus:279:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getProgressStatus,NA
+ACT:SCP0108_CAPA_LOB_Report.getShopGroup,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.getShopGroup,NA
 ACT:SCP0108_CAPA_LOB_Report.getShopGroup:430:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getShopGroup,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getShopGroup:430:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getShopGroup,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getSite,AS-IS 액션,B4,B4|COND:clbSite,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getSite,AS-IS 액션,B3,B3|COND:clbSite,TODO
-ACT:SCP0108_CAPA_LOB_Report.getSite:406:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getSite:406:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getSite:410:2,AS-IS 액션,B4,B4|COND:clbSite,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getSite:410:2,AS-IS 액션,B3,B3|COND:clbSite,TODO
-ACT:SCP0108_CAPA_LOB_Report.getSite:416:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getSite:416:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getSite,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getVersion,AS-IS 액션,B4,B4|COND:cboVersion,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getVersion,AS-IS 액션,B3,B3|COND:cboVersion,TODO
-ACT:SCP0108_CAPA_LOB_Report.getVersion:218:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getVersion,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getVersion:218:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getVersion,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getVersion:222:2,AS-IS 액션,B4,B4|COND:cboVersion,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getVersion:222:2,AS-IS 액션,B3,B3|COND:cboVersion,TODO
-ACT:SCP0108_CAPA_LOB_Report.getVersion:224:3,AS-IS 액션,B4,B4|COND:cboVersion,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getVersion:224:3,AS-IS 액션,B3,B3|COND:cboVersion,TODO
-ACT:SCP0108_CAPA_LOB_Report.getVersion:231:4,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getVersion,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getVersion:231:4,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getVersion,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getVersionSeq,AS-IS 액션,B4,B4|COND:cboVersionSeq,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getVersionSeq,AS-IS 액션,B3,B3|COND:cboVersionSeq,TODO
-ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:315:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getVersionSeq,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:315:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getVersionSeq,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:319:2,AS-IS 액션,B4,B4|COND:cboVersionSeq,NOPATH
-ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:319:2,AS-IS 액션,B3,B3|COND:cboVersionSeq,TODO
-ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:326:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getVersionSeq,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:326:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getVersionSeq,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged:1523:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.getShopGroup:430:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getShopGroup,NA
+ACT:SCP0108_CAPA_LOB_Report.getSite,AS-IS 액션,B4,B4|COND:clbSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getSite,AS-IS 액션,B3,B3|COND:clbSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getSite:406:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getSite:406:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getSite:410:2,AS-IS 액션,B4,B4|COND:clbSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getSite:410:2,AS-IS 액션,B3,B3|COND:clbSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getSite:416:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getSite:416:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getSite,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersion,AS-IS 액션,B4,B4|COND:cboVersion,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersion,AS-IS 액션,B3,B3|COND:cboVersion,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersion:218:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getVersion,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersion:218:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getVersion,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersion:222:2,AS-IS 액션,B4,B4|COND:cboVersion,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersion:222:2,AS-IS 액션,B3,B3|COND:cboVersion,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersion:224:3,AS-IS 액션,B4,B4|COND:cboVersion,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersion:224:3,AS-IS 액션,B3,B3|COND:cboVersion,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersion:231:4,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getVersion,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersion:231:4,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getVersion,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersionSeq,AS-IS 액션,B4,B4|COND:cboVersionSeq,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersionSeq,AS-IS 액션,B3,B3|COND:cboVersionSeq,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:315:1,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getVersionSeq,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:315:1,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getVersionSeq,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:319:2,AS-IS 액션,B4,B4|COND:cboVersionSeq,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:319:2,AS-IS 액션,B3,B3|COND:cboVersionSeq,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:326:3,AS-IS 액션,B4,B4|ENTRY:SCP0108_CAPA_LOB_Report.getVersionSeq,NA
+ACT:SCP0108_CAPA_LOB_Report.getVersionSeq:326:3,AS-IS 액션,B3,B3|ENTRY:SCP0108_CAPA_LOB_Report.getVersionSeq,NA
+ACT:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,ERROR
+ACT:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged:1523:1,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged:1523:1,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged:1523:1,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged:1525:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,NA
+ACT:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged:1525:2,AS-IS 액션,C2,C2|ENTRY:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,ERROR
 ACT:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged:1525:2,AS-IS 액션,C3,C3|ENTRY:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,NA
 ACT:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged:1525:2,AS-IS 액션,C6,C6|ENTRY:SCP0108_CAPA_LOB_Report.rgrpDivisionType_SelectedIndexChanged,NA
-ACT:SCP0108_CAPA_LOB_Report.spdMain_TopChange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.spdMain_TopChange,REVIEW
-ACT:SCP0108_CAPA_LOB_Report.spdMain_TopChange,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.spdMain_TopChange:1254:1,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.spdMain_TopChange:1256:2,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
-ACT:SCP0108_CAPA_LOB_Report.spdMain_TopChange:1258:3,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
+ACT:SCP0108_CAPA_LOB_Report.spdMain_TopChange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0108_CAPA_LOB_Report.spdMain_TopChange,PASS
+ACT:SCP0108_CAPA_LOB_Report.spdMain_TopChange,AS-IS 액션,H4,H4|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.spdMain_TopChange:1254:1,AS-IS 액션,H4,H4|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.spdMain_TopChange:1256:2,AS-IS 액션,H4,H4|SCREEN,PASS
+ACT:SCP0108_CAPA_LOB_Report.spdMain_TopChange:1258:3,AS-IS 액션,H4,H4|SCREEN,PASS

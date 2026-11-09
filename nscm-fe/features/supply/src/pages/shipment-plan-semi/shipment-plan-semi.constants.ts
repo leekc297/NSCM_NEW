@@ -84,8 +84,8 @@ export const CONDITION_NOT_USE_LIST = ['planStartYyyymmdd', 'planType', 'planSeq
 // AS-IS Validation MSG ID — TO-BE SCM_ADM_MSG_M 실측 역매핑 필요(design 02 §4.5 다수 "TO-BE 미등록").
 //   design 문서가 실측을 완료하지 못한 항목은 영문 defaultValue fallback 유지(Hook #114 — 임의 매핑 금지).
 export const MSG = {
-  REQUIRED_FIELD: 'MSG00002', // 필수 입력사항입니다(Division/OperationGroup 만, design 01 §3)
-  PERIOD_REQUIRED: 'MSG00049', // 기간 From/To 값 존재 검증 상당(design 02 §0-4 Check_PeriodDate_New)
+  REQUIRED_FIELD: 'MSG00013', // "필수 입력란을 입력해 주세요."(design 01 §3). AS-IS MSG00002는 TO-BE에서 "저장 성공"이라 의미 오매칭 — MSG00013으로 교정(2026-11-03)
+  PERIOD_REQUIRED: 'MSG00665', // 기간 From/To 값 존재 검증 상당(design 02 §0-4 Check_PeriodDate_New)
   PERIOD_FROM_AFTER_TO: 'MSG00108', // From > To 검증 상당
   LOCKED_MODE: 'MSG01046', // 수정모드가 아니므로 저장할 수 없습니다(design 01 §2 #2-3). AS-IS 코드는 MSG00010 이나 TO-BE 에선 그 문구가 MSG01046 으로 등록됨 — TO-BE MSG00010='조회 조건이 저장되었습니다'로 의미가 다르다(DB SCM_ADM_MSG_M·번들 실측 2026-10-13, 명칭 역매핑)
   SAVE_NOT_ALLOWED: 'MSG01196', // "수정할 수 없는 플랜입니다." (SCP0013_GET_PLAN_TYPE_SAVE_YN false / 유효 Plan 없음) — AS-IS MSG00182 는 TO-BE 미등록이라 같은 문구 MSG01196 으로 대체(DB 실측 2026-10-12, 자매 SCP0009 동일)

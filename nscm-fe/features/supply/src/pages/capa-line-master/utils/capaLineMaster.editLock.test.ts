@@ -12,9 +12,10 @@ import {
   nextSortOrder,
 } from './capaLineMaster.editLock';
 
-// design 03_grid-columns §5-3 의 편집 파리티 (a)~(e) 를 그대로 검증 축으로 삼는다.
-//   (a) 조회 직후 전열 읽기전용 / (b) DUMMY_YN='N' 행 편집 불가 / (c) DUMMY_YN='Y' 편집모드 행은
-//   자기레벨 NAME(+L5 VALID_YN) 만 / (d) ID 는 신규행에서만 / (e) DIVISION_ID·DUMMY_YN·SHOP_GROUP_ID 항상 잠금.
+// design 03_grid-columns §5-3 의 편집 파리티 (a)~(e) 를 canEdit(EDIT 버튼 권한) 축으로 검증한다.
+//   수정 모드 토글 미이식(asis_to_tobe.md §11, 전 화면 공통) — 4번째 인자는 editingLevel 이 아니라 canEdit(boolean).
+//   (a) 권한 없으면 기존행 전열 읽기전용 / (b) DUMMY_YN='N' 행 편집 불가 / (c) DUMMY_YN='Y' 행은 자기레벨
+//   NAME(+L5 VALID_YN) 만 / (d) ID 는 신규행에서만 / (e) DIVISION_ID·DUMMY_YN·SHOP_GROUP_ID 항상 잠금.
 //   AS-IS 근거는 editLock.ts 머리말의 cs 라인 주석 참조(LockRange 상수 이식 금지 — hook #130).
 
 const dummyRow = (patch: Record<string, unknown> = {}) => ({
@@ -30,43 +31,44 @@ const fpRow = (patch: Record<string, unknown> = {}) => ({
 });
 
 describe('isCellEditable — (e) 항상 잠금 컬럼', () => {
-  it('DIVISION_ID / DUMMY_YN / SORT_ORDER 는 편집모드·dummy 행에서도 잠금', () => {
+  it('DIVISION_ID / DUMMY_YN / SORT_ORDER 는 권한·dummy 행에서도 잠금', () => {
     for (const binding of ['DIVISION_ID', 'DUMMY_YN', 'SORT_ORDER']) {
-      expect(isCellEditable(1, binding, dummyRow(), 1)).toBe(false);
+      expect(isCellEditable(1, binding, dummyRow(), true)).toBe(false);
     }
   });
 
-  it('SHOP_GROUP_ID 는 L5 편집모드에서도 잠금 (cs:650/658)', () => {
-    expect(isCellEditable(5, 'SHOP_GROUP_ID', dummyRow(), 5)).toBe(false);
-    expect(isCellEditable(5, 'SHOP_GROUP_ID', dummyRow({ CRUD_TYPE: 'I' }), 5)).toBe(false);
+  it('SHOP_GROUP_ID 는 L5 에서 권한·신규행이어도 잠금 (cs:650/658)', () => {
+    expect(isCellEditable(5, 'SHOP_GROUP_ID', dummyRow(), true)).toBe(false);
+    expect(isCellEditable(5, 'SHOP_GROUP_ID', dummyRow({ CRUD_TYPE: 'I' }), true)).toBe(false);
   });
 
   it('row/binding 이 없으면 편집 불가', () => {
-    expect(isCellEditable(1, 'SITE_NAME', undefined, 1)).toBe(false);
-    expect(isCellEditable(1, '', dummyRow(), 1)).toBe(false);
+    expect(isCellEditable(1, 'SITE_NAME', undefined, true)).toBe(false);
+    expect(isCellEditable(1, '', dummyRow(), true)).toBe(false);
   });
 });
 
-describe('isCellEditable — (a) 조회 직후 전열 읽기전용', () => {
-  it('편집모드가 아니면(null) dummy 행이어도 전열 잠금', () => {
-    expect(isCellEditable(1, 'SITE_NAME', dummyRow(), null)).toBe(false);
-    expect(isCellEditable(5, 'VALID_YN', dummyRow(), null)).toBe(false);
+describe('isCellEditable — (a) EDIT 권한 없으면 기존행 전열 읽기전용', () => {
+  it('canEdit=false 면 dummy 행이어도 전열 잠금', () => {
+    expect(isCellEditable(1, 'SITE_NAME', dummyRow(), false)).toBe(false);
+    expect(isCellEditable(5, 'VALID_YN', dummyRow(), false)).toBe(false);
   });
 
-  it('다른 레벨이 편집중이면 이 레벨은 전열 잠금 (동시 1개, cs:490~502)', () => {
-    expect(isCellEditable(2, 'COMPANY_NAME', dummyRow(), 3)).toBe(false);
+  it('신규행은 권한과 무관하게 편집 가능(Insert 로만 생성)', () => {
+    const inserted = dummyRow({ CRUD_TYPE: 'I' });
+    expect(isCellEditable(1, 'SITE_NAME', inserted, false)).toBe(true);
   });
 });
 
-describe('isCellEditable — (b) DUMMY_YN=N 행은 편집모드여도 전열 잠금', () => {
+describe('isCellEditable — (b) DUMMY_YN=N 행은 권한이 있어도 전열 잠금', () => {
   it('FP 인터페이스 유입 행은 자기 NAME 도 잠금 (업무규칙 4)', () => {
-    expect(isCellEditable(1, 'SITE_NAME', fpRow(), 1)).toBe(false);
-    expect(isCellEditable(4, 'FACTORY_NAME', fpRow(), 4)).toBe(false);
-    expect(isCellEditable(5, 'VALID_YN', fpRow(), 5)).toBe(false);
+    expect(isCellEditable(1, 'SITE_NAME', fpRow(), true)).toBe(false);
+    expect(isCellEditable(4, 'FACTORY_NAME', fpRow(), true)).toBe(false);
+    expect(isCellEditable(5, 'VALID_YN', fpRow(), true)).toBe(false);
   });
 });
 
-describe('isCellEditable — (c) dummy 행 편집모드는 자기레벨 NAME 만', () => {
+describe('isCellEditable — (c) dummy 행은 자기레벨 NAME 만 (권한 보유 시)', () => {
   const levelNameColumn = {
     1: 'SITE_NAME',
     2: 'COMPANY_NAME',
@@ -78,44 +80,44 @@ describe('isCellEditable — (c) dummy 행 편집모드는 자기레벨 NAME 만
   it('레벨별 자기 NAME 만 열린다', () => {
     for (const [level, nameColumn] of Object.entries(levelNameColumn)) {
       const lv = Number(level) as 1 | 2 | 3 | 4 | 5;
-      expect(isCellEditable(lv, nameColumn, dummyRow(), lv)).toBe(true);
+      expect(isCellEditable(lv, nameColumn, dummyRow(), true)).toBe(true);
     }
   });
 
   it('부모레벨 NAME 은 자기 레벨에서 열리지 않는다', () => {
-    expect(isCellEditable(3, 'SITE_NAME', dummyRow(), 3)).toBe(false);
-    expect(isCellEditable(3, 'COMPANY_NAME', dummyRow(), 3)).toBe(false);
+    expect(isCellEditable(3, 'SITE_NAME', dummyRow(), true)).toBe(false);
+    expect(isCellEditable(3, 'COMPANY_NAME', dummyRow(), true)).toBe(false);
   });
 
   it('L5 는 VALID_YN 도 함께 열린다 (cs:652)', () => {
-    expect(isCellEditable(5, 'VALID_YN', dummyRow(), 5)).toBe(true);
+    expect(isCellEditable(5, 'VALID_YN', dummyRow(), true)).toBe(true);
     // 다른 레벨의 VALID_YN 은 컬럼 자체가 없고, 있더라도 열리지 않는다.
-    expect(isCellEditable(1, 'VALID_YN', dummyRow(), 1)).toBe(false);
+    expect(isCellEditable(1, 'VALID_YN', dummyRow(), true)).toBe(false);
   });
 });
 
 describe('isCellEditable — (d) ID 컬럼은 신규행에서만', () => {
-  it('기존 dummy 행의 자기 ID 는 편집모드여도 잠금 (cs:530/559/588/617/648)', () => {
-    expect(isCellEditable(1, 'SITE_ID', dummyRow(), 1)).toBe(false);
-    expect(isCellEditable(5, 'LINE_ID', dummyRow(), 5)).toBe(false);
+  it('기존 dummy 행의 자기 ID 는 권한이 있어도 잠금 (cs:530/559/588/617/648)', () => {
+    expect(isCellEditable(1, 'SITE_ID', dummyRow(), true)).toBe(false);
+    expect(isCellEditable(5, 'LINE_ID', dummyRow(), true)).toBe(false);
   });
 
   it('신규행(CRUD_TYPE=I)은 자기 ID + 자기 NAME 이 열린다 (cs:1265~1290)', () => {
     const inserted = dummyRow({ CRUD_TYPE: 'I' });
-    expect(isCellEditable(2, 'COMPANY_ID', inserted, 2)).toBe(true);
-    expect(isCellEditable(2, 'COMPANY_NAME', inserted, 2)).toBe(true);
+    expect(isCellEditable(2, 'COMPANY_ID', inserted, true)).toBe(true);
+    expect(isCellEditable(2, 'COMPANY_NAME', inserted, true)).toBe(true);
   });
 
   it('신규행의 부모키는 상속값이라 잠금', () => {
     const inserted = dummyRow({ CRUD_TYPE: 'I' });
-    expect(isCellEditable(3, 'SITE_ID', inserted, 3)).toBe(false);
-    expect(isCellEditable(3, 'COMPANY_NAME', inserted, 3)).toBe(false);
+    expect(isCellEditable(3, 'SITE_ID', inserted, true)).toBe(false);
+    expect(isCellEditable(3, 'COMPANY_NAME', inserted, true)).toBe(false);
   });
 
-  it('신규행은 DUMMY_YN 값과 무관하게 자기 ID/NAME 이 열린다', () => {
-    // 신규행은 항상 DUMMY_YN='Y' 로 생성되지만, 판정이 (b) 보다 먼저라 'N' 이어도 동일하다.
+  it('신규행은 DUMMY_YN·권한과 무관하게 자기 ID/NAME 이 열린다', () => {
+    // 신규행은 항상 DUMMY_YN='Y' 로 생성되지만, 판정이 (b)·(a) 보다 먼저라 'N'·canEdit=false 여도 동일하다.
     const inserted = fpRow({ CRUD_TYPE: 'I' });
-    expect(isCellEditable(1, 'SITE_ID', inserted, 1)).toBe(true);
+    expect(isCellEditable(1, 'SITE_ID', inserted, false)).toBe(true);
   });
 });
 
@@ -135,22 +137,16 @@ describe('isInsertRow / isDummyRow', () => {
 
 describe('canDrillDown — design 01 §2 L6 / 00 §4d #8~#12', () => {
   it('L5 는 최하위라 드릴다운 없음 (cs:1816~1833)', () => {
-    expect(canDrillDown(5, 10, null)).toBe(false);
+    expect(canDrillDown(5, 10)).toBe(false);
   });
 
   it('행이 0건이면 무동작 (cs:1745/1764/1781/1799)', () => {
-    expect(canDrillDown(1, 0, null)).toBe(false);
+    expect(canDrillDown(1, 0)).toBe(false);
   });
 
-  it('해당 레벨이 편집중이면 억제 (Action 컬럼 visible 판정 등가)', () => {
-    expect(canDrillDown(2, 5, 2)).toBe(false);
-    // 다른 레벨이 편집중인 것은 억제 사유가 아니다.
-    expect(canDrillDown(2, 5, 4)).toBe(true);
-  });
-
-  it('L1~L4 + 행 존재 + 비편집이면 허용', () => {
-    expect(canDrillDown(1, 1, null)).toBe(true);
-    expect(canDrillDown(4, 3, null)).toBe(true);
+  it('L1~L4 + 행 존재면 허용(수정 모드 억제축 미이식 §11)', () => {
+    expect(canDrillDown(1, 1)).toBe(true);
+    expect(canDrillDown(4, 3)).toBe(true);
   });
 });
 

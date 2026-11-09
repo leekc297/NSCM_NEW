@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 328,
+  "at": "2026-11-07T08:21:23.904Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ }
+]

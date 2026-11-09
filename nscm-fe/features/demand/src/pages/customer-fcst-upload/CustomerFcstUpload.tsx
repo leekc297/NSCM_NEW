@@ -218,6 +218,9 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
     editTrackerRef.current?.clearChanges();
     setHasSearched(false);
     clearFilters();
+    // 그리드 컬럼은 사업부마다 다르다(UI Category 컬럼 사업부 지정) — 바뀐 사업부로 다시 받는다.
+    //   Form 이 setSearchParams 로 사업부를 바꾼 직후 호출하므로 store 가 새 값을 읽는다.
+    void fetchStaticColumns();
   };
 
   // 참조 고정 필수: 인라인/매 렌더 재생성 함수로 넘기면 조회조건 타이핑/드롭다운마다 부모가 리렌더될

@@ -89,7 +89,13 @@ export const CapaMobilityItForm = ({ onSearch }: Props) => {
 
   const divisionOptions = toOptions(divisions);
   const plantOptions = toOptions(plantSites);
-  const lineOptions = toOptions(lines);
+  // Plant Site → Line cascade (사용자 지시 2026-11-04 — AS-IS S1 "PlantSite→Line NO-OP" 에서 의도적 deviation).
+  //   LineByOperation 이 각 행에 SCM_SITE_ID 를 담아 내리고(SELECT B.SCM_SITE_ID) Plant Site 콤보 값이 곧
+  //   SCM_SITE_ID 라, 재조회·SP·콤보 변경 없이 로드된 라인을 선택 Plant 로 클라에서 좁힌다(미선택=전체).
+  const lineRowsInScope = (lines ?? []).filter(
+    r => sc.plantIds.length === 0 || sc.plantIds.includes(r.SCM_SITE_ID)
+  );
+  const lineOptions = toOptions(lineRowsInScope);
 
   const multi = (
     labelText: string,
@@ -149,10 +155,9 @@ export const CapaMobilityItForm = ({ onSearch }: Props) => {
                 )}
               />
             </Grid>
-            {/* Plant Site — PlantByDivisionOperation 다중. */}
+            {/* Plant Site — PlantByDivisionOperation 다중. Plant 변경 시 Line 선택 리셋(cascade 범위 밖 라인 제거). */}
             {multi(t(LBL.PLANT_SITE, 'Plant Site'), sc.plantIds, plantOptions, codes =>
-              // PlantSite→Line 재조회는 AS-IS NO-OP(S1) — Line 후보를 재조회하지 않는다.
-              setSearchParams({ plantIds: codes })
+              setSearchParams({ plantIds: codes, lineIds: [] })
             )}
             {/* Line — LineByOperation 다중('-'→ 빈값 저장 시 치환). */}
             {multi(t(LBL.LINE, 'Line'), sc.lineIds, lineOptions, codes =>
@@ -185,7 +190,9 @@ export const CapaMobilityItForm = ({ onSearch }: Props) => {
                 )}
               />
             </Grid>
-            {/* Material — Item 팝업 트리거(POP-12: endAdornment 검색아이콘 + 더블클릭). */}
+            {/* Period — 월 단위 피커(monthOnly). 표기 YYYY-MM, 확정값은 월경계(시작월 1일~종료월 말일)로
+                정규화되어 start/end = YYYYMMDD(8자리) 계약 유지. GET SP(PKG_SCP0098.P_GET_CAPA_MOBILITYIT)는
+                from/to 를 SUBSTR(...,1,6)=YYYYMM 으로만 쓰므로(일 자리 무시) SP·PROC_M 변경 없이 월 조회 등가. */}
             <Grid size={3}>
               <PeriodRangePicker
                 start={sc.startYyyymmdd}
@@ -193,6 +200,7 @@ export const CapaMobilityItForm = ({ onSearch }: Props) => {
                 onChange={(start, end) => setSearchParams({ startYyyymmdd: start, endYyyymmdd: end })}
                 label={t(LBL.PERIOD, 'Period')}
                 required
+                monthOnly
                 className={commonStyles.formItem}
               />
             </Grid>

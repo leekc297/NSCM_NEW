@@ -1,0 +1,3 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+SCP0127,main|같은 사용자,SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY,ERROR,0,534,[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음,
+SCP0127,main,SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY,REVIEW,0,534,"AS-IS 0행 · TO-BE 534행 · 키 ['VALUE_TYPE', 'OPMZ_PLAN_GR_ID', 'SCM_SITE_ID', 'ITEM_ID', 'STAGE', 'FROM_YYYYMMDD', 'TO_YYYYMMDD', 'VALUE_DESCRIPTION'] AS-IS 전용 0 · TO-BE 전용 534 · 값 대조 0칸(숫자 컬럼 2) · 불일치 컬럼 0",

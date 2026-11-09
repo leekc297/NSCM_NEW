@@ -1,4 +1,4 @@
-import { CollectionView, SortDescription } from '@mescius/wijmo';
+import { CollectionView, DataType, SortDescription } from '@mescius/wijmo';
 import { AllowMerging, CellType, Column, type DataMap, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { IFlexGridXlsxOptions, XlsxFormatItemEventArgs } from '@mescius/wijmo.grid.xlsx';
@@ -815,13 +815,20 @@ export const GridAction = {
     grid: FlexGrid<T>,
     defaultCopyPropsList: Partial<T>[],
     placement: GridRowPlacement = 'above',
-    options?: { preserveMergeManager?: boolean; groupKey?: (row: T) => string }
+    options?: {
+      preserveMergeManager?: boolean;
+      groupKey?: (row: T) => string;
+      // 전 행이 EDIT_FLAG='N' 이면 추가를 막는 아래 가드를 건너뛴다(기본 false = 가드 유지, 기존 동작 불변).
+      //   EDIT_FLAG='N' 을 "신규 미확정" 같은 정상 데이터 상태로 쓰는 화면(SSP0022 요청상세 — AS-IS InsertRow
+      //   는 이런 가드가 없다)에서만 켠다. 다른 호출부는 미지정이라 가드가 그대로 유지된다.
+      skipEditFlagGuard?: boolean;
+    }
   ): T[] | undefined => {
     if (grid.isReadOnly || defaultCopyPropsList.length === 0) return undefined;
     const itemsSource = grid.itemsSource as T[];
     const editFlag = itemsSource.every(item => item?.EDIT_FLAG === 'N');
     // TODO: 조회 없이 (그리드에 데이터 없이) 추가할 때 handle 추가적으로 필요  - 강민재
-    if (itemsSource.length !== 0 && editFlag) return undefined;
+    if (itemsSource.length !== 0 && editFlag && !options?.skipEditFlagGuard) return undefined;
 
     const view = grid.collectionView as CollectionView<T>;
     const source = view.sourceCollection as T[];
@@ -1103,106 +1110,6 @@ export const GridAction = {
     });
   },
 
-  // Excel Upload 양식 다운로드 — AS-IS 2단 병합 헤더 양식 (그리드 없이 컬럼 정의로 직접 생성).
-  //   1행 = group 없는 컬럼은 1~2행 세로 병합 / group 컬럼은 연속 구간 가로 병합(그룹명)
-  //   2행 = group 컬럼의 하위명(header). 데이터 영역은 입력용 빈 시트(행 없음).
-  //   BE ExcelUtils.convertGroupedHeaderExcelToJson 이 "그룹명_하위명" 으로 키를 합성해 HEADER_CONTENT 와 매칭한다
-  //   — group/header 문자열은 HEADER_CONTENT 토큰과 1바이트도 달라선 안 된다.
-  //   헤더 스타일 = AS-IS 양식 실측 (Arial 9 / 배경 #F0F0F0 / 가운데·줄바꿈 / 얇은 테두리).
-  //   데이터 영역은 컬럼 스타일 '@'(텍스트) — 입력한 202607 이 숫자 셀로 바뀌지 않게 한다.
-  groupedHeaderExcelDownload: (
-    columns: ReadonlyArray<{ header: string; key: string; group?: string; width?: string }>,
-    fileNamePrefix: string,
-    sheetName = 'Sheet1'
-  ): Promise<void> => {
-    const headerFont = new WorkbookFont();
-    headerFont.family = 'Arial';
-    // WorkbookFont.size = 픽셀 — 12px = 엑셀 9pt (AS-IS 양식). 9 로 주면 7pt 로 기록된다(실측).
-    headerFont.size = 12;
-
-    const thin = () => {
-      const setting = new WorkbookBorderSetting();
-      setting.style = BorderStyle.Thin;
-      setting.color = '#000000';
-      return setting;
-    };
-    const border = new WorkbookBorder();
-    border.top = thin();
-    border.bottom = thin();
-    border.left = thin();
-    border.right = thin();
-
-    const headerFill = new WorkbookFill();
-    headerFill.color = '#F0F0F0';
-
-    const headerStyle = new WorkbookStyle();
-    headerStyle.font = headerFont;
-    headerStyle.fill = headerFill;
-    headerStyle.borders = border;
-    headerStyle.hAlign = HAlign.Center;
-    headerStyle.vAlign = VAlign.Center;
-    headerStyle.wordWrap = true;
-    headerStyle.format = '@';
-
-    const textStyle = new WorkbookStyle();
-    textStyle.format = '@';
-
-    const toCell = (value: string, span?: { colSpan?: number; rowSpan?: number }) => {
-      const cell = new WorkbookCell();
-      cell.value = value;
-      cell.style = headerStyle;
-      if (span?.colSpan) cell.colSpan = span.colSpan;
-      if (span?.rowSpan) cell.rowSpan = span.rowSpan;
-      return cell;
-    };
-
-    // 병합으로 가려지는 위치에도 빈 셀을 채운다 — 비워 두면 병합 영역 테두리가 끊겨 보인다.
-    const topRow = new WorkbookRow();
-    const subRow = new WorkbookRow();
-    columns.forEach((column, index) => {
-      if (!column.group) {
-        topRow.cells.push(toCell(column.header, { rowSpan: 2 }));
-        subRow.cells.push(toCell(''));
-        return;
-      }
-      const isGroupStart = index === 0 || columns[index - 1].group !== column.group;
-      if (isGroupStart) {
-        let span = 1;
-        while (columns[index + span]?.group === column.group) span += 1;
-        topRow.cells.push(toCell(column.group, { colSpan: span }));
-      } else {
-        topRow.cells.push(toCell(''));
-      }
-      subRow.cells.push(toCell(column.header));
-    });
-
-    const sheet = new WorkSheet();
-    sheet.name = sheetName;
-    sheet.rows.push(topRow, subRow);
-    columns.forEach(column => {
-      const sheetColumn = new WorkbookColumn();
-      if (column.width) sheetColumn.width = column.width;
-      sheetColumn.style = textStyle;
-      sheet.columns.push(sheetColumn);
-    });
-
-    const workbook = new Workbook();
-    workbook.sheets.push(sheet);
-
-    return new Promise<void>((resolve, reject) => {
-      workbook.saveAsync(
-        `${fileNamePrefix}_${dayjs().format('YYYYMMDD_hhmmss')}.xlsx`,
-        () => resolve(),
-        (reason?: unknown) =>
-          reject(
-            reason instanceof Error
-              ? reason
-              : new Error(typeof reason === 'string' ? reason : 'xlsx save failed')
-          )
-      );
-    });
-  },
-
   // F11 : Excel download
   //   headerCellStyle — opt-in 헤더 셀 꾸밈(기본 undefined = 기존 화면 전부 무변화).
   //     border: 헤더 셀 4방향 테두리(Thin/검정). fillColor: 헤더 셀 배경색(#RRGGBB).
@@ -1213,12 +1120,54 @@ export const GridAction = {
     setProgress?: (progress: number) => void,
     headerCellStyle?: { border?: boolean; fillColor?: string; bold?: boolean }
   ) => {
-    grid.beginUpdate();
-
     const fileName = `${menuName}_${dayjs().format('YYYYMMDD_hhmmss')}`;
 
     const clonedAllowMerging = grid.allowMerging;
-    const clonedColumnGroups = [...(grid.columnGroups as FlexGridColumnConfig[])];
+    // 일부 그리드(React FlexGrid + columnGroups 조합)는 control.columnGroups 가 export 시점에 비어 있고
+    //   실제 컬럼은 grid.columns(평탄 leaf)에만 산다 — SCP0055 피벗 리포트 실측 2026-11-03: grid.columns 는
+    //   16칸(폭·헤더 정상)인데 grid.columnGroups 는 []. 이 경우 아래 재구성이 0개가 돼 Wijmo 가 데이터로
+    //   컬럼을 auto-generate 하면서 동적 컬럼이 폭 0 으로 떨어진다. columnGroups 가 비면 live grid.columns 로
+    //   flat 컬럼 정의를 합성한다(폭·데이터 정상 복구). 주의: 월 group 2단 헤더는 이 경로에선 복원 못 하고
+    //   leaf 헤더(Result/Plan/Total 등) 단일 행으로 평탄 export 된다 — 폭·값은 화면과 동일.
+    const rawColumnGroups = grid.columnGroups as FlexGridColumnConfig[] | undefined;
+    // 평탄 합성 시 각 컬럼 헤더는 헤더패널 전 행을 위→아래로 이어 붙인다(예 "26/08 Result") — 그래야
+    //   다단 헤더(월 group)가 평탄 export 돼도 월 맥락이 안 사라진다. 정적 컬럼은 전 행이 같은 값이라 1개만.
+    const headerPanel = grid.columnHeaders;
+    const headerRowCount = headerPanel.rows.length;
+    const combinedHeaderOf = (colIndex: number, fallback: string): string => {
+      const parts: string[] = [];
+      for (let r = 0; r < headerRowCount; r++) {
+        const value = String(headerPanel.getCellData(r, colIndex, false) ?? '').trim();
+        if (value && !parts.includes(value)) parts.push(value);
+      }
+      return parts.length ? parts.join(' ') : fallback;
+    };
+    const clonedColumnGroups: FlexGridColumnConfig[] =
+      rawColumnGroups && rawColumnGroups.length
+        ? [...rawColumnGroups]
+        : Array.from({ length: grid.columns.length }, (_, i) => {
+            const liveColumn: Column | undefined = grid.columns[i];
+            const leafHeader =
+              typeof liveColumn?.header === 'string' ? liveColumn.header : (liveColumn?.binding ?? '');
+            // wijmo Column.width/renderWidth 는 d.ts 상 any — unknown 으로 받아 숫자만 좁힌다.
+            const rawWidth: unknown = liveColumn?.width;
+            const rawRender: unknown = liveColumn?.renderWidth;
+            const width =
+              typeof rawWidth === 'number' && rawWidth > 0
+                ? rawWidth
+                : typeof rawRender === 'number' && rawRender > 0
+                  ? Math.round(rawRender)
+                  : undefined;
+            return {
+              binding: liveColumn?.binding,
+              header: combinedHeaderOf(i, leafHeader),
+              align: liveColumn?.align as FlexGridColumnConfig['align'],
+              width,
+              visible: liveColumn?.visible,
+              format: liveColumn?.format,
+              _ctrlType: liveColumn?.dataType === DataType.Number ? CELL_CONTROL_TYPE.NUMBER : undefined,
+            } as FlexGridColumnConfig;
+          });
     // 다단 헤더 전체 행 높이 스냅샷 (2026-09-08 — DMF0082 등 다단 헤더 화면 리포트).
     //   복원 때 rows[0] 한 행만 되돌리면, columnGroups 재구성으로 새로 생긴 rows[1..] 이 export 중
     //   부풀린 헤더 높이(아래 columnHeaders.rows[0].height = 48)를 그대로 물려받아 헤더가 커진 채
@@ -1256,6 +1205,11 @@ export const GridAction = {
      * includeStyles: false, includeColumnHeaders: true
      * 위 속성들과 호환이 되지 않음 (컬럼헤더의 로우 개수만큼 데이터의 상위 n개가 엑셀에 불러와지지 않음... formatItem에서 애초에 index를 찍을 때 스킵되는 버그)
      */
+    // beginUpdate 는 반드시 위 clonedColumnGroups 합성·dataMap·visible 채집 '이후'다 — 합성이 live
+    //   grid.columns 의 width/renderWidth 를 읽으므로 그 전에 beginUpdate 로 레이아웃을 suspend 하면
+    //   폭이 0 으로 읽힌다(SCP0055 엑셀 폭0 2026-11-03). 초입에 두지 말 것. endUpdate 는 resetGridProps
+    //   에서 1회 호출돼 균형이 맞는다.
+    grid.beginUpdate();
     grid.columns.clear();
     grid.columnGroups = [];
     // grid.columnHeaders.rows.clear();
@@ -1274,6 +1228,52 @@ export const GridAction = {
         })
       )
     );
+
+    // xlsx 컬럼 폭 보정 — 근본 원인은 FlexGridXlsxConverter 가 동적 컬럼(pivot/파생)에 WorkbookColumn.autoWidth=true
+    //   를 걸어, Excel 이 명시 width(모델엔 정상 세팅됨)를 무시하고 내용 기준 자동맞춤 → 폭 0 으로 접히는 것이다
+    //   (SCP0055 피벗 리포트 실측 2026-11-03: grid.columns·workbook 모델 둘 다 폭 정상인데 xlsx 만 동적 컬럼 폭 0.
+    //   정적 텍스트 컬럼은 autoWidth 여도 0 이 안 됨). 해결: autoWidth 를 끄고(=명시 폭 사용) visible 을 보장한다.
+    //   폭 자체가 비어있는 컬럼(드문 경우)만 grid 폭으로 채운다. resetGridProps(컬럼 clear) 이전에 호출해야 한다.
+    const applyExcelColumnWidths = (workbook: Workbook) => {
+      const widthSheet = workbook.sheets[0];
+      if (!widthSheet) return;
+      // WorkbookColumn.width 단위(px vs 문자)가 wijmo 버전마다 모호하다 — 변환기가 이미 올바른 단위로
+      //   폭을 쓴 컬럼(정적 컬럼)에서 (Excel단위/grid px) 비율을 역산해 쓴다. 기준 컬럼이 없으면 Excel
+      //   기본폰트 근사(1 char ≈ 7px)로 폴백. 폭이 비어있는(0) 컬럼만 채운다 — 정상 컬럼은 손대지 않음.
+      // wijmo Column.width / WorkbookColumn.width 는 d.ts 상 any — unknown 으로 받아 숫자만 좁힌다.
+      const gridPxOf = (i: number): number => {
+        const raw: unknown = grid.columns[i]?.width;
+        return typeof raw === 'number' ? raw : 0;
+      };
+      const existingOf = (i: number): number => {
+        const raw: unknown = widthSheet.columns[i]?.width;
+        return typeof raw === 'number' ? raw : 0;
+      };
+      let unitPerPx = 0;
+      for (let i = 0; i < grid.columns.length; i++) {
+        const gridPx = gridPxOf(i);
+        const existing = existingOf(i);
+        if (gridPx > 0 && existing > 0) {
+          unitPerPx = existing / gridPx;
+          break;
+        }
+      }
+      if (!unitPerPx) unitPerPx = 1 / 7;
+      for (let i = 0; i < grid.columns.length; i++) {
+        const gridPx = gridPxOf(i);
+        if (gridPx <= 0) continue;
+        while (widthSheet.columns.length <= i) widthSheet.columns.push(new WorkbookColumn());
+        const workbookColumn = widthSheet.columns[i];
+        if (!(typeof workbookColumn.width === 'number' && workbookColumn.width > 0)) {
+          workbookColumn.width = gridPx * unitPerPx;
+        }
+        // autoWidth=true 면 Excel 이 명시 width 를 무시하고 내용 기준 자동맞춤(동적 숫자 컬럼이 0 으로
+        //   줄어드는 원인 후보). 명시 폭을 쓰도록 자동맞춤을 끄고 숨김도 방지한다.
+        const col = workbookColumn as WorkbookColumn & { autoWidth?: boolean; visible?: boolean };
+        col.autoWidth = false;
+        col.visible = true;
+      }
+    };
 
     grid.allowMerging = AllowMerging.None;
     grid.columnHeaders.rows[0].height = 48;
@@ -1433,6 +1433,7 @@ export const GridAction = {
           includeColumnHeaders: true,
         });
         applyExcelFrozenPane(workbook, 1); // 평탄 저장 = 헤더 1행 고정
+        applyExcelColumnWidths(workbook); // 컬럼 폭 명시(변환기 폭 유실 보정) — resetGridProps 이전
         resetGridProps(); // 파일 생성 전에 원복 — 이후 리렌더는 workbook 에 영향 없음
         workbook.saveAsync(
           fileName,
@@ -1453,6 +1454,7 @@ export const GridAction = {
         try {
           const workbook = FlexGridXlsxConverter.save(grid, convertOptions);
           const sheet = workbook.sheets[0];
+          applyExcelColumnWidths(workbook); // 컬럼 폭 명시(변환기 다단 저장 시 동적 컬럼 폭 유실 보정)
 
           // WorkbookRow.cells 는 readonly lazy-init getter — 반환 배열을 index/push 로 변이해 채운다
           const headerRows: WorkbookRow[] = Array.from(

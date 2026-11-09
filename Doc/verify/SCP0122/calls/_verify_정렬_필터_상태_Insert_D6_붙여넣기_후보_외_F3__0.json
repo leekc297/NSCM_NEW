@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 155,
+  "at": "2026-11-07T10:26:56.441Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 132,
+  "at": "2026-11-07T10:27:02.688Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 145,
+  "at": "2026-11-07T10:27:07.201Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ }
+]

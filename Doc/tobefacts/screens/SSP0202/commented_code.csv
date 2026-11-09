@@ -1,4 +1,7 @@
 ﻿"page_key","menu_id","file","line","kind","snippet"
 "shipping/shipment-change-request-confirm","SSP0202","features/shipping/src/pages/shipment-change-request-confirm/components/ConfirmDetailPanel.tsx","40","jsx","우측 1/3 은 빈 칸(`<Grid size={4} />`)으로 비워 2열을 유지한다(자매 SSP0200/SSP0201 과 동일)."
+"shipping/shipment-change-request-confirm","SSP0202","features/shipping/src/pages/shipment-change-request-confirm/ShipmentChangeRequestConfirm.tsx","210","code","await 창(SCS/PLAN/ERP 조회)에서 더블클릭 시 두 흐름이 각자 IF_CHECK(커밋 SP)·SAVE 까지 진행할"
+"shipping/shipment-change-request-confirm","SSP0202","features/shipping/src/pages/shipment-change-request-confirm/ShipmentChangeRequestConfirm.tsx","211","code","수 있었다. 아래 finally 가 모든 return 경로(차단·취소·사유·실패·성공·예외)에서 가드를 해제한다."
+"shipping/shipment-change-request-confirm","SSP0202","features/shipping/src/pages/shipment-change-request-confirm/ShipmentChangeRequestConfirm.tsx","343","code","사용자 결정 2026-10-27(종전 () => undefined 노출 유지에서 표준 우선으로 전환)."
 "shipping/shipment-change-request-confirm","SSP0202","features/shipping/src/pages/shipment-change-request-confirm/useShipmentChangeRequestConfirmStore.ts","46","endpoint","ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(메인/서브 2회)."
 "shipping/shipment-change-request-confirm","SSP0202","features/shipping/src/pages/shipment-change-request-confirm/useShipmentChangeRequestConfirmStore.ts","222","endpoint","메인/서브 2 시트 컬럼메타 각각 fetch (design 03 §4). 미등록/실패 시 빈 배열 유지."

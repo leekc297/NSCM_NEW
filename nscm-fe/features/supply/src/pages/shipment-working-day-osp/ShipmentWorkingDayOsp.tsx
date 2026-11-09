@@ -16,7 +16,6 @@ import { ShipmentWorkingDayOspInputModal } from './components/ShipmentWorkingDay
 import {
   DAY_WEEK,
   INPUT_VALUE_SET,
-  LBL,
   MEASURE_CONST,
   MENU_ID,
   MSG,
@@ -399,9 +398,10 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
-        // '입력'(btnInput) — AS-IS 조회조건의 Input 버튼을 버튼영역으로 이동(2026-10-15 사용자 지시).
+        // 'Bulk Update'(btnInput) — AS-IS 조회조건의 Input 버튼을 버튼영역으로 이동(2026-10-15 사용자 지시).
         //   편집 권한(canEdit)일 때만 노출. 클릭 → 조회 가드 후 값입력 팝업 오픈(샘플 capa-mobility-it Bulk Update 동형).
-        customButtons={canEdit ? [{ label: t(LBL.INPUT, '_Input'), action: handleInputOpen }] : []}
+        //   라벨은 샘플 BulkUpdateModal 과 동일하게 'Bulk Update' 리터럴(2026-11-04 사용자 지시).
+        customButtons={canEdit ? [{ label: 'Bulk Update', action: handleInputOpen }] : []}
       />
       <ShipmentWorkingDayOspGrid
         gridRef={gridRef}

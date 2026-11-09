@@ -1,7 +1,7 @@
 # SCP0108 — To-Be Fact Pack 요약
 
 - page_key: `supply/capa-lob-report` · feature: supply · As-is Fact Pack 있음
-- 파일 16 · 엔드포인트 호출 6 (미해결 0, 주석 속 1) · 이벤트 23 · 컴포넌트 사용 56 · 하드코딩 컬럼 1 · 메시지 30
+- 파일 16 · 엔드포인트 호출 6 (미해결 0, 주석 속 1) · 이벤트 23 · 컴포넌트 사용 57 · 하드코딩 컬럼 1 · 메시지 27
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
@@ -9,10 +9,10 @@
 |---|---|---|
 | features/supply/src/pages/capa-lob-report/capa-lob-report.constants.ts | constants | 272 |
 | features/supply/src/pages/capa-lob-report/capa-lob-report.types.ts | types | 119 |
-| features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | page | 343 |
-| features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | component | 444 |
-| features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.module.scss | component | 15 |
-| features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.tsx | component | 162 |
+| features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | page | 322 |
+| features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | component | 460 |
+| features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.module.scss | component | 24 |
+| features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.tsx | component | 189 |
 | features/supply/src/pages/capa-lob-report/components/modals/CapaLobReportColumnModal.tsx | component | 110 |
 | features/supply/src/pages/capa-lob-report/components/modals/CapaLobReportItemPopup.tsx | component | 50 |
 | features/supply/src/pages/capa-lob-report/hooks/useCapaLobReportCombos.ts | hook | 310 |
@@ -44,26 +44,26 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CapaLobReportForm | onSearch | handleSearch | jsx | features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | 301 |
-| CapaLobReportForm | onOpenItemPopup | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | 302 |
-| CapaLobReportColumnModal | onClose | <arrow> setOpenColumnSetting | jsx | features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | 333 |
-| CapaLobReportItemPopup | onClose | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | 338 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 132 |
-| CustomDropdown | onChange | <arrow> handleDivisionChange,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 149 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 164 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 188 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 233 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 260 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 287 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 312 |
-| CustomDropdown | onChange | <arrow> handleDivisionTypeChange,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 339 |
-| CustomDropdown | onChange | <arrow> handleOperationChange,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 360 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 381 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 406 |
-| Button | onClick | onOpenItemPopup | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 414 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 434 |
-| grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.tsx | 84 |
-| grid | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.tsx | 107 |
+| CapaLobReportForm | onSearch | handleSearch | jsx | features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | 280 |
+| CapaLobReportForm | onOpenItemPopup | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | 281 |
+| CapaLobReportColumnModal | onClose | <arrow> setOpenColumnSetting | jsx | features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | 312 |
+| CapaLobReportItemPopup | onClose | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | 317 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 133 |
+| CustomDropdown | onChange | <arrow> handleDivisionTypeChange,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 156 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 178 |
+| Button | onClick | onOpenItemPopup | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 186 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 205 |
+| CustomDropdown | onChange | <arrow> handleDivisionChange,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 227 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 242 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 267 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 317 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 344 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 371 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 396 |
+| CustomDropdown | onChange | <arrow> handleOperationChange,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 424 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | 447 |
+| grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.tsx | 111 |
+| grid | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.tsx | 134 |
 | ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,Number,String,clearFilters,settings.filter | jsx | features/supply/src/pages/capa-lob-report/components/modals/CapaLobReportColumnModal.tsx | 64 |
 | CapaItemPopup | onClose | onClose | jsx | features/supply/src/pages/capa-lob-report/components/modals/CapaLobReportItemPopup.tsx | 35 |
 | CapaItemPopup | onSelect | <arrow> selectedAll.map(item=>toStr(item.nickName)).filter,selectedAll.map,toStr,Array.from(newSet(values)).join,Array.from,setSearchParams | jsx | features/supply/src/pages/capa-lob-report/components/modals/CapaLobReportItemPopup.tsx | 38 |
@@ -71,7 +71,7 @@
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
-| Grid | 13 |
+| Grid | 14 |
 | FormItem | 13 |
 | CustomDropdown | 12 |
 | Box | 3 |
@@ -100,8 +100,6 @@
 |---|---|
 | MSG00667 | 1 |
 | MSG01410 | 1 |
-| MSG01044 | 1 |
-| MSG01045 | 1 |
 | MSG00096 | 1 |
 | MSG01390 | 1 |
 | MSG01052 | 1 |
@@ -111,24 +109,23 @@
 | LBL00038 | 1 |
 | LBL01059 | 1 |
 | LBL00112 | 1 |
-| LBL00641 | 1 |
+| LBL00027 | 1 |
+| LBL00054 | 1 |
+| LBL00055 | 1 |
+| LBL00001 | 1 |
 | LBL00053 | 1 |
-| LBL00606 | 1 |
 | LBL00014 | 1 |
 | LBL00015 | 1 |
 | LBL00030 | 1 |
 | LBL00008 | 1 |
 | LBL00010 | 1 |
-| LBL00027 | 1 |
 | LBL00009 | 1 |
 | LBL00056 | 1 |
-| LBL00054 | 1 |
-| LBL00055 | 1 |
 | LBL00764 | 1 |
 | LBL00765 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0108(18), SCP0105(16), SCP0104(5), SCP0106(4), SCP0025(2)
+- 화면ID: SCP0108(18), SCP0105(17), SCP0104(5), SCP0106(4), SCP0025(2)
 - SP/PKG: PKG_SCP0104(6), PKG_SCP0108(5), P_SCP0104_GET_SPREAD_TITLE(3), SCP0108_GET_CAPA_LOB_CURRENT(1), SCP0108_GET_CAPA_LOB(1), PKG_SCP0100(1), P_SCP0100_GET_GLOBAL_PSI_REPORT(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

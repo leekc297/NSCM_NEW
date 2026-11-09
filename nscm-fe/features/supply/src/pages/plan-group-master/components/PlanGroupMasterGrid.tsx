@@ -123,14 +123,15 @@ export const PlanGroupMasterGrid = ({
         dblClick={handleGridDblClick}
       />
       {/* Model by Division 공용 팝업 — AS-IS SCM0002_ItembyDivisionPopup(cs:922-933)의 TO-BE(SCM0002).
-          AS-IS Form_Load(true, division, "", "", "") 1:1: multiSelect + division=클릭 행 DIVISION_ID.
-          OK 반환 itemId 를 그 행 Model 셀에 반영(setItemId → editTracker 'M' 마킹). */}
+          division=클릭 행 DIVISION_ID. OK 반환 itemId 를 그 행 Model 셀에 반영(setItemId → editTracker 'M' 마킹).
+          단일선택: OPMZ_PLAN_GR_ITEM_ID 는 행당 Model 하나를 가리키는 셀이라 콤마 다건을 넣지 않는다.
+          AS-IS 는 Form_Load(true) 로 다중을 넘기나 팝업에 체크박스가 없어 체감은 단일선택이고, 한 셀에
+          콤마 목록이 들어가는 것은 이 컬럼 의미상 부적합 — 단일선택이 올바른 동작(사용자 결정 2026-11-03). */}
       <ModelByDivisionPopup
         open={openItemModal}
         onClose={() => setOpenItemModal(false)}
         onSelect={selected => setItemId(selected.itemId)}
         params={{ divisionId: clickedDivisionRef.current }}
-        multiSelect
       />
     </>
   );

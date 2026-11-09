@@ -3,8 +3,9 @@
 //   구현 검사기: A10 조회 전 그리드 · X-REOPEN 닫기·재오픈 · K4 버튼 구성 · G6 조회조건 초기값 · C1 상위 변경→하위 후보 · C4 조건 변경→그리드 상태 · D6 Insert 위치
 //   기대값 = 원장 condition(JSON — AS-IS 문장 원문에서 추출). 원문으로 기대를 정할 수 없으면 실측만 남기고 판정필요(추측 PASS 금지).
 //   저장(Save)은 하지 않는다. 결과 = Doc/verify/<ID>/e2e_results.json(@verify 와 같은 파일에 row_id 단위 병합) → judge.py 가 원장에 반입.
+import { measurable as precond } from '../../../tools/E2E/lib/precond';
 import * as fs from 'node:fs';
-import { asisInsertNoop } from '../../../tools/E2E/lib/newrow';
+import { asisDeleteNewOnly, asisInsertNoop } from '../../../tools/E2E/lib/newrow';
 import { createHash } from 'node:crypto';
 import * as path from 'node:path';
 import type { Locator } from '@playwright/test';
@@ -26,14 +27,16 @@ const LEDGER = path.join(DIR, 'verify_ledger.csv');
 const OUT = process.env.CL_RESULTS || path.join(DIR, 'e2e_results.json');  // CL_RESULTS = CheckList 자기검증(변이) 실행의 별도 결과 파일(2026-10-28)
 const CL_SELFTEST = !!(process.env.CL_MUTATE || process.env.CL_SELFTEST_BASE);  // 자기검증 기준선 실행도 공식 산출물 미기록  // 변이 실행 = 공식 산출물(combo_runtime·dyn_facts) 미기록
 
-type Res = { row_id: string; result: 'PASS' | 'FAIL' | '판정필요' | 'ERROR' | 'NA'; evidence: string; tobe_ref?: string; cond?: string };
+type Res = { row_id: string; result: 'PASS' | 'FAIL' | '판정필요' | 'ERROR' | 'NA'; evidence: string; tobe_ref?: string; cond?: string; mctx?: { calls: number; rows: number; req: number } };
 const results: Res[] = [];
 // 2026-10-30: 조건 JSON "dead"(실행되지 않는 AS-IS 메서드에서만 나온 검사 — mapping_trace.asis_live) 행은 측정하지 않는다. 정적 단계가 NA 로 둔 행을 이 엔진이 다시 재 FAIL 하던 결함(SCP0041 SCP0040 F4)
 const rows = ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(r => r.source === 'TRACE' && !/"dead":\s*"/.test(r.condition || '')) : [];
 // 2026-10-28 화면 독립화: 메인 시트명·컬럼 집합은 화면 메타(plan.json·원장 COLUMN 행)에서 — SCP0007 의 'bod'·ROUTE_ID 등을 다른 화면에 적용하던 결함(SCP0096 L1 77초·G4/H5 허위 FAIL)
-const PLAN: { mainSheets?: { name?: string }[] } = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')); } catch { return {}; } })();
+const PLAN: { mainSheets?: { name?: string; key?: string }[] } = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')); } catch { return {}; } })();
 const nrmS = (s: unknown) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-const MAIN_SHEETS = new Set((Array.isArray(PLAN.mainSheets) ? PLAN.mainSheets.map(m => nrmS(m && m.name)) : []).filter(Boolean));
+// 2026-11-07 T129: FE call-proc 의 sheet 는 BE 시트 키('main' · plan.json mainSheets[].key)다 — AS-IS 시트명만 담으면 본 조회 호출을 끝까지 못 찾아
+//   searchWait 류가 60초(120×500ms) 대기 뒤 벽시계를 기록했다(6화면 전부 L1 '64초' 허위 FAIL · calls/*.json 실측 sheet='main')
+const MAIN_SHEETS = new Set([...(Array.isArray(PLAN.mainSheets) ? PLAN.mainSheets.flatMap(m => [nrmS(m && m.name), nrmS(m && m.key)]) : []), 'main'].filter(Boolean));
 const isMainSheet = (s: string) => MAIN_SHEETS.size ? MAIN_SHEETS.has(nrmS(s)) : true;
 const COLS = new Set(ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(r => r.source === 'COLUMN' && !/<DYNAMIC:/.test(r.target || '')).map(r => ((r.target || '').split('.')[1] || '').split(' ')[0]).filter(Boolean) : []);  // <DYNAMIC:…> 패밀리 행은 정적 컬럼 집합이 아니다(2026-10-30)
 const has = (...c: string[]) => c.every(x => COLS.has(x));
@@ -48,7 +51,13 @@ const flush = () => {
   fs.writeFileSync(OUT, JSON.stringify([...m.values()], null, 1), 'utf8');
 };
 const COND_HASH = new Map(rows.map(r => [r.row_id, createHash('sha1').update(String(r.condition || ''), 'utf8').digest('hex').slice(0, 8)]));  // 측정 시점의 검사 조건 — judge 가 조건이 바뀐 낡은 판정을 가려낸다(2026-10-29)
-const put = (row_id: string, result: Res['result'], evidence: string) => results.push({ row_id, result, evidence: evidence.slice(0, 900), tobe_ref: 'E2E @trace', cond: COND_HASH.get(row_id) });
+// P1(2026-11-06 근본 보완): 측정 맥락 — 이 테스트에서 지금까지 나간 call-proc 수·조회 응답 최대 행·필수 조건 자동 채움 횟수. judge 가 '측정 전제 미충족' FAIL 을 ERROR 로 돌리는 근거
+const CUR: { nscm: Nscm | null } = { nscm: null };
+const mctxOf = () => { const n = CUR.nscm; if (!n) return undefined; const rows = n.calls.reduce((m, c) => Math.max(m, c.rows == null ? -1 : Number(c.rows)), -1); return { calls: n.calls.length, rows, req: (n as unknown as { requiredNotes?: string[] }).requiredNotes?.length || 0 }; };
+// 2026-11-07 T142: 스냅샷 행(원장 target '<ID> 스냅샷 …' · _snap.spec 전용)은 규칙 묶음 판정(A5 컬럼 구성·H4 가로 스크롤 등 RULE_SCREEN 전체 put)이 덮지 않는다 —
+//   chain6b 에서 골든 없는 헤더·미승인 화면샷 행이 @trace 결과로 PASS 가 돼 '승인대기' 에서 빠졌다(SCP0037/0084/0122/0131)
+const SNAP_IDS = new Set(ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(r => /스냅샷/.test(r.target || '')).map(r => r.row_id) : []);
+const put = (row_id: string, result: Res['result'], evidence: string) => { if (SNAP_IDS.has(row_id)) return; results.push({ row_id, result, evidence: evidence.slice(0, 900), tobe_ref: 'E2E @trace', cond: COND_HASH.get(row_id), mctx: mctxOf() }); };
 // 동적 facts(실행 시 수집) — 조회조건 콤보 code↔name · 팝업 선택 행 필드 · 사이트 유형 표본 → Doc/verify/<ID>/dyn_facts.json (2026-10-27 사용자 요청: 정합검증에 필요한 동적 데이터도 facts 로 보존)
 const DYN: { combos: Record<string, { c: string; v: string }[]>; popupFields: Record<string, string[]>; at: string } = { combos: {}, popupFields: {}, at: '' };
 const dynFlush = (nscm?: Nscm) => { if (!ID) return; try { const p0 = path.join(DIR, 'dyn_facts.json'); const prev = fs.existsSync(p0) ? JSON.parse(fs.readFileSync(p0, 'utf8')) as typeof DYN : { combos: {}, popupFields: {}, at: '' };
@@ -66,7 +75,7 @@ type Cond = { et?: string; name?: string; popup?: boolean; excluded?: string[]; 
   m4?: { handler: string; trigger: string; targets: string[]; popup: string }[];
   d3None?: boolean; e4None?: boolean; d5Src?: string; popupSheet?: string; trigger?: string[];
   siteSamples?: Record<string, string[]>; ctlType?: string; allFlag?: boolean; metaWidth?: Record<string, string>;
-  src?: string[]; noAssign?: boolean; viaPopup?: boolean; popMap?: Record<string, string>; asisCombo?: boolean; mergeSrc?: string; asisCellSrc?: string; d4?: string[]; d4expr?: string[]; d5?: string; asisCols?: string[]; callProc?: { menu: string; sheet: string; btn: string }[]; truncated?: boolean };
+  src?: string[]; noAssign?: boolean; clearOnly?: boolean; viaPopup?: boolean; popMap?: Record<string, string>; asisCombo?: boolean; mergeSrc?: string; asisCellSrc?: string; d4?: string[]; d4expr?: string[]; d5?: string; asisCols?: string[]; callProc?: { menu: string; sheet: string; btn: string }[]; truncated?: boolean };
 const condOf = (r: Record<string, string>): Cond => { try { return JSON.parse(r.condition || '{}'); } catch { return {}; } };
 const nrm = (s: string) => String(s || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
 const LABEL_ALIASES = loadLabelAliases(ID);  // tools/Harness/rules/label_alias.csv — 이 화면 scope 의 명칭 변경 룰
@@ -111,7 +120,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
   // 2026-10-30 테스트결과서: 이 테스트에서 FAIL 로 기록한 행이 있으면 테스트 종료 시점 화면을 저장하고 행 ↔ 파일 색인을 남긴다(Doc/verify/<ID>/e2e/shots/).
   //   판정에는 영향 없음(캡처 실패는 삼킨다) · 스펙별 색인 파일(index_trace.json)로 병렬 워커 간 쓰기 충돌을 피한다 · 캡처는 '종료 시점' 이라 실패 순간과 다를 수 있음을 색인 note 에 남긴다.
   let shotMark = 0;
-  test.beforeEach(() => { shotMark = results.length; });
+  test.beforeEach(({ nscm }) => { CUR.nscm = nscm; shotMark = results.length; });
   test.afterEach(async ({ page }, testInfo) => {
     const fails = results.slice(shotMark).filter(r => r.result === 'FAIL');
     if (!fails.length) return;
@@ -189,9 +198,12 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       // 판정 = 재오픈한 화면의 상태(재오픈 후 치명 콘솔·5xx·이전 결과 잔존). 탭을 닫는 동안(화면 해제) 난 콘솔 예외는 사용자에게 보이지 않고 재오픈에 영향이 없으면
       //   결함으로 세지 않고 증거에만 남긴다(2026-10-30 SCP0100 '판정 오류 — 정상 동작': 닫기 중 그리드 해제 'finishEditing' null 1건으로 FAIL 이었음)
       const fatal = nscm.consoleErrors.filter(e => /pageerror|Uncaught|Cannot read|is not a function/i.test(e));
-      const bad5 = nscm.serverErrors.length - s5;
+      // 2026-11-06 T72(SCP0122 X-REOPEN 허위 FAIL): 메뉴를 열 때마다 셸이 보내는 공통 접속 로그(admin/log/menu-access)의 5xx 는 화면 결함이 아니다
+      //   (로컬 BE 에 처리기 없음 → 공통 예외 처리기 500 · 모든 화면 공통) — 화면 판정에서 빼고 근거에 따로 남긴다
+      const new5 = nscm.serverErrors.slice(s5); const shell5 = new5.filter(e => /\/admin\/log\//i.test(e.url));
+      const bad5 = new5.length - shell5.length;
       const ok = !fatal.length && bad5 <= 0 && (rowsAgain <= 0 || rowsOnOpen > 0);
-      put(x.row_id, ok ? 'PASS' : 'FAIL', `${how} → 재오픈: 치명 콘솔 ${fatal.length}${fatal.length ? ` (${fatal[0].slice(0, 120)})` : ''} · 5xx ${Math.max(0, bad5)} · 재오픈 직후 행 ${rowsAgain}(최초 진입 ${rowsOnOpen})${consoleAfterClose.length ? ` · 참고: 탭 닫는 중(화면 해제) 콘솔 예외 ${consoleAfterClose.length}건 (${consoleAfterClose[0].slice(0, 100)}) — 재오픈에 영향 없으면 결함 아님` : ''}`);
+      put(x.row_id, ok ? 'PASS' : 'FAIL', `${how} → 재오픈: 치명 콘솔 ${fatal.length}${fatal.length ? ` (${fatal[0].slice(0, 120)})` : ''} · 5xx ${Math.max(0, bad5)}${shell5.length ? `(공통 접속 로그 5xx ${shell5.length}건 제외 — 화면 무관 · ${shell5[0].url.replace(/^https?:\/\/[^/]+/, '').slice(0, 60)})` : ''} · 재오픈 직후 행 ${rowsAgain}(최초 진입 ${rowsOnOpen})${consoleAfterClose.length ? ` · 참고: 탭 닫는 중(화면 해제) 콘솔 예외 ${consoleAfterClose.length}건 (${consoleAfterClose[0].slice(0, 100)}) — 재오픈에 영향 없으면 결함 아님` : ''}`);
     }
   });
 
@@ -304,8 +316,10 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         await p.waitForTimeout(800);
         const rowsAfter0 = await probe.rowCount(p); const allGrids = await p.evaluate(`(() => [...document.querySelectorAll('.wj-flexgrid')].filter(e => e.offsetParent !== null && !e.closest('[role="dialog"], .MuiDialog-root')).map(e => { const k = e['$WJ-CTRL']; return k ? k.rows.length : 0; }))()`).catch(() => [rowsAfter0]) as number[]; const rowsAfter = (c.clear || []).length > 0 ? Math.max(rowsAfter0, ...allGrids) : rowsAfter0; const clear = (c.clear || []).length > 0; const requery = ((c as { requery?: string[] }).requery || []).length > 0;
         // AS-IS 핸들러가 초기화 뒤 즉시 재조회(FindData 등)하면 기대 = 자동 재조회 ≥1(행 수는 데이터 따라 달라 판정 재료가 아님) — 종전엔 '행 0 순간' 포착 여부로 PASS/FAIL 이 요동(2026-10-30 SCP0100 Bucket)
-        const ok = clear && requery ? searchAfter.length > 0 : clear ? rowsAfter <= 0 && searchAfter.length === 0 : rowsAfter === rowsBefore;
-        put(x.row_id, rowsBefore <= 0 ? '판정필요' : ok ? 'PASS' : 'FAIL', `조회 ${rowsBefore}행 → '${parent.label}' 변경('${picked.slice(0, 30)}') 후 ${rowsAfter}행(그리드별 ${allGrids.join('/')}) · 자동 재조회 ${searchAfter.length}건 — 기대 ${clear && requery ? `그리드 초기화 후 즉시 재조회(AS-IS ${(c.clear || []).join(' ; ').slice(0, 120)} → ${((c as { requery?: string[] }).requery || []).join(' ; ')})` : clear ? `그리드 초기화(AS-IS ${(c.clear || []).join(' ; ').slice(0, 160)})` : 'AS-IS 핸들러에 그리드 초기화 없음 → 유지'}`);
+        // CR-078(확정 요건): Division 단일 선택 콤보 변경 시 모든 그리드·하위 조건 초기화 — AS-IS 핸들러에 초기화가 없어도 TO-BE 공통 규약이 우선(2026-11-06 사용자 판정 SCP0016 17·20번: Div 변경 후 0행 = 오류 아님)
+        const divSingle = parent.kind === 'combo' && (c.labels || []).concat(labels).some(l => /^(cboDivision|Division\*?|Div\.?\*?)$/i.test(String(l || '').trim())) && !/,/.test(String(await condValue(parent.root, parent.kind)).trim());
+        const ok = divSingle ? rowsAfter <= 0 || searchAfter.length > 0 : clear && requery ? searchAfter.length > 0 : clear ? rowsAfter <= 0 && searchAfter.length === 0 : rowsAfter === rowsBefore;
+        put(x.row_id, rowsBefore <= 0 ? '판정필요' : ok ? 'PASS' : 'FAIL', `조회 ${rowsBefore}행 → '${parent.label}' 변경('${picked.slice(0, 30)}') 후 ${rowsAfter}행(그리드별 ${allGrids.join('/')}) · 자동 재조회 ${searchAfter.length}건 — 기대 ${divSingle ? `Div 단일 선택 변경 → 그리드 초기화(CONTRACT:CR-078 · AS-IS 핸들러 ${(c.clear || []).length ? '초기화 있음' : '초기화 없음이지만 공통 규약 우선'})` : clear && requery ? `그리드 초기화 후 즉시 재조회(AS-IS ${(c.clear || []).join(' ; ').slice(0, 120)} → ${((c as { requery?: string[] }).requery || []).join(' ; ')})` : clear ? `그리드 초기화(AS-IS ${(c.clear || []).join(' ; ').slice(0, 160)})` : 'AS-IS 핸들러에 그리드 초기화 없음 → 유지'}`);
       }
     }
     fs.writeFileSync(path.join(ROOT, 'Doc', 'verify', ID, 'combo_cascade.json'), JSON.stringify(cascadeDump));
@@ -493,19 +507,21 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       if (c.noAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일) — 연쇄 채움 대상 아님(D1/D3/H2 에서 판정)`); continue; }
       if (c.viaPopup) { put(x.row_id, '판정필요', `${tgt}: 원천 ${srcs.join('/')} 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사에서 판정)`); continue; }
       if (!srcs.length) { put(x.row_id, '판정필요', `${tgt} 연쇄 원천 컬럼 해석 불가 — AS-IS ${(c.raws || [])[0] || ''}`); continue; }
-      const tried: string[] = []; let ok = false; let blocked = '';
+      const tried: string[] = []; let ok = false; let blocked = ''; let clearFail = false;
       for (const src of srcs) {
         if (!(await probe.editable(p, cRow.row, src))) { blocked = `원천 ${src} ${crNm} 편집 불가(팝업 전용 셀이면 M4 에서 판정)`; continue; }
         const prefer = [...new Set((await probe.candidatesWithField(p, src, 'CITY')).concat((await probe.candidates(p, cRow.row, src)) || []).filter(Boolean))].slice(0, 3);
         for (const v of prefer) {
           if (!(await probe.setByEditor(p, cRow.row, src, v))) continue; await p.waitForTimeout(800);
           const got = (await probe.value(p, cRow.row, tgt)) ?? ''; tried.push(`${src}='${v}' → ${tgt}='${got}'`);
-          if (got) { ok = true; break; }
+          // 2026-11-09 T173(SSP0025 12·14번): AS-IS 가 원천 변경 시 대상을 ""로 비우기만 하면(mapping_trace clearOnly) 기대 = 빈 값 — 값이 남으면 FAIL
+          if (c.clearOnly ? got === '' : !!got) { ok = true; if (!c.clearOnly) break; } else if (c.clearOnly) { clearFail = true; break; }
         }
-        if (ok) break;
+        if (ok || clearFail) break;
       }
+      if (clearFail) ok = false;
       if (!tried.length) { put(x.row_id, '판정필요', `${tgt} 연쇄 프로브 불가 — ${blocked || `원천 ${srcs.join(',')} 에 입력할 후보 없음(B1·B4 확인)`}`); continue; }
-      put(x.row_id, ok ? 'PASS' : 'FAIL', `${crNm} 연쇄 ${srcs.join('/')} → ${tgt}: ${tried.join(' | ')}${ok ? '' : ' — 원천 선택 후 대상 빈 값'} (AS-IS ${(c.raws || [])[0]?.slice(0, 60) || ''})`);
+      put(x.row_id, ok ? 'PASS' : 'FAIL', `${crNm} 연쇄 ${srcs.join('/')} → ${tgt}: ${tried.join(' | ')}${c.clearOnly ? (ok ? ' — AS-IS 도 원천 변경 시 대상을 비움(같음)' : ' — AS-IS 는 원천 변경 시 대상을 비우는데 값이 남음') : ok ? '' : ' — 원천 선택 후 대상 빈 값'} (AS-IS ${(c.raws || [])[0]?.slice(0, 60) || ''})`);
     }
     // C2 — 원천 값에 따라 대상 콤보 후보가 달라진다
     for (const { x, c } of cols.filter(t => t.x.rule_id === 'C2')) {
@@ -735,7 +751,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         else if (/errCode\s*==\s*"990[1-4]0"/.test(g) && !/^else/.test(g)) put(rid, 'FAIL', `${e.msg || '(동적)'}: AS-IS 는 저장 실패 응답의 오류코드(99010 중복·99020/99030/99040 검증 실패)에 따라 문제가 된 행·셀을 색으로 표시하고 그 셀 기준 메시지를 띄운다 — TO-BE 는 저장 실패 시 어느 행·셀이 문제인지 표시하지 않음(대조표 D00-3-043~ 미구현) → FAIL`);
         else if (/^else of \(errCode/.test(g)) put(rid, 'NA', `${e.msg}: 그 밖의 서버 오류 코드 → 일반 저장 실패 메시지 — 정상 데이터로는 재현 불가(오류 주입 금지) · 서버 오류 표시는 공통 오류 핸들러(F4 BE 오류 0 로 판정)`);
         else if (/^catch/.test(g)) put(rid, 'NA', `${e.msg || '(동적)'}: catch 블록 예외 메시지(프레임워크 공통 오류 표시) — 검사 대상 아님`);
-        else if (/Rows\[0\]\[0\]\.ToString\(\)\s*==\s*"S"/.test(g)) put(rid, f1Row && f1Row.result === 'PASS' ? 'PASS' : 'FAIL', `${e.msg}: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 ${f1Row?.result || '미실행'}: ${(f1Row?.evidence || '').slice(0, 100)}) 경로에서 성공 알림·재조회 확인`);
+        // 2026-11-07 T130: _trace 는 _verify(F1) 보다 먼저 돌아 원장의 F1 이 NOT_RUN 이다 — 그때 FAIL 을 적으면 judge 의 E4_F1LINK 가 최종 F1 로 바꿔도
+        //   note 의 '원판정:FAIL' 이 남아 regress 오라클(SCP0037 16행 '검사기 원판정 FAIL 유지')에 걸린다 → 미측정이면 NA(E4_F1LINK 대기)로 두고 judge 가 F1 최종값으로 판정
+        else if (/Rows\[0\]\[0\]\.ToString\(\)\s*==\s*"S"/.test(g)) put(rid, f1Row && f1Row.result === 'PASS' ? 'PASS' : f1Row && f1Row.result === 'FAIL' ? 'FAIL' : 'NA', `${e.msg}: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 ${f1Row?.result || '미실행'}: ${(f1Row?.evidence || '').slice(0, 100)}) 경로에서 성공 알림·재조회 확인${f1Row && (f1Row.result === 'PASS' || f1Row.result === 'FAIL') ? '' : ' — F1 최종 결과로 재판정(judge E4_F1LINK)'}`);
         else put(rid, 'NA', `${e.msg}: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard '${g.slice(0, 120)}' (변수→컬럼 ${JSON.stringify(e.vars).slice(0, 80)}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)`);
         continue;
       }
@@ -968,17 +986,23 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
             const nNew1 = await probe.newRowCount(p); ev.push(`신규행 Delete → 신규행 ${nNew0}→${nNew1}`); if (nNew1 >= nNew0) ok = false;
           }
           const exD = await probe.findRow(p, 'existing');
+          // 2026-11-06 T107(SCP0127 F5 허위 FAIL): CR-057(Active 토글형 Delete)은 AS-IS Delete 가 Active/VALID_YN 을 토글하는 화면에만 — AS-IS 가 D Flag(siMain.Delete)면 AS-IS 대로 D 가 정답
+          const asisToggle = (() => { try { const acts = parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'), 'utf8').replace(/^\uFEFF/, '')); return acts.some(a => /delete/i.test(String(a.method || a['method'] || Object.values(a)[2] || '')) && /VALID_YN|USE_YN|ACTIVE_YN|DEL_YN/i.test(JSON.stringify(a))); } catch { return false; } })();
+          // 2026-11-07 T140(SCP0037 F5 \uD5C8\uC704 FAIL): AS-IS DeleteButton \uC774 `action == CAppSetting.FlagI` \uBD84\uAE30 \uC548\uC5D0\uC11C\uB9CC siMain.Delete() \uB97C \uBD80\uB974\uB294 \uD654\uBA74\uC740 \uAE30\uC874\uD589 Delete \uAC00 \uBB34\uB3D9\uC791\uC774\uB2E4
+          //   (SCP0037_OperationLT.cs:294-296 \u00B7 TO-BE OperationLT.tsx:136 \uB3C4 INSERT \uD589\uB9CC) \u2192 \uAE30\uC874\uD589\uC5D0 D Flag \uAC00 \uC548 \uC0DD\uAE30\uB294 \uAC83\uC774 AS-IS \uC640 \uAC19\uB2E4 \u2014 actions.csv \uC0AC\uC2E4\uB85C \uD310\uC815
+          const asisNewOnly = (() => { try { const acts = parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'), 'utf8').replace(/^\uFEFF/, '')); return acts.some(a => /DeleteButton/i.test(String(a.method || '')) && /FlagI/.test(String(a.guard || '') + ' ' + String(a.target || '')) && /BRANCH/i.test(String(a.kind || ''))) || asisDeleteNewOnly(acts).newOnly; } catch { return false; } })(); // 2026-11-09 T173(SSP0025 2번): DeleteButton → this.Delete() 위임 · Rows.Remove · guard == StringI 까지(newrow.asisDeleteNewOnly = asis_delete.py)
           if (exD) {
-            const actCols = vb.filter(b => /ACTIVE|USE_YN|VALID_YN|DEL_YN/i.test(b)); const act0 = await Promise.all(actCols.map(async c => (await probe.value(p, exD.row, c)) ?? ''));
+            const actCols = asisToggle ? vb.filter(b => /ACTIVE|USE_YN|VALID_YN|DEL_YN/i.test(b)) : []; const act0 = await Promise.all(actCols.map(async c => (await probe.value(p, exD.row, c)) ?? ''));
             const pt = await probe.cellCenter(p, exD.row, focusCol); if (pt) await p.mouse.click(pt.x, pt.y);
             await nscm.subButton('Delete').click({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); const al = await nscm.alertText(); await nscm.clearDialogs();
             const crudD = (await probe.value(p, exD.row, 'CRUD_TYPE')) ?? '';
             const act1 = await Promise.all(actCols.map(async c => (await probe.value(p, exD.row, c)) ?? ''));
             const toggled = actCols.filter((c, i) => act0[i] !== act1[i]);
-            if (actCols.length) { const isD = /^D$/i.test(crudD); ev.push(`기존행 Delete → CRUD_TYPE='${crudD}' · Active 관리 화면(CR-057: 기존행 D Flag 표시 안 함 · 컬럼 ${actCols.join(',')})${isD ? ' — D Flag 표시됨(결함)' : ''}`); if (isD) ok = false; }
+            if (actCols.length) { const isD = /^D$/i.test(crudD); ev.push(`기존행 Delete → CRUD_TYPE='${crudD}' · Active 관리 화면(CR-057: AS-IS Delete 가 Active 토글 · 기존행 D Flag 표시 안 함 · 컬럼 ${actCols.join(',')})${isD ? ' — D Flag 표시됨(결함)' : ''}`); if (isD) ok = false; }
             else if (/^D$/i.test(crudD)) ev.push(`기존행 Delete → CRUD_TYPE='D'`);
             else if (toggled.length) ev.push(`기존행 Delete → ${toggled.map((c, i) => `${c} ${act0[actCols.indexOf(c)]}→${act1[actCols.indexOf(c)]}`).join(',')} (Active 토글형 · CR-057)`);
             else if (al) ev.push(`기존행 Delete → 알림 '${al.replace(/\s+/g, ' ').slice(0, 60)}' · CRUD_TYPE='${crudD}'`);
+            else if (asisNewOnly) ev.push(`기존행 Delete → 변화 없음(CRUD_TYPE='${crudD}' · 앞선 편집 상태 유지) — AS-IS DeleteButton 은 신규행(FlagI)만 삭제(기존행 무동작 · actions.csv) · TO-BE 동일`);
             else { ev.push(`기존행 Delete → CRUD_TYPE='${crudD}' (D 아님 · Active 토글 없음)`); ok = false; }
           }
         } catch (e) { ev.push(`Delete 시험 불가(도구): ${String(e).replace(/\s+/g, ' ').slice(0, 80)}`); }
@@ -1217,7 +1241,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       seenLab.add(key);
       await openReady(nscm); await nscm.expandSearchArea(true);
       const box = await fc([...g.labels, ...LABEL_ALIASES.filter(a => g.labels.some(l => nrm(l) === nrm(a.asis_label))).map(a => a.tobe_label)], `w4c_g1_${key}`);  // CR-092 AS-IS 'Valid' = TO-BE 'Active'(2026-11-01 SCP0028 허위 '칸 없음')
-      if (!box || box.kind !== 'combo') { put(g.rid, box ? 'NA' : 'FAIL', box ? `${g.labels[0]} 콤보 아님(${box.kind}) — 멀티선택 검사 대상 아님` : `조회조건 ${g.labels[0]} 칸 없음`); continue; }
+      if (!box || box.kind !== 'combo') { put(g.rid, box ? 'NA' : 'ERROR', box ? `${g.labels[0]} 콤보 아님(${box.kind}) — 멀티선택 검사 대상 아님` : `[측정 경로 없음] 조회조건 ${g.labels[0]} 칸을 찾지 못함(라벨·구조 — 존재 여부는 smoke 조회조건 검사에서 판정 · 2026-11-06 T106)`); continue; }
+      { const pre = await precond(nscm, { control: g.labels[0], idle: false }); if (!pre.ok && /비활성/.test(pre.why)) { put(g.rid, 'ERROR', `${pre.why} — AS-IS 도 이 Division 에서 비활성인지(Electrode EE 전용 등)는 사람 확인`); if (g.g2) put(g.g2, 'NA', `${g.labels[0]} 비활성 칸 — ALL/다중 사양 측정 불가`); continue; } }
       await searchAndRows(nscm); await nscm.expandSearchArea(true);
       // 결과 컬럼 = 이 화면 그리드 헤더에서 조건 라벨로 찾은 binding 우선, COND_COL 은 그 컬럼이 이 그리드에 실제로 있을 때만
       //   (2026-10-30 SCP0100 From/To Site: COND_COL 의 SCP0007 이름 FROM_SITE_CODE 를 그대로 써 그리드에 없는 컬럼 → 기본 결과 값 0개 →
@@ -1274,7 +1299,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
           : ' — 조회 요청에 고른 값이 실렸으나 결과에 조건 밖 값/0행(서버 필터 미반영)';
         // ALL 로 복귀 → 전체
         await nscm.expandSearchArea(true); const box2 = await fc(g.labels, `w4c_g1b_${key}`);
-        let rowsAll = -1; let alAll = ''; let errAll = '';
+        let rowsAll = -1; let alAll = ''; let errAll = ''; const b2All = nscm.calls.length;
         if (box2) {
           const o2 = await comboOpts(box2.root); const sa = o2.texts.findIndex(t => /select all|^all$|전체/i.test(t));
           // 'Select All' 토글: 전부 체크된 상태가 아닐 때만 눌러 전체 선택으로 만든다(이미 전체면 누르면 전체 해제)
@@ -1282,6 +1307,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
           if (sa >= 0 && !allOn) { await o2.lis.nth(sa).click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(300); }
           await p.keyboard.press('Escape'); const b2 = nscm.calls.length; await nscm.search().catch(() => undefined); for (let k = 0; k < 120 && !nscm.calls.slice(b2).some(q => isMainSheet(q.sheet)); k++) await p.waitForTimeout(500); await p.waitForTimeout(1_500); alAll = await nscm.alertText(); await nscm.clearDialogs(); rowsAll = await rowsAfterSearch(); errAll = nscm.calls.slice(b2).filter(q => q.status >= 400).map(q => `${q.sheet}/${q.btn} HTTP ${q.status}`).join(',');
         }
+        // 2026-11-07 T135(SCP0131 G2 허위 FAIL): 그리드 행 수가 0 으로 읽혀도 ALL 선택 조회 call-proc 응답에 행이 있으면 그 값이 실측이다(calls/*.json rows=1 · 그리드 0 읽힘 → 'ALL 이 전체를 돌려주지 않음' 오판)
+        const allCallRows = Math.max(-1, ...nscm.calls.slice(b2All).filter(q => isMainSheet(q.sheet)).map(q => Number(q.rows ?? -1)));
+        if (rowsAll <= 0 && allCallRows > 0) rowsAll = allCallRows;
         const allOk = rowsAll >= rowsOne && rowsAll > 0 && !errAll;
         // 개별 선택이 기본(ALL) 조회와 같은 행수면 필터가 걸리지 않은 것 — ALL↔개별 비교가 성립하지 않는다(2026-10-31 SCP0100 To Site 1668=기본 vs Select All 550 → 허위 FAIL). 또 '전체 체크' 는 후보 목록 범위, 'ALL' 센티널은 무조건 전체라 다를 수 있다 → 사람 판정
         const allAmbig = !allOk && rowsAll > 0 && (rowsOne >= baseRows || rowsAll < rowsOne);
@@ -1304,7 +1332,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
           else { judged++; evs.push(`'${texts[i]}' → ${rc}행 · 요청 ${body.includes(texts[i].split(/\s+/)[0]) ? '인자 포함' : '인자 미확인'}`); }
         }
         const ev = `[단일선택 ${g.labels[0]}] ` + evs.join(' | ');
-        put(g.rid, fail ? 'FAIL' : judged ? 'PASS' : 'FAIL', ev + (judged ? '' : ' — 판정 가능한 옵션 없음'));
+        put(g.rid, fail ? 'FAIL' : judged ? 'PASS' : 'ERROR', ev + (judged ? '' : ' — [측정 경로 없음] 판정 가능한 옵션 없음(칸 비활성·후보 0 — 측정 실패는 FAIL 이 아님 · 2026-11-06 SCP0016 Electrode)'));
         if (g.g2) put(g.g2, 'NA', `${g.labels[0]} 단일 선택 콤보 — ALL/다중 사양 대상 아님`);
       }
     }
@@ -1602,11 +1630,12 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const comboOpts = async (root: import('@playwright/test').Locator) => { const combo = root.locator('[role="combobox"]').first(); await combo.click({ timeout: 5_000 }).catch(() => undefined); const lis = p.locator('.MuiAutocomplete-popper [role="option"], .MuiAutocomplete-popper li, [role="listbox"] [role="option"]'); await lis.first().waitFor({ state: 'visible', timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(250); let texts = (await lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim()); if (!texts.length) { await combo.press('ArrowDown').catch(() => undefined); await lis.first().waitFor({ state: 'visible', timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(250); texts = (await lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim()); } return { lis, texts }; };
     // 조회 직후 그리드는 '행 0' 으로 먼저 그려지고 ~1초 뒤 데이터가 찬다(2026-10-27 진단 실측) — 0/−1 이면 최대 15초 기다린 뒤 확정. 응답 행수(call n)가 더 크면 그 값을 쓴다
     const rowsAfterSearch = async (callFrom?: number) => { let n = -1; for (let k = 0; k < 30 && n <= 0; k++) { n = await probe.rowCount(p); if (n <= 0) await p.waitForTimeout(500); } const resp = callFrom == null ? null : nscm.calls.slice(callFrom).filter(q => isMainSheet(q.sheet) && (q as unknown as { n?: number | null }).n != null).map(q => Number((q as unknown as { n?: number | null }).n)).pop(); return resp != null && resp > n ? resp : n; };
-    const searchWait = async () => { const b = nscm.calls.length; const t0 = Date.now(); await nscm.search(); for (let k = 0; k < 120 && !nscm.calls.slice(b).some(q => isMainSheet(q.sheet)); k++) await p.waitForTimeout(500); const ms = Date.now() - t0; await p.waitForTimeout(1_200); await nscm.clearDialogs(); return { ms, n: await rowsAfterSearch(), calls: nscm.calls.slice(b) }; };
+    // 응답시간 = 본 조회 call-proc 의 요청 시작~응답 끝(ProcCall.dur · EG415). 벽시계(search() 의 필수 조건 자동 선택·대기 포함)는 참고값 — 2026-11-07 SCP0127/SCP0016 L1 '64초' 허위 FAIL(DB 직접 호출 0.15s · 벽시계에 조회 준비 시간이 섞임)
+    const searchWait = async () => { const b = nscm.calls.length; const t0 = Date.now(); await nscm.search(); for (let k = 0; k < 120 && !nscm.calls.slice(b).some(q => isMainSheet(q.sheet)); k++) await p.waitForTimeout(500); const wall = Date.now() - t0; await p.waitForTimeout(1_200); await nscm.clearDialogs(); const main = nscm.calls.slice(b).filter(q => isMainSheet(q.sheet)); const net = Math.max(0, ...main.map(q => Number((q as { dur?: number }).dur || q.ms || 0))); return { ms: net > 0 ? net : wall, wall, net, n: await rowsAfterSearch(), calls: nscm.calls.slice(b) }; };
     const r0 = await openReady(nscm); if (!r0.authorized) return;
     // ── L1 조회 응답시간 · 기본(ALL) 조회
     const first = await searchWait(); const nAll = first.n;
-    for (const x of [...byRule('RULE_SCREEN', 'L1').filter(z => z.note !== '전용'), ...byRule('DEFECT', 'L1'), ...byRule('CONFIRMED', 'L1')]) put(x.row_id, first.ms <= 10_000 ? 'PASS' : 'FAIL', `조회(Division ALL) 응답 ${first.ms}ms · ${nAll}행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)${first.ms <= 10_000 ? '' : ' 초과'}`);
+    for (const x of [...byRule('RULE_SCREEN', 'L1').filter(z => z.note !== '전용'), ...byRule('DEFECT', 'L1'), ...byRule('CONFIRMED', 'L1')]) put(x.row_id, first.ms <= 10_000 ? 'PASS' : 'FAIL', `조회(Division ALL) 응답 ${first.ms}ms(${first.net > 0 ? `요청~응답 ${first.net}ms · 벽시계 ${first.wall}ms` : `벽시계 — 본 조회 call 미포착`}) · ${nAll}행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)${first.ms <= 10_000 ? '' : ' 초과'}`);
     const divSearched = (() => { const q = nscm.calls.find(k => isMainSheet(k.sheet) && /SEARCH/i.test(k.btn)); try { const j = JSON.parse(q?.body || '{}'); const d = (j.data && typeof j.data === 'object' ? j.data : j) as Record<string, unknown>; return String(d.divisionId ?? ''); } catch { return ''; } })();
     // ── 조회조건 종류 수집(L2·B8 측정)
     await nscm.expandSearchArea(true);

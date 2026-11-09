@@ -12,7 +12,7 @@ import { useCallback, useEffect, useRef, type MutableRefObject } from 'react';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
-import { GridAction, GridUtils, paintNegativeText, toGridNumber } from '@foundation/utils';
+import { GridUtils, paintNegativeText, toGridNumber } from '@foundation/utils';
 import { DataGrid, TabItem, TabWrapper } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
@@ -60,6 +60,11 @@ interface Props {
   staticColumns: Partial<Record<SHEETS, RawFlexGridColumnConfig[]>>;
   // 편집 가능 = canEdit(hasButton('EDIT')) — AS-IS EditButton 토글 미이식(convert-core §2.4).
   editable: boolean;
+  // 공통 툴바(SubTitle)가 "포커스된 하단 그리드"를 보게 하기 위한 참조 — 부모가 쥐고 있고, 이 컴포넌트가
+  //   활성(포커스된) detail 그리드/필터 인스턴스를 채운다. drill 서브시트는 로컬 ref 라 부모가 시트→ref 로
+  //   찾지 못하므로 여기서만 채울 수 있다(아래 sync effect). SSP0003 패턴(사용자 신고 2026-11-06).
+  focusedGridRef?: MutableRefObject<FlexGridType | undefined>;
+  focusedGridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   onConfirmDetail: (changeReqNo: string) => void; // CHANGE_REQ_NO 클릭(아이콘셀 popup)
   // ERP_SO_NO 더블클릭 → OrderDetail(SSP0300) 팝업 (AS-IS SpdDetail_CellDoubleClick L1331-1347)
   onOrderDetail: (ctx: {
@@ -98,6 +103,8 @@ export const ShipmentPsiDetailGrid = ({
   editTrackerRefs,
   staticColumns,
   editable,
+  focusedGridRef,
+  focusedGridFilterRef,
   onConfirmDetail,
   onOrderDetail,
 }: Props) => {
@@ -501,38 +508,21 @@ export const ShipmentPsiDetailGrid = ({
   const resolveGridFilterRef = (sheet: SHEETS): MutableRefObject<FlexGridFilter | undefined> =>
     gridFilterRefs[sheet] ?? (localGridFilterRefs.current[sheet] ??= { current: undefined });
 
-  // ── Detail 그리드 포커스 시 F3(Sort)/F4(Filter) — "포커스된 그리드별 단축키"(AS-IS parity) ──
-  //   공용 SubTitle 의 단축키 핸들러는 Main 그리드의 containsFocus 로만 게이트된다(SubTitle.tsx:282).
-  //   그래서 하단 Detail 그리드 포커스 시 Sort/Filter 가 발화하지 않았다(사용자 신고 2026-10-29).
-  //   처리를 자식(이 컴포넌트)에서 하는 이유: 부모는 7개 시트 ref 만 쥐고 drill 서브시트 3개는 로컬 ref 라
-  //   부모 레벨에서는 포커스된 그리드를 찾지 못한다. 여기선 resolveGridRef 로 전 시트(부모+로컬)가 보인다.
-  //   읽기전용 동작(정렬/필터)이라 편집 커밋·권한 게이트 없이 건다.
-  //   - 현재 보이는 visibleSheets 중 포커스를 가진 그리드에만 실행(Main 포커스는 SubTitle 담당 → 상호배타).
-  //   - F4 는 Wijmo 기본 datamap 열림을 막기 위해 preventDefault + stopImmediatePropagation(SubTitle.tsx:284 등가).
-  const visibleSheetsRef = useRef(visibleSheets);
-  visibleSheetsRef.current = visibleSheets;
+  // ── 포커스된 하단 그리드를 공통 툴바(SubTitle)에 노출 ──
+  //   공용 SubTitle 의 단축키 핸들러는 grid.containsFocus() 로 게이트되는데, 부모가 grid 로 Main 그리드만
+  //   넘기면 하단 Detail 그리드 포커스 시 F1/F3/F4/F6/F7/F9/F10 이 전부 무발화였다(사용자 신고 2026-10-29·2026-11-06).
+  //   부모는 7개 시트 ref 만 쥐고 drill 서브시트 3개(WH_STOCK_DETAIL·HOLD_STOCK_DETAIL·WH_IN_PLAN_DETAIL)는
+  //   로컬 ref 라 부모 레벨에서 포커스 그리드를 못 찾는다. 여기선 resolveGridRef 로 전 시트(부모+로컬)가 보이므로,
+  //   활성 탭(=포커스 대상) 그리드/필터를 부모가 넘긴 focusedGridRef/focusedGridFilterRef 에 채운다.
+  //   부모는 activeGrid==='detail' 일 때 이 ref 를 SubTitle 의 grid/gridFilter 로 넘겨 Sort/Filter·편집커밋·
+  //   가드까지 포커스된 그리드를 보게 한다(종전 F3/F4 전용 로컬 keydown 리스너를 이 경로로 통합). SSP0003 파리티.
+  //   deps 는 음수 도색·dash date effect 와 동일 — 시트 순차 도착·탭 전환으로 늦게 mount 된 그리드도 반영.
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'F3' && e.key !== 'F4') return;
-      const sheet = visibleSheetsRef.current.find(s => resolveGridRef(s).current?.containsFocus());
-      if (sheet === undefined) return; // Detail 미포커스 → Main 담당(SubTitle)
-      const g = resolveGridRef(sheet).current;
-      if (!g) return;
-      if (e.key === 'F3') {
-        e.preventDefault();
-        GridAction.toggleColumnSort(g);
-        return;
-      }
-      // F4 — Wijmo 기본 datamap 열림 차단(SubTitle.tsx:284 과 동일 처방)
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      const filter = resolveGridFilterRef(sheet).current;
-      if (filter) GridAction.toggleColumnFilter(g, filter);
-    };
-    globalThis.window.addEventListener('keydown', onKeyDown, true);
-    return () => globalThis.window.removeEventListener('keydown', onKeyDown, true);
+    if (focusedGridRef) focusedGridRef.current = resolveGridRef(activeDetailSheet).current;
+    if (focusedGridFilterRef)
+      focusedGridFilterRef.current = resolveGridFilterRef(activeDetailSheet).current;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [activeDetailSheet, visibleSheets, rowsBySheet, staticColumns, focusedGridRef, focusedGridFilterRef]);
 
   // 음수 = 빨간 글자 (AS-IS NegativeRed 전역 파리티 — 모든 detail 시트 공통. 정본 paintNegativeText).
   //   시트별 formatItem(편집마킹·MES Blue 등)과 별개로 전 그리드(읽기전용·drill 서브시트 포함)·데이터셀·

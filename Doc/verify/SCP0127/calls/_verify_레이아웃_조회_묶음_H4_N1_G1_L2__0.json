@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0127",
+  "sheet": "init",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/init/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 2835,
+  "dur": 321,
+  "at": "2026-11-07T12:01:03.385Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 221,
+  "at": "2026-11-07T12:01:09.994Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"EE_HG\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 172,
+  "at": "2026-11-07T12:01:17.485Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ }
+]

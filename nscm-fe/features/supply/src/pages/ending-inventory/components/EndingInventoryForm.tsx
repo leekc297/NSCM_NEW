@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import dayjs from '@foundation/dayjs';
 import type { ComboResponse, LookupResponse } from '@foundation/models';
@@ -22,6 +22,7 @@ import {
   DEVALUATION_AGE_LABEL,
   LBL,
   LOOKUP,
+  MONTH_MIN,
   MONTH_MIN_YEAR,
   MSG,
   SEARCH_MODE,
@@ -72,7 +73,7 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
   //   @yyyymmdd 길이로 월/일 테이블 분기(6=_R.YYYYMM, 8=_R_D.CUTOFF_DATE). 기간·Division·Plant 변경 시 재조회.
   const periodParam = sc.mode === SEARCH_MODE.DAILY ? sc.date : sc.month;
 
-  const [divisions, plants, profitCenters] = useTabComboQueries({
+  const [divisions, plants, profitCenters, monthRangeRaw] = useTabComboQueries({
     filters: [
       COMBO.DIVISION,
       { comboId: COMBO.PLANT, divisionId: divisionParam },
@@ -82,8 +83,28 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
         divisionId: divisionParam,
         plantId: plantParam,
       },
+      // Month 범위·기본값 — 전역 콤보(파라미터 없음). AS-IS SetMonthRange(cs:494~513) 재현.
+      COMBO.MONTH_RANGE,
     ],
   });
+
+  // Month 범위 — COMBO.MONTH_RANGE 단일 행(MAX_YYYYMM). 기본값·상한은 MAX, 하한은 AS-IS 하드코딩 '2021-12'.
+  //   형제 long-term-stock(SCP0084) 패턴 축약: 상한은 maxYear(연) + onChange 클램프(월)로 건다.
+  const monthRange = useMemo(() => {
+    const row = ((monthRangeRaw ?? []) as Array<Record<string, unknown>>)[0];
+    const max = str(row?.MAX_YYYYMM);
+    const maxMonth = /^\d{6}$/.test(max) ? max : undefined;
+    return { maxMonth, maxYear: maxMonth ? Number(maxMonth.slice(0, 4)) : undefined };
+  }, [monthRangeRaw]);
+
+  // 기본값 = 최신월(MAX_YYYYMM) — AS-IS InitValue=MAX. 범위 최초 도착 시 1회 적용(사용자 변경 전 초기화).
+  //   store 초기값은 당월(dayjs) 폴백이라, 범위 도착 시 MAX 로 덮어 AS-IS 와 일치시킨다.
+  const appliedMaxMonthRef = useRef(false);
+  useEffect(() => {
+    if (appliedMaxMonthRef.current || !monthRange.maxMonth) return;
+    appliedMaxMonthRef.current = true;
+    set({ month: monthRange.maxMonth });
+  }, [monthRange.maxMonth, set]);
 
   // Item Type — 옵션집합·표시명 모두 DB LOOKUP 'ITEM_TYPE'에서 가져온다(사용자 결정 2026-10-21).
   //   품목데이터 DISTINCT(ITEM_MASTER_ITEM_TYPE)는 실재 코드(H/P/Q/R·'-')만이라 '기타'·'저장품' 등 미사용
@@ -108,6 +129,22 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
 
   const isDaily = sc.mode === SEARCH_MODE.DAILY;
 
+  // 라이브러리 DatePicker clear 보정 — @lges/design-system DatePicker 의 textField onChange 는
+  //   `(v) => v && dayjs.isDayjs(v) && …` 가드라 키보드로 기간을 지우면(빈값) onChange 를 호출하지
+  //   않아 store 값이 옛 날짜로 남는다(화면엔 placeholder 만 보이는데 조회엔 옛 날짜가 실림).
+  //   기간 입력 DOM 의 'input' 이벤트로 빈값을 직접 감지해 store 를 비워, 화면·store·조회를 일치시키고
+  //   조회 필수검증(MSG00429)이 정상 동작하게 한다. 활성 모드 필드(date/month)만 비운다.
+  const periodWrapRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const input = periodWrapRef.current?.querySelector('input');
+    if (!input) return;
+    const onInput = () => {
+      if (input.value.trim() === '') set(isDaily ? { date: '' } : { month: '' });
+    };
+    input.addEventListener('input', onInput);
+    return () => input.removeEventListener('input', onInput);
+  }, [isDaily, set]);
+
   return (
     <SearchArea
       searchButtonLabel={t(LBL.SEARCH, '_Search')}
@@ -128,7 +165,7 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
           </Grid>
 
           {/* 기간 — MONTH 모드=monthPicker / DAILY 모드=datePicker(조건부 렌더, 01_layout R2/R3) */}
-          <Grid size={3}>
+          <Grid size={3} ref={periodWrapRef}>
             <FormItem
               className={commonStyles.formItem}
               label={isDaily ? t(LBL.DATE, '_Date') : t(LBL.MONTH, '_Month')}
@@ -145,7 +182,10 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
                       ((date: ReturnType<typeof dayjs> | null) => {
                         // Date 는 독립 컴포넌트 — month 와 값을 서로 참조하지 않는다(사용자 결정 2026-10-21,
                         //   AS-IS DatePicker_ValueChanged 의 month 동기화는 미이식). date 만 갱신.
-                        set({ date: date?.format('YYYYMMDD') ?? '' });
+                        // 유효성 가드 — 라이브러리가 clear/부분입력 시 invalid dayjs 로 onChange 를 호출해
+                        //   .format() 이 "Invalid Date" 문자열을 만든다(truthy → 필수검증 통과 → proc 에 유입).
+                        //   isValid() 로 invalid·null 을 빈값 처리해 조회 필수검증(MSG00429)이 걸리게 한다.
+                        set({ date: date?.isValid() ? date.format('YYYYMMDD') : '' });
                       }) as never
                     }
                   />
@@ -155,13 +195,25 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
                     size='small'
                     elevation
                     minYear={MONTH_MIN_YEAR}
+                    maxYear={monthRange.maxYear}
                     value={ymToDayjs(sc.month)}
                     disabled={noDivisionAuth}
                     onChange={
                       ((date: ReturnType<typeof dayjs>) => {
                         // Month 는 독립 컴포넌트 — date 와 값을 서로 참조하지 않는다(사용자 결정 2026-10-21,
                         //   AS-IS MonthPicker_ValueChanged 의 date 동기화는 미이식). month 만 갱신.
-                        set({ month: date?.format('YYYYMM') ?? '' });
+                        // 유효성 가드 — date 핸들러와 동일(invalid dayjs → "Invalid Date" 유입 방지).
+                        const ym = date?.isValid() ? date.format('YYYYMM') : '';
+                        // 월 단위 범위 클램프 — MonthPicker 는 연 경계(maxYear)만 막아 상한 연(예: 2026)의
+                        //   범위밖 월(MAX_YYYYMM 초과)이 선택 가능. AS-IS MonthMax(MAX_YYYYMM)·MonthMin
+                        //   '2021-12' 를 YYYYMM 문자열 비교로 경계월에 클램프한다(cs:510~511).
+                        const clamped =
+                          ym && ym < MONTH_MIN
+                            ? MONTH_MIN
+                            : ym && monthRange.maxMonth && ym > monthRange.maxMonth
+                              ? monthRange.maxMonth
+                              : ym;
+                        set({ month: clamped });
                       }) as never
                     }
                   />

@@ -15,7 +15,7 @@
 | features/shipping/src/pages/shipment-model-pic/shipment-model-pic.types.ts | types | 64 |
 | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.module.scss | style | 12 |
 | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | page | 565 |
-| features/shipping/src/pages/shipment-model-pic/useShipmentModelPicStore.ts | store | 198 |
+| features/shipping/src/pages/shipment-model-pic/useShipmentModelPicStore.ts | store | 200 |
 | features/shipping/src/pages/shipment-model-pic/utils/shipmentModelPicColumns.ts | util | 50 |
 | features/shipping/src/pages/shipment-model-pic/utils/shipmentModelPicEditLock.ts | util | 16 |
 | features/shipping/src/pages/shipment-model-pic/utils/shipmentModelPicUserLookup.ts | util | 45 |
@@ -30,8 +30,8 @@
 | (useTabComboQueryResults) | hook | 1 | Y | ShipmentModelPic.tsx:87 |
 | SSP0014/main//call-proc | hook | 1 | Y | ShipmentModelPic.tsx:163 |
 | /SSP0014/main/SAVE/call-proc | http | 1 | Y | ShipmentModelPic.tsx:343 |
-| /admin/menu/SSP0014/column | http | 1 | Y | useShipmentModelPicStore.ts:139 |
-| /admin/menu/SSP0014/search-conditions | http | 1 | Y | useShipmentModelPicStore.ts:165 |
+| /admin/menu/SSP0014/column | http | 1 | Y | useShipmentModelPicStore.ts:141 |
+| /admin/menu/SSP0014/search-conditions | http | 1 | Y | useShipmentModelPicStore.ts:167 |
 | COM0010/ssoUser/SEARCH/call-proc | callProc | 1 | Y | shipmentModelPicUserLookup.ts:31 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -102,7 +102,7 @@
 | MSG01052 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0014(9), COM0010(3), SCM0002(2), SCP0005(2), SCP0013(1), DMF0020(1)
+- 화면ID: SSP0014(10), COM0010(3), SCM0002(2), SCP0005(2), SCP0013(1), DMF0020(1)
 - SP/PKG: PKG_SSP0014(7), P_SSP0014_SAVE_MODEL_PIC(3), P_SSP0014_GET_USER_ID_CHECK(2), P_USER_ID(2), P_SSP0014_GET_MODEL_PIC(2), P_ITEM_ID(2), P_CREATE_ID(1), P_DIVISION_ID(1), P_OPERATION_GROUP(1), P_FROM_SITE(1), P_VALID_YN(1), P_LANGUAGE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)

@@ -19,8 +19,13 @@ import sys
 from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+# 2026-11-06 T70(SCP0122 F1·E4 허위 FAIL): 저장 요청 본문의 행 상태 필드 이름은 화면마다 다르다 — 'CRUD' 고정이면 activeFlag:"D" 를 못 봐 FAIL.
+#   이름 = TO-BE 저장 PROC 인자 실측(proc_params.csv 11-06): ACTIVEFLAG 105 · CRUD_TYPE 6 · CRUDTYPE 2 · ACTIONTYPE 3 — 본문은 camelCase/원래 이름 둘 다 가능
+ROWSTATE_RE = '(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)'
 sys.path.insert(0, HERE)
 import expect_rows as ER  # noqa: E402
+from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
+from asis_delete import new_only, delete_stmts  # 2026-11-09 T173: AS-IS Delete 신규 행 전용 판정 단일 원천(CALL_LOCAL 추적)
 
 ROOT = ER.ROOT
 ASIS = os.path.join(ROOT, 'Doc', 'asisfacts')
@@ -134,7 +139,7 @@ class Screen:
         # 레이아웃 라벨: 항목 Control=this.X → 항목 Text · 버튼 자체 Text
         ctl_item, txt = {}, {}
         for p in self.props:
-            if p.get('variant') not in ('', 'current', None):
+            if not is_main(p, self.dir):
                 continue
             if p['prop'] == 'Control':
                 ctl_item[p['value'].replace('this.', '').strip()] = p['target']
@@ -144,7 +149,7 @@ class Screen:
         self.text = txt
         self.ctype = {}
         for c in self.controls:
-            if c.get('variant') in ('', 'current', None):
+            if is_main(c, self.dir):
                 self.ctype.setdefault(c['name'], c['type'].split('.')[-1])
         self.env = self._env()
 
@@ -286,12 +291,14 @@ def p_delete(S):
     if emp:
         # 2026-11-05 SCP0111 허위 FAIL — AS-IS DeleteButton 재정의 본문이 비어 Delete 가 아무 동작 안 함(SCP0111_IntegrationPSI.cs:536)
         return [], [f'AS-IS DeleteButton 재정의 본문 비어 있음({emp}) → Delete 동작 없음 · D 저장 대상 아님']
-    dels = [a for a in S.actions if a['method'].startswith('DeleteButton') and a['kind'] == 'DATA_OP' and '.Delete' in a['target']]
-    only_new = dels and all(re.search(r'==\s*CAppSetting\.(StringI|FlagI)', a['guard']) for a in dels)
+    # 2026-11-09 T173(SSP0025 4번 허위 FAIL): DeleteButton → this.Delete() 위임 · sv.Rows.Remove · DeleteRow 를 종전 판정(DeleteButton 안 '.Delete' DATA_OP 만)이 놓쳤다
+    #   → asis_delete.new_only 단일 원천(CALL_LOCAL 추적 · 호출 경로 guard 결합 · 'else of' 조각 제외)
+    dels = [a for a, _ in delete_stmts(S.actions)]
+    only_new, ref = new_only(S.actions)
     if only_new:
-        return [], [f"AS-IS 삭제가 신규 행만(DeleteButton {dels[0]['line']} guard == StringI) → 기존 행 D 저장 대상 아님"]
+        return [], [f"AS-IS 삭제가 신규 행만({ref} guard == StringI/FlagI) → 기존 행 D 저장 대상 아님"]
     b = f"btn_auth DELETE · AS-IS DeleteButton {dels[0]['line']}" if dels else 'btn_auth DELETE(AS-IS 삭제 문장 미확인)'
-    return [row(S, 'P06', 'F1', '기존 행 Delete → D 저장 요청', f'{S.prefix()}search;delrow;save;savehas:CRUD[^,]{{0,8}}D', b)], []
+    return [row(S, 'P06', 'F1', '기존 행 Delete → D 저장 요청', f'{S.prefix()}search;delrow;save;savehas:{ROWSTATE_RE}[^,]{{0,8}}D', b)], []
 
 
 def p_combo(S):
@@ -313,6 +320,10 @@ def p_combo(S):
         out.append(row(S, 'P08', 'F3', f'{col} 신규 행 콤보 붙여넣기 — 후보 값 반영', f'{S.prefix(r)}search;insert;paste:{col}=@cand:1;cell:~,{col}=~\\S', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']}"))
         out.append(row(S, 'P09', 'F3', f'{col} 신규 행 콤보 붙여넣기 — 후보 밖 값 거부', f'{S.prefix(r)}search;insert;paste:{col}=ZZ_E2E_NOT_IN_LIST;cell:~,{col}=~^(?!ZZ_E2E_NOT_IN_LIST$)', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']}"))
         out.append(row(S, 'P10', 'F3', f'{col} 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)', f'{S.prefix(r)}search;insert;type:{col}=@cand:1;cell:~,{col}=~\\S', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']}"))
+        # 2026-11-09(SCP0131 사용자 보고 'Copy & Paste 시 Plan Group 붙이기 안됨' 이 조치 필요 누락): 실제 사용자 경로 = 기존 행 셀 Copy → 신규 행 붙여넣기.
+        #   P31 = 신규 행 후보 안 값을 가진 기존 행 셀 Copy → 반영돼야 함 · P32 = 후보 밖 값(비활성 마스터 등) 행 셀 Copy → 결과를 드러내 사용자 판정(AS-IS 후보 SQL 도 VALID_YN='Y' · cs 붙여넣기 이름 조회 실패 시 예외)
+        out.append(row(S, 'P31', 'F3', f'{col} 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영', f'{S.prefix(r)}search;insert;paste:{col}=@copy:in;cell:~,{col}=~\\S', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']} · 사용자 경로 Copy&Paste"))
+        out.append(row(S, 'P32', 'F3', f'{col} 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사', f'{S.prefix(r)}search;insert;paste:{col}=@copy:out;cell:~,{col}=~\\S', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']} · 사용자 경로 Copy&Paste(원본 값이 이 행 후보 밖)"))
     return out, why
 
 
@@ -572,7 +583,7 @@ def p_modins(S):
         col = r['column_name'].upper()
         fill.append(f'type:{col}=@cand:1' if k == 'combo' else f'type:{col}=1' if k == 'number' else f'type:{col}=20991231' if k == 'date' else f'type:{col}=E2E_SCN_I')
     e = ed[0]['column_name'].upper()
-    st = f'{S.prefix()}search;type:{e}=E2E_SCN;insert;' + ';'.join(fill) + (';' if fill else '') + 'save;savehas:CRUD[^,]{0,8}M;savehas:CRUD[^,]{0,8}I'
+    st = f'{S.prefix()}search;type:{e}=E2E_SCN;insert;' + ';'.join(fill) + (';' if fill else '') + f'save;savehas:{ROWSTATE_RE}[^,]{{0,8}}M;savehas:{ROWSTATE_RE}[^,]{{0,8}}I'
     return [row(S, 'P23', 'F2', '기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I', st, f"sheet_columns 편집 {e} · 필수 {len(req)}칸")], []
 
 
@@ -733,7 +744,7 @@ def _defcols(S):
     if hasattr(S, '_dc'):
         return S._dc
     dc = {}
-    for f in {r['file'] for r in rcsv(os.path.join(S.dir, 'files.csv')) if r.get('file', '').endswith('.cs') and r.get('variant', 'current') == 'current'} if os.path.exists(os.path.join(S.dir, 'files.csv')) else set():
+    for f in {r['file'] for r in rcsv(os.path.join(S.dir, 'files.csv')) if r.get('file', '').endswith('.cs') and is_main(r, S.dir)} if os.path.exists(os.path.join(S.dir, 'files.csv')) else set():
         L = asis_src(f)
         for ln in L or []:
             m = re.search(r'(?:const\s+string|static\s+(?:readonly\s+)?string)\s+(\w+)\s*=\s*"([^"]+)"', ln)
@@ -745,7 +756,7 @@ def _defcols(S):
 
 def _empty_override(S, name):
     """AS-IS 화면 파일(current)에 'override void <name>()' 이 있고 본문에 문장이 없으면 '파일:줄' — 주석·빈 줄만 있는 본문"""
-    for f in sorted({r['file'] for r in rcsv(os.path.join(S.dir, 'files.csv')) if r.get('file', '').endswith('.cs') and r.get('variant', 'current') == 'current'} if os.path.exists(os.path.join(S.dir, 'files.csv')) else set()):
+    for f in sorted({r['file'] for r in rcsv(os.path.join(S.dir, 'files.csv')) if r.get('file', '').endswith('.cs') and is_main(r, S.dir)} if os.path.exists(os.path.join(S.dir, 'files.csv')) else set()):
         L = asis_src(f) or []
         for i, ln in enumerate(L):
             if re.search(r'override\s+void\s+' + name + r'\s*\(\s*\)', ln) and not ln.strip().startswith('//'):
@@ -804,7 +815,7 @@ def p_colvis(S):
     # 같은 칸의 대입은 조건 유무와 무관하게 전부 본다(2026-11-04 SCP0070 TYPE — 라디오 조건 줄을 빼고 남은 줄로만 정하면 근거 불완전):
     #   조건 없음 = 모든 Division · Division 술어만 = 계산 · 다른 술어 섞임 = 그 칸 전체 제외(incomplete)
     for r in rcsv(p):
-        if r.get('variant') not in ('', 'current') or r['api'] not in VIS_API:
+        if not is_main(r, S.dir) or r['api'] not in VIS_API:
             continue
         cond = r.get('conditions') or ''
         raw = r.get('raw') or ''
@@ -912,7 +923,7 @@ def p_btnvis(S):
     why, ev = [], defaultdict(lambda: defaultdict(set))
     U = base_divisions()
     for p in S.props:
-        if p.get('variant') not in ('', 'current') or p['prop'] != 'Visible' or 'Designer' in p['file'] or not re.match(r'(btn|ubtn)', p['target'], re.I):
+        if not is_main(p, S.dir) or p['prop'] != 'Visible' or 'Designer' in p['file'] or not re.match(r'(btn|ubtn)', p['target'], re.I):
             continue
         L = asis_src(p['file'])
         if not L:
@@ -1011,7 +1022,7 @@ def p_sumtoggle(S):
     fl = rcsv(os.path.join(S.dir, 'flow.csv'))
     if any('chkSum' in (f.get('entry') or '') for f in fl):
         return [], ['chkSum 핸들러에 서버 경로 있음(flow) → 재조회형 — immediate 판단은 문서 몫']
-    files = {r['file'] for r in rcsv(os.path.join(S.dir, 'files.csv')) if r.get('file', '').endswith('.cs') and r.get('variant', 'current') == 'current'}
+    files = {r['file'] for r in rcsv(os.path.join(S.dir, 'files.csv')) if r.get('file', '').endswith('.cs') and is_main(r, S.dir)}
     uses, sets_true_designer, sets_false_code, bucket = [], False, False, False
     for f in files:
         L = asis_src(f) or []
@@ -1106,6 +1117,8 @@ PATTERN_INFO = {
     'P08': ('p_combo', 'F3', '신규 행 콤보 붙여넣기 — 후보 값 반영', 'P07 과 같음'),
     'P09': ('p_combo', 'F3', '신규 행 콤보 붙여넣기 — 후보 밖 값 거부', 'P07 과 같음'),
     'P10': ('p_combo', 'F3', '신규 행 콤보 직접 입력 — 후보 값 반영', 'P07 과 같음'),
+    'P31': ('p_combo', 'F3', '기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영(2026-11-09 SCP0131)', 'P07 과 같음 · 후보 안 값을 가진 기존 행'),
+    'P32': ('p_combo', 'F3', '기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값 행에서 복사(2026-11-09 SCP0131)', 'P07 과 같음 · 후보 밖 값(비활성 마스터 등)을 가진 기존 행'),
     'P11': ('p_decimal', 'F6', '소수 자릿수 저장 요청 유지', 'AS-IS cell_rules decimals>0 · 기존 행 편집 숫자 칸'),
     'P12': ('p_reqfp', 'E4', '기존 행 수정 저장 → 필수 칸 오탐 없음(DM-215)', 'btn_auth SAVE · 기존 행 편집 숫자/글자 칸(없으면 AS-IS 동적 기간 칸)'),
     'P13': ('p_blank_save', 'E3', '빈 신규 행 저장 → 필수 안내·저장 요청 0', 'btn_auth INSERT·SAVE · 필수 칸(M/IM) 또는 AS-IS 저장 메서드의 빈값 검사 메시지(가장 안쪽 조건 · 성공/확인 문구 제외)'),

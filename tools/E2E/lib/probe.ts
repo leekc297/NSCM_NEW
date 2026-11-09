@@ -54,14 +54,22 @@ export const probe = {
   /** 편집기 열림 여부(beginningEdit 취소 포함) — 열리면 즉시 취소, 값 변경 없음. 컬럼 없으면 null */
   editable: (p: Page, row: number, binding: string) =>
     p.evaluate(`(() => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return null;
-      if (col.isReadOnly || c.isReadOnly) return false; const ok = c.startEditing(true, ${row}, col.index); if (ok) c.finishEditing(true); return !!ok; })()`) as Promise<boolean | null>,
+      if (col.isReadOnly || c.isReadOnly) return false;
+      // 2026-11-06 T60(SCP0127·SCP0131): 날짜 칸 편집기가 Date 아닌 셀 값으로 'Assertion failed in Wijmo: Date expected' 를 던지면 evaluate 가 실패해
+      //   그리드 컬럼 프로브 테스트 전체(A5·D1·H2…)가 중단됐다. beginningEdit 를 통과해 편집기 생성까지 간 것이므로 편집 가능(true)으로 보고, 예외는 따로 남긴다.
+      try { const ok = c.startEditing(true, ${row}, col.index); if (ok) c.finishEditing(true); return !!ok; }
+      catch (e) { try { c.finishEditing(true); } catch (e2) { /* 편집 상태 정리 실패 무시 */ } (window.__e2eEditorErr = window.__e2eEditorErr || []).push(${J(binding)} + ': ' + String((e && e.message) || e).slice(0, 120)); return true; } })()`) as Promise<boolean | null>,
+  /** T60: probe.editable/startEdit 이 삼킨 편집기 예외(컬럼: 메시지) — 읽으면 비운다 */
+  editorErrors: (p: Page) =>
+    p.evaluate(`(() => { const a = window.__e2eEditorErr || []; window.__e2eEditorErr = []; return a; })()`).catch(() => [] as string[]) as Promise<string[]>,
   /**
    * 편집 시작/취소 — 화면이 beginningEdit 에서 후보 필터를 설치하는 경우(FCST Type W/S 게이트·Measure·Cell Prod Site, ForecastPriceGrid.tsx:1345-1375)
    * 편집기를 연 상태에서 후보를 읽어야 사용자가 보는 후보다(2026-10-24: 닫힌 상태로 읽어 누적 표시맵을 후보로 오인 — Measure 허위 FAIL)
    */
   startEdit: (p: Page, row: number, binding: string) =>
     p.evaluate(`(async () => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col || col.isReadOnly || c.isReadOnly) return false;
-      if (c.startEditing(true, ${row}, col.index)) return true;
+      try { if (c.startEditing(true, ${row}, col.index)) return true; }
+      catch (e) { (window.__e2eEditorErr = window.__e2eEditorErr || []).push(${J(binding)} + ': ' + String((e && e.message) || e).slice(0, 120)); if (c.activeEditor) return true; try { c.finishEditing(true); } catch (e2) { /* 무시 */ } return false; }  // T60
       for (let k = 0; k < 15; k++) { if (c.activeEditor && c.editRange && c.editRange.row === ${row} && c.editRange.col === col.index) return true; await new Promise(r => setTimeout(r, 200)); }
       return false; })()`) as Promise<boolean>,
   cancelEdit: (p: Page) =>
@@ -79,11 +87,16 @@ export const probe = {
   //   startEditing 이 false 여도 최대 3초 동안 그 셀에 편집기가 다시 열리는지 기다린다(2026-10-24 '편집 불가' 오판)
   setByEditor: (p: Page, row: number, binding: string, text: string) =>
     p.evaluate(`(async () => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return false;
-      c.select(${row}, col.index); let ok = c.startEditing(true, ${row}, col.index);
+      c.select(${row}, col.index); let ok = false;
+      // 2026-11-07 T156(SCP0131 E3 · chain6b/6f 2회): 날짜 칸 편집기(InputDate)가 Date 아닌 셀 값으로 'Assertion failed in Wijmo: Date expected' 를 던지면 evaluate 가 실패해
+      //   테스트 전체가 중단됐다(F1/F2/F4/F6 5행 '검증엔진 미기동'). T60 과 같이 예외를 기록하고 false(입력 경로 실패)로 돌려 그 칸만 ERROR 로 남긴다
+      try { ok = c.startEditing(true, ${row}, col.index); }
+      catch (e) { (window.__e2eEditorErr = window.__e2eEditorErr || []).push(${J(binding)} + ': ' + String((e && e.message) || e).slice(0, 120)); try { c.finishEditing(true); } catch (e2) { /* 무시 */ } return false; }
       if (!ok) { for (let k = 0; k < 15 && !(c.activeEditor && c.editRange && c.editRange.row === ${row} && c.editRange.col === col.index); k++) await new Promise(r => setTimeout(r, 200));
         ok = !!(c.activeEditor && c.editRange && c.editRange.row === ${row} && c.editRange.col === col.index); }
       if (!ok) return false; const ed = c.activeEditor; if (!ed) { c.finishEditing(true); return false; }
-      ed.value = ${J(text)}; c.finishEditing(false); return true; })()`) as Promise<boolean>,
+      try { ed.value = ${J(text)}; c.finishEditing(false); } catch (e) { (window.__e2eEditorErr = window.__e2eEditorErr || []).push(${J(binding)} + ': ' + String((e && e.message) || e).slice(0, 120)); try { c.finishEditing(true); } catch (e2) { /* 무시 */ } return false; }
+      return true; })()`) as Promise<boolean>,
   /** 셀을 화면에 스크롤해 화면 좌표 중심점 반환(더블클릭 프로브용) */
   cellCenter: (p: Page, row: number, binding: string) =>
     // 스크롤 직후에는 셀이 아직 다시 그려지지 않아 null 이 나온다(2026-10-23 실측) → 최대 10회(약 2초) 재시도
@@ -122,7 +135,11 @@ export const probe = {
   /** 셀 DOM 클래스(편집 표시 판정 H2) — 화면에 스크롤 후 읽는다 */
   cellClasses: (p: Page, row: number, binding: string) =>
     p.evaluate(`(() => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return null; c.scrollIntoView(${row}, col.index);
-      const el = c.cells.getCellElement(${row}, col.index); return el ? String(el.className) : null; })()`) as Promise<string | null>,
+      const el = c.cells.getCellElement(${row}, col.index); if (!el) return null;
+      const bg = String(el.style.backgroundColor || getComputedStyle(el).backgroundColor || '').replace(/\\s+/g, '');
+      return String(el.className) + (/^(rgb\\(255,248,205\\)|#fff8cd)$/i.test(bg) && !/wj-cell-editable/.test(el.className) ? ' wj-cell-editable--inline-bg' : ''); })()`) as Promise<string | null>,
+  // ↑ 2026-11-06(SCP0084 H2 허위 FAIL 2건): 화면이 편집 셀을 클래스(.wj-cell-editable) 대신 인라인 배경색 #fff8cd(hook #95 표준 편집 노랑 = .wj-cell-editable 과 같은 색)
+  //   로 칠하는 경우(LongTermStockGrid formatItem MEMO) 클래스만 보던 H2 가 '편집 가능인데 노랑 아님' 으로 오판 → 실제 배경색이 표준 노랑이면 표식 클래스를 덧붙여 노랑으로 본다.
   /** 컬럼 정의 — Wijmo DataType(0 Object·1 String·2 Number·3 Boolean·4 Date) · dataMap/에디터 · 형식 · 읽기전용 */
   colInfo: (p: Page, binding: string) =>
     p.evaluate(`(() => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return null;

@@ -22,6 +22,8 @@ interface Props {
   /** 조회조건 Plan Type — 'P' 면 ERP_SO_NO 숨김 + 그룹라벨 Plan/Confirm (AS-IS cs:624~645). */
   changeType: string;
   adminColumns?: RawFlexGridColumnConfig[];
+  // 그리드 포커스 획득 시 — 공통 툴바 Sort(F3)/Filter(F4) 타깃을 이 하단 그리드로(페이지가 추적).
+  onGridFocus?: () => void;
 }
 
 // AS-IS spdSub "Change Request" (58열, 전량 읽기전용 siSub.LockColumn(0,max,true) cs:1824).
@@ -34,6 +36,7 @@ export const ShipmentChangeRequestSubGrid = ({
   division,
   changeType,
   adminColumns,
+  onGridFocus,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -126,6 +129,7 @@ export const ShipmentChangeRequestSubGrid = ({
       staticColumns={columns}
       comboParams={comboParams}
       initialized={handleInitialized}
+      gotFocus={onGridFocus}
     />
   );
 };

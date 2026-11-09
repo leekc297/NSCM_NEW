@@ -9,6 +9,8 @@ import { DataGrid } from '@shared/components';
 
 import { deriveStorLocCode, isCellEditable, isStorLocNameVisible } from '../utils/warehouseCapacityEditLock';
 
+import styles from './WarehouseItemMappingGrid.module.scss';
+
 interface Props {
   rows: WijmoRowItem[];
   gridRef: MutableRefObject<FlexGridType | undefined>;
@@ -34,10 +36,11 @@ interface Props {
  * 쓴다. 편집잠금은 WhCapa 시트와 동일 `isCellEditable`(ALWAYS_LOCKED_COLUMNS 공유) — 단
  * ITEM_ID 는 POPUP_ONLY_COLUMNS 로 항상 편집 차단, 더블클릭만 허용(design 03 §1.2 gridSignals#19).
  *
- * STOR_LOC_NAME 은 division 에 '81_UC' 가 포함될 때만 표시(AS-IS `.cs:512-532`, project-route
- * `ProjectRouteMainGrid.tsx` R-DYN 과 동일 패턴 — admin 메타 속성 덮어쓰기가 아니라 컬럼 목록에서
- * 제외). 이 컬럼에 "East"/"West" 를 입력·붙여넣기하면 STOR_LOC 이 `@E`/`@W` 로 파생된다
- * (AS-IS `.cs:1317-1336`/`1388-1406`).
+ * STOR_LOC_NAME 은 division 에 '81_UC' 가 포함될 때만 표시(AS-IS `.cs:512-532` `SetVisibleSheetColumns`
+ * — `SetVisibleSheetColumn(STOR_LOC_NAME, 80, true/false)`로 너비를 직접 덮어씀). admin 메타는
+ * VISIBLE_FLAG='N'/COLUMN_WIDTH=0 고정이라(AS-IS 도 동일) 컬럼 목록에서 빼고 넣는 것만으론 안 되고
+ * `colWth`/`visible` 을 직접 덮어써야 한다. 이 컬럼에 "East"/"West" 를 입력·붙여넣기하면 STOR_LOC 이
+ * `@E`/`@W` 로 파생된다(AS-IS `.cs:1317-1336`/`1388-1406`).
  */
 export const WarehouseItemMappingGrid = ({
   rows,
@@ -57,8 +60,14 @@ export const WarehouseItemMappingGrid = ({
 
   const columns = useMemo(() => {
     const cols = adminColumns ?? [];
-    if (isStorLocNameVisible(divisionId)) return cols;
-    return cols.filter(c => c.colNm !== 'STOR_LOC_NAME');
+    const visible = isStorLocNameVisible(divisionId);
+    // admin 메타(STOR_LOC_NAME)는 VISIBLE_FLAG='N'/COLUMN_WIDTH=0 고정(AS-IS 도 동일 실측) —
+    //   배열에 넣고 빼는 것만으론 그 객체가 들고 있는 colWth:0/visible:false 가 그대로 남아 계속
+    //   안 보인다. AS-IS SetVisibleSheetColumn(STOR_LOC_NAME, 80, true/false)처럼 너비를 직접
+    //   덮어써야 한다(2026-11-05 사용자 보고 — 81_UC에서도 안 보임).
+    return cols.map(c =>
+      c.colNm === 'STOR_LOC_NAME' ? { ...c, visible, colWth: visible ? 80 : 0 } : c
+    );
   }, [adminColumns, divisionId]);
 
   useEffect(() => {
@@ -79,6 +88,37 @@ export const WarehouseItemMappingGrid = ({
     };
     g.beginningEdit.addHandler(beginningEditHandler);
     g.pastingCell.addHandler(beginningEditHandler as never);
+
+    // Model(ITEM_ID) 더블클릭 팝업 진입 어포던스 아이콘 — admin 메타(CELL_CONTROL_OBJECT_TYPE_CODE)가
+    //   비어 있어 공용 formatPopupIcon 대상이 아니다(사용자 지시 2026-11-05, 위 scss 주석 참고).
+    const formatItemHandler = (
+      sender: FlexGridType,
+      e: { panel: unknown; row: number; col: number; cell: HTMLElement }
+    ) => {
+      if (e.panel !== sender.cells) return;
+      const binding = sender.columns[e.col]?.binding ?? '';
+      if (binding === 'ITEM_ID') {
+        e.cell.style.paddingRight = '20px';
+        if (!e.cell.querySelector('.popup-icon')) {
+          const icon = document.createElement('span');
+          icon.className = `popup-icon ${styles.popupIcon}`;
+          e.cell.appendChild(icon);
+        }
+      } else if (e.cell.querySelector('.popup-icon')) {
+        e.cell.style.paddingRight = '';
+        e.cell.querySelector('.popup-icon')?.remove();
+      }
+
+      // STOR_LOC_NAME(Storage Loc) — admin 메타 INPUT_TP_CD='S'(SEARCH_ONLY)라 공용 wrapper
+      //   (GridUtils.isEditableCell)가 wj-cell-editable(노란 배경)을 꺼버린다. 실제로는 East/West
+      //   타이핑·붙여넣기로 편집 가능한 셀(storLocDeriveHandler)이라 이 화면의 isCellEditable
+      //   화이트리스트 기준으로 재대입한다(ShipmentPlanDetailGrid 와 동일 선례 — formatItem 등록
+      //   순서가 최종 판정, 사용자 지시 2026-11-05).
+      if (binding === 'STOR_LOC_NAME') {
+        e.cell.classList.toggle('wj-cell-editable', isCellEditable(binding));
+      }
+    };
+    g.formatItem.addHandler(formatItemHandler as never);
 
     // STOR_LOC_NAME(East/West) → STOR_LOC(@E/@W) 파생(AS-IS ComboSelChange/ClipboardPasted).
     const storLocDeriveHandler = (
@@ -127,6 +167,7 @@ export const WarehouseItemMappingGrid = ({
       try {
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastingCell?.removeHandler(beginningEditHandler as never);
+        g.formatItem?.removeHandler(formatItemHandler as never);
         g.cellEditEnded?.removeHandler(storLocDeriveHandler as never);
         g.pastedCell?.removeHandler(storLocDeriveHandler as never);
         g.cellEditEnded?.removeHandler(whDeriveHandler as never);

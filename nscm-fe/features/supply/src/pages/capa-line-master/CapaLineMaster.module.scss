@@ -14,6 +14,19 @@
   min-height: 0;
 }
 
+// 하단 영역(Product Group 바 + L4|L5) — flex 세로. 바는 고정높이, 그리드 그룹이 나머지를 채운다.
+.bottomPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.bottomRowGroup {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
 .splitBar {
   height: 16px;
   cursor: row-resize;

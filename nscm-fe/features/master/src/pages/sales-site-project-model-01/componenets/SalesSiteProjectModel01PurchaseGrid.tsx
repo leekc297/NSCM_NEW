@@ -1,0 +1,130 @@
+import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useRef, useState, type MutableRefObject } from 'react';
+
+import { GridUtils, type EditTracker } from '@foundation/utils';
+import { DataGrid } from '@shared/components';
+
+import { OwnerModal } from '../../../components';
+import type { MODAL_OWNER } from '../../../components/ownerModal/owner-modal.constants';
+import type { MENU_ID, RESPONSE_SET } from '../sales-site-project-model-01.constants';
+import {
+  MAX_OWNER_COUNT,
+  SHEETS,
+  SHEET_INDEX,
+  SINGLE_OWNER_DIVISIONS,
+} from '../sales-site-project-model-01.constants';
+import { useEditBaseline } from '../sales-site-project-model-01.editBaseline';
+import { useSalesCompanyGuard } from '../sales-site-project-model-01.salesCompanyGuard';
+import { useSalesSiteProjectModel01Store } from '../useSalesSiteProjectModel01Store';
+
+interface SalesSiteProjectModel01PurchaseGridProps {
+  gridRef: MutableRefObject<
+    FlexGrid<ResponseData<MENU_ID, SHEETS.PURCHASE, RESPONSE_SET.PURCHASE>> | undefined
+  >;
+  gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
+  data: ResponseData<MENU_ID, SHEETS.PURCHASE, RESPONSE_SET.PURCHASE>[];
+  setActiveTab: (sheetIndex: SHEET_INDEX) => void;
+}
+
+export const SalesSiteProjectModel01PurchaseGrid = ({
+  gridRef,
+  gridFilterRef,
+  data,
+  setActiveTab,
+}: SalesSiteProjectModel01PurchaseGridProps) => {
+  const editTrackerRef =
+    useRef<EditTracker<ResponseData<MENU_ID, SHEETS.PURCHASE, RESPONSE_SET.PURCHASE>>>();
+
+  const filters = useSalesSiteProjectModel01Store(state => state.filters);
+  const staticColumns = useSalesSiteProjectModel01Store(state => state.staticColumns);
+
+  const [openOwnerModal, setOpenOwnerModal] = useState<boolean>(false);
+  const [clickedRow, setClickedRow] = useState(-1);
+  const clickedDataItem = GridUtils.getRow(gridRef.current, clickedRow);
+
+  // 조회 원본 기준선으로 수정상태(M)를 재판정 — 사유는 sales-site-project-model.editBaseline 참조.
+  const resyncRow = useEditBaseline({ gridRef, editTrackerRef, data });
+
+  // Sales Company / Sales Plant 규칙은 상단 그리드와 같다 — purchase_81 시트도 같은 컬럼 메타다.
+  useSalesCompanyGuard({
+    gridRef,
+    editTrackerRef,
+    resyncRow,
+    staticColumns: staticColumns[SHEETS.PURCHASE],
+    data,
+  });
+
+  const handleOwnerSelected = (selectedUsers: ResponseData<MODAL_OWNER, 'owner', 'o_rc1'>[]) => {
+    const owners = selectedUsers.map(item => item.USER_ID).join(',');
+    const ownersNames = selectedUsers.map(item => item.USER_NAME_EN).join(',');
+
+    const dataItem = GridUtils.getRow(gridRef.current, clickedRow);
+    if (!dataItem) return;
+
+    editTrackerRef.current?.storeChange(dataItem, 'OWNER', dataItem.OWNER, owners);
+    editTrackerRef.current?.storeChange(dataItem, 'OWNER_NAME', dataItem.OWNER_NAME, ownersNames);
+
+    dataItem.OWNER = owners;
+    dataItem.OWNER_NAME = ownersNames;
+
+    resyncRow(dataItem);
+    GridUtils.refreshRow(gridRef.current, clickedRow);
+  };
+
+  const handleFocus = () => {
+    setActiveTab(SHEET_INDEX.PURCHASE);
+  };
+
+  const handleUserIdCellClick = (mouseEvent: MouseEvent) => {
+    const grid = gridRef.current;
+    // 읽기전용(production SAVE 권한 없음)이면 Owner 입력 팝업을 띄우지 않는다.
+    if (!grid || grid.isReadOnly) return;
+    const ht = grid.hitTest(mouseEvent);
+    if (ht.cellType !== CellType.Cell) return;
+
+    const dataItem = GridUtils.getRow(grid, ht.row);
+    const binding = GridUtils.getBinding(grid, ht.col);
+
+    if (!dataItem || !binding) return;
+    // 행 잠금(EDIT_FLAG='N' — SP 사업부 권한·SCP Planner 가드)이면 셀 편집과 같이 팝업도 막는다.
+    if (dataItem.EDIT_FLAG === 'N') return;
+
+    if (binding === 'OWNER') {
+      setClickedRow(ht.row);
+      setOpenOwnerModal(true);
+    }
+  };
+
+  return (
+    <>
+      <DataGrid<ResponseData<MENU_ID, SHEETS.PURCHASE, RESPONSE_SET.PURCHASE>>
+        gridRef={gridRef}
+        gridFilterRef={gridFilterRef}
+        editTrackerRef={editTrackerRef}
+        itemsSource={data}
+        staticColumns={staticColumns[SHEETS.PURCHASE]}
+        // 하단 저장도 production/SAVE 로 나가므로(SalesSiteProjectModel01 mutatePurchase) 잠금도 production 기준.
+        //   purchase 시트에는 SAVE 가 등록돼 있지 않아 purchase 로 판정하면 잠금이 걸리지 않는다.
+        saveAuth={{ sheetName: SHEETS.PRODUCTION }}
+        gotFocus={handleFocus}
+        dblClick={handleUserIdCellClick}
+      />
+      {openOwnerModal && (
+        <OwnerModal
+          open={openOwnerModal}
+          modalClose={() => setOpenOwnerModal(false)}
+          setSelectedValue={handleOwnerSelected}
+          divisionId={filters.purchase?.divisionId ?? '40'}
+          ownerId={clickedDataItem?.OWNER}
+          // 인원 상한 10명 — 상단 그리드와 같은 규칙. 팝업이 OK 시점에 막고 열어 둔다.
+          maxSelect={MAX_OWNER_COUNT}
+          // 신규 행은 DIVISION_ID 가 비어있을 수 있어 조회 조건으로 폴백.
+          singleSelect={SINGLE_OWNER_DIVISIONS[SHEETS.PURCHASE].includes(
+            clickedDataItem?.DIVISION_ID || filters.purchase?.divisionId || ''
+          )}
+        />
+      )}
+    </>
+  );
+};

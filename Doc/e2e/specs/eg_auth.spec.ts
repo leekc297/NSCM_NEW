@@ -1,6 +1,7 @@
 // E03 Division·권한 순회 검사(@eg-auth · 2026-10-31) — 공식 체인(_verify·_trace) 밖의 독립 스펙. 결과 = CL_RESULTS(eg_auth 결과 JSON, EgRes[]).
 //   화면 = VERIFY_ID. 대상·기대 = Doc/verify/_parallel/E03/facts/<ID>.json(facts_auth.py: AS-IS 원문·사내 DB). 저장 없음(VERIFY_NO_SAVE=1 전제 — 없으면 시작하지 않는다).
 //   변이 = EG_MUT=<종류>: 결함을 일부러 만든 상태에서 FAIL 이 나는지 확인. 계정 ID 는 결과·로그에 쓰지 않는다.
+import { measurable } from '../../../tools/E2E/lib/precond';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { test } from '../../../tools/E2E/fixtures/test';
@@ -14,8 +15,25 @@ const ID = (process.env.VERIFY_ID || '').toUpperCase();
 const MUT = process.env.EG_MUT || '';
 const OUT = process.env.CL_RESULTS || '';
 const F: Facts | null = ID ? loadFacts(ID) : null;
+// 2026-11-06(SCP0084 EG366 허위 FAIL): AS-IS Division 콤보가 헬퍼 필터를 얹은 경우(BLUtils.GetDivisionWithoutEE = ATTRIBUTE3 <> 'EE' ·
+//   GetDivisionESS = ATTRIBUTE3 = '82' — facts_combosrc.py 가 asisfacts/screens/<ID>/combo_src.csv filters 에 기록) 기대 후보도 같은 필터로 줄인다.
+//   ATTRIBUTE3 = Doc/tobefacts/db/division.csv. 필터·원장이 없으면 종전대로(권한 Division 전체).
+const DIV_FILTER: { note: string; keep: (d: string) => boolean } | null = (() => {
+  try {
+    const src = parseCsv(fs.readFileSync(path.join(__dirname, '..', '..', 'asisfacts', 'screens', ID, 'combo_src.csv'), 'utf8').replace(/^﻿/, ''));
+    const row = src.find(r => r.target_kind === 'SEARCH' && /division/i.test(`${r.target} ${r.code}`) && /ATTRIBUTE3/i.test(r.filters || ''));
+    const m = row && /ATTRIBUTE3\s*(<>|!=|=)\s*'([^']*)'/i.exec(row.filters || '');
+    if (!m) return null;
+    const attr = new Map(parseCsv(fs.readFileSync(path.join(__dirname, '..', '..', 'tobefacts', 'db', 'division.csv'), 'utf8').replace(/^﻿/, '')).map(d => [d.division_id, d.attribute3 || '']));
+    const neg = m[1] !== '='; const v = m[2];
+    return { note: `AS-IS 필터 ${row!.filters.split(' @')[0]}(${row!.ref || ''})`, keep: (d: string) => (attr.has(d) ? (neg ? attr.get(d) !== v : attr.get(d) === v) : true) };
+  } catch { return null; }
+})();
 const results: EgRes[] = [];
-const put = (eg: string, target: string, ctx: string, result: Verdict, expected: string, actual: string, asis = '', note = '') => { results.push({ eg, screen: ID, target, ctx, result, expected, actual, asis, note }); };
+// P1(2026-11-06 근본 보완): 측정 맥락 — 이 테스트에서 지금까지 나간 call-proc 수·조회 응답 최대 행·필수 조건 자동 채움 횟수. judge 가 '측정 전제 미충족' FAIL 을 ERROR 로 돌리는 근거
+const CUR: { nscm: Nscm | null } = { nscm: null };
+const mctxOf = () => { const n = CUR.nscm; if (!n) return undefined; const rows = n.calls.reduce((m, c) => Math.max(m, c.rows == null ? -1 : Number(c.rows)), -1); return { calls: n.calls.length, rows, req: (n as unknown as { requiredNotes?: string[] }).requiredNotes?.length || 0 }; };
+const put = (eg: string, target: string, ctx: string, result: Verdict, expected: string, actual: string, asis = '', note = '') => { results.push({ eg, screen: ID, target, ctx, result, expected, actual, asis, note, mctx: mctxOf() } as EgRes); };
 const flush = () => {
   if (!OUT) return; const prev: EgRes[] = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
   fs.mkdirSync(path.dirname(OUT), { recursive: true }); fs.writeFileSync(OUT, JSON.stringify([...prev, ...results], null, 1), 'utf8'); results.length = 0;
@@ -65,6 +83,7 @@ function metaCols(f: Facts, sheet: string, d: string): string[] {
 }
 
 test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
+  test.beforeEach(({ nscm }) => { CUR.nscm = nscm; });
   test.describe.configure({ retries: 0 });
   test.skip(!ID || !F, 'VERIFY_ID 또는 facts 없음(facts_auth.py 선행)');
   test.skip(!process.env.VERIFY_NO_SAVE, 'VERIFY_NO_SAVE=1 전제 — 이 스펙은 저장하지 않는다');
@@ -259,13 +278,21 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
       // EG365·EG366: Div 후보·자동 선택
       if (!ds.found) { put('EG366', 'Division 칸', a.key, 'NA', 'Division 칸', '조회영역에 Division 칸 없음'); }
       else {
-        const opts = [...new Set(ds.options)]; const want = new Set(a.divsMenu);
-        const leak = opts.filter(o => !want.has(o)); const miss = a.divsMenu.filter(o => !opts.includes(o));
-        put('EG366', 'Division 후보', a.key, leak.length ? 'FAIL' : miss.length ? '판정필요' : 'PASS', `후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) ${a.divsMenu.join(',') || '(없음)'}`, `후보 ${opts.join(',')}${leak.length ? ` · 권한 밖 ${leak.join(',')}` : ''}${miss.length ? ` · 권한 있는데 없음 ${miss.join(',')}` : ''}`, 'SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M', miss.length ? 'Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요' : '');
+        const divsWant = DIV_FILTER ? a.divsMenu.filter(DIV_FILTER.keep) : a.divsMenu;
+        const opts = [...new Set(ds.options)]; const want = new Set(divsWant);
+        // 2026-11-06 T73(SCP0122 EG365 허위 FAIL): 콤보 후보를 0개 읽음 = 측정 실패 — '후보 안의 값()' 에 선택값이 없다고 FAIL 하지 않는다(EG366 도 같은 값을 씀)
+        const v = ds.code; measuredDiv[a.key] = v;  // T73: 아래 '이전 세션 잔존' 판정도 쓰므로 분기 앞에서
+        if (!opts.length) { const why = `[측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '${ds.code || ''}'`; put('EG366', 'Division 후보', a.key, 'ERROR', `후보 = 메뉴 권한 그룹의 부문 권한 ${a.divsMenu.join(',') || '(없음)'}`, why); put('EG365', '자동 선택', a.key, 'ERROR', '후보 안의 값', why, 'DM-65'); measuredDiv[a.key] = ds.code; }
+        else {
+        const leak = opts.filter(o => !want.has(o)); const miss = divsWant.filter(o => !opts.includes(o));
+        put('EG366', 'Division 후보', a.key, leak.length ? 'FAIL' : miss.length ? '판정필요' : 'PASS', `후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) ${divsWant.join(',') || '(없음)'}${DIV_FILTER && divsWant.length !== a.divsMenu.length ? ` · ${DIV_FILTER.note} 로 ${a.divsMenu.filter(d => !divsWant.includes(d)).join(',')} 제외` : ''}`,`후보 ${opts.join(',')}${leak.length ? ` · 권한 밖 ${leak.join(',')}` : ''}${miss.length ? ` · 권한 있는데 없음 ${miss.join(',')}` : ''}`, 'SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M', miss.length ? 'Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요' : '');
         // 자동 선택
-        const v = ds.code; measuredDiv[a.key] = v;
-        if (!v) put('EG365', '자동 선택', a.key, opts.length === 1 ? 'FAIL' : '판정필요', opts.length === 1 ? `후보 1개 → 자동 선택 ${opts[0]}` : '후보 다수 — 기본 선택', '빈값', 'DM-65');
+        // 2026-11-06(SCP0084 재측정): 다중선택 Division 의 초기값 'ALL'(공용 CustomDropdown sentinel = 필터 없음 = 권한 후보 전부 · 칩 미표시)은
+        //   후보가 1개면 그 1개로 조회되는 것과 같다(FE store 가 ALL 을 권한 코드로 펼쳐 전송 · AS-IS GetCheckedListValue 'ALL' → dtMyDivision 열거) → 자동 선택 충족
+        if (!v && ds.multiAll) put('EG365', '자동 선택', a.key, 'PASS', opts.length === 1 ? `후보 1개 → 자동 선택 ${opts[0]}` : '후보 다수 — 기본 선택', `다중선택 초기값 ALL(필터 없음 = 후보 ${opts.join(',')} 전부)`, 'DM-65');
+        else if (!v) put('EG365', '자동 선택', a.key, opts.length === 1 ? 'FAIL' : '판정필요', opts.length === 1 ? `후보 1개 → 자동 선택 ${opts[0]}` : '후보 다수 — 기본 선택', '빈값', 'DM-65');
         else put('EG365', '자동 선택', a.key, opts.includes(v) ? (opts.length === 1 && opts[0] !== v ? 'FAIL' : 'PASS') : 'FAIL', opts.length === 1 ? `단일 권한 → ${opts[0]}` : `후보 안의 값(${opts.join(',')})`, v, 'DM-65');
+        }  // T73 후보 읽기 성공 분기 끝
         // 이전 세션 잔존
         if (prevKey && prevDiv && prevDiv !== v && !opts.includes(prevDiv)) put('EG365', '이전 세션 잔존', `${prevKey}→${a.key}`, 'PASS', '이전 계정 Div 잔존 0', `이전 ${prevDiv} · 이번 ${v}`);
         if (prevKey && prevDiv && prevDiv === v && !want.has(prevDiv)) put('EG365', '이전 세션 잔존', `${prevKey}→${a.key}`, 'FAIL', '권한 밖 Div 잔존 0', `이전 계정 Div ${prevDiv} 그대로`);
@@ -273,14 +300,19 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
       }
       // 조회 전 버튼 ↔ btn_auth(그룹 합집합) · CR-070: 사용자·선택 Division 권한 — 버튼 코드만 비교
       const codeRe: Record<string, RegExp> = { SAVE: /^Save/i, INSERT: /^Insert/i, DELETE: /^Delete/i };
-      const auth = new Set((f.btnDiv?.[a.key] || {})[ds.code] || []);
+      // 2026-11-06(SCP0084 EG374·EG411 허위 FAIL 6건): Division 이 ALL·복수·빈값이면 FE 는 Division 축 없이 사용자 그룹 합집합으로 버튼을 낸다
+      //   (useTabBtnPermissions.ts:31-57 — divisionId 미지정/'ALL'/'a,b' → PR_GET_MNU_BTN_AUTH_DIV 에 Division 을 보내지 않음). 종전엔 빈 Div 로 Div 별 권한을 찾아
+      //   '권한 없음 → 비노출' 을 기대했다 → 그 경우 기대 = btn_auth 의 계정 그룹 합집합(USE_YN Y).
+      const divAxis = !!ds.code && !/^all$/i.test(ds.code) && !ds.code.includes(',');
+      const auth = new Set(divAxis ? ((f.btnDiv?.[a.key] || {})[ds.code] || [])
+        : f.db.btnAuth.filter(b => (b.use_yn || 'Y') === 'Y' && a.groups.includes(b.user_gr_id)).map(b => b.mnu_btn_cd));
       const judgeBtn = async () => {
         await mutDom(nscm, 'acct-after');
         const after = (await buttonSnapshot(p)).map(b => b.name);
         for (const [code, re] of Object.entries(codeRe)) {
           const b4 = before.some(n => re.test(n)); const af = after.some(n => re.test(n)); const has = auth.has(code); const egs = ['EG374', 'EG411'];
           const res: Verdict = !has ? (b4 || af ? 'FAIL' : 'PASS') : b4 ? 'PASS' : af ? 'FAIL' : '판정필요';
-          for (const eg of egs) put(eg, `${code} 버튼 조회 전`, a.key, res, !has ? `PR_GET_MNU_BTN_AUTH_DIV(Div ${ds.code}) ${code} 없음 → 비노출(CR-070)` : `PR_GET_MNU_BTN_AUTH_DIV(Div ${ds.code}) ${code} 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)`, `조회 전 ${b4 ? '노출' : '비노출'} · 조회 후 ${af ? '노출' : '비노출'}`, 'PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070', res === '판정필요' ? '조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요' : '');
+          for (const eg of egs) put(eg, `${code} 버튼 조회 전`, a.key, res, !has ? `${divAxis ? `PR_GET_MNU_BTN_AUTH_DIV(Div ${ds.code})` : '계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions)'} ${code} 없음 → 비노출(CR-070)` : `${divAxis ? `PR_GET_MNU_BTN_AUTH_DIV(Div ${ds.code})` : '계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions)'} ${code} 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)`, `조회 전 ${b4 ? '노출' : '비노출'} · 조회 후 ${af ? '노출' : '비노출'}`, 'PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070', res === '판정필요' ? '조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요' : '');
         }
       };
       // EG369: GROUP guard 버튼·조건(계정 그룹)
@@ -354,10 +386,10 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
       const ctx = `Div ${d || '(없음)'}`;
       let mea = await readDlg(/^Measure$/i); let retryNote = '';
       if (mea && mea.length) {
-        const calc = (m: NonNullable<typeof mea>) => { const sh0 = [...new Set(m.flatMap(x => x.rows))]; const sheet = sheetOf(f.db.measures, sh0); const w = new Set(f.db.measures.filter(x => x.sheet_name === sheet && x.valid_yn === 'Y' && x.user_selectable_flag !== 'N' && listHas(x.division_id, d)).map(x => labelKey(x.column_label_name))); const k = new Set(sh0.map(labelKey)); return [...w].filter(x => !k.has(x)).length + [...k].filter(x => !w.has(x)).length; };
+        const calc = (m: NonNullable<typeof mea>) => { const sh0 = [...new Set(m.flatMap(x => x.rows))]; const sheet = sheetOf(f.db.measures, sh0); const w = new Set(f.db.measures.filter(x => x.sheet_name === sheet && x.valid_yn === 'Y' /* 2026-11-06(SCP0016 EG022 14건 허위 FAIL): USER_SELECTABLE_FLAG=N 행도 공용 MeasureSelectModal·AS-IS TitleSetForm 목록에 나온다(이동만 금지) → 기대 = 유효 전체 */ && listHas(x.division_id, d)).map(x => labelKey(x.column_label_name))); const k = new Set(sh0.map(labelKey)); return [...w].filter(x => !k.has(x)).length + [...k].filter(x => !w.has(x)).length; };
         if (calc(mea) > 0 && !MUT) { const first = mea.flatMap(x => x.rows).sort().join('|'); await p.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => undefined); await p.waitForTimeout(3_000); const again = await readDlg(/^Measure$/i); if (again && again.length) { retryNote = again.flatMap(x => x.rows).sort().join('|') === first ? ' · 재측정 동일' : ' · 첫 측정과 달라 재측정값 사용(전환 직후 이전 Div 후보 표시 가능성 — 부하 시 관찰)'; mea = again; } }
         anyMeasure = true; const shown = [...new Set(mea.flatMap(s => s.rows))]; const sh = sheetOf(f.db.measures, shown);
-        const want = f.db.measures.filter(m => m.sheet_name === sh && m.valid_yn === 'Y' && m.user_selectable_flag !== 'N' && listHas(m.division_id, d)).map(m => m.column_label_name);
+        const want = f.db.measures.filter(m => m.sheet_name === sh && m.valid_yn === 'Y' && listHas(m.division_id, d)).map(m => m.column_label_name);
         const wantK = new Set(want.map(labelKey)); const shK = new Set(shown.map(labelKey));
         const extra = shown.filter(x => !wantK.has(labelKey(x))); const miss = want.filter(x => !shK.has(labelKey(x)));
         for (const eg of ['EG022', 'EG402']) put(eg, `Measure 후보(${sh})`, ctx, !sh ? 'ERROR' : extra.length || miss.length ? 'FAIL' : 'PASS', `SCM_MST_SHEET_MEASURE Div ${d} 유효 ${want.length}개`, !sh ? '메타 시트 대응 실패' : extra.length || miss.length ? `실제 ${shown.length}개 · 메타 밖 ${extra.slice(0, 6).join(', ') || '-'} · 누락 ${miss.slice(0, 6).join(', ') || '-'}` : `일치 ${shown.length}개${retryNote}`, 'TO-BE UI Category(AS-IS 대조 = facts_auth_db)', retryNote);
@@ -528,6 +560,8 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
     const hs = f.asis?.headerSpan || [];
     const got = await p.evaluate(`(() => { const c = ${GRID}; if (!c) return null; const h = c.columnHeaders; let spans = 0; const smp = []; for (let row = 0; row < h.rows.length; row++) for (let col = 0; col < c.columns.length && col < 400; col++) { const g = c.getMergedRange(h, row, col, false); if (g && (g.columnSpan > 1 || g.rowSpan > 1) && g.topRow === row && g.leftCol === col) { spans++; if (smp.length < 5) smp.push(String(h.getCellData(row, col, true)).slice(0, 20)); } } return { rows: h.rows.length, spans, smp }; })()`).catch(() => null) as { rows: number; spans: number; smp: string[] } | null;
     if (!got) { put('EG315', '헤더 병합', ID, 'ERROR', '그리드', '그리드 컨트롤 없음'); return; }
+    // 2026-11-06(SCP0016 38번): 조회 결과·동적 컬럼이 반영되기 전(헤더 1행·행 0)에 재면 병합 0 은 측정 실패 — FAIL 이 아니라 ERROR
+    if (hs.length && !got.spans) { const pre = await measurable(nscm, { rows: true, headerRows: 2 }); if (!pre.ok) { put('EG315', '헤더 병합', `AS-IS 문장 ${hs.length}건`, 'ERROR', `AS-IS 헤더 병합 (${hs[0].raw.slice(0, 60)})`, `${pre.why} · TO-BE 헤더 ${got.rows}행 병합 ${got.spans}개`, hs[0].ref); return; } }
     if (!hs.length) put('EG315', '헤더 병합', ID, got.spans ? 'NA' : 'NA', 'AS-IS ColumnHeaderSpan 문장', `없음 · TO-BE 헤더 ${got.rows}행 병합 ${got.spans}개`, 'facts_auth');
     else put('EG315', '헤더 병합', `AS-IS 문장 ${hs.length}건`, got.spans ? 'PASS' : 'FAIL', `AS-IS 헤더 병합 (${hs[0].raw.slice(0, 60)})`, `TO-BE 헤더 ${got.rows}행 병합 ${got.spans}개 ${got.smp.join('|')}`, hs[0].ref);
   });

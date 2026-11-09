@@ -1,0 +1,93 @@
+[
+ {
+  "menu": "SCP0127",
+  "sheet": "init",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/init/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 2835,
+  "dur": 285,
+  "at": "2026-11-07T11:57:59.975Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 220,
+  "at": "2026-11-07T11:58:01.128Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 225,
+  "at": "2026-11-07T11:58:12.762Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 222,
+  "at": "2026-11-07T11:58:24.779Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 243,
+  "at": "2026-11-07T11:58:41.767Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 226,
+  "at": "2026-11-07T11:58:53.773Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 210,
+  "at": "2026-11-07T11:58:55.189Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ }
+]

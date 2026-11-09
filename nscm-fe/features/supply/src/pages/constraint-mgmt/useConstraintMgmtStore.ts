@@ -29,7 +29,7 @@ interface ConstraintMgmtState {
   staticColumns: ConstraintMgmtStaticColumns;
   isOpenSearchArea: boolean;
   activeGrid: ActiveGrid;
-  /** 더블클릭으로 선택한 마스터 행의 LOOKUP_TYPE. Sub 조회 키이자 Sub 신규행 기본값이다. */
+  /** 클릭으로 선택한 마스터 행의 LOOKUP_TYPE. Sub 조회 키이자 Sub 신규행 기본값이다. */
   mainLookupType: string;
   /** Sub 컬럼 라벨 치환값(동적 ②③). 키는 컬럼메타 colNm 이라 문자열 맵으로 둔다. */
   dynamicColumnLabels: Record<string, string>;
@@ -154,7 +154,7 @@ export const useConstraintMgmtStore = createPersistedStoreWithTab<
       });
     },
     /**
-     * Sub 조회 발사(마스터 더블클릭) — AS-IS FindData_Sub 진입과 같은 자리.
+     * Sub 조회 발사(마스터 클릭) — AS-IS FindData_Sub 진입과 같은 자리.
      * 이 시점에 Plan Group 체크값을 스냅샷한다. 같은 마스터 행을 다시 골라 queryKey 가
      * 그대로여도 배열 참조가 바뀌므로 하단 바인딩 소스가 새로 만들어지고, 미저장 pending 이
      * 함께 버려진다(AS-IS InitSpread(siSub) 와 동형).

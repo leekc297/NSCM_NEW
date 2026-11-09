@@ -20,7 +20,7 @@
 | features/master/src/pages/erp-edi-master/ErpEdiMaster.module.scss | style | 208 |
 | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | page | 694 |
 | features/master/src/pages/erp-edi-master/index.ts | index | 2 |
-| features/master/src/pages/erp-edi-master/useErpEdiMasterStore.ts | store | 346 |
+| features/master/src/pages/erp-edi-master/useErpEdiMasterStore.ts | store | 350 |
 | features/master/src/pages/erp-edi-master/__asis-mapping__.md | mapping | 161 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -35,7 +35,7 @@
 | /DMF0008/main/STATUS_UPDATE/call-proc | http | 1 | Y | ErpEdiMaster.tsx:254 |
 | /DMF0008/{route}/SAVE/call-proc | http | 1 | N | ErpEdiMaster.tsx:472 |
 | /admin/menu/DMF0008/column | http | 1 | Y | useErpEdiMasterStore.ts:295 |
-| /admin/menu/DMF0008/search-conditions | http | 1 | Y | useErpEdiMasterStore.ts:319 |
+| /admin/menu/DMF0008/search-conditions | http | 1 | Y | useErpEdiMasterStore.ts:323 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -124,8 +124,8 @@
 | MSG00004 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0004(6), DMF0008(2), DMF0005(1)
-- SP/PKG: DMF0000_GET_UPDATE_HISTORY(4), DMF0008_GET_SALES_SITE(3), DMF0008_GET_EDI_MST_SUMMARY(2), DMF0008_GET_EDI_MST_REPAIR(2), DMF0008_GET_SALES_SITE_PROJECT_MODEL(1), P_MESSAGE_CURSOR(1), DMF0008_SAVE_SALES_SITE_EDI_REPAIR(1), DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR(1), PR_DM_DNM_EDI_CALLOFF_STATUS(1), P_DMF0008_GET_EDI_MST_REPAIR(1)
+- 화면ID: DMF0004(7), DMF0008(2), DMF0005(1)
+- SP/PKG: DMF0000_GET_UPDATE_HISTORY(4), DMF0008_GET_SALES_SITE(3), DMF0008_GET_EDI_MST_SUMMARY(2), DMF0008_GET_EDI_MST_REPAIR(2), DMF0008_GET_SALES_SITE_PROJECT_MODEL(1), P_MESSAGE_CURSOR(1), DMF0008_SAVE_SALES_SITE_EDI_REPAIR(1), DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR(1), PR_DM_DNM_EDI_CALLOFF_STATUS(1), P_DMF0008_GET_EDI_MST_REPAIR(1), PR_GET_SHEET_COLUMN_LIST(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

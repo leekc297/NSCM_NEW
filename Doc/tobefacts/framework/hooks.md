@@ -96,17 +96,16 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **useTabComboQueries** | `@shared/hooks` | 221 |  |  |
-| **useTabProcQuery** | `@shared/hooks` | 200 |  | filters 는 매 렌더 새로 만들지 말 것 — 아래 useLayoutEffect 는 filters 참조가 바뀌면 값이 같아도 "사용자가 재조회했다"로 판정해 캐시를 비운다. store selector / useState 값 / useMemo / 모 |
-| **useTabBtnPermissions** | `@shared/hooks` | 110 |  |  |
-| **useTabid** | `@shared/stores` | 69 |  |  |
-| **useSaveWithValidation** | `@shared/hooks` | 67 |  |  |
-| **useTabLookupQueries** | `@shared/hooks` | 56 |  |  |
+| **useTabComboQueries** | `@shared/hooks` | 231 |  |  |
+| **useTabProcQuery** | `@shared/hooks` | 212 |  | filters 는 매 렌더 새로 만들지 말 것 — 아래 useLayoutEffect 는 filters 참조가 바뀌면 값이 같아도 "사용자가 재조회했다"로 판정해 캐시를 비운다. store selector / useState 값 / useMemo / 모 |
+| **useTabBtnPermissions** | `@shared/hooks` | 117 |  |  |
+| **useTabid** | `@shared/stores` | 74 |  |  |
+| **useSaveWithValidation** | `@shared/hooks` | 71 |  |  |
+| **useTabLookupQueries** | `@shared/hooks` | 58 |  |  |
 | **useProcMutation** | `@shared/hooks` | 34 |  |  |
 | **useTabComboQueryResults** | `@shared/hooks` | 10 |  | `useTabComboQueries` 와 같은 쿼리를 구독하되 `data` 뿐 아니라 `isPending`/`isError` 도 함께 돌려준다. 콤보 데이터가 아직 안 온 것(로딩 중)과 조회했지만 실패한 것을 구분해야 하는 호출부용 (예: DataG |
 | **useTitleAreaLanguage** | `@shared/hooks` | 6 |  | 디자인 시스템 TitleArea(SubTitleArea) 의 `language` 값 — 건수 표기 「총 N건」 / 「Total N rows」 를 고른다. 디자인 시스템은 `language` 기본값이 'ko' 이고 'ko' 가 아니면 모두 영어(Tota |
-| **useInvalidateCombos** | `@shared/hooks` | 4 |  | 콤보 캐시 무효화 — 콤보의 원천 마스터를 저장한 화면이 저장 성공 직후 호출한다. 콤보는 staleTime 0 이지만 그건 "화면을 새로 열 때 다시 받는다"는 뜻이다. MDI 는 keep-alive 라 저장한 그 화면은 리마운트되지 않으므로, 방금 |
-| **useStreamProcQuery** | `@shared/hooks` | 1 |  |  |
+| **useInvalidateCombos** | `@shared/hooks` | 5 |  | 콤보 캐시 무효화 — 콤보의 원천 마스터를 저장한 화면이 저장 성공 직후 호출한다. 콤보는 staleTime 0 이지만 그건 "화면을 새로 열 때 다시 받는다"는 뜻이다. MDI 는 keep-alive 라 저장한 그 화면은 리마운트되지 않으므로, 방금 |
 | **useTabLookupQuery** | `@shared/hooks` | 1 |  | @deprecated useTabLookupQueries 사용하세요 |
 | **useClearAppData** | `@shared/hooks` | 0 |  |  |
 | **useDataGridUtils** | `@shared/components` | 0 |  |  |
@@ -118,6 +117,7 @@ props/params:
 | **useInsertedRows** | `@shared/hooks` | 0 |  |  |
 | **useMenuId** | `@shared/stores` | 0 |  |  |
 | **useRowParamCombos** | `@shared/components` | 0 |  | 행 값 조합마다 콤보를 조회해 `컬럼 binding -> 조합 키 -> 후보 행` 으로 돌려준다. 지연 조회다 - 그리드에 실린 행을 미리 훑지 않고, 사용자가 닿은 행만 조회한다. 첫 조회는 공란 조합 1건뿐이고 그 뒤로는 포커스가 닿을 때마다 1건 |
+| **useStreamProcQuery** | `@shared/hooks` | 0 |  |  |
 | **useTabComboQuery** | `@shared/hooks` | 0 |  | @deprecated useTabComboQueries를 사용하세요 |
 
 ### useTabComboQueries  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:314</sub>
@@ -152,17 +152,16 @@ props/params:
 - `queryOptions?: Omit<UseQueryOptions<ProcResponse<M, S>>, "queryKey"`
 - `"queryFn">`
 
-### useTabBtnPermissions  <sub>packages/shared/src/hooks/useTabBtnPermissions.ts:47</sub>
+### useTabBtnPermissions  <sub>packages/shared/src/hooks/useTabBtnPermissions.ts:43</sub>
 
 ```ts
-({ menuId, enabled, divisionId, }: { menuId: string; enabled?: boolean; divisionId?: string; }): { buttons: any; hasButton: (btnCd: string, sheetName?: string) => boolean; hasButtonDef: (btnCd: string, sheetName?: string) => boolean; isLoading: any; refetch: any; }
+({ menuId, enabled, }: { menuId: string; enabled?: boolean; }): { buttons: any; hasButton: (btnCd: string, sheetName?: string) => boolean; hasButtonDef: (btnCd: string, sheetName?: string) => boolean; isLoading: any; refetch: any; }
 ```
 
 props/params:
 
 - `menuId: string`
 - `enabled?: boolean`
-- `divisionId?: string`
 
 ### useTabid  <sub>packages/shared/src/stores/createStore.ts:15</sub>
 
@@ -230,24 +229,6 @@ props/params:
 ```ts
 (): any
 ```
-
-### useStreamProcQuery  <sub>packages/shared/src/hooks/useStreamProcQuery.ts:38</sub>
-
-```ts
-<Row extends object>({ menuId, sheetName, procedureAction, dataCursor, gridRef, transformRow, refreshIntervalMs, onDone, onError, }: UseStreamProcQueryOptions<Row>): { data: any; start: any; cancel: any; isStreaming: any; loadedCount: any; error: any; }
-```
-
-props/params:
-
-- `menuId: string`
-- `sheetName: string`
-- `procedureAction?: string`
-- `dataCursor?: string — 그리드에 넣을 데이터 커서 이름 (PROC_M COL_NM)`
-- `gridRef?: MutableRefObject<any> — 데이터를 이어 붙일 그리드 — collectionView.refresh 대상`
-- `transformRow?: (row: Row) => Row — 행 정규화(날짜 등) — 묶음 도착 시 행마다 1회`
-- `refreshIntervalMs?: number — 수신 중 그리드 갱신 최소 간격(ms)`
-- `onDone?: (result: any) => void`
-- `onError?: (error: Error) => void`
 
 ### useTabLookupQuery  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:328</sub>
 
@@ -330,6 +311,24 @@ props/params:
 
 - `columns: RawFlexGridColumnConfig[] — 표시 중인 컬럼 메타 (D 컬럼만 골라 쓴다)`
 - `sheetName?: string — 그리드 시트명 — 행 조합 콤보 요청에도 sheetName 으로 실어 보낸다(그리드 콤보 규약, DataGrid 가 넘김).`
+
+### useStreamProcQuery  <sub>packages/shared/src/hooks/useStreamProcQuery.ts:38</sub>
+
+```ts
+<Row extends object>({ menuId, sheetName, procedureAction, dataCursor, gridRef, transformRow, refreshIntervalMs, onDone, onError, }: UseStreamProcQueryOptions<Row>): { data: any; start: any; cancel: any; isStreaming: any; loadedCount: any; error: any; }
+```
+
+props/params:
+
+- `menuId: string`
+- `sheetName: string`
+- `procedureAction?: string`
+- `dataCursor?: string — 그리드에 넣을 데이터 커서 이름 (PROC_M COL_NM)`
+- `gridRef?: MutableRefObject<any> — 데이터를 이어 붙일 그리드 — collectionView.refresh 대상`
+- `transformRow?: (row: Row) => Row — 행 정규화(날짜 등) — 묶음 도착 시 행마다 1회`
+- `refreshIntervalMs?: number — 수신 중 그리드 갱신 최소 간격(ms)`
+- `onDone?: (result: any) => void`
+- `onError?: (error: Error) => void`
 
 ### useTabComboQuery  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:254</sub>
 

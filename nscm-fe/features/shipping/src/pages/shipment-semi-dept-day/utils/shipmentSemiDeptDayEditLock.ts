@@ -29,14 +29,17 @@ export const isDivisionRequired = (
 ): boolean => isInsertRow(row) && !row?.[DIVISION_COLUMN] && isItemPopupColumn(binding);
 
 // 셀 편집 가능(팝업 포함) — 모드×행상태 판정 (design 03 §3.1).
-//   신규행 = INSERT_SET(DIVISION_ID/ITEM_ID/DEPARTURE_DAY/VALID_YN) / 기존행 = editMode && EDIT_SET(DEPARTURE_DAY/VALID_YN).
+//   isEditMode = SAVE 권한(사용자 지시 2026-11-06). EDIT 권한은 보지 않는다 — SAVE 권한이 있으면 수정 가능.
+//   권한 없으면(isEditMode=false) 신규행·기존행 전부 잠금. 있으면 행상태로 편집 가능 컬럼을 가린다:
+//   신규행 = INSERT_SET(DIVISION_ID/ITEM_ID/DEPARTURE_DAY/VALID_YN) / 기존행 = EDIT_SET(DEPARTURE_DAY/VALID_YN).
 export const isCellEditable = (
   binding: string,
   row: Record<string, unknown> | undefined,
   isEditMode: boolean
 ): boolean => {
+  if (!isEditMode) return false;
   if (isInsertRow(row)) return INSERT_SET.has(binding);
-  return isEditMode && EDIT_SET.has(binding);
+  return EDIT_SET.has(binding);
 };
 
 // 인라인 편집(콤보/텍스트) 허용 — ITEM_ID 는 팝업 전용이라 인라인 편집 취소(nscm-patterns §5-16).

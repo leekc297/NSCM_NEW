@@ -199,11 +199,13 @@ export const ConstraintOfShipmentQtyForm = ({ onSearch }: Props) => {
                 )}
               />
             </Grid>
-            {/* Model Group(다중, cascade 하위 — design 02 §2.3, TO-BE 미배포 확인 필요) */}
+            {/* Item Group(라벨 표기, 다중 cascade 하위 — design 02 §2.3). 사용자 지시(2026-11-05)로
+                조회조건 명칭을 "Model Group" -> "Item Group"(LBL00063)로 변경. backing 데이터는
+                모델그룹(MDL_GR_NM)/INIT_SET.MODEL_GROUP 그대로이며 라벨 표기만 바뀐다. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.MODEL_GROUP, '_Model Group')}
+                label={t(LBL.ITEM_GROUP, '_Item Group')}
                 labelAlign='right'
                 render={() => (
                   <CustomDropdown

@@ -1,0 +1,40 @@
+# [Harness] SCP0037 operation-lt — BLOCK 12 / WARN 26 (final)
+
+- WARN AC1 액션 대조표 미처리 219행: AC-f3fe0f59(상태 빈칸 CALL_EXT UIUtils.GetAllDivisionCheckedE), AC-7c215410(상태 빈칸 POPUP new SCM0002_MaterialByDivision), AC-ca09d3fe(상태 빈칸 POPUP pop.Form_Load), AC-80e5d24c(상태 빈칸 UI_PROP pop.StartPosition), AC-1656dfff(상태 빈칸 POPUP pop.ShowDialog), AC-7f64dc0b(상태 빈칸 VALUE_SET txtItemId.Text), AC-eb01a874(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-7dc3bf2f(상태 빈칸 RETURN return isPass;) … @Doc/asisfacts/screens/SCP0037/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 3행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-f3fe0f59(UIUtils.GetAllDivisionCheckedElectrode @SCP0037_OperationLT.cs:828), AC-fba33f63(dtPlantSite.Rows.InsertAt @SCP0037_OperationLT.cs:147), AC-8be10904(UIUtils.GetAllDivisionCheckedElectrode @SCP0037_OperationLT.cs:676) @Doc/asisfacts/screens/SCP0037/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SCP.SCP0037_GET_OPERATION_LT (SCP0037_GET_OPERATION_LT) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0037_SAVE_OPERATION_LT (SCP0037_SAVE_OPERATION_LT) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → ClbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboLTOperation.SelectedIndexChanged → ClbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellClick → SpdMain_CellClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ComboSelChange → SpdMain_ComboSelChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ClipboardPasted → SpdMain_ClipboardPasted 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.KeyPress → SpdMain_KeyPress 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → btnItemId_Click 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 cboValid / UsrComboBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbPlantSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboLTOperation / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- BLOCK V01 Validation 마커 누락 3/3: V-001(Lundefined) V-002(Lundefined) V-003(Lundefined) @hooks/useOperationLTValidation.ts
+- BLOCK V01 As-is Expression 24건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @operation-lt.constants.ts
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 2건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 셀 클릭(CLICK) SEQ1 [MSG00093] Division을(를) 선택하십시오 → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0037.md
+- WARN VR2 MSG01122 — VALIDATION 취합 판정: 조회(SEARCH) SEQ1 AS-IS MSG00097 [메시지 불일치] — [메시지 불일치] 불일치 — TO-BE="Division을(를) 선택하십시오."(미선택 안내). AS-IS=권한을 가진 Division 없음 / TO-BE 마스터 @operation-lt.constants.ts:60
+- BLOCK VC1 대조표 FAIL 44행 (Doc/verify/SCP0037/mapping_trace.md §FAIL)
+- BLOCK VC1 대조표 미검증 263행 — 검사 사유 REVIEW 40 · ERROR 310 · NOPATH 51 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- BLOCK VC1 작업 원장 미완료 62건 / 검사 인스턴스 337 — W3 5 · W5 16 · W7 21 · W9 20 · 구현 의심 1 (Doc/verify/SCP0037/work_ledger.md)
+- BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/OperationLTGrid.tsx:278
+- BLOCK R09 자체 행상태 필드 금지 — CRUD_TYPE 전용 (#99 §0) @components/OperationLTGrid.tsx:22
+- BLOCK R03 window.alert/confirm → useMessageStore (#26 messaging-api) @hooks/useOperationLTValidation.ts:48
+- BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @OperationLT.tsx:147
+- BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @useOperationLTStore.ts:146
+- BLOCK R09 자체 행상태 필드 금지 — CRUD_TYPE 전용 (#99 §0) @utils/operation-lt.editLock.ts:14
+- WARN B13 AS-IS 파일:라인 주석(// AS-IS …:L) — 이벤트 8건 대비 AS-IS 참조 주석 0건 — 1:1 추적 근거
+- BLOCK B19 expressions.md 24행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0037/SCP0037_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0037/SCP0037_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)

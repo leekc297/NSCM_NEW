@@ -29,10 +29,13 @@ interface Props {
 /**
  * 영역2 조회조건 (design 02 §5.1).
  *
- * 12필드라 hook #52 기준(12-column 그리드 2단 = 6필드) 초과 → 3단째부터 `extraConditions` 로 분리한다.
- *   1단 conditions      : Division · Plan Month · Version · Plan Type(readOnly)
- *   2단 conditions      : Division Type · Site
- *   3단~ extraConditions: Plant · Building · Line · Operation · Line Type · Item(+팝업) · Valid
+ * 사용자 요청(2026-11-04) — 조회조건이 2줄을 넘어가면 접는다(2026-10-19 "3줄 고정" 결정을 번복).
+ *   공용 SearchArea 는 `extraConditions` 가 있으면 chevron 토글을 자동 렌더한다(2줄까지 항상 노출,
+ *   나머지는 펼침). 2줄 유지 기준으로 아래처럼 가른다(hook #52, 줄당 4필드).
+ *   1줄 conditions      : Operation group · Material/Basic Nickname(+팝업) · Division · Plan Month
+ *                          (Version 콤보+Plan Type 회색칸 50:50 은 2줄 머리로 밀린다)
+ *   2줄 conditions      : Version(+Plan Type) · Site · Plant · Building
+ *   접힘 extraConditions: Line · Operation · Line Type(Cell/Module.Pack 모드만) · Active
  *
  * 축 A(`divisionType`) 는 조회조건이 아니라 화면 모드 스위치다 — Operation/Line Type 노출과
  * Item 라벨까지 동시에 가른다(R-04~R-06). Operation 과 Line Type 은 **서로 배타**이므로 한 자리에
@@ -184,6 +187,59 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
                 Plan Type 은 AS-IS Designer 좌표대로 Version 콤보 뒤 라벨없는 회색칸으로 묶여 독립 칸을
                 쓰지 않는다(V-05). Operation/Line Type 은 Electrode 모드에서 숨으므로 기본 화면은 정확히
                 3줄이고, Cell/Module.Pack 모드에서만 2필드가 늘어 4줄째로 자연 흐른다(R-04/R-05 보존). */}
+            {/* S05 Division Type — 화면 모드 스위치. 변경 시 두 탭 전면 초기화(R-01).
+                AS-IS `lciDivisionType` 은 `TextVisible=false` = 라벨 없는 라디오 3택이었으나,
+                사용자 확정(DB 실측)으로 LBL00027 'Operation group' 라벨을 붙인다.
+                사용자 요청(2026-11-04)으로 1줄 맨 앞(Division 앞)에 둔다. */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t(LBL.OPERATION_GROUP, { defaultValue: 'Operation group' })}
+                labelAlign='right'
+                render={() => (
+                  <CustomDropdown
+                    disabled={locked}
+                    value={String(sc.divisionType)}
+                    options={divisionTypeOptions}
+                    onChange={(_, picked) =>
+                      changeDivisionType(Number(picked ?? DIVISION_TYPE.ELTR) as DivisionType)
+                    }
+                  />
+                )}
+              />
+            </Grid>
+            {/* S12+S13 Item — 라벨이 모드로 바뀐다(Basic Nickname ↔ Material, R-06). 버튼이 P01 팝업.
+                사용자 요청(2026-11-04)으로 1줄 두 번째(Operation group 다음, Division 앞)에 둔다. */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t(isEltr ? LBL.MODEL : LBL.BASIC_NICKNAME, {
+                  defaultValue: isEltr ? 'Material' : 'Basic Nickname',
+                })}
+                labelAlign='right'
+                render={() => (
+                  <InputField
+                    fullWidth
+                    className={commonStyles.popupSearchField}
+                    disabled={locked}
+                    value={sc.itemId}
+                    InputProps={{
+                      endAdornment: (
+                        <Button
+                          appearance='outlined'
+                          priority='normal'
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          disabled={locked}
+                          onClick={() => setOpenItemPopup(true)}
+                        />
+                      ),
+                    }}
+                    onChange={event => setSearchParams({ itemId: event.target.value })}
+                    onKeyDown={event => event.key === 'Enter' && onSearch()}
+                  />
+                )}
+              />
+            </Grid>
             {/* S01 Division — 단일선택, ALL 없음. 기본 포커스(AS-IS TabIndex 0).
                 Division 변경 = TO-BE 공통 요건: Division 을 제외한 검색조건 전부 초기화 + 두 그리드
                 초기화(store `setDivision`). AS-IS `cboDivision_SelectedIndexChanged`(cs:5510-5519)는
@@ -236,26 +292,6 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
                 )}
               />
             </Grid>
-            {/* S05 Division Type — 화면 모드 스위치. 변경 시 두 탭 전면 초기화(R-01).
-                AS-IS `lciDivisionType` 은 `TextVisible=false` = 라벨 없는 라디오 3택이었으나,
-                사용자 확정(DB 실측)으로 LBL00027 'Operation group' 라벨을 붙인다. */}
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LBL.OPERATION_GROUP, { defaultValue: 'Operation group' })}
-                labelAlign='right'
-                render={() => (
-                  <CustomDropdown
-                    disabled={locked}
-                    value={String(sc.divisionType)}
-                    options={divisionTypeOptions}
-                    onChange={(_, picked) =>
-                      changeDivisionType(Number(picked ?? DIVISION_TYPE.ELTR) as DivisionType)
-                    }
-                  />
-                )}
-              />
-            </Grid>
             {/* S06 Site */}
             {multiField(LBL.SITE, 'Site', sc.siteIds, cascade.siteOptions, codes =>
               // 상위 변경 시 하위 초기화 — 배열은 `['ALL']`(design 02 §5.4).
@@ -274,7 +310,12 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
             {multiField(LBL.BUILDING, 'Building', sc.factoryIds, cascade.factoryOptions, codes =>
               setSearchParams({ factoryIds: codes, lineIds: [ALL] })
             )}
-            {/* S09 Line — `_A`/`_C` 접미 커스텀 정렬 적용분(V-19). */}
+          </>
+        }
+        extraConditions={
+          <>
+            {/* S09 Line — `_A`/`_C` 접미 커스텀 정렬 적용분(V-19).
+                사용자 요청(2026-11-04)으로 접힘 영역으로 내린다. */}
             {multiField(LBL.LINE, 'Line', sc.lineIds, cascade.lineOptions, codes =>
               setSearchParams({ lineIds: codes })
             )}
@@ -298,37 +339,6 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
                 cascade.electrodeTypeOptions,
                 codes => setSearchParams({ electrodeTypes: codes })
               )}
-            {/* S12+S13 Item — 라벨이 모드로 바뀐다(Basic Nickname ↔ Material, R-06). 버튼이 P01 팝업. */}
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(isEltr ? LBL.MODEL : LBL.BASIC_NICKNAME, {
-                  defaultValue: isEltr ? 'Material' : 'Basic Nickname',
-                })}
-                labelAlign='right'
-                render={() => (
-                  <InputField
-                    fullWidth
-                    className={commonStyles.popupSearchField}
-                    disabled={locked}
-                    value={sc.itemId}
-                    InputProps={{
-                      endAdornment: (
-                        <Button
-                          appearance='outlined'
-                          priority='normal'
-                          iconComponent={<FunctionSearchIcon appearance='lined' />}
-                          disabled={locked}
-                          onClick={() => setOpenItemPopup(true)}
-                        />
-                      ),
-                    }}
-                    onChange={event => setSearchParams({ itemId: event.target.value })}
-                    onKeyDown={event => event.key === 'Enter' && onSearch()}
-                  />
-                )}
-              />
-            </Grid>
             {/* S14 Valid(라벨 'Active', LBL00007 — DB 실측) — 'ALL' 은 SP 로 '' 로 나간다(V-18). */}
             {singleField(LBL.VALID, 'Active', sc.validYn, validOptions, code =>
               setSearchParams({ validYn: code || ALL })

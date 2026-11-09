@@ -229,11 +229,11 @@
       ],
       "menuAccess": "Y",
       "expectedBtns": [
-        "INSERT",
-        "DELETE",
-        "SAVE",
         "EDIT",
-        "SEARCH"
+        "SEARCH",
+        "SAVE",
+        "DELETE",
+        "INSERT"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -281,39 +281,39 @@
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
-      "INSERT",
-      "DELETE",
-      "SAVE",
       "EDIT",
-      "SEARCH"
-    ],
-    "FP Planner": [
-      "SAVE",
       "SEARCH",
-      "EDIT",
-      "INSERT",
-      "DELETE"
-    ],
-    "SCM PI Admin": [
-      "EDIT",
       "SAVE",
-      "SEARCH",
       "DELETE",
       "INSERT"
     ],
-    "SCP Planner": [
+    "FP Planner": [
+      "DELETE",
+      "EDIT",
+      "INSERT",
+      "SAVE",
+      "SEARCH"
+    ],
+    "SCM PI Admin": [
+      "DELETE",
+      "EDIT",
       "SEARCH",
+      "SAVE",
+      "INSERT"
+    ],
+    "SCP Planner": [
       "INSERT",
       "DELETE",
-      "SAVE"
+      "SAVE",
+      "SEARCH"
     ]
   },
   "menuBtnCodes": [
-    "INSERT",
-    "DELETE",
-    "SAVE",
     "EDIT",
-    "SEARCH"
+    "SEARCH",
+    "SAVE",
+    "DELETE",
+    "INSERT"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

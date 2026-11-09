@@ -14,12 +14,12 @@
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **RawFlexGridColumnConfig** | `@foundation/models` | 388 |  |  |
-| **PageProps** | `@foundation/models` | 145 |  |  |
-| **HotkeyConfig** | `@foundation/models` | 134 |  |  |
-| **ComboResponse** | `@foundation/models` | 109 |  |  |
-| **FlexGridColumnConfig** | `@foundation/models` | 74 |  |  |
-| **ComboParam** | `@foundation/models` | 30 |  |  |
+| **RawFlexGridColumnConfig** | `@foundation/models` | 404 |  |  |
+| **PageProps** | `@foundation/models` | 149 |  |  |
+| **HotkeyConfig** | `@foundation/models` | 138 |  |  |
+| **ComboResponse** | `@foundation/models` | 111 |  |  |
+| **FlexGridColumnConfig** | `@foundation/models` | 76 |  |  |
+| **ComboParam** | `@foundation/models` | 32 |  |  |
 | **LookupResponse** | `@foundation/models` | 7 |  |  |
 | **Menu** | `@foundation/models` | 1 |  |  |
 | **SalesSite** | `@foundation/models` | 1 |  |  |
@@ -49,11 +49,11 @@
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
 | **ComboOption** | `features/master/src/components` | 32 |  | Filter 콤보 옵션 만들기 — AS-IS DataService.GetDMInnerTable 재현. 그 함수는 세션당 한 번 받아 둔 데이터셋(list_line_dm)을 메모리에서 거른다. TO-BE 는 등록 SQL(Filter*)이 같은 결과셋을  |
-| **MeasureMeta** | `features/master/src/components` | 20 |  | 공용 Measure 선택 popup (2026-07-30 통합 — 화면별 5벌 중복 제거): // AS-IS DM0002_TitleSetForm_Popup.cs 의 measure 모드 동등 동작. ColumnSettingModal(컬럼 모드) 의 형제 |
+| **MeasureMeta** | `features/master/src/components` | 22 |  | 공용 Measure 선택 popup (2026-07-30 통합 — 화면별 5벌 중복 제거): // AS-IS DM0002_TitleSetForm_Popup.cs 의 measure 모드 동등 동작. ColumnSettingModal(컬럼 모드) 의 형제 |
 | **Row** | `features/master/src/components` | 3 |  | // helpers // |
+| **ItemModalColumn** | `features/master/src/components` | 2 |  |  |
+| **ItemModalCondition** | `features/master/src/components` | 2 |  |  |
 | **ModelSelection** | `features/master/src/components` | 2 |  | AS-IS 반환값 (SCM0002_ItembyDivisionPopup: ItemID/ItemName/ItemType/NickName/ItemClassName). |
-| **ItemModalColumn** | `features/master/src/components` | 1 |  |  |
-| **ItemModalCondition** | `features/master/src/components` | 1 |  |  |
 | **CapaAuthContext** | `features/master/src/components` | 0 |  |  |
 | **CapaAuthListRow** | `features/master/src/components` | 0 |  |  |
 | **CapaFpInstanceRow** | `features/master/src/components` | 0 |  |  |
@@ -83,10 +83,11 @@
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **ColumnLayoutRow** | `@shared/components` | 11 |  |  |
+| **ColumnLayoutRow** | `@shared/components` | 12 |  |  |
 | **CascadeNode** | `@shared/components` | 1 |  | 계층 선택지 트리 노드 — value/label 과 선택 시 펼쳐질 하위(children). // children 이 없으면 잎(최종 선택)이다. |
 | **ColumnMetaRow** | `@shared/components` | 1 |  | admin 컬럼 메타 1행 중 컬럼 설정 팝업이 쓰는 부분 (`/admin/menu/{mnuId}/column` = GridColumn DTO). |
 | **DualListColumn** | `@shared/components` | 1 |  | 공용 Column Setting dual list (2026-06-20 신설 / 2026-07-01 디자인 개편 + 우측 D&D 순서이동): // AS-IS DM0002_TitleSetForm_Popup.cs 의 Base/User dual list 동 |
+| **GridLayoutRow** | `@shared/components` | 1 |  | 그리드 적용용으로 파싱한 레이아웃 1행. |
 | **SsoUserRow** | `@shared/components` | 1 |  | COM0010 ssoUser 응답 행 — multiCheckbox 모드의 setSelectedValues 가 그대로 넘긴다. |
 | **WeekOfMonth** | `@shared/lib` | 1 |  | 수량/금액 Bucket 배분 공통 유틸 — 화면 recalc(표시) 배분용 순수 함수. // // 룰1 (월 → 주): 월 수량 입력 시 주별 "월내 기여 일수" Rate 산출 후 주별 배분. // 끝자리(rounding 잔여)는 마지막 주차에 +/- |
 | **BaseTabState** | `@shared/stores` | 0 |  |  |
@@ -108,7 +109,6 @@
 | **GridContextMenuItem** | `@shared/components` | 0 |  |  |
 | **GridContextMenuOptions** | `@shared/components` | 0 |  |  |
 | **GridLayoutKey** | `@shared/components` | 0 |  | DataGrid 레이아웃 개인화 키 — 이 prop 을 준 그리드만 활성화(opt-in). ⚠️ sheetName 은 admin SHEET_NAME(컬럼 메타 조회 `sheetNm` 과 동일한 값)이어야 한다. FE 내부 시트 코드('main' 등)와 |
-| **GridLayoutRow** | `@shared/components` | 0 |  | 그리드 적용용으로 파싱한 레이아웃 1행. |
 | **InsertAnchorGrid** | `@shared/hooks` | 0 |  | FlexGrid 최소 구조 — wijmo 타입에 하드 의존하지 않기 위한 structural type (테스트에서 그리드 없이 anchor 동작을 검증할 수 있게 하는 목적도 겸한다). |
 | **InsertAnchorGridRef** | `@shared/hooks` | 0 |  | 그리드 인스턴스 참조 — 페이지가 이미 들고 있는 `gridRef` 를 그대로 넘긴다. |
 | **ListboxChild** | `@shared/components` | 0 |  |  |

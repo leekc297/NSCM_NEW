@@ -26,7 +26,7 @@ if (-not $prompt) { exit 0 }
 $root = "C:\Projects\NSCM"
 $v2   = "$root\Doc\_rules_v2"
 $cons = "$root\Doc\_rules_consolidation"
-$memRoot = "C:\Users\ejene\.claude\projects\C--Projects-NSCM\memory"
+$memRoot = "C:\Users\LG\.claude\projects\c--Projects-NSCM\memory"
 $maxBytes = 120KB
 
 # ── 0. 모드 판별 ─────────────────────────────────────────────────────────────

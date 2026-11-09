@@ -1,0 +1,1651 @@
+{
+"id": "SSP0025",
+"at": "2026-11-09 10:56:32",
+"asis": {
+"insertStmts": [
+{
+"kind": "CALL_LOCAL",
+"raw": "InsertRow()",
+"ref": "SSP0025_ShipmentRequestorPIC.cs:192",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_COMBO",
+"raw": "siMain.SetCellTypeCombo(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.DIVISION_ID), dtMyDivision)",
+"ref": "SSP0025_ShipmentRequestorPIC.cs:318",
+"method": "InsertRow"
+},
+{
+"kind": "GRID_COMBO",
+"raw": "siMain.SetCellTypeCombo(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.SITE_DESCRIPTION), dtToSite)",
+"ref": "SSP0025_ShipmentRequestorPIC.cs:320",
+"method": "InsertRow"
+}
+],
+"headerSpan": [],
+"planExcluded": [],
+"editRules": [],
+"mainClass": "SSP0025_ShipmentRequestorPIC",
+"divControls": [
+"cboDivision"
+],
+"changeMethods": [
+"CboDivision_SelectedIndexChanged",
+"SetChangedControl"
+],
+"loadMethods": [
+".ctor",
+"CreateSpread",
+"DefineProperty",
+"Form_Load",
+"InitControls",
+"InitEvent",
+"InitSpread",
+"SetChangedControl"
+],
+"states": [],
+"stateCountAll": 0,
+"defaults": [],
+"insertGuards": [],
+"deadExcluded": [],
+"hasMerge": false
+},
+"db": {
+"menu": {
+"mnu_id": "SSP0025",
+"uppr_mnu_id": "Shipping_Master",
+"unit_tp_cd": "S",
+"use_yn": "Y",
+"n01_atr_ctn": "NSCM"
+},
+"menuGroups": [
+{
+"user_gr_id": "SSP Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"use_yn": "Y"
+}
+],
+"btnAuth": [
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "popup",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+}
+],
+"columns": [
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "CELL_TYPE",
+"column_label_name": "Cell Type",
+"sort_order_no": "8",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "CREATED_BY",
+"column_label_name": "Created By",
+"sort_order_no": "16",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "CREATION_DATE",
+"column_label_name": "Creation Date",
+"sort_order_no": "17",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "ELECTRODE_TYPE",
+"column_label_name": "Electrode Type",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "ITEM_ID",
+"column_label_name": "Material*",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "LAST_UPDATED_BY",
+"column_label_name": "Last Updated By",
+"sort_order_no": "18",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "LAST_UPDATE_DATE",
+"column_label_name": "Last Update Date",
+"sort_order_no": "19",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "MODEL_ID",
+"column_label_name": "Model",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "7",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "PART_LEADER",
+"column_label_name": "Part Leader",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "PART_LEADER_NAME",
+"column_label_name": "Part Leader Name",
+"sort_order_no": "12",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "SITE_DESCRIPTION",
+"column_label_name": "Plant Site*",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "TEAM_LEADER",
+"column_label_name": "Team Leader",
+"sort_order_no": "13",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "TEAM_LEADER_NAME",
+"column_label_name": "Team Leader Name",
+"sort_order_no": "14",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "TO_SITE",
+"column_label_name": "Plant Site Code",
+"sort_order_no": "2",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "USER_ID",
+"column_label_name": "User ID*",
+"sort_order_no": "9",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "USER_NAME",
+"column_label_name": "User Name",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0025",
+"sheet_name": "Shipment Requestor PIC",
+"column_name": "VALID_YN",
+"column_label_name": "Active*",
+"sort_order_no": "15",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+}
+],
+"measures": [],
+"lookupMeasure": [],
+"lookupAdmin": [
+{
+"segment1": "ADMIN",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment2": "ALL",
+"valid_yn": "Y"
+}
+],
+"now": {
+"now_": "2026-11-09 10:56",
+"dow": "MON",
+"hm": "1056"
+}
+},
+"accounts": [
+{
+"key": "SSP/40/SSP Planner",
+"keys": [
+"SSP/40/SSP Planner"
+],
+"groups": [
+"GUEST",
+"SSP Planner"
+],
+"menuGroups": [
+"SSP Planner"
+],
+"divsAll": [
+"40"
+],
+"divsMenu": [
+"40"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0035",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0041",
+"SCP0055",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SSP/40/SSP Viewer",
+"keys": [
+"SSP/40/SSP Viewer"
+],
+"groups": [
+"GUEST",
+"SSP Viewer"
+],
+"menuGroups": [
+"SSP Viewer"
+],
+"divsAll": [
+"40"
+],
+"divsMenu": [
+"40"
+],
+"menus": [
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0045",
+"Demand",
+"Demand_Master",
+"Popup",
+"SCM0002",
+"SCP0005",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0022",
+"SCP0028",
+"SCP0037",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SSP/81/SSP Planner",
+"keys": [
+"SSP/81/SSP Planner"
+],
+"groups": [
+"GUEST",
+"SSP Planner"
+],
+"menuGroups": [
+"SSP Planner"
+],
+"divsAll": [
+"81_HM"
+],
+"divsMenu": [
+"81_HM"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0035",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0041",
+"SCP0055",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SSP/81/SSP Viewer",
+"keys": [
+"SSP/81/SSP Viewer",
+"SSP/82/SSP Viewer"
+],
+"groups": [
+"GUEST",
+"SSP Viewer"
+],
+"menuGroups": [
+"SSP Viewer"
+],
+"divsAll": [
+"40",
+"81",
+"82",
+"EE"
+],
+"divsMenu": [
+"40",
+"81",
+"82",
+"EE"
+],
+"menus": [
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0045",
+"Demand",
+"Demand_Master",
+"Popup",
+"SCM0002",
+"SCP0005",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0022",
+"SCP0028",
+"SCP0037",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SSP/82/SSP Planner",
+"keys": [
+"SSP/82/SSP Planner"
+],
+"groups": [
+"GUEST",
+"SSP Planner"
+],
+"menuGroups": [
+"SSP Planner"
+],
+"divsAll": [
+"82"
+],
+"divsMenu": [
+"82"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0035",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0041",
+"SCP0055",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+}
+],
+"btnDiv": {
+"__default__": {
+"40": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"81": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"81_HD": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"81_HG": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"81_HM": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"81_ST": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"81_UC": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"82": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"EE": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"EE_HD": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"EE_HG": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"EE_HM": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"EE_ST": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+],
+"EE_UC": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+]
+},
+"SSP/40/SSP Planner": {
+"40": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+]
+},
+"SSP/40/SSP Viewer": {
+"40": [
+"EXCEL",
+"SEARCH",
+"USER_CHECK"
+]
+},
+"SSP/81/SSP Planner": {
+"81_HM": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+]
+},
+"SSP/81/SSP Viewer": {
+"40": [
+"EXCEL",
+"SEARCH",
+"USER_CHECK"
+],
+"81": [
+"EXCEL",
+"SEARCH",
+"USER_CHECK"
+],
+"82": [
+"EXCEL",
+"SEARCH",
+"USER_CHECK"
+],
+"EE": [
+"EXCEL",
+"SEARCH",
+"USER_CHECK"
+]
+},
+"SSP/82/SSP Planner": {
+"82": [
+"DELETE",
+"EDIT",
+"EXCEL",
+"INSERT",
+"SAVE",
+"SEARCH",
+"USER_CHECK"
+]
+}
+}
+}

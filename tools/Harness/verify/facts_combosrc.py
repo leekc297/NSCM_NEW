@@ -20,6 +20,7 @@ import json
 import os
 import re
 import sys
+from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 SRC = os.path.join(ROOT, 'GSCM')
@@ -288,7 +289,7 @@ def main():
         return 2
     sid = sys.argv[1].upper()
     sdir = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', sid)
-    files = [r['file'] for r in read_csv(os.path.join(sdir, 'files.csv')) if r.get('variant') == 'current']
+    files = [r['file'] for r in read_csv(os.path.join(sdir, 'files.csv')) if is_main(r, sdir)]
     if not files:
         print(f'[FAIL] {sid}: files.csv current 변형 없음 — AsisFacts 먼저 실행')
         return 1

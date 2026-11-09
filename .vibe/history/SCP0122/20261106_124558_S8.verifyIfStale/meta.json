@@ -1,0 +1,17 @@
+{
+  "id": "SCP0122",
+  "task": "S8.verifyIfStale",
+  "scope": "none",
+  "note": "verify_if_stale.py SCP0122",
+  "start": "2026-11-06T12:45:58+09:00",
+  "end": "2026-11-06T12:45:59+09:00",
+  "exit": 0,
+  "sources": [],
+  "source": "chain",
+  "label": "CheckList — 최신이 아닐 때만 실행 (FE 소스·PKG DDL·화면 메타가 직전 CheckList 이후 바뀌었거나 결과 없음 → run_verify · 최신이면 건너뜀) — 보완 메뉴 첫 단계",
+  "text": "",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "changed": []
+}

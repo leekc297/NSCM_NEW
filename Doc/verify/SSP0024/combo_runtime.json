@@ -1,0 +1,4502 @@
+{
+ "at": "2026-11-09T02:30:13.878Z",
+ "search": {
+  "Div": {
+   "label": "Div",
+   "opts": [
+    "81 Automotive Battery",
+    "40 Mobility & IT Battery",
+    "82 ESS Battery",
+    "81_UC Automotive Battery(UC)",
+    "81_HM Automotive Battery(HM)",
+    "81_ST Automotive Battery(ST)",
+    "81_HD Automotive Battery(HD)",
+    "81_HG Automotive Battery(HG)"
+   ],
+   "multi": false,
+   "sel": [
+    "81 Automotive Battery"
+   ]
+  },
+  "Plant Site": {
+   "label": "Plant Site",
+   "opts": [
+    "SELECT ALL",
+    "LGESMI Elec MI00",
+    "LGESNA Elec NA00",
+    "LGESNB Electrode-Electrode NB01",
+    "LGESOC Elec HQ07",
+    "LGESWA Elec WA00",
+    "MI_LS Auto Elec-Electrode",
+    "OC_2 Auto Elec-Electrode"
+   ],
+   "multi": true,
+   "sel": []
+  }
+ },
+ "grid": {
+  "DIVISION_ID": {
+   "header": "Div",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "81",
+      "v": "81"
+     },
+     {
+      "c": "40",
+      "v": "40"
+     },
+     {
+      "c": "82",
+      "v": "82"
+     },
+     {
+      "c": "81_UC",
+      "v": "81_UC"
+     },
+     {
+      "c": "81_HM",
+      "v": "81_HM"
+     },
+     {
+      "c": "81_ST",
+      "v": "81_ST"
+     },
+     {
+      "c": "81_HD",
+      "v": "81_HD"
+     },
+     {
+      "c": "81_HG",
+      "v": "81_HG"
+     },
+     {
+      "c": "81",
+      "v": "81"
+     },
+     {
+      "c": "40",
+      "v": "40"
+     },
+     {
+      "c": "82",
+      "v": "82"
+     },
+     {
+      "c": "81_UC",
+      "v": "81_UC"
+     },
+     {
+      "c": "81_HM",
+      "v": "81_HM"
+     },
+     {
+      "c": "81_ST",
+      "v": "81_ST"
+     },
+     {
+      "c": "81_HD",
+      "v": "81_HD"
+     },
+     {
+      "c": "81_HG",
+      "v": "81_HG"
+     }
+    ],
+    "disp": [
+     "81",
+     "40",
+     "82",
+     "81_UC",
+     "81_HM",
+     "81_ST",
+     "81_HD",
+     "81_HG"
+    ],
+    "editing": true
+   },
+   "newCtx": {
+    "DIVISION_ID": "81"
+   },
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "81",
+      "v": "81"
+     },
+     {
+      "c": "40",
+      "v": "40"
+     },
+     {
+      "c": "82",
+      "v": "82"
+     },
+     {
+      "c": "81_UC",
+      "v": "81_UC"
+     },
+     {
+      "c": "81_HM",
+      "v": "81_HM"
+     },
+     {
+      "c": "81_ST",
+      "v": "81_ST"
+     },
+     {
+      "c": "81_HD",
+      "v": "81_HD"
+     },
+     {
+      "c": "81_HG",
+      "v": "81_HG"
+     },
+     {
+      "c": "81",
+      "v": "81"
+     },
+     {
+      "c": "40",
+      "v": "40"
+     },
+     {
+      "c": "82",
+      "v": "82"
+     },
+     {
+      "c": "81_UC",
+      "v": "81_UC"
+     },
+     {
+      "c": "81_HM",
+      "v": "81_HM"
+     },
+     {
+      "c": "81_ST",
+      "v": "81_ST"
+     },
+     {
+      "c": "81_HD",
+      "v": "81_HD"
+     },
+     {
+      "c": "81_HG",
+      "v": "81_HG"
+     }
+    ],
+    "disp": [
+     "81",
+     "40",
+     "82",
+     "81_UC",
+     "81_HM",
+     "81_ST",
+     "81_HD",
+     "81_HG"
+    ],
+    "editing": false
+   },
+   "exCtx": {
+    "DIVISION_ID": "81"
+   }
+  },
+  "PLANT_SITE_ID": {
+   "header": "Plant Site",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "HQ07-E",
+      "v": "LGESOC Elec HQ07"
+     },
+     {
+      "c": "HQ11-E",
+      "v": "OC_2 Auto Elec-Electrode"
+     },
+     {
+      "c": "MI00-E",
+      "v": "LGESMI Elec MI00"
+     },
+     {
+      "c": "MI02-E",
+      "v": "MI_LS Auto Elec-Electrode"
+     },
+     {
+      "c": "NA00-E",
+      "v": "LGESNA Elec NA00"
+     },
+     {
+      "c": "NB01-E",
+      "v": "LGESNB Electrode-Electrode NB01"
+     },
+     {
+      "c": "WA00-E",
+      "v": "LGESWA Elec WA00"
+     },
+     {
+      "c": "HQ07-E",
+      "v": "LGESOC Elec HQ07"
+     },
+     {
+      "c": "HQ11-E",
+      "v": "OC_2 Auto Elec-Electrode"
+     },
+     {
+      "c": "MI00-E",
+      "v": "LGESMI Elec MI00"
+     },
+     {
+      "c": "MI02-E",
+      "v": "MI_LS Auto Elec-Electrode"
+     },
+     {
+      "c": "NA00-E",
+      "v": "LGESNA Elec NA00"
+     },
+     {
+      "c": "NB01-E",
+      "v": "LGESNB Electrode-Electrode NB01"
+     },
+     {
+      "c": "WA00-E",
+      "v": "LGESWA Elec WA00"
+     }
+    ],
+    "disp": [
+     "LGESOC Elec HQ07",
+     "OC_2 Auto Elec-Electrode",
+     "LGESMI Elec MI00",
+     "MI_LS Auto Elec-Electrode",
+     "LGESNA Elec NA00",
+     "LGESNB Electrode-Electrode NB01",
+     "LGESWA Elec WA00"
+    ],
+    "editing": true
+   },
+   "newCtx": {
+    "DIVISION_ID": "81"
+   },
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "HQ07-E",
+      "v": "LGESOC Elec HQ07"
+     },
+     {
+      "c": "HQ11-E",
+      "v": "OC_2 Auto Elec-Electrode"
+     },
+     {
+      "c": "MI00-E",
+      "v": "LGESMI Elec MI00"
+     },
+     {
+      "c": "MI02-E",
+      "v": "MI_LS Auto Elec-Electrode"
+     },
+     {
+      "c": "NA00-E",
+      "v": "LGESNA Elec NA00"
+     },
+     {
+      "c": "NB01-E",
+      "v": "LGESNB Electrode-Electrode NB01"
+     },
+     {
+      "c": "WA00-E",
+      "v": "LGESWA Elec WA00"
+     },
+     {
+      "c": "HQ07-E",
+      "v": "LGESOC Elec HQ07"
+     },
+     {
+      "c": "HQ11-E",
+      "v": "OC_2 Auto Elec-Electrode"
+     },
+     {
+      "c": "MI00-E",
+      "v": "LGESMI Elec MI00"
+     },
+     {
+      "c": "MI02-E",
+      "v": "MI_LS Auto Elec-Electrode"
+     },
+     {
+      "c": "NA00-E",
+      "v": "LGESNA Elec NA00"
+     },
+     {
+      "c": "NB01-E",
+      "v": "LGESNB Electrode-Electrode NB01"
+     },
+     {
+      "c": "WA00-E",
+      "v": "LGESWA Elec WA00"
+     }
+    ],
+    "disp": [
+     "LGESOC Elec HQ07",
+     "OC_2 Auto Elec-Electrode",
+     "LGESMI Elec MI00",
+     "MI_LS Auto Elec-Electrode",
+     "LGESNA Elec NA00",
+     "LGESNB Electrode-Electrode NB01",
+     "LGESWA Elec WA00"
+    ],
+    "editing": false
+   },
+   "exCtx": {
+    "DIVISION_ID": "81"
+   }
+  },
+  "POST_OPER": {
+   "header": "Post Oper.",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "OP01",
+      "v": "Taping"
+     },
+     {
+      "c": "OP02",
+      "v": "CTIC"
+     },
+     {
+      "c": "OP03",
+      "v": "Heat treatment"
+     },
+     {
+      "c": "OP04",
+      "v": "Tandem press"
+     },
+     {
+      "c": "OP05",
+      "v": "General"
+     },
+     {
+      "c": "OP06",
+      "v": "CTIC/Heat treatment"
+     },
+     {
+      "c": "OP00",
+      "v": "-"
+     },
+     {
+      "c": "OP04",
+      "v": "Tandem press"
+     },
+     {
+      "c": "OP05",
+      "v": "General"
+     },
+     {
+      "c": "OP00",
+      "v": "-"
+     },
+     {
+      "c": "OP04",
+      "v": "Tandem press"
+     },
+     {
+      "c": "OP05",
+      "v": "General"
+     },
+     {
+      "c": "OP01",
+      "v": "Taping"
+     },
+     {
+      "c": "OP02",
+      "v": "CTIC"
+     },
+     {
+      "c": "OP03",
+      "v": "Heat treatment"
+     },
+     {
+      "c": "OP04",
+      "v": "Tandem press"
+     },
+     {
+      "c": "OP05",
+      "v": "General"
+     },
+     {
+      "c": "OP06",
+      "v": "CTIC/Heat treatment"
+     },
+     {
+      "c": "OP00",
+      "v": "-"
+     },
+     {
+      "c": "OP04",
+      "v": "Tandem press"
+     },
+     {
+      "c": "OP05",
+      "v": "General"
+     }
+    ],
+    "disp": [
+     "-",
+     "Tandem press",
+     "General"
+    ],
+    "editing": true
+   },
+   "newCtx": {
+    "DIVISION_ID": "81"
+   },
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "OP01",
+      "v": "Taping"
+     },
+     {
+      "c": "OP02",
+      "v": "CTIC"
+     },
+     {
+      "c": "OP03",
+      "v": "Heat treatment"
+     },
+     {
+      "c": "OP04",
+      "v": "Tandem press"
+     },
+     {
+      "c": "OP05",
+      "v": "General"
+     },
+     {
+      "c": "OP06",
+      "v": "CTIC/Heat treatment"
+     },
+     {
+      "c": "OP00",
+      "v": "-"
+     },
+     {
+      "c": "OP04",
+      "v": "Tandem press"
+     },
+     {
+      "c": "OP05",
+      "v": "General"
+     },
+     {
+      "c": "OP00",
+      "v": "-"
+     },
+     {
+      "c": "OP04",
+      "v": "Tandem press"
+     },
+     {
+      "c": "OP05",
+      "v": "General"
+     },
+     {
+      "c": "OP01",
+      "v": "Taping"
+     },
+     {
+      "c": "OP02",
+      "v": "CTIC"
+     },
+     {
+      "c": "OP03",
+      "v": "Heat treatment"
+     },
+     {
+      "c": "OP04",
+      "v": "Tandem press"
+     },
+     {
+      "c": "OP05",
+      "v": "General"
+     },
+     {
+      "c": "OP06",
+      "v": "CTIC/Heat treatment"
+     },
+     {
+      "c": "OP00",
+      "v": "-"
+     },
+     {
+      "c": "OP04",
+      "v": "Tandem press"
+     },
+     {
+      "c": "OP05",
+      "v": "General"
+     }
+    ],
+    "disp": [
+     "-",
+     "Tandem press",
+     "General"
+    ],
+    "editing": true
+   },
+   "exCtx": {
+    "DIVISION_ID": "81"
+   }
+  },
+  "PACKAGE_TYPE_CODE": {
+   "header": "Package Type",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "BX",
+      "v": "Box"
+     },
+     {
+      "c": "SC",
+      "v": "Steelcrate"
+     },
+     {
+      "c": "SR",
+      "v": "Steelrack"
+     }
+    ],
+    "disp": [
+     "Box",
+     "Steelcrate",
+     "Steelrack"
+    ],
+    "editing": true
+   },
+   "newCtx": {
+    "DIVISION_ID": "81"
+   },
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "BX",
+      "v": "Box"
+     },
+     {
+      "c": "SC",
+      "v": "Steelcrate"
+     },
+     {
+      "c": "SR",
+      "v": "Steelrack"
+     }
+    ],
+    "disp": [
+     "Box",
+     "Steelcrate",
+     "Steelrack"
+    ],
+    "editing": true
+   },
+   "exCtx": {
+    "DIVISION_ID": "81"
+   }
+  },
+  "DOM_EXP_TYPE_CODE": {
+   "header": "DOM/EXP.",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "DOM",
+      "v": "DOM"
+     },
+     {
+      "c": "EXP",
+      "v": "EXP"
+     }
+    ],
+    "disp": [
+     "DOM",
+     "EXP"
+    ],
+    "editing": true
+   },
+   "newCtx": {
+    "DIVISION_ID": "81"
+   },
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "DOM",
+      "v": "DOM"
+     },
+     {
+      "c": "EXP",
+      "v": "EXP"
+     }
+    ],
+    "disp": [
+     "DOM",
+     "EXP"
+    ],
+    "editing": true
+   },
+   "exCtx": {
+    "DIVISION_ID": "81"
+   }
+  },
+  "BUILDING": {
+   "header": "Building",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "ALL",
+      "v": "ALL"
+     },
+     {
+      "c": "A1",
+      "v": "OC4_A"
+     },
+     {
+      "c": "A2",
+      "v": "OC5_A"
+     },
+     {
+      "c": "A3",
+      "v": "NA1_A"
+     },
+     {
+      "c": "A4",
+      "v": "MI1_A"
+     },
+     {
+      "c": "A5",
+      "v": "WA1_A"
+     },
+     {
+      "c": "A6",
+      "v": "WA3_A"
+     },
+     {
+      "c": "A7",
+      "v": "WA5_A"
+     },
+     {
+      "c": "A8",
+      "v": "NB1_A"
+     },
+     {
+      "c": "A9",
+      "v": "OC3_A"
+     },
+     {
+      "c": "AA",
+      "v": "NB2_A"
+     },
+     {
+      "c": "AC",
+      "v": "WA8_A"
+     },
+     {
+      "c": "AF",
+      "v": "OC8_A"
+     },
+     {
+      "c": "AH",
+      "v": "MI_LS_A"
+     },
+     {
+      "c": "AI",
+      "v": "(N/A)(AI)MI2_A"
+     },
+     {
+      "c": "AL",
+      "v": "OC10_A"
+     },
+     {
+      "c": "AM",
+      "v": "OC10_A(Pilot)"
+     },
+     {
+      "c": "E5",
+      "v": "OC4_E"
+     },
+     {
+      "c": "E6",
+      "v": "OC5_E"
+     },
+     {
+      "c": "E8",
+      "v": "(N/A)Nanjing Automotive Bldg 1"
+     },
+     {
+      "c": "E9",
+      "v": "MI1_E"
+     },
+     {
+      "c": "EA",
+      "v": "NA2_E"
+     },
+     {
+      "c": "EB",
+      "v": "WA2_E"
+     },
+     {
+      "c": "EC",
+      "v": "NB1_E"
+     },
+     {
+      "c": "ED",
+      "v": "WA4_E"
+     },
+     {
+      "c": "EF",
+      "v": "NB2_E"
+     },
+     {
+      "c": "EG",
+      "v": "OC3_E(Pilot)"
+     },
+     {
+      "c": "EJ",
+      "v": "WA8_E"
+     },
+     {
+      "c": "ES",
+      "v": "(N/A)(ES)MI2_E"
+     },
+     {
+      "c": "ET",
+      "v": "MI_LS_E"
+     },
+     {
+      "c": "EY",
+      "v": "OC8_E(Pilot)"
+     },
+     {
+      "c": "EZ",
+      "v": "OC10_E(Pilot)"
+     },
+     {
+      "c": "F3",
+      "v": "MI_LS_F"
+     },
+     {
+      "c": "F4",
+      "v": "MI1_F"
+     },
+     {
+      "c": "N2",
+      "v": "(N2)MI_LS2_F(ESS)"
+     },
+     {
+      "c": "P1",
+      "v": "OC4_P"
+     },
+     {
+      "c": "P2",
+      "v": "OC5_P"
+     },
+     {
+      "c": "P4",
+      "v": "NA1_P"
+     },
+     {
+      "c": "P5",
+      "v": "MI3_P"
+     },
+     {
+      "c": "P6",
+      "v": "OC2_P"
+     },
+     {
+      "c": "P7",
+      "v": "WA10_P"
+     },
+     {
+      "c": "P8",
+      "v": "WA11_P"
+     },
+     {
+      "c": "P9",
+      "v": "NB1_P"
+     },
+     {
+      "c": "PA",
+      "v": "WA12_P"
+     },
+     {
+      "c": "PB",
+      "v": "HP_P"
+     },
+     {
+      "c": "PC",
+      "v": "NB2_P"
+     },
+     {
+      "c": "PE",
+      "v": "OC9_P"
+     },
+     {
+      "c": "PG",
+      "v": "MI4_P"
+     },
+     {
+      "c": "PJ",
+      "v": "MI3_P2"
+     },
+     {
+      "c": "SA",
+      "v": "(SA)MI_LS2_A(ESS)"
+     },
+     {
+      "c": "ALL",
+      "v": "ALL"
+     },
+     {
+      "c": "A1",
+      "v": "OC4_A"
+     },
+     {
+      "c": "A2",
+      "v": "OC5_A"
+     },
+     {
+      "c": "A3",
+      "v": "NA1_A"
+     },
+     {
+      "c": "A4",
+      "v": "MI1_A"
+     },
+     {
+      "c": "A5",
+      "v": "WA1_A"
+     },
+     {
+      "c": "A6",
+      "v": "WA3_A"
+     },
+     {
+      "c": "A7",
+      "v": "WA5_A"
+     },
+     {
+      "c": "A8",
+      "v": "NB1_A"
+     },
+     {
+      "c": "A9",
+      "v": "OC3_A"
+     },
+     {
+      "c": "AA",
+      "v": "NB2_A"
+     },
+     {
+      "c": "AB",
+      "v": "UC1_A"
+     },
+     {
+      "c": "AC",
+      "v": "WA8_A"
+     },
+     {
+      "c": "AD",
+      "v": "HLI1_A"
+     },
+     {
+      "c": "AE",
+      "v": "UC2_A"
+     },
+     {
+      "c": "AF",
+      "v": "OC8_A"
+     },
+     {
+      "c": "AG",
+      "v": "NE1_A"
+     },
+     {
+      "c": "AH",
+      "v": "MI_LS_A"
+     },
+     {
+      "c": "AI",
+      "v": "(N/A)(AI)MI2_A"
+     },
+     {
+      "c": "AJ",
+      "v": "LH_A"
+     },
+     {
+      "c": "AK",
+      "v": "HG1_A"
+     },
+     {
+      "c": "AL",
+      "v": "OC10_A"
+     },
+     {
+      "c": "AM",
+      "v": "OC10_A(Pilot)"
+     },
+     {
+      "c": "B2",
+      "v": "(B2)AZ1_F"
+     },
+     {
+      "c": "E1",
+      "v": "청주 소형1동 전극"
+     },
+     {
+      "c": "E2",
+      "v": "OC1_E"
+     },
+     {
+      "c": "E3",
+      "v": "OC2_E"
+     },
+     {
+      "c": "E4",
+      "v": "OC3_E"
+     },
+     {
+      "c": "E5",
+      "v": "OC4_E"
+     },
+     {
+      "c": "E6",
+      "v": "OC5_E"
+     },
+     {
+      "c": "E7",
+      "v": "NJ5_E"
+     },
+     {
+      "c": "E8",
+      "v": "(N/A)Nanjing Automotive Bldg 1"
+     },
+     {
+      "c": "E9",
+      "v": "MI1_E"
+     },
+     {
+      "c": "EA",
+      "v": "NA2_E"
+     },
+     {
+      "c": "EB",
+      "v": "WA2_E"
+     },
+     {
+      "c": "EC",
+      "v": "NB1_E"
+     },
+     {
+      "c": "ED",
+      "v": "WA4_E"
+     },
+     {
+      "c": "EE",
+      "v": "NJ7_E"
+     },
+     {
+      "c": "EF",
+      "v": "NB2_E"
+     },
+     {
+      "c": "EG",
+      "v": "OC3_E(Pilot)"
+     },
+     {
+      "c": "EH",
+      "v": "NJ1_E"
+     },
+     {
+      "c": "EI",
+      "v": "UC1_E"
+     },
+     {
+      "c": "EJ",
+      "v": "WA8_E"
+     },
+     {
+      "c": "EK",
+      "v": "NJ8_E"
+     },
+     {
+      "c": "EL",
+      "v": "NJ9_E"
+     },
+     {
+      "c": "EM",
+      "v": "TVB3_E(Pilot)"
+     },
+     {
+      "c": "EN",
+      "v": "HLI1_E"
+     },
+     {
+      "c": "EO",
+      "v": "UC2_E"
+     },
+     {
+      "c": "EP",
+      "v": "OC4_E(Mobile)"
+     },
+     {
+      "c": "EQ",
+      "v": "NE1_E"
+     },
+     {
+      "c": "ER",
+      "v": "OC9_E"
+     },
+     {
+      "c": "ES",
+      "v": "(N/A)(ES)MI2_E"
+     },
+     {
+      "c": "ET",
+      "v": "MI_LS_E"
+     },
+     {
+      "c": "EU",
+      "v": "LH_E"
+     },
+     {
+      "c": "EV",
+      "v": "HG2_A"
+     },
+     {
+      "c": "EW",
+      "v": "MI2_E(ESS)"
+     },
+     {
+      "c": "EX",
+      "v": "WA13_E"
+     },
+     {
+      "c": "EY",
+      "v": "OC8_E(Pilot)"
+     },
+     {
+      "c": "EZ",
+      "v": "OC10_E(Pilot)"
+     },
+     {
+      "c": "F1",
+      "v": "LH_F"
+     },
+     {
+      "c": "F2",
+      "v": "NE1_F"
+     },
+     {
+      "c": "F3",
+      "v": "MI_LS_F"
+     },
+     {
+      "c": "F4",
+      "v": "MI1_F"
+     },
+     {
+      "c": "F5",
+      "v": "HG1_F"
+     },
+     {
+      "c": "F9",
+      "v": "(F9)HLI1_F"
+     },
+     {
+      "c": "FA",
+      "v": "(FA)UC1_F"
+     },
+     {
+      "c": "FB",
+      "v": "(FB)UC2_F"
+     },
+     {
+      "c": "L1",
+      "v": "OC10_E(Mobile Pilot)"
+     },
+     {
+      "c": "L2",
+      "v": "AZ1_E"
+     },
+     {
+      "c": "M1",
+      "v": "OC1_A"
+     },
+     {
+      "c": "M2",
+      "v": "OC2_A"
+     },
+     {
+      "c": "M3",
+      "v": "NJ1_A"
+     },
+     {
+      "c": "M4",
+      "v": "NJ2_A"
+     },
+     {
+      "c": "M5",
+      "v": "NJ3_A"
+     },
+     {
+      "c": "M6",
+      "v": "NJ4_A"
+     },
+     {
+      "c": "M7",
+      "v": "NJ5_A"
+     },
+     {
+      "c": "M8",
+      "v": "NJ6_A"
+     },
+     {
+      "c": "M9",
+      "v": "TVB3_A(Pilot)"
+     },
+     {
+      "c": "MA",
+      "v": "OC4_A(Mobile)"
+     },
+     {
+      "c": "MB",
+      "v": "NJ9_A"
+     },
+     {
+      "c": "MC",
+      "v": "OC9_A"
+     },
+     {
+      "c": "MD",
+      "v": "AZ1_A"
+     },
+     {
+      "c": "ME",
+      "v": "TVB5_A"
+     },
+     {
+      "c": "N1",
+      "v": "MI2_F(ESS)"
+     },
+     {
+      "c": "N2",
+      "v": "(N2)MI_LS2_F(ESS)"
+     },
+     {
+      "c": "P1",
+      "v": "OC4_P"
+     },
+     {
+      "c": "P2",
+      "v": "OC5_P"
+     },
+     {
+      "c": "P3",
+      "v": "(N/A)OC_ESS"
+     },
+     {
+      "c": "P4",
+      "v": "NA1_P"
+     },
+     {
+      "c": "P5",
+      "v": "MI3_P"
+     },
+     {
+      "c": "P6",
+      "v": "OC2_P"
+     },
+     {
+      "c": "P7",
+      "v": "WA10_P"
+     },
+     {
+      "c": "P8",
+      "v": "WA11_P"
+     },
+     {
+      "c": "P9",
+      "v": "NB1_P"
+     },
+     {
+      "c": "PA",
+      "v": "WA12_P"
+     },
+     {
+      "c": "PB",
+      "v": "HP_P"
+     },
+     {
+      "c": "PC",
+      "v": "NB2_P"
+     },
+     {
+      "c": "PD",
+      "v": "NJ3_P"
+     },
+     {
+      "c": "PE",
+      "v": "OC9_P"
+     },
+     {
+      "c": "PF",
+      "v": "NE2_P"
+     },
+     {
+      "c": "PG",
+      "v": "MI4_P"
+     },
+     {
+      "c": "PH",
+      "v": "LH_P"
+     },
+     {
+      "c": "PI",
+      "v": "MI4_P(ESS)"
+     },
+     {
+      "c": "PJ",
+      "v": "MI3_P2"
+     },
+     {
+      "c": "PK",
+      "v": "OC9_P2"
+     },
+     {
+      "c": "PL",
+      "v": "WA11_P(ESS)"
+     },
+     {
+      "c": "PN",
+      "v": "MI_AZ_ESS"
+     },
+     {
+      "c": "S2",
+      "v": "OC5_A(ESS)"
+     },
+     {
+      "c": "S3",
+      "v": "NJ2_A(ESS)"
+     },
+     {
+      "c": "S4",
+      "v": "NB1_A(ESS)"
+     },
+     {
+      "c": "S5",
+      "v": "NJ4_A(ESS)"
+     },
+     {
+      "c": "S6",
+      "v": "(N/A)NJ ESS Elec #2"
+     },
+     {
+      "c": "S7",
+      "v": "NB ESS Assy Bldg#2"
+     },
+     {
+      "c": "S8",
+      "v": "MI2_A(ESS)"
+     },
+     {
+      "c": "S9",
+      "v": "WA3_A(ESS)"
+     },
+     {
+      "c": "SA",
+      "v": "(SA)MI_LS2_A(ESS)"
+     },
+     {
+      "c": "VF_AE",
+      "v": "GM UC2_A"
+     },
+     {
+      "c": "VF_AG",
+      "v": "ST NE1_A"
+     },
+     {
+      "c": "VF_AH",
+      "v": "VF MI_LS_A"
+     },
+     {
+      "c": "VF_AJ",
+      "v": "HD LH_A"
+     },
+     {
+      "c": "VF_PF",
+      "v": "VF NE2_P"
+     },
+     {
+      "c": "VT",
+      "v": "VT temp building"
+     },
+     {
+      "c": "W2",
+      "v": "(N/A)NJ Mobile Bldg#6"
+     },
+     {
+      "c": "ALL",
+      "v": "ALL"
+     },
+     {
+      "c": "A1",
+      "v": "OC4_A"
+     },
+     {
+      "c": "A2",
+      "v": "OC5_A"
+     },
+     {
+      "c": "A9",
+      "v": "OC3_A"
+     },
+     {
+      "c": "AF",
+      "v": "OC8_A"
+     },
+     {
+      "c": "E5",
+      "v": "OC4_E"
+     },
+     {
+      "c": "E6",
+      "v": "OC5_E"
+     },
+     {
+      "c": "EG",
+      "v": "OC3_E(Pilot)"
+     },
+     {
+      "c": "EY",
+      "v": "OC8_E(Pilot)"
+     },
+     {
+      "c": "P1",
+      "v": "OC4_P"
+     },
+     {
+      "c": "P2",
+      "v": "OC5_P"
+     },
+     {
+      "c": "P6",
+      "v": "OC2_P"
+     },
+     {
+      "c": "ALL",
+      "v": "ALL"
+     },
+     {
+      "c": "A1",
+      "v": "OC4_A"
+     },
+     {
+      "c": "A2",
+      "v": "OC5_A"
+     },
+     {
+      "c": "A3",
+      "v": "NA1_A"
+     },
+     {
+      "c": "A4",
+      "v": "MI1_A"
+     },
+     {
+      "c": "A5",
+      "v": "WA1_A"
+     },
+     {
+      "c": "A6",
+      "v": "WA3_A"
+     },
+     {
+      "c": "A7",
+      "v": "WA5_A"
+     },
+     {
+      "c": "A8",
+      "v": "NB1_A"
+     },
+     {
+      "c": "A9",
+      "v": "OC3_A"
+     },
+     {
+      "c": "AA",
+      "v": "NB2_A"
+     },
+     {
+      "c": "AC",
+      "v": "WA8_A"
+     },
+     {
+      "c": "AF",
+      "v": "OC8_A"
+     },
+     {
+      "c": "AH",
+      "v": "MI_LS_A"
+     },
+     {
+      "c": "AI",
+      "v": "(N/A)(AI)MI2_A"
+     },
+     {
+      "c": "AL",
+      "v": "OC10_A"
+     },
+     {
+      "c": "AM",
+      "v": "OC10_A(Pilot)"
+     },
+     {
+      "c": "E5",
+      "v": "OC4_E"
+     },
+     {
+      "c": "E6",
+      "v": "OC5_E"
+     },
+     {
+      "c": "E8",
+      "v": "(N/A)Nanjing Automotive Bldg 1"
+     },
+     {
+      "c": "E9",
+      "v": "MI1_E"
+     },
+     {
+      "c": "EA",
+      "v": "NA2_E"
+     },
+     {
+      "c": "EB",
+      "v": "WA2_E"
+     },
+     {
+      "c": "EC",
+      "v": "NB1_E"
+     },
+     {
+      "c": "ED",
+      "v": "WA4_E"
+     },
+     {
+      "c": "EF",
+      "v": "NB2_E"
+     },
+     {
+      "c": "EG",
+      "v": "OC3_E(Pilot)"
+     },
+     {
+      "c": "EJ",
+      "v": "WA8_E"
+     },
+     {
+      "c": "ES",
+      "v": "(N/A)(ES)MI2_E"
+     },
+     {
+      "c": "ET",
+      "v": "MI_LS_E"
+     },
+     {
+      "c": "EY",
+      "v": "OC8_E(Pilot)"
+     },
+     {
+      "c": "EZ",
+      "v": "OC10_E(Pilot)"
+     },
+     {
+      "c": "F3",
+      "v": "MI_LS_F"
+     },
+     {
+      "c": "F4",
+      "v": "MI1_F"
+     },
+     {
+      "c": "N2",
+      "v": "(N2)MI_LS2_F(ESS)"
+     },
+     {
+      "c": "P1",
+      "v": "OC4_P"
+     },
+     {
+      "c": "P2",
+      "v": "OC5_P"
+     },
+     {
+      "c": "P4",
+      "v": "NA1_P"
+     },
+     {
+      "c": "P5",
+      "v": "MI3_P"
+     },
+     {
+      "c": "P6",
+      "v": "OC2_P"
+     },
+     {
+      "c": "P7",
+      "v": "WA10_P"
+     },
+     {
+      "c": "P8",
+      "v": "WA11_P"
+     },
+     {
+      "c": "P9",
+      "v": "NB1_P"
+     },
+     {
+      "c": "PA",
+      "v": "WA12_P"
+     },
+     {
+      "c": "PB",
+      "v": "HP_P"
+     },
+     {
+      "c": "PC",
+      "v": "NB2_P"
+     },
+     {
+      "c": "PE",
+      "v": "OC9_P"
+     },
+     {
+      "c": "PG",
+      "v": "MI4_P"
+     },
+     {
+      "c": "PJ",
+      "v": "MI3_P2"
+     },
+     {
+      "c": "SA",
+      "v": "(SA)MI_LS2_A(ESS)"
+     }
+    ],
+    "disp": [
+     "ALL",
+     "OC4_A",
+     "OC5_A",
+     "NA1_A",
+     "MI1_A",
+     "WA1_A",
+     "WA3_A",
+     "WA5_A",
+     "NB1_A",
+     "OC3_A",
+     "NB2_A",
+     "WA8_A",
+     "OC8_A",
+     "MI_LS_A",
+     "(N/A)(AI)MI2_A",
+     "OC10_A",
+     "OC10_A(Pilot)",
+     "OC4_E",
+     "OC5_E",
+     "(N/A)Nanjing Automotive Bldg 1",
+     "MI1_E",
+     "NA2_E",
+     "WA2_E",
+     "NB1_E",
+     "WA4_E",
+     "NB2_E",
+     "OC3_E(Pilot)",
+     "WA8_E",
+     "(N/A)(ES)MI2_E",
+     "MI_LS_E",
+     "OC8_E(Pilot)",
+     "OC10_E(Pilot)",
+     "MI_LS_F",
+     "MI1_F",
+     "(N2)MI_LS2_F(ESS)",
+     "OC4_P",
+     "OC5_P",
+     "NA1_P",
+     "MI3_P",
+     "OC2_P",
+     "WA10_P",
+     "WA11_P",
+     "NB1_P",
+     "WA12_P",
+     "HP_P",
+     "NB2_P",
+     "OC9_P",
+     "MI4_P",
+     "MI3_P2",
+     "(SA)MI_LS2_A(ESS)"
+    ],
+    "editing": true
+   },
+   "newCtx": {
+    "DIVISION_ID": "81"
+   },
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "ALL",
+      "v": "ALL"
+     },
+     {
+      "c": "A1",
+      "v": "OC4_A"
+     },
+     {
+      "c": "A2",
+      "v": "OC5_A"
+     },
+     {
+      "c": "A3",
+      "v": "NA1_A"
+     },
+     {
+      "c": "A4",
+      "v": "MI1_A"
+     },
+     {
+      "c": "A5",
+      "v": "WA1_A"
+     },
+     {
+      "c": "A6",
+      "v": "WA3_A"
+     },
+     {
+      "c": "A7",
+      "v": "WA5_A"
+     },
+     {
+      "c": "A8",
+      "v": "NB1_A"
+     },
+     {
+      "c": "A9",
+      "v": "OC3_A"
+     },
+     {
+      "c": "AA",
+      "v": "NB2_A"
+     },
+     {
+      "c": "AC",
+      "v": "WA8_A"
+     },
+     {
+      "c": "AF",
+      "v": "OC8_A"
+     },
+     {
+      "c": "AH",
+      "v": "MI_LS_A"
+     },
+     {
+      "c": "AI",
+      "v": "(N/A)(AI)MI2_A"
+     },
+     {
+      "c": "AL",
+      "v": "OC10_A"
+     },
+     {
+      "c": "AM",
+      "v": "OC10_A(Pilot)"
+     },
+     {
+      "c": "E5",
+      "v": "OC4_E"
+     },
+     {
+      "c": "E6",
+      "v": "OC5_E"
+     },
+     {
+      "c": "E8",
+      "v": "(N/A)Nanjing Automotive Bldg 1"
+     },
+     {
+      "c": "E9",
+      "v": "MI1_E"
+     },
+     {
+      "c": "EA",
+      "v": "NA2_E"
+     },
+     {
+      "c": "EB",
+      "v": "WA2_E"
+     },
+     {
+      "c": "EC",
+      "v": "NB1_E"
+     },
+     {
+      "c": "ED",
+      "v": "WA4_E"
+     },
+     {
+      "c": "EF",
+      "v": "NB2_E"
+     },
+     {
+      "c": "EG",
+      "v": "OC3_E(Pilot)"
+     },
+     {
+      "c": "EJ",
+      "v": "WA8_E"
+     },
+     {
+      "c": "ES",
+      "v": "(N/A)(ES)MI2_E"
+     },
+     {
+      "c": "ET",
+      "v": "MI_LS_E"
+     },
+     {
+      "c": "EY",
+      "v": "OC8_E(Pilot)"
+     },
+     {
+      "c": "EZ",
+      "v": "OC10_E(Pilot)"
+     },
+     {
+      "c": "F3",
+      "v": "MI_LS_F"
+     },
+     {
+      "c": "F4",
+      "v": "MI1_F"
+     },
+     {
+      "c": "N2",
+      "v": "(N2)MI_LS2_F(ESS)"
+     },
+     {
+      "c": "P1",
+      "v": "OC4_P"
+     },
+     {
+      "c": "P2",
+      "v": "OC5_P"
+     },
+     {
+      "c": "P4",
+      "v": "NA1_P"
+     },
+     {
+      "c": "P5",
+      "v": "MI3_P"
+     },
+     {
+      "c": "P6",
+      "v": "OC2_P"
+     },
+     {
+      "c": "P7",
+      "v": "WA10_P"
+     },
+     {
+      "c": "P8",
+      "v": "WA11_P"
+     },
+     {
+      "c": "P9",
+      "v": "NB1_P"
+     },
+     {
+      "c": "PA",
+      "v": "WA12_P"
+     },
+     {
+      "c": "PB",
+      "v": "HP_P"
+     },
+     {
+      "c": "PC",
+      "v": "NB2_P"
+     },
+     {
+      "c": "PE",
+      "v": "OC9_P"
+     },
+     {
+      "c": "PG",
+      "v": "MI4_P"
+     },
+     {
+      "c": "PJ",
+      "v": "MI3_P2"
+     },
+     {
+      "c": "SA",
+      "v": "(SA)MI_LS2_A(ESS)"
+     },
+     {
+      "c": "ALL",
+      "v": "ALL"
+     },
+     {
+      "c": "A1",
+      "v": "OC4_A"
+     },
+     {
+      "c": "A2",
+      "v": "OC5_A"
+     },
+     {
+      "c": "A3",
+      "v": "NA1_A"
+     },
+     {
+      "c": "A4",
+      "v": "MI1_A"
+     },
+     {
+      "c": "A5",
+      "v": "WA1_A"
+     },
+     {
+      "c": "A6",
+      "v": "WA3_A"
+     },
+     {
+      "c": "A7",
+      "v": "WA5_A"
+     },
+     {
+      "c": "A8",
+      "v": "NB1_A"
+     },
+     {
+      "c": "A9",
+      "v": "OC3_A"
+     },
+     {
+      "c": "AA",
+      "v": "NB2_A"
+     },
+     {
+      "c": "AB",
+      "v": "UC1_A"
+     },
+     {
+      "c": "AC",
+      "v": "WA8_A"
+     },
+     {
+      "c": "AD",
+      "v": "HLI1_A"
+     },
+     {
+      "c": "AE",
+      "v": "UC2_A"
+     },
+     {
+      "c": "AF",
+      "v": "OC8_A"
+     },
+     {
+      "c": "AG",
+      "v": "NE1_A"
+     },
+     {
+      "c": "AH",
+      "v": "MI_LS_A"
+     },
+     {
+      "c": "AI",
+      "v": "(N/A)(AI)MI2_A"
+     },
+     {
+      "c": "AJ",
+      "v": "LH_A"
+     },
+     {
+      "c": "AK",
+      "v": "HG1_A"
+     },
+     {
+      "c": "AL",
+      "v": "OC10_A"
+     },
+     {
+      "c": "AM",
+      "v": "OC10_A(Pilot)"
+     },
+     {
+      "c": "B2",
+      "v": "(B2)AZ1_F"
+     },
+     {
+      "c": "E1",
+      "v": "청주 소형1동 전극"
+     },
+     {
+      "c": "E2",
+      "v": "OC1_E"
+     },
+     {
+      "c": "E3",
+      "v": "OC2_E"
+     },
+     {
+      "c": "E4",
+      "v": "OC3_E"
+     },
+     {
+      "c": "E5",
+      "v": "OC4_E"
+     },
+     {
+      "c": "E6",
+      "v": "OC5_E"
+     },
+     {
+      "c": "E7",
+      "v": "NJ5_E"
+     },
+     {
+      "c": "E8",
+      "v": "(N/A)Nanjing Automotive Bldg 1"
+     },
+     {
+      "c": "E9",
+      "v": "MI1_E"
+     },
+     {
+      "c": "EA",
+      "v": "NA2_E"
+     },
+     {
+      "c": "EB",
+      "v": "WA2_E"
+     },
+     {
+      "c": "EC",
+      "v": "NB1_E"
+     },
+     {
+      "c": "ED",
+      "v": "WA4_E"
+     },
+     {
+      "c": "EE",
+      "v": "NJ7_E"
+     },
+     {
+      "c": "EF",
+      "v": "NB2_E"
+     },
+     {
+      "c": "EG",
+      "v": "OC3_E(Pilot)"
+     },
+     {
+      "c": "EH",
+      "v": "NJ1_E"
+     },
+     {
+      "c": "EI",
+      "v": "UC1_E"
+     },
+     {
+      "c": "EJ",
+      "v": "WA8_E"
+     },
+     {
+      "c": "EK",
+      "v": "NJ8_E"
+     },
+     {
+      "c": "EL",
+      "v": "NJ9_E"
+     },
+     {
+      "c": "EM",
+      "v": "TVB3_E(Pilot)"
+     },
+     {
+      "c": "EN",
+      "v": "HLI1_E"
+     },
+     {
+      "c": "EO",
+      "v": "UC2_E"
+     },
+     {
+      "c": "EP",
+      "v": "OC4_E(Mobile)"
+     },
+     {
+      "c": "EQ",
+      "v": "NE1_E"
+     },
+     {
+      "c": "ER",
+      "v": "OC9_E"
+     },
+     {
+      "c": "ES",
+      "v": "(N/A)(ES)MI2_E"
+     },
+     {
+      "c": "ET",
+      "v": "MI_LS_E"
+     },
+     {
+      "c": "EU",
+      "v": "LH_E"
+     },
+     {
+      "c": "EV",
+      "v": "HG2_A"
+     },
+     {
+      "c": "EW",
+      "v": "MI2_E(ESS)"
+     },
+     {
+      "c": "EX",
+      "v": "WA13_E"
+     },
+     {
+      "c": "EY",
+      "v": "OC8_E(Pilot)"
+     },
+     {
+      "c": "EZ",
+      "v": "OC10_E(Pilot)"
+     },
+     {
+      "c": "F1",
+      "v": "LH_F"
+     },
+     {
+      "c": "F2",
+      "v": "NE1_F"
+     },
+     {
+      "c": "F3",
+      "v": "MI_LS_F"
+     },
+     {
+      "c": "F4",
+      "v": "MI1_F"
+     },
+     {
+      "c": "F5",
+      "v": "HG1_F"
+     },
+     {
+      "c": "F9",
+      "v": "(F9)HLI1_F"
+     },
+     {
+      "c": "FA",
+      "v": "(FA)UC1_F"
+     },
+     {
+      "c": "FB",
+      "v": "(FB)UC2_F"
+     },
+     {
+      "c": "L1",
+      "v": "OC10_E(Mobile Pilot)"
+     },
+     {
+      "c": "L2",
+      "v": "AZ1_E"
+     },
+     {
+      "c": "M1",
+      "v": "OC1_A"
+     },
+     {
+      "c": "M2",
+      "v": "OC2_A"
+     },
+     {
+      "c": "M3",
+      "v": "NJ1_A"
+     },
+     {
+      "c": "M4",
+      "v": "NJ2_A"
+     },
+     {
+      "c": "M5",
+      "v": "NJ3_A"
+     },
+     {
+      "c": "M6",
+      "v": "NJ4_A"
+     },
+     {
+      "c": "M7",
+      "v": "NJ5_A"
+     },
+     {
+      "c": "M8",
+      "v": "NJ6_A"
+     },
+     {
+      "c": "M9",
+      "v": "TVB3_A(Pilot)"
+     },
+     {
+      "c": "MA",
+      "v": "OC4_A(Mobile)"
+     },
+     {
+      "c": "MB",
+      "v": "NJ9_A"
+     },
+     {
+      "c": "MC",
+      "v": "OC9_A"
+     },
+     {
+      "c": "MD",
+      "v": "AZ1_A"
+     },
+     {
+      "c": "ME",
+      "v": "TVB5_A"
+     },
+     {
+      "c": "N1",
+      "v": "MI2_F(ESS)"
+     },
+     {
+      "c": "N2",
+      "v": "(N2)MI_LS2_F(ESS)"
+     },
+     {
+      "c": "P1",
+      "v": "OC4_P"
+     },
+     {
+      "c": "P2",
+      "v": "OC5_P"
+     },
+     {
+      "c": "P3",
+      "v": "(N/A)OC_ESS"
+     },
+     {
+      "c": "P4",
+      "v": "NA1_P"
+     },
+     {
+      "c": "P5",
+      "v": "MI3_P"
+     },
+     {
+      "c": "P6",
+      "v": "OC2_P"
+     },
+     {
+      "c": "P7",
+      "v": "WA10_P"
+     },
+     {
+      "c": "P8",
+      "v": "WA11_P"
+     },
+     {
+      "c": "P9",
+      "v": "NB1_P"
+     },
+     {
+      "c": "PA",
+      "v": "WA12_P"
+     },
+     {
+      "c": "PB",
+      "v": "HP_P"
+     },
+     {
+      "c": "PC",
+      "v": "NB2_P"
+     },
+     {
+      "c": "PD",
+      "v": "NJ3_P"
+     },
+     {
+      "c": "PE",
+      "v": "OC9_P"
+     },
+     {
+      "c": "PF",
+      "v": "NE2_P"
+     },
+     {
+      "c": "PG",
+      "v": "MI4_P"
+     },
+     {
+      "c": "PH",
+      "v": "LH_P"
+     },
+     {
+      "c": "PI",
+      "v": "MI4_P(ESS)"
+     },
+     {
+      "c": "PJ",
+      "v": "MI3_P2"
+     },
+     {
+      "c": "PK",
+      "v": "OC9_P2"
+     },
+     {
+      "c": "PL",
+      "v": "WA11_P(ESS)"
+     },
+     {
+      "c": "PN",
+      "v": "MI_AZ_ESS"
+     },
+     {
+      "c": "S2",
+      "v": "OC5_A(ESS)"
+     },
+     {
+      "c": "S3",
+      "v": "NJ2_A(ESS)"
+     },
+     {
+      "c": "S4",
+      "v": "NB1_A(ESS)"
+     },
+     {
+      "c": "S5",
+      "v": "NJ4_A(ESS)"
+     },
+     {
+      "c": "S6",
+      "v": "(N/A)NJ ESS Elec #2"
+     },
+     {
+      "c": "S7",
+      "v": "NB ESS Assy Bldg#2"
+     },
+     {
+      "c": "S8",
+      "v": "MI2_A(ESS)"
+     },
+     {
+      "c": "S9",
+      "v": "WA3_A(ESS)"
+     },
+     {
+      "c": "SA",
+      "v": "(SA)MI_LS2_A(ESS)"
+     },
+     {
+      "c": "VF_AE",
+      "v": "GM UC2_A"
+     },
+     {
+      "c": "VF_AG",
+      "v": "ST NE1_A"
+     },
+     {
+      "c": "VF_AH",
+      "v": "VF MI_LS_A"
+     },
+     {
+      "c": "VF_AJ",
+      "v": "HD LH_A"
+     },
+     {
+      "c": "VF_PF",
+      "v": "VF NE2_P"
+     },
+     {
+      "c": "VT",
+      "v": "VT temp building"
+     },
+     {
+      "c": "W2",
+      "v": "(N/A)NJ Mobile Bldg#6"
+     },
+     {
+      "c": "ALL",
+      "v": "ALL"
+     },
+     {
+      "c": "A1",
+      "v": "OC4_A"
+     },
+     {
+      "c": "A2",
+      "v": "OC5_A"
+     },
+     {
+      "c": "A9",
+      "v": "OC3_A"
+     },
+     {
+      "c": "AF",
+      "v": "OC8_A"
+     },
+     {
+      "c": "E5",
+      "v": "OC4_E"
+     },
+     {
+      "c": "E6",
+      "v": "OC5_E"
+     },
+     {
+      "c": "EG",
+      "v": "OC3_E(Pilot)"
+     },
+     {
+      "c": "EY",
+      "v": "OC8_E(Pilot)"
+     },
+     {
+      "c": "P1",
+      "v": "OC4_P"
+     },
+     {
+      "c": "P2",
+      "v": "OC5_P"
+     },
+     {
+      "c": "P6",
+      "v": "OC2_P"
+     },
+     {
+      "c": "ALL",
+      "v": "ALL"
+     },
+     {
+      "c": "A1",
+      "v": "OC4_A"
+     },
+     {
+      "c": "A2",
+      "v": "OC5_A"
+     },
+     {
+      "c": "A3",
+      "v": "NA1_A"
+     },
+     {
+      "c": "A4",
+      "v": "MI1_A"
+     },
+     {
+      "c": "A5",
+      "v": "WA1_A"
+     },
+     {
+      "c": "A6",
+      "v": "WA3_A"
+     },
+     {
+      "c": "A7",
+      "v": "WA5_A"
+     },
+     {
+      "c": "A8",
+      "v": "NB1_A"
+     },
+     {
+      "c": "A9",
+      "v": "OC3_A"
+     },
+     {
+      "c": "AA",
+      "v": "NB2_A"
+     },
+     {
+      "c": "AC",
+      "v": "WA8_A"
+     },
+     {
+      "c": "AF",
+      "v": "OC8_A"
+     },
+     {
+      "c": "AH",
+      "v": "MI_LS_A"
+     },
+     {
+      "c": "AI",
+      "v": "(N/A)(AI)MI2_A"
+     },
+     {
+      "c": "AL",
+      "v": "OC10_A"
+     },
+     {
+      "c": "AM",
+      "v": "OC10_A(Pilot)"
+     },
+     {
+      "c": "E5",
+      "v": "OC4_E"
+     },
+     {
+      "c": "E6",
+      "v": "OC5_E"
+     },
+     {
+      "c": "E8",
+      "v": "(N/A)Nanjing Automotive Bldg 1"
+     },
+     {
+      "c": "E9",
+      "v": "MI1_E"
+     },
+     {
+      "c": "EA",
+      "v": "NA2_E"
+     },
+     {
+      "c": "EB",
+      "v": "WA2_E"
+     },
+     {
+      "c": "EC",
+      "v": "NB1_E"
+     },
+     {
+      "c": "ED",
+      "v": "WA4_E"
+     },
+     {
+      "c": "EF",
+      "v": "NB2_E"
+     },
+     {
+      "c": "EG",
+      "v": "OC3_E(Pilot)"
+     },
+     {
+      "c": "EJ",
+      "v": "WA8_E"
+     },
+     {
+      "c": "ES",
+      "v": "(N/A)(ES)MI2_E"
+     },
+     {
+      "c": "ET",
+      "v": "MI_LS_E"
+     },
+     {
+      "c": "EY",
+      "v": "OC8_E(Pilot)"
+     },
+     {
+      "c": "EZ",
+      "v": "OC10_E(Pilot)"
+     },
+     {
+      "c": "F3",
+      "v": "MI_LS_F"
+     },
+     {
+      "c": "F4",
+      "v": "MI1_F"
+     },
+     {
+      "c": "N2",
+      "v": "(N2)MI_LS2_F(ESS)"
+     },
+     {
+      "c": "P1",
+      "v": "OC4_P"
+     },
+     {
+      "c": "P2",
+      "v": "OC5_P"
+     },
+     {
+      "c": "P4",
+      "v": "NA1_P"
+     },
+     {
+      "c": "P5",
+      "v": "MI3_P"
+     },
+     {
+      "c": "P6",
+      "v": "OC2_P"
+     },
+     {
+      "c": "P7",
+      "v": "WA10_P"
+     },
+     {
+      "c": "P8",
+      "v": "WA11_P"
+     },
+     {
+      "c": "P9",
+      "v": "NB1_P"
+     },
+     {
+      "c": "PA",
+      "v": "WA12_P"
+     },
+     {
+      "c": "PB",
+      "v": "HP_P"
+     },
+     {
+      "c": "PC",
+      "v": "NB2_P"
+     },
+     {
+      "c": "PE",
+      "v": "OC9_P"
+     },
+     {
+      "c": "PG",
+      "v": "MI4_P"
+     },
+     {
+      "c": "PJ",
+      "v": "MI3_P2"
+     },
+     {
+      "c": "SA",
+      "v": "(SA)MI_LS2_A(ESS)"
+     }
+    ],
+    "disp": [
+     "ALL",
+     "OC4_A",
+     "OC5_A",
+     "OC3_A",
+     "OC8_A",
+     "OC4_E",
+     "OC5_E",
+     "OC3_E(Pilot)",
+     "OC8_E(Pilot)",
+     "OC4_P",
+     "OC5_P",
+     "OC2_P"
+    ],
+    "editing": true
+   },
+   "exCtx": {
+    "DIVISION_ID": "81"
+   }
+  }
+ },
+ "combos": [
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"PlantSiteByFactoryEEOperation\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"ElectrodePostOperCode\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 9,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "POST_OPER_LT",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "OP01",
+     "v": "Taping"
+    },
+    {
+     "c": "OP02",
+     "v": "CTIC"
+    },
+    {
+     "c": "OP03",
+     "v": "Heat treatment"
+    },
+    {
+     "c": "OP04",
+     "v": "Tandem press"
+    },
+    {
+     "c": "OP05",
+     "v": "General"
+    },
+    {
+     "c": "OP06",
+     "v": "CTIC/Heat treatment"
+    },
+    {
+     "c": "OP00",
+     "v": "-"
+    },
+    {
+     "c": "OP04",
+     "v": "Tandem press"
+    },
+    {
+     "c": "OP05",
+     "v": "General"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"PlantSiteByFactoryEEOperation\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"MyDivision\",\"mnuId\":\"SSP0024\"}",
+   "status": 200,
+   "n": 8,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "81",
+     "v": "81 Automotive Battery"
+    },
+    {
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
+    },
+    {
+     "c": "82",
+     "v": "82 ESS Battery"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"SSP0024_MY_DIVISION_CODE\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 8,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "81",
+     "v": "81"
+    },
+    {
+     "c": "40",
+     "v": "40"
+    },
+    {
+     "c": "82",
+     "v": "82"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"ElectrodePackageType\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 3,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "BX",
+     "v": "Box"
+    },
+    {
+     "c": "SC",
+     "v": "Steelcrate"
+    },
+    {
+     "c": "SR",
+     "v": "Steelrack"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"DomExpTypeCode\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "DOM",
+     "v": "DOM"
+    },
+    {
+     "c": "EXP",
+     "v": "EXP"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"SSP0024_BUILDING_BY_PLANTSITE_ALL\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 123,
+   "keys": [
+    "CODE",
+    "SORT_NO",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "ALL",
+     "v": "ALL"
+    },
+    {
+     "c": "A1",
+     "v": "OC4_A"
+    },
+    {
+     "c": "A2",
+     "v": "OC5_A"
+    },
+    {
+     "c": "A3",
+     "v": "NA1_A"
+    },
+    {
+     "c": "A4",
+     "v": "MI1_A"
+    },
+    {
+     "c": "A5",
+     "v": "WA1_A"
+    },
+    {
+     "c": "A6",
+     "v": "WA3_A"
+    },
+    {
+     "c": "A7",
+     "v": "WA5_A"
+    },
+    {
+     "c": "A8",
+     "v": "NB1_A"
+    },
+    {
+     "c": "A9",
+     "v": "OC3_A"
+    },
+    {
+     "c": "AA",
+     "v": "NB2_A"
+    },
+    {
+     "c": "AB",
+     "v": "UC1_A"
+    },
+    {
+     "c": "AC",
+     "v": "WA8_A"
+    },
+    {
+     "c": "AD",
+     "v": "HLI1_A"
+    },
+    {
+     "c": "AE",
+     "v": "UC2_A"
+    },
+    {
+     "c": "AF",
+     "v": "OC8_A"
+    },
+    {
+     "c": "AG",
+     "v": "NE1_A"
+    },
+    {
+     "c": "AH",
+     "v": "MI_LS_A"
+    },
+    {
+     "c": "AI",
+     "v": "(N/A)(AI)MI2_A"
+    },
+    {
+     "c": "AJ",
+     "v": "LH_A"
+    },
+    {
+     "c": "AK",
+     "v": "HG1_A"
+    },
+    {
+     "c": "AL",
+     "v": "OC10_A"
+    },
+    {
+     "c": "AM",
+     "v": "OC10_A(Pilot)"
+    },
+    {
+     "c": "B2",
+     "v": "(B2)AZ1_F"
+    },
+    {
+     "c": "E1",
+     "v": "청주 소형1동 전극"
+    },
+    {
+     "c": "E2",
+     "v": "OC1_E"
+    },
+    {
+     "c": "E3",
+     "v": "OC2_E"
+    },
+    {
+     "c": "E4",
+     "v": "OC3_E"
+    },
+    {
+     "c": "E5",
+     "v": "OC4_E"
+    },
+    {
+     "c": "E6",
+     "v": "OC5_E"
+    },
+    {
+     "c": "E7",
+     "v": "NJ5_E"
+    },
+    {
+     "c": "E8",
+     "v": "(N/A)Nanjing Automotive Bldg 1"
+    },
+    {
+     "c": "E9",
+     "v": "MI1_E"
+    },
+    {
+     "c": "EA",
+     "v": "NA2_E"
+    },
+    {
+     "c": "EB",
+     "v": "WA2_E"
+    },
+    {
+     "c": "EC",
+     "v": "NB1_E"
+    },
+    {
+     "c": "ED",
+     "v": "WA4_E"
+    },
+    {
+     "c": "EE",
+     "v": "NJ7_E"
+    },
+    {
+     "c": "EF",
+     "v": "NB2_E"
+    },
+    {
+     "c": "EG",
+     "v": "OC3_E(Pilot)"
+    },
+    {
+     "c": "EH",
+     "v": "NJ1_E"
+    },
+    {
+     "c": "EI",
+     "v": "UC1_E"
+    },
+    {
+     "c": "EJ",
+     "v": "WA8_E"
+    },
+    {
+     "c": "EK",
+     "v": "NJ8_E"
+    },
+    {
+     "c": "EL",
+     "v": "NJ9_E"
+    },
+    {
+     "c": "EM",
+     "v": "TVB3_E(Pilot)"
+    },
+    {
+     "c": "EN",
+     "v": "HLI1_E"
+    },
+    {
+     "c": "EO",
+     "v": "UC2_E"
+    },
+    {
+     "c": "EP",
+     "v": "OC4_E(Mobile)"
+    },
+    {
+     "c": "EQ",
+     "v": "NE1_E"
+    },
+    {
+     "c": "ER",
+     "v": "OC9_E"
+    },
+    {
+     "c": "ES",
+     "v": "(N/A)(ES)MI2_E"
+    },
+    {
+     "c": "ET",
+     "v": "MI_LS_E"
+    },
+    {
+     "c": "EU",
+     "v": "LH_E"
+    },
+    {
+     "c": "EV",
+     "v": "HG2_A"
+    },
+    {
+     "c": "EW",
+     "v": "MI2_E(ESS)"
+    },
+    {
+     "c": "EX",
+     "v": "WA13_E"
+    },
+    {
+     "c": "EY",
+     "v": "OC8_E(Pilot)"
+    },
+    {
+     "c": "EZ",
+     "v": "OC10_E(Pilot)"
+    },
+    {
+     "c": "F1",
+     "v": "LH_F"
+    },
+    {
+     "c": "F2",
+     "v": "NE1_F"
+    },
+    {
+     "c": "F3",
+     "v": "MI_LS_F"
+    },
+    {
+     "c": "F4",
+     "v": "MI1_F"
+    },
+    {
+     "c": "F5",
+     "v": "HG1_F"
+    },
+    {
+     "c": "F9",
+     "v": "(F9)HLI1_F"
+    },
+    {
+     "c": "FA",
+     "v": "(FA)UC1_F"
+    },
+    {
+     "c": "FB",
+     "v": "(FB)UC2_F"
+    },
+    {
+     "c": "L1",
+     "v": "OC10_E(Mobile Pilot)"
+    },
+    {
+     "c": "L2",
+     "v": "AZ1_E"
+    },
+    {
+     "c": "M1",
+     "v": "OC1_A"
+    },
+    {
+     "c": "M2",
+     "v": "OC2_A"
+    },
+    {
+     "c": "M3",
+     "v": "NJ1_A"
+    },
+    {
+     "c": "M4",
+     "v": "NJ2_A"
+    },
+    {
+     "c": "M5",
+     "v": "NJ3_A"
+    },
+    {
+     "c": "M6",
+     "v": "NJ4_A"
+    },
+    {
+     "c": "M7",
+     "v": "NJ5_A"
+    },
+    {
+     "c": "M8",
+     "v": "NJ6_A"
+    },
+    {
+     "c": "M9",
+     "v": "TVB3_A(Pilot)"
+    },
+    {
+     "c": "MA",
+     "v": "OC4_A(Mobile)"
+    },
+    {
+     "c": "MB",
+     "v": "NJ9_A"
+    },
+    {
+     "c": "MC",
+     "v": "OC9_A"
+    },
+    {
+     "c": "MD",
+     "v": "AZ1_A"
+    },
+    {
+     "c": "ME",
+     "v": "TVB5_A"
+    },
+    {
+     "c": "N1",
+     "v": "MI2_F(ESS)"
+    },
+    {
+     "c": "N2",
+     "v": "(N2)MI_LS2_F(ESS)"
+    },
+    {
+     "c": "P1",
+     "v": "OC4_P"
+    },
+    {
+     "c": "P2",
+     "v": "OC5_P"
+    },
+    {
+     "c": "P3",
+     "v": "(N/A)OC_ESS"
+    },
+    {
+     "c": "P4",
+     "v": "NA1_P"
+    },
+    {
+     "c": "P5",
+     "v": "MI3_P"
+    },
+    {
+     "c": "P6",
+     "v": "OC2_P"
+    },
+    {
+     "c": "P7",
+     "v": "WA10_P"
+    },
+    {
+     "c": "P8",
+     "v": "WA11_P"
+    },
+    {
+     "c": "P9",
+     "v": "NB1_P"
+    },
+    {
+     "c": "PA",
+     "v": "WA12_P"
+    },
+    {
+     "c": "PB",
+     "v": "HP_P"
+    },
+    {
+     "c": "PC",
+     "v": "NB2_P"
+    },
+    {
+     "c": "PD",
+     "v": "NJ3_P"
+    },
+    {
+     "c": "PE",
+     "v": "OC9_P"
+    },
+    {
+     "c": "PF",
+     "v": "NE2_P"
+    },
+    {
+     "c": "PG",
+     "v": "MI4_P"
+    },
+    {
+     "c": "PH",
+     "v": "LH_P"
+    },
+    {
+     "c": "PI",
+     "v": "MI4_P(ESS)"
+    },
+    {
+     "c": "PJ",
+     "v": "MI3_P2"
+    },
+    {
+     "c": "PK",
+     "v": "OC9_P2"
+    },
+    {
+     "c": "PL",
+     "v": "WA11_P(ESS)"
+    },
+    {
+     "c": "PN",
+     "v": "MI_AZ_ESS"
+    },
+    {
+     "c": "S2",
+     "v": "OC5_A(ESS)"
+    },
+    {
+     "c": "S3",
+     "v": "NJ2_A(ESS)"
+    },
+    {
+     "c": "S4",
+     "v": "NB1_A(ESS)"
+    },
+    {
+     "c": "S5",
+     "v": "NJ4_A(ESS)"
+    },
+    {
+     "c": "S6",
+     "v": "(N/A)NJ ESS Elec #2"
+    },
+    {
+     "c": "S7",
+     "v": "NB ESS Assy Bldg#2"
+    },
+    {
+     "c": "S8",
+     "v": "MI2_A(ESS)"
+    },
+    {
+     "c": "S9",
+     "v": "WA3_A(ESS)"
+    },
+    {
+     "c": "SA",
+     "v": "(SA)MI_LS2_A(ESS)"
+    },
+    {
+     "c": "VF_AE",
+     "v": "GM UC2_A"
+    },
+    {
+     "c": "VF_AG",
+     "v": "ST NE1_A"
+    },
+    {
+     "c": "VF_AH",
+     "v": "VF MI_LS_A"
+    },
+    {
+     "c": "VF_AJ",
+     "v": "HD LH_A"
+    },
+    {
+     "c": "VF_PF",
+     "v": "VF NE2_P"
+    },
+    {
+     "c": "VT",
+     "v": "VT temp building"
+    },
+    {
+     "c": "W2",
+     "v": "(N/A)NJ Mobile Bldg#6"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SSP0024\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "40",
+     "v": "Mobility & IT Battery"
+    },
+    {
+     "c": "81",
+     "v": "Automotive Battery"
+    },
+    {
+     "c": "81_HD",
+     "v": "Automotive Battery(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "Automotive Battery(HG)"
+    },
+    {
+     "c": "81_HM",
+     "v": "Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "Automotive Battery(ST)"
+    },
+    {
+     "c": "81_UC",
+     "v": "Automotive Battery(UC)"
+    },
+    {
+     "c": "82",
+     "v": "ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "Electrode"
+    },
+    {
+     "c": "EE_HD",
+     "v": "Electrode(HD)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "Electrode(HG)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "Electrode(HM)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "Electrode(ST)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "Electrode(UC)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"PlantSiteByFactoryEEOperation\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\"}",
+   "status": 200,
+   "n": 7,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "PLANT_ID",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "HQ07-E",
+     "v": "LGESOC Elec HQ07"
+    },
+    {
+     "c": "HQ11-E",
+     "v": "OC_2 Auto Elec-Electrode"
+    },
+    {
+     "c": "MI00-E",
+     "v": "LGESMI Elec MI00"
+    },
+    {
+     "c": "MI02-E",
+     "v": "MI_LS Auto Elec-Electrode"
+    },
+    {
+     "c": "NA00-E",
+     "v": "LGESNA Elec NA00"
+    },
+    {
+     "c": "NB01-E",
+     "v": "LGESNB Electrode-Electrode NB01"
+    },
+    {
+     "c": "WA00-E",
+     "v": "LGESWA Elec WA00"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"PlantSiteByFactoryEEOperation\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 7,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "PLANT_ID",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "HQ07-E",
+     "v": "LGESOC Elec HQ07"
+    },
+    {
+     "c": "HQ11-E",
+     "v": "OC_2 Auto Elec-Electrode"
+    },
+    {
+     "c": "MI00-E",
+     "v": "LGESMI Elec MI00"
+    },
+    {
+     "c": "MI02-E",
+     "v": "MI_LS Auto Elec-Electrode"
+    },
+    {
+     "c": "NA00-E",
+     "v": "LGESNA Elec NA00"
+    },
+    {
+     "c": "NB01-E",
+     "v": "LGESNB Electrode-Electrode NB01"
+    },
+    {
+     "c": "WA00-E",
+     "v": "LGESWA Elec WA00"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"SSP0024_MY_DIVISION_CODE\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 8,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "81",
+     "v": "81"
+    },
+    {
+     "c": "40",
+     "v": "40"
+    },
+    {
+     "c": "82",
+     "v": "82"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"ElectrodePostOperCode\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 9,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "POST_OPER_LT",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "OP01",
+     "v": "Taping"
+    },
+    {
+     "c": "OP02",
+     "v": "CTIC"
+    },
+    {
+     "c": "OP03",
+     "v": "Heat treatment"
+    },
+    {
+     "c": "OP04",
+     "v": "Tandem press"
+    },
+    {
+     "c": "OP05",
+     "v": "General"
+    },
+    {
+     "c": "OP06",
+     "v": "CTIC/Heat treatment"
+    },
+    {
+     "c": "OP00",
+     "v": "-"
+    },
+    {
+     "c": "OP04",
+     "v": "Tandem press"
+    },
+    {
+     "c": "OP05",
+     "v": "General"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"ElectrodePackageType\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 3,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "BX",
+     "v": "Box"
+    },
+    {
+     "c": "SC",
+     "v": "Steelcrate"
+    },
+    {
+     "c": "SR",
+     "v": "Steelrack"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"DomExpTypeCode\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "DOM",
+     "v": "DOM"
+    },
+    {
+     "c": "EXP",
+     "v": "EXP"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"SSP0024_BUILDING_BY_PLANTSITE_ALL\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 50,
+   "keys": [
+    "CODE",
+    "SORT_NO",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "ALL",
+     "v": "ALL"
+    },
+    {
+     "c": "A1",
+     "v": "OC4_A"
+    },
+    {
+     "c": "A2",
+     "v": "OC5_A"
+    },
+    {
+     "c": "A3",
+     "v": "NA1_A"
+    },
+    {
+     "c": "A4",
+     "v": "MI1_A"
+    },
+    {
+     "c": "A5",
+     "v": "WA1_A"
+    },
+    {
+     "c": "A6",
+     "v": "WA3_A"
+    },
+    {
+     "c": "A7",
+     "v": "WA5_A"
+    },
+    {
+     "c": "A8",
+     "v": "NB1_A"
+    },
+    {
+     "c": "A9",
+     "v": "OC3_A"
+    },
+    {
+     "c": "AA",
+     "v": "NB2_A"
+    },
+    {
+     "c": "AC",
+     "v": "WA8_A"
+    },
+    {
+     "c": "AF",
+     "v": "OC8_A"
+    },
+    {
+     "c": "AH",
+     "v": "MI_LS_A"
+    },
+    {
+     "c": "AI",
+     "v": "(N/A)(AI)MI2_A"
+    },
+    {
+     "c": "AL",
+     "v": "OC10_A"
+    },
+    {
+     "c": "AM",
+     "v": "OC10_A(Pilot)"
+    },
+    {
+     "c": "E5",
+     "v": "OC4_E"
+    },
+    {
+     "c": "E6",
+     "v": "OC5_E"
+    },
+    {
+     "c": "E8",
+     "v": "(N/A)Nanjing Automotive Bldg 1"
+    },
+    {
+     "c": "E9",
+     "v": "MI1_E"
+    },
+    {
+     "c": "EA",
+     "v": "NA2_E"
+    },
+    {
+     "c": "EB",
+     "v": "WA2_E"
+    },
+    {
+     "c": "EC",
+     "v": "NB1_E"
+    },
+    {
+     "c": "ED",
+     "v": "WA4_E"
+    },
+    {
+     "c": "EF",
+     "v": "NB2_E"
+    },
+    {
+     "c": "EG",
+     "v": "OC3_E(Pilot)"
+    },
+    {
+     "c": "EJ",
+     "v": "WA8_E"
+    },
+    {
+     "c": "ES",
+     "v": "(N/A)(ES)MI2_E"
+    },
+    {
+     "c": "ET",
+     "v": "MI_LS_E"
+    },
+    {
+     "c": "EY",
+     "v": "OC8_E(Pilot)"
+    },
+    {
+     "c": "EZ",
+     "v": "OC10_E(Pilot)"
+    },
+    {
+     "c": "F3",
+     "v": "MI_LS_F"
+    },
+    {
+     "c": "F4",
+     "v": "MI1_F"
+    },
+    {
+     "c": "N2",
+     "v": "(N2)MI_LS2_F(ESS)"
+    },
+    {
+     "c": "P1",
+     "v": "OC4_P"
+    },
+    {
+     "c": "P2",
+     "v": "OC5_P"
+    },
+    {
+     "c": "P4",
+     "v": "NA1_P"
+    },
+    {
+     "c": "P5",
+     "v": "MI3_P"
+    },
+    {
+     "c": "P6",
+     "v": "OC2_P"
+    },
+    {
+     "c": "P7",
+     "v": "WA10_P"
+    },
+    {
+     "c": "P8",
+     "v": "WA11_P"
+    },
+    {
+     "c": "P9",
+     "v": "NB1_P"
+    },
+    {
+     "c": "PA",
+     "v": "WA12_P"
+    },
+    {
+     "c": "PB",
+     "v": "HP_P"
+    },
+    {
+     "c": "PC",
+     "v": "NB2_P"
+    },
+    {
+     "c": "PE",
+     "v": "OC9_P"
+    },
+    {
+     "c": "PG",
+     "v": "MI4_P"
+    },
+    {
+     "c": "PJ",
+     "v": "MI3_P2"
+    },
+    {
+     "c": "SA",
+     "v": "(SA)MI_LS2_A(ESS)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"PlantSiteByFactoryEEOperation\",\"divisionId\":\"''\",\"mnuId\":\"SSP0024\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"ElectrodePostOperCode\",\"segment1\":\"''\",\"mnuId\":\"SSP0024\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 9,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "POST_OPER_LT",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "OP01",
+     "v": "Taping"
+    },
+    {
+     "c": "OP02",
+     "v": "CTIC"
+    },
+    {
+     "c": "OP03",
+     "v": "Heat treatment"
+    },
+    {
+     "c": "OP04",
+     "v": "Tandem press"
+    },
+    {
+     "c": "OP05",
+     "v": "General"
+    },
+    {
+     "c": "OP06",
+     "v": "CTIC/Heat treatment"
+    },
+    {
+     "c": "OP00",
+     "v": "-"
+    },
+    {
+     "c": "OP04",
+     "v": "Tandem press"
+    },
+    {
+     "c": "OP05",
+     "v": "General"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"SSP0024_BUILDING_BY_PLANTSITE_ALL\",\"pPlantSiteId\":\"''\",\"divisionId\":\"''\",\"mnuId\":\"SSP0024\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 123,
+   "keys": [
+    "CODE",
+    "SORT_NO",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "ALL",
+     "v": "ALL"
+    },
+    {
+     "c": "A1",
+     "v": "OC4_A"
+    },
+    {
+     "c": "A2",
+     "v": "OC5_A"
+    },
+    {
+     "c": "A3",
+     "v": "NA1_A"
+    },
+    {
+     "c": "A4",
+     "v": "MI1_A"
+    },
+    {
+     "c": "A5",
+     "v": "WA1_A"
+    },
+    {
+     "c": "A6",
+     "v": "WA3_A"
+    },
+    {
+     "c": "A7",
+     "v": "WA5_A"
+    },
+    {
+     "c": "A8",
+     "v": "NB1_A"
+    },
+    {
+     "c": "A9",
+     "v": "OC3_A"
+    },
+    {
+     "c": "AA",
+     "v": "NB2_A"
+    },
+    {
+     "c": "AB",
+     "v": "UC1_A"
+    },
+    {
+     "c": "AC",
+     "v": "WA8_A"
+    },
+    {
+     "c": "AD",
+     "v": "HLI1_A"
+    },
+    {
+     "c": "AE",
+     "v": "UC2_A"
+    },
+    {
+     "c": "AF",
+     "v": "OC8_A"
+    },
+    {
+     "c": "AG",
+     "v": "NE1_A"
+    },
+    {
+     "c": "AH",
+     "v": "MI_LS_A"
+    },
+    {
+     "c": "AI",
+     "v": "(N/A)(AI)MI2_A"
+    },
+    {
+     "c": "AJ",
+     "v": "LH_A"
+    },
+    {
+     "c": "AK",
+     "v": "HG1_A"
+    },
+    {
+     "c": "AL",
+     "v": "OC10_A"
+    },
+    {
+     "c": "AM",
+     "v": "OC10_A(Pilot)"
+    },
+    {
+     "c": "B2",
+     "v": "(B2)AZ1_F"
+    },
+    {
+     "c": "E1",
+     "v": "청주 소형1동 전극"
+    },
+    {
+     "c": "E2",
+     "v": "OC1_E"
+    },
+    {
+     "c": "E3",
+     "v": "OC2_E"
+    },
+    {
+     "c": "E4",
+     "v": "OC3_E"
+    },
+    {
+     "c": "E5",
+     "v": "OC4_E"
+    },
+    {
+     "c": "E6",
+     "v": "OC5_E"
+    },
+    {
+     "c": "E7",
+     "v": "NJ5_E"
+    },
+    {
+     "c": "E8",
+     "v": "(N/A)Nanjing Automotive Bldg 1"
+    },
+    {
+     "c": "E9",
+     "v": "MI1_E"
+    },
+    {
+     "c": "EA",
+     "v": "NA2_E"
+    },
+    {
+     "c": "EB",
+     "v": "WA2_E"
+    },
+    {
+     "c": "EC",
+     "v": "NB1_E"
+    },
+    {
+     "c": "ED",
+     "v": "WA4_E"
+    },
+    {
+     "c": "EE",
+     "v": "NJ7_E"
+    },
+    {
+     "c": "EF",
+     "v": "NB2_E"
+    },
+    {
+     "c": "EG",
+     "v": "OC3_E(Pilot)"
+    },
+    {
+     "c": "EH",
+     "v": "NJ1_E"
+    },
+    {
+     "c": "EI",
+     "v": "UC1_E"
+    },
+    {
+     "c": "EJ",
+     "v": "WA8_E"
+    },
+    {
+     "c": "EK",
+     "v": "NJ8_E"
+    },
+    {
+     "c": "EL",
+     "v": "NJ9_E"
+    },
+    {
+     "c": "EM",
+     "v": "TVB3_E(Pilot)"
+    },
+    {
+     "c": "EN",
+     "v": "HLI1_E"
+    },
+    {
+     "c": "EO",
+     "v": "UC2_E"
+    },
+    {
+     "c": "EP",
+     "v": "OC4_E(Mobile)"
+    },
+    {
+     "c": "EQ",
+     "v": "NE1_E"
+    },
+    {
+     "c": "ER",
+     "v": "OC9_E"
+    },
+    {
+     "c": "ES",
+     "v": "(N/A)(ES)MI2_E"
+    },
+    {
+     "c": "ET",
+     "v": "MI_LS_E"
+    },
+    {
+     "c": "EU",
+     "v": "LH_E"
+    },
+    {
+     "c": "EV",
+     "v": "HG2_A"
+    },
+    {
+     "c": "EW",
+     "v": "MI2_E(ESS)"
+    },
+    {
+     "c": "EX",
+     "v": "WA13_E"
+    },
+    {
+     "c": "EY",
+     "v": "OC8_E(Pilot)"
+    },
+    {
+     "c": "EZ",
+     "v": "OC10_E(Pilot)"
+    },
+    {
+     "c": "F1",
+     "v": "LH_F"
+    },
+    {
+     "c": "F2",
+     "v": "NE1_F"
+    },
+    {
+     "c": "F3",
+     "v": "MI_LS_F"
+    },
+    {
+     "c": "F4",
+     "v": "MI1_F"
+    },
+    {
+     "c": "F5",
+     "v": "HG1_F"
+    },
+    {
+     "c": "F9",
+     "v": "(F9)HLI1_F"
+    },
+    {
+     "c": "FA",
+     "v": "(FA)UC1_F"
+    },
+    {
+     "c": "FB",
+     "v": "(FB)UC2_F"
+    },
+    {
+     "c": "L1",
+     "v": "OC10_E(Mobile Pilot)"
+    },
+    {
+     "c": "L2",
+     "v": "AZ1_E"
+    },
+    {
+     "c": "M1",
+     "v": "OC1_A"
+    },
+    {
+     "c": "M2",
+     "v": "OC2_A"
+    },
+    {
+     "c": "M3",
+     "v": "NJ1_A"
+    },
+    {
+     "c": "M4",
+     "v": "NJ2_A"
+    },
+    {
+     "c": "M5",
+     "v": "NJ3_A"
+    },
+    {
+     "c": "M6",
+     "v": "NJ4_A"
+    },
+    {
+     "c": "M7",
+     "v": "NJ5_A"
+    },
+    {
+     "c": "M8",
+     "v": "NJ6_A"
+    },
+    {
+     "c": "M9",
+     "v": "TVB3_A(Pilot)"
+    },
+    {
+     "c": "MA",
+     "v": "OC4_A(Mobile)"
+    },
+    {
+     "c": "MB",
+     "v": "NJ9_A"
+    },
+    {
+     "c": "MC",
+     "v": "OC9_A"
+    },
+    {
+     "c": "MD",
+     "v": "AZ1_A"
+    },
+    {
+     "c": "ME",
+     "v": "TVB5_A"
+    },
+    {
+     "c": "N1",
+     "v": "MI2_F(ESS)"
+    },
+    {
+     "c": "N2",
+     "v": "(N2)MI_LS2_F(ESS)"
+    },
+    {
+     "c": "P1",
+     "v": "OC4_P"
+    },
+    {
+     "c": "P2",
+     "v": "OC5_P"
+    },
+    {
+     "c": "P3",
+     "v": "(N/A)OC_ESS"
+    },
+    {
+     "c": "P4",
+     "v": "NA1_P"
+    },
+    {
+     "c": "P5",
+     "v": "MI3_P"
+    },
+    {
+     "c": "P6",
+     "v": "OC2_P"
+    },
+    {
+     "c": "P7",
+     "v": "WA10_P"
+    },
+    {
+     "c": "P8",
+     "v": "WA11_P"
+    },
+    {
+     "c": "P9",
+     "v": "NB1_P"
+    },
+    {
+     "c": "PA",
+     "v": "WA12_P"
+    },
+    {
+     "c": "PB",
+     "v": "HP_P"
+    },
+    {
+     "c": "PC",
+     "v": "NB2_P"
+    },
+    {
+     "c": "PD",
+     "v": "NJ3_P"
+    },
+    {
+     "c": "PE",
+     "v": "OC9_P"
+    },
+    {
+     "c": "PF",
+     "v": "NE2_P"
+    },
+    {
+     "c": "PG",
+     "v": "MI4_P"
+    },
+    {
+     "c": "PH",
+     "v": "LH_P"
+    },
+    {
+     "c": "PI",
+     "v": "MI4_P(ESS)"
+    },
+    {
+     "c": "PJ",
+     "v": "MI3_P2"
+    },
+    {
+     "c": "PK",
+     "v": "OC9_P2"
+    },
+    {
+     "c": "PL",
+     "v": "WA11_P(ESS)"
+    },
+    {
+     "c": "PN",
+     "v": "MI_AZ_ESS"
+    },
+    {
+     "c": "S2",
+     "v": "OC5_A(ESS)"
+    },
+    {
+     "c": "S3",
+     "v": "NJ2_A(ESS)"
+    },
+    {
+     "c": "S4",
+     "v": "NB1_A(ESS)"
+    },
+    {
+     "c": "S5",
+     "v": "NJ4_A(ESS)"
+    },
+    {
+     "c": "S6",
+     "v": "(N/A)NJ ESS Elec #2"
+    },
+    {
+     "c": "S7",
+     "v": "NB ESS Assy Bldg#2"
+    },
+    {
+     "c": "S8",
+     "v": "MI2_A(ESS)"
+    },
+    {
+     "c": "S9",
+     "v": "WA3_A(ESS)"
+    },
+    {
+     "c": "SA",
+     "v": "(SA)MI_LS2_A(ESS)"
+    },
+    {
+     "c": "VF_AE",
+     "v": "GM UC2_A"
+    },
+    {
+     "c": "VF_AG",
+     "v": "ST NE1_A"
+    },
+    {
+     "c": "VF_AH",
+     "v": "VF MI_LS_A"
+    },
+    {
+     "c": "VF_AJ",
+     "v": "HD LH_A"
+    },
+    {
+     "c": "VF_PF",
+     "v": "VF NE2_P"
+    },
+    {
+     "c": "VT",
+     "v": "VT temp building"
+    },
+    {
+     "c": "W2",
+     "v": "(N/A)NJ Mobile Bldg#6"
+    }
+   ],
+   "user": "minyonglee1"
+  }
+ ],
+ "gridCascade": [
+  {
+   "src": "DIVISION_ID",
+   "v": "81",
+   "tgt": "PLANT_SITE_ID",
+   "cands": [
+    "LGESOC Elec HQ07",
+    "OC_2 Auto Elec-Electrode",
+    "LGESMI Elec MI00",
+    "MI_LS Auto Elec-Electrode",
+    "LGESNA Elec NA00",
+    "LGESNB Electrode-Electrode NB01",
+    "LGESWA Elec WA00"
+   ],
+   "ctx": {
+    "DIVISION_ID": "81"
+   }
+  },
+  {
+   "src": "DIVISION_ID",
+   "v": "81_UC",
+   "tgt": "PLANT_SITE_ID",
+   "cands": [
+    "Ultium Cells (E) - Lordstown-Electrode",
+    "GM2_TN Auto Elec-Electrode"
+   ],
+   "ctx": {
+    "DIVISION_ID": "81_UC"
+   }
+  },
+  {
+   "src": "DIVISION_ID",
+   "v": "81_HM",
+   "tgt": "PLANT_SITE_ID",
+   "cands": [
+    "HM Auto Elec-Electrode"
+   ],
+   "ctx": {
+    "DIVISION_ID": "81_HM"
+   }
+  },
+  {
+   "src": "DIVISION_ID",
+   "v": "81_ST",
+   "tgt": "PLANT_SITE_ID",
+   "cands": [
+    "OT Auto Elec-Electrode"
+   ],
+   "ctx": {
+    "DIVISION_ID": "81_ST"
+   }
+  },
+  {
+   "src": "DIVISION_ID",
+   "v": "81_HD",
+   "tgt": "PLANT_SITE_ID",
+   "cands": [
+    "ES Honda JV Auto Elec-Electrode"
+   ],
+   "ctx": {
+    "DIVISION_ID": "81_HD"
+   }
+  },
+  {
+   "src": "DIVISION_ID",
+   "v": "81_HG",
+   "tgt": "PLANT_SITE_ID",
+   "cands": [
+    "ESHG Auto Elec-Electrode"
+   ],
+   "ctx": {
+    "DIVISION_ID": "81_HG"
+   }
+  }
+ ]
+}

@@ -42,6 +42,9 @@ interface State {
   checkedIds: string[];
   // ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(메인/서브 2회).
   staticColumns: StaticColumnsBySheet;
+  // 권한 Division 코드(MyDivisionInEE, EE 제외 콤보 결과). Division 미선택 시 setFilter 가 이 코드를
+  //   열거해 보내 권한 밖 division 노출을 막는다(아래 setFilter 주석). Form(콤보 소유)이 로드 후 올린다.
+  authDivisions: string[];
 }
 
 interface Action {
@@ -60,6 +63,8 @@ interface Action {
   setCheckedIds: (ids: string[]) => void;
   toggleCheck: (id: string) => void;
   fetchStaticColumns: () => Promise<void>;
+  // Form(콤보 소유)이 권한 Division 코드를 올린다 — setFilter 열거용.
+  setAuthDivisions: (codes: string[]) => void;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchCondition 패치(1회).
   restoreSearchConditions: () => Promise<void>;
 }
@@ -93,6 +98,7 @@ const initState: State = {
   rejectReason: '',
   checkedIds: [],
   staticColumns: emptyStaticColumns,
+  authDivisions: [],
 };
 
 // design 02 §2.5: Period 기본 = D-14 (from=오늘-14, to=오늘).
@@ -151,9 +157,18 @@ export const useShipmentChangeRequestConfirmSsp0003Store = createPersistedStoreW
       //   p_division_id / p_from_site / p_request_id / p_from_yyyymmdd / p_to_yyyymmdd /
       //   p_status / p_language / p_item_id / p_change_type
       const language = useSessionStore.getState().session.langCd ?? '';
+      // Division 미선택은 리터럴 'ALL' 이 아니라 권한 Division 코드(authDivisions)를 열거해 보낸다 — GET SP
+      //   P_SSP0003_GET_CHG_REQ_CONFIRM 은 P_DIVISION_ID='ALL' 이면 전체 division 을 반환하고 서버측 권한
+      //   재필터가 없어(ora.py 실측: DIVISION_ID IN(split) OR ='ALL', @sesUserId 권한절 없음), 'ALL' 을 보내면
+      //   권한 밖 division 의 변경요청까지 노출된다(인가 우회). AS-IS GetCheckedListValue 2-arg(cs:687)가
+      //   clbDivision 전체체크를 dtMyDivision(EE제외 권한) 코드로 펼친 것과 등가 — 권한 코드 열거로 IN(auth)
+      //   가드를 태운다(SCP0101/SCM0019 선례). 표시용 searchCondition.divisionIds 는 빈 배열 유지.
+      const pickedDivisions = c.divisionIds.filter(v => v && v !== ALL);
+      const divisionId =
+        pickedDivisions.length > 0 ? pickedDivisions.join(',') : get().authDivisions.join(',');
       state.filters = {
         [SHEETS.MAIN]: {
-          divisionId: joinOrAll(c.divisionIds), // p_division_id (다중 콤마, ALL->'ALL')
+          divisionId, // p_division_id (미선택=권한 division 코드 열거, 선택=선택값)
           fromSite: joinOrAll(c.fromSiteIds), // p_from_site (ALL->'ALL')
           requestId: multiLine(c.requestId), // p_request_id (Requestor)
           fromYyyymmdd: c.fromYyyymmdd, // p_from_yyyymmdd
@@ -224,6 +239,11 @@ export const useShipmentChangeRequestConfirmSsp0003Store = createPersistedStoreW
       state.checkedIds = state.checkedIds.includes(id)
         ? state.checkedIds.filter(x => x !== id)
         : [...state.checkedIds, id];
+    }),
+
+  setAuthDivisions: codes =>
+    set(state => {
+      if (state.authDivisions.join(',') !== codes.join(',')) state.authDivisions = codes;
     }),
 
   fetchStaticColumns: async () => {

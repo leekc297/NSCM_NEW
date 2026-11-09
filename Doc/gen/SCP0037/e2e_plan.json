@@ -1,0 +1,235 @@
+{
+  "menuId": "SCP0037",
+  "page": "OperationLt",
+  "feature": "supply",
+  "routePath": "supply/operation-lt",
+  "asisName": "OperationLT",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "ltOperation",
+      "label": "Operation",
+      "lbl": "LBL00009",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboLTOperation"
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlantSite"
+    },
+    {
+      "key": "itemIds",
+      "label": "Material",
+      "lbl": "LBL00021",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValid"
+    }
+  ],
+  "buttons": [],
+  "sheets": [
+    {
+      "name": "Operation LT",
+      "key": "OPERATION_LT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DIVISION_ID",
+        "INV_FLAG",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LT_DAY",
+        "LT_OPERATION",
+        "NICK_NAME",
+        "PLANT_SITE_ID",
+        "SCM_SITE_ID",
+        "SITE_ITEM_VALID_YN"
+      ],
+      "labels": [
+        "Created By",
+        "Creation Date",
+        "Division*",
+        "Inv Flag",
+        "Material*",
+        "Last Update Date",
+        "Last Updated By",
+        "LT(Day)*",
+        "LT Operation",
+        "Nick Name",
+        "Plant Site Code",
+        "Plant Site*",
+        "Site Item Valid"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Operation LT",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0037.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "Operation LT",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0037.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0037_GET_OPERATION_LT",
+      "sheet": "Operation LT",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0037_SAVE_OPERATION_LT",
+      "sheet": "Operation LT",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "biz:CommonData.YesOrNo"
+      ]
+    },
+    {
+      "name": "handleClbDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleClbDivision",
+      "target": "cboLTOperation",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainCell",
+      "target": "spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainComboSelChange",
+      "target": "spdMain",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainClipboardPasted",
+      "target": "spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainKeyPress",
+      "target": "spdMain",
+      "event": "KeyPress",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

@@ -28,6 +28,15 @@ interface Props {
 const ymd8 = (v: unknown): string =>
   (typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '').replace(/\D/g, '');
 
+// Bucket 콤보 CODE(BUCKET_TYPE_CODE: DAILY/WEEKLY/MONTHLY 풀워드) → store·피벗 로직이 쓰는 BUCKET_TYPE(D/W/M).
+//   콤보는 이미 배포된 lookup 을 재사용하되(COMBO.BUCKET), 이 화면의 isDynamicColumnVisible·태그(X_D_/X_W_/X_M_)
+//   는 단문자 D/W/M 기준이라 value 를 매핑한다(자매 shipment-plan 동일 패턴, 미매핑 시 콤보 빈표시+열토글 오작동).
+const BUCKET_CODE_TO_TYPE: Record<string, string> = {
+  DAILY: BUCKET_TYPE.DAILY,
+  WEEKLY: BUCKET_TYPE.WEEKLY,
+  MONTHLY: BUCKET_TYPE.MONTHLY,
+};
+
 /**
  * 조회조건(design 02) — cascade 3단: Division(필터)→Company(재조회)→{PlantSite,PlanDate}(재조회).
  * `useCascadeFields`(master 도메인 CASCADE_LEVELS 카탈로그)는 division/team/endCustomer 등
@@ -52,6 +61,7 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
   const isOpenSearchArea = useShipmentRequestElectrodeStore(state => state.isOpenSearchArea);
   const bohMode = useShipmentRequestElectrodeStore(state => state.bohMode);
   const setBohMode = useShipmentRequestElectrodeStore(state => state.setBohMode);
+  const setRealFlag = useShipmentRequestElectrodeStore(state => state.setRealFlag);
 
   const tabId = useTabid();
 
@@ -63,6 +73,21 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
     .filter(row => !sp.divisionId || String(row.DIVISION_ID ?? '') === sp.divisionId)
     .map(row => ({ label: String(row.NAME ?? ''), value: String(row.CODE ?? '') }));
 
+  // FE 후필터 CODE!='EE': 리터럴 'EE' 디비전만 제거(AS-IS SetChangedControl L532, SSP0023 동일).
+  //   EE_HD/EE_HG/EE_HM/EE_ST/EE_UC 전극 디비전은 유지.
+  const divisionOptions = (divisions ?? [])
+    .filter(r => String(r.CODE ?? '') !== 'EE')
+    .map(r => ({ label: String(r.NAME ?? ''), value: String(r.CODE ?? '') }));
+
+  // Division 기본값 = 콤보 첫 항목 자동선택(AS-IS SSP0022 는 MyDivision 목록 바인딩 후 첫 행, setListBox
+  //   SelectedIndex 미지정). store 초기값('')이 옵션에 없을 때만 setDivision 직접 호출(초기 로드라 dirty
+  //   confirm 불필요). session.div deviation 제거(2026-11-05).
+  const firstDivision = divisionOptions[0]?.value ?? '';
+  const hasDivision = divisionOptions.some(o => o.value === sp.divisionId);
+  useEffect(() => {
+    if (firstDivision && !hasDivision) setDivision(firstDivision);
+  }, [firstDivision, hasDivision, setDivision]);
+
   // Company→PlantSite/PlanDate: 재조회 방식(design 02 §3 — 서버가 division/company 파라미터로 필터).
   const plantSiteEnabled = !!sp.companyId;
   const [plantSites] = useTabComboQueries({
@@ -73,14 +98,22 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
     filters: [{ comboId: COMBO.PLAN_DATE, companyId: sp.companyId }],
     enabled: plantSiteEnabled,
   });
-  const [cellTypes] = useTabComboQueries({ filters: [COMBO.CELL_TYPE] });
+  const [cellTypes, buckets] = useTabComboQueries({ filters: [COMBO.CELL_TYPE, COMBO.BUCKET] });
 
-  // Bucket(cboBucketType) — Daily/Weekly/Monthly(D/W/M). 메인그리드 열 bucket 전환(재조회 없음, design 03 §2.2).
-  const bucketOptions = [
-    { label: 'Daily', value: BUCKET_TYPE.DAILY },
-    { label: 'Weekly', value: BUCKET_TYPE.WEEKLY },
-    { label: 'Monthly', value: BUCKET_TYPE.MONTHLY },
-  ];
+  // Bucket(cboBucketType) — AS-IS DM0003 이 감싼 lookup 'BUCKET_TYPE_CODE' 콤보 재사용(COMBO.BUCKET). 메인그리드
+  //   열 bucket 전환(재조회 없음, design 03 §2.2). 콤보 CODE(DAILY/WEEKLY/MONTHLY)를 D/W/M 로 매핑하고 라벨은
+  //   NAME 유지, 0건이면 하드코딩 폴백(자매 shipment-plan 패턴 동일).
+  const bucketOptions =
+    buckets && buckets.length > 0
+      ? (buckets ?? []).map(r => ({
+          label: String(r.NAME ?? r.CODE ?? ''),
+          value: BUCKET_CODE_TO_TYPE[String(r.CODE ?? '')] ?? String(r.CODE ?? ''),
+        }))
+      : [
+          { label: 'Daily', value: BUCKET_TYPE.DAILY },
+          { label: 'Weekly', value: BUCKET_TYPE.WEEKLY },
+          { label: 'Monthly', value: BUCKET_TYPE.MONTHLY },
+        ];
 
   const handleDivisionChange = (divisionId: string) => {
     // Division 변경 = 검색조건(Div·기간 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건). 편집중(dirty)이면
@@ -98,7 +131,12 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
   const handlePlanDateChange = (planDate: string) => {
     // PlanDate 선택 → 기간 자동 세팅(design 02 §3, 클라 파생 — 서버 재조회 없음). 콤보 FROM_DATE/TO_DATE 는
     //   하이픈 포함이라 ymd8 로 8자리 YYYYMMDD 정규화(PeriodRangePicker 표시 + 조회 SP 파라미터 요건).
-    const row = (planDates ?? []).find(r => String(r.CODE ?? '') === planDate);
+    const list = planDates ?? [];
+    const row = list.find(r => String(r.CODE ?? '') === planDate);
+    // bRealFlag(AS-IS cboPlanDate.SelectedIndex==0, cs:3743-3750) — 최신 Plan Date(index0) 선택 여부.
+    //   Plan_InforElectrode 콤보는 CURRENT_PLAN_DATE_YN='Y' 축이 index0 이다. 과거 Plan 선택 시 realFlag=false
+    //   → 메인 pivot 편집·ETA 팝업 차단(MSG00312) + 조회 P_REAL_FLAG='N'.
+    setRealFlag(list.length === 0 || String(list[0].CODE ?? '') === planDate);
     setSearchParams({
       planDate,
       fromYyyymmdd: ymd8(row?.FROM_DATE),
@@ -149,14 +187,7 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
               render={() => (
                 <CustomDropdown
                   value={sp.divisionId}
-                  // FE 후필터 CODE!='EE': 리터럴 'EE' 디비전만 제거(AS-IS SetChangedControl L532, SSP0023 동일).
-                  //   EE_HD/EE_HG/EE_HM/EE_ST/EE_UC 전극 디비전은 유지.
-                  options={(divisions ?? [])
-                    .filter(r => String(r.CODE ?? '') !== 'EE')
-                    .map(r => ({
-                      label: String(r.NAME ?? ''),
-                      value: String(r.CODE ?? ''),
-                    }))}
+                  options={divisionOptions}
                   onChange={(_, option) => handleDivisionChange(option)}
                 />
               )}

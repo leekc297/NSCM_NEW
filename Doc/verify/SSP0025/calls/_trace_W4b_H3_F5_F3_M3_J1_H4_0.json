@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 399,
+  "at": "2026-11-09T02:06:48.437Z",
+  "user": "minyonglee1",
+  "test": "W4b H3·F5·F3·M3·J1·H4"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 17,
+  "dur": 335,
+  "at": "2026-11-09T02:06:52.208Z",
+  "user": "minyonglee1",
+  "test": "W4b H3·F5·F3·M3·J1·H4"
+ }
+]

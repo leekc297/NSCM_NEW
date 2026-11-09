@@ -22,6 +22,7 @@ import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ExcelUploadModal } from './components/ExcelUploadModal';
+import { BodItemRouteModal, type BodItemReturn } from './components/modals/BodItemRouteModal';
 import { ShipmentRequestPackDetailGrid } from './components/ShipmentRequestPackDetailGrid';
 import { ShipmentRequestPackDetailSearch } from './components/ShipmentRequestPackDetailSearch';
 import { ShipmentRequestPackForm } from './components/ShipmentRequestPackForm';
@@ -134,6 +135,10 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openExcelUpload, setOpenExcelUpload] = useState(false);
   // Request Detail MODEL_ID 셀 더블클릭 대상 행 — Model 팝업(검색조건 동일, 행 FROM_SITE 기준) 오픈 상태.
   const [modelCellRow, setModelCellRow] = useState<RequestDetailRow | null>(null);
+  // Cell Biz 메인 그리드 신규행 Model 셀 더블클릭 대상 행 — AS-IS cellTypeImage Item 팝업(GAP-G 해소).
+  const [cellModelRow, setCellModelRow] = useState<CellRow | null>(null);
+  // Cell Biz 메인 그리드 신규행 Trans Mode 셀 더블클릭 대상 행 — BOD 팝업(DMF0045 파리티, 2026-11-04).
+  const [bodPopupRow, setBodPopupRow] = useState<CellRow | null>(null);
   // 활성 spdMain 시트를 SHEETS enum 키로(ActiveMainSheet 문자열 ↔ SHEETS enum 구분) — measure 메타 인덱싱용.
   const activeSheetKey = activeMainSheet === 'pack' ? SHEETS.PACK : SHEETS.CELL;
 
@@ -142,15 +147,18 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
   const canEdit = hasButton('EDIT');
 
   // Cell Biz 탭 권한 게이트(design 01 R1, AS-IS Form_Load cs:267/338) — LookupCommon 'PGM_AUTH_ID' 의
-  //   CODE=SSP0026 행 NAME(허용 그룹명)에 내 그룹(groupId/groups)이 포함될 때만 Cell Biz 탭을 노출한다.
+  //   PROGRAM_ID=SSP0026 행 AUTH_ID(허용 그룹명)에 내 그룹(groupId/groups)이 포함될 때만 Cell Biz 탭을 노출한다.
   //   AS-IS 는 drPgmAuthId(CODE='SSP0026' AND NAME=NowGroupID) 존재 시에만 AddSheet(shtCell). 허용행 0건이면 비노출.
+  //   주의: /api/admin/lookup 실측 응답 필드는 PROGRAM_ID/AUTH_ID 다(AS-IS LookupCommon 의 CODE/NAME 아님,
+  //   2026-11-04 네트워크 실측). 종전 r.CODE/r.NAME 참조는 항상 undefined → allowed 공란 → 탭이 누구에게도
+  //   안 뜨던 버그였다. 필드명을 실측값으로 바로잡아 허용 그룹 사용자에게 Cell Biz 탭을 노출한다.
   const [pgmAuthLookup] = useTabLookupQueries({ filters: [{ lookupType: 'PGM_AUTH_ID' }] });
   const sessionGroupId = useSessionStore(s => s.session.groupId);
   const sessionGroups = useSessionStore(s => s.session.groups);
   const canSeeCellBiz = useMemo(() => {
     const allowed = (pgmAuthLookup ?? [])
-      .filter(r => String(r.CODE) === MENU_ID)
-      .map(r => String(r.NAME));
+      .filter(r => String((r as { PROGRAM_ID?: unknown }).PROGRAM_ID) === MENU_ID)
+      .map(r => String((r as { AUTH_ID?: unknown }).AUTH_ID));
     if (allowed.length === 0) return false;
     const mine = new Set([sessionGroupId, ...(sessionGroups ?? [])].filter(Boolean));
     return allowed.some(name => mine.has(name));
@@ -198,15 +206,16 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
     () => ({ ...searchParams, fromYyyymmdd2: '', toYyyymmdd2: '' }),
     [searchParams]
   );
-  const periodInitRef = useRef(false);
+  // 기간 기본값 적용 — 비어 있을 때만 채운다(사용자 입력·F6 복원값은 덮지 않는다). 과거의 1회 가드(ref)를
+  //   제거해 F10(resetConditionOnClient) 으로 조회조건이 초기화돼 기간이 비워지면 다시 Plan 기본값으로
+  //   되돌아오게 한다(2026-11-04 사용자 요청 — F10 직후 화면이 "fresh-open" 기본값으로 복귀). 빈값 가드가
+  //   사용자/복원값 보존을 그대로 담보하므로 searchParams 변화로 재실행돼도 멱등하다(채워진 뒤엔 no-op).
   useEffect(() => {
-    if (periodInitRef.current) return;
     const row = planPeriod?.[0] as Record<string, string> | undefined;
     if (!row) return;
     const from = String(row.FROM_DATE ?? '').replace(/-/g, '');
     const to = String(row.TO_DATE ?? '').replace(/-/g, '');
     if (from.length !== 8 || to.length !== 8) return;
-    periodInitRef.current = true; // 1회만 — 이후 사용자/F6 복원값을 덮지 않는다
     if (!searchParams.fromYyyymmdd) setSearchParams({ fromYyyymmdd: from, toYyyymmdd: to });
     if (!searchParams.fromYyyymmdd2) setSearchParams({ fromYyyymmdd2: from, toYyyymmdd2: to });
   }, [planPeriod, searchParams, setSearchParams]);
@@ -387,6 +396,39 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     setModelCellRow(row);
+  };
+
+  // Cell Biz 메인 그리드 신규행 Model 셀 더블클릭 → Item 팝업(AS-IS SpdMain_CellDoubleClick Cell 분기
+  //   cs:3848-3909). AS-IS 와 동일하게 From Site/To Site 가 모두 채워진 신규행에서만 열고(각각 MSG00098→
+  //   문구 동일 MSG01126 재매핑), 선택 품번을 그 행 MODEL_ID 에 반영한다.
+  const handleCellModelDblClick = (row: CellRow) => {
+    const rec = row as unknown as Record<string, string | undefined>;
+    const selectFirst = (term: string) =>
+      setAlert({ type: 'alert', content: t('MSG01126', '_First, select {0}.').replace('{0}', term) });
+    if (!String(rec.FROM_SITE ?? '').trim()) {
+      void selectFirst(t('LBL00022', 'From Site'));
+      return;
+    }
+    if (!String(rec.TO_SITE ?? '').trim()) {
+      void selectFirst(t('LBL00023', 'To Site'));
+      return;
+    }
+    setCellModelRow(row);
+  };
+
+  // Cell Biz 메인 그리드 신규행 Trans Mode 셀 더블클릭 → BOD 팝업(DMF0045 파리티). SCP0030 BOD 팝업은
+  //   division/itemId 로 조회하므로 Model(MODEL_ID) 이 선행돼야 한다 — 미설정이면 MSG00098(→문구 동일
+  //   MSG01126) 로 Model 선택을 먼저 유도한다(DMF0045 canOpenBodPopup 전제와 동형).
+  const handleBodCellDblClick = (row: CellRow) => {
+    const rec = row as unknown as Record<string, string | undefined>;
+    if (!String(rec.MODEL_ID ?? '').trim()) {
+      void setAlert({
+        type: 'alert',
+        content: t('MSG01126', '_First, select {0}.').replace('{0}', t('LBL00669', 'Model')),
+      });
+      return;
+    }
+    setBodPopupRow(row);
   };
 
   // AS-IS FindData_BOD(cs:4132) — TR_MODE/INCOTERMS 변경·Model 선택 시 행의 Div/From/To/Model 로
@@ -778,6 +820,10 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey
         hotkeyConfig={hotkeyConfig}
         searchParam={conditionSaveParam}
+        // F10(조회조건 초기화) 직후 화면 조회조건도 즉시 기본값으로 되돌린다(사용자 요청 2026-11-04).
+        //   프레임워크 기본(false)은 서버 저장(개인화)분만 지우므로, 한 번 눌러 화면이 바로 초기화되도록
+        //   opt-in 한다(자매 SSP0003/confirm 동일). staticColumns·visibleMeasures 는 MotherStore 가 보존.
+        resetConditionOnClient
         customButtons={customButtons}
       />
       <PanelGroup className={styles.bodyPanelGroup} orientation='vertical'>
@@ -820,6 +866,8 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
                   confirmDay={confirmDayCell}
                   comboParams={gridComboParams}
                   onFocus={() => setActiveGrid('spdMain')}
+                  onCellModelDblClick={handleCellModelDblClick}
+                  onBodCellDblClick={handleBodCellDblClick}
                 />
               </TabItem>,
                 ]
@@ -924,6 +972,52 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
           scmSiteId: modelCellRow?.FROM_SITE ?? '',
           projectCode: '',
           itemId: modelCellRow?.MODEL_ID ?? '',
+        }}
+      />
+      {/* Cell Biz 메인 그리드 신규행 Model 셀 더블클릭 → Item 팝업(AS-IS SpdMain_CellDoubleClick Cell 분기,
+          SSP0026_ItembyDivisionPopup). 행 FROM_SITE 기준 조회, 선택 품번을 그 행 MODEL_ID 에 반영. */}
+      <ModelByDivisionPopup
+        open={!!cellModelRow}
+        onClose={() => setCellModelRow(null)}
+        onSelect={selected => {
+          if (cellModelRow) {
+            // DMF0045 ITEM 모달셀 파리티 — 선택 품번으로 Model + Nick Name 2컬럼을 함께 채운다
+            //   (ModelByDivisionPopup 은 nickName 을 반환한다, ShipmentRequestModals setSelectedValue 동형).
+            const rec = cellModelRow as unknown as Record<string, unknown>;
+            rec.MODEL_ID = selected.itemId;
+            rec.NICK_NAME = selected.nickName ?? '';
+            gridRefCell.current?.invalidate();
+          }
+          setCellModelRow(null);
+        }}
+        params={{
+          divisionId: searchParams.divisionId,
+          scmSiteId: (cellModelRow as unknown as { FROM_SITE?: string } | null)?.FROM_SITE ?? '',
+          projectCode: '',
+          itemId: (cellModelRow as unknown as { MODEL_ID?: string } | null)?.MODEL_ID ?? '',
+        }}
+      />
+      {/* Cell Biz 메인 그리드 신규행 Trans Mode 셀 더블클릭 → BOD 팝업(DMF0045 파리티, SCP0030 백엔드).
+          선택(단건/다건 첫 건) 시 그 행 From/To/Incoterms/TrMode/BOD_ID 를 일괄 세팅한다. */}
+      <BodItemRouteModal
+        open={!!bodPopupRow}
+        modalClose={() => setBodPopupRow(null)}
+        preSearchParams={{
+          divisionId: searchParams.divisionId,
+          itemId: (bodPopupRow as unknown as { MODEL_ID?: string } | null)?.MODEL_ID ?? '',
+        }}
+        setSelectedValue={(selected: BodItemReturn[]) => {
+          const pick = selected[0];
+          if (bodPopupRow && pick) {
+            const rec = bodPopupRow as unknown as Record<string, unknown>;
+            rec.FROM_SITE = pick.c_FROM_SITE;
+            rec.TO_SITE = pick.c_TO_SITE;
+            rec.INCOTERMS = pick.c_INCOTERMS;
+            rec.TR_MODE = pick.c_TRANSPORT_MODE;
+            rec.BOD_ID = pick.c_BOD_ID;
+            gridRefCell.current?.invalidate();
+          }
+          setBodPopupRow(null);
         }}
       />
     </>

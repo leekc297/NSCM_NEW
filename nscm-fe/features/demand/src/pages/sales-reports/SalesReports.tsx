@@ -612,18 +612,23 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     insert: hasButton('INSERT') && searched.dataType === DATA_TYPE.ETC ? handleInsert : false,
-    // Data Type 을 Cutoff 로 고르는 즉시 Delete 를 숨긴다 (사용자 지정 2026-09-04).
-    //   판정 원천은 조회 결과(searched)가 아니라 입력 중인 조회조건 sc — 조회를 누르기 전,
-    //   콤보에서 고르는 순간 반응해야 한다(위 insert 는 searched 기준이라 시점이 다르다).
+    // Delete 노출은 Insert 와 같은 시점·기준 — 조회한(searched) Data Type 이 ETC 일 때만 (사용자 지정 2026-11-05).
+    //   handleDelete 도 searched ETC 가 아니면 무동작이라, 종전 sc 기준(2026-09-04 — 콤보에서 Cutoff 를
+    //   고르는 즉시 숨김)은 ALL 로 조회했거나 콤보만 바꾸고 재조회 안 한 상태에서 눌러도 안 되는 버튼을 보여 줬다.
     //   false = 버튼 미렌더 (아래 save 주석 참조).
-    delete: hasButton('DELETE') && sc.dataType !== DATA_TYPE.CUTOFF ? handleDelete : false,
+    delete: hasButton('DELETE') && searched.dataType === DATA_TYPE.ETC ? handleDelete : false,
     // 금지: 저장 중이라고 `false` 를 넘기지 말 것 (2026-08-21 결함 정정).
     //   `HotkeyConfig` 의 `false` 는 "비활성"이 아니라 **버튼 미렌더**다 — 공용
     //   `SubTitle.tsx` 가 `{buttonActions.save === false || (<Button .../>)}` 로 그린다.
     //   그래서 저장을 누르면 Save 버튼이 사라졌다가 끝나면 다시 나타났다.
     //   연타는 `savingRef` 가 동기로 막고(handleSave 진입 가드), 진행 표시는
     //   ProgressIndicator 오버레이가 한다 (REQ:CHAT-20260820-17).
-    save: hasButton('SAVE') || hasButton('SAVE_CF') ? () => void handleSave() : false,
+    // 시트 단위 판정 — 메뉴 단위 hasButton('SAVE') 는 titleSet/textbox 등 다른 시트 SAVE 와 합쳐져
+    //   group menu 에서 MDF Reports SAVE 를 꺼도 버튼이 남는다.
+    save:
+      hasButton('SAVE', SHEETS.MAIN) || hasButton('SAVE_CF', SHEETS.MAIN)
+        ? () => void handleSave()
+        : false,
     manual: false,
     upload: false,
   };

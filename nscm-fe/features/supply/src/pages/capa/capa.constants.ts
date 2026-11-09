@@ -53,8 +53,8 @@ export const BUCKET_OPTIONS = [
 
 /**
  * 체크박스 5종 기본값(02 §4 실측): Loss=N / Line=Y / Tact=Y / Yield=Y / Empty=N.
- * Loss 는 조회조건 체크박스로 사용자 값 전송(cs:352 기본 N), Line/Tact/Yield 는 UI 없이 이 값 고정 전송.
- * GET_CAPA IN 파라미터 전용('Y'/'N') — 클라 행 토글 없음(03 Vis1~4 dead code 확정).
+ * 5종 모두 조회조건 체크박스로 사용자 값 전송(Line/Tact/Yield 는 2026-11-04 UI 복원 — 이 값은 초기 기본값).
+ * GET_CAPA IN 파라미터 전용('Y'/'N') — 클라 행 토글 없음(03 Vis1~4 dead code 확정, 재조회 시 행 생성 분기).
  */
 export const CHECK_DEFAULTS = {
   checkLoss: false,

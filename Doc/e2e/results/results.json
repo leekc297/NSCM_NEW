@@ -1,7 +1,18 @@
 {
   "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_trace",
+      "--grep",
+      "W4d",
+      "--workers",
+      "1"
+    ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
@@ -14,6 +25,61 @@
       "actualWorkers": 1
     },
     "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/e2e/results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
     "reporter": [
       [
         "list",
@@ -35,111 +101,40 @@
     ],
     "reportSlowTests": {
       "max": 5,
-      "threshold": 15000
+      "threshold": 300000
     },
-    "quiet": false,
-    "projects": [
-      {
-        "outputDir": "C:/Projects/NSCM/Doc/e2e/results/artifacts",
-        "repeatEach": 1,
-        "retries": 1,
-        "metadata": {},
-        "id": "chromium",
-        "name": "chromium",
-        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
-        "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
-        "timeout": 180000
-      }
-    ],
     "shard": null,
-    "updateSnapshots": "missing",
-    "version": "1.49.1",
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
     "workers": 1,
     "webServer": null
   },
   "suites": [
     {
-      "title": "DMF0082.smoke.spec.ts",
-      "file": "DMF0082.smoke.spec.ts",
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "DMF0082 FcstNPrice_Mgmt 스모크 @smoke",
-          "file": "DMF0082.smoke.spec.ts",
-          "line": 8,
+          "title": "검증엔진 SCP0122 @trace",
+          "file": "_trace.spec.ts",
+          "line": 111,
           "column": 6,
           "specs": [
             {
-              "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
+              "title": "W4d 잔여 판정필요 실측",
               "ok": true,
               "tags": [
-                "smoke"
+                "trace"
               ],
               "tests": [
                 {
-                  "timeout": 600000,
+                  "timeout": 1800000,
                   "annotations": [
-                    {
-                      "type": "common",
-                      "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 239"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Sort(F3)(common) — 클릭 정상"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 0"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 5"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 5개 중 기간 키 0 (bucketType, divisionId, qtyYn, sumYn, versionType)"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 2개 재진입 후 그대로 복원"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 7개 유지"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'FcstPrice_20261105_110236.xlsx' 6773B"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Columns 컬럼 설정(common) — 설정 창 열림·닫힘(X)"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[NA] Manual(F1)(common) — 버튼 없음"
-                    },
-                    {
-                      "type": "commonsum",
-                      "description": "12/12 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 1"
-                    },
                     {
                       "type": "dberr",
                       "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
@@ -151,130 +146,29 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 83955,
+                      "duration": 195273,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-05T02:01:15.849Z",
+                      "startTime": "2026-11-06T22:41:10.618Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
                       "attachments": []
                     }
                   ],
                   "status": "expected"
                 }
               ],
-              "id": "cc80c3ccd65098aca97a-0efb12f8d92a38276812",
-              "file": "DMF0082.smoke.spec.ts",
-              "line": 111,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "SCP0084.smoke.spec.ts",
-      "file": "SCP0084.smoke.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "SCP0084 LongTermStock 스모크 @smoke",
-          "file": "SCP0084.smoke.spec.ts",
-          "line": 8,
-          "column": 6,
-          "specs": [
-            {
-              "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
-              "ok": true,
-              "tags": [
-                "smoke"
-              ],
-              "tests": [
-                {
-                  "timeout": 600000,
-                  "annotations": [
-                    {
-                      "type": "common",
-                      "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 2038"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Sort(F3)(common) — 클릭 정상"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 3"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 4개 유지"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] (저장 조회조건 복원)(common) — 테스트 전 저장값 3건 재저장 HTTP 200"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'LongTermStock_20261105_110333.xlsx' 368547B"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[NA] Manual(F1)(common) — 버튼 없음"
-                    },
-                    {
-                      "type": "commonsum",
-                      "description": "10/10 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "status": "passed",
-                      "duration": 48605,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-05T02:02:48.782Z",
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "d78240201136862a49e0-ffe9b702ec85cbdd7ecb",
-              "file": "SCP0084.smoke.spec.ts",
-              "line": 111,
+              "id": "61ae7fb993b6ecef23da-45c07522f76e3c27552e",
+              "file": "_trace.spec.ts",
+              "line": 1614,
               "column": 7
             }
           ]
@@ -284,9 +178,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-05T02:01:12.906Z",
-    "duration": 153533.814,
-    "expected": 2,
+    "startTime": "2026-11-06T22:41:08.001Z",
+    "duration": 201038.587,
+    "expected": 1,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

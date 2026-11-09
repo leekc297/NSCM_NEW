@@ -1,0 +1,173 @@
+{
+ "mid": "SCP0108",
+ "asis_id": "SCP0108",
+ "account": "minyonglee1",
+ "group": "ADMIN",
+ "results": [
+  {
+   "kind": "SEARCH",
+   "target": "Plan Month",
+   "label": "Plan Month",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 27,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtVersion 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Ver.",
+   "label": "Version",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 1,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — '필터 변수 filter 조립식 해석 불가: DBUtils.GetAndFilterString(new List<string>() { \"DIVISION_ID\", \"CODE\" }, new Lis'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Operation group",
+   "label": "Operation",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 3,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtOperation 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Site",
+   "label": "Site",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 4,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtSite 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Plant",
+   "label": "Plant",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 6,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtPlant 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Building",
+   "label": "Building",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 12,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtFactory 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Line",
+   "label": "Line",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 66,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtLine 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Operation",
+   "label": "Operation",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 7,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtOperation 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Bottleneck",
+   "label": "",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 2,
+   "asis_src": "UP_FX_GetCommonDataList_SCP Division @RefreshDivision (SCP0108_CAPA_LOB_Report.cs:986 ← SCP0108_CAPA_LOB_Report.cs:)",
+   "asis_n": 8,
+   "rep": "CODE",
+   "branches": 2,
+   "asis_only": [
+    "81",
+    "40",
+    "82",
+    "81_UC",
+    "81_HM",
+    "81_ST",
+    "81_HD",
+    "81_HG"
+   ],
+   "tobe_only": [
+    "Y",
+    "N"
+   ],
+   "asis_only_n": 8,
+   "tobe_only_n": 2,
+   "explain": {
+    "81": "설명 불가(원천 마스터 테이블 해석 실패)",
+    "40": "설명 불가(원천 마스터 테이블 해석 실패)",
+    "82": "설명 불가(원천 마스터 테이블 해석 실패)",
+    "81_UC": "설명 불가(원천 마스터 테이블 해석 실패)",
+    "81_HM": "설명 불가(원천 마스터 테이블 해석 실패)",
+    "81_ST": "설명 불가(원천 마스터 테이블 해석 실패)",
+    "81_HD": "설명 불가(원천 마스터 테이블 해석 실패)",
+    "81_HG": "설명 불가(원천 마스터 테이블 해석 실패)",
+    "Y": "설명 불가(원천 마스터 테이블 해석 실패)",
+    "N": "설명 불가(원천 마스터 테이블 해석 실패)"
+   },
+   "b4": "판정필요",
+   "why": "AS-IS 8건 vs TO-BE 2건 · 차이 10건 설명 불가: 81: 설명 불가(원천 마스터 테이블 해석 실패); 40: 설명 불가(원천 마스터 테이블 해석 실패); 82: 설명 불가(원천 마스터 테이블 해석 실패); 81_UC: 설명 불가(원천 마스터 테이블 해석 실패); 81_HM: 설명 불가(원천 마스터 테이블 해석 실패); 81_ST: 설명 불가(원천 마스터 테이블 해석 실패) · 분기 원천 2종 중 가장 가까운 원천 기준(분기 선택은 C2 행에서 판정)",
+   "b3": "PASS",
+   "b3_why": "원문 ORDER BY 있음·정렬 키 해석 불가 — AS-IS 반환 순서와 일치: TO-BE [] / AS-IS []",
+   "g7": "판정필요",
+   "g7_why": "CODE≠NAME 후보 8건이 TO-BE 표시 문구와 한 건도 안 맞음(데이터 차이 또는 다른 형식) · AS-IS 표시 NAME"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Line Type",
+   "label": "Line Type",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 9,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtElectrode 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "CASCADE",
+   "target": "Plan Month",
+   "label": "Plan Month",
+   "scenario": "상위 Division=40",
+   "tobe_n": 20,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtVersion 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "CASCADE",
+   "target": "Version",
+   "label": "Version",
+   "scenario": "상위 Division=40",
+   "tobe_n": 1,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — '필터 변수 filter 조립식 해석 불가: DBUtils.GetAndFilterString(new List<string>() { \"DIVISION_ID\", \"CODE\" }, new Lis'"
+  },
+  {
+   "kind": "CASCADE",
+   "target": "_plan_type",
+   "label": "Plant",
+   "scenario": "상위 Division=40",
+   "tobe_n": 3,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtPlant 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  }
+ ]
+}

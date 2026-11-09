@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 62,
+  "dur": 152,
+  "at": "2026-11-07T11:18:51.787Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"AMCOME782-A1-0A0\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 4,
+  "dur": 151,
+  "at": "2026-11-07T11:18:52.990Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"amcome782-a1-0a0\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 4,
+  "dur": 152,
+  "at": "2026-11-07T11:18:53.975Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"MCOME782-A1-0A\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 4,
+  "dur": 166,
+  "at": "2026-11-07T11:18:54.923Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"AMCOME782-A1-0A0,AMCOME782-A1-0K0\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 7,
+  "dur": 174,
+  "at": "2026-11-07T11:18:55.891Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 62,
+  "dur": 160,
+  "at": "2026-11-07T11:18:56.747Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ }
+]

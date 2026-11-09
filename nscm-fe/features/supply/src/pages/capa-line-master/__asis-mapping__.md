@@ -18,9 +18,9 @@
 | 5 | `SpdLevel3_CellDoubleClick` (1779) | 동일 (level=3) | 구현 |
 | 6 | `SpdLevel4_CellDoubleClick` (1797) | 동일 (level=4) | 구현 |
 | 7 | `cboDivision_SelectedIndexChanged` (1835) | `CapaLineMasterForm` Division 변경 → `setSearchCondition` → 페이지 조회조건 effect 의 **division 분기**: `clearAllTrackers()` + `clearFilters()`(5그리드·applied·drill 전부) + `fetchStaticColumns(새 division)`. AS-IS `FindData(1)` → `InitSpread(1~5)` 와 **범위 동일**. **즉시 재조회만 하지 않는다**(명시 Search 게이트, 2026-09-23 사용자 확정) | 구현(결정 반영) |
-| 8 | `rgrpSearchLevel_SelectedIndexChanged` (1845) | Product Group 변경 → 같은 effect 의 **product-group 분기**: `tracker4`·`tracker5` 만 clear 후 store `resetForProductGroup()` — **L4·L5 filter 만 삭제**하고 L1~L3 filter·drill(SITE/COMPANY/PLANT)·`applied.divisionId` 는 유지, `applied.shopGroupId` 만 교체, `drill` 의 `FACTORY_*` 만 제거. AS-IS `FindData(4,…)` → `case 4: InitSpread(4); InitSpread(5)`(cs:712~716) 와 **범위 동일**. 편집모드는 비우는 레벨(4·5)일 때만 해제하고 L1~L3 편집은 유지한다 — AS-IS `RefreshEditMode`(cs:1629~1636)가 `IsEditModes` dict 만 되돌리고 실제 저장 게이트 `IsLock`(cs:784)은 건드리지 않기 때문 | 구현(결정 반영) |
+| 8 | `rgrpSearchLevel_SelectedIndexChanged` (1845) | Product Group 변경 → 같은 effect 의 **product-group 분기**: `tracker4`·`tracker5` 만 clear 후 store `resetForProductGroup()` — **L4·L5 filter 만 삭제**하고 L1~L3 filter·drill(SITE/COMPANY/PLANT)·`applied.divisionId` 는 유지, `applied.shopGroupId` 만 교체, `drill` 의 `FACTORY_*` 만 제거. AS-IS `FindData(4,…)` → `case 4: InitSpread(4); InitSpread(5)`(cs:712~716) 와 **범위 동일**. 편집은 상시 가능(수정 모드 미이식 §11)이라 L1~L3 의 미저장 편집은 그대로 유지되고, 비우는 L4·L5 의 편집 마킹만 `tracker.clearChanges` 로 걷는다 | 구현(결정 반영) |
 | 9 | `DeleteButton` (358) | `handleDelete` — 가드 3 + 신규행('I')만 `GridAction.removeRow(grid, true)` | 구현 |
-| 10 | `EditButton` (462) | `handleEdit` → `store.toggleEditingLevel(activeLevel)` | 구현 |
+| 10 | `EditButton` (462) | **미이식** — AS-IS 수정 모드 토글(SwitchLock/IsLock 계열)은 전 화면 공통 제외(asis_to_tobe.md §11, 2026-09-23 사용자). TO-BE 는 EDIT 버튼 권한(`canEdit = hasButton('EDIT')`) 단일 축으로 상시 편집. 수정 버튼·`editingLevel` store 제거 | 미이식(§11) |
 | 11 | `InsertButton` (353) → `InsertRow` (1196) | `handleInsert` + `buildInsertRow` | 구현 |
 | 12 | `SpdLevel5_CellDoubleClick` (1816) | **재조회 없음**(AS-IS 도 ID 캐시만 하고 `FindData` 미호출). `canDrillDown` 이 level<5 로 차단 | 구현(무동작 재현) |
 | 13~17 | `spdAssign_Change` ×5 (1727, 그 외 동일 핸들러) | 공용 `EditTracker`(DataGrid wrapper)가 셀 변경을 `CRUD_TYPE='M'` 으로 마킹. AS-IS 본문은 가드 2건 후 전부 주석(1739~1740) | 구현(공용 대체) |
@@ -35,11 +35,11 @@
 | 1 | Delete `spreadLevel == null` (364) | `handleDelete` — `if (!grid) return` | 구현 |
 | 2 | Delete `ActiveSheet.RowCount == 0` (367) | `if (grid.rows.length === 0) return` | 구현 |
 | 3 | Delete `ActiveSheet.ActiveRow == null` (370) | `if (!grid.selectedRows?.length) return` | 구현 |
-| 4 | Edit `EditCnt == 'I' \|\| 'M'` (482) | `handleEdit` — 활성 그리드 source 에 `CRUD_TYPE` I/M 행 있으면 return | 구현 |
-| 5 | Edit `editCnt > 1` (498) | `store.toggleEditingLevel` — 다른 레벨이 편집중이면 무시(동시 1개) | 구현 |
+| 4 | Edit `EditCnt == 'I' \|\| 'M'` (482) | **미이식** — 수정 모드 토글 가드(§11 EditButton 미이식에 종속) | 미이식(§11) |
+| 5 | Edit `editCnt > 1` (498) | **미이식** — 동시 1개 편집모드 제약은 수정 모드 토글 전제라 제외(§11). 편집은 권한 있으면 전 레벨 상시 가능 | 미이식(§11) |
 | 6 | Change `spreadLevel == null` (1733) | 그리드별 핸들러라 sender 가 항상 존재 — 구조상 해소 | 해당없음 |
-| 7 | Change `spreadLevel.IsLock(SheetName)` (1736) | `beginningEdit` 게이트(`isCellEditable`)가 편집모드 아닌 시트의 셀 변경을 애초에 차단 | 구현 |
-| 8 | L1 dblClick `Rows.Count <= 0` (1745) | `canDrillDown(level, rowCount, editingLevel)` — rowCount>0 조건 | 구현 |
+| 7 | Change `spreadLevel.IsLock(SheetName)` (1736) | `beginningEdit` 게이트(`isCellEditable`)가 권한 없음/잠금 컬럼의 셀 변경을 애초에 차단 | 구현 |
+| 8 | L1 dblClick `Rows.Count <= 0` (1745) | `canDrillDown(level, rowCount)` — rowCount>0 조건 | 구현 |
 | 9 | L2 dblClick `Rows.Count <= 0` (1764) | 동일 | 구현 |
 | 10 | L3 dblClick `Rows.Count <= 0` (1781) | 동일 | 구현 |
 | 11 | L4 dblClick `Rows.Count <= 0` (1799) | 동일 | 구현 |
@@ -49,10 +49,10 @@
 
 | AS-IS | TO-BE | 상태 |
 |---|---|:--:|
-| `InsertRow` `spreadLevel.IsLock(SheetName) == false` (1202) | `handleInsert` — `editingLevel !== activeLevel` 이면 삽입 안 함(+ MSG00662 안내) | 구현 |
+| `InsertRow` `spreadLevel.IsLock(SheetName) == false` (1202) | `handleInsert` — 수정 모드 전제(§11 미이식) 대신 미조회(`!applied`)·부모 컨텍스트 미확정 시 삽입 안 함(+ MSG00662 안내) | 구현(§11 반영) |
 | `SaveData` `_si.ActiveSheet.Rows.Count <= 0` (782) | `handleSave` — dirty 0건이면 MSG00004 후 return | 구현 |
-| `SaveData` `_si.IsLock(SheetName) == false` (784) | `handleSave` — `editingLevel !== level` 이면 return | 구현 |
-| 드릴다운 `Columns[StringAction].Visible` (1748/1767/1784/1802) | `canDrillDown` — `editingLevel === level` 이면 억제 | 구현 |
+| `SaveData` `_si.IsLock(SheetName) == false` (784) | **미이식** — 수정 모드 가드(§11). dirty 수집은 CRUD 마킹행 기준이라 이 전제 불요 | 미이식(§11) |
+| 드릴다운 `Columns[StringAction].Visible` (1748/1767/1784/1802) | **미이식** — 수정 모드 시 드릴다운 억제축(§11). 편집은 셀 게이트가 담당, 드릴다운은 부모행 더블클릭으로 상시 가능 | 미이식(§11) |
 
 ---
 
@@ -75,12 +75,12 @@
 | R2 | `Freeze(0, 앵커)` ×5 (249/268/288/310/336) | 공용 `DataGrid`(`frozenColumns` 미지정 — admin `FIXED_FLAG` 로 위임) | **2026-10-13 gap-resolve iter-2 수정.** `Freeze` 2번째 인자는 개수이고 `AddActionTextBox` 가 0번에 숨김 Action 컬럼을 넣어 AS-IS 실효(화면상) 고정열은 5시트 전부 **0**이다(`.atlas/memory/grid-freeze-parity-fixed-flag-vs-prop.md`). `SCM_MST_SHEET_COLUMNS` `FIXED_Y` 도 전건 `'-'`(=0)라 **DB 변경 없이 화면의 `resolveFrozenColumns`/`FREEZE_ANCHOR_COLUMN` 를 제거**하는 것이 정합이다 — 이전엔 L1 앵커(`DIVISION_ID`)가 visible 이라 FE 가 index+1=1 로 오프바이원 계산해 그 컬럼을 시각적으로 고정시키고 있었다(CLAUDE.md §2 체크4 저촉, G33 재분류: R3 사용자승인→R1 코드 해소) | 구현 |
 | R3 | `VisibleTab(true)` ×5 + `VisibleAlternatingRow` (251/270/290/312/338/754) | `CapaLineMaster.tsx:459~487` 5그리드 정적 렌더(PanelGroup) + `CapaLineMasterLevelGrid.tsx:140` 레벨 캡션 | zebra·rowHeader 는 공용 DataGrid 기본값(hook #95/#108). 동적 show/hide 분기 0건 — design 01 §2 L1·L3 | 구현 |
 | R4 | `Query(ds)` (747) — 결과셋 바인딩 | `CapaLineMaster.tsx:103~137` `useTabProcQuery` ×5 → `:140~144` `rows{1..5}` → `CapaLineMasterLevelGrid.tsx:145` `itemsSource` | 시트별 독립 query. 응답 키 `o_rc1` 은 PKG 배포 후 `runtime-parity-gate` 재판정 대상(§10) | 구현 |
-| R5 | `LockColumn(0, max, true)` (748) — 조회 직후 전열 읽기전용 | `utils/capaLineMaster.editLock.ts:68` `if (editingLevel !== level) return false` | 조회 직후 `editingLevel=null` 이라 전열 false. `beginningEdit`(`CapaLineMasterLevelGrid.tsx:96`)·`pastingCell`(`:108`)·`formatItem`(`:81`) 이 같은 함수를 공유 | 구현 |
+| R5 | `LockColumn(0, max, true)` (748) — 조회 직후 전열 읽기전용 | `utils/capaLineMaster.editLock.ts` `if (!canEdit) return false`(기존행) | 수정 모드 토글 미이식(§11) — EDIT 권한 없으면 기존행 전열 false. `beginningEdit`(`CapaLineMasterLevelGrid.tsx`)·`pastingCell`·`formatItem` 이 같은 함수를 공유 | 구현(§11 반영) |
 | R6 | L1 SwitchLock + per-row LockRange (512~538, 11건) | `editLock.ts:50~72` `isCellEditable(1,…)` + `constants.ts:95` `LEVEL_ID_COLUMN[1]='SITE_ID'` / `:105` `LEVEL_NAME_COLUMN[1]='SITE_NAME'` / `:133~138` `ALWAYS_LOCKED_COLUMNS` | hook #130 — LockRange 컬럼 인덱스 상수 미이식, 컬럼명 축으로 의미 재현 | 구현 |
 | R7 | L2 동일 (544~567, 8건) | `editLock.ts:50~72` `isCellEditable(2,…)` + `constants.ts:96`/`:106` (`COMPANY_ID`/`COMPANY_NAME`) | 동일 함수의 레벨 파라미터 분기 — 레벨별 중복 코드 없음 | 구현 |
 | R8 | L3 동일 (573~596, 8건) | `editLock.ts:50~72` `isCellEditable(3,…)` + `constants.ts:97`/`:107` (`PLANT_ID`/`PLANT_NAME`) | 〃 | 구현 |
 | R9 | L4 동일 (602~625, 8건) | `editLock.ts:50~72` `isCellEditable(4,…)` + `constants.ts:98`/`:108` (`FACTORY_ID`/`FACTORY_NAME`) | 〃 | 구현 |
-| R10 | L5 동일 (631~660, 12건) | `editLock.ts:50~72` `isCellEditable(5,…)` + `:62` `isValidYnOfLevel5` + `constants.ts:99`/`:109` (`LINE_ID`/`LINE_NAME`) | `SHOP_GROUP_ID`·`DUMMY_YN` 은 `ALWAYS_LOCKED_COLUMNS` 라 편집모드에서도 잠금(cs:650/658) | 구현 |
+| R10 | L5 동일 (631~660, 12건) | `editLock.ts:50~72` `isCellEditable(5,…)` + `:62` `isValidYnOfLevel5` + `constants.ts:99`/`:109` (`LINE_ID`/`LINE_NAME`) | `SHOP_GROUP_ID`·`DUMMY_YN` 은 `ALWAYS_LOCKED_COLUMNS` 라 EDIT 권한이 있어도 잠금(cs:650/658) | 구현 |
 | R11 | `Insert()` + SORT_ORDER=Max+1 (1214) | `editLock.ts:88~95` `nextSortOrder(rows)` | 행 0건이면 1 — AS-IS `ds` 부재 시 1 과 동일(cs:1206~1212) | 구현 |
 | R12 | 공통 기본값 VALID_YN='Y', DUMMY_YN='Y' (1259~1262) | `editLock.ts:113~115` + `constants.ts:149~150` `INSERT_DEFAULT_VALID_YN`/`INSERT_DEFAULT_DUMMY_YN` | 신규행은 항상 dummy — 사람설계서 업무규칙 4 와 정합 | 구현 |
 | R13 | L1 신규행 DIVISION_ID + 잠금 (1267/1268) | `editLock.ts:103~125` `buildInsertRow(1,…)` + `constants.ts:115` `LEVEL_PARENT_KEYS[1]=[]` | L1 은 부모키가 없어 division 만 상속. `hasParentContext(1,…)` 는 빈 배열이라 항상 통과(AS-IS 동일) | 구현 |
@@ -126,10 +126,10 @@
 |---|---|:--:|
 | `usrPanel`(UsrConditionPanel, HidePanel) + `usrLayoutControl2` + `layoutControlGroup2` | `SearchArea`(`CapaLineMasterForm`) + `MainTitle.openSearchArea` 토글 | 구현 |
 | `cboDivision`(UsrCombo) + `Division` LayoutControlItem | `CustomDropdown` 단일선택 + `FormItem label=t('LBL00641')` | 구현 |
-| `usrLabel1`("Product Group") + `rgrpSearchLevel`(RadioGroup 3항목) | `FormItem label=t('LBL00088')` + `CustomDropdown` 단일선택 3옵션. **공용 RadioGroup 컴포넌트 부재로 드롭다운 매핑**(04 §확인필요) | 구현(컨트롤 대체) |
+| `usrLabel1`("Product Group") + `rgrpSearchLevel`(RadioGroup 3항목) | 하단 라디오 바 `CapaLineMasterProductGroupBar`(네이티브 radio 3옵션 E/A/P, L1~L3 / L4~L5 그리드 사이 — 2026-10-30 SearchArea 밖으로 분리). 라벨 `t('LBL00088')` | 구현(컨트롤 대체) |
 | `splitContainer1`(Horizontal, SplitterDistance=271) | `PanelGroup orientation='vertical'` 상/하 2분할 | 구현 |
 | `panel4/5/6` + `spdLevel1/2/3` | 상단 `PanelGroup orientation='horizontal'` 3분할 + `CapaLineMasterLevelGrid` ×3 | 구현 |
-| `panel1`(라디오바) | Product Group 을 조회영역(SearchArea)으로 이전(design 02 §5 TO-BE 매핑) — 하단 라디오바 없음 | 구현(위치 이동) |
+| `panel1`(라디오바) | 하단 라디오 바 `CapaLineMasterProductGroupBar`(L1~L3 / L4~L5 그리드 사이, 네이티브 radio) — AS-IS panel1 위치를 그대로 재현(2026-10-30 SearchArea 밖으로 분리) | 구현 |
 | `panel2/3` + `spdLevel4/5` | 하단 `PanelGroup orientation='horizontal'` 2분할 + 그리드 ×2 | 구현 |
 | 공통 툴바(Find/Insert/Delete/Edit/Save) | `SubTitle hotkeyConfig`(search/insert/delete/save) + `customButtons`(Edit) — 전부 `useTabBtnPermissions().hasButton()` 조건부 | 구현 |
 | `RefreshEnabled()` (1705) — 5그리드 항상 `Enabled=true` | 동적 enable 분기 없음(도입하지 않음) | 해당없음 |
@@ -202,5 +202,5 @@
 | COMMON:UC-03 | 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 (hook #132 §2-2) | 해당없음 — 이 화면은 Column/Measure 설정 UI 자체가 없다 | 공용 `DataGrid.tsx:713~716` 이 Column Settings·Save/Load/Reset Layout 컨텍스트 메뉴를 **`layoutKey` 지정 시에만** 만든다. `CapaLineMasterLevelGrid.tsx:141~150` 은 `layoutKey` 를 넘기지 않으므로 메뉴가 렌더되지 않는다. Measure 도 `SCM_MST_SHEET_MEASURE` 0행(pivot 없음, design 03 §2). 04 §4 "TitleSet 저장 후 복원 = 미해당" 과 동일 판정 | 해당없음 |
 | COMMON:UC-04 | CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WDG 표준) | `CapaLineMaster.tsx:345~351` 저장 성공 `setToast({type:'success', …MSG00672})` + `:377` 변경없음 `setToast({type:'error', …MSG00004})` | 저장 **실패**(`:316~322` HTTP/code) · **중복 99020**(`:333~339`) · 필수값 미입력(`:388~396`) · Division 미선택(`:193~199`) 은 CRUD 완료가 아니라 차단/에러라 `setAlert` 가 맞다(AS-IS GMessageBox 동일 의미) | 구현 |
 | COMMON:UC-05 | Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 (gridAction dataMap 승계) | `CapaLineMaster.tsx:439` `SubTitle excelFileName='CapaLineMaster'` → `SubTitle.tsx:185` `GridAction.excelDownload` → `gridAction.ts:257~281` dataMap 스냅샷(살아있는 `col.dataMap` 우선, columnGroups 폴백) | 이 화면 셀 콤보는 **1건**(Level5 `VALID_YN` → `YesOrNo`)이고, `SCM_ADM_CMBO_SQL_M` 본문이 `SELECT 'Y' AS CODE,'Y' AS NAME … UNION ALL 'N','N'`(ora.py 실측)라 **CODE=NAME** — Code/Name 드리프트가 구조적으로 발생하지 않는다. 나머지 46컬럼은 텍스트(AS-IS `AddTextColumn` 46건과 정합) | 구현 |
-| COMMON:UC-06 | Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 | 해당없음 — 텍스트 Key-in 조회조건 0건 | 조회조건 2건이 전부 단일선택 드롭다운이다(`CapaLineMasterForm.tsx:86~93` Division / `:104~112` Product Group). AS-IS 도 `cboDivision`(UsrCombo) + `rgrpSearchLevel`(RadioGroup) 뿐이라 콤마 다중입력 대상 텍스트박스가 없다(00 §1 #2·#15, 02 §1). 콤마 다중검색 요구 미해당 | 해당없음 |
+| COMMON:UC-06 | Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 | 해당없음 — 텍스트 Key-in 조회조건 0건 | 조회조건 2건 모두 단일선택이다 — Division 은 상단 SearchArea 드롭다운, Product Group 은 하단 라디오 바 `CapaLineMasterProductGroupBar`(네이티브 radio, 2026-10-30 SearchArea 밖으로 분리). AS-IS 도 `cboDivision`(UsrCombo) + `rgrpSearchLevel`(RadioGroup) 뿐이라 콤마 다중입력 대상 텍스트박스가 없다(00 §1 #2·#15, 02 §1). 콤마 다중검색 요구 미해당 | 해당없음 |
 | COMMON:UC-07 | 필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilterColumns) | `packages/shared/src/components/organisms/data-grid/DataGrid.tsx:1477~1479` `rebindFilterColumns(grid, getGridFilter())` — itemsSource 재적재로 끊어진 필터-컬럼 연결 복구. `CapaLineMasterLevelGrid.tsx:143` `gridFilterRef` 전달로 이 화면 5그리드 전부 경유 | 이 화면의 재조회 경로 3종(Search `CapaLineMaster.tsx:201` / 드릴다운 `useCapaLineMasterStore.ts:185~191` / 저장 후 `CapaLineMaster.tsx:355`)이 전부 `itemsSource` 참조 교체라 동일 복구 경로를 탄다 | 구현 |

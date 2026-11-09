@@ -115,12 +115,11 @@ export const CustomerModal = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // 단일 매치 자동선택+자동닫힘(AS-IS SCM0002_PlantCustomerbyDivisionPopup.cs FindData, cs:247-257).
-  useEffect(() => {
-    if (!open || loading || itemsSource.length !== 1) return;
-    pick(itemsSource[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemsSource, loading, open]);
+  // 단일매치 자동선택+자동닫힘 미이식(사용자 지시 2026-11-05) — AS-IS SCM0002_PlantCustomerby
+  //   DivisionPopup.cs FindData(cs:249-259)는 결과 1건이면 즉시 Close 하나, Form_Load 가 현재 셀값
+  //   (soldTo+shipTo)을 시드해 FindData 를 자동 실행하므로 값이 있는 셀을 다시 열면 바로 닫혀 수정이
+  //   불가능했다(AS-IS 잠재버그). TO-BE 는 자동닫힘을 제거하고, 선택은 항상 사용자 조작(행 더블클릭/
+  //   OK 버튼)으로만 확정한다.
 
   useEffect(() => {
     if (gridRef.current) attachRowNoHeader(gridRef.current, t(LBL.NO, '_No'));
@@ -133,6 +132,7 @@ export const CustomerModal = ({
       position='basic'
       open={open}
       handleClose={modalClose}
+      disableScale
       disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>

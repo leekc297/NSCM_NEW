@@ -92,6 +92,11 @@ export const DIVISION_CODE = {
   SMALL: '40',
   /** 원통형 UC — STOCK 계열 SP 분기 + `LINE_ID`/`BEFORE_DEGAS` 표시 */
   UC: '81_UC',
+  /**
+   * MKT FCST 신규행 필수검증에서 `PLANT_SITE_ID` 를 제외하는 division(cs:948, E20260901-000686).
+   * AS-IS 가 `== "82"` 리터럴로만 쓰고 업무명칭 매핑이 소스·설계 어디에도 없어 코드값으로 둔다.
+   */
+  DIV_82: '82',
 } as const;
 
 /** GM 사업부 집합 원천 — FE 화이트리스트 금지(hook #113). `useTabLookupQueries` 로 조회. */
@@ -333,7 +338,8 @@ export const DYNAMIC_COLUMNS: Record<TABS, Readonly<Record<string, DynamicColumn
  * 라벨 `*` 와 어긋나는 컬럼이 여럿이라(§6 U3) 메타 라벨 기반 검증으로 대체할 수 없다.
  */
 export const INSERT_REQUIRED_COLUMNS: Record<TABS, readonly string[]> = {
-  // division ≠ '40' 기준 10개. division == '40' 은 아래 MKT_FCST_REQUIRED_SMALL 로 대체.
+  // division ≠ '40'·≠ '82' 기준 10개. '40' 은 MKT_FCST_REQUIRED_SMALL, '82' 는
+  //   MKT_FCST_REQUIRED_82(PLANT_SITE_ID 제외) 로 대체(cs:929·938·948, E20260901-000686).
   [TABS.MKT_FCST]: [
     COL.PROJECT_CODE,
     COL.SCM_SITE_ID,
@@ -394,6 +400,23 @@ export const MKT_FCST_REQUIRED_SMALL: readonly string[] = [
   COL.ITEM_ID,
   COL.FCST_TYPE_NAME,
   COL.INCOTERMS,
+  COL.DUE_DATE,
+  COL.CHG_QTY,
+  COL.CHG_RSN,
+];
+
+/**
+ * MKT FCST division == '82' 전용 필수 9개 — `PLANT_SITE_ID` 만 제외(cs:948~955, E20260901-000686).
+ * 일반 목록과 달리 Plant Site 는 필수가 아니다. `CELL_PROD_SITE_ID` 는 유지하지만 82(비-40)행은
+ * Insert 시 `'-'` 가 강제로 채워져(cs:742 / workbench.insert.ts:50) 실제로는 막히지 않는다 — AS-IS 동일.
+ */
+export const MKT_FCST_REQUIRED_82: readonly string[] = [
+  COL.PROJECT_CODE,
+  COL.SCM_SITE_ID,
+  COL.ITEM_ID,
+  COL.FCST_TYPE_NAME,
+  COL.INCOTERMS,
+  COL.CELL_PROD_SITE_ID,
   COL.DUE_DATE,
   COL.CHG_QTY,
   COL.CHG_RSN,

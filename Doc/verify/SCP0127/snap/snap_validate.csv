@@ -1,0 +1,7 @@
+﻿key,kind,scope,status,missing,order,type_warn,extra,basis
+조회조건_Div_40,조회조건,Div 40,MISMATCH,,시각 순서 division > scmsite > type > stage > plangroup > modelnickname > active ≠ 기준표 division > plangroup > scmsite > stage > modelnickname > type > active,DOM 순서≠기준표(경고): Plan Group→SCM Site;Model/Nickname→Type,,
+버튼_Div_40,버튼,Div 40,OK,,,SEARCH: Search(F5) 는 조회영역(SearchArea) 안의 버튼 — SubTitle 버튼 바 스냅샷 대상 아님(조회조건 스냅샷에서 확인),,plan.json accounts[0].expectedBtns / menuBtnCodes(btn_auth) · buttons(AS-IS 메서드)
+헤더_PRECEDE_SAFETY_STOCK_DAY,헤더,PRECEDE / SAFETY STOCK DAY,OK,,,META 숨김(VISIBLE_FLAG=N · 설계 결정 확인): PLAN_GROUP_NAME;META 숨김(VISIBLE_FLAG=N · 설계 결정 확인): PRE_KEY_VALUES,,plan.json mainSheets[PRECEDE / SAFETY STOCK DAY].labels(AS-IS 헤더)
+팝업_Model_Nickname,팝업,Model/Nickname,NA,,,,,AS-IS 유래 기대 없음(팝업·화면샷) — 사람 확인
+화면샷_1920,화면샷,1920,NA,,,,,화면샷 — 사람 확인(NEW)
+화면샷_1366,화면샷,1366,NA,,,,,화면샷 — 사람 확인(NEW)

@@ -271,8 +271,10 @@ export const useMktFcstStore = createPersistedStoreWithTab<State & Action>(
         //   가 누락(undefined)될 수 있음 → initSearch 기본값 머지로 항상 완전한 조회조건 보장.
         //   (누락 시 j(undefined) 예외 → setFilter 중단 → stale filters 재사용 → SP NULL payload → ORA-00936 사고 차단)
         const c: SearchCondition = { ...initSearch, ...state.searchCondition };
-        // 멀티선택(^delim). 빈/미정의 배열 = 'ALL' (AS-IS 전체 조회 sentinel).
-        const j = (arr?: string[]): string => (!arr || arr.length === 0 ? 'ALL' : arr.join('^'));
+        // 멀티선택(',' 구분 — 다른 화면과 같은 규약, 2026-11-06). 빈/미정의 배열 = 'ALL' (AS-IS 전체 조회 sentinel).
+        //   조회 SP 는 ',' · '^' 둘 다 구분자로 자르고(REGEXP_SUBSTR '[^,^]+'), Team 은 ',' 만 본다
+        //   (REPLACE(P_TEAM_ID, ',', ''',''')) — '^' 로 보내면 Team 다중 선택이 그 분기에서 한 값으로 묶였다.
+        const j = (arr?: string[]): string => (!arr || arr.length === 0 ? 'ALL' : arr.join(','));
         state.filters = {
           // ── DMF0003_GET_MKT_FCST_DATA (22 IN, PROC_M SORT_ORD 순) ──────────────
           [SHEETS.MAIN]: {

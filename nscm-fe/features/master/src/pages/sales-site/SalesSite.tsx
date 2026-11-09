@@ -319,9 +319,13 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   (2026-10-14 리포트, DMF0005·DMF0007 2026-10-07 과 같은 조치). 조회는 종전대로 둔다(같은 두 화면과 동일).
   //   INSERT/DELETE 는 버튼 메타가 함께 등록돼야 보인다 — 배포 SQL
   //   _artifacts/_deploy_packages/DMF0004_BTN_INSERT_DELETE_20261014/ (site SAVE 보유 그룹에 동일 부여).
+  // Save 는 활성 그리드가 저장하는 시트의 SAVE 로 판정한다(handleSave 가 activeTab 시트로 보낸다).
+  //   메뉴 단위면 4개 시트 SAVE 가 합쳐져 group menu 에서 한 시트만 꺼도 버튼이 남는다.
+  //   INSERT/DELETE 는 site 시트에만 등록돼 있어 종전대로 메뉴 단위로 둔다.
+  const activeSheet = [SHEETS.SITE, SHEETS.CUSTOMER, SHEETS.LOCATION, SHEETS.BUCKET][activeTab];
   const hotkeyConfig: HotkeyConfig = {
     insert: hasButton('INSERT') ? handleInsert : false,
-    save: hasButton('SAVE') ? handleSave : false,
+    save: hasButton('SAVE', activeSheet) ? handleSave : false,
     delete: hasButton('DELETE') ? handleDelete : false,
     search: () => {
       setSiteFilters();

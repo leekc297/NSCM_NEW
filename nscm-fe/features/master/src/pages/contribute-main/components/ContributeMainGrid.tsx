@@ -370,6 +370,8 @@ export const ContributeMainGrid = ({
       //   기본 컬럼(부문~형태)의 2단 헤더 세로 병합이 깨진다(2026-10-20).
       allowMerging={AllowMerging.All}
       alternatingRowStep={0}
+      // 읽기전용 자동 잠금을 ContributeMain 시트 SAVE 권한으로 판정(메뉴 단위면 version SAVE 와 섞임)
+      saveAuth={{ sheetName: SHEETS.MAIN }}
     />
   );
 };

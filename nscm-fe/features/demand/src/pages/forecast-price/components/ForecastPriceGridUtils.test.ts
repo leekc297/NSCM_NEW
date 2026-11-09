@@ -183,7 +183,6 @@ describe('allocateLoc — LOC 일괄 할당 (M-16 / M-20)', () => {
     expect(r['W_2026081']).toBe(500);
     expect(r['W_2026082']).toBe(500);
   });
-
 });
 
 describe('isNonEditableCell — 편집 차단 게이트 (M-03 / M-04·F-01 / M-07)', () => {

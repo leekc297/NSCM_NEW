@@ -14,7 +14,7 @@
 | features/supply/src/pages/plant-site/components/modals/PlantSiteModal.module.scss | component | 21 |
 | features/supply/src/pages/plant-site/components/modals/VendorModal.tsx | component | 230 |
 | features/supply/src/pages/plant-site/components/modals/vendorModalStore.ts | store | 33 |
-| features/supply/src/pages/plant-site/components/PlantSiteCustomerGrid.tsx | component | 194 |
+| features/supply/src/pages/plant-site/components/PlantSiteCustomerGrid.tsx | component | 197 |
 | features/supply/src/pages/plant-site/components/PlantSiteForm.tsx | component | 184 |
 | features/supply/src/pages/plant-site/components/PlantSiteGrid.tsx | component | 370 |
 | features/supply/src/pages/plant-site/components/PlantSiteLocationGrid.tsx | component | 197 |
@@ -81,8 +81,8 @@
 | grid | beginningEdit | editHandler | addHandler | features/supply/src/pages/plant-site/components/PlantSiteCustomerGrid.tsx | 118 |
 | grid | pastingCell | pasteHandler | addHandler | features/supply/src/pages/plant-site/components/PlantSiteCustomerGrid.tsx | 119 |
 | grid | formatItem | formatHandler | addHandler | features/supply/src/pages/plant-site/components/PlantSiteCustomerGrid.tsx | 120 |
-| DataGrid | gotFocus | handleFocus | jsx | features/supply/src/pages/plant-site/components/PlantSiteCustomerGrid.tsx | 179 |
-| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/plant-site/components/PlantSiteCustomerGrid.tsx | 180 |
+| DataGrid | gotFocus | handleFocus | jsx | features/supply/src/pages/plant-site/components/PlantSiteCustomerGrid.tsx | 182 |
+| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/plant-site/components/PlantSiteCustomerGrid.tsx | 183 |
 | SearchArea | onSearch | runSearch | jsx | features/supply/src/pages/plant-site/components/PlantSiteForm.tsx | 81 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/plant-site/components/PlantSiteForm.tsx | 98 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/plant-site/components/PlantSiteForm.tsx | 118 |

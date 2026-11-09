@@ -74,12 +74,20 @@ def main():
     rows = []
     for sh, cols in sheets.items():
         names = {c['column'] for c in cols}
-        same = [k for k in meta if k[0] == mid and k[1].upper() == sh.upper().replace(' ', '')]
+        # 2026-11-07 T160(SCP0016 H1 29행 NA '대응 메타 시트 없음'): 한쪽만 공백을 지워 비교해 'Waterfall Shipment Plan' ↔ 'WATERFALLSHIPMENTPLAN' 이 영영 안 맞았다 — 양쪽 다 정규화
+        _nz = lambda s: re.sub(r'[\s_\-]', '', str(s or '')).upper()
+        same = [k for k in meta if k[0] == mid and _nz(k[1]) == _nz(sh)]
+        ratio = 1.0
         if same:
             key = same[0]
         else:
             cand = sorted(((len(names & set(v)) / max(len(names), 1), k) for k, v in meta.items()), reverse=True)
             key = cand[0][1] if cand and cand[0][0] >= 0.6 else None
+            ratio = cand[0][0] if key else 0.0
+        # 2026-11-09 T173(SSP0025 10번 · 사용자 지시 '팝업 MODEL_ID·NICK_NAME 정렬 Center/Left 는 조치필요 아님 → 판정필요'):
+        #   같은 PROGRAM_ID 시트가 없어 컬럼 겹침으로 '다른 화면' 메타를 추정한 경우(SSP0025_ItembyDivisionPopup → SSP0024/Ship Master Elec 메인 그리드)
+        #   TO-BE 팝업이 실제로 그 메타를 쓰는지 확인되지 않았다 → 그 원천으로 낸 FAIL 은 결함 증거가 아니라 판정필요 · PASS 는 근거에 '원천 추정' 표시
+        borrowed = bool(key) and not same and key[0] != mid
         for c in cols:
             a = NORM.get((c.get('halign') or '').strip().upper())
             t = meta.get(key, {}).get(c['column']) if key else None
@@ -97,6 +105,12 @@ def main():
             else:
                 v = 'PASS' if a == t_al else 'FAIL'
                 note = f"AS-IS {WORD[a]} ↔ TO-BE {WORD.get(t_al, t_al)}" + ('' if v == 'PASS' else ' — 정렬 다름')
+                if borrowed and not ov:
+                    tag = f"TO-BE 원천 추정(같은 화면 시트 없음 · 컬럼 겹침 {ratio:.0%} 로 다른 화면 메타 {key[0]}/{key[1]} 사용 — TO-BE 팝업 실제 메타 미확인)"
+                    if v == 'FAIL':
+                        v, note = '판정필요', f"[정렬 원천 추정 → 판정필요] {note} · {tag}"
+                    else:
+                        note = f"{note} · {tag}"
             rows.append({'menu_id': mid, 'sheet': sh, 'column': c['column'], 'label': c.get('label', ''), 'asis_halign': a or '',
                          'asis_ref': c.get('ref', ''), 'tobe_program': key[0] if key else '', 'tobe_sheet': key[1] if key else '',
                          'tobe_halign': t_al or '', 'tobe_source': src, 'verdict': v, 'note': note})

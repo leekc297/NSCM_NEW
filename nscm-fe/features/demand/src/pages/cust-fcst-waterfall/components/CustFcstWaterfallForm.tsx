@@ -228,7 +228,7 @@ export const CustFcstWaterfallForm = ({
               )}
             />
           </Grid>
-          {multiField('LBL00502', 'Team', searchParams.deptIds, teamOptions, v =>
+          {multiField('LBL00044', 'Team', searchParams.deptIds, teamOptions, v =>
             setSearchParams({ deptIds: v, endCustomers: [], salesSiteIds: [] })
           )}
           {/* UM-02 — Team → End Customer cascade (AS-IS clbTeam_SelectedIndexChanged L1030~1065:
@@ -243,7 +243,7 @@ export const CustFcstWaterfallForm = ({
             v => setSearchParams({ endCustomers: v, salesSiteIds: [] })
           )}
           {/* AS-IS L1042/L1054 — Sales Site 의 team 축: 81 계열·82 는 빈 값 고정 / 40 만 team */}
-          {multiField('LBL00506', 'Sales Site', searchParams.salesSiteIds, salesSiteOptions, v =>
+          {multiField('LBL00011', 'Sales Site', searchParams.salesSiteIds, salesSiteOptions, v =>
             setSearchParams({ salesSiteIds: v })
           )}
           {/* Row 2 — Biz.Type / Input Date* / Period* / Bucket */}

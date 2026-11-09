@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 
@@ -24,7 +24,12 @@ import {
   resolvePlantCodes,
   str,
 } from '../utils/optCapa.candidates';
-import { buildVisibleSheets, resolveActiveSheet } from '../utils/optCapa.sheetVisibility';
+import {
+  buildInitialSheets,
+  buildVisibleSheets,
+  nextTabOrder,
+  resolveActiveSheet,
+} from '../utils/optCapa.sheetVisibility';
 
 /** `init` 조회 payload — IN 0개 SP 지만 훅이 `enabled` 판정에 참조를 쓰므로 모듈 상수로 고정한다. */
 const EMPTY_FILTER = {} as ProcRequest<MENU_ID, SHEETS.INIT>;
@@ -131,13 +136,19 @@ export const useOptCapaSheets = ({ tabId, divisionId, plantIds, activeSheet }: A
   );
 
   // ── 탭 집합 (Division 축) ────────────────────────────────────────────────────────────
-  //   노출 탭·순서 모두 제외목록 단일 원천에서 파생한다 — Division 이동 이력에 의존하지 않는 **정규
-  //   순서**(`buildVisibleSheets` = `GRID_SHEETS` 에서 제외만 뺌). `init` 응답 전엔 exclusionRows 가
-  //   빈 배열이라 8탭이 뜨고, 응답이 오면 제외가 반영돼 재파생된다(ref·effect 불필요).
-  const visibleSheets = useMemo(
-    () => buildVisibleSheets(exclusionRows, divisionId),
-    [exclusionRows, divisionId]
-  );
+  //   AS-IS 와 같이 첫 Division 으로 탭을 만들고, Division 이 바뀔 때마다 직전 탭에서 지우고 맨 뒤에 붙인다.
+  //   `init` 응답 전에는 이력을 시작하지 않고 기본 8탭을 보여 준다.
+  const tabHistoryRef = useRef<{ divisionId: string; sheets: GridSheet[] } | null>(null);
+  const visibleSheets = useMemo(() => {
+    if (!initData || !divisionId) return buildVisibleSheets(exclusionRows, divisionId);
+    const history = tabHistoryRef.current;
+    if (history?.divisionId === divisionId) return history.sheets;
+    const sheets = history
+      ? nextTabOrder(history.sheets, exclusionRows, divisionId)
+      : buildInitialSheets(exclusionRows, divisionId);
+    tabHistoryRef.current = { divisionId, sheets };
+    return sheets;
+  }, [initData, exclusionRows, divisionId]);
   const effectiveSheet = useMemo(
     () => resolveActiveSheet(visibleSheets, activeSheet),
     [visibleSheets, activeSheet]

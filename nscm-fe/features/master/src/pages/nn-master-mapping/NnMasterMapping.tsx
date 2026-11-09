@@ -139,6 +139,9 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (prevDivisionRef.current === searchCondition.divisionId) return;
     prevDivisionRef.current = searchCondition.divisionId;
     clearInsertedRows();
+    // 컬럼은 사업부마다 다르다(UI Category 컬럼 사업부 지정) — 바뀐 사업부로 다시 받는다.
+    void fetchStaticColumns();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchCondition.divisionId]);
 
   // AS-IS L538-602: InsertRow — DATA_TYPE='SCM' fixed, DIVISION=search div, ACTIVE_YN='Y' default

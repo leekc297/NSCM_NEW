@@ -7,12 +7,12 @@ import { t } from '@foundation/i18n';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { attachRowNoHeader, GridAction } from '@foundation/utils';
 import { CustomDialog, DataGrid, ResultArea } from '@shared/components';
-import { useSaveWithValidation } from '@shared/hooks';
+import { useSaveWithValidation, useTabBtnPermissions } from '@shared/hooks';
 import { Button } from '@shared/lges';
 import { ControlConfirmIcon, FileExceldownloadIcon } from '@shared/lges-icons';
 import { useMessageStore } from '@shared/stores';
 
-import { MODEL_CHANGE_SHEET, SHEETS } from '../sales-site-project-model.constants';
+import { MENU_ID, MODEL_CHANGE_SHEET, SHEETS } from '../sales-site-project-model.constants';
 import { useSalesSiteProjectModelSave } from '../useSalesSiteProjectModelSave';
 
 import styles from './ModelCodeChangeModal.module.scss';
@@ -82,6 +82,12 @@ export const ModelCodeChangeModal = ({ open, modalClose, tabId }: Props) => {
     refetchSheetName: SHEETS.PRODUCTION,
     tabId,
   });
+
+  // Insert/Delete/Save 노출 = modelChange 시트 SAVE 권한(시트 단위). 이 팝업의 행 추가·삭제는
+  //   서버를 부르지 않고 modelChange/SAVE 로 함께 저장되며, modelChange 시트에는 INSERT/DELETE 가
+  //   등록돼 있지 않아 세 버튼을 같은 SAVE 로 판정한다.
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID, enabled: open });
+  const canSave = hasButton('SAVE', MODEL_CHANGE_SHEET);
 
   const handleInsert = () => {
     const grid = gridRef.current;
@@ -159,6 +165,8 @@ export const ModelCodeChangeModal = ({ open, modalClose, tabId }: Props) => {
                 staticColumns={MODEL_CHANGE_COLUMNS}
                 autoGenerateColumns={false}
                 className={styles.grid}
+                // 읽기전용 자동 잠금을 modelChange 시트 SAVE 권한으로 판정(메뉴 단위면 production SAVE 와 섞임)
+                saveAuth={{ menuId: MENU_ID, sheetName: MODEL_CHANGE_SHEET }}
               />
             </ResultArea>
           </div>
@@ -171,30 +179,34 @@ export const ModelCodeChangeModal = ({ open, modalClose, tabId }: Props) => {
               disabled={rowCount === 0}
               onClick={() => void handleExcel()}
             />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00121', '_Insert')}
-              onClick={handleInsert}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00108', '_Delete')}
-              onClick={handleDelete}
-            />
-            <Button
-              appearance='contained'
-              priority='primary'
-              size='medium'
-              buttonLabel={t('LBL00111', '_Save')}
-              iconComponent={<ControlConfirmIcon size='small' />}
-              iconPosition='leading'
-              disabled={isPending}
-              onClick={handleSave}
-            />
+            {canSave && (
+              <>
+                <Button
+                  appearance='outlined'
+                  priority='normal'
+                  size='medium'
+                  buttonLabel={t('LBL00121', '_Insert')}
+                  onClick={handleInsert}
+                />
+                <Button
+                  appearance='outlined'
+                  priority='normal'
+                  size='medium'
+                  buttonLabel={t('LBL00108', '_Delete')}
+                  onClick={handleDelete}
+                />
+                <Button
+                  appearance='contained'
+                  priority='primary'
+                  size='medium'
+                  buttonLabel={t('LBL00111', '_Save')}
+                  iconComponent={<ControlConfirmIcon size='small' />}
+                  iconPosition='leading'
+                  disabled={isPending}
+                  onClick={handleSave}
+                />
+              </>
+            )}
             <Button
               appearance='outlined'
               priority='normal'

@@ -266,13 +266,14 @@ export const Bod = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // 버튼권한 게이트 — AS-IS Insert/Delete/Edit 는 별도 SP 호출 없는 순수 로컬 그리드 액션이고
   // 저장은 SaveButton 이 일괄 처리한다(00_checklist.md §4d entryPoints 집계, buttonGuards #1·#2).
-  // 공통버튼은 버튼 코드별 권한으로 게이트한다(TO-BE 룰 2026-10-26: 기능 있음 × 사용자·Division 권한 있음 일 때만 노출).
-  //   INSERT/DELETE MNU_BTN_CD 는 2026-10-26 SCM_ADM_MNU_BTN_MPG_M(bod) 에 등록 + 그룹 권한은 SAVE 권한을 복사했다
-  //   (_artifacts/_deploy_packages/COMMON_BTN_VISIBILITY_CLOUD_20261026/30_META). 종전 'SAVE 로 통일' 은 메타 부재 때문이었다.
-  //   Division 선택에 따른 권한 변화(cascade)는 공용 SubTitle 이 searchParam.divisionId 로 처리한다.
+  // 별도 CanInsert/CanDelete AS-IS 권한이 없어 화면 update 권한(=SAVE)로 통일한다 — INSERT/DELETE
+  // MNU_BTN_CD 는 SCM_ADM_MNU_BTN_MPG_M 에 등록된 적이 없어(97_SCP0007_main_proc_api_registration.sql
+  // 은 SEARCH/SAVE 2건만 등록) hasButton('INSERT')/hasButton('DELETE') 로 게이트하면 상시 차단된다
+  // (ProductionPlanLine H1 사고와 동일 유형, gap-resolve iter-1 G11 고위험). SEARCH 는 이미 등록돼
+  // 있어(동일 SQL BLOCK4) hasButton('SEARCH')로 게이트한다(project-route.tsx 표준 패턴).
   const hotkeyConfig: HotkeyConfig = {
-    insert: hasButton('INSERT') ? handleInsert : false,
-    delete: hasButton('DELETE') ? handleDelete : false,
+    insert: hasButton('SAVE') ? handleInsert : false,
+    delete: hasButton('SAVE') ? handleDelete : false,
     search: hasButton('SEARCH') ? setFilters : false,
     save: hasButton('SAVE') ? handleSave : false,
     manual: false,

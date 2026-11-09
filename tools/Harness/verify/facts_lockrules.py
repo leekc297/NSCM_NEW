@@ -25,6 +25,7 @@ import re
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from asis_live import dead_methods, _src_path  # noqa: E402
 from facts_combosrc import strip_comments  # noqa: E402
+from asis_variant import is_main, is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 RX_DEFCOL = re.compile(r'\bDef\w+\.([A-Z0-9_]+)')
@@ -356,10 +357,10 @@ def main():
     a = ap.parse_args()
     sid = a.asis_id.upper()
     sdir = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', sid)
-    cur_files = {f['file'] for f in read_csv(os.path.join(sdir, 'files.csv')) if f.get('variant') in ('current', 'shared')}
+    cur_files = {f['file'] for f in read_csv(os.path.join(sdir, 'files.csv')) if is_cur(f)}
     dead = dead_methods(sid)  # 실행되지 않는 AS-IS 메서드의 잠금은 사실 아님(2026-10-30 asis_live)
     acts = [x for x in read_csv(os.path.join(sdir, 'actions.csv')) if (not cur_files or x['file'] in cur_files) and (x['class'], x['method']) not in dead]
-    main_files = {f['file'] for f in read_csv(os.path.join(sdir, 'files.csv')) if f.get('variant') == 'current' and f['file'].endswith('.cs') and not f['file'].endswith('.Designer.cs')}
+    main_files = {f['file'] for f in read_csv(os.path.join(sdir, 'files.csv')) if is_main(f, sdir) and f['file'].endswith('.cs') and not f['file'].endswith('.Designer.cs')}
     cnt = {}
     for x in acts:
         if x['file'] in main_files:

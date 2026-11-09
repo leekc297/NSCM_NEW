@@ -1,0 +1,126 @@
+{
+ "_note": "2026-11-06 21:5x PoC 임시 골든(검증엔진 승인·사용자 판정 미기록) 6건은 메커니즘 시험(MATCH 6/6 → 변이 DIFF 검출) 뒤 제거 — 첫 골든은 사용자가 snap_approve.py --by <이름> 으로 승인",
+ "_poc_removed": {
+  "조회조건_Div_40": {
+   "kind": "조회조건",
+   "scope": "Div 40",
+   "golden": "Doc\\verify\\SCP0127\\snap\\golden\\조회조건_Div_40.aria.yml",
+   "sha8": "be888579",
+   "approved_by": "검증엔진 PoC(임시 · 사용자 승인 아님)",
+   "approved_at": "2026-11-06 21:34",
+   "opinion": "PoC: 조회조건 시각 순서≠기준표(SC1 사용자 확인 대기)·헤더 META 숨김 2건은 사람 확인 사안 — 메커니즘 시험용 임시 승격",
+   "validate": "MISMATCH",
+   "forced": true
+  },
+  "버튼_Div_40": {
+   "kind": "버튼",
+   "scope": "Div 40",
+   "golden": "Doc\\verify\\SCP0127\\snap\\golden\\버튼_Div_40.aria.yml",
+   "sha8": "757a887e",
+   "approved_by": "검증엔진 PoC(임시 · 사용자 승인 아님)",
+   "approved_at": "2026-11-06 21:34",
+   "opinion": "PoC: 조회조건 시각 순서≠기준표(SC1 사용자 확인 대기)·헤더 META 숨김 2건은 사람 확인 사안 — 메커니즘 시험용 임시 승격",
+   "validate": "OK",
+   "forced": false
+  },
+  "헤더_PRECEDE_SAFETY_STOCK_DAY": {
+   "kind": "헤더",
+   "scope": "PRECEDE / SAFETY STOCK DAY",
+   "golden": "Doc\\verify\\SCP0127\\snap\\golden\\헤더_PRECEDE_SAFETY_STOCK_DAY.txt",
+   "sha8": "c5479f17",
+   "approved_by": "검증엔진 PoC(임시 · 사용자 승인 아님)",
+   "approved_at": "2026-11-06 21:34",
+   "opinion": "PoC: 조회조건 시각 순서≠기준표(SC1 사용자 확인 대기)·헤더 META 숨김 2건은 사람 확인 사안 — 메커니즘 시험용 임시 승격",
+   "validate": "OK",
+   "forced": false
+  },
+  "팝업_Model_Nickname": {
+   "kind": "팝업",
+   "scope": "Model/Nickname",
+   "golden": "Doc\\verify\\SCP0127\\snap\\golden\\팝업_Model_Nickname.aria.yml",
+   "sha8": "a56bc530",
+   "approved_by": "검증엔진 PoC(임시 · 사용자 승인 아님)",
+   "approved_at": "2026-11-06 21:34",
+   "opinion": "PoC: 조회조건 시각 순서≠기준표(SC1 사용자 확인 대기)·헤더 META 숨김 2건은 사람 확인 사안 — 메커니즘 시험용 임시 승격",
+   "validate": "NA",
+   "forced": false
+  },
+  "화면샷_1920": {
+   "kind": "화면샷",
+   "scope": "1920",
+   "golden": "Doc\\verify\\SCP0127\\snap\\golden\\화면샷_1920.png",
+   "sha8": "e76d7b57",
+   "approved_by": "검증엔진 PoC(임시 · 사용자 승인 아님)",
+   "approved_at": "2026-11-06 21:34",
+   "opinion": "PoC: 조회조건 시각 순서≠기준표(SC1 사용자 확인 대기)·헤더 META 숨김 2건은 사람 확인 사안 — 메커니즘 시험용 임시 승격",
+   "validate": "NA",
+   "forced": false
+  },
+  "화면샷_1366": {
+   "kind": "화면샷",
+   "scope": "1366",
+   "golden": "Doc\\verify\\SCP0127\\snap\\golden\\화면샷_1366.png",
+   "sha8": "6018db4b",
+   "approved_by": "검증엔진 PoC(임시 · 사용자 승인 아님)",
+   "approved_at": "2026-11-06 21:34",
+   "opinion": "PoC: 조회조건 시각 순서≠기준표(SC1 사용자 확인 대기)·헤더 META 숨김 2건은 사람 확인 사안 — 메커니즘 시험용 임시 승격",
+   "validate": "NA",
+   "forced": false
+  }
+ },
+ "버튼_Div_40": {
+  "kind": "버튼",
+  "scope": "Div 40",
+  "golden": "Doc\\verify\\SCP0127\\snap\\golden\\버튼_Div_40.aria.yml",
+  "sha8": "757a887e",
+  "approved_by": "사용자(대화 2026-11-06)",
+  "approved_at": "2026-11-06 22:16",
+  "opinion": "1-c: 조회조건 순서(SC1) 제외하고 승인 · 헤더 META 숨김 2건은 설계 결정 확인 사안",
+  "validate": "OK",
+  "forced": false
+ },
+ "헤더_PRECEDE_SAFETY_STOCK_DAY": {
+  "kind": "헤더",
+  "scope": "PRECEDE / SAFETY STOCK DAY",
+  "golden": "Doc\\verify\\SCP0127\\snap\\golden\\헤더_PRECEDE_SAFETY_STOCK_DAY.txt",
+  "sha8": "c5479f17",
+  "approved_by": "사용자(대화 2026-11-06)",
+  "approved_at": "2026-11-06 22:16",
+  "opinion": "1-c: 조회조건 순서(SC1) 제외하고 승인 · 헤더 META 숨김 2건은 설계 결정 확인 사안",
+  "validate": "OK",
+  "forced": false
+ },
+ "팝업_Model_Nickname": {
+  "kind": "팝업",
+  "scope": "Model/Nickname",
+  "golden": "Doc\\verify\\SCP0127\\snap\\golden\\팝업_Model_Nickname.aria.yml",
+  "sha8": "a56bc530",
+  "approved_by": "사용자(대화 2026-11-06)",
+  "approved_at": "2026-11-06 22:16",
+  "opinion": "1-c: 조회조건 순서(SC1) 제외하고 승인 · 헤더 META 숨김 2건은 설계 결정 확인 사안",
+  "validate": "NA",
+  "forced": false
+ },
+ "화면샷_1920": {
+  "kind": "화면샷",
+  "scope": "1920",
+  "golden": "Doc\\verify\\SCP0127\\snap\\golden\\화면샷_1920.png",
+  "sha8": "e76d7b57",
+  "approved_by": "사용자(대화 2026-11-06)",
+  "approved_at": "2026-11-06 22:16",
+  "opinion": "1-c: 조회조건 순서(SC1) 제외하고 승인 · 헤더 META 숨김 2건은 설계 결정 확인 사안",
+  "validate": "NA",
+  "forced": false
+ },
+ "화면샷_1366": {
+  "kind": "화면샷",
+  "scope": "1366",
+  "golden": "Doc\\verify\\SCP0127\\snap\\golden\\화면샷_1366.png",
+  "sha8": "6018db4b",
+  "approved_by": "사용자(대화 2026-11-06)",
+  "approved_at": "2026-11-06 22:16",
+  "opinion": "1-c: 조회조건 순서(SC1) 제외하고 승인 · 헤더 META 숨김 2건은 설계 결정 확인 사안",
+  "validate": "NA",
+  "forced": false
+ }
+}

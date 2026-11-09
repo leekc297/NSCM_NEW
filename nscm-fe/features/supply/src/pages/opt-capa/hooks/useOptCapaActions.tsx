@@ -6,6 +6,7 @@ import type { HotkeyConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import { GridAction, type EditTracker } from '@foundation/utils';
 import { useSaveWithValidation, useTabBtnPermissions } from '@shared/hooks';
+import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import {
@@ -28,7 +29,12 @@ import type { GridRow } from '../opt-capa.types';
 import { useOptCapaStore } from '../useOptCapaStore';
 import { resolveFilterCodes, str } from '../utils/optCapa.candidates';
 import { buildExcelFormColumns, buildExcelFormRows } from '../utils/optCapa.excelForm';
-import { buildFlatSavePayload, buildWeekSavePayload, isPersistedRow } from '../utils/optCapa.save';
+import {
+  buildFlatSavePayload,
+  buildWeekSavePayload,
+  isPersistedRow,
+  weekKeyOf,
+} from '../utils/optCapa.save';
 import { buildFeatureButtonVisibility } from '../utils/optCapa.sheetVisibility';
 
 import { submitOptCapaSave } from './useOptCapaSave';
@@ -123,6 +129,11 @@ export const useOptCapaActions = ({
    * 어느 시트의 행인지도 함께 들고 있어야 확정 시 그 시트의 EditTracker·grid 에 반영된다.
    */
   const [itemPopup, setItemPopup] = useState<{ row: GridRow; sheet: GridSheet } | null>(null);
+  /** Week 달력은 더블클릭한 셀 바로 밑에 뜬다 — 행과 함께 셀 아래쪽 좌표(viewport 기준)를 든다. */
+  const [weekPopup, setWeekPopup] = useState<{
+    row: GridRow;
+    anchor: { top: number; left: number };
+  } | null>(null);
 
   /** 신규행 division 은 **확정 조회조건 우선**(CommonCheckList "확정 searchParams 기준 division"). */
   const divisionId = applied?.divisionId ?? sc.divisionId;
@@ -368,6 +379,7 @@ export const useOptCapaActions = ({
           dirtyRows: rows,
           sourceRows: source,
           staticColumns: saveColumns,
+          isWeekNoWork,
         });
         if (failure) {
           const message = t(failure.msgId, { defaultValue: '' });
@@ -418,7 +430,36 @@ export const useOptCapaActions = ({
     );
   };
 
-  /** Item 팝업 확정 — `ITEM_ID` + `NICK_NAME` 동시 채움. 취소 시 아무것도 바꾸지 않는다(R-11). */
+  /** Week 달력 확정 — 고른 날짜의 ISO 주차 라벨('2026-W40'). 취소 시 아무것도 바꾸지 않는다. */
+  const handleWeekSelect = (weekName: string) => {
+    const row = weekPopup?.row;
+    if (!row || !weekName) return;
+    // 같은 Division·Plant·Line·Operation·Line Type 에 같은 Week 가 이미 있으면 막는다
+    //   (저장 검증 `findDuplicateKey` Week 분기와 같은 키). 삭제 표시 행은 대조하지 않는다.
+    const nextKey = weekKeyOf(row, weekName);
+    const source = (gridRefs[SHEETS.NO_WORK].current?.collectionView?.sourceCollection ??
+      []) as unknown as GridRow[];
+    const isDuplicate = source.some(
+      other => other !== row && str(other.CRUD_TYPE) !== 'D' && weekKeyOf(other) === nextKey
+    );
+    if (isDuplicate) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.DUPLICATE_KEY_CHANGED, { defaultValue: 'Duplicate Data found.' }),
+      });
+      return;
+    }
+    const prev = row[COLUMN.WEEK_NAME] as WijmoPrimitive;
+    row[COLUMN.WEEK_NAME] = weekName;
+    editTrackerRefs[SHEETS.NO_WORK].current?.storeChange(
+      row as unknown as WijmoRowItem,
+      COLUMN.WEEK_NAME,
+      prev,
+      weekName as WijmoPrimitive
+    );
+    gridRefs[SHEETS.NO_WORK].current?.invalidate();
+  };
+
   const handleItemSelect = (itemId: string, nickName: string) => {
     const row = itemPopup?.row;
     if (!row || !itemId || !itemPopup) return;
@@ -483,8 +524,13 @@ export const useOptCapaActions = ({
   const hotkeyConfig: HotkeyConfig = {
     search: authorized && hasButton('SEARCH') ? handleSearch : false,
     save: authorized && hasButton('SAVE') ? handleSave : false,
-    delete: authorized && hasButton('DELETE') ? handleDelete : false,
-    insert: authorized && hasButton('INSERT') ? handleInsert : false,
+    delete: authorized && hasButton('DELETE') && (sheet ?? activeSheet) !== SHEETS.DAILY_CAPA 
+                ? handleDelete : false,
+    // Daily Capa 는 Insert 가 무동작이라(`handleInsert` 첫 가드) 버튼 자체를 숨긴다. AS-IS 는 버튼을
+    //   보여 주고 눌러도 행이 안 생겼다 — 사용자 혼동을 막기 위한 의도적 이탈이다.
+    insert:
+      authorized && hasButton('INSERT') && (sheet ?? activeSheet) !== SHEETS.DAILY_CAPA
+              ? handleInsert : false,
     // Excel Upload 는 customButtons 로 배치한다(표준 upload 슬롯은 customButtons 뒤에 렌더되어
     //   순서가 깨진다 — 선례 `CustPsiUpload.tsx`).
     upload: false,
@@ -503,12 +549,25 @@ export const useOptCapaActions = ({
   };
 
   /**
-   * 전용버튼 순서 = Excel Upload → Excel Form → Batch Save(사용자 요청 2026-10-28).
+   * 전용버튼 순서 = Excel Form → Excel Upload → Batch Save(사용자 요청 2026-11-06, SCP0005 정합).
+   *   Excel 2종의 순서·아이콘(Form=FileExceldownloadIcon / Upload=FileExceluploadIcon, leading)을
+   *   정본 SCP0005(DistributionRoute) 와 맞춘다 — 2026-10-28 의 Upload→Form 순서를 뒤집음.
    * AS-IS Edit 버튼(SwitchLock 토글)은 미채용 — `hasButton('EDIT')` 은 버튼 노출이 아니라 위
    * `canEdit` 권한축으로만 쓴다(convert-core §2.4). 그래서 이 화면 customButtons 엔 Edit 이 없다.
    */
   const customButtons = useMemo(
     () => [
+      ...(authorized && hasButton('EXCEL') && featureButtons.excelForm
+        ? [
+            {
+              label: t(LBL.EXCEL_FORM, 'Excel Form'),
+              title: t(LBL.EXCEL_FORM, 'Excel Form'),
+              action: handleExcelForm,
+              iconComponent: <FileExceldownloadIcon />,
+              iconPosition: 'leading' as const,
+            },
+          ]
+        : []),
       ...(authorized && hasButton('UPLOAD') && featureButtons.excelUpload
         ? [
             {
@@ -516,15 +575,7 @@ export const useOptCapaActions = ({
               title: t(LBL.EXCEL_UPLOAD, 'Excel Upload'),
               action: () => setOpenUpload(true),
               iconComponent: <FileExceluploadIcon />,
-            },
-          ]
-        : []),
-      ...(authorized && hasButton('EXCEL') && featureButtons.excelForm
-        ? [
-            {
-              label: t(LBL.EXCEL_FORM, 'Excel Form'),
-              title: t(LBL.EXCEL_FORM, 'Excel Form'),
-              action: handleExcelForm,
+              iconPosition: 'leading' as const,
             },
           ]
         : []),
@@ -564,5 +615,11 @@ export const useOptCapaActions = ({
     itemPopup,
     openItemPopup: (row: GridRow, rowSheet: GridSheet) => setItemPopup({ row, sheet: rowSheet }),
     closeItemPopup: () => setItemPopup(null),
+    openWeekPopup: weekPopup !== null,
+    weekPopupAnchor: weekPopup?.anchor,
+    showWeekPopup: (row: GridRow, anchor: { top: number; left: number }) =>
+      setWeekPopup({ row, anchor }),
+    closeWeekPopup: () => setWeekPopup(null),
+    handleWeekSelect,
   };
 };

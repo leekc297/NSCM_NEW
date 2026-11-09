@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 195,
+  "at": "2026-11-07T12:56:45.574Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 3227,
+  "at": "2026-11-07T12:56:48.497Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 181,
+  "at": "2026-11-07T12:56:54.440Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 991,
+  "dur": 8023,
+  "at": "2026-11-07T12:57:01.954Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 186,
+  "at": "2026-11-07T12:57:06.961Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ }
+]

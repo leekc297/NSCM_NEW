@@ -108,6 +108,8 @@ export interface ColumnMetaRow {
   colNm: string;
   /** COLUMN_LABEL_NAME — 팝업 목록 라벨. */
   colLblNm?: string;
+  /** SMALL_CLASS_LABEL_NAME — 2단 머지헤더의 소분류(그룹) 라벨. ColumnLayoutModal showSmallClass 열. */
+  sClsLblNm?: string;
   /** SCM_MST_SHEET_COLUMNS.COLUMN_WIDTH — 관리자 기본 폭. Default 리셋의 폭 정본. */
   colWth?: number;
   /** SCM_MST_SHEET_COLUMNS.VISIBLE_FLAG — 관리 노출 여부. false = 화면·팝업 어디에도 안 뜬다. */

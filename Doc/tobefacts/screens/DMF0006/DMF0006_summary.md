@@ -9,7 +9,7 @@
 |---|---|---|
 | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.module.scss | component | 23 |
 | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | component | 341 |
-| features/master/src/pages/customer-model-mapping/components/CustomerModelMappingGrid.tsx | component | 386 |
+| features/master/src/pages/customer-model-mapping/components/CustomerModelMappingGrid.tsx | component | 388 |
 | features/master/src/pages/customer-model-mapping/customer-model-mapping.constants.ts | constants | 320 |
 | features/master/src/pages/customer-model-mapping/customer-model-mapping.duplicateCheck.ts | other | 142 |
 | features/master/src/pages/customer-model-mapping/customer-model-mapping.gridCombos.ts | other | 88 |

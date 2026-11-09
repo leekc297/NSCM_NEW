@@ -68,7 +68,7 @@ const getFormat = (
     CELL_CONTROL_TYPE.DATE_TEXT,
   ];
   if (dateTypes.includes(ctrlType!)) {
-    return 'yyyy.MM.dd'; // ⭐ 원하는 출력 형식
+    return 'yyyy-MM-dd'; 
   }
 
   return undefined;
@@ -83,7 +83,8 @@ const getMask = (ctrlType: CELL_CONTROL_TYPE | undefined): string | undefined =>
 
 const getEditor = (
   ctrlType: CELL_CONTROL_TYPE,
-  scale: number | undefined
+  scale: number | undefined,
+  maxLength: number | undefined
 ): Control | undefined => {
   switch (ctrlType) {
     // 숫자 셀 입력 자릿수 제한 — 메타 scale(DATA_SCALE_NUMBER)을 편집기에 건다. Wijmo
@@ -91,14 +92,27 @@ const getEditor = (
     //   scale 미지정(NULL)은 제한 없는 기본 텍스트 편집기를 그대로 둔다 — 0(정수)과 NULL(미지정)은 다르다.
     //   AS-IS 는 MKT FCST/Elec.Demand CHG_QTY 를 정수(int), STOCK 계열을 소수 2자리(double)로 다룬다
     //   (SCP0125_Workbench.cs L1059·1357). API 는 미지정 컬럼을 scale:null 로 내려준다(실측).
-    case CELL_CONTROL_TYPE.NUMBER:
+    case CELL_CONTROL_TYPE.NUMBER: {
       if (scale == null) return undefined;
-      return new InputNumber(document.createElement('div'), {
+      const editor = new InputNumber(document.createElement('div'), {
         format: `n${scale}`,
         isRequired: false,
         step: null,
         showSpinner: false, // 셀 편집기에 -/+ 스피너 버튼 숨김(step:null 만으로는 DOM 에 남는다)
       });
+      // 글자수 제한(DATA_MAX_LENGTH) — Wijmo 는 커스텀 editor 가 붙으면 Column.maxLength 를 무시한다
+      //   (maxLength 는 내장 기본 에디터 전용). 숫자 셀은 maxLength 를 값 범위(min/max)로 환산해
+      //   InputNumber 가 자릿수 초과 입력을 막게 한다. 정수부 자릿수 = maxLength - scale, 상한은
+      //   JS 안전정수(MAX_SAFE_INTEGER)로 클램프해 16자리 이상에서 부동소수 정밀도로 값이 변형되는
+      //   것을 막는다(미설정이면 무제한 그대로). SCP0128 APL_QTY 실사고(2026-11-05).
+      if (maxLength != null && maxLength > 0) {
+        const intDigits = Math.max(1, maxLength - scale);
+        const bound = Math.min(10 ** intDigits - 1, Number.MAX_SAFE_INTEGER);
+        editor.max = bound;
+        editor.min = -bound;
+      }
+      return editor;
+    }
     // TODO: 테스트 필요, 투머치면 빼기
     case CELL_CONTROL_TYPE.PERCENT:
       return new LinearGauge(document.createElement('div'), {
@@ -719,7 +733,9 @@ const toLeafColumn = (column: NormalizedRawColumn): FlexGridColumnConfig => ({
   _lClsLblNm: column.lClsLblNm,
   dataMap: buildLeafColumnDataMap(column),
   isRequired: false, // TODO: 논의 필요..? -강민재
-  editor: column.cellCtrlObjTpCd ? getEditor(column.cellCtrlObjTpCd, column.scale) : undefined,
+  editor: column.cellCtrlObjTpCd
+    ? getEditor(column.cellCtrlObjTpCd, column.scale, column.dataMaxLength)
+    : undefined,
   dataType: column.cellCtrlObjTpCd ? getDataType(column.cellCtrlObjTpCd) : undefined,
   multiLine: column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.MULTILINE_TEXT,
   wordWrap: column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.MULTILINE_TEXT,

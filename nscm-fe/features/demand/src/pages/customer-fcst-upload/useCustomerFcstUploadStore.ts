@@ -19,7 +19,11 @@ interface CustomerFcstUploadState {
   isOpenSearchArea: boolean;
   searchParams: SearchParamProps;
   filters: FiltersBySheet;
+  // 엑셀 양식(Excel Form) · 템플릿 팝업용 — 사업부 무관 전체 메타. 업로드 필수 열(Customer Model* 등)이
+  //   사업부 지정으로 빠지면 양식으로 받은 파일이 업로드되지 않으므로 사업부를 넘기지 않는다.
   staticColumn: RawFlexGridColumnConfig[];
+  // 그리드 표시용 — 현재 사업부 기준 메타(UI Category 컬럼 사업부 지정 반영, 예: 82 의 CUSTOMER_MODEL 숨김).
+  gridColumn: RawFlexGridColumnConfig[];
   // ⭐ PR_GET_DAY_RANGE 기본 Period 적용 1회성 (persist — 탭 재진입 remount 시
   //   사용자가 변경한 Period 를 서버 기본값이 다시 덮지 않도록. DMF0048 A-4 선례)
   dayRangeApplied: boolean;
@@ -73,6 +77,7 @@ const initCustomerFcstUploadState: CustomerFcstUploadState = {
   },
   filters: {},
   staticColumn: [],
+  gridColumn: [],
   dayRangeApplied: false,
 };
 
@@ -213,16 +218,19 @@ export const useCustomerFcstUploadStore = createPersistedStoreWithTab<
       }),
 
     // ⭐ ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 15행, admin 즉시 반영)
+    //   두 번 받는다 — 전체(양식용)와 현재 사업부 기준(그리드용). 사업부는 호출 시점의 조회조건 값.
     fetchStaticColumns: async () => {
       try {
-        const result = await apiClient.post<RawFlexGridColumnConfig[]>(
-          `/admin/menu/${MENU_ID}/column`,
-          {
+        const fetchColumns = (divisionId?: string) =>
+          apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
             sheetNm: SHEETS.MAIN, // 'FCST Upload' — 등록명 그대로 (룰 #91)
-          }
-        );
+            divisionId: divisionId || undefined,
+          });
+        const division = get().searchParams.divisionId;
+        const [all, byDivision] = await Promise.all([fetchColumns(), fetchColumns(division)]);
         set(state => {
-          state.staticColumn = result.data.result ?? [];
+          state.staticColumn = all.data.result ?? [];
+          state.gridColumn = byDivision.data.result ?? [];
           state.initialized = true;
         });
       } catch {

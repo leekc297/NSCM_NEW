@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 62,
+  "dur": 164,
+  "at": "2026-11-07T10:55:18.161Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 62,
+  "dur": 166,
+  "at": "2026-11-07T10:55:19.122Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ }
+]

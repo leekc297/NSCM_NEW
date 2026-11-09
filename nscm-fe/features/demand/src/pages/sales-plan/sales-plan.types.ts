@@ -26,7 +26,7 @@ export interface SearchCondition {
 }
 
 // 메인 그리드 행 (PIVOT wide format — 정적 66 admin 메타 + 동적 M_/W_/D_ 컬럼)
-//   CRUD_TYPE: 'I'(신규) / 'M'(수정 — EditTracker 자동 마킹). 저장행 삭제는 셀 0 저장(SP 'D' 전환) 경로만.
+//   CRUD_TYPE: 'I'(신규) / 'M'(수정 — EditTracker 자동 마킹). 저장된 데이터는 삭제하지 않는다(0 은 값 0 으로 저장).
 //   INSERT_GROUP_ID: Insert 행 식별자 (셀 팝업 반영 대상 추적).
 export type SalesPlanRow = Record<string, unknown> & {
   CRUD_TYPE?: 'I' | 'M' | 'D';

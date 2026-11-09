@@ -28,6 +28,7 @@
 import csv, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from asis_live import dead_methods, dead_sps, sp_base  # noqa: E402
 from collections import Counter
+from asis_variant import is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
@@ -282,7 +283,7 @@ def host_label(srcs, usage):
 def asis_popups(aid):
     """AS-IS 팝업 호출 → [{cls_method, file, line, popup, var, args:[(param, arg, source_kind, source, concept)], result_concepts}]"""
     acts = read_csv(P('Doc', 'asisfacts', 'screens', aid, 'actions.csv'))
-    cur = {f['file'] for f in read_csv(P('Doc', 'asisfacts', 'screens', aid, 'files.csv')) if f.get('variant') in ('current', 'shared')}
+    cur = {f['file'] for f in read_csv(P('Doc', 'asisfacts', 'screens', aid, 'files.csv')) if is_cur(f)}
     dead = dead_methods(aid)  # 실행되지 않는 AS-IS 메서드의 팝업 호출 제외(2026-10-30 asis_live)
     acts = [a for a in acts if (not cur or a['file'] in cur) and (a['class'], a['method']) not in dead]
     by_m = {}
@@ -517,6 +518,9 @@ def main():
             common.update(tobe_key=k, tobe_value=v[:120])
             if cls_ == 'BOUND':
                 rows.append(base(**common, verdict='PASS', note=f"AS-IS {it['source'] or it['arg']} → TO-BE {k}={v[:60]} (값 연동)"))
+            elif re.search(r'this\.Name(\.Substring\(\s*0\s*,\s*7\s*\))?', it['source'] or it['arg'] or '') and re.fullmatch(r"\s*(MENU_ID|menuId|'" + re.escape(mid) + r"'|\"" + re.escape(mid) + r"\")\s*", v or ''):
+                # 2026-11-06 T79(SCP0037 V-01cdddea 허위 FAIL): AS-IS this.Name(.Substring(0,7)) = 폼 이름 앞 7자 = 화면 ID · TO-BE MENU_ID 상수(= 화면 ID)·'<ID>' 리터럴은 같은 값
+                rows.append(base(**common, verdict='PASS', note=f"AS-IS {it['source'] or it['arg']}(= 화면 ID {mid}) → TO-BE {k}={v[:60]} (같은 값 — 화면 ID 상수)"))
             else:
                 lab = fcon.get(it['concept'], ('', ''))[1] or it['concept']
                 rows.append(base(**common, verdict='FAIL', screen_field=fcon.get(it['concept'], ('', ''))[0],

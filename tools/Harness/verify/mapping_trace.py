@@ -28,6 +28,7 @@
   산출: Doc/verify/<ID>/mapping_trace.csv(행) · mapping_trace_checks.csv(행 × 인스턴스) · mapping_trace_instances.csv · mapping_trace.md · mapping_trace_summary.json
 """
 import argparse, csv, json, os, re, sys, collections, datetime, hashlib, glob
+from asis_variant import is_main, is_cur, main_files  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 HERE = os.path.dirname(os.path.abspath(__file__))
 DOC = os.path.join(ROOT, 'Doc')
@@ -131,6 +132,7 @@ def sp_tokens(text):
         if text[m.end():m.end() + 1] == '…': continue
         tok = m.group(0).split('.')[-1]
         if tok in cols: continue
+        if re.fullmatch(r'PKG_[A-Z0-9_]+', m.group(0)): continue  # 2026-11-06(SCP0016 18번): 멤버 없는 패키지명(PKG_SCP0016 '미배포' 비고)은 SP 가 아니다
         # 'P_…' 는 TO-BE 프로시저 접두이지만 패키지명(P_SCM0002)·바인드 변수(@P_BUCKET·P_FROM_SITE)도 같은 모양이다 → 동사 세그먼트(_GET/_SAVE…)가 있거나 proc_meta 에 있는 것만 SP (2026-10-29 SCP0100 F4 허위 FAIL 5건)
         if tok.startswith('P_') and not re.search(r'_(GET|SAVE|SET|INS|UPD|DEL|CHK|CHECK|PROC|EXEC|CALC|GEN|MAKE|LOAD|SYNC|UPLOAD|DOWN)', tok) and tok.upper() not in known_procs(): continue
         if text[max(0, m.start() - 1):m.start()] == '@': continue
@@ -182,7 +184,7 @@ def resolve_call_proc(name):
             eps = rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'endpoints.csv'))
         except Exception:
             eps = []
-        _ASIS_SPS = {nz(m.group(0).split('.')[-1]) for e in eps if (e.get('variant') or 'current') == 'current'
+        _ASIS_SPS = {nz(m.group(0).split('.')[-1]) for e in eps if is_main(e, os.path.join(DOC, 'asisfacts', 'screens', asis_id()))
                      for m in re.finditer(r'[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?', e.get('sp_or_sql') or '')}
     taken = {nz(p) for p in _ASIS_SPS} - {nz(nm_t)}
     cands = {r['proc'] for r in mine
@@ -470,7 +472,8 @@ def ev_ledger():
 def ev_e2e(elems):
     """E2E 요약 어노테이션 → (검사 ID, 대상 단위, 이름/라벨, 결과, 출처)"""
     out = []
-    for r in [x for x in rdcsv(os.path.join(DOC, 'e2e', 'results', '_summary.csv')) if x.get('menu_id', '').upper() == MENU]:
+    import e2e_paths  # 2026-11-06: 화면별 요약(Doc/e2e/results/<ID>/_summary.csv) 우선 · 없으면 공용 색인
+    for r in [x for x in rdcsv(e2e_paths.summary_path(MENU)) if x.get('menu_id', '').upper() == MENU]:
         kind, st = r.get('kind', ''), r.get('status', '')
         stres = 'PASS' if st == 'PASS' else ('FAIL' if st == 'FAIL' else 'NOT_RUN')
         for part in (r.get('annotations') or '').split(' || '):
@@ -481,6 +484,7 @@ def ev_e2e(elems):
                 v, name, k2 = m.groups(); res = RES.get(v, v)
                 if t == 'cond':
                     chk = {'popup': 'H6', 'design': 'G4', 'order': 'SC1', 'gone': 'SC1'}.get(k2, 'G1')
+                    if k2 == 'order': res = 'NA'  # 2026-11-09 CR-098(사용자 지시 · SCP0084): 조회조건 순서는 판정 대상 제외 — 실측 문구는 desc 로 참고 보존
                     out.append((chk, 'SCREEN' if chk == 'SC1' else 'COND', name, res, f'E2E smoke cond {k2}', desc[:90]))
                 else:
                     chk = 'K-SA' if re.search(r'search ?area', name, re.I) else 'G3' if re.search(r'condition|reset', name, re.I) else 'H7' if re.search(r'excel', name, re.I) \
@@ -684,7 +688,7 @@ def main():
                 if p and tail(p) == tail(d['name']): d['hits'].append((res, src))
             elif sj == 'DBERR' and d['et'] == 'SP' and tail(d['name']) in name.upper(): d['hits'].append((res, src))
         if d['check'] == 'A1' and d['et'] == 'SP':
-            for g in rdcsv(os.path.join(DOC, 'golden', '_summary.csv')):
+            for g in rdcsv(__import__('e2e_paths').golden_path(MENU)):  # 2026-11-06 화면 폴더 골든 요약 우선
                 if g.get('screen', '').upper() == MENU and tail(g.get('asis_sp', '') or '-') == tail(d['name']):
                     v = (g.get('verdict') or g.get('result') or '').upper()
                     # 데이터 원천이 다르다(AS-IS dev MSSQL vs TO-BE Oracle) — 행수·값 차이는 FAIL 이 아니라 해석 필요(REVIEW), 컬럼 집합 차이는 구조 결함(FAIL)
@@ -702,7 +706,7 @@ def main():
                     d['hits'].append(({'PASS': 'PASS', 'FAIL': 'FAIL', 'NA': 'NA'}.get(s['verdict'], 'REVIEW'), f"정렬대조 {s['verdict']} {s['note'][:50]}"))
             # 실측 순서(golden.py 2026-10-28): 같은 인자의 AS-IS·TO-BE 결과에서 공통·유일 행의 상대 순서 — ORDER BY 가 같아도 실제 순서가 다르면 FAIL
             no_order = any((tail(s['sp']) == tail(d['name']) or tail(s.get('tobe_proc', '') or '-') == tail(d['name'])) and s['verdict'] == 'NA' for s in rdcsv(os.path.join(DOC, 'verify', MENU, 'sort_check.csv')))
-            for g in rdcsv(os.path.join(DOC, 'golden', '_summary.csv')):
+            for g in rdcsv(__import__('e2e_paths').golden_path(MENU)):  # 2026-11-06 화면 폴더 골든 요약 우선
                 if no_order or g.get('screen', '').upper() != MENU or (g.get('order') or '') not in ('PASS', 'DIFF'): continue
                 if tail(g.get('asis_sp', '') or '-') == tail(d['name']) or tail(g.get('tobe_proc', '') or '-') == tail(d['name']):
                     d['hits'].append(('PASS' if g['order'] == 'PASS' else 'FAIL', f"실측 순서대조 {g['order']} 공통 {g.get('common_rows', '')}행(Doc/golden/{MENU}/{g.get('asis_sp', '')}.order.csv)"))
@@ -1009,6 +1013,13 @@ def engine_condition(d, rmap):
                 if s and s != col: srcs.append(s)
             j['src'] = list(dict.fromkeys(srcs))[:3]
             if c == 'C3' and not assign and own: j['noAssign'] = True  # 값 대입 문장이 없다(잠금·스타일만) — 연쇄 채움 검사 대상 아님
+            if c == 'C3' and j['src']:
+                # 2026-11-09 T173(SSP0025 12·14번 허위 FAIL): 원천 변경 시 AS-IS 가 이 컬럼을 ""(빈 값)로 비우기만 하는 경우(SpdMain_ComboSelChange:688·689
+                #   DIVISION_ID 변경 → SITE_DESCRIPTION·ITEM_ID = "") '연쇄 자동 채움' 을 기대하면 TO-BE 빈 값이 FAIL 로 나온다 → 기대 = 원천 변경 뒤 대상 비움
+                tgt_rx = re.compile(r'(?:SetValue|SetText)\([^;]*?DefColumns\.' + re.escape(col) + r'\)\s*,\s*(?:""|string\.Empty|String\.Empty)\s*\)')
+                from_src = [r for r in assign if cascade_src(r, rmap) in j['src']]
+                if from_src and all(tgt_rx.search(r.get('raw', '')) for r in from_src):
+                    j['clearOnly'] = True
             if any(x in E.trigger_cols for x in j['src']): j['viaPopup'] = True  # 원천이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4)
             if c == 'C3':
                 # 팝업 선택 행(dr["필드"]) → 이 컬럼 대응 · 고정값("Y") — AS-IS SetRoute: ROUTE_VALID←VALID_YN · DIS_TOTAL_LEAD_TIME←LT_SUM · TRANSPORT_MODE←TRANSPORT_MODE_NAME · BOD_VALID←"Y"
@@ -1122,7 +1133,10 @@ def engine_condition(d, rmap):
         j['callProc'] = [{'menu': r['menu_id'], 'sheet': r['sheet'], 'btn': r['btn']} for r in pm][:4]
     if c == 'A10':
         acts = rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'actions.csv'))
-        auto = [x for x in acts if re.match(r'^(Form_Load|InitControls|DefineProperty|OnLoad|Init\w*)$', x['method']) and x['kind'] in ('CALL_LOCAL', 'CALL_EXT') and re.match(r'^(FindButton|FindData\w*|Search\w*|Retrieve\w*)$', x['target'])]
+        # 2026-11-09 T173(SSP0025 13번 허위 FAIL): 팝업 파일(SSP0025_ItembyDivisionPopup.cs Form_Load:182 FindData)의 로드 조회를 화면 진입 자동 조회로 잡았다
+        #   — actions.csv 는 variant 칸이 없어 is_main 행 판정이 항상 참 → 화면 본체 파일 집합(main_files)으로 거른다
+        _mf = main_files(os.path.join(DOC, 'asisfacts', 'screens', asis_id()))
+        auto = [x for x in acts if (not _mf or x.get('file', '') in _mf) and re.match(r'^(Form_Load|InitControls|DefineProperty|OnLoad|Init\w*)$', x['method']) and x['kind'] in ('CALL_LOCAL', 'CALL_EXT') and re.match(r'^(FindButton|FindData\w*|Search\w*|Retrieve\w*)$', x['target'])]
         j['auto'] = [f"{x['method']}:{x['line']} {x['raw'][:60]} [{x['guard'][:60]}]" for x in auto]
     elif c in ('G6',):
         j['raws'] = [x[:160] for x in raws if d['name'] in x][:8]
@@ -1130,7 +1144,7 @@ def engine_condition(d, rmap):
         acts = rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'actions.csv'))
         hs = {x['value'].replace('+=', '').strip() for x in acts if x['kind'] == 'EVENT_WIRE' and re.sub(r'^this\.', '', x['target']).startswith(d['name'] + '.')}
         # Designer 연결은 events.csv 에 'this.컨트롤' 로 있다 — 이걸 안 보면 핸들러·하위 조건이 전부 비어 C1 이 재요청 여부만 판정했다(2026-11-02 DMF0005 EG084)
-        hs |= {e['handler'] for e in rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'events.csv')) if re.sub(r'^this\.', '', e.get('target') or '') == d['name'] and e.get('handler') and e.get('variant', 'current') in ('current', 'shared')}
+        hs |= {e['handler'] for e in rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'events.csv')) if re.sub(r'^this\.', '', e.get('target') or '') == d['name'] and e.get('handler') and is_cur(e)}
         body = [x for x in acts if x['method'] in hs]
         calls = {x['target'] for x in body if x['kind'] == 'CALL_LOCAL'}
         body += [x for x in acts if x['method'] in calls]
@@ -1167,7 +1181,7 @@ def engine_condition(d, rmap):
         elif isinstance(j[k], list): j[k] = j[k][:n]
         elif isinstance(j[k], dict): j[k] = {kk: j[k][kk] for kk in list(j[k])[:n]}
         s = json.dumps(j, ensure_ascii=False)
-    if len(s) > 3000: s = json.dumps({**{'et': j.get('et'), 'name': j.get('name'), 'labels': j.get('labels', [])[:3], 'truncated': True}, **{k: j[k] for k in ('dead', 'popup', 'asisCombo', 'merge', 'viaPopup', 'popMap', 'd5Src', 'd5', 'noAssign', 'allFlag', 'ctlType', 'asisLabel') if k in j}}, ensure_ascii=False)  # 작은 판정 키는 폴백에도 남긴다(2026-10-27 VMI_YN asisCombo 누락)
+    if len(s) > 3000: s = json.dumps({**{'et': j.get('et'), 'name': j.get('name'), 'labels': j.get('labels', [])[:3], 'truncated': True}, **{k: j[k] for k in ('dead', 'popup', 'asisCombo', 'merge', 'viaPopup', 'popMap', 'd5Src', 'd5', 'noAssign', 'clearOnly', 'allFlag', 'ctlType', 'asisLabel') if k in j}}, ensure_ascii=False)  # 작은 판정 키는 폴백에도 남긴다(2026-10-27 VMI_YN asisCombo 누락)
     return s
 
 

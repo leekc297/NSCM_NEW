@@ -1,0 +1,53 @@
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+// AS-IS 좌상단 Division 라벨(예: '81 Automotive Battery').
+.divLabel {
+  font-weight: 600;
+}
+
+.toolbarButtons {
+  display: flex;
+  gap: 8px;
+}
+
+// 그리드 영역 — flex column 이어야 ResultArea(flex:1 1 0)/그 body 가 채워진다(ResultArea.module.scss).
+//   display:flex 없이 min-height 만 주면 ResultArea 가 auto(0) 높이로 접혀 그리드가 안 보인다(OwnerSelectModal
+//   .gridPane 과 동일 구조). min-height:360px 는 dialog 높이 체인이 완전치 않아도 최소 높이 보장.
+.gridWrap {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 360px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+}

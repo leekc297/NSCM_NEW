@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
@@ -45,8 +47,10 @@ const makeInitSearch = (): SearchCondition => ({
   fcstYn: false,
   planDate: '',
   gapDate: '',
-  fromYyyymm: '',
-  toYyyymm: '',
+  // Period 기본값 = 오늘 기준 -3개월 ~ +3개월(AS-IS Form_Load umpMonthFrom=Now-3M, umpMonthTo=Now+3M,
+  //   SCP0055_Shipment_Allo_Report.cs §4 L165-166). 예: 오늘 2026-10 -> 2026-07 ~ 2027-01.
+  fromYyyymm: dayjs().add(-3, 'month').format('YYYYMM'),
+  toYyyymm: dayjs().add(3, 'month').format('YYYYMM'),
   itemId: '',
   nickName: '',
 });

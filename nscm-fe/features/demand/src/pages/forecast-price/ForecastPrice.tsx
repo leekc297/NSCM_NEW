@@ -26,18 +26,16 @@ import { FcstUploadModal } from '../../components';
 import { ForecastPriceForm } from './components/ForecastPriceForm';
 import { ForecastPriceGrid } from './components/ForecastPriceGrid';
 import { compareForecastRows, groupKeyBindings, type GroupKeyColumn } from './components/ForecastPriceGridUtils';
-import {
-  ExchangeRateModal,
-  ForecastTemplateModal,
-  SavePricePeriodModal,
-  VersionSelectModal,
-} from './components/modals';
+// Excel Form 팝업은 쓰지 않는다 — customButtons 액션이 직접 다운로드한다(handleExcelFormDownload).
+// import { ForecastTemplateModal } from './components/modals';
+import { ExchangeRateModal, SavePricePeriodModal, VersionSelectModal } from './components/modals';
 import {
   AUTH_MEASURES,
   MENU_ID,
   MSG,
   NON_GROUPING_BINDINGS,
   SHEETS,
+  TEMPLATE_EXCEL_PREFIX,
   UPLOAD_HEADERS,
   UPLOAD_SHEET,
 } from './forecast-price.constants';
@@ -53,6 +51,7 @@ import { useForecastPriceStore } from './useForecastPriceStore';
 import { saveExcelUpload, saveTitleSet, TITLESET_SHEET } from './utils/forecast-price.api';
 import { q } from './utils/forecast-price.combo';
 import { editableDayColumnsOf } from './utils/forecast-price.editLock';
+import { buildExcelFormColumns } from './utils/forecast-price.excelForm';
 import { buildSavePayload, buildSaveRows } from './utils/forecast-price.save';
 import { validateSaveRows } from './utils/forecast-price.validate';
 import { buildWsFcstTypeSet, parseWsPlannerYn } from './utils/forecast-price.wsAuth';
@@ -72,7 +71,8 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [exchangeModalOpen, setExchangeModalOpen] = useState(false);
   const [savePriceModalOpen, setSavePriceModalOpen] = useState(false);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
-  const [templateModalOpen, setTemplateModalOpen] = useState(false);
+  // Excel Form 팝업 상태는 더 이상 쓰지 않는다(직다운로드로 대체 — handleExcelFormDownload).
+  // const [templateModalOpen, setTemplateModalOpen] = useState(false);
   // 저장 진행 오버레이 — '^' bulk 저장은 react-query 밖이라 전역 스피너가 뜨지 않는다
   //   (정본 SalesReports.tsx:133·493 동일 패턴). 화면 스피너로 진행 중임을 알린다.
   const [saving, setSaving] = useState(false);
@@ -112,6 +112,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useForecastPriceStore(state => state.setOpenSearchArea);
   const fetchStaticColumns = useForecastPriceStore(state => state.fetchStaticColumns);
   const fetchStaticMeasures = useForecastPriceStore(state => state.fetchStaticMeasures);
+  const fetchTemplateColumns = useForecastPriceStore(state => state.fetchTemplateColumns);
   const restoreSearchConditions = useForecastPriceStore(state => state.restoreSearchConditions);
   const setMeasureAuth = useForecastPriceStore(state => state.setMeasureAuth);
   const setCalendar = useForecastPriceStore(state => state.setCalendar);
@@ -788,18 +789,23 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig = {
     search: () => void handleSubmit(),
     manual: false as const, // Manual(F1) 버튼 미표시 (전체 삭제 방침 — 강민재)
-    // 추가/삭제/저장 = 메뉴 버튼권한(hasButton SAVE — admin 에서 끄면 숨김) AND buttonAuth 시트 Y/N
+    // 추가/삭제/저장 = FcstNPrice 시트 SAVE 권한(시트 단위 — admin 에서 끄면 숨김) AND buttonAuth 시트 Y/N
     //   AND 편집 가능 버전. buttonAuth 는 화면 오픈·Division 변경 시 SP 가 내려주므로 조회 전에도 정해진다.
     //   SP 판정(P_DMF0082_GET_BUTTON_AUTH): SAVE/DELETE = 편집 가능 메저 존재 AND division<>82
     //   (DM Viewer 전 메저 N → 숨김, 82 조회 전용) / INSERT = SAVE AND MKT_FCST·LOC·VMI_In_Req 중 'Y'
     //   (SCP Planner 단독 = SCM_FCST 수정만 가능, 신규행 불가 — [E20260917-INSERTGATE] 규칙 그대로).
     //   과거(조회 전용) 버전은 전 행 EDIT_FLAG='N' → isEditableVersion=false → 세 버튼 숨김(미렌더).
-    //   형제 화면처럼 hasButton('INSERT'/'DELETE') 로 가르지 않는 이유: 메인 시트에 그 버튼이 미등록이고
-    //   버튼권한 API 가 서브시트(Price Batch 팝업 INSERT)를 합쳐 내려줘 항상 true 다(실측 2026-09-04).
-    ...(hasButton('SAVE') && isEditableVersion && buttonAuth.save
+    //   SAVE 를 메뉴 단위로 보면 fcstNPrice/futurePriceInfo/titleSet SAVE 와 합쳐져 FcstNPrice SAVE 만
+    //   꺼도 버튼이 남는다. Delete 는 FcstNPrice DELETE 도 함께 본다(2026-11-03 실측 등록 확인).
+    //   Insert 는 FcstNPrice 시트에 INSERT 가 미등록이라 hasButton 으로 가르지 않는다 — 메뉴 단위
+    //   INSERT 는 futurePriceInfo(환율 팝업) INSERT 라 메인 Insert 와 무관하다.
+    ...(hasButton('SAVE', SHEETS.FCST_N_PRICE_40) && isEditableVersion && buttonAuth.save
       ? {
           insert: buttonAuth.insert ? handleInsert : (false as const),
-          delete: buttonAuth.delete ? () => void handleDelete() : (false as const),
+          delete:
+            buttonAuth.delete && hasButton('DELETE', SHEETS.FCST_N_PRICE_40)
+              ? () => void handleDelete()
+              : (false as const),
           save: () => void handleSave(),
         }
       : { insert: false as const, delete: false as const, save: false as const }),
@@ -812,15 +818,33 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   // AS-IS 커스텀 4버튼 — icon-only (mkt-fcst/DMF0020 표준: buttonLabel='' + iconComponent,
   //   label/title=Tooltip). ⚠️ LBL 실측 대사 완료 — LBL00661/00712/00605 (직전 LBL00741/752/753 은
   //   View PR/MKT FCST 미등록 제외/Include Internal Txn 오매핑 사고 → 교정 2026-07-12).
+  // Excel Form — 팝업 없이 버튼 클릭 즉시 빈 양식을 다운로드한다(DMF0074 handleExcelFormDownload 동일 방향).
+  //   양식 조회(FORM_DATA → P_DMF0082_GET_EXCEL_FORM_DATA)로 조회조건의 키 조합을 채워 내리던 방식을 되돌린다.
+  //   데이터 유무와 무관하게 Sales Price Template 메타 헤더(토큰 원형 + M0~M12)만 있는 양식을 내려받는다.
+  //   헤더는 업로드 HEADER_CONTENT 매핑 키이므로 메타 → buildExcelFormColumns 경로를 그대로 쓴다.
+  const handleExcelFormDownload = async () => {
+    const metaColumns = await fetchTemplateColumns(searchParams.divisionId);
+    const formColumns = buildExcelFormColumns(metaColumns);
+    await GridAction.flatExcelDownload(
+      [],
+      formColumns.map(c => ({ header: c.header, key: c.key, width: c.width })),
+      TEMPLATE_EXCEL_PREFIX
+    ).catch(() => {
+      void setAlert({ type: 'alert', content: t(MSG.SAVE_ERROR, '_Excel download failed.') });
+    });
+  };
+
   const customButtons = [
-    // ⭐ Excel Form(템플릿 다운로드 모달) — division 81 계열 전용 노출 [E20260819-XLS81LOC] (metal-link 'Excel Form' 이식).
+    // ⭐ Excel Form(템플릿 직다운로드) — division 81 계열 전용 노출 [E20260819-XLS81LOC] (metal-link 'Excel Form' 이식).
     //   81 계열 판정은 buttonAuth 시트 EXCEL_FORM_YN (SP 가 division LIKE '81%' 로 산출).
     ...(buttonAuth.excelForm && hasButton('FORM_DATA')
       ? [
           {
             // SubTitle 이 buttonLabel={label} 기본 적용 → 아이콘 + 'Excel Form' 텍스트 (metal-link 동일 shape)
             label: t('LBL00762', 'Excel Form'),
-            action: () => setTemplateModalOpen(true),
+            // 팝업 방식(원본)은 아래처럼 열었다 — 참고용으로 남겨둔다.
+            // action: () => setTemplateModalOpen(true),
+            action: () => void handleExcelFormDownload(),
             iconComponent: <FileExceldownloadIcon />,
             iconPosition: 'leading' as const,
           },
@@ -840,7 +864,8 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     // [UICATEGORY 2026-08-07] div 82 = 조회 전용 — Price Batch Input(기간 일괄 저장 진입점)도 숨김 (사용자 지정)
     // [E20260826-AUTHVIEW] + 판가 편집권한(LOC='Y') 보유 시에만 — SCP Planner(판가 불가)·DM Viewer(전면 불가)
     //   숨김 (사용자 지시 2026-08-26). 두 조건 모두 buttonAuth 시트 PRICE_BATCH_YN (= LOC 'Y' AND division<>82).
-    ...(buttonAuth.priceBatch
+    //   + 팝업 저장은 FcstNPrice/SAVE 로 가므로 그 시트 SAVE 권한(시트 단위)이 없으면 숨긴다.
+    ...(buttonAuth.priceBatch && hasButton('SAVE', SHEETS.FCST_N_PRICE_40)
       ? [
           {
             // 명칭 = DMF0020 과 동일 'Price Batch Input' (LBL00662, 2026-07-12 요청)
@@ -1156,14 +1181,14 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         onSaveResult={() => invalidateAfterSave()}
       />
 
-      {/* Excel Form (템플릿 다운로드 모달) — division 81 계열 전용 [E20260819-XLS81LOC].
-          SP 가 LOC measure 만 산출 + 81 외 division 은 CODE '1' MSG01014 가드. */}
+      {/* Excel Form 팝업은 쓰지 않는다 — customButtons 액션이 직접 다운로드한다(handleExcelFormDownload).
       <ForecastTemplateModal
         open={templateModalOpen}
         modalClose={() => setTemplateModalOpen(false)}
         divisionId={searchParams.divisionId}
         filters={filters as Record<string, unknown> | undefined}
       />
+      */}
 
       {/* Excel Upload (AS-IS DMF0082_EXCEL_UPLOAD — 2-Step: Upload=검증분류 / OK=저장 mode=1.
           공용 FcstUploadModal(demand) + EXCEL_COLUMNS SHEET_NAME='FcstNPrice' 기이관 실측) */}

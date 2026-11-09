@@ -14,18 +14,24 @@ interface Props {
   onItemSearch2: () => void;
   // 2차 Model/Nickname 돋보기 → MaterialByDivisionModal(page 소유, SSP0023 동일, 사용자 지시 2026-10-22).
   onModelSearch2: () => void;
+  // btnRequestor → SsoUserModal(page 소유, AS-IS UserInfoPopup). 요청상세 탭 전용 Requestor 팝업.
+  onRequestorSearch: () => void;
 }
 
 /**
- * 2차 조회조건 바(usrLayoutControl3 — spdDetail 상단, design 02 §1 2차 필드). 노출 필드 =
- * Material(txtItemId2 + 팝업) · Model/Nickname(txtModelId2 + 팝업, Model+NickName 통합) · Lot ID(txtLotID) · Search.
- *   - Material·Model/Nickname 은 MaterialByDivisionModal(page 소유, SSP0023 동일)로 itemId2 / modelId2+nickName2 세팅.
- *   - 각 상세 SP IN 집합(setFilters): 요청상세 = modelId2/itemId2/nickName2/period2, 재고상세 = modelId2/itemId2/lotId.
+ * 2차 조회조건 바(usrLayoutControl3 — spdDetail 상단, design 02 §1 2차 필드). 활성 상세 탭에 따라
+ * 노출 필드가 토글된다(AS-IS SpdDetail_ActiveSheetChanged cs:1357-1382):
+ *   - 공통: Material(txtItemId2 + 팝업) · Model/Nickname(txtModelId2 + 팝업, Model+NickName 통합) · Search.
+ *   - 요청상세(Shipment Request Detail) 탭: Shipment ETA(drpPeriod2) + Requestor(txtRequestor + 팝업). Lot ID 숨김.
+ *   - 재고상세(Stock Detail) 탭: Lot ID(txtLotID). Shipment ETA·Requestor 숨김.
+ *   - 각 상세 SP IN 집합(setDetailFilters): 요청상세 = modelId2/itemId2/nickName2/period2/requestor,
+ *     재고상세 = modelId2/itemId2/lotId(요청상세는 AS-IS p_lot_id="" 로 Lot ID 미사용, cs:2291-2292).
  */
 export const ShipmentRequestElectrodeDetailBar = ({
   onDetailSearch,
   onItemSearch2,
   onModelSearch2,
+  onRequestorSearch,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -105,19 +111,50 @@ export const ShipmentRequestElectrodeDetailBar = ({
             />
           )}
         />
-        {/* Lot ID — txtLotID. 재고상세 SP p_lot_id. */}
-        <FormItem
-          className={commonStyles.formItem}
-          label={t(LBL.LOT_ID, '_Lot ID')}
-          labelAlign='right'
-          render={() => (
-            <InputField
-              fullWidth
-              value={sp.lotId}
-              onChange={e => setSearchParams({ lotId: e.target.value })}
-            />
-          )}
-        />
+        {/* Requestor — txtRequestor + btnRequestor 팝업(SsoUserModal, page 소유, AS-IS UserInfoPopup).
+            요청상세 탭 전용(AS-IS layoutControlItem26/28 Always/Never 토글, cs:1362-1374). 선택 사용자 "이름"을
+            그대로 조회 파라미터(P_REQUESTOR_ID)로 쓴다(ID 아님 — design 02 §4.6). */}
+        {activeDetailTab === 'requestDetail' && (
+          <FormItem
+            className={commonStyles.formItem}
+            label={t(LBL.REQUESTOR, '_Requestor')}
+            labelAlign='right'
+            render={() => (
+              <InputField
+                fullWidth
+                className={commonStyles.popupSearchField}
+                value={sp.requestor}
+                InputProps={{
+                  endAdornment: (
+                    <Button
+                      appearance='outlined'
+                      priority='normal'
+                      iconComponent={<FunctionSearchIcon appearance='lined' />}
+                      onClick={onRequestorSearch}
+                    />
+                  ),
+                }}
+                onChange={e => setSearchParams({ requestor: e.target.value })}
+              />
+            )}
+          />
+        )}
+        {/* Lot ID — txtLotID. 재고상세 탭 전용(AS-IS layoutControlItem17 Always/Never 토글, cs:1364/1375).
+            재고상세 SP p_lot_id. 요청상세 탭에서는 AS-IS 가 p_lot_id="" 로 미사용(cs:2291-2292). */}
+        {activeDetailTab === 'stockDetail' && (
+          <FormItem
+            className={commonStyles.formItem}
+            label={t(LBL.LOT_ID, '_Lot ID')}
+            labelAlign='right'
+            render={() => (
+              <InputField
+                fullWidth
+                value={sp.lotId}
+                onChange={e => setSearchParams({ lotId: e.target.value })}
+              />
+            )}
+          />
+        )}
       </Stack>
       <Button appearance='contained' priority='primary' onClick={onDetailSearch}>
         {t(LBL.SEARCH_GRID, '_Search')}

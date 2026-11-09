@@ -27,18 +27,25 @@ const firstValue = (rows: Row[]): string => {
 
 // SSP0202 승인/반려/자기반려 액션 서버체크 (design 01 §2 E2/E10/E11, roslyn validations 실측).
 export const useShipmentChangeRequestConfirmActions = () => {
-  // E2/E6/E12 ERP 차단 게이트 — SSPBlockCheckIF_SCP(@segment1='SSP0202'), BLOCK_YN='Y'면 차단(MSG00267->MSG01395).
-  //   조회 실패 시 false(차단 안 함) — false-block 방지, 서버 SAVE SP 가 최종 방어(자매 SSP0201 동일).
-  const checkErpBlock = async (divisionId: string): Promise<boolean> => {
+  // E2/E6/E12 ERP 차단 게이트 — SSPBlockCheckIF_SCP(@segment1='SSP0202'). BLOCK_YN='Y' 행이 있으면 차단.
+  //   그 행의 PERIOD(콤보 SQL `SEGMENT2 || ' ~ ' || SEGMENT3`)를 함께 돌려줘 안내 메시지 {0} 에 넣는다
+  //   (AS-IS chkERPIFBlockYn cs:1073 arg=PERIOD → MSG00267 → TO-BE MSG01498). 조회 실패 시 blocked=false
+  //   (false-block 방지, 서버 SAVE SP 가 최종 방어 — 자매 SSP0201 동일).
+  const checkErpBlock = async (
+    divisionId: string
+  ): Promise<{ blocked: boolean; period: string }> => {
     try {
       const rows = await apiClient.getCombo({
         comboId: ERP_BLOCK_COMBO,
         divisionId: divisionId || FIXED_DIVISION,
         segment1: MENU_ID,
       });
-      return (rows ?? []).some(r => str(r.BLOCK_YN ?? (r as Record<string, unknown>).CODE) === 'Y');
+      const hit = (rows ?? []).find(
+        r => str(r.BLOCK_YN ?? (r as Record<string, unknown>).CODE) === 'Y'
+      );
+      return { blocked: !!hit, period: hit ? str((hit as Record<string, unknown>).PERIOD) : '' };
     } catch {
-      return false;
+      return { blocked: false, period: '' };
     }
   };
 

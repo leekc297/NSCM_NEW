@@ -1,33 +1,37 @@
 {
  "ok": true,
  "mode": "apply",
- "stamp": "20261103_094448",
- "tip": "eaeb291747d62647d15e8bf83f8bb17a9be5ca11",
- "tip_info": "eaeb29174 2026-11-03 09:24 Jeongyun Park docs(SCP0131): 통합 설계서·테스트케이스 생성 (design-testcase)",
- "base": "0b6b4a75bc04e5328d18589a3b0e6b1d7409b540",
+ "stamp": "20261109_132219",
+ "tip": "34052be2820422bb279a7aeec2f4675c112ec056",
+ "tip_info": "34052be28 2026-11-09 13:21 eunjoo_hwang docs(memory): 조회조건 열거-vs-ALL 누수 패턴 reference 추가",
+ "base": "eaeb291747d62647d15e8bf83f8bb17a9be5ca11",
  "ancestor": true,
- "commits": 53,
- "changed": 111,
+ "commits": 195,
+ "changed": 442,
  "counts": {
-  "수정(M) — 로컬 = 공통 이력본(무편집)": 107,
-  "신규(A) — 로컬 부재": 2,
-  "3-way 병합 — 충돌 0": 1,
-  "3-way 충돌 2 → 로컬 유지(결정 대기)": 1
+  "동일": 2239,
+  "공통 변경분 — 공통 원문 적용(로컬 보호 안 함)": 320,
+  "공통 파일 — 로컬 부재": 92,
+  "로컬만 다름 — 공통 원문으로 복원(로컬 보호 안 함)": 29,
+  "공통 삭제 — 로컬 삭제(로컬 보호 안 함)": 1,
+  "로컬 전용(공통에 없음) — 유지": 98
  },
  "actions": {
-  "write": 109,
-  "merge": 1,
-  "keep": 1,
-  "delete": 0,
-  "none": 0
+  "none": 2239,
+  "write": 441,
+  "delete": 1,
+  "keep": 98,
+  "merge": 0
  },
- "pending": 1,
- "report": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261103\\README.md",
- "backup": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261103",
+ "pending": 0,
+ "overwrite_local": true,
+ "local_only": 98,
+ "report": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261109\\README.md",
+ "backup": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261109",
  "verify": [
-  "공통 원문 적용 109건 — 개행 정규화 후 공통 원문과 불일치 0건",
+  "공통 원문 적용 441건 — 개행 정규화 후 공통 원문과 불일치 0건",
   "적용 파일 충돌 마커 잔존 0건",
-  "삭제 0건 — 잔존 0",
+  "삭제 1건 — 잔존 0",
   "procedures.d.ts `declare global` 1건(기대 1)"
  ]
 }

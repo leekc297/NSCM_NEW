@@ -75,7 +75,8 @@ TO-BE: `nscm-fe/features/supply/src/pages/constraint-mgmt/`
 | 셀 콤보 4슬롯 (`dtSystem`/`dtYesOrNo`, `isAddALL=false`) | cs:35~36·191·192·203·244 | `CELL_CONTROL_OBJECT_TYPE_CODE='FPComboBox'` + `CELL_COMBO_DATA_TYPE` = `SYSTEM` ×1 / `YesOrNo` ×3. PARAM2/9/10 전건 NULL(cascade 콤보 0건) | 구현 |
 | `Data.Type.LookupCommon`(param1='SYSTEM') | cs:35 | TO-BE 는 **`SYSTEM`** SQL_ID 를 쓴다 | 구현(사유: `LookupCommon` 은 `@lookupType` 바인드를 요구해 셀콤보 자동조회 경로에서 `''` 로 치환돼 0행이 되고 셀에 코드 원문이 노출된다. `SYSTEM` 은 상수를 SQL 에 박고 있어 결과가 5행으로 동일하다) |
 | `SetColumInfo` + Sub 컬럼 순회 동적 3축 (25슬롯) | cs:455~481·866~896 | `applyDynamicSubColumns(masterRow)` + `ConstraintMgmtDetailGrid` 파생 `staticColumns` useMemo | 구현 |
-| `spdMain.CellDoubleClick` → Sub 조회 | cs:849~864 | `dblClick` → `applyDynamicSubColumns` + `setSubFilters` | 구현 |
+| `spdMain.CellDoubleClick` → Sub 조회 | cs:849~864 | `click` → `applyDynamicSubColumns` + `setSubFilters` | 구현(사유: 사용자 요청으로 더블클릭 대신 단일 클릭으로 조회한다(2026-11-04). 같은 LOOKUP_TYPE 재클릭은 재조회하지 않는다) |
+| (AS-IS 없음) 하단 미저장 중 다른 Lookup Type 클릭 | — | `confirmDiscardDetail` → MSG00704 confirm, 취소 시 하단 유지(상단 선택은 클릭한 행에 둔다) | 신설(사유: 단일 클릭 전환으로 실수 이동이 쉬워져 미저장 변경 폐기를 확인한다, GRID-03, 2026-11-04) |
 | 더블클릭 가드 ① `siMain.IsLock(sheetName)==true` 일 때만 | cs:851 | **제거** | 제외(사유: 편집이 기본값인 TO-BE 에서는 이 가드가 Sub 조회를 영구 차단한다 — `decisions.md §2`) |
 | 더블클릭 가드 ② `Rows.Count<=0` | cs:853 | `if (!dataItem) return;` + `if (!lookupType) return;` | 구현 |
 | Main 신규행 기본값 `VALID_YN='Y'` 1건 | cs:811~815 | `EMPTY_MASTER_ROW` (34열 `''` + `VALID_YN:'Y'`) | 구현 |
@@ -120,7 +121,7 @@ TO-BE: `nscm-fe/features/supply/src/pages/constraint-mgmt/`
 |---|---|---|---|
 | `DataUtil.checkRequiredOfSpread(siSub)` — 런타임 라벨의 `*` 를 읽어 빈 값을 MSG00429 로 차단 | cs:659 | 동적 3축 파생 컬럼셋을 `buildDynamicDetailColumns` 로 올려 **그리드 렌더와 `saveWithValidation` 이 같은 컬럼셋**을 쓴다 | 구현(사유: 파생이 그리드 컴포넌트 로컬 useMemo 에만 있으면 저장 검증에 `*` 없는 원본 메타가 넘어가 `isMandatoryColumn` 전건 false — 헤더에 빨간 점은 찍히는데 빈 값이 그대로 저장된다) |
 | `checkRequiredOfSpread` → `CheckValidation` 순서 | cs:546~548 / cs:659~661 | `saveWithValidation(..., payload => { 중복 -> DISPLAY_SEQ -> mutate })` — 필수가 먼저 | 구현 |
-| `FindData_Sub` 안에서 `clbPlanGroup.CheckedItems` 를 **그 시점 한 번** 읽음 | cs:483~529 | `appliedPlanGroupNames` = `setSubFilters`(마스터 더블클릭) 시점 스냅샷 | 구현(사유: 조회조건을 반응형으로 읽으면 체크박스 조작만으로 하단이 재필터되고 splice 로 넣은 미저장 신규행이 사라진다) |
+| `FindData_Sub` 안에서 `clbPlanGroup.CheckedItems` 를 **그 시점 한 번** 읽음 | cs:483~529 | `appliedPlanGroupNames` = `setSubFilters`(마스터 클릭) 시점 스냅샷 | 구현(사유: 조회조건을 반응형으로 읽으면 체크박스 조작만으로 하단이 재필터되고 splice 로 넣은 미저장 신규행이 사라진다) |
 | `InitSpread(siSub)` — 마스터 행이 바뀌면 Sub 시트 재생성 | cs:455 | 같은 스냅샷 참조 교체가 하단 바인딩 배열을 새로 만든다(`slice()` 복사) | 구현(부수효과로 `GridAction.addRow` 의 splice 가 react-query 캐시 배열을 오염시키지 않게 됐다) |
 | 붙여넣기 편집 차단 | — | `pastingCell` 에도 `canEdit` 게이트 | 구현(공용 `setEditableColumns` 는 `_inputEditType` 만 보므로 `canEdit=false` 에서도 'M'/'O' 컬럼 붙여넣기가 통과했다) |
 | `CanSelect` 불통과 시 안내 후 return | R-29 | `handleSearch` 앞단 `hasButton('SEARCH')` 게이트 + `MSG00096` | 구현(사유: 공용 `SearchArea` 의 조회 버튼에는 권한 검사가 0건이라 `hotkeyConfig` 만 막으면 그 버튼으로 조회가 그대로 나간다) |

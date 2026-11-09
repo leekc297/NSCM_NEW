@@ -1,0 +1,3 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+SSP0025,main|같은 사용자,SSP0025_GET_SHIPMENT_REQUESTOR_PIC,ERROR,0,17,[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음,
+SSP0025,main,SSP0025_GET_SHIPMENT_REQUESTOR_PIC,REVIEW,16,17,"AS-IS 16행 · TO-BE 17행 · 키 ['TO_SITE', 'SITE_DESCRIPTION', 'ITEM_ID', 'ELECTRODE_TYPE', 'MODEL_ID', 'NICK_NAME', 'USER_ID', 'VALID_YN'] AS-IS 전용 0 · TO-BE 전용 1 · 값 대조 16칸(숫자 컬럼 1) · 불일치 컬럼 0",미대응 인자 ['p_language']

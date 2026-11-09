@@ -107,9 +107,21 @@ export const useShipmentChangeHistoryStore = createPersistedStoreWithTab<State &
         //   p_division_id / p_from_site / p_to_site / p_incoterms / p_from_yyyymmdd / p_to_yyyymmdd /
         //   p_item_id / p_sono / p_trans_mode / p_confirm_id / p_language / debug_mode='F'.
         //   다중 콤보는 콤마 join(빈=전체). 텍스트(Model/SoNo/ConfirmId)는 콤마 다중입력을 SP 가 파싱(원문 전달).
+        //
+        // p_division_id 는 미선택(ALL)이어도 빈값을 보내면 안 된다 — AS-IS 와 권한범위가 달라진다.
+        //   AS-IS 체인(실측): clbDivision 미체크 -> ControlValues='ALL' -> cs:387
+        //   CString.GetCheckedListValue(dtMyDivision,'ALL') 2인자 오버로드(CString.cs:529~551)가
+        //   'ALL' 을 dtMyDivision(권한 division) 전 행 CSV 로 "전개"해서 보낸다. 즉 AS-IS 미체크 조회
+        //   = 권한 division 전체를 명시 나열한 조회다. 반면 GET SP 본문(PKG_SSP0019 BODY:439~442,
+        //   asis.py 원본도 동일)은 `TRIM(V_DIVISION_ID) IS NULL OR UPPER='ALL'` 이면 필터를 통째로
+        //   건너뛴다 -> 빈값 전송 시 권한 밖 division 까지 조회된다(권한범위 확대). 그래서 미선택이면
+        //   authDivisionIds(MyDivisionInEE_SCP 권한 후보, EE 제외)로 전개해 AS-IS 와 같은 범위를 만든다.
+        //   (From/To Site·Incoterms·TransMode 는 AS-IS 가 3인자 오버로드 isReturnEmptyString=true 라
+        //    ALL 이면 빈값을 보낸다 — 이쪽은 빈=전체 그대로가 등가. 자매 shipment-semi-dept-day 동일 규약.)
+        const pickedDivision = c.divisionIds.length > 0 ? c.divisionIds : state.authDivisionIds;
         state.filters = {
           [SHEETS.MAIN]: {
-            p_division_id: joinOrEmpty(c.divisionIds),
+            p_division_id: joinOrEmpty(pickedDivision),
             p_from_site: joinOrEmpty(c.fromSiteIds),
             p_to_site: joinOrEmpty(c.toSiteIds),
             p_incoterms: joinOrEmpty(c.incoterms),

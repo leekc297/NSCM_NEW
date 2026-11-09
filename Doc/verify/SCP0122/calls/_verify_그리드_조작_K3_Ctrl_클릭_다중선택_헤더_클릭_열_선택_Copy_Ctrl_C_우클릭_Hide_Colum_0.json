@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 162,
+  "at": "2026-11-08T02:45:46.627Z",
+  "user": "minyonglee1",
+  "test": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회"
+ },
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 149,
+  "at": "2026-11-08T02:45:59.366Z",
+  "user": "minyonglee1",
+  "test": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회"
+ },
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 173,
+  "at": "2026-11-08T02:46:00.759Z",
+  "user": "minyonglee1",
+  "test": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회"
+ }
+]

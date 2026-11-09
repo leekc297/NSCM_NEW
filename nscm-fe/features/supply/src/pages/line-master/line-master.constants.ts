@@ -101,6 +101,10 @@ export const MSG = {
   NO_CHANGES: 'MSG00004', // 변경된 내용이 없습니다.
   SAVE_SUCCESS: 'MSG00002', // 성공적으로 저장되었습니다.
   SAVE_FAIL: 'MSG00043', // 저장 중 오류가 발생하였습니다. {0}
+  // Packer 기존행 삭제 차단 안내 — "신규 입력(Insert)한 행만 삭제할 수 있습니다."
+  //   AS-IS DeleteButton(cs:401)은 기존행 선택 시 무반응(silent)이나 왜 안 되는지 알리도록 안내 추가(사용자 지시 2026-11-09).
+  //   DB 실측(SCM_ADM_MSG_M) KO/EN/CN 전건 USE_YN='Y' 등록 확인.
+  DELETE_INSERT_ONLY: 'MSG00608',
 } as const;
 
 // 컬럼 메타 (룰 12 §11.7 형식) — admin SCM_MST_SHEET_COLUMNS 미로드 시 fallback.

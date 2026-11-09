@@ -8,7 +8,7 @@ import { useQueryClient } from '@foundation/query-client';
 import { GridAction, type EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { useMessageStore } from '@shared/stores';
 
 import { ShipmentRequestForm } from './components/ShipmentRequestForm';
 import { ShipmentRequestGrid } from './components/ShipmentRequestGrid';
@@ -67,7 +67,6 @@ export const ShipmentRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // Division 기본 선택 (sales-plan/DMF0003/DMF0020 정본 통일). 세션 division 이 MyDivision 목록에
   //   있으면 그것, 없으면 목록 첫 행. sc.divisionId 가 비어 있을 때만 채운다(사용자 선택 보존).
-  const session = useSessionStore(s => s.session);
   const [divisionRows] = useTabComboQueries({ filters: [SEARCH_COMBO.division] });
   useEffect(() => {
     if (sc.divisionId) return;
@@ -79,9 +78,9 @@ export const ShipmentRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
       .map(r => String(r.CODE ?? ''))
       .filter(code => code && code !== DIVISION.MOBILITY);
     if (codes.length === 0) return;
-    const sessionDiv = String(session.div ?? '');
-    setSearchCondition({ divisionId: codes.includes(sessionDiv) ? sessionDiv : codes[0] });
-  }, [divisionRows, sc.divisionId, session.div, setSearchCondition]);
+    // 기본 사업부 = 콤보(40 제외) 첫 항목. 세션(session.div) 우선 제거(사용자 지시 2026-11-05).
+    setSearchCondition({ divisionId: codes[0] });
+  }, [divisionRows, sc.divisionId, setSearchCondition]);
 
   // 명시 조회 게이트 (persist 안 됨 — 컴포넌트 로컬). 마운트 시 persist 된 stale filters 로 SP 가
   //   자동 발사되어 NULL payload 사고 차단 (sales-plan 계보). Search 클릭 후에만 enable.

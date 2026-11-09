@@ -1,6 +1,6 @@
-# 완료 정의(DoD) — DMF0042 2026-11-05 08:20
+# 완료 정의(DoD) — DMF0042 2026-11-08 02:53
 
-29/44 충족
+29/45 충족
 
 | 코드 | 상태 | 항목 | 근거 |
 |---|---|---|---|
@@ -48,3 +48,4 @@
 | B27 | ✅ | 동적 헤더 원천 DMF0042_3_GET_SPREAD_TITLE → FE 조회 | 시트 'spreadTitle' 조회 |
 | B27 | ✅ | 동적 헤더 원천 DMF0042_GET_SPREAD_TITLE → FE 조회 | 시트 'spreadTitle' 조회 |
 | B27 | ✅ | 동적 헤더 원천 DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE → FE 조회 | 시트 'spreadTitle' 조회 |
+| S01 | ❌ | 정적 게이트(run_verify.py --static) 실행 | 실행 결과 없음(rc=1) —                                                     ^^^ | UnboundLocalError: cannot access local variable 'mid' where it is not associated with a value |

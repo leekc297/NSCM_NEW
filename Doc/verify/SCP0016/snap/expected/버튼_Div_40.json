@@ -1,0 +1,28 @@
+{
+ "kind": "버튼",
+ "scope": "Div 40",
+ "codes": [
+  "MEASURE_SELECT",
+  "SEARCH"
+ ],
+ "asis_buttons": [
+  {
+   "key": "column",
+   "label": "Column",
+   "lbl": "LBL00711",
+   "kind": "subtitle-custom",
+   "tobe": "COLUMN_SETUP",
+   "asis": "btnColumn"
+  },
+  {
+   "key": "measure",
+   "label": "Measure",
+   "lbl": "LBL00310",
+   "kind": "subtitle-custom",
+   "tobe": "MEASURE_SELECT",
+   "asis": "btnMeasure"
+  }
+ ],
+ "src": "plan.json accounts[0].expectedBtns / menuBtnCodes(btn_auth) · buttons(AS-IS 메서드)",
+ "note": "코드 ↔ 표시명은 접두 일치(SEARCH~Search(F5)) · MEASURE_SELECT~Measure"
+}

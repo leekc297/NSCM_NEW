@@ -106,6 +106,9 @@ export const PlanGroupDashboard = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='PlanGroupDashboard'
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
+        // F10(조회조건 초기화) — 사용자 지시(2026-11-05): 서버 개인화 초기화에 더해 **즉시 한번** 화면
+        //   조회조건도 기본값으로 되돌린다(Division 제외 — store reset() 이 현재 Division 보존).
+        resetConditionOnClient
       />
       <PlanGroupDashboardGrid
         gridRef={gridRef}

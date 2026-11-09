@@ -91,11 +91,14 @@ export const ProductionPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) =>
   // 날짜 동적컬럼 헤더 선조회 — Division 이 콤보 자동선택으로 채워지면(비동기) TITLE(캘린더) filters 만
   //   세팅해 화면 진입 직후 날짜 헤더가 뜨도록 한다. MAIN 데이터 조회는 Search 게이트 유지(자동조회 금지).
   //   권한 Division 0건이면 선조회하지 않는다(G6). setTitleFilters 는 TITLE filters 가 이미 있으면 no-op.
+  //   deps 에 기간(from/to)은 넣지 않는다 — Search 전 Period 수동 변경마다 헤더가 재조회돼 깜빡이던 것을
+  //   막는다(조회된 것처럼 보이는 오인 방지). 바뀐 기간은 Search 시 setFilters 가 헤더에 반영한다. bucket 은
+  //   변경 시 그리드(헤더 포함)를 비우므로(setBucket) 비운 뒤 새 bucket 으로 헤더를 1회 다시 세팅하도록 유지.
   useEffect(() => {
     if (noDivisionAuth) return;
     if (!sc.divisionId) return;
     setTitleFilters();
-  }, [noDivisionAuth, sc.divisionId, sc.bucket, sc.fromYyyymmdd, sc.toYyyymmdd, setTitleFilters]);
+  }, [noDivisionAuth, sc.divisionId, sc.bucket, setTitleFilters]);
 
   // 조회 데이터(메인 pivot). enabled = filters 세팅 후(명시 Search 게이트).
   const { data } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({

@@ -23,7 +23,7 @@ import {
   useTabProcQuery,
 } from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { useMessageStore, useSessionStore, useUIStore } from '@shared/stores';
 
 import { ShipmentChangeRequestDraftingModal } from './components/ShipmentChangeRequestDraftingModal';
 import {
@@ -185,6 +185,10 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
   //   미선택이면 통과(로드 전 불필요 차단 방지).
   const isLatestPlan = !latestPlanDate || !sc.planDate || sc.planDate === latestPlanDate;
   const canEditPlan = canEdit && isLatestPlan;
+  // Memo(WH_IN 코멘트) 우클릭 메뉴·더블클릭 팝업은 코멘트 저장 권한이 있을 때만 연다 — AS-IS 도 권한 그룹일 때만
+  //   컨텍스트 메뉴에 Memo 를 추가했다(SSP0015_ShipmentPSI.cs L625). 과거 Plan 잠금 칸에서도 쓰므로 canEditPlan 이
+  //   아니라 버튼 권한으로 판정한다. 기존 메모 표시(코너 마커·툴팁)는 권한과 무관하게 유지한다.
+  const canMemo = hasButton(COMMENTS_BTN.SAVE);
 
   // Packer 과거 조회 분기 — AS-IS SSP0015.cs: 최신 Plan 은 GET_SHIPMENT_PSI_PACKER(L2354),
   //   비최신(과거) Plan 은 GET_SHIPMENT_PSI_PACKER_PAST(L2235). 조회한 filter 의 planStart 를 기준으로 판정
@@ -1390,11 +1394,26 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
     setOpenMeasure(true);
   };
 
+  // 하단 Detail 그리드 공통 툴바(F1/F3/F4/F6/F7/F9/F10)가 "포커스된 그리드"를 보게 한다 — 공용 SubTitle 가드
+  //   (grid.containsFocus())가 Main 그리드만 보던 탓에 하단 그리드 포커스 시 단축키가 전부 무발화였다
+  //   (사용자 신고 2026-11-06, SSP0003 파리티). drill 서브시트는 로컬 ref 라 부모가 시트→ref 로 못 찾으므로
+  //   ShipmentPsiDetailGrid 가 활성 그리드/필터 인스턴스를 아래 ref 에 채운다. 건수 배지는 Main 고정(countGrid).
+  const focusedDetailGridRef = useRef<FlexGridType>();
+  const focusedDetailFilterRef = useRef<FlexGridFilter>();
+  const focusedGridRef = activeGrid === 'detail' ? focusedDetailGridRef : mainGridRef;
+  const focusedGridFilterRef = activeGrid === 'detail' ? focusedDetailFilterRef : mainGridFilterRef;
+
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     save: hasButton('SAVE') ? handleSave : false,
     insert: hasButton('INSERT') ? handleInsert : false,
     delete: hasButton('DELETE') ? handleDelete : false,
+    // grid prop 을 포커스된 그리드로 넘기므로 기본 Excel(grid.current)이 하단 디테일을 받지 않게 Main 고정.
+    excel: () => {
+      const g = mainGridRef.current;
+      if (g)
+        void GridAction.excelDownload(g, 'ShipmentPlanMobilityIt', useUIStore.getState().setProgress);
+    },
     manual: false,
     upload: false,
   };
@@ -1598,7 +1617,7 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       onFigureDrilldown={handleFigureDrilldown}
       prodNoteOf={prodNoteOf}
       memoOf={memoOf}
-      onMemo={handleMemo}
+      onMemo={canMemo ? handleMemo : undefined}
     />
   );
 
@@ -1615,8 +1634,10 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       )}
       <SubTitle
         menuId={MENU_ID}
-        grid={mainGridRef}
-        gridFilter={mainGridFilterRef}
+        // Sort(F3)/Filter(F4)·편집커밋·키보드 가드까지 포커스된 그리드(Main/Detail)를 본다. 건수는 Main 고정.
+        grid={focusedGridRef}
+        gridFilter={focusedGridFilterRef}
+        countGrid={mainGridRef}
         dataCount={mainRows.length}
         excelFileName='ShipmentPlanMobilityIt'
         useHotkey={true}
@@ -1683,6 +1704,8 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
                 }}
                 staticColumns={detailStaticColumns}
                 editable={canEditPlan}
+                focusedGridRef={focusedDetailGridRef}
+                focusedGridFilterRef={focusedDetailFilterRef}
                 onConfirmDetail={setReqDraftingNo}
                 onOrderDetail={setOrderDetailCtx}
               />

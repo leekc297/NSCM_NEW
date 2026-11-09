@@ -377,7 +377,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // F9 Delete — AS-IS DeleteButton(L673~679) 1:1 — Action='I'(신규 삽입행)만 즉시 제거.
-  //   DB 조회행은 무동작(silent) — 저장행 삭제는 셀 0 저장(SP 'D' 전환) 경로만 (DMF0082 와 상이).
+  //   DB 조회행은 무동작(silent) — 저장된 데이터는 삭제하지 않는다(0 은 값 0 으로 저장, DMF0042 와 동일).
   //   ⚠ 드래그 다중 선택 · 삭제 대상이 다른 신규행의 앵커였던 경우의 앵커 승계는
   //   GridAction.removeRow 가 처리한다 — 다중 선택은 grid.selectedRows 를 그대로 순회하고,
   //   앵커 승계는 pin 이 grid 인스턴스의 WeakMap 에 걸려 있어(React state 가 아니다) 삭제된
@@ -414,7 +414,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     );
     if (!vr.ok) return;
 
-    // (1) (행 × 변경 기간셀) unfold — 활성 버킷 셀만, 빈값→'0'→'D', Catch_Up 음수/라인 무변경 검증
+    // (1) (행 × 변경 기간셀) unfold — 활성 버킷 셀만, 빈값→'0'(값 0 으로 저장), Catch_Up 음수/라인 무변경 검증
     const build = buildUnfoldRows({
       insertedRows: pendingRows,
       editedChanges: changedMap,
@@ -485,7 +485,9 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     search: hasButton('SEARCH') ? handleSearch : false,
     insert: hasButton('INSERT') ? handleInsert : false,
     delete: hasButton('DELETE') ? handleDelete : false,
-    save: hasButton('SAVE') ? () => void handleSave() : false,
+    // Save 는 시트 단위 — 메뉴 단위면 titleSet SAVE 와 합쳐져 group menu 에서 Sales Plan SAVE 만
+    //   꺼도 버튼이 남는다(저장은 Sales Plan/SAVE 로 간다).
+    save: hasButton('SAVE', SHEETS.MAIN) ? () => void handleSave() : false,
     manual: false,
     upload: false,
   };

@@ -1,5 +1,5 @@
 import { PeriodField } from 'features/master/src/components';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -67,6 +67,14 @@ export const WarehouseCapacityForm = ({ onSearch, onItemSearch, activeSheet }: P
   const [validRows] = useTabComboQueries({ filters: [VALID_COMBO_ID] });
 
   const divisionOptions = useMemo(() => toOptions(divisions), [divisions]);
+
+  // Division 기본값 = 콤보 첫 항목 자동선택(AS-IS SCP0133 cs:182 GetDivision 바인딩 후 첫 행, SelectedIndex
+  //   미지정). store 초기값('')이 옵션에 없을 때만 세팅 — setDivision 이 하위 조건·그리드 초기화 포함.
+  const firstDivision = divisionOptions[0]?.value ?? '';
+  const hasCurrentDivision = divisionOptions.some(o => o.value === sc.divisionId);
+  useEffect(() => {
+    if (firstDivision && !hasCurrentDivision) setDivision(firstDivision);
+  }, [firstDivision, hasCurrentDivision, setDivision]);
 
   // PlanGroup — PlanGroup_SCP_ALL 은 전량 조회 + DIVISION_ID 컬럼 반환(design 02 §2.3) → 클라에서
   //   선택된 division 으로 좁힌다(AS-IS DBUtils.Filter 재현, filterCalls#1).

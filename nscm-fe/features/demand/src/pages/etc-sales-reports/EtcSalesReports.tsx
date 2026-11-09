@@ -559,7 +559,9 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   그래서 저장을 누르면 Save 버튼이 사라졌다가 끝나면 다시 나타났다.
     //   연타는 `savingRef` 가 동기로 막고(handleSave 진입 가드), 진행 표시는 아래
     //   ProgressIndicator 오버레이가 한다 (REQ:CHAT-20260820-17).
-    save: hasButton('SAVE') ? () => void handleSave() : false,
+    // 시트 단위 판정 — 메뉴 단위 hasButton('SAVE') 는 titleSet SAVE 와 합쳐져 group menu 에서
+    //   MDF Reports SAVE 를 꺼도 버튼이 남는다.
+    save: hasButton('SAVE', SHEETS.MAIN) ? () => void handleSave() : false,
     manual: false,
     upload: false,
   };

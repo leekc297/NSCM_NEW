@@ -218,7 +218,7 @@ export const AuthManagementPopup = ({
     if (!keyword) {
       void setAlert({
         type: 'alert',
-        content: t('MSG00913', '_사용자ID 혹은 이름을 입력해주세요.'),
+        content: t('MSG00717', '_사용자ID 혹은 이름을 입력해주세요.'),
       });
       return;
     }

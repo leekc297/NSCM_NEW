@@ -56,12 +56,10 @@ export const NnMasterMappingGrid = ({
   //   080_DMF0072_dynamic_property_management.sql 사내 적용 완료 (2026-06-20) → BE 가 23 row 반환.
   //   admin UI Category Setup 의 VISIBLE_FLAG 변경이 즉시 반영됨 (FE hardcoded fallback 제거 완료).
   const rawStaticColumns = useNnMasterMappingStore(s => s.staticColumns.main);
-  // AS-IS .cs L1073-1084 clbDivision_SelectedIndexChanged 재현 — division=='40' 이면 PROJECT_CODE 숨김.
-  //   메타(SHEET_COLUMNS)엔 division 축이 있지만 DMF0072 PROJECT_CODE row 는 DIVISION_ID 가 비어 있어
-  //   서버 재조회로는 걸러지지 않는다. AS-IS 와 동일하게 FE 에서 visible 을 가공한다.
-  //   필수: col.visible 을 wijmo 인스턴스에 직접 세팅하면 DataGrid 가 매 렌더 컬럼을 재생성하며 리셋되므로
-  //   staticColumns 소스의 visible 자체를 바꿔 재생성 뒤에도 유지되게 한다.
-  //   END_CUSTOMER 셀 콤보도 같은 분기다 — AS-IS InsertRow(cs567/572)는 40 이면 EndCustomerByDivision40
+  // AS-IS .cs L1073-1084 clbDivision_SelectedIndexChanged 의 division=='40' PROJECT_CODE 숨김은
+  //   UI Category 메타(PROJECT_CODE DIVISION_ID = 40 제외, 2026-11-06 등록)로 옮겼다 — store 가 사업부를
+  //   넘겨 받은 컬럼에 이미 빠져 있다. FE 에서 visible 을 따로 가공하지 않는다.
+  //   END_CUSTOMER 셀 콤보는 40 이면 다른 콤보를 쓴다 — AS-IS InsertRow(cs567/572)는 40 이면 EndCustomerByDivision40
   //   (프로젝트 코드 기준), 그 외는 UserEndCustomerByDivisionDeptAuth 를 쓴다. 메타는 한 행이라 사업부별로
   //   나눌 수 없어(PK PROGRAM_ID·SHEET_NAME·COLUMN_NAME, 조회 SP 에 사업부 축 없음) 40 일 때만 FE 에서
   //   콤보 ID 를 바꾼다. PARAM2(DIVISION_ID:divisionId)·PARAM10(D)은 그대로 둬 행 파라미터 경로를 유지한다.
@@ -70,7 +68,6 @@ export const NnMasterMappingGrid = ({
   const staticColumns = useMemo(() => {
     if (searchCondition.divisionId !== '40') return rawStaticColumns;
     return rawStaticColumns.map(col => {
-      if (col.colNm === 'PROJECT_CODE') return { ...col, visible: false };
       if (col.colNm === 'END_CUSTOMER') {
         return { ...col, cellCboDataTp: SEARCH_COMBO.endCustomer40Requery };
       }

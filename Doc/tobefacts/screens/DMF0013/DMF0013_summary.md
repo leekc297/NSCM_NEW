@@ -32,11 +32,7 @@
 | /DMF0013/PSI Upload/FORM_DATA/call-proc | http | 1 | Y | cust-psi-upload.api.ts:21 |
 
 ## 3. procedures.d.ts 등재 시트
-| sheet | request_keys | response_cursors | sp_hints |
-|---|---|---|---|
-| PSI Upload | divisionId deptId endCustomer scmSiteId plantSiteId projectCode itemId startYyyymmdd endYyyymmdd bucketType domExp createdBy userinfo sesUserId mnuId | o_rc1 | DMF0014_GET_SPREAD_TITLE PR_GET_DAY_RANGE P_DMF0013_SAVE_CUST_PSI_UPLOAD_DATA |
-| spreadTitle | startYyyymmdd endYyyymmdd bucketType sesUserId mnuId | o_rc1 | DMF0014_GET_SPREAD_TITLE PR_GET_DAY_RANGE P_DMF0013_SAVE_CUST_PSI_UPLOAD_DATA |
-| dayRange | createdBy month | o_rc1 o_rc2 | DMF0014_GET_SPREAD_TITLE PR_GET_DAY_RANGE P_DMF0013_SAVE_CUST_PSI_UPLOAD_DATA |
+(없음)
 
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |

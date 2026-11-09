@@ -9,7 +9,7 @@ import { DataGrid } from '@shared/components';
 
 import { LEVEL_TITLE, MENU_ID, type LevelNo } from '../capa-line-master.constants';
 import type { CapaLineRow } from '../capa-line-master.types';
-import { canDrillDown, isCellEditable } from '../utils/capaLineMaster.editLock';
+import { canDrillDown, isCellEditable, isInsertRow } from '../utils/capaLineMaster.editLock';
 import { buildColumns } from '../utils/capaLineMasterColumns';
 
 import styles from './CapaLineMasterLevelGrid.module.scss';
@@ -20,8 +20,8 @@ interface Props {
   gridRef: MutableRefObject<FlexGridType | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   editTrackerRef: MutableRefObject<EditTracker | undefined>;
-  // 현재 편집모드인 레벨(없으면 null). 5그리드 중 동시 1개만 — design 01 §2.1.
-  editingLevel: LevelNo | null;
+  // EDIT 버튼 권한(hasButton('EDIT')). 수정 모드 토글 미이식(asis_to_tobe.md §11) — 권한 있으면 상시 편집.
+  canEdit: boolean;
   adminColumns?: RawFlexGridColumnConfig[];
   // 셀 더블클릭 -> 하위 레벨 재조회(L1~L4). L5 는 호출되지 않는다(design 01 §2 L6).
   onDrillDown: (row: Record<string, unknown>) => void;
@@ -47,7 +47,7 @@ export const CapaLineMasterLevelGrid = ({
   gridRef,
   gridFilterRef,
   editTrackerRef,
-  editingLevel,
+  canEdit,
   adminColumns,
   onDrillDown,
   onFocus,
@@ -57,9 +57,9 @@ export const CapaLineMasterLevelGrid = ({
   // 셀 콤보 @토큰(@mnuId) 해소 — VALID_YN=YesOrNo. 인용은 getCombo funnel(nscm-patterns §3.3).
   const comboParams = useMemo(() => ({ mnuId: `'${MENU_ID}'` }), []);
 
-  // 최신 editingLevel/rows 를 stale 없이 참조(핸들러는 mount 후 1회 등록, deps 최소화).
-  const editingLevelRef = useRef(editingLevel);
-  editingLevelRef.current = editingLevel;
+  // 최신 canEdit/rows 를 stale 없이 참조(핸들러는 mount 후 1회 등록, deps 최소화).
+  const canEditRef = useRef(canEdit);
+  canEditRef.current = canEdit;
   const rowCountRef = useRef(rows.length);
   rowCountRef.current = rows.length;
   const drillRef = useRef(onDrillDown);
@@ -77,17 +77,13 @@ export const CapaLineMasterLevelGrid = ({
       if (e.panel !== sender.cells) return;
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
-      toggleClass(
-        e.cell,
-        'wj-cell-editable',
-        isCellEditable(level, binding, row, editingLevelRef.current)
-      );
+      toggleClass(e.cell, 'wj-cell-editable', isCellEditable(level, binding, row, canEditRef.current));
       toggleClass(e.cell, 'wj-cell-non-editable', false);
     };
     grid.formatItem.addHandler(formatItemHandler);
 
-    // 편집 게이트(design 03 §3.2 / §5-3) — 조회 직후 전열 읽기전용, 편집모드 + DUMMY_YN='Y' 행의
-    //   자기 NAME(+L5 VALID_YN), 신규행의 자기 ID/NAME(+L5 VALID_YN) 만 해제.
+    // 편집 게이트(design 03 §3.2 / §5-3) — EDIT 권한 있으면 DUMMY_YN='Y' 행의 자기 NAME(+L5 VALID_YN),
+    //   신규행의 자기 ID/NAME(+L5 VALID_YN) 만 해제. 권한 없으면 기존행 전열 읽기전용.
     //   공용 DataGrid 기본 핸들러(INPUT_TP_CD 기반)가 먼저 판정하고 화면이 나중에 최종 재지정한다.
     const beginningEditHandler = (
       sender: FlexGridType,
@@ -95,7 +91,7 @@ export const CapaLineMasterLevelGrid = ({
     ) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
-      e.cancel = !isCellEditable(level, binding, row, editingLevelRef.current);
+      e.cancel = !isCellEditable(level, binding, row, canEditRef.current);
     };
     grid.beginningEdit.addHandler(beginningEditHandler);
 
@@ -107,18 +103,28 @@ export const CapaLineMasterLevelGrid = ({
     ) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
-      if (!isCellEditable(level, binding, row, editingLevelRef.current)) e.cancel = true;
+      if (!isCellEditable(level, binding, row, canEditRef.current)) e.cancel = true;
     };
     grid.pastingCell.addHandler(pastingCellHandler);
 
-    // 드릴다운 — L1~L4 셀 더블클릭 시 하위 레벨 재조회(cs:1743~1814).
-    //   가드: L5 제외 / rows 0건 / 해당 레벨 편집중(AS-IS Action 컬럼 visible 판정).
+    // 드릴다운 — L1~L4 셀 더블클릭 시 하위 레벨 재조회(cs:1743~1814). 가드: L5 제외 / rows 0건.
+    //   수정 모드 억제축은 미이식(asis_to_tobe.md §11). 더블클릭의 주 동작은 드릴다운이다 —
+    //   편집가능 셀(노란 셀)이든 아니든 더블클릭하면 드릴다운한다(사용자 지시 2026-11-02).
+    //   주의: 편집가능 셀을 더블클릭하면 공용 DataGrid 가 네이티브 편집기를 띄워(DataGrid.tsx:1681)
+    //   그 input 이 셀을 덮어 hitTest 가 Cell 이 아니게 된다 → 현재 선택행(selection.row)으로 보정하고,
+    //   열린 편집기는 닫은 뒤 드릴다운한다. 셀 편집 자체는 단일클릭·F2·키인으로 시작한다(편집가능 표시는 유지).
     const dblClickHandler = (ev: MouseEvent) => {
+      if (!canDrillDown(level, rowCountRef.current)) return;
       const hit = grid.hitTest(ev);
-      if (hit.cellType !== CellType.Cell) return;
-      if (!canDrillDown(level, rowCountRef.current, editingLevelRef.current)) return;
-      const row = GridUtils.getRow(grid, hit.row) as Record<string, unknown> | undefined;
+      const rowIndex = hit.cellType === CellType.Cell ? hit.row : (grid.selection?.row ?? -1);
+      if (rowIndex < 0) return;
+      const row = GridUtils.getRow(grid, rowIndex) as Record<string, unknown> | undefined;
       if (!row) return;
+      // 신규행('I')은 자기 레벨 ID 가 빈 값이라 드릴다운하면 빈 키로 하위를 조회한다 — 무동작으로 막는다.
+      //   AS-IS 도 편집모드(Action 컬럼 visible)면 더블클릭 드릴다운을 억제했다(cs:1748~). 수정모드 토글
+      //   자체는 미이식(asis_to_tobe §11)하되, 신규행 드릴다운 억제 의도만은 유지한다(사용자 확정 2026-11-06).
+      if (isInsertRow(row)) return;
+      if (grid.activeEditor) grid.finishEditing(true);
       drillRef.current(row);
     };
     grid.hostElement.addEventListener('dblclick', dblClickHandler);

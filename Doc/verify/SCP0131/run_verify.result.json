@@ -1,0 +1,209 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-07T20:32:27+09:00",
+ "producer": "run_verify",
+ "id": "SCP0131",
+ "skip_e2e": false,
+ "started": "2026-11-07 19:43:07",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-c8cd860a",
+   "class": "G3",
+   "msg": "SCP0131 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E smoke/auth 요약"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-11d9fee9",
+   "class": "F2",
+   "msg": "SCP0131 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-07 20:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2bcf7fcf",
+   "class": "E7",
+   "msg": "Sales Site Priority.ITEM_ID (Model*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-07 20:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8e911390",
+   "class": "E7",
+   "msg": "Sales Site Priority.ITEM_ID (Model*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-07 20:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-637991ac",
+   "class": "E1",
+   "msg": "Sales Site Priority.PRIO_RANK (Priority*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-07 20:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e5dd5abc",
+   "class": "H13",
+   "msg": "Sales Site Priority.PRIO_RANK (Priority*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-07 20:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-089cd2c5",
+   "class": "G5",
+   "msg": "[DMF0042 결함 유형] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4dcb8c79",
+   "class": "F2",
+   "msg": "[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5622ffdf",
+   "class": "G5",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-35587087",
+   "class": "G5",
+   "msg": "[SCP0006 결함 유형] Capa New Model 팝업 조건(Group/Plant)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-16764f22",
+   "class": "G5",
+   "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0566f2f0",
+   "class": "G5",
+   "msg": "검색 팝업(공용 모달) 호출 인자",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-167aad67",
+   "class": "X-ROW",
+   "msg": "SCP0131_SalesSitePriority.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [],
+ "summary": {
+  "rows": 1837,
+  "PASS": 782,
+  "FAIL": 13,
+  "판정필요": 18,
+  "미검증": 88,
+  "해당없음": 936,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1211,
+   "없음(미검증)": 88,
+   "사람": 2,
+   "없음(판정 대기)": 18,
+   "기계(상속·집계)": 516,
+   "출처 미기록": 2
+  },
+  "fail_listed": 13,
+  "coverage": {
+   "rules": 90,
+   "measured": 503,
+   "not_run_error": 63,
+   "na": 309,
+   "suspect_na100": []
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0131_SalesSitePriority_CheckList_v11.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0131_SalesSitePriority_ActionItemList_v11.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0131/e2e_results.json"
+  }
+ ],
+ "note": ""
+}

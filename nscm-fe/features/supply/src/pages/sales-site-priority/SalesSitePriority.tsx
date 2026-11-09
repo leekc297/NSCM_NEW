@@ -119,31 +119,18 @@ export const SalesSitePriority = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticColumns();
   };
 
-  // 신규행(design 01 §2#6 / 03 §3.2, AS-IS Insert_Row l503~521 확정): 확정 조회조건 division
-  //   기준 기본값(DIVISION_ID 항상잠금, VALID_YN='Y' AS-IS defaultData 그대로).
-  //   AS-IS 미조회 상태 빈 행 삽입 금지(tact-time SCP0020 실사고 재발 방지) — 조회(filters) 선행 필수.
-  //   InsertButton override 는 AS-IS 원본 확보(2026-09-26)로 실동작(Insert_Row 호출) 확정 —
-  //   "조회 후 그리드 상시편집" 모드에서 행 추가를 허용하는 이 배선이 최종 구현이다(__asis-mapping__.md).
+  // 신규행(design 01 §2#6 / 03 §3.2, AS-IS Insert_Row l503~521): DIVISION_ID 항상잠금 + VALID_YN='Y'
+  //   기본값(AS-IS defaultData 그대로). 기준 division 은 AS-IS 와 동일하게 현재 폼에 선택된 Division
+  //   (cboDivision.ControlValues, .cs:512)에서 가져온다 — 조회(filters) 선행은 AS-IS 조건이 아니다.
+  //   AS-IS 는 Insert_Row 가 IsLock==false(편집모드) 아니면 메시지 없이 조용히 무시하므로(.cs:505),
+  //   기준 division 이 없으면(미선택/다중) 알림 없이 return 한다. Division 은 진입 시 첫 값 자동선택
+  //   (SalesSitePriorityForm firstDivision)이라 통상 값이 있다. __asis-mapping__.md G06 참조.
   const handleInsert = () => {
     const grid = gridRef.current;
     if (!grid) return;
-    const f = filters[SHEETS.MAIN];
-    if (!f) {
-      void setAlert({
-        type: 'alert',
-        content: t(MSG.REQUIRED_SELECT, '_Select {0}.').replace('{0}', 'Division'),
-      });
-      return;
-    }
-    const division = s((f as Record<string, unknown>).divisionId);
-    if (division === '' || division.includes(',')) {
-      // Division 은 단일 선택(design 02 주1) — 콤마 다중이면 신규행 기본값 확정 불가.
-      void setAlert({
-        type: 'alert',
-        content: t(MSG.REQUIRED_SELECT, '_Select {0}.').replace('{0}', 'Division'),
-      });
-      return;
-    }
+    const division = s(searchCondition.divisionId);
+    // Division 은 단일 선택(design 02 주1) — 미선택/콤마 다중이면 신규행 기본값 확정 불가, 조용히 무시.
+    if (division === '' || division.includes(',')) return;
     GridAction.addRow(grid, insertDefaults(division));
   };
 

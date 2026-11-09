@@ -254,32 +254,23 @@ export const useProductionPlanWaterfallStore = createPersistedStoreWithTab<State
     },
     // 날짜 헤더(TITLE) 선조회 — Division 이 실제 값(콤보 자동선택 후)일 때만 세팅한다. divisionId 가
     //   비면 의미 있는 캘린더가 나오지 않으므로 no-op. MAIN filters 는 건드리지 않아 데이터 자동조회가
-    //   발생하지 않는다. Search 로 MAIN 이 이미 조회됐으면(= filters[MAIN] 존재) 그때의 TITLE 과 어긋나지
-    //   않게 선조회를 넘긴다 — Search 시 setFilters 가 MAIN·TITLE 을 함께 재구성하기 때문. Search 전에는
-    //   Division/Bucket/기간 변경에 따라 헤더를 현재 조건으로 갱신한다.
+    //   발생하지 않는다. Search 로 MAIN 이 이미 조회됐으면(= filters[MAIN] 존재) 선조회를 넘긴다 — Search 시
+    //   setFilters 가 MAIN·TITLE 을 함께 재구성하기 때문.
+    //   헤더는 진입(또는 그리드 clear: Division/OperationGroup/Bucket/All 변경) 후 1회만 세팅하고, 이미 TITLE
+    //   이 있으면 재세팅하지 않는다 — Search 전 Period 수동 변경마다 헤더가 재조회돼 깜빡이던 것을 막는다(조회가
+    //   된 것처럼 보이는 오인 방지, Search 게이트 원칙). 바뀐 Period 는 Search 시 setFilters 가 헤더에 반영한다.
     setTitleFilters: () => {
       set(state => {
         const p = state.searchParams;
         if (!p.divisionId) return;
         if (state.filters[SHEETS.MAIN]) return;
-        const next = {
+        if (state.filters[SHEETS.TITLE]) return;
+        state.filters[SHEETS.TITLE] = {
           divisionId: orAll(p.divisionId),
           bucket: p.bucket,
           fromYyyymmdd: dash(p.fromYyyymmdd),
           toYyyymmdd: dash(p.toYyyymmdd),
         };
-        // 동일 조건이면 재세팅하지 않는다(effect 재평가·StrictMode 이중호출 시 중복 TITLE 조회 방지).
-        const cur = state.filters[SHEETS.TITLE];
-        if (
-          cur &&
-          cur.divisionId === next.divisionId &&
-          String(cur.bucket) === String(next.bucket) &&
-          cur.fromYyyymmdd === next.fromYyyymmdd &&
-          cur.toYyyymmdd === next.toYyyymmdd
-        ) {
-          return;
-        }
-        state.filters[SHEETS.TITLE] = next;
       });
     },
     clearFilters: () =>

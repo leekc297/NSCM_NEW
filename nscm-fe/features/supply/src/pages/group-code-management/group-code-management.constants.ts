@@ -91,7 +91,7 @@ export const ALARM_MASS_COLUMN = {
 
 // 화면 고유 저장검증 MSG (03_grid-columns.md §3-4 R-SAVE-RESULT / §6).
 export const MSG = {
-  DATE_ORDER: 'MSG00048', // 81* SALES_FROM/TO 일자 순서 (V-DATE-ORDER)
+  DATE_ORDER: 'MSG00108', // 81* SALES_FROM/TO 일자 순서 (V-DATE-ORDER)
   // 저장 성공 — R-SAVE-RESULT. NSCM(TO-BE) MSG00004 는 "No changes to save."(무변경)라 저장 성공에 쓰면
   //   성공 토스트가 "수정한 내용이 없습니다."로 뜬다(DB SCM_ADM_MSG_M 실측). MSG00002 "성공적으로 저장되었습니다."
   //   를 쓴다(사용자 지시 2026-10-12, 건수 플레이스홀더 없음).

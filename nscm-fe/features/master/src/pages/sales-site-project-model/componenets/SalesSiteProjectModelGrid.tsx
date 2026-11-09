@@ -138,6 +138,9 @@ export const SalesSiteProjectModelGrid = ({
       if (event.key !== 'Delete' && event.key !== 'Backspace') return;
       // 편집 중(네이티브 입력)에는 편집기가 받아야 하므로 건드리지 않는다.
       if (grid.activeEditor) return;
+      // 읽기전용(production SAVE 권한 없음)이면 가로채지 않는다 — 아래 직접 대입은 wijmo 의 읽기전용 차단을
+      //   거치지 않으므로, 여기서 빠져야 기본 Delete 도 읽기전용에 막혀 아무것도 지워지지 않는다.
+      if (grid.isReadOnly) return;
 
       const selection = grid.selection;
       if (!selection || selection.col < 0) return;
@@ -153,6 +156,8 @@ export const SalesSiteProjectModelGrid = ({
       for (let rowIndex = topRow; rowIndex <= bottomRow; rowIndex += 1) {
         const row = GridUtils.getRow(grid, rowIndex);
         if (!row) continue;
+        // 행 잠금(EDIT_FLAG='N' — SP 사업부 권한·SCP Planner 가드) 행은 셀 편집처럼 지우지 않는다.
+        if ((row as WijmoRowItem).EDIT_FLAG === 'N') continue;
         if (!row.TEAM_NAME && !row.DEPT_ID) continue;
 
         editTrackerRef.current?.storeChange(row, 'TEAM_NAME', row.TEAM_NAME, '');
@@ -488,11 +493,18 @@ export const SalesSiteProjectModelGrid = ({
 
     if (!dataItem || !binding) return;
 
-    if (binding === 'DEPT_ID' || binding === 'TEAM_NAME') {
+    // 그리드가 읽기전용(production SAVE 권한 없음)이면 Team/Owner 입력 팝업을 띄우지 않고 아래 하단 조회로 넘어간다.
+    //   AS-IS spdMain_CellDoubleClick 도 잠금 상태에서는 FindData_Sub 만 하고 팝업은 편집 상태에서만 띄웠다.
+    //   Project/Model 팝업은 신규행(I) 조건이라 읽기전용(행 추가 불가)에서는 원래 열리지 않는다.
+    //   행 잠금(EDIT_FLAG='N')도 함께 본다 — 메뉴 SAVE 가 있어도 SP 의 사업부 권한이나 SCP Planner 가드
+    //   (applyScpEditLock)로 잠긴 행은 셀 편집이 막히는데, 팝업만 열리면 선택값이 그대로 들어가 잠금이 뚫린다.
+    const canEdit = !grid.isReadOnly && (dataItem as WijmoRowItem).EDIT_FLAG !== 'N';
+
+    if (canEdit && (binding === 'DEPT_ID' || binding === 'TEAM_NAME')) {
       setClickedRow(ht.row);
       setOpenTeamModal(true);
       return;
-    } else if (binding === 'OWNER' || binding === 'PRJ_OWNR_ID') {
+    } else if (canEdit && (binding === 'OWNER' || binding === 'PRJ_OWNR_ID')) {
       setClickedRow(ht.row);
       setOwnerOpenByPm(binding === 'PRJ_OWNR_ID');
       setOpenOwnerModal(true);
@@ -579,6 +591,8 @@ export const SalesSiteProjectModelGrid = ({
         itemsSource={data}
         staticColumns={staticColumns[SHEETS.PRODUCTION]}
         allowMerging={AllowMerging.ColumnHeaders}
+        // 읽기전용 자동 잠금을 production 시트 SAVE 권한으로 판정(메뉴 단위면 modelChange SAVE 와 섞임)
+        saveAuth={{ sheetName: SHEETS.PRODUCTION }}
         gotFocus={handleFocus}
         dblClick={handleGridDblClick}
       />

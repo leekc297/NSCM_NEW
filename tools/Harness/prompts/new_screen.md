@@ -16,7 +16,10 @@
 6-2. **조회조건 기준표 참고자료**(SCP·SSP 화면 — 사용자 지시 2026-10-23, 룰 E11): `tools/VibeManager/rules/40_SEARCH_COND.md` 의 `#### <ID>` 절(+ §2 정렬원칙·명칭/팝업 통일). 생성기가 이미 조회조건 **순서·사용여부·To-Be 명칭**을 적용했다(GEN_NOTES §12 · Form 주석 `기준표 #n`) — 아래 '해야 할 것' 1-1.
 7. **하우스 스타일 예제**: `tools/Harness/prompts/examples/INDEX.md` — 채울 항목의 유형(§1 컨트롤 타입 / §2 이벤트명)에 맞는 `examples/<유형>.md` 를 먼저 읽고 **그 모양 그대로**(훅·컴포넌트·네이밍·주석 규약) 작성한다. 예제에 없는 유형만 표준 참조 화면을 본다.
 
+8. **검사엔진 사양 표(기대값 원천 — 검사기와 같은 표를 읽는다 · 2026-11-08 사용자 결정 '생성·검사 사양 공유')**: `tools/Harness/rules/search_cond.csv`(조회조건 순서·사용 여부 · SC1/G4 기준) · `label_alias.csv`(명칭 별칭 CR-092 등) · `Doc/tobefacts/db/sheet_columns.csv`(컬럼·필수·편집·정렬 메타 · A5/E3/H1) · `confirmed_requirements.csv`(CR 룰) · `design_decisions.csv`(DD 설계 결정) · `common_contract.csv`(CC 공용 컴포넌트 계약) · `rule_applicability.csv`(이 화면에 적용될 규칙 판별). 이 표와 다른 기대값으로 만들면 정합검증에서 FAIL 이 난다 — 표가 틀렸다고 보면 표를 고치지 말고 사용자에게 보고한다.
+
 ## 완료 정의(DoD) — 끝났다고 말하기 전에 `node tools/Harness/check.js --page <폴더> --id <ID> --final` 의 `Doc/gen/<ID>/DOD.md` 가 전부 ✅ 여야 한다
+**정적 게이트(2026-11-08 신설)**: 그 다음 `python tools/Harness/verify/run_verify.py <ID> --static` 이 exit 0(정적 FAIL 0)이어야 한다 — 브라우저 없이 1~3분 · 결과 `Doc/verify/<ID>/static_gate.md`. FAIL 이 있으면 그 행(규칙·기대 원천·증거)을 고친 뒤 다시 `--static`. E2E 포함 정규 실행(`run_verify.py <ID>`)은 정적 게이트 통과 뒤에만.
 기초 항목(B01~B21): index.ts export · MENU_ID as const+type · SHEETS · createPersistedStoreWithTab · useTabProcQuery<MENU_ID> · hotkeyConfig search/save/insert/delete/upload/manual 명시(As-is override 있으면 함수, 없으면 false; UsrConditionPanel 없으면 condition/resetCondition false) · As-is 팝업 1:1(components/modals 또는 공통 모달 재사용 명시 + 매핑표 POPUP 섹션) · Division 분기 보존 · AS-IS 파일:라인 주석 · Form 표준(SearchArea/FormItem/LBL 코드/useTabComboQueries) · DataGrid · 검증/표현식 훅 · 단위테스트 · register/e2e_plan/registration.sql/PKG.sql · **B22~B25**(filter 키 = 사내 PROC_M COL_NM · registration.sql 배선 = 사내 현행 · As-is Form_Load 초기값 반영 · 공통버튼 핸들러 빈 본문 0) · **M06/M07**(커밋본 대비 대사표 축소·파일 삭제 0).
 
 ## 해야 할 것 (순서)

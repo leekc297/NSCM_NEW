@@ -1,0 +1,12 @@
+﻿target_kind,target,label,method,var,filters,wrapper,sp,code,args,unresolved,ref
+SEARCH,cboDivision,,RefreshDivision,dtDivision,ATTRIBUTE3 <> 'EE' @BLUtils.cs:58-117,Data_SCP.Common,UP_FX_GetCommonDataList_SCP,Division,"[{""n"": ""@Param1"", ""expr"": ""UserInfoContext.Current[\""NowGroupID\""]""}, {""n"": ""@Param2"", ""expr"": ""UserInfoContext.Current.UserId""}]",,SCP0108_CAPA_LOB_Report.cs:986 ← SCP0108_CAPA_LOB_Report.cs:45
+SEARCH,cboVersion,Plan Month,RefreshVersion,dtVersion,,,,,[],dtVersion 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0108_CAPA_LOB_Report.cs:999
+SEARCH,cboVersionSeq,Version,RefreshVersionSeq,dtVersionSeq,"filter := DBUtils.GetAndFilterString(new List<string>() { ""DIVISION_ID"", ""CODE"" }, new List<string>() { _division, _version }, true) @SCP0108_CAPA_LOB_Report.cs:1006 (dtVersionAll→dtVersionSeq)",Data_SCP.CommonAll,UP_FX_GetCommonDataList_SCP_ALL,CapaVersion,[],,SCP0108_CAPA_LOB_Report.cs:1010 ← SCP0108_CAPA_LOB_Report.cs:47
+SEARCH,cboProgressStatus,Status,RefreshProgressStatus,dtProgressStatus,,,,,[],dtProgressStatus 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0108_CAPA_LOB_Report.cs:1033
+SEARCH,clbSite,Site,RefreshSite,dtSite,,,,,[],dtSite 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0108_CAPA_LOB_Report.cs:1061
+SEARCH,clbPlant,Plant,RefreshPlant,dtPlant,,,,,[],dtPlant 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0108_CAPA_LOB_Report.cs:1071
+SEARCH,clbFactory,Building,RefreshFactory,dtFactory,,,,,[],dtFactory 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0108_CAPA_LOB_Report.cs:1081
+SEARCH,clbLine,Line,RefreshLine,dtLine,,,,,[],dtLine 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0108_CAPA_LOB_Report.cs:1091
+SEARCH,clbOperation,Operation,RefreshOperation,dtOperation,,,,,[],dtOperation 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0108_CAPA_LOB_Report.cs:1104
+SEARCH,clbElectrodeType,Line Type,RefreshElectrodeType,dtElectrode,,,,,[],dtElectrode 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0108_CAPA_LOB_Report.cs:1119
+SEARCH,control,,ClearUsrCheckedList,dt,,,,,[],dt 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0108_CAPA_LOB_Report.cs:1149

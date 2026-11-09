@@ -1,236 +1,42 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-04T19:39:35+09:00",
+ "ts": "2026-11-08T22:09:51+09:00",
  "producer": "run_verify",
  "id": "SCP0122",
  "skip_e2e": false,
- "started": "2026-11-04 18:13:53",
+ "started": "2026-11-08 21:59:47",
  "state": "completed",
- "verdict": "fail",
- "issues": [
-  {
-   "id": "V-7dd01ed1",
-   "class": "A5",
-   "msg": "SCP0122 Division 컬럼 40/Plan Activity Mgmt",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify Division 컬럼 @11-04 19:34"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-d4b92d5a",
-   "class": "A5",
-   "msg": "SCP0122 Division 컬럼 81/Plan Activity Mgmt",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify Division 컬럼 @11-04 19:34"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-cb1f0c93",
-   "class": "A5",
-   "msg": "SCP0122 Division 컬럼 82/Plan Activity Mgmt",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify Division 컬럼 @11-04 19:34"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-ddd65ca4",
-   "class": "F10",
-   "msg": "PKG_SCP0122.P_SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-58a71ace",
-   "class": "L1",
-   "msg": "조회조건 텍스트 입력 중 그리드",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-04 19:34"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-75f2ab0f",
-   "class": "A5",
-   "msg": "[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-e181faf0",
-   "class": "J1",
-   "msg": "[DMF0082 결함 일반화] Division 기본값 · 메뉴 트리(Admin-System)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-e9f851d3",
-   "class": "A5",
-   "msg": "[DMF0082 결함 유형] BIZ PLAN 제외 컬럼(Cust Group Dtl 등 7개)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-0d3fdb76",
-   "class": "A5",
-   "msg": "[DMF0021 결함 일반화] 그리드 End Customer 컬럼(END_CUSTOMER_ID) · 컬럼 셋팅 개인화 저장(필수 컬럼)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-a334446c",
-   "class": "J1",
-   "msg": "Division 기본값 · 메뉴 트리(Admin-System)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-bec40765",
-   "class": "X-REOPEN",
-   "msg": "SCP0122 화면",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-04 19:34"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-39d1db98",
-   "class": "X-ROW",
-   "msg": "SCP0122_PlanActivityMgmt.FindData_Main",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-f943bb02",
-   "class": "X-ROW",
-   "msg": "SCP0122_PlanActivityMgmt.GetPlanGroupByUserID",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-6ede4086",
-   "class": "X-ROW",
-   "msg": "SCP0122_PlanActivityMgmt.Save_Data",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "EG-b2c946fe",
-   "class": "J1",
-   "msg": "SCP0122 EG365 자동 선택 SCP/81/SCM PI Admin",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @eg-auth @11-04 19:34"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "EG-14c3bd1a",
-   "class": "I2",
-   "msg": "SCP0122 언어 전환 CN",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @i18n-lang @11-04 19:34"
-    }
-   ],
-   "grade": "hard"
-  }
- ],
+ "verdict": "hold",
+ "issues": [],
+ "warnings": [],
  "summary": {
-  "rows": 1480,
-  "PASS": 524,
-  "FAIL": 16,
-  "판정필요": 16,
-  "미검증": 58,
-  "해당없음": 866,
+  "rows": 1504,
+  "PASS": 540,
+  "FAIL": 0,
+  "판정필요": 17,
+  "미검증": 70,
+  "해당없음": 877,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 852,
-   "없음(판정 대기)": 16,
-   "없음(미검증)": 58,
-   "기계(상속·집계)": 551,
-   "출처 미기록": 3
+   "기계": 995,
+   "없음(판정 대기)": 17,
+   "없음(미검증)": 70,
+   "사람": 2,
+   "기계(상속·집계)": 418,
+   "출처 미기록": 2
   },
-  "fail_listed": 16,
+  "fail_listed": 0,
   "coverage": {
    "rules": 84,
-   "measured": 335,
-   "not_run_error": 42,
-   "na": 178,
-   "suspect_na100": [
-    "F1",
-    "F2"
-   ]
+   "measured": 351,
+   "not_run_error": 45,
+   "na": 185,
+   "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0122_PlanActivityMgmt_CheckList_v1.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0122_PlanActivityMgmt_ActionItemList_v1.xlsx"
+  "CheckList": "Doc/CheckList/SCP0122_PlanActivityMgmt_CheckList_v20.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0122_PlanActivityMgmt_ActionItemList_v20.xlsx"
  },
  "evidence": [
   {
@@ -242,5 +48,5 @@
    "ref": "Doc/verify/SCP0122/e2e_results.json"
   }
  ],
- "note": "⚠ 검사기 회귀 오라클 위반(rc 10) — Doc/verify/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발 · 이 CheckList 는 검사기 결함을 안고 있음"
+ "note": ""
 }

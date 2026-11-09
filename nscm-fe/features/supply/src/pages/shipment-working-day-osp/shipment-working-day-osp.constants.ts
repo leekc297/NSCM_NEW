@@ -116,7 +116,7 @@ export const MSG = {
   //   format.{0}"(숫자형식 오류)라 Y/N 검증과 의미 불일치이고, 그 숫자-형식 메시지는 TO-BE 에 MSG01082 로
   //   이미 이관됨 → MSG00050 코드는 TO-BE DB 에 없다. Y/N 전용 문구는 신규 등록 요청 중(사용자 seq 채번).
   //   등록 코드 확정되면 이 값을 그 코드로 교체한다(그 전까지 EN fallback 표시).
-  INVALID_FORMAT: 'MSG00050',
+  INVALID_FORMAT: 'MSG01082',
   // 저장 성공 토스트 — 'MSG00002'="성공적으로 저장되었습니다." (TO-BE 실측). AS-IS 는 MSG00004("N건 저장",
   //   cs:622)였으나 TO-BE 로케일에서 MSG00004 는 "수정한 내용이 없습니다"(의미 drift)라 성공 메시지로 쓰면
   //   저장 성공인데 "수정한 내용이 없습니다" 토스트가 뜬다 — 형제 SCP0019/shipment-plan-semi 와 동일 교정.

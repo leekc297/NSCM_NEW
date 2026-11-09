@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { apiClient } from '@foundation/apis';
 import { BUTTON_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import { MainTitle, SubTitle } from '@shared/components';
+import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useTabBtnPermissions, useTabLookupQueries } from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
@@ -51,9 +51,14 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useMasterValidationStore(state => state.setOpenSearchArea);
   const restoreSearchConditions = useMasterValidationStore(state => state.restoreSearchConditions);
 
-  const [detailRows, setDetailRows] = useState<DetailRow[]>([]);
+  // 검증유형별 조회결과 캐시 — AS-IS siProjectRoute 는 검증유형마다 독립 sheet(탭)를 두고 각 sheet 가
+  //   자기 조회결과를 보존한다(cs:649 ChangeActiveSheet). TO-BE 도 sheet 별로 담아 탭 전환 시 유지한다.
+  const [detailRowsBySheet, setDetailRowsBySheet] = useState<Partial<Record<SHEETS, DetailRow[]>>>({});
   const [activeSheet, setActiveSheet] = useState<SHEETS | null>(null);
   const [focusDetail, setFocusDetail] = useState(false);
+  // 기존 로직 주석 보존 (2026-10-28) 시작: 마지막 조회 결과 건수 기준 총 N건
+  // const [lastQueryCount, setLastQueryCount] = useState(0);
+  // 기존 로직 주석 보존 (2026-10-28) 끝
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
@@ -84,9 +89,31 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
     [lookupData]
   );
 
-  const detailStaticColumns = useMemo(
-    () => (activeSheet ? (staticColumns[activeSheet] ?? []) : []),
-    [activeSheet, staticColumns]
+  // 디테일 탭 목록 — 마스터 행(활성 검증유형) 그대로. label=SHEET_NAME(표시명, 그리드 "Validation Type"과
+  //   동일 표기), sheet=VALIDATION_MAP dispatch. AS-IS siProjectRoute 12 sheet 탭(cs:999~1001)과 등가.
+  const tabs = useMemo(
+    () =>
+      masterRows
+        .map(row => {
+          const spec = VALIDATION_MAP[row.VALIDATION_TYPE];
+          return spec
+            ? { sheet: spec.sheet, adminSheetName: spec.adminSheetName, label: row.SHEET_NAME }
+            : null;
+        })
+        .filter((tab): tab is { sheet: SHEETS; adminSheetName: string; label: string } => tab !== null),
+    [masterRows]
+  );
+
+  // 초기 활성 탭 = 첫 검증유형(AS-IS 진입 시 첫 sheet). 탭 로드 후 1회 세팅 + 컬럼 메타 프리페치.
+  useEffect(() => {
+    if (activeSheet || tabs.length === 0) return;
+    setActiveSheet(tabs[0].sheet);
+    void fetchDetailColumns(tabs[0].sheet, tabs[0].adminSheetName);
+  }, [tabs, activeSheet, fetchDetailColumns]);
+
+  const activeTabIndex = Math.max(
+    tabs.findIndex(tab => tab.sheet === activeSheet),
+    0
   );
 
   // 행 COUNT 를 그리드 dataItem 에 직접 갱신 + refresh — itemsSource 재생성 없이(선택/스크롤 보존).
@@ -104,8 +131,8 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
       row.COUNT = '';
     });
     masterGridRef.current?.collectionView?.refresh();
-    setDetailRows([]);
-    setActiveSheet(null);
+    // 조회결과만 비운다 — 탭(sheet) 구성과 활성 탭은 유지(AS-IS ClearSheet 는 데이터만 clear, cs:1219).
+    setDetailRowsBySheet({});
   }, [masterRows]);
 
   useEffect(() => {
@@ -153,8 +180,9 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
       const rows = await callValidationSp(row);
       if (rows === null) return;
       setActiveSheet(spec.sheet);
-      setDetailRows(rows);
+      setDetailRowsBySheet(prev => ({ ...prev, [spec.sheet]: rows }));
       setRowCount(row.VALIDATION_TYPE, String(rows.length));
+      // setLastQueryCount(rows.length);
     },
     [callValidationSp, fetchDetailColumns, setRowCount]
   );
@@ -183,41 +211,76 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
       const spec = VALIDATION_MAP[row.VALIDATION_TYPE];
       if (!spec) return;
       void fetchDetailColumns(spec.sheet, spec.adminSheetName);
+      // 셀 클릭 = 디테일 탭 프리뷰 전환(조회 없이, AS-IS cs:1000~1001 ChangeActiveSheet). 기존 조회결과는 보존.
       setActiveSheet(spec.sheet);
-      setDetailRows([]);
     },
     [fetchDetailColumns, setPlanGroupLocked]
   );
 
-  // 전체조회(F5/FindDataAll) — 활성 행마다 SP 호출해 COUNT 채움(design 01 §2-E R22:
-  //   CONSTRAINTS01 Div: 가 현재 division 과 다르면 skip). detail 은 QUERY 로 개별 드릴다운.
+  // 디테일 탭 전환 — 해당 sheet 로 활성 전환 + 컬럼 메타 확보(AS-IS sheet 탭 클릭 등가, 조회는 QUERY 로만).
+  const handleTabChange = useCallback(
+    (index: number) => {
+      const tab = tabs[index];
+      if (!tab) return;
+      setActiveSheet(tab.sheet);
+      void fetchDetailColumns(tab.sheet, tab.adminSheetName);
+    },
+    [tabs, fetchDetailColumns]
+  );
+
+  // 전체조회(F5/FindDataAll) — 행마다 SP 호출해 COUNT + 해당 sheet 데이터를 채운다(AS-IS FindDataAll
+  //   cs:534~558 → FindData cs:646~651: ChangeActiveSheet + Query 로 각 sheet 에 결과 바인딩). COUNT 만
+  //   채우면 탭 전환 시 데이터가 비어 보인다. Div 종속행(Div:82/40)은 현재 division 과 다르면 skip(R22).
   const handleSearch = useCallback(() => {
     void Promise.allSettled(
       masterRows.map(async row => {
+        const spec = VALIDATION_MAP[row.VALIDATION_TYPE];
+        if (!spec) return;
         if (isDivisionSkipped(row.CONSTRAINTS01, searchParams.divisionId)) {
           setRowCount(row.VALIDATION_TYPE, '');
+          setDetailRowsBySheet(prev => ({ ...prev, [spec.sheet]: [] }));
           return;
         }
+        await fetchDetailColumns(spec.sheet, spec.adminSheetName);
         const rows = await callValidationSp(row);
-        if (rows !== null) setRowCount(row.VALIDATION_TYPE, String(rows.length));
+        if (rows !== null) {
+          setRowCount(row.VALIDATION_TYPE, String(rows.length));
+          setDetailRowsBySheet(prev => ({ ...prev, [spec.sheet]: rows }));
+          // 병렬 호출이라 가장 늦게 끝난 조회 건수가 남는다(AS-IS 도 마지막 완료분).
+          // setLastQueryCount(rows.length);
+        }
       })
     );
-  }, [callValidationSp, masterRows, searchParams.divisionId, setRowCount]);
+  }, [callValidationSp, fetchDetailColumns, masterRows, searchParams.divisionId, setRowCount]);
 
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     // read-only 뷰어 — AS-IS Insert/Edit/Delete/Save override 본문 공백(NO-OP, design 00 §4d).
-    //   TO-BE 룰(2026-10-26): 기능 없는 공통버튼은 노출하지 않는다 → false(버튼·단축키 숨김).
-    insert: false,
-    save: false,
-    delete: false,
+    //   명시적 무동작 함수로 배선(키 생략 금지 — 공용 SubTitle addRow/removeRow 재활성 방지, self-check §3).
+    insert: () => undefined,
+    save: () => undefined,
+    delete: () => undefined,
     manual: false,
     upload: false,
   };
 
   const focusedGrid = focusDetail ? detailGridRef : masterGridRef;
   const focusedFilter = focusDetail ? detailFilterRef : masterFilterRef;
-  const focusedCount = focusDetail ? detailRows.length : masterRows.length;
+  // 기존 로직 주석 보존 (2026-10-28) 시작: 포커스 그리드 행 수 기준 총 N건
+  // const focusedCount = focusDetail
+  //   ? (activeSheet ? (detailRowsBySheet[activeSheet]?.length ?? 0) : 0)
+  //   : masterRows.length;
+  // 기존 로직 주석 보존 (2026-10-28) 끝
+  // 기존 로직 주석 보존 (2026-10-28) 시작: 열린 디테일 탭 건수 기준 총 N건
+  // const activeTabCount = activeSheet ? (detailRowsBySheet[activeSheet]?.length ?? 0) : 0;
+  // 기존 로직 주석 보존 (2026-10-28) 끝
+  // 총 N건 = 좌측 COUNT 합계(검증유형별 결과 건수 합). 그리드 필터와 무관하게 고정한다.
+  const totalValidationCount = Object.values(detailRowsBySheet).reduce(
+    (sum, rows) => sum + (rows?.length ?? 0),
+    0
+  );
+  // 빈 ref 를 건수 기준 그리드로 넘겨 SubTitle 의 필터 건수 대체를 끈다.
+  const noCountGridRef = useRef<FlexGrid>();
 
   return (
     <>
@@ -232,16 +295,19 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
         menuId={MENU_ID}
         grid={focusedGrid}
         gridFilter={focusedFilter}
-        dataCount={focusedCount}
+        countGrid={noCountGridRef}
+        dataCount={totalValidationCount}
         excelFileName='MasterValidation'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
       />
-      {/* 좌 마스터목록(초기폭 400 고정) | 우 detail 2-pane. AS-IS 우측 4분할·빈 3그리드는 dead layout
-          미재현(design 01 §1.1 — 확인된 dead 제거). */}
+      {/* 좌 마스터목록 | 우 detail 2-pane. AS-IS 우측 4분할·빈 3그리드는 dead layout 미재현(design 01 §1.1).
+          마스터 패널 기본폭은 마스터 그리드 가시 컬럼(No~45 + Validation Type 150 + Count 60 + QUERY 70 +
+          OPEN 70 = 약 395px, SCM_MST_SHEET_COLUMNS 실측)에 맞춰 px 고정 — 빈 여백 없이 detail 이 나머지를
+          다 써 12개 탭이 잘리지 않는다. react-resizable-panels v4 는 "NNpx" 지원(ShipmentPlan 선례). */}
       <PanelGroup className={styles.tableWrapper} orientation='horizontal'>
-        <Panel defaultSize={35} minSize={20}>
+        <Panel defaultSize='420px' minSize='260px'>
           <MasterValidationMasterGrid
             gridRef={masterGridRef}
             gridFilterRef={masterFilterRef}
@@ -254,14 +320,24 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
           />
         </Panel>
         <PanelSeparator className={styles.splitBar} />
-        <Panel defaultSize={65} minSize={20}>
-          <MasterValidationDetailGrid
-            gridRef={detailGridRef}
-            gridFilterRef={detailFilterRef}
-            data={detailRows}
-            staticColumns={detailStaticColumns}
-            gotFocus={() => setFocusDetail(true)}
-          />
+        <Panel minSize={20}>
+          {/* 디테일 = 검증유형별 탭(AS-IS siProjectRoute 12 sheet). 비활성 탭은 언마운트(비-persist)라
+              활성 탭 그리드 1개만 detailGridRef 에 잡힌다 — SubTitle 엑셀/필터 대상 정합. */}
+          <div className={styles.detailTabs}>
+            <TabWrapper activeTabIndex={activeTabIndex} setActiveTabIndex={handleTabChange}>
+              {tabs.map(tab => (
+                <TabItem key={tab.sheet} label={tab.label}>
+                  <MasterValidationDetailGrid
+                    gridRef={detailGridRef}
+                    gridFilterRef={detailFilterRef}
+                    data={detailRowsBySheet[tab.sheet] ?? []}
+                    staticColumns={staticColumns[tab.sheet] ?? []}
+                    gotFocus={() => setFocusDetail(true)}
+                  />
+                </TabItem>
+              ))}
+            </TabWrapper>
+          </div>
         </Panel>
       </PanelGroup>
     </>

@@ -1,0 +1,25 @@
+﻿check_id,rule_ids,source_filter,target_re,evidence_re,status,confirmed_screens,since,note
+CM-001,H4,RULE_SCREEN,조회조건 겹침 \d+,,trial,,2026-11-06,T91 — 1460 가로 스크롤 설계 미반영 허위 FAIL 3화면
+CM-002,G4,RULE_SCREEN,돋보기 위치,,trial,,2026-11-06,T95 — popupSearchField 40px 칸 미반영 허위 FAIL 3화면
+CM-003,H11,RULE_SCREEN,.,로딩,trial,,2026-11-06,T98 — 병렬 call-proc 첫 응답 기준 허위 FAIL
+CM-004,A9,COLUMN|RULE_SCREEN,DYNAMIC|동적,중복,trial,,2026-11-06,T99 — 다단 헤더 맨 아래 칸 중복
+CM-005,H7,RULE_SCREEN,Excel 컬럼 구성,,trial,,2026-11-06,T97 — 다단 헤더 파일 맨 위 행 비교
+CM-006,D4,RULE_SCREEN,EG315 헤더 병합,,trial,,2026-11-06,T100 — 헤더 반영 전 측정·1×1 span 기대
+CM-007,A5,RULE_SCREEN,EG022 Measure 후보,,trial,,2026-11-06,T100 — USER_SELECTABLE=N 행 기대 제외
+CM-008,G1,RULE_SCREEN,PICK_SEARC,,trial,,2026-11-06,T98 — 첫 SEARCH 호출만 확인
+CM-009,G3,RULE_SCREEN,화면$,Reset Condition\(F10\) 화면값 유지|제외 조건 비저장,trial,,2026-11-06,T96 — Reset 기준 스냅숏·NotUseList 의미 (Period 비저장(CR-029)은 사용자 확정 2026-11-06 SCP0131 → 시험 대상 아님·FAIL 유지)
+CM-010,F1,RULE_SCREEN,저장 실패 처리,,trial,,2026-11-06,T93 — 실패 주입이 BE 계약 밖
+CM-011,G10,SEARCH,조회조건 ,,trial,,2026-11-06,T92 — AS-IS Enter 핸들러 확인 없이 행 생성
+CM-012,C1,RULE_SCREEN,시나리오 \[자동\].*셀 콤보 후보,,trial,,2026-11-06,T94 — 편집 뒤 dataMap 전체 후보
+CM-013,F3,RULE_SCREEN,시나리오 \[자동\].*붙여넣기,,trial,,2026-11-06,T94 — 편집 전 dataMap 첫 값
+CM-014,H3,RULE_SCREEN,계층 병합,,trial,,2026-11-06,T84 — Restricted 병합 미반영
+CM-015,G6,RULE_SCREEN,연속 조회 본문,,trial,,2026-11-06,T102 — 조회 막힘을 본문 불변으로 오판
+CM-016,J1,RULE_SCREEN,EG366 Division 후보,,trial,,2026-11-06,T88 — SELECT ALL·EE 필터
+CM-017,J2,RULE_SCREEN,EG374|EG411,,trial,,2026-11-06,T88 — Division ALL 상태 버튼 합집합
+CM-018,B7,RULE_SCREEN,콤보 후보 최신성,,trial,,2026-11-06,T87 — CODE 열 없는 콤보 열 매칭
+CM-019,D5,RULE_SCREEN,팝업 .*IDENTIT,,trial,,2026-11-06,T100 — 공용 모달 대응표 미사용
+CM-020,F4,TRACE,.,PROC_M 배선 없음,trial,,2026-11-06,T87·T101 — 콤보 API 대체·SP 통합·패키지명 오추출
+CM-021,E3,RULE_SCREEN,EG160 필수 표시,,trial,,2026-11-06,SCP0016 24번 — 사용자 미확인
+CM-022,H2,COLUMN|TRACE,.,편집 가능인데 노랑 아님,trial,,2026-11-06,T83 — 인라인 표준 노랑 미인정
+CM-023,MS1,MSG,,,trial,,2026-11-06,T104·T105 — 상수 정의만 사용으로 셈 · 같은 ID 다른 뜻을 결함으로 봄(SCP0084 12번·SCP0037 9번 사용자 오류 아님)
+CM-SNAP,G4;K4;A5;H6;H4,RULE_SCREEN,스냅샷,,trial,,2026-11-06,스냅샷 형상 검사(W8-C _snap.spec.ts) — 골든 불일치 FAIL 은 화면 2개 이상 사용자 확인 뒤 confirmed

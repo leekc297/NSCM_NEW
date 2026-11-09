@@ -1,0 +1,179 @@
+{
+ "mid": "SCP0127",
+ "asis_id": "SCP0127",
+ "account": "minyonglee1",
+ "group": "ADMIN",
+ "results": [
+  {
+   "kind": "SEARCH",
+   "target": "Div",
+   "label": "Division*",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 14,
+   "asis_src": "UP_FX_GetCommonDataList_SCP Division @InitControls (SCP0127_PrecedeSafetyStockDay.cs:164 ← SCP0127_PrecedeSafety)",
+   "asis_n": 14,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 14건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "원문 ORDER BY 있음·정렬 키 해석 불가 — AS-IS 반환 순서와 일치: TO-BE ['81', '40', '82', 'EE', '81_UC'] / AS-IS ['81', '40', '82', 'EE', '81_UC']",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SCP0127_PrecedeSafetyStockDay.cs:164) = TO-BE 표시 NAME (CODE≠NAME 후보 14/14건 확인)"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Plan Group",
+   "label": "Plan Group",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 15,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtPlanGroup 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "SCM Site",
+   "label": "SCM Site",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 486,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtScmSite 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Stage",
+   "label": "Stage",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 10,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtStage 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Type",
+   "label": "Type",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 2,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtType 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Active",
+   "label": "",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 2,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID",
+   "target": "VALUE_TYPE",
+   "label": "Type",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 2,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "VALUE_TYPE",
+   "label": "Type",
+   "scenario": "기존행(DIVISION_ID=81, SCM_SITE_ID=WA00-A, ITEM_ID=AAEN4128I-A1-000)",
+   "tobe_n": 2,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID",
+   "target": "OPMZ_PLAN_GR_ID",
+   "label": "Plan Group",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 15,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtPlanGroup 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "OPMZ_PLAN_GR_ID",
+   "label": "Plan Group",
+   "scenario": "기존행(DIVISION_ID=81, SCM_SITE_ID=WA00-A, ITEM_ID=AAEN4128I-A1-000)",
+   "tobe_n": 15,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtPlanGroup 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "GRID",
+   "target": "SCM_SITE_ID",
+   "label": "SCM site",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 486,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "SCM_SITE_ID",
+   "label": "SCM site",
+   "scenario": "기존행(DIVISION_ID=81, SCM_SITE_ID=WA00-A, ITEM_ID=AAEN4128I-A1-000)",
+   "tobe_n": 486,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID",
+   "target": "STAGE",
+   "label": "Stage",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 10,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "STAGE",
+   "label": "Stage",
+   "scenario": "기존행(DIVISION_ID=81, SCM_SITE_ID=WA00-A, ITEM_ID=AAEN4128I-A1-000)",
+   "tobe_n": 10,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID",
+   "target": "VALID_YN",
+   "label": "Active",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 2,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "VALID_YN",
+   "label": "Active",
+   "scenario": "기존행(DIVISION_ID=81, SCM_SITE_ID=WA00-A, ITEM_ID=AAEN4128I-A1-000)",
+   "tobe_n": 2,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  }
+ ]
+}

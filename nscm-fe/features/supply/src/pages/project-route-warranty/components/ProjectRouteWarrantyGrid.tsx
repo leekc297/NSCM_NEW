@@ -18,6 +18,7 @@ import { useMessageStore } from '@shared/stores';
 
 import {
   COMBO,
+  DEFAULT_CELL_BG_COLOR,
   DIVISION_82,
   INVALID_CELL_BG_COLOR,
   isSalesSitePopupDivision,
@@ -61,6 +62,23 @@ const applyDateColumnTypes = (g: FlexGrid): void => {
     if (col.dataType !== DataType.Date) col.dataType = DataType.Date;
     if (col.format !== 'yyyy-MM-dd') col.format = 'yyyy-MM-dd';
   }
+};
+
+// 행 타입 조건부 잠금 셀 판정(AS-IS EditButton cs:295-305). beginningEdit(편집 차단)과
+//   formatItem(편집 스타일 제거)이 이 술어를 공유해 AS-IS 노랑(편집)/흰색(잠금) 패턴을 맞춘다.
+//   비-Warranty 행(opGroup≠'W') → LOCK_ON_NON_WARRANTY(PLANT_SITE_ID~VALID_YN) 잠금.
+//   Warranty 기존행(opGroup='W' && PRIORITY_SEQ≠'') → LOCK_ON_WARRANTY_EXISTING(PLANT_SITE_ID~
+//   PROJECT_CODE) 잠금. 그래서 Priority/From/To/Active(메타 'M')는 Warranty 행에서만 편집=노랑,
+//   비-Warranty 행에서는 잠금=흰색이 된다. 신규행(opGroup='W' && PRIORITY_SEQ='')은 미잠금.
+const isRowTypeLockedCell = (binding: string, row: MainRow | undefined): boolean => {
+  if (!row) return false;
+  const opGroup = String(row.OPERATION_GROUP ?? '');
+  if (opGroup !== OPERATION_GROUP_WARRANTY)
+    return (LOCK_ON_NON_WARRANTY as readonly string[]).includes(binding);
+  const prioritySeq = String(row.PRIORITY_SEQ ?? '');
+  if (prioritySeq !== '')
+    return (LOCK_ON_WARRANTY_EXISTING as readonly string[]).includes(binding);
+  return false;
 };
 
 // SCP0048 단일 그리드(spdMain) — 31 컬럼 DB 메타 구동. 편집은 조건부(R-L1~R-L5), 파생 R-D1~D8.
@@ -150,12 +168,63 @@ export const ProjectRouteWarrantyGrid = ({
     if (binding === 'DIVISION_ID' && dataItem.CRUD_TYPE !== 'I') {
       e.cell.textContent = String(dataItem.DIVISION_ID ?? '');
     }
-    // 매칭 시 배경 강조, 아니면 해제(셀 DOM 재사용 대비 항상 재설정).
+    // 행-조건부 잠금 셀(R-L2/R-L3)은 메타 INPUT_TP_CD='M' 라 공용 그리드가 편집 스타일
+    //   (wj-cell-editable=#fff8cd 노랑)을 붙인다. beginningEdit 와 동일 술어(isRowTypeLockedCell)로
+    //   잠긴 셀의 클래스를 떼고 inline 흰색을 덮어 AS-IS 노랑(편집)/흰색(잠금)을 맞춘다 — 잠금은
+    //   되는데 노랑이 남던 증상 교정(2026-11-03, 자매 SCP0027 준용). inline 이 클래스색을 이긴다.
+    const locked = isRowTypeLockedCell(binding, dataItem);
+    if (locked) e.cell.classList.remove('wj-cell-editable');
+    // 매칭 시 배경 강조, 잠금 셀은 기본 흰색, 그 외는 해제(셀 DOM 재사용 대비 항상 재설정).
     const isInvalid = invalidCellsRef.current.some(
       c => c.row === dataItem && c.column === binding
     );
-    e.cell.style.backgroundColor = isInvalid ? INVALID_CELL_BG_COLOR : '';
+    e.cell.style.backgroundColor = isInvalid
+      ? INVALID_CELL_BG_COLOR
+      : locked
+        ? DEFAULT_CELL_BG_COLOR
+        : '';
   }, []);
+
+  // 조건부 편집 잠금(design/03 §3.3)을 beginningEdit 로 배선한다(GAP-4). 단방향(잠그기만)이다 —
+  //   공용 DataGrid(setEditableColumns)의 기본 편집게이트가 먼저 메타 INPUT_TP_CD 로 cancel 을 세워
+  //   둔다(실측: S 22 / IM 3(DIVISION_ID·ITEM_ID·PLANT_SITE_ID) / IO 2(SCM_SITE_ID·PROJECT_CODE) /
+  //   M 4(FROM/TO_YYYYMMDD·PRIORITY·VALID_YN)). 여기서 cancel=false 로 되돌리면 admin 메타를 화면이
+  //   덮어쓰는 셈이라(CLAUDE.md §2 속성 단위 덮어쓰기 금지) 절대 하지 않는다 — 이미 막힌 셀(e.cancel)은
+  //   그대로 둔다. 화면은 메타로 표현 못하는 "행-조건부/팝업전용" 잠금만 추가로 건다: R-C5(div=82
+  //   PLANT_SITE 비움) / 팝업전용(ITEM_ID·SCM_SITE_ID·PROJECT_CODE 키인 금지) / R-L2(opGroup≠"W" →
+  //   PLANT_SITE_ID~VALID_YN) / R-L3(W & PRIORITY_SEQ≠"" 기존행 → PLANT_SITE_ID~PROJECT_CODE).
+  //   주의: 이 핸들러는 반드시 handleGridInitialized(initialized 콜백)에서 등록한다. 이전엔 useEffect
+  //   ([gridRef])로 걸었으나, wijmo 비동기 mount 라 첫 pass 에 gridRef.current===undefined → early-return
+  //   하고 deps 불변이라 재실행되지 않아 핸들러가 영영 미등록 → R-L2/R-L3 가 전혀 안 걸려 모든 행이
+  //   편집가능해지는 버그가 있었다(2026-11-03 실사고 — DataMap/날짜/formatItem 과 동일 함정, 그 셋은
+  //   이미 initialized 로 옮겨져 정상이었다).
+  const beginningEditHandler = useCallback(
+    (s: FlexGrid<MainRow>, e: { cancel: boolean; row: number; col: number }) => {
+      // 공용 게이트가 메타(INPUT_TP_CD)로 이미 막은 셀은 그대로 둔다 — 화면은 추가로 잠그기만.
+      if (e.cancel) return;
+      const binding = s.columns[e.col]?.binding ?? '';
+      const row = s.rows[e.row]?.dataItem as MainRow | undefined;
+      // 팝업 전용 셀(ITEM_ID/SCM_SITE_ID/PROJECT_CODE)은 키인 편집기를 열지 않는다 — 값 입력은
+      //   더블클릭 팝업(handleDblClick)으로만. 신규행에서 R-L2/R-L3 에 안 걸려도 항상 잠근다.
+      if ((POPUP_ONLY_COLUMNS as readonly string[]).includes(binding)) {
+        e.cancel = true;
+        return;
+      }
+      // R-C5 — division=="82" 행은 PLANT_SITE_ID 콤보를 비운다(AS-IS .cs 993/994 CellClick) → 편집기를
+      //   열지 않는다. 메타 PARAM10='D' 재조회로는 표현되지 않는 FE 업무규칙이다.
+      if (binding === 'PLANT_SITE_ID' && String(row?.DIVISION_ID ?? '') === DIVISION_82) {
+        e.cancel = true;
+        return;
+      }
+      // R-L2/R-L3 — 행-조건부 잠금(formatItem 의 노랑 제거와 동일 술어 공유). 비-Warranty 행
+      //   PLANT_SITE_ID~VALID_YN / Warranty 기존행 PLANT_SITE_ID~PROJECT_CODE 잠금(AS-IS .cs 295-305).
+      if (isRowTypeLockedCell(binding, row)) {
+        e.cancel = true;
+        return;
+      }
+    },
+    []
+  );
 
   // 그리드 생성 시 1회(initialized, grid 확정 보장) — 모든 셀 렌더링 훅을 여기서 건다.
   //   주의: 이들을 useEffect([gridRef])로 걸면 안 된다. gridRef.current 는 wijmo 비동기 mount 라
@@ -165,6 +234,8 @@ export const ProjectRouteWarrantyGrid = ({
   //   (a) DIVISION_ID 신규행 DataMap 재부착(updatedLayout 마다 — columnGroups 재대입이 지움)
   //   (b) FROM/TO dataType=Date + format='yyyy-MM-dd'(updatedLayout 마다 재적용)
   //   (c) formatItem(DIVISION_ID 코드표시 + 저장검증 실패 배경).
+  //   (d) beginningEdit(행-조건부 편집잠금 R-L2/R-L3·R-C5·팝업전용). useEffect([gridRef])에서 옮겨왔다
+  //       (grid 미확정 early-return 으로 미등록되던 버그, 위 beginningEditHandler 주석 참고).
   const handleGridInitialized = useCallback(
     (grid: FlexGrid<MainRow>) => {
       grid.updatedLayout.addHandler(() => attachDivisionDataMap(grid));
@@ -172,76 +243,15 @@ export const ProjectRouteWarrantyGrid = ({
       grid.updatedLayout.addHandler(applyDateColumnTypes);
       applyDateColumnTypes(grid);
       grid.formatItem.addHandler(formatItemHandler);
+      grid.beginningEdit.addHandler(beginningEditHandler);
     },
-    [attachDivisionDataMap, formatItemHandler]
+    [attachDivisionDataMap, formatItemHandler, beginningEditHandler]
   );
   // 콤보가 grid mount 이후 도착하는 경우 — 변경 시 즉시 DataMap 부착.
   useEffect(() => {
     const grid = gridRef.current;
     if (grid && divisionDataMap) attachDivisionDataMap(grid);
   }, [gridRef, divisionDataMap, attachDivisionDataMap]);
-
-  // 조건부 편집 잠금(design/03 §3.3)은 beginningEdit 로 배선한다(GAP-4). 단방향(잠그기만)이다 —
-  //   공용 DataGrid(setEditableColumns)의 기본 편집게이트가 이 화면보다 먼저 등록돼 메타
-  //   INPUT_TP_CD 로 cancel 을 세워 둔다(SCM_MST_SHEET_COLUMNS 실측: S 22 / IM 3(DIVISION_ID·ITEM_ID·
-  //   PLANT_SITE_ID) / IO 2(SCM_SITE_ID·PROJECT_CODE) / M 4(FROM/TO_YYYYMMDD·PRIORITY·VALID_YN)).
-  //   S=cancel, IM/IO=insert 행만 허용, M=편집 허용. 여기서 다시 cancel=false 로 되돌리면 admin 메타를
-  //   화면이 덮어쓰는 셈이라(CLAUDE.md §2 속성 단위 덮어쓰기 금지) 절대 하지 않는다 — 공용 게이트가
-  //   이미 막은 셀(e.cancel===true)은 그대로 둔다. 화면은 메타로 표현 못하는 "행-조건부/팝업전용"
-  //   잠금만 추가로 건다: R-C5(div=82 PLANT_SITE 비움) / 팝업전용(ITEM_ID·SCM_SITE_ID·PROJECT_CODE
-  //   키인 금지) / R-L2(opGroup≠"W" → PLANT_SITE_ID~VALID_YN) / R-L3(W & PRIORITY_SEQ≠"" 기존행 →
-  //   PLANT_SITE_ID~PROJECT_CODE). DIVISION_ID insert-only·S 컬럼 잠금은 메타(IM/S)가 이미 처리한다.
-  useEffect(() => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    const lockNonWarranty: readonly string[] = LOCK_ON_NON_WARRANTY;
-    const lockWarrantyExisting: readonly string[] = LOCK_ON_WARRANTY_EXISTING;
-    const popupOnly: readonly string[] = POPUP_ONLY_COLUMNS;
-    const beginningEditHandler = (s: FlexGrid<MainRow>, e: { cancel: boolean; row: number; col: number }) => {
-      // 공용 게이트가 메타(INPUT_TP_CD)로 이미 막은 셀은 그대로 둔다 — 화면은 추가로 잠그기만.
-      if (e.cancel) return;
-      const binding = s.columns[e.col]?.binding ?? '';
-      const row = s.rows[e.row]?.dataItem as MainRow | undefined;
-      // 팝업 전용 셀(ITEM_ID/SCM_SITE_ID/PROJECT_CODE)은 키인 편집기를 열지 않는다 — 값 입력은
-      //   더블클릭 팝업(handleDblClick)으로만. 신규행에서 R-L2/R-L3 에 안 걸려도 항상 잠근다.
-      if (popupOnly.includes(binding)) {
-        e.cancel = true;
-        return;
-      }
-      // R-C5 — division=="82" 행은 PLANT_SITE_ID 콤보를 비운다(AS-IS .cs 993/994 CellClick).
-      //   후보가 비는 것과 동등하게, 82 행에서는 PLANT_SITE_ID 편집기(행 파라미터 콤보) 자체를
-      //   열지 않는다. 82 는 SITE 에 PLANT 행이 존재해도(콤보 SQL 은 반환) Warranty plant-site
-      //   선택 대상이 아닌 사업부라, 메타 PARAM10='D' 재조회로는 표현되지 않는 FE 업무규칙이다.
-      if (binding === 'PLANT_SITE_ID' && String(row?.DIVISION_ID ?? '') === DIVISION_82) {
-        e.cancel = true;
-        return;
-      }
-      const opGroup = String(row?.OPERATION_GROUP ?? '');
-      const prioritySeq = String(row?.PRIORITY_SEQ ?? '');
-      // R-L2 — Warranty 아닌 행: PLANT_SITE_ID~VALID_YN 잠금.
-      if (opGroup !== OPERATION_GROUP_WARRANTY && lockNonWarranty.includes(binding)) {
-        e.cancel = true;
-        return;
-      }
-      // R-L3 — Warranty 기존행(PRIORITY_SEQ 존재): PLANT_SITE_ID~PROJECT_CODE 잠금.
-      if (
-        opGroup === OPERATION_GROUP_WARRANTY &&
-        prioritySeq !== '' &&
-        lockWarrantyExisting.includes(binding)
-      ) {
-        e.cancel = true;
-        return;
-      }
-    };
-    grid.beginningEdit.addHandler(beginningEditHandler);
-    return () => {
-      try {
-        grid.beginningEdit.removeHandler(beginningEditHandler);
-      } catch {
-        /* unmount race */
-      }
-    };
-  }, [gridRef]);
 
   // 저장검증 실패 셀 집합이 바뀌면 재도색(formatItemHandler 가 invalidCellsRef 로 최신값을 읽어
   //   다시 판정한다 — DOM 직접 칠하기는 스크롤 시 셀 재활용으로 어긋난다, BodGrid saveError 패턴 준용).

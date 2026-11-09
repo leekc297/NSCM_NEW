@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0127",
+  "sheet": "init",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/init/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 2835,
+  "dur": 283,
+  "at": "2026-11-07T11:41:07.068Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 226,
+  "at": "2026-11-07T11:41:10.244Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 210,
+  "at": "2026-11-07T11:41:18.089Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ }
+]

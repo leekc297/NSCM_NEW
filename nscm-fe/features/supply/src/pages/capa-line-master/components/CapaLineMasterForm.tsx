@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
@@ -7,13 +7,7 @@ import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
-import {
-  COMBO,
-  DIVISION_EXCLUDE_ATTRIBUTE3,
-  MENU_ID,
-  PRODUCT_GROUP,
-  type ProductGroup,
-} from '../capa-line-master.constants';
+import { COMBO, DIVISION_EXCLUDE_ATTRIBUTE3, MENU_ID } from '../capa-line-master.constants';
 import { useCapaLineMasterStore } from '../useCapaLineMasterStore';
 
 interface Props {
@@ -28,17 +22,16 @@ interface Option {
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
-// design 02 (02_search-combo.md) 조회조건 1단 2필드 — 접기/펼치기(extraConditions) 미적용
-//   (hook #52 기준 6필드 초과 아님, design 02 §5·§6-6).
-//   1) Division* : 단일선택 콤보(Division_SCP 권한필터 + ATTRIBUTE3='EE' 클라 제외), ALL 옵션 없음
-//   2) Product Group : 정적 3옵션(Electrode/Cell/Module·Pack) -> p_shop_group_id E/A/P, 기본 Electrode
-//   cascade 없음(독립 2축, design 02 §3). 변경 시 즉시조회하지 않는다 — 명시 Search 게이트.
+// 상단 SearchArea — Division* 1필드만. Product Group 은 AS-IS(rgrpSearchLevel)처럼 상단이 아니라
+//   Level1~3 과 Level4~5 그리드 사이의 하단 조회조건 바(CapaLineMasterProductGroupBar)로 분리했다
+//   (SSP0023 2차 조회조건 패턴 참조, 사용자 지시 2026-10-30). 두 축 모두 명시 Search 게이트.
+//   Division* : 단일선택 콤보(Division_SCP 권한필터 + ATTRIBUTE3='EE' 클라 제외), ALL 옵션 없음.
 export const CapaLineMasterForm = ({ onSearch }: Props) => {
   const { t } = useTranslation();
 
   const sc = useCapaLineMasterStore(s => s.searchCondition);
-  const setSearchCondition = useCapaLineMasterStore(s => s.setSearchCondition);
   const setDivision = useCapaLineMasterStore(s => s.setDivision);
+  const setSearchCondition = useCapaLineMasterStore(s => s.setSearchCondition);
   const openSearchArea = useCapaLineMasterStore(s => s.openSearchArea);
 
   const tabId = useTabid();
@@ -61,17 +54,16 @@ export const CapaLineMasterForm = ({ onSearch }: Props) => {
     [divisions]
   );
 
-  // Product Group — 정적 옵션(SP 없음, design 02 §2.2). AS-IS RadioGroup 3항목(Designer.cs:597~601).
-  //   NSCM 공용에 RadioGroup 컴포넌트가 없어 단일선택 드롭다운으로 매핑한다(의미 동일: 단일선택 3옵션).
-  //   'Module/Pack' 은 등가 LBL 미존재(LBL00379 는 'Module' 전용) -> 영문 defaultValue 유지(hook #114).
-  const productGroupOptions = useMemo<Option[]>(
-    () => [
-      { label: t('LBL00038', '_Electrode'), value: PRODUCT_GROUP.ELECTRODE },
-      { label: t('LBL01059', '_Cell'), value: PRODUCT_GROUP.CELL },
-      { label: 'Module/Pack', value: PRODUCT_GROUP.MODULE_PACK },
-    ],
-    [t]
-  );
+  // Division 기본값 = 권한목록 첫 항목 자동선택(AS-IS setListBox DropDownList 첫 행 자동선택, cs:187~192).
+  //   L1(Division 미선택) 갭 해소. 콤보가 async 로드라 첫 항목 확정 후, 아직 미선택일 때만 1회 세팅한다.
+  //   setSearchCondition 으로 divisionId 만 채운다(setDivision 의 전체 리셋을 피해 Product Group 보존).
+  //   자동조회는 하지 않는다 — 명시 Search 게이트(L3, 2026-09-23 사용자 확정). divisionId 변경 시 CapaLineMaster
+  //   effect 가 컬럼 메타만 재조회한다.
+  const firstDivision = divisionOptions[0]?.value;
+  useEffect(() => {
+    if (!sc.divisionId && firstDivision) setSearchCondition({ divisionId: firstDivision });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstDivision, sc.divisionId]);
 
   return (
     <SearchArea
@@ -80,7 +72,9 @@ export const CapaLineMasterForm = ({ onSearch }: Props) => {
       onSearch={onSearch}
       conditions={
         <>
-          {/* Division* (단일선택, ALL 없음 — design 02 §1 #1 / §4 setListBox(false)). LBL00641. */}
+          {/* Division* (단일선택, ALL 없음 — design 02 §1 #1 / §4 setListBox(false)).
+              라벨 = LBL00001 "Div" — AS-IS SCP0114 캡션(LBL00641 "Division")과 다르나, 자매 SCP0104
+              (Line Assign) 및 공용 DivisionField 카탈로그와 통일하기로 사용자 확정(2026-11-06). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -101,26 +95,6 @@ export const CapaLineMasterForm = ({ onSearch }: Props) => {
                       if (ok) setDivision(v);
                     });
                   }}
-                />
-              )}
-            />
-          </Grid>
-
-          {/* Product Group (정적 3옵션, 기본 Electrode — design 02 §1 #4 / §2.2). LBL00088. */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t('LBL00088', '_Product Group')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  value={sc.shopGroupId}
-                  options={productGroupOptions}
-                  onChange={(_, picked) =>
-                    setSearchCondition({
-                      shopGroupId: (String(picked ?? '') || PRODUCT_GROUP.ELECTRODE) as ProductGroup,
-                    })
-                  }
                 />
               )}
             />

@@ -27,7 +27,8 @@ interface OwnerSelectModalProps {
   onConfirm: (value: { owner: string; userNameEn: string }) => void;
 }
 
-// 이동 후 대상 그리드 SORT_ORDER_NO 오름차순 정렬(AS-IS SetTitleSet cs L440-446, design 01 R3/R4).
+// 오른쪽 → 왼쪽 이동 후 왼쪽 그리드 SORT_ORDER_NO 오름차순 정렬(AS-IS SetTitleSet cs L440-446, design 01 R3/R4).
+//   조회 결과는 정렬하지 않는다 — AS-IS 는 받은 순서(왼쪽 = 부서명 → 이름)로 표시한다(cs L298·303, 갭분석 F-02).
 const sortBySortOrder = (rows: OwnerRow[]): OwnerRow[] =>
   [...rows].sort((a, b) => Number(a.SORT_ORDER_NO) - Number(b.SORT_ORDER_NO));
 
@@ -94,10 +95,10 @@ export const OwnerSelectModal = ({
   // 서버 응답 바인딩 — o_rc1=Base 후보, o_rc2=User 기선택.
   useEffect(() => {
     if (!data) return;
-    const base = sortBySortOrder(data.o_rc1 ?? []);
+    const base = data.o_rc1 ?? [];
     if (isInitialLoadRef.current) {
       setBaseRows(base);
-      setUserRows(sortBySortOrder(data.o_rc2 ?? []));
+      setUserRows(data.o_rc2 ?? []);
       isInitialLoadRef.current = false;
     } else {
       // Find 재조회: Base 만 교체, User 는 클라 상태 유지(design 01 R2 / 03 §4).

@@ -1,6 +1,6 @@
 import { AllowMerging, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, useEffect, useRef } from 'react';
+import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { DataGrid } from '@shared/components';
@@ -53,6 +53,22 @@ export const CapaLobReportGrid = ({
   const bottleneckRef = useRef(bottleneckIndex);
   bottleneckRef.current = bottleneckIndex;
 
+  /**
+   * 컬럼 개인화 색 (ColumnLayoutModal 저장값) — binding -> {cell, text}.
+   * 공용 DataGrid 는 colWth/display 만 컬럼에 옮기고 **색은 안 넘기므로**(형제 ShipmentRequestGrid 와 동일)
+   * 아래 formatItem 이 고정 컬럼 셀에 직접 칠한다. 저장·조회는 정상이나 렌더 경로가 없던 갭 보완(2026-11-04).
+   */
+  const colorMetaRef = useRef<Map<string, { cell: string; text: string }>>(new Map());
+  colorMetaRef.current = useMemo(() => {
+    const m = new Map<string, { cell: string; text: string }>();
+    staticColumns.forEach(column => {
+      if (column.cellColor || column.textColor) {
+        m.set(column.colNm, { cell: column.cellColor ?? '', text: column.textColor ?? '' });
+      }
+    });
+    return m;
+  }, [staticColumns]);
+
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
@@ -65,8 +81,19 @@ export const CapaLobReportGrid = ({
       const binding = sender.columns[event.col]?.binding ?? '';
       const row = sender.rows[event.row]?.dataItem as CapaLobRow | undefined;
 
+      // 개인화 셀/글자색(ColumnLayoutModal 저장값) 적용·해제. Wijmo 가 셀 DOM 을 재사용하므로
+      //   미해당 시 반드시 해제한다(hook #95 §1-4). 배경은 동적 hex 라 CSS 변수(--clr-cell-bg)로 넘기고
+      //   class(.personalCellBg, 선택 셀 제외) 가 칠한다 — inline 색 하드코딩 금지(§2.1 #5). 글자색은
+      //   개인화 동적값이라 setProperty 로 직접 적용(형제 ShipmentRequestGrid 선례).
+      const color = row ? colorMetaRef.current.get(binding) : undefined;
+      if (color?.cell) event.cell.style.setProperty('--clr-cell-bg', color.cell);
+      else event.cell.style.removeProperty('--clr-cell-bg');
+      event.cell.classList.toggle(styles.personalCellBg, !!color?.cell);
+      if (color?.text) event.cell.style.setProperty('color', color.text, 'important');
+      else event.cell.style.removeProperty('color');
+
       // Wijmo 는 셀 DOM 을 재사용한다 — 미해당 시에도 반드시 클래스를 해제한다(hook #95 §1-4).
-      //   고정 6컬럼에는 포맷·색이 걸리지 않는다(AS-IS 루프가 `ELTR_LN_TP_CD` 다음 컬럼부터, R-10).
+      //   고정 6컬럼에는 음수·bottleneck 포맷이 걸리지 않는다(AS-IS 루프가 `ELTR_LN_TP_CD` 다음 컬럼부터, R-10).
       if (!row || !isPeriodColumn(binding)) {
         event.cell.classList.remove(styles.negativeValue, styles.bottleneckCell);
         return;

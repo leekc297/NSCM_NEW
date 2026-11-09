@@ -1,0 +1,147 @@
+FRESH-GATE OK 2026-11-09 12:00:00 PKG_DMF0082_1104 SPEC 2026-11-04 16:00:18 BODY 2026-11-06 06:09:06 · 원본 BODY 2026-11-04 14:48:42
+지문 SPEC (104, 7660, 225891144160) BODY (27888, 1548471, 60508527752322) 원본 GET_MAIN_DATA (5285, 323720, 11513597021521) 줄수 {'PACKAGE': 124, 'PACKAGE BODY': 28837}
+의존 128개(동적 3) · 열 2628 · 권한 2 · 시노님 1
+wrote 00_PRECHECK_CLOUD.sql 150800
+wrote 20_CREATE_PKG_DMF0082_1104.sql 1589214
+wrote 30_SPEED_RUN.sql 8059
+wrote 40_SPEED_COMPARE.sql 4447
+wrote 90_VERIFY.sql 3036
+wrote 98_CLEANUP_SPEED_LOG.sql 874
+wrote 99_ROLLBACK.sql 4150
+── 99_ROLLBACK.sql · 문장 2 · 12:00:06
+   > SKIP — PKG_DMF0082_1104R 없음 · 백업표 없음 (이미 원복 또는 미적용)
+   SELECT 2행 ['CHK', 'OBJECT_NAME', 'OBJECT_TYPE', 'STATUS', 'LAST_DDL']
+     ('R1', 'PKG_DMF0082', 'PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')
+     ('R1', 'PKG_DMF0082', 'PACKAGE', 'VALID', '2026-10-09 13:38:31')
+   → 실패 0
+── 00_PRECHECK_CLOUD.sql · 문장 9 · 12:00:06
+   SELECT 1행 ['CHK', 'DB_NAME', 'CUR_USER', 'NOW_TIME']
+     ('P0', 'ZIOUI1', 'SCM_MGR', '2026-11-09 12:00:06')
+   SELECT 1행 ['CHK', 'PRODUCT', 'VERSION']
+     ('P0', 'Oracle AI Database 26ai Enterprise Edition ', '23.0.0.0.0')
+   SELECT 2행 ['CHK', 'OBJECT_NAME', 'OBJECT_TYPE', 'STATUS', 'LAST_DDL']
+     ('P1', 'PKG_DMF0082', 'PACKAGE', 'VALID', '2026-10-09 13:38:31')
+     ('P1', 'PKG_DMF0082', 'PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')
+   SELECT 1행 ['CHK', 'ARG_CNT', 'JUDGE']
+     ('P2', '22', 'OK')
+   SELECT 1행 ['CHK', 'N_LINES', 'LEN_SUM', 'HASH_SUM', 'CORP_N', 'CORP_LEN', 'CORP_HASH', 'JUDGE']
+     ('P3', '5285', '323720', '11513597021521', '5285', '323720', '11513597021521', 'SAME')
+   SELECT 0행 ['CHK', 'OWN', 'NAM', 'TYP', 'REF_KIND', 'STATUS', 'JUDGE']
+   SELECT 0행 ['CHK', 'OWN', 'TAB', 'COL', 'JUDGE']
+   SELECT 4행 ['CHK', 'KIND', 'WHO', 'WHAT']
+     ('P6', 'GRANT', 'RL_SCM_DML', 'DEBUG')
+     ('P6', 'GRANT', 'RL_SCM_DML', 'EXECUTE')
+     ('P6', 'GRANT', 'SCMP_APP', 'EXECUTE')
+     ('P6', 'SYNONYM', 'SCMP_APP', 'PKG_DMF0082')
+   > P7 실행 중 세션 1 — 끝난 뒤 20 실행
+   → 실패 0
+── 20_CREATE_PKG_DMF0082_1104.sql · 문장 6 · 12:00:09
+   > BACKUP  NONE — 적용 전 PKG_DMF0082_1104R 없음 (99 원복 = 삭제)
+   CREATE OR REPLACE PACKAGE "PKG_DMF0082_1104R" 실행
+   CREATE OR REPLACE PACKAGE BODY 실행
+   > GRANT   EXECUTE ON PKG_DMF0082_1104R TO RL_SCM_DML
+   > GRANT   EXECUTE ON PKG_DMF0082_1104R TO SCMP_APP
+   > GRANT   DEBUG ON PKG_DMF0082_1104R TO RL_SCM_DML
+   > SYNONYM SCMP_APP.PKG_DMF0082_1104R
+   > 권한·시노님 4건
+   SELECT 2행 ['CHK', 'OBJECT_NAME', 'OBJECT_TYPE', 'STATUS', 'LAST_DDL']
+     ('C1', 'PKG_DMF0082_1104R', 'PACKAGE', 'VALID', '2026-11-09 12:00:13')
+     ('C1', 'PKG_DMF0082_1104R', 'PACKAGE BODY', 'VALID', '2026-11-09 12:00:09')
+   SELECT 0행 ['CHK', 'TYPE', 'LINE', 'POSITION', 'TEXT']
+   → 실패 0
+   원문 대조 PACKAGE: 동일 (리허설 7787자 · 사내 1104 치환본 7787자)
+   원문 대조 PACKAGE BODY: 동일 (리허설 1577309자 · 사내 1104 치환본 1577309자)
+── 20_CREATE_PKG_DMF0082_1104.sql · 문장 6 · 12:00:16
+   > BACKUP  SKIP — 백업 이미 있음(첫 실행 상태 보존)
+   CREATE OR REPLACE PACKAGE "PKG_DMF0082_1104R" 실행
+   CREATE OR REPLACE PACKAGE BODY 실행
+   > GRANT   EXECUTE ON PKG_DMF0082_1104R TO RL_SCM_DML
+   > GRANT   EXECUTE ON PKG_DMF0082_1104R TO SCMP_APP
+   > GRANT   DEBUG ON PKG_DMF0082_1104R TO RL_SCM_DML
+   > SYNONYM SCMP_APP.PKG_DMF0082_1104R
+   > 권한·시노님 4건
+   SELECT 2행 ['CHK', 'OBJECT_NAME', 'OBJECT_TYPE', 'STATUS', 'LAST_DDL']
+     ('C1', 'PKG_DMF0082_1104R', 'PACKAGE', 'VALID', '2026-11-09 12:00:13')
+     ('C1', 'PKG_DMF0082_1104R', 'PACKAGE BODY', 'VALID', '2026-11-09 12:00:09')
+   SELECT 0행 ['CHK', 'TYPE', 'LINE', 'POSITION', 'TEXT']
+   → 실패 0
+── 90_VERIFY.sql · 문장 6 · 12:00:16
+   SELECT 2행 ['CHK', 'OBJECT_NAME', 'OBJECT_TYPE', 'STATUS', 'LAST_DDL']
+     ('V1', 'PKG_DMF0082_1104R', 'PACKAGE', 'VALID', '2026-11-09 12:00:13')
+     ('V1', 'PKG_DMF0082_1104R', 'PACKAGE BODY', 'VALID', '2026-11-09 12:00:09')
+   SELECT 1행 ['CHK', 'ERR_CNT', 'JUDGE']
+     ('V2', '0', 'PASS')
+   SELECT 2행 ['CHK', 'TYPE', 'N_LINES', 'LEN_SUM', 'HASH_SUM', 'CORP_N', 'CORP_LEN', 'CORP_HASH', 'JUDGE']
+     ('V3', 'PACKAGE', '104', '7662', '222308899796', '104', '7660', '225891144160', 'FAIL — 파일 일부만 실행됐거나 다른 원문')
+     ('V3', 'PACKAGE BODY', '27888', '1548473', '60504299404254', '27888', '1548471', '60508527752322', 'FAIL — 파일 일부만 실행됐거나 다른 원문')
+   SELECT 0행 ['CHK', 'GRANTEE', 'PRIVILEGE', 'JUDGE']
+   SELECT 0행 ['CHK', 'OWNER', 'JUDGE']
+   SELECT 2행 ['CHK', 'OBJECT_TYPE', 'STATUS', 'LAST_DDL']
+     ('V6', 'PACKAGE', 'VALID', '2026-10-09 13:38:31')
+     ('V6', 'PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')
+   → 실패 0
+── 30_SPEED_RUN.sql · 문장 3 · 12:00:16
+   > 기록표 생성 ZB_DMF0082_1104R_SPEED
+   > 시작 2026-11-09 12:00:16 · user=minyonglee1 · group=ADMIN · 20261101~20270430 · 회차 1
+   > 12:00:40 PKG_DMF0082       div40 #1 proc 12.57s fetch 10.77s rows=8213
+   > 12:00:54 PKG_DMF0082_1104R div40 #1 proc 7.96s fetch 5.56s rows=8213
+   > 12:01:26 PKG_DMF0082       div81 #1 proc 18.2s fetch 13.49s rows=8500
+   > 12:01:45 PKG_DMF0082_1104R div81 #1 proc 11.3s fetch 6.78s rows=8500
+   > 12:02:53 PKG_DMF0082       div82 #1 proc 38.72s fetch 28.64s rows=16677
+   > 12:03:23 PKG_DMF0082_1104R div82 #1 proc 16.48s fetch 13.25s rows=16677
+   > 끝 2026-11-09 12:03:23 — 40_SPEED_COMPARE 로 결과 확인
+   SELECT 6행 ['PKG', 'DIV', 'RUN_NO', 'SEQ_IN_RUN', 'PROC_SEC', 'FETCH_SEC', 'TOTAL_SEC', 'R1', 'C1', 'ERR']
+     ('PKG_DMF0082', '40', '1', '1', '12.57', '10.77', '23.34', '8213', '432', 'None')
+     ('PKG_DMF0082_1104R', '40', '1', '2', '7.96', '5.56', '13.52', '8213', '432', 'None')
+     ('PKG_DMF0082', '81', '1', '1', '18.2', '13.49', '31.69', '8500', '432', 'None')
+     ('PKG_DMF0082_1104R', '81', '1', '2', '11.3', '6.78', '18.08', '8500', '432', 'None')
+     ('PKG_DMF0082', '82', '1', '1', '38.72', '28.64', '67.36', '16677', '432', 'None')
+     ('PKG_DMF0082_1104R', '82', '1', '2', '16.48', '13.25', '29.73', '16677', '432', 'None')
+   → 실패 0
+── 40_SPEED_COMPARE.sql · 문장 3 · 12:03:23
+   SELECT 3행 ['CHK', 'DIV', 'RUNS', 'ORIG_TOTAL', 'NEW_TOTAL', 'RATIO', 'ORIG_PROC', 'NEW_PROC', 'ORIG_FETCH', 'NEW_FETCH', 'ORIG_RANGE', 'NEW_RANGE']
+     ('C1', '40', '1', '23.34', '13.52', '0.58', '12.57', '7.96', '10.77', '5.56', '23.34~23.34', '13.52~13.52', '8213', '8213', 'OK')
+     ('C1', '81', '1', '31.69', '18.08', '0.57', '18.2', '11.3', '13.49', '6.78', '31.69~31.69', '18.08~18.08', '8500', '8500', 'OK')
+     ('C1', '82', '1', '67.36', '29.73', '0.44', '38.72', '16.48', '28.64', '13.25', '67.36~67.36', '29.73~29.73', '16677', '16677', 'OK')
+   SELECT 6행 ['CHK', 'DIV', 'RUN_NO', 'SEQ_IN_RUN', 'PKG', 'PROC_SEC', 'FETCH_SEC', 'TOTAL_SEC', 'R1', 'R2', 'R3', 'R4']
+     ('C2', '40', '1', '1', 'PKG_DMF0082', '12.57', '10.77', '23.34', '8213', '6', '1', '5', '181', '1', '432', 'minyonglee1')
+     ('C2', '40', '1', '2', 'PKG_DMF0082_1104R', '7.96', '5.56', '13.52', '8213', '6', '1', '5', '181', '1', '432', 'minyonglee1')
+     ('C2', '81', '1', '1', 'PKG_DMF0082', '18.2', '13.49', '31.69', '8500', '6', '1', '5', '181', '1', '432', 'minyonglee1')
+     ('C2', '81', '1', '2', 'PKG_DMF0082_1104R', '11.3', '6.78', '18.08', '8500', '6', '1', '5', '181', '1', '432', 'minyonglee1')
+     ('C2', '82', '1', '1', 'PKG_DMF0082', '38.72', '28.64', '67.36', '16677', '6', '1', '5', '181', '1', '432', 'minyonglee1')
+     ('C2', '82', '1', '2', 'PKG_DMF0082_1104R', '16.48', '13.25', '29.73', '16677', '6', '1', '5', '181', '1', '432', 'minyonglee1')
+   SELECT 3행 ['CHK', 'DIV', 'RUN_NO', 'CUR1', 'CUR2', 'CUR3', 'CUR4', 'CUR5', 'CUR6', 'ORIG_R1', 'NEW_R1', 'ORIG_COLS']
+     ('C3', '40', '1', 'SAME', 'SAME', 'SAME', 'SAME', 'SAME', 'SAME', '8213', '8213', '432', '432')
+     ('C3', '81', '1', 'SAME', 'SAME', 'SAME', 'SAME', 'SAME', 'SAME', '8500', '8500', '432', '432')
+     ('C3', '82', '1', 'SAME', 'SAME', 'SAME', 'SAME', 'SAME', 'SAME', '16677', '16677', '432', '432')
+   → 실패 0
+── 98_CLEANUP_SPEED_LOG.sql · 문장 1 · 12:03:23
+   > DROPPED ZB_DMF0082_1104R_SPEED
+   → 실패 0
+── 98_CLEANUP_SPEED_LOG.sql · 문장 1 · 12:03:23
+   > SKIP — ZB_DMF0082_1104R_SPEED 없음
+   → 실패 0
+── 99_ROLLBACK.sql (DRY) · 문장 2 · 12:03:24
+   > DRY     DROP SYNONYM SCMP_APP.PKG_DMF0082_1104R
+   > DRY     DROP PACKAGE PKG_DMF0082_1104R
+   SELECT 4행 ['CHK', 'OBJECT_NAME', 'OBJECT_TYPE', 'STATUS', 'LAST_DDL']
+     ('R1', 'PKG_DMF0082', 'PACKAGE', 'VALID', '2026-10-09 13:38:31')
+     ('R1', 'PKG_DMF0082', 'PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')
+     ('R1', 'PKG_DMF0082_1104R', 'PACKAGE', 'VALID', '2026-11-09 12:00:13')
+     ('R1', 'PKG_DMF0082_1104R', 'PACKAGE BODY', 'VALID', '2026-11-09 12:00:09')
+   → 실패 0
+── 99_ROLLBACK.sql · 문장 2 · 12:03:24
+   > DROPPED SYNONYM SCMP_APP.PKG_DMF0082_1104R
+   > ROLLED BACK — DROP PACKAGE PKG_DMF0082_1104R (적용 전 없던 객체)
+   > DROPPED ZB_DMF0082_1104R_BAK
+   SELECT 2행 ['CHK', 'OBJECT_NAME', 'OBJECT_TYPE', 'STATUS', 'LAST_DDL']
+     ('R1', 'PKG_DMF0082', 'PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')
+     ('R1', 'PKG_DMF0082', 'PACKAGE', 'VALID', '2026-10-09 13:38:31')
+   → 실패 0
+── 99_ROLLBACK.sql · 문장 2 · 12:03:25
+   > SKIP — PKG_DMF0082_1104R 없음 · 백업표 없음 (이미 원복 또는 미적용)
+   SELECT 2행 ['CHK', 'OBJECT_NAME', 'OBJECT_TYPE', 'STATUS', 'LAST_DDL']
+     ('R1', 'PKG_DMF0082', 'PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')
+     ('R1', 'PKG_DMF0082', 'PACKAGE', 'VALID', '2026-10-09 13:38:31')
+   → 실패 0
+== 리허설 끝 · 문장 실패 합계 0 · 남은 PKG_DMF0082_1104R 객체 00 · 남은 ZB 표 0

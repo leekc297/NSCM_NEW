@@ -62,7 +62,7 @@ export function buttonSnapshot(p: Page): Promise<BtnSnap[]> {
 }
 export const isDivLabel = (k: string) => /^(div|division|사업부)$/.test(k);
 /** Division 칸: 값·콤보 후보(코드). 후보 텍스트 앞 토큰이 코드(FE 표기 '81 Automotive …') */
-export async function divState(nscm: Nscm): Promise<{ value: string; code: string; options: string[]; found: boolean }> {
+export async function divState(nscm: Nscm): Promise<{ value: string; code: string; options: string[]; found: boolean; multiAll?: boolean }> {
   const p = nscm.page; const snap = await condSnapshot(p); const it = snap.find(c => isDivLabel(c.key));
   if (!it) return { value: '', code: '', options: [], found: false };
   const code = (it.value.trim().split(/\s+/)[0] || '').replace(/[^A-Za-z0-9_]/g, '');
@@ -71,7 +71,11 @@ export async function divState(nscm: Nscm): Promise<{ value: string; code: strin
   await p.getByRole('option').first().waitFor({ state: 'visible', timeout: 5_000 }).catch(() => undefined);
   const raw = await p.getByRole('option').allInnerTexts().catch(() => [] as string[]);
   await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(150);
-  return { value: it.value, code, options: raw.map(t => (t.trim().split(/\s+/)[0] || '').replace(/[^A-Za-z0-9_]/g, '')).filter(t => t && !/^all$/i.test(t)), found: true };
+  // 2026-11-06(SCP0084 EG366 허위 FAIL 10건): 다중선택 콤보의 전체 선택 항목('Select All')을 앞 토큰 'SELECT' 로 잘라 Division 코드로 셌다
+  //   → 문구 전체가 전체 선택 항목이면 토큰화 전에 뺀다(condOptions 와 같은 규칙)
+  // multiAll = 다중선택 콤보(전체 선택 항목 'SELECT ALL' 이 있음)이고 선택값이 비어 있음 = 공용 CustomDropdown 의 'ALL' sentinel(필터 없음 = 후보 전부 · 칩 미표시)
+  const multiAll = raw.some(t => /^select\s*all$/i.test(t.trim())) && !code;
+  return { value: it.value, code, multiAll, options: raw.map(t => t.trim()).filter(t => t && !/^(select\s*)?all$|^전체$|^전체\s*선택$/i.test(t)).map(t => (t.split(/\s+/)[0] || '').replace(/[^A-Za-z0-9_]/g, '')).filter(t => t && !/^all$/i.test(t)), found: true };
 }
 /** Division 선택 후 표시값이 그 코드인지까지 확인(선택 실패를 측정값으로 쓰지 않는다) */
 export async function selectDiv(nscm: Nscm, code: string): Promise<boolean> {

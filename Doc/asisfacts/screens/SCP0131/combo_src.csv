@@ -1,0 +1,9 @@
+﻿target_kind,target,label,method,var,filters,wrapper,sp,code,args,unresolved,ref
+SEARCH,cboDivision,Division*,InitControls,dtMyDivision,,Data_SCP.Common,UP_FX_GetCommonDataList_SCP,Division,"[{""n"": ""@Param1"", ""expr"": ""UserInfoContext.Current[\""NowGroupID\""]""}, {""n"": ""@Param2"", ""expr"": ""UserInfoContext.Current.UserId""}]",,SCP0131_SalesSitePriority.cs:155 ← SCP0131_SalesSitePriority.cs:40
+SEARCH,clbPlanGroup,Plan Group,RefreshPlanGroupByDivision,dtPlanGroup,,,,,[],dtPlanGroup 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0131_SalesSitePriority.cs:252
+SEARCH,clbSite,SCM Site,RefreshSiteByDivision,dtScmSite,,,,,[],dtScmSite 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0131_SalesSitePriority.cs:267
+PARAM,ScmSite,,InitSpread,dtScmSite,,,,,[],dtScmSite 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0131_SalesSitePriority.cs:306
+PARAM,Division,,InitSpread,dtMyDivision,,Data_SCP.Common,UP_FX_GetCommonDataList_SCP,Division,"[{""n"": ""@Param1"", ""expr"": ""UserInfoContext.Current[\""NowGroupID\""]""}, {""n"": ""@Param2"", ""expr"": ""UserInfoContext.Current.UserId""}]",,SCP0131_SalesSitePriority.cs:307 ← SCP0131_SalesSitePriority.cs:40
+PARAM,PlanGroup,,InitSpread,dtPlanGroup,,,,,[],dtPlanGroup 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0131_SalesSitePriority.cs:308
+PARAM,ValidYn,,InitSpread,dtValidYn,,,,,[],dtValidYn 원천 대입 미발견(필드 초기화·외부 주입 확인),SCP0131_SalesSitePriority.cs:309
+GRID,OPMZ_PLAN_GR_ID,Plan Group*,SheetMeta,dtPlanGroup,,,,,[],dtPlanGroup 원천 대입 미발견(필드 초기화·외부 주입 확인),SCM_MST_SHEET_COLUMNS SCP0131/Sales Site Priority/OPMZ_PLAN_GR_ID

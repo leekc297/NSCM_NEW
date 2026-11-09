@@ -40,15 +40,15 @@ const toOptions = (rows: ComboResponse[] | undefined): Option[] =>
   (rows ?? []).map(r => ({ label: str(r.NAME) || str(r.CODE), value: str(r.CODE) }));
 
 // AS-IS SSP0045 조회조건 8필드 + 패널 1 (design 02 §1 F1~F8 / C09).
-//   1단: Division* / Operation Group* / From Site / Model(+픽커)   2단: Period* / Bucket / Sum (전부 size3)
+//   1단: Division* / Operation Group* / Model(+픽커) / From Site   2단: Bucket / Period* / Sum (전부 size3)
 //   전체 7칸(2단) = 표준 SRCH-02 "8칸 **초과** 시 extraConditions" 미해당 → **확장 접기 토글 없음**.
 //   Bucket·Sum 은 SP 파라미터가 아니라 그리드 가시성 전용이지만 2단에 그대로 노출한다(design 02 §5.6).
 //   Period 는 `PeriodField gridSize={3}`(카탈로그 표준 폭) — size6 이면 셀 여백이 Bucket 과의 간격으로 보인다.
 //   전체 조회영역 접기(isHidden)는 AS-IS `usrConditionPanel1` HidePanel=C09 대응으로 별개 유지.
 //   cascade 1개(2단): (Division, Operation Group) → From Site — 전 단계 **재조회 방식**(design 02 §3).
-//   주의: 조회조건 노출 순서는 **AS-IS tabIndex(Model→From Site)와 다르게** From Site 를 Model 앞에 둔다.
-//     cascade 선행조건(From Site 는 Div·OperGrp 종속)을 먼저 노출하는 사용성 결정이다(사용자 지시 2026-10-20,
-//     design 02 §5.7 에 기록). 값·SP 파라미터·cascade 동작은 불변 — 표시 순서만 바뀐다.
+//   주의: 조회조건 노출 순서는 Model 을 Operation Group 다음(3번째), From Site 를 그 뒤에 둔다
+//     (사용자 지시 2026-11-06, 종전 From Site→Model 2026-10-20 지시를 대체). 값·SP 파라미터·cascade
+//     동작은 불변 — 표시 순서만 바뀐다(cascade 는 여전히 Div·OperGrp → From Site).
 export const ShipmentRequestSemiForm = ({ onSearch, onModelSearch }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -224,35 +224,8 @@ export const ShipmentRequestSemiForm = ({ onSearch, onModelSearch }: Props) => {
             />
           </Grid>
 
-          {/* F5 From Site — 다중 + ALL. 미선택(ALL)은 SP 에 **빈 문자열**로 나간다(P3, store.setFilter).
-              표시 순서상 Model 앞에 둔다(cascade 선행조건 우선, 위 헤더 주석 / design 02 §5.7). */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.FROM_SITE, '_From Site')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  multiple
-                  allOption
-                  useClearIcon
-                  limitTags={1}
-                  disabled={noDivisionAuth}
-                  value={sc.scmSiteIds.join(',')}
-                  options={fromSiteOptions}
-                  onChange={(_, picked) =>
-                    set({
-                      scmSiteIds: String(picked ?? '')
-                        .split(',')
-                        .filter(v => v && v !== 'ALL'),
-                    })
-                  }
-                />
-              )}
-            />
-          </Grid>
-
-          {/* F3 Model + F4 픽커(PU03) — 콤마 구분 다중 입력. 픽커 버튼은 필드 오른쪽 외부(popupSearchField). */}
+          {/* F3 Model + F4 픽커(PU03) — 콤마 구분 다중 입력. 픽커 버튼은 필드 오른쪽 외부(popupSearchField).
+              표시 순서상 Operation Group 다음(3번째, From Site 앞)에 둔다(사용자 지시 2026-11-06). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -281,24 +254,38 @@ export const ShipmentRequestSemiForm = ({ onSearch, onModelSearch }: Props) => {
             />
           </Grid>
 
-          {/* F7 Period* — AS-IS `drpPeriod.Enabled=false`(G15). 서버 산출 고정값(오늘~오늘+55일).
-              카탈로그 `PeriodField disabled`(DatePickerCalendar 2개, 입력·팝업 모두 잠금)로 AS-IS 비활성
-              daterange 달력을 재현한다 — 자매 demand Shipment Request(ShipmentRequestForm:277)와 동일 패턴.
-              공용 수정이 아니라 기존 opt-in prop 사용이라 Hard Boundary 무침범(design 02 §5.8 D3 / §7.2 R3).
-              label 은 LBL00013 명시 전달(카탈로그 기본 `LBL00505` 는 DB 미등록, design 02 §4.5 함정). */}
-          <PeriodField
-            gridSize={3}
-            label={t(LBL.PERIOD, '_Period')}
-            start={sc.fromYyyymmdd}
-            end={sc.toYyyymmdd}
-            disabled
-            onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
-          />
+          {/* F5 From Site — 다중 + ALL. 미선택(ALL)은 SP 에 **빈 문자열**로 나간다(P3, store.setFilter). */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.FROM_SITE, '_From Site')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  disabled={noDivisionAuth}
+                  value={sc.scmSiteIds.join(',')}
+                  options={fromSiteOptions}
+                  onChange={(_, picked) =>
+                    set({
+                      scmSiteIds: String(picked ?? '')
+                        .split(',')
+                        .filter(v => v && v !== 'ALL'),
+                    })
+                  }
+                />
+              )}
+            />
+          </Grid>
 
           {/* F6 Bucket — `BucketType`(DAILY/WEEKLY/MONTHLY). 기본값 DAILY(G17). 조회 파라미터 아님.
               표시옵션이지만 전체 8칸(2단)이라 표준 SRCH-02(8칸 **초과** 시에만 extraConditions)상
               확장 접기 토글은 불필요 — AS-IS 2단 배치(Bucket/Period/Sum)처럼 conditions 2단에 그대로
-              노출한다(design 02 §5.6). 전체 조회영역 접기(isHidden)는 AS-IS HidePanel=C09 대응으로 별개 유지. */}
+              노출한다(design 02 §5.6). 전체 조회영역 접기(isHidden)는 AS-IS HidePanel=C09 대응으로 별개 유지.
+              표시 순서상 Period 앞(2단 첫 칸)에 둔다(사용자 지시 2026-11-06). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -316,6 +303,21 @@ export const ShipmentRequestSemiForm = ({ onSearch, onModelSearch }: Props) => {
               )}
             />
           </Grid>
+
+          {/* F7 Period* — AS-IS `drpPeriod.Enabled=false`(G15). 서버 산출 고정값(오늘~오늘+55일).
+              카탈로그 `PeriodField disabled`(DatePickerCalendar 2개, 입력·팝업 모두 잠금)로 AS-IS 비활성
+              daterange 달력을 재현한다 — 자매 demand Shipment Request(ShipmentRequestForm:277)와 동일 패턴.
+              공용 수정이 아니라 기존 opt-in prop 사용이라 Hard Boundary 무침범(design 02 §5.8 D3 / §7.2 R3).
+              label 은 LBL00013 명시 전달(카탈로그 기본 `LBL00505` 는 DB 미등록, design 02 §4.5 함정).
+              표시 순서상 Bucket 다음에 둔다(사용자 지시 2026-11-06). */}
+          <PeriodField
+            gridSize={3}
+            label={t(LBL.PERIOD, '_Period')}
+            start={sc.fromYyyymmdd}
+            end={sc.toYyyymmdd}
+            disabled
+            onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
+          />
 
           {/* F8 Sum — 초기 unchecked. SUM(M_/W_) 컬럼 가시성만 바꾼다(재조회 없음).
               정렬: 라벨을 `FormItem` 라벨 트랙(우측정렬)에 둬 위 Period·Bucket 라벨 열과 x 정렬한다.

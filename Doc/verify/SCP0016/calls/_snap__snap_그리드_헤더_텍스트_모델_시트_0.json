@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 197,
+  "at": "2026-11-07T12:44:43.200Z",
+  "user": "minyonglee1",
+  "test": "@snap 그리드 헤더 텍스트(모델) ×시트"
+ }
+]

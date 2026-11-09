@@ -1,7 +1,19 @@
 {
   "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "eg_popup",
+      "--workers",
+      "1",
+      "--retries",
+      "0",
+      "--reporter=list,json"
+    ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
@@ -12,19 +24,6 @@
     "maxFailures": 0,
     "metadata": {},
     "preserveOutput": "always",
-    "reporter": [
-      [
-        "list"
-      ],
-      [
-        "json"
-      ]
-    ],
-    "reportSlowTests": {
-      "max": 5,
-      "threshold": 15000
-    },
-    "quiet": false,
     "projects": [
       {
         "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0122/eg/popup/artifacts",
@@ -41,9 +40,58 @@
         "timeout": 180000
       }
     ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0122\\eg\\popup\\artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
     "shard": null,
-    "updateSnapshots": "missing",
-    "version": "1.49.1",
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
     "workers": 1,
     "webServer": null
   },
@@ -55,8 +103,8 @@
     }
   ],
   "stats": {
-    "startTime": "2026-11-04T10:23:07.119Z",
-    "duration": 575.0480000000002,
+    "startTime": "2026-11-07T10:31:13.579Z",
+    "duration": 511.6980000000003,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

@@ -215,6 +215,11 @@ export const ShipmentChangeRequestForm = ({ onSearch, onItemSearch }: Props) => 
                   //   어긋난다(자매 SSP0200 a8dffcd0 과 동일 처방 — 정렬만 떼어낸 공용 클래스).
                   className={commonStyles.multilineSearchField}
                   value={sc.confirmId}
+                  // Enter 로 줄바꿈(행 추가)되지 않게 막는다(사용자 요청 2026-11-05) — 다건은 콤마/
+                  //   붙여넣기(개행 포함)로 입력하고, store multiLine() 이 `[\n,]` 로 분해한다.
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') e.preventDefault();
+                  }}
                   onChange={e => set({ confirmId: e.target.value })}
                 />
               )}

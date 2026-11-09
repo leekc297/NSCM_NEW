@@ -33,12 +33,6 @@ interface MktFcstComparisonState {
   originalStaticColumns: RawFlexGridColumnConfig[];
   /** 저장된 컬럼 개인화(titleSet 'C') — 표시/순서/폭/색. fetchStaticColumns 재조회 시 재적용. */
   userColumnLayout: ColumnLayoutSetting[] | null;
-  /**
-   * userColumnLayout 을 받아온 division — [2026-09-14] titleSet 'C' 조회는 division 별로 다른 컬럼을 준다
-   *   (40 = END_CUSTOMER40/SCM_SITE_ID40/ITEM_ID40, 그 외 = END_CUSTOMER/SCM_SITE_ID/ITEM_ID).
-   *   division 이 바뀌면 다시 받아야 한다 — 최초 division 레이아웃을 재사용하면 해당 컬럼이 숨김 처리된다.
-   */
-  userColumnLayoutDivision: string;
   /** 컬럼 admin 기본 정렬(SORT_ORDER_NO) colNm→순번 — 개인화 누락 필수 컬럼 제자리 삽입 기준. */
   adminColOrder: Record<string, number>;
   staticMeasures: MeasureMeta[];
@@ -122,7 +116,6 @@ const initState: MktFcstComparisonState = {
   staticColumns: [],
   originalStaticColumns: [],
   userColumnLayout: null,
-  userColumnLayoutDivision: '',
   adminColOrder: {},
   staticMeasures: [],
   initialized: false,
@@ -223,7 +216,6 @@ export const useMktFcstComparisonStore = createPersistedStoreWithTab<
         state.staticColumns = [];
         state.originalStaticColumns = [];
         state.userColumnLayout = null;
-        state.userColumnLayoutDivision = '';
         state.adminColOrder = {};
       }),
     // ⭐ [COND 2026-08-27] F6 저장 조회조건 복원 — 탭 오픈 시 1회(initialized 가드). F10(Reset Condition) 은
@@ -311,10 +303,7 @@ export const useMktFcstComparisonStore = createPersistedStoreWithTab<
       // 진입 시 개인화 복원 — 저장된 titleSet 을 먼저 조회해 override 를 확보한 뒤 메타에 적용한다.
       //   (별도 effect 로 분리하면 메타 응답과 순서 경쟁 → 늦게 온 쪽이 덮어쓰는 사고.)
       //   userColumnLayout 이 이미 있으면(모달 OK 직후 재조회) 서버 재조회 없이 그 값을 유지.
-      //   ⭐ [2026-09-14] 단, 받아온 division 과 다르면 다시 받는다 — 40 ↔ 81/82 전환 시 End Customer·
-      //   Sales Site·Model 컬럼이 숨겨지던 결함(이전 division 레이아웃에 해당 컬럼명이 없어 숨김 처리).
-      if (get().userColumnLayout === null || get().userColumnLayoutDivision !== divisionId)
-        await get().fetchUserColumnLayout({ divisionId });
+      if (get().userColumnLayout === null) await get().fetchUserColumnLayout({ divisionId });
 
       const result = await apiClient.post<RawFlexGridColumnConfig[]>(
         `/admin/menu/${MENU_ID}/column`,
@@ -382,9 +371,6 @@ export const useMktFcstComparisonStore = createPersistedStoreWithTab<
         }
         set(state => {
           state.adminColOrder = adminColOrder;
-          state.userColumnLayoutDivision = divisionId;
-          // 이 division 에 저장 개인화가 없으면 이전 division 레이아웃을 남기지 않는다(admin 기본으로 표시).
-          if (layout.length === 0) state.userColumnLayout = null;
         });
         if (layout.length === 0) return;
         set(state => {
@@ -428,8 +414,6 @@ export const useMktFcstComparisonStore = createPersistedStoreWithTab<
             order: i + 1,
           }));
         state.userColumnLayout = layout;
-        // 모달은 현재 division 기준으로 저장한다 — 이후 fetchStaticColumns 가 재조회 없이 이 값을 쓰도록 표시.
-        state.userColumnLayoutDivision = state.searchParams.divisionId;
         if (state.staticColumns.length === 0) return;
         state.staticColumns = applyLayoutToColumns(state.staticColumns, layout, state.adminColOrder);
       }),

@@ -8,7 +8,7 @@ const S = n => ({ name: 'a', h: n }); const A = { allFields: ['T'], sent: true, 
 const cases = [
   ['높이 유지', hh({ steps: [S(40), S(40.5)] }), 'PASS'], ['높이 변함', hh({ steps: [S(40), S(60)] }), 'FAIL'], ['1회만', hh({ steps: [S(40), S(0)] }), 'ERROR'],
   ['스크롤 없음', sc({ page: false, nested: [], rows: 5 }), 'PASS'], ['페이지 스크롤', sc({ page: true, nested: [], rows: 5 }), 'FAIL'], ['중첩 스크롤', sc({ page: false, nested: ['x'], rows: 5 }), 'FAIL'], ['0행', sc({ page: false, nested: [], rows: 0 }), 'ERROR'],
-  ['헤더 정상', hf({ seen: 5, clipped: [] }), 'PASS'], ['헤더 잘림', hf({ seen: 5, clipped: ['A'] }), 'FAIL'], ['렌더 0', hf({ seen: 0, clipped: [] }), 'ERROR'],
+  ['헤더 정상', hf({ seen: 5, clipped: [] }), 'PASS'], ['헤더 잘림', hf({ seen: 5, clipped: ['A'] }), '판정필요'], ['렌더 0', hf({ seen: 0, clipped: [] }), 'ERROR'],
   ['후보 정상', cd({ fields: [{ name: 'A', opts: ['-', 'x'] }] }), 'PASS'], ['후보 - 일색', cd({ fields: [{ name: 'A', opts: ['-', '-'] }] }), 'FAIL'], ['후보 / 일색', cd({ fields: [{ name: 'A', opts: ['/'] }] }), 'FAIL'], ['콤보 없음', cd({ fields: [] }), 'NA'],
   ['ALL 정상', al(A), 'PASS'], ['필수 안내', al({ ...A, dialog: '필수 항목을 선택하세요' }), 'FAIL'], ['영문 안내', al({ ...A, dialog: 'Please select Team' }), 'FAIL'], ['요청 없음', al({ ...A, sent: false }), 'ERROR'], ['ALL 없음', al({ ...A, allFields: [] }), 'NA'],
   ['입력 안정', ty(T), 'PASS'], ['대조군 수준', ty({ ...T, idle: 2, typing: 2 }), 'PASS'], ['재렌더', ty({ ...T, typing: 3 }), 'FAIL'], ['스크롤 이동', ty({ ...T, moved: true }), 'FAIL'], ['입력칸 없음', ty({ ...T, typed: false }), 'NA'], ['측정 실패', ty({ ...T, why: 'x' }), 'ERROR'],

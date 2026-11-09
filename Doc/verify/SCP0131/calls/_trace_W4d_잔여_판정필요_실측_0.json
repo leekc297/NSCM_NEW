@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 62,
+  "dur": 157,
+  "at": "2026-11-07T10:51:18.897Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 94,
+  "dur": 155,
+  "at": "2026-11-07T10:51:25.782Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ }
+]

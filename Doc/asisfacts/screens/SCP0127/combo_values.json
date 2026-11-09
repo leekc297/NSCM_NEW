@@ -1,0 +1,16 @@
+{
+ "screen": "SCP0127",
+ "generated": "2026-11-08 20:53:22",
+ "vars": {
+  "dtMyDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "PARAM:Division",
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SCP0127_PrecedeSafetyStockDay.cs:164 ← SCP0127_PrecedeSafetyStockDay.cs:45",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  }
+ }
+}

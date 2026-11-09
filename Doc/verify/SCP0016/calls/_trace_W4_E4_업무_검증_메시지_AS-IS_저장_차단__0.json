@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 185,
+  "at": "2026-11-07T12:49:15.381Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 3226,
+  "at": "2026-11-07T12:49:18.305Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ }
+]

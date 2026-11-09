@@ -44,6 +44,13 @@ import { type ExcelExportOptions, exportCapaExcel } from './utils/capa-mobility-
 import { buildSavePayload, validateSavePayload } from './utils/capa-mobility-it.save';
 
 /**
+ * Measure 설정 버튼 숨김 플래그 — measure 가 DAILY_CAPA 1건 고정이라 표시 measure 선택 팝업이
+ *   무의미(사용자 지시 2026-11-04, DB SCM_MST_SHEET_MEASURE 실측 1행). 기능/모달 코드는 유지(미삭제)하고
+ *   렌더만 차단해 measure 가 다시 늘면 true 로 즉시 복원한다.
+ */
+const SHOW_MEASURE_SELECT = false;
+
+/**
  * SCP0098 Production Plan Line (CAPA Mobility IT / CAPA Report Small).
  *   pivot measure 그리드 + 동적 기간컬럼 + measure별 편집잠금 + 3분기 저장 + Week/Month 복사.
  *   Insert 없음(조회형 편집). Division '40' 고정. 편집모드 미이식(편집 기본 ON, mount canEdit 1회).
@@ -342,7 +349,8 @@ export const CapaMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => {
           ...(canEdit ? [{ label: 'Bulk Update', action: () => void handleBulkOpen() }] : []),
           // Column/Detail 버튼은 AS-IS 에 없어 제외(AS-IS 개인화 버튼은 btnMeasure 하나).
           // Measure 설정 — AS-IS btnMeasure(SCM0002_TitleSetForm 'M') 복원. 사용자별 표시 measure 와 순서를 저장한다.
-          ...(hasButton('MEASURE_SELECT')
+          //   SHOW_MEASURE_SELECT=false 로 현재 숨김(measure 1건 고정). 기능 코드는 유지 — 복원 시 플래그만 true.
+          ...(SHOW_MEASURE_SELECT && hasButton('MEASURE_SELECT')
             ? [
                 {
                   label: t(LBL.MEASURE, 'Measure'),

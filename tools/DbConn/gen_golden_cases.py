@@ -10,6 +10,8 @@ import sys as _sys
 try: _sys.stdout.reconfigure(encoding='utf-8', errors='replace'); _sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 except Exception: pass
 import sys, os, csv, json, re
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Harness', 'verify'))  # asis_variant
+from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 HERE = os.path.dirname(os.path.abspath(__file__))
 H = json.load(open(os.path.join(os.path.dirname(HERE), 'Harness', 'harness.json'), encoding='utf-8-sig'))
 ASIS, TOBE = H['asisOutDir'], H['tobeOutDir']
@@ -62,7 +64,7 @@ for sc in screens:
     sps = []
     for r in rcsv(os.path.join(ASIS, 'screens', sc, 'endpoints.csv')):
         m = re.match(r'^SP\s+(\S+)', r.get('sp_or_sql', '') or '')
-        if m and r.get('status') == 'MATCH' and r.get('variant', 'current') == 'current':
+        if m and r.get('status') == 'MATCH' and is_main(r, os.path.join(ASIS, 'screens', sc)):
             sp = m.group(1).split('.')[-1]
             if sp not in sps: sps.append(sp)
     for sp in sps:

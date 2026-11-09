@@ -37,6 +37,8 @@ interface UseCapaLossPlanSaveParams {
   divisionType: DivisionType;
   /** 편집권한 — `canEdit = hasButton('EDIT')`. AS-IS Edit 토글 미이식(convert-core §2.4). */
   canEdit: boolean;
+  /** Edit 게이트 차단 메시지 코드(judgeEditGate) — 설정 시 저장 차단 + 안내(읽기전용 버전). */
+  editBlockedMessageId?: string;
   /** 필수검증 기준 메타 — 현재 시트분. */
   staticColumns: RawFlexGridColumnConfig[];
   /** 저장 성공 후 재조회 — AS-IS 는 SAVE -> GET 을 연쇄 실행한다. */
@@ -59,6 +61,7 @@ export const useCapaLossPlanSave = ({
   sheetType,
   divisionType,
   canEdit,
+  editBlockedMessageId,
   staticColumns,
   refetch,
 }: UseCapaLossPlanSaveParams) => {
@@ -182,6 +185,11 @@ export const useCapaLossPlanSave = ({
     const grid = gridRef.current;
     if (!grid) return;
     if (!canEdit) return;
+    // Edit 게이트 차단 버전(Pre/2차컷오프/1차컷오프xMODEL)은 저장 불가 — 읽기전용 안내 후 중단(01 L-12~L-15).
+    if (editBlockedMessageId) {
+      void setAlert({ type: 'alert', content: t(editBlockedMessageId, '_Read-only.') });
+      return;
+    }
     if (grid.rows.length === 0) return;
     grid.finishEditing();
 

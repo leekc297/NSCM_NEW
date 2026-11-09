@@ -14,6 +14,10 @@ export type MODAL_SHEET_DATA = typeof MODAL_SHEET_DATA;
 export const MODAL_SHEET_COLUMN_META = 'versionPopup' as const;
 export type MODAL_SHEET_COLUMN_META = typeof MODAL_SHEET_COLUMN_META;
 
+// 저장 sheet (version/SAVE) — Insert/Delete/Save 버튼 권한도 이 시트 단위로 판정한다.
+export const MODAL_SHEET_SAVE = 'version' as const;
+export type MODAL_SHEET_SAVE = typeof MODAL_SHEET_SAVE;
+
 export const MODAL_SHEET_YEAR = 'yearPopup' as const;
 export type MODAL_SHEET_YEAR = typeof MODAL_SHEET_YEAR;
 

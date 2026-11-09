@@ -32,9 +32,7 @@ interface State {
   filters: FiltersBySheet;
   // 드릴다운으로 확정된 상위 컨텍스트(AS-IS _siteId/_companyId/... 캐시, cs:1757~1831).
   drill: DrillContext;
-  // 편집모드 레벨 — 5그리드 중 동시 1개만(AS-IS IsEditModes dict + editCnt>1 되돌림, cs:490~502).
-  editingLevel: LevelNo | null;
-  // 활성(포커스) 그리드 — 공통 Insert/Delete/Edit/Save 가 이 그리드에만 작용(AS-IS fps/spreadNow, hook #97).
+  // 활성(포커스) 그리드 — 공통 Insert/Delete/Save 가 이 그리드에만 작용(AS-IS fps/spreadNow, hook #97).
   activeLevel: LevelNo;
   openSearchArea: boolean;
   // ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(시트별).
@@ -52,8 +50,6 @@ interface Action {
   clearBelowLevel: (level: LevelNo) => void;
   drillDown: (level: LevelNo, row: Record<string, unknown>) => void;
   setActiveLevel: (level: LevelNo) => void;
-  toggleEditingLevel: (level: LevelNo) => void;
-  clearEditingLevel: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: (divisionId?: string) => Promise<void>;
 }
@@ -68,8 +64,9 @@ const SEARCH_KEYS = new Set<string>(['divisionId', 'shopGroupId']);
 const PRODUCT_GROUP_VALUES = new Set<string>(Object.values(PRODUCT_GROUP));
 
 const initSearch: SearchCondition = {
-  // 기본선택 없음 — Division 은 콤보 첫 행이 아니라 사용자가 고르게 둔다(AS-IS 는 DropDownList 첫 행이
-  //   자동 선택되지만 TO-BE 는 명시 Search 게이트라 미선택 상태로 시작, design 02 §4).
+  // store 초기값은 빈 문자열이나, 실제 화면은 Form 이 콤보 로드 후 첫 항목을 자동선택한다
+  //   (CapaLineMasterForm.tsx useEffect — AS-IS DropDownList 첫 행 자동선택 재현). 따라서
+  //   사용자에게는 Division 이 미선택으로 보이지 않는다(L1 갭 해소, design 02 §4).
   divisionId: '',
   shopGroupId: DEFAULT_PRODUCT_GROUP,
 };
@@ -88,7 +85,6 @@ const initState: State = {
   applied: null,
   filters: {},
   drill: {},
-  editingLevel: null,
   activeLevel: 1,
   openSearchArea: true,
   staticColumns: emptyStaticColumns,
@@ -139,7 +135,7 @@ export const useCapaLineMasterStore = createPersistedStoreWithTab<State & Action
     //   이 화면의 비(非)Division 조회조건은 Product Group(shopGroupId) 하나이며 기간/날짜 조건은 없다
     //   → shopGroupId 를 initSearch 기본값(Electrode)으로 되돌린다. 편집중(dirty) 확인 가드(MSG00704)는
     //   Form 의 onChange 가 confirmIfDirtyKey 로 처리한다(commit 51d4e9fa 패턴). 그리드 초기화는 clearFilters
-    //   와 동일(filters/applied/drill/editingLevel 비움) — 재조회는 명시 Search/드릴다운으로만.
+    //   와 동일(filters/applied/drill 비움) — 재조회는 명시 Search/드릴다운으로만.
     setDivision: divisionId =>
       set(state => {
         state.searchCondition = {
@@ -149,7 +145,6 @@ export const useCapaLineMasterStore = createPersistedStoreWithTab<State & Action
         state.filters = {};
         state.applied = null;
         state.drill = {};
-        state.editingLevel = null;
       }),
 
     // Search(F5) — Level1 부터 조회. AS-IS FindButton -> FindData(1, division, "") (cs:346~351).
@@ -161,9 +156,8 @@ export const useCapaLineMasterStore = createPersistedStoreWithTab<State & Action
           divisionId: condition.divisionId,
           shopGroupId: condition.shopGroupId,
         };
-        // 상위 컨텍스트/편집모드 리셋 — AS-IS FindData 의 RefreshEditMode + InitSpread(1~5).
+        // 상위 컨텍스트 리셋 — AS-IS FindData 의 InitSpread(1~5).
         state.drill = {};
-        state.editingLevel = null;
         state.filters = {
           [SHEETS.LEVEL1]: buildGetParams(1, condition.divisionId, condition.shopGroupId, {}),
         };
@@ -176,40 +170,40 @@ export const useCapaLineMasterStore = createPersistedStoreWithTab<State & Action
         state.filters = {};
         state.applied = null;
         state.drill = {};
-        state.editingLevel = null;
       }),
 
     // Product Group 변경 — Division 과 달리 L4·L5 만 초기화하고 L1~L3 과 상위 드릴다운 컨텍스트를 유지한다.
     //   AS-IS rgrpSearchLevel_SelectedIndexChanged(cs:1845~1866) 는 FindData(4, division, L1, L2, L3) 를
-    //   부르고 FindData 의 case 4(cs:713~717) 는 InitSpread(4); InitSpread(5) 만 수행한다 — L1~L3 그리드와
-    //   _siteId/_companyId/_plantId 캐시는 그대로다(design 01 §2 L5 / 02 §3 "Level4·5 재초기화").
+    //   부르고 FindData 의 case 4(cs:713~717) 는 InitSpread(4); InitSpread(5) 만 수행한다 — L4 를 새 제품군으로
+    //   즉시 재조회하고 L5 만 비운다. L1~L3 그리드와 _siteId/_companyId/_plantId 캐시는 그대로다.
     //   근거: GET SP 의 L1~L3 활성 쿼리는 p_shop_group_id 를 참조하지 않는다. P/A 분기와 E 분기가 같은
     //   SCP_MST_CAPA_LINE UNION SCP_MST_CAPA_ELTR_LINE 을 쓰고, ATTRIBUTE1=@p_shop_group_id 필터는
     //   L4·L5 에만 걸린다(L1~L3 위치의 등장은 전부 주석). 따라서 L1~L3 을 비우는 것은 근거 없는 과초기화다.
-    //   주의: AS-IS 는 FindData 를 _shopgroupId 갱신보다 먼저 불러 직전 제품군으로 조회하는 순서 결함이
-    //   있다(cs:1851 vs 1853~1864). 이 화면은 명시 Search 게이트라 그 결함을 재현하지 않는다.
+    //   TO-BE 파리티 결정(goal #5, 사용자 재확정 2026-11-06): Division 은 명시 Search 게이트지만 Product Group
+    //   라디오(2차 조회조건)는 전사 표준(apply-division-reset=Division 단일콤보 전용, nscm-patterns §5-5)의
+    //   대상이 아니라, AS-IS 처럼 L4 즉시 재조회로 복원한다. 재조회는 refetch 직접호출이 아니라 drillDown 과
+    //   동일한 filters 참조 교체로 발사한다(nscm-patterns §5 #1). AS-IS 의 "_shopgroupId 갱신 전 FindData 호출"
+    //   순서 결함(cs:1851 vs 1853~1864)은 재현하지 않는다 — 새 shopGroupId 로 params 를 만든다.
     resetForProductGroup: () =>
       set(state => {
-        // 편집모드는 비우는 레벨(L4·L5)일 때만 끝낸다. L1~L3 편집은 이어져야 한다 —
-        //   AS-IS RefreshEditMode(cs:1629~1636)는 IsEditModes dict 만 false 로 돌리고, 실제 편집·저장
-        //   게이트인 IsLock(SaveData cs:784, SwitchLock cs:512~)은 건드리지 않는다. 그래서 AS-IS 는
-        //   제품군을 바꿔도 L1~L3 의 미저장 편집을 계속 고치고 저장할 수 있다.
-        //   TO-BE 의 editingLevel 은 그 IsLock 축에 대응하므로 1~3 이면 유지해야 파리티다. 여기서
-        //   null 로 만들면 행의 CRUD_TYPE 마킹만 남고 Save(editingLevel!==level)·Edit 재진입(I/M 행 존재)이
-        //   둘 다 무음 return 이라, 사용자가 빠져나갈 길 없이 편집분을 잃는다.
-        //   주의: AS-IS 는 이 경로에서 두 시트가 동시에 unlocked 될 수 있으나 그건 사람설계서 업무규칙 5
-        //   ("Edit 모드는 Level1~5 중 동시 처리 불가")에 반하는 결함이라 재현하지 않는다.
-        if (state.editingLevel !== null && state.editingLevel >= 4) state.editingLevel = null;
+        // L1~L3 그리드·드릴다운 컨텍스트와 그 미저장 편집은 유지한다(편집은 상시 가능, 수정 모드 없음).
+        //   비우는 것은 L4·L5 뿐 — 그 시트의 편집 마킹은 화면 effect 가 tracker.clearChanges 로 걷는다.
         if (!state.applied) return;
-        // 확정 조회조건의 제품군만 교체 — 이후 L4 드릴다운·신규행이 새 값을 쓴다.
-        state.applied = { ...state.applied, shopGroupId: state.searchCondition.shopGroupId };
+        // 확정 조회조건의 제품군만 교체 — 이후 L4 재조회·드릴다운·신규행이 새 값을 쓴다.
+        const shopGroupId = state.searchCondition.shopGroupId;
+        state.applied = { ...state.applied, shopGroupId };
         // L4 드릴다운 산출물(FACTORY_*)은 L4 를 비우는 순간 무효다. L1~L3 산출물은 유지.
         const drill: DrillContext = { ...state.drill };
         delete drill.FACTORY_ID;
         delete drill.FACTORY_NAME;
         state.drill = drill;
         const filters: FiltersBySheet = { ...state.filters };
-        clearBelow(filters, 3);
+        clearBelow(filters, 3); // L4·L5 비움
+        // AS-IS FindData(4) 파리티: L3 까지 드릴된 상태(상위 ID 확정)면 새 제품군으로 L4 를 즉시 재조회한다.
+        //   L5 는 비운 채 드릴 대기. 미드릴(상위 컨텍스트 없음) 상태면 재조회 대상이 없어 그대로 빈 유지.
+        if (drill.SITE_ID && drill.COMPANY_ID && drill.PLANT_ID) {
+          filters[SHEET_BY_LEVEL[4]] = buildGetParams(4, state.applied.divisionId, shopGroupId, drill);
+        }
         state.filters = filters;
       }),
 
@@ -241,7 +235,6 @@ export const useCapaLineMasterStore = createPersistedStoreWithTab<State & Action
         }
         state.drill = drill;
         state.applied = { ...applied, divisionId };
-        state.editingLevel = null; // FindData -> RefreshEditMode (cs:685)
 
         const filters: FiltersBySheet = { ...state.filters };
         clearBelow(filters, level);
@@ -268,22 +261,6 @@ export const useCapaLineMasterStore = createPersistedStoreWithTab<State & Action
     setActiveLevel: level =>
       set(state => {
         state.activeLevel = level;
-      }),
-
-    // Edit 토글 — 이미 다른 레벨이 편집중이면 무시(AS-IS editCnt>1 되돌림 후 return, cs:498~502).
-    toggleEditingLevel: level =>
-      set(state => {
-        if (state.editingLevel === level) {
-          state.editingLevel = null;
-          return;
-        }
-        if (state.editingLevel !== null) return;
-        state.editingLevel = level;
-      }),
-
-    clearEditingLevel: () =>
-      set(state => {
-        state.editingLevel = null;
       }),
 
     setOpenSearchArea: open =>

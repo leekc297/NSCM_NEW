@@ -128,10 +128,11 @@ export async function findCond(nscm: Nscm, labels: string[], tag: string): Promi
     for (const box of ordered) {
       const labTrack = box.firstElementChild as HTMLElement;
       const ctlPart = box.children[1] as HTMLElement; const ctl = ctlPart.querySelector('[role="combobox"], input[type="checkbox"], input[type="radio"], input:not([type="hidden"]), textarea');
-      if (!ctl) continue;
+      const calOnly = !ctl && !!ctlPart.querySelector('[aria-label*="calendar" i], [class*="dateBox" i]');  // 2026-11-06 T110: 달력 전용 기간 칸(PeriodRangePicker textInputEnabled=false — input 없음)
+      if (!ctl && !calOnly) continue;
       const radios = ctlPart.querySelectorAll('input[type="radio"]').length; const checks = ctlPart.querySelectorAll('input[type="checkbox"]').length; const combos = ctlPart.querySelectorAll('[role="combobox"]').length;
       const inputs = Array.from(ctlPart.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"])'));
-      const kind = radios ? 'radio' : combos ? 'combo' : checks && !inputs.length ? 'checkbox' : inputs.length >= 2 || inputs.some(i => /YYYY|yyyy/.test((i as HTMLInputElement).placeholder || '')) ? 'period' : ctlPart.querySelector('button, svg[cursor="pointer"], [class*="SearchIcon"]') ? 'popup' : 'text';
+      const kind = calOnly ? 'period' : radios ? 'radio' : combos ? 'combo' : checks && !inputs.length ? 'checkbox' : inputs.length >= 2 || inputs.some(i => /YYYY|yyyy/.test((i as HTMLInputElement).placeholder || '')) ? 'period' : ctlPart.querySelector('button, svg[cursor="pointer"], [class*="SearchIcon"]') ? 'popup' : 'text';
       (box as HTMLElement).setAttribute('data-e2e-cond', tag);
       const labEl = (labTrack.querySelector('label, span') as HTMLElement) || labTrack; const lr = labEl.getBoundingClientRect();
       const target = (ctlPart.querySelector('input[type="checkbox"], input[type="radio"]') || ctl) as HTMLElement;
@@ -227,7 +228,7 @@ export async function conditionCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan
         let dlg: Locator | null = null; const until = Date.now() + 10_000;
         while (!dlg && Date.now() < until) { dlg = await tagPopup(nscm, `p${k}`); if (!dlg) await page.waitForTimeout(300); }
         if (!dlg) { items.push({ name, kind: c.kind, verdict: clickErr ? 'FAIL' : 'ERROR', note: clickErr ? `돋보기 클릭 실패 — ${clickErr}` : '팝업 창을 자동 감지하지 못함 — 수동 확인 필요(SCP0100 Model 팝업은 수동 디버그에서 정상 열림 확인, 2026-10-23)' }); continue; }
-        const dsearch = dlg.getByRole('button', { name: /^(조회|Search)(\(F5\))?$/ }).first(); if (await dsearch.isVisible().catch(() => false)) { await dsearch.click().catch(() => undefined); await page.waitForTimeout(1_500); }
+        const dsearch = dlg.getByRole('button', { name: /^(조회|Search)(\(F5\))?$/ }).first(); if (await dsearch.isVisible().catch(() => false)) { await dsearch.click({ timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(1_500); }
         const row = dlg.locator('.wj-cells .wj-row').first();
         if (await row.isVisible({ timeout: 8_000 }).catch(() => false)) {
           const rowChk = row.locator('input[type="checkbox"]').first(); // 다중 선택 팝업 = 행 체크박스 + OK
@@ -235,16 +236,17 @@ export async function conditionCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan
           else await row.locator('.wj-cell').nth(1).dblclick({ timeout: 5_000 }).catch(() => undefined);
           await page.waitForTimeout(500);
         }
-        if (await dlg.isVisible().catch(() => false)) { const okb = dlg.getByRole('button', { name: /^(확인|OK|Confirm|Select|선택|Apply|적용)$/i }).first(); if (await okb.isVisible().catch(() => false)) await okb.click().catch(() => undefined); }
+        if (await dlg.isVisible().catch(() => false)) { const okb = dlg.getByRole('button', { name: /^(확인|OK|Confirm|Select|선택|Apply|적용)$/i }).first(); if (await okb.isVisible().catch(() => false) && await okb.isEnabled().catch(() => false)) await okb.click({ timeout: 5_000 }).catch(() => undefined)  /* 2026-11-06 T103: 팝업 행 0건이면 확인 버튼이 비활성 — timeout 없는 click 이 활성화를 영원히 기다려 20분 타임아웃(SCP0131 2일 연속) */; }
         const closed = !(await dlg.isVisible({ timeout: 3_000 }).catch(() => false));
-        if (!closed) { const cb = dlg.getByRole('button', { name: /^(Close|닫기|Cancel|취소)$/i }).first(); if (await cb.isVisible().catch(() => false)) await cb.click().catch(() => undefined); else await page.keyboard.press('Escape').catch(() => undefined); }
+        if (!closed) { const cb = dlg.getByRole('button', { name: /^(Close|닫기|Cancel|취소)$/i }).first(); if (await cb.isVisible().catch(() => false)) await cb.click({ timeout: 5_000 }).catch(() => undefined); else await page.keyboard.press('Escape').catch(() => undefined); }
         const val = await c.root.locator('input').first().inputValue().catch(() => '');
         changed = !!val; action = `팝업 열림 · ${closed ? '선택 후 닫힘' : '닫히지 않음(Esc)'} · 값 '${val.slice(0, 30)}'`;
         if (!val) { items.push({ name, kind: c.kind, verdict: 'WARN', note: `${action} — 팝업 행 선택이 칸에 채워지지 않음(데이터 0건이면 정상)` }); continue; }
       } else if (c.kind === 'period') {
-        const ins = c.root.locator('input:not([type="hidden"])'); const v1 = await ins.nth(0).inputValue().catch(() => ''); const v2 = await ins.nth(1).inputValue().catch(() => '');
+        const ins = c.root.locator('input:not([type="hidden"])'); const nIn = await ins.count().catch(() => 0); let v1 = nIn ? await ins.nth(0).inputValue().catch(() => '') : ''; let v2 = nIn > 1 ? await ins.nth(1).inputValue().catch(() => '') : '';
+        if (!nIn) { const ds = ((await c.root.innerText().catch(() => '')) as string).match(/\d{4}[.\-\/]?\d{2}[.\-\/]?\d{2}/g) || []; v1 = ds[0] || ''; v2 = ds[1] || ''; }  // T110 달력 전용: 표시 글자에서 날짜
         action = `기간 '${v1}' ~ '${v2}'`; changed = false;
-        if (!v1 || (await ins.count()) > 1 && !v2) { items.push({ name, kind: c.kind, verdict: 'FAIL', note: `${action} — 초기 기간 빈값(DoD B24: As-is Form_Load 초기값)` }); continue; }
+        if (!v1 || (nIn > 1 || !nIn) && !v2) { items.push({ name, kind: c.kind, verdict: 'FAIL', note: `${action} — 초기 기간 빈값(DoD B24: As-is Form_Load 초기값)` }); continue; }
       } else {
         const inp = c.root.locator('input:not([type="hidden"]), textarea').first();
         const v = /model|nick|material|item/i.test(name) ? (plan.sample && plan.sample.item) || 'E2E_ZZZ' : /project|pjt/i.test(name) ? (plan.sample && plan.sample.project) || 'E2E_ZZZ' : 'E2E_ZZZ';
@@ -265,7 +267,8 @@ export async function conditionCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan
     const want = plan.condOrder.map(norm).filter(w => placed.includes(w));
     const seq = placed.filter(p => want.includes(p));
     const okOrder = seq.join('|') === want.join('|');
-    items.push({ name: '(기준표 순서)', kind: 'order', verdict: want.length < 2 ? 'NA' : okOrder ? 'OK' : 'FAIL', note: want.length < 2 ? '비교 대상 2개 미만' : okOrder ? want.join(' → ') : `화면 ${seq.join(' → ')} / 기준 ${want.join(' → ')}` });
+    // 2026-11-09 CR-098(사용자 지시 · SCP0084): 조회조건 순서는 판정 대상 제외 — 실측은 참고로만 기록(verdict NA · 문구 형식 '화면 … / 기준 …' 유지 → judge 참고 증거)
+    items.push({ name: '(기준표 순서)', kind: 'order', verdict: 'NA', note: want.length < 2 ? '비교 대상 2개 미만' : `[판정 제외·참고 CR-098] ${okOrder ? '일치 ' + want.join(' → ') : `화면 ${seq.join(' → ')} / 기준 ${want.join(' → ')}`}` });
   }
   // 기준표가 제외(삭제·Sun-Set·버튼영역 이동 등)한 조건이 화면에 남아 있는지
   for (const g of plan.condGone || []) {
@@ -324,13 +327,17 @@ export async function commonCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan): 
       add('Condition(F6) 조회조건 저장', !a || /실패|fail|error|오류/i.test(a) ? 'FAIL' : n === 0 ? 'WARN' : 'OK', `${a ? `알림 '${a.replace(/\s+/g, ' ').slice(0, 60)}'` : '저장 결과 알림 없음'} · 저장 행 ${n < 0 ? '조회 실패' : n}`); } }
       // 2026-10-30 SSP45 공통요건 11 · CR-029: Condition 저장에 기간(Period·From/To Date 등) 조건은 저장되지 않아야 한다 — 저장된 paramNm 을 DB 에서 다시 읽어 기간 키 유무로 판정(judge: 'condition' 이름 → G3)
       const savedKeys = await page.evaluate(async u => { try { const r = await fetch(u, { credentials: 'include' }); if (!r.ok) return null; const j = await r.json(); const arr = Array.isArray(j) ? j : (j && typeof j === 'object' ? (Object.values(j as Record<string, unknown>).find(v => Array.isArray(v)) as unknown[] | undefined) : undefined); return (arr || []).map(x => String((x as Record<string, unknown>).paramNm ?? (x as Record<string, unknown>).PARAM_NM ?? (x as Record<string, unknown>).param_nm ?? '')); } catch { return null; } }, condApi);
-      if (savedKeys) { const per = savedKeys.filter(k => /period|from.?(dt|date)$|to.?(dt|date)$|start.?(dt|date)|end.?(dt|date)|ymd|yyyymm|yyyyww|week|month|plan.?date|cutoff/i.test(k));
-        add('Condition(F6) Period 비저장(기간 조건 제외)', per.length ? 'FAIL' : savedKeys.length ? 'OK' : 'WARN', per.length ? `기간 키 저장됨: ${per.slice(0, 5).join(', ')} (공통 요건 11 · CR-029: 기간 조건은 저장 제외)` : savedKeys.length ? `저장 키 ${savedKeys.length}개 중 기간 키 0 (${savedKeys.slice(0, 6).join(', ')})` : '저장 키 없음 — 판정 재료 없음');
+      const PERIOD_RX = /period|from.?(dt|date)$|to.?(dt|date)$|start.?(dt|date)|end.?(dt|date)|ymd|yyyymm|yyyyww|week|month|plan.?date|cutoff/i;
+      if (savedKeys) { const per = savedKeys.filter(k => PERIOD_RX.test(k));
+        // 2026-11-09(사용자 판정 SCP0131 1번 '기간은 Condition 저장 대상 제외 → 조치 필요 아님'): 저장 키에 기간 키가 들어 있는 것만으로는 결함 아님 → OK(참고 문구 · WARN 은 judge 에서 판정필요로 반입되므로 쓰지 않음) · 기간 조건은 복원 비교 대상에서도 뺀다(아래 PERIOD_RX)
+        //   (ConditionNotUseList 와 같은 처리 — 2026-11-06 SCP0016 1번 · 검사기 결함 T96 · CR-029)
+        add('Condition(F6) Period 비저장(기간 조건 제외)', per.length ? 'OK' : savedKeys.length ? 'OK' : 'WARN', per.length ? `[참고·결함 아님] 기간 키가 저장 데이터에 있음: ${per.slice(0, 5).join(', ')} — 기간 조건은 Condition 저장 대상 제외(CR-029)이며 복원 비교에서도 제외(사용자 판정 2026-11-09 SCP0131)` : savedKeys.length ? `저장 키 ${savedKeys.length}개 중 기간 키 0 (${savedKeys.slice(0, 6).join(', ')})` : '저장 키 없음 — 판정 재료 없음');
         // 2026-10-30 G3: AS-IS ConditionNotUseList(화면이 저장에서 뺀 조건 — SCP0111 PlanDate·PlanType) 가 TO-BE 저장 키에 있으면 FAIL
         const notUse = plan.condNotUse || [];
         if (notUse.length) {
           const hit = notUse.filter(n => { const keys = [n.key, ...(n.labels || []), n.asis.replace(/^(cbo|clb|txt|chk|dt|usr)/, '')].map(nk).filter(Boolean); return savedKeys.some(k => keys.some(x => nk(k) === x || nk(k).includes(x) || x.includes(nk(k)))); });
-          add('Condition(F6) 제외 조건 비저장(AS-IS ConditionNotUseList)', hit.length ? 'FAIL' : 'OK', hit.length ? `AS-IS 가 저장에서 제외한 조건이 저장됨: ${hit.map(h => h.asis + (h.key ? '→' + h.key : '')).join(', ')} (BaseForm OnClickConditionButton ConditionNotUseList) — TO-BE SubTitle hotkeyConfig.condition/personalizeCondition 저장 대상에서 제외 필요` : `제외 조건 ${notUse.map(n => n.asis).join(', ')} 저장 키에 없음(저장 키 ${savedKeys.length})`);
+          // 2026-11-06(SCP0016 1번): AS-IS BaseForm 은 ConditionNotUseList 를 복원(InitPanel)에서만 빼고 저장(SavePanelCondition)은 한다 → '저장됨' 은 결함 아님(WARN 기록) · 복원 여부는 아래 재진입 비교에서 본다
+          add('Condition(F6) 제외 조건 비저장(AS-IS ConditionNotUseList)', hit.length ? 'WARN' : 'OK', hit.length ? `AS-IS 가 저장에서 제외한 조건이 저장됨: ${hit.map(h => h.asis + (h.key ? '→' + h.key : '')).join(', ')} (BaseForm OnClickConditionButton ConditionNotUseList) — TO-BE SubTitle hotkeyConfig.condition/personalizeCondition 저장 대상에서 제외 필요` : `제외 조건 ${notUse.map(n => n.asis).join(', ')} 저장 키에 없음(저장 키 ${savedKeys.length})`);
         }
         // 2026-10-30 G3: 저장 → 화면 재진입 → 저장 키에 해당하는 조건값이 복원되는지(AS-IS Form_Load 개인 조회조건 복원)
         if (savedKeys.length && plan.menuId) {
@@ -338,13 +345,15 @@ export async function commonCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan): 
           const snapAfter = await condSnapshot(nscm, plan, 'cs1_');
           const diffs: string[] = []; let compared = 0;
           for (const [key, v0] of snapBefore) {
-            if (!v0) continue; if (!savedKeys.some(k => nk(k) === nk(key) || nk(k).includes(nk(key)) || nk(key).includes(nk(k)))) continue;
+            if (!v0) continue; if (PERIOD_RX.test(key)) continue;  // 2026-11-09: 기간 조건은 Condition 저장·복원 대상 제외(CR-029 · SCP0131 사용자 판정) — 복원 비교하지 않음
+            if (!savedKeys.some(k => !PERIOD_RX.test(k) && (nk(k) === nk(key) || nk(k).includes(nk(key)) || nk(key).includes(nk(k))))) continue;
             compared++; const v1 = snapAfter.get(key) ?? ''; if (v1 !== v0) diffs.push(`${key}: '${v0.slice(0, 30)}' → '${v1.slice(0, 30)}'`);
           }
           add('Condition(F6) 저장 복원(재진입)', !compared ? 'WARN' : diffs.length ? 'FAIL' : 'OK', !compared ? `저장 키(${savedKeys.slice(0, 5).join(', ')})에 대응하는 화면 조건값을 찾지 못해 복원 비교 불가` : diffs.length ? `재진입 후 복원 안 됨: ${diffs.slice(0, 4).join(' · ')} (FE 조회조건 복원 effect·conditionsRestored 플래그 확인)` : `저장 조건 ${compared}개 재진입 후 그대로 복원`);
         }
       }
   // 5) Reset Condition(F10) → 확인(Confirm) → 초기화 알림 → 저장 행 0
+  await nscm.expandSearchArea(true).catch(() => undefined); const snapBase = await condSnapshot(nscm, plan, 'rb_');  // Reset 직전 화면값(2026-11-06)
   { const b = await nscm.visibleFirst(page.getByRole('button', { name: /^Reset Condition(\(F10\))?$/i }));
     if (!b) add('Reset Condition(F10) 조회조건 초기화', 'NA', '버튼 없음');
     else { await b.click({ timeout: 5_000 }).catch(() => undefined); const q = await waitAlert(nscm);
@@ -353,9 +362,11 @@ export async function commonCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan): 
       const a = await waitAlert(nscm); await closeVisibleDialogs(nscm); const n = await savedCount();
       add('Reset Condition(F10) 조회조건 초기화', !q || (a && /실패|fail|error|오류/i.test(a)) ? 'FAIL' : n > 0 ? 'FAIL' : 'OK', `확인 '${(q || '').replace(/\s+/g, ' ').slice(0, 40)}' → 결과 '${(a || '').replace(/\s+/g, ' ').slice(0, 40)}' · 남은 저장 행 ${n < 0 ? '조회 실패' : n}`);
       // 2026-10-30 G3(사용자 결정 AS-IS 대로): Reset 은 서버 저장본만 삭제(BaseForm ResetPanelCondition) — 화면 입력값·Division 이 지워지면 FAIL
-      const snapR = await condSnapshot(nscm, plan, 'rs_');
-      const wiped = [...snapBefore].filter(([key, v0]) => v0 && (snapR.get(key) ?? '') === '').map(([key, v0]) => `${key}('${v0.slice(0, 24)}')`);
-      add('Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)', wiped.length ? 'FAIL' : snapBefore.size ? 'OK' : 'WARN', wiped.length ? `Reset 뒤 화면 조건값이 지워짐: ${wiped.slice(0, 5).join(', ')} — AS-IS ResetPanelCondition 은 저장본만 삭제(화면값 유지) · TO-BE handleResetCondition/resetConditionValues 가 화면 상태까지 초기화` : snapBefore.size ? `화면 조건값 ${snapBefore.size}개 유지` : '비교할 조건값 없음'); } }
+      // 2026-11-06(SCP0016 1번 허위 FAIL): 기준은 Reset 직전 스냅숏(재진입 뒤 접힌 칸 포함 → 펼친 뒤) · 스냅숏에 없는 칸(못 찾음)은 '지워짐' 이 아니라 미측정
+      await nscm.expandSearchArea(true).catch(() => undefined); const snapR = await condSnapshot(nscm, plan, 'rs_');
+      const wiped = [...snapBase].filter(([key, v0]) => v0 && snapR.has(key) && (snapR.get(key) ?? '') === '').map(([key, v0]) => `${key}('${v0.slice(0, 24)}')`);
+      const unseen = [...snapBase].filter(([key, v0]) => v0 && !snapR.has(key)).map(([key]) => key);
+      add('Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)', wiped.length ? 'FAIL' : snapBase.size ? 'OK' : 'WARN', wiped.length ? `Reset 뒤 화면 조건값이 지워짐: ${wiped.slice(0, 5).join(', ')} — AS-IS ResetPanelCondition 은 저장본만 삭제(화면값 유지) · TO-BE handleResetCondition/resetConditionValues 가 화면 상태까지 초기화` : snapBase.size ? (unseen.length ? `미측정 칸 ${unseen.slice(0, 4).join(',')}(Reset 뒤 못 찾음) · ` : '') + `화면 조건값 ${snapBefore.size}개 유지` : '비교할 조건값 없음'); } }
   // 4·5 후처리 — 기존 저장 조회조건 복원(있었던 경우만). 실패하면 ERROR 로 남겨 사람이 복원하게 한다
   if (backup.ok && backup.rows.length) {
     const st = await page.evaluate(async ({ u, rows }) => { try { const r = await fetch(u, { method: 'POST', credentials: 'include', headers: { 'content-type': 'application/json' }, body: JSON.stringify(rows) }); return r.status; } catch { return 0; } }, { u: condApi, rows: backup.rows });
@@ -520,7 +531,7 @@ export async function widenFrom(p: Nscm['page'], months: number): Promise<number
 
 /** 기본 조회가 0행이면 실제 화면 후보로 대안 조회를 시도한다 — ① Division 후보 순회 ② 기간(period) 시작 2년 앞으로. 행이 생기는 첫 조건에서 멈춘다(2026-10-31 SCP0041 기본 조회 0행 → 전 검사 ERROR).
  *  사전 데이터셋을 쓰지 않는다(화면 콤보 후보·실데이터만). 결과 via 는 증거용 경로 설명 */
-const ENSURE_MEMO = new Map<string, { via: string; years?: number; div?: string; none?: boolean }>();
+const ENSURE_MEMO = new Map<string, { via: string; years?: number; div?: string; none?: boolean; req?: { label: string; idx: number } }>();
 export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promise<{ rows: number; via: string }> {
   const p = nscm.page;
   let rows = await probe.rowCount(p);
@@ -557,6 +568,7 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promi
     if (memo.none) return { rows, via: `기본 조회 0행 · 대안 전부 0행(이전 시도 ${memo.via} · 재시도 생략)` };
     if (memo.years) await widenAll(memo.years);
     if (memo.div) await nscm.setDivision(memo.div).catch(() => false);
+    if (memo.req) await nscm.fillRequired(memo.req.label, memo.req.idx).catch(() => '');  // T59 필수 후보 재적용
     rows = await searchCount();
     return { rows, via: `${memo.via} (메모 재적용 → ${rows}행)` };
   }
@@ -586,7 +598,16 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promi
       }
     }
   } catch { /* Division 순회 실패 */ }
-  const via = `기본 조회 0행 · 대안 ${tried.join(' · ') || '없음'} 전부 0행`;
+  // ③ 2026-11-06 T59: 필수 조회조건을 search() 가 첫 후보로 채웠는데 0행 — 같은 칸의 다음 화면 후보 2개(다중선택이면 추가 체크)
+  for (const label of [...nscm.requiredFilled]) {
+    for (const idx of [1, 2]) {
+      const note = await nscm.fillRequired(label, idx).catch(() => '');
+      if (!note.startsWith('선택')) break;
+      rows = await searchCount(); tried.push(`필수 ${label} ${idx + 1}번째 후보:${rows}행`);
+      if (rows > 0) { const via = `필수 조건 '${label}' ${idx + 1}번째 후보 대안 조회(${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, req: { label, idx } }); return { rows, via }; }
+    }
+  }
+  const via = `기본 조회 0행 · 대안 ${tried.join(' · ') || '없음'} 전부 0행${nscm.requiredNotes.length ? ` · 필수 조건 ${nscm.requiredNotes.slice(-2).join(' / ')}` : ''}`;
   ENSURE_MEMO.set(key, { via, none: true });
   return { rows, via };
 }

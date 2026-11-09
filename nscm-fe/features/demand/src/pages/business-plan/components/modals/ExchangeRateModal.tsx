@@ -102,9 +102,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
 
   // 환율 저장 권한 — 설계서 [권한] 시트 '환율 저장' 행: 모달을 열 수 있는 그룹(EXCHANGE_RATE)과
   //   저장할 수 있는 그룹이 다르다. DM Viewer / SCP Planner 는 조회만 하고 저장 버튼이 없다.
-  //   별도 버튼 코드가 없는 '모달 내 SAVE' 라 메인 SAVE 권한과 같은 그룹 집합을 쓴다.
+  //   저장은 exchangeRate/SAVE 로 가므로 그 시트의 SAVE 권한(시트 단위)으로 판정한다. 메뉴 단위로 보면
+  //   Biz Plan/titleSet SAVE 와 합쳐져 group menu 에서 exchangeRate SAVE 만 꺼도 버튼이 남는다.
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
-  const canSave = hasButton('SAVE');
+  const canSave = hasButton('SAVE', SHEETS.EXCHANGE_RATE);
 
   // Division dropdown — 권한 기반 MyDivision combo (미응답 시 빈 목록 — 하드코딩 fallback 금지)
   const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
@@ -800,6 +801,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 frozenColumns={fixedBindings.length}
                 allowSorting={false}
                 allowMerging={AllowMerging.All}
+                // 읽기전용 자동 잠금을 exchangeRate 시트 SAVE 권한으로 판정(메뉴 단위면 Biz Plan SAVE 와 섞임)
+                saveAuth={{ menuId: MENU_ID, sheetName: SHEETS.EXCHANGE_RATE }}
               />
             </ResultArea>
           </div>

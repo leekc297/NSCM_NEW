@@ -25,6 +25,8 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.pat
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Harness', 'verify'))  # asis_variant
+from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 TODAY = datetime.date.today().strftime('%Y-%m-%d')
 FONT_NAME = '맑은 고딕'
@@ -256,7 +258,7 @@ class Screen:
             src = 'TO-BE E2E 계획 fields(e2e_plan.json)'
         if not o:
             pat = re.compile(r'(UsrCheckedList|UsrCombo|UsrTextBox|UsrDate|DateEdit|UsrRadio|UsrCheck|TextEdit|ComboBox)', re.I)
-            cur = [c for c in self.controls if c.get('variant') in ('current', '') and pat.search(c.get('type') or '') and re.match(r'(clb|cbo|txt|dtp|dte|rdo|chk)', c.get('name') or '', re.I)]
+            cur = [c for c in self.controls if is_main(c, os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', self.ID)) and pat.search(c.get('type') or '') and re.match(r'(clb|cbo|txt|dtp|dte|rdo|chk)', c.get('name') or '', re.I)]
             o = [{'ctl': c['name'], 'label': re.sub(r'^(clb|cbo|txt|dtp|dte|rdo|chk)', '', c['name'], flags=re.I), 'tobe': re.sub(r'^(clb|cbo|txt|dtp|dte|rdo|chk)', '', c['name'], flags=re.I), 'seq': i + 1, 'usage': 'USE'} for i, c in enumerate(cur)]
             src = 'AS-IS 조회 컨트롤(controls.csv — 라벨은 컨트롤명 기준, 화면 라벨 확인 필요)'
         self._order, self.search_src = o, (src if o else '원천 없음')

@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 341,
+  "at": "2026-11-09T02:07:09.971Z",
+  "user": "minyonglee1",
+  "test": "G6 조회조건 초기값 = AS-IS 로드 문장"
+ }
+]

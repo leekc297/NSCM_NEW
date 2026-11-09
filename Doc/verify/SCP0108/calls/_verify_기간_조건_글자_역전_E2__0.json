@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0108",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"fromYyyymm\":\"202611\",\"programId\":\"SCP0108\",\"sheetName\":\"MAIN\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 132,
+  "at": "2026-11-09T01:27:54.504Z",
+  "user": "minyonglee1",
+  "test": "기간 조건 글자·역전(E2)"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"fromYyyymm\":\"202611\",\"programId\":\"SCP0108\",\"sheetName\":\"MAIN\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 131,
+  "at": "2026-11-09T01:27:58.238Z",
+  "user": "minyonglee1",
+  "test": "기간 조건 글자·역전(E2)"
+ }
+]

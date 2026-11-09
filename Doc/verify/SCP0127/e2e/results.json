@@ -1,0 +1,305 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "--grep",
+      "CRUD\\ —\\ 필수\\ 공란\\ 실제\\ 저장\\ 시도\\(E3\\)\\ →\\ 필수\\ 채워\\ 실제\\ 저장·재조회·값\\ 보존·정리\\(F1·F2·F4·F6\\)|셀\\ 편집\\ 표시·값\\ 유지\\(A2·F6\\)|저장\\ 세부\\(F1·F6\\)\\ —\\ 컬럼별\\ 왕복·0\\ 값\\ 저장",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0127/e2e/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0127\\e2e\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SCP0127 @verify",
+          "file": "_verify.spec.ts",
+          "line": 213,
+          "column": 6,
+          "specs": [
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 저장 키 컬럼 제외 222셀 · 편집 컬럼 = 행 데이터 변화로 확정 TYPE_APPLY_DAY(메타 순번 이름 VALUE_DESCRIPTION 아님 · T143) · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVE:200 요청={\"activeFlag\":\"M\",\"valueType\":\"MAX\",\"divisionId\":\"81\",\"opmzPlanGrId\":\"PG0001\",\"scmSiteId\":\"WA00-A\",\"itemId\":\"AAEN4128I-A1-000\",\"stage\":\"ASSY\",\"fromYyyymmdd\":\"20261231\",\"toYyyymmdd\" 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\" | SEARCH:200 알림=성공적으로 저장되었습니다. · [3s] 재조회 · [3s] 행 찾기 0 · 행 [MAX|81|E129A_E128A] TYPE_APPLY_DAY: '1' → '2' 저장 성공 · 재조회 값 '2' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 '1' 저장 성공 · 재조회 값 '1' 복원 확인"
+                    },
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 252546,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[crud] 빈 키 없음 — 신규행 경로 무효, 기존행 수정 저장으로 측정 · 초기 {\"DIVISION_ID\":\"81\",\"SCM_SITE_ID\":\"WA00-A\",\"OPMZ_PLAN_GR_ID\":\"PG0001\",\"STAGE\":\"ASSY\",\"ITEM_ID\":\"AAEN4128I-A1-000\",\"VALUE_TYPE\":\"MAX\",\"FROM_YYYYMMDD\":\"\",\"TO_Y\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T12:03:47.415Z",
+                      "annotations": [
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 저장 키 컬럼 제외 222셀 · 편집 컬럼 = 행 데이터 변화로 확정 TYPE_APPLY_DAY(메타 순번 이름 VALUE_DESCRIPTION 아님 · T143) · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVE:200 요청={\"activeFlag\":\"M\",\"valueType\":\"MAX\",\"divisionId\":\"81\",\"opmzPlanGrId\":\"PG0001\",\"scmSiteId\":\"WA00-A\",\"itemId\":\"AAEN4128I-A1-000\",\"stage\":\"ASSY\",\"fromYyyymmdd\":\"20261231\",\"toYyyymmdd\" 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\" | SEARCH:200 알림=성공적으로 저장되었습니다. · [3s] 재조회 · [3s] 행 찾기 0 · 행 [MAX|81|E129A_E128A] TYPE_APPLY_DAY: '1' → '2' 저장 성공 · 재조회 값 '2' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 '1' 저장 성공 · 재조회 값 '1' 복원 확인"
+                        },
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-daadebb792bed5b9bd5a",
+              "file": "_verify.spec.ts",
+              "line": 818,
+              "column": 7
+            },
+            {
+              "title": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 132550,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[저장 세부] T64 저장 키 컬럼 제외 8: VALUE_TYPE,DIVISION_ID,OPMZ_PLAN_GR_ID,SCM_SITE_ID,ITEM_ID,STAGE,FROM_YYYYMMDD,TO_YYYYMMDD\n"
+                        },
+                        {
+                          "text": "[저장 세부] 12:08:36 TYPE_APPLY_DAY r101 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 12:08:46 TYPE_APPLY_DAY 끝\n"
+                        },
+                        {
+                          "text": "[저장 세부] 12:08:47 VALUE_DESCRIPTION r101 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 12:08:57 VALUE_DESCRIPTION 끝\n"
+                        },
+                        {
+                          "text": "[저장 세부] 12:08:57 VALID_YN r101 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 12:09:04 VALID_YN 끝\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T12:08:02.389Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-28e52205d32af1982198",
+              "file": "_verify.spec.ts",
+              "line": 1430,
+              "column": 7
+            },
+            {
+              "title": "셀 편집 표시·값 유지(A2·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13854,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T12:10:17.720Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-2bb0ebacde8fac09650c",
+              "file": "_verify.spec.ts",
+              "line": 2545,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T12:03:46.068Z",
+    "duration": 409545.072,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

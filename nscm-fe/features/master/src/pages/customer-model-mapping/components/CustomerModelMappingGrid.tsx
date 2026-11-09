@@ -315,7 +315,9 @@ export const CustomerModelMappingGrid = ({
 
   const handleGridDblclick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
-    if (!grid) return;
+    // 읽기전용(SAVE 권한 없음)이면 Project/Model 입력 팝업을 띄우지 않는다. 아래 isEditableCell 은
+    //   행 EDIT_FLAG·입력 구분만 보고 그리드 읽기전용은 보지 않아, 여기서 막지 않으면 팝업으로 값이 바뀐다.
+    if (!grid || grid.isReadOnly) return;
     const ht = grid.hitTest(mouseEvent);
     const editable = GridUtils.isEditableCell(grid, ht.row, ht.col);
     if (!editable) return;

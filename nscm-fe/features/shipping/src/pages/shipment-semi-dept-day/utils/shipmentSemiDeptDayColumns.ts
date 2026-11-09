@@ -19,9 +19,12 @@ const augmentScreenCombos = (cols: RawFlexGridColumnConfig[]): RawFlexGridColumn
     if (c.colNm === DIVISION_COLUMN) {
       return {
         ...c,
-        cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO,
-        cellCboDataTp: COMBO.DIVISION,
-        attribute9: COMBO.DIVISION, // 신규행 전용 후보(PARAM9) — design 03 §1.2
+        // admin 메타(SCM_MST_SHEET_COLUMNS)에 콤보가 등록돼 있으면 그대로 존중한다(CLAUDE.md §2 체크4
+        //   속성 단위 덮어쓰기 금지). 미등록(공란)일 때만 FE 가 신규행 셀콤보를 주입한다(design 03 §1.2).
+        //   2026-11-06 메타 등록(05_register.sql §8: FPComboBox/MyDivisionInEE) 후에는 메타값을 따른다.
+        cellCtrlObjTpCd: c.cellCtrlObjTpCd || CELL_CONTROL_TYPE.COMBO,
+        cellCboDataTp: c.cellCboDataTp || COMBO.DIVISION,
+        attribute9: c.attribute9 || COMBO.DIVISION, // 신규행 전용 후보(PARAM9)
         allowMerging: c.colNm === MERGE_COLUMN ? true : c.allowMerging,
       };
     }

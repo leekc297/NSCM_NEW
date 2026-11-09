@@ -346,7 +346,7 @@ export const TeamField = ({
     <Grid size={gridSize ?? 4}>
       <FormItem
         className={commonStyles.formItem}
-        label={L('LBL00502', 'Team')}
+        label={L('LBL00044', 'Team')}
         labelAlign='right'
         render={() => (
           <CustomDropdown
@@ -554,7 +554,7 @@ export const SalesSiteField = ({
     <Grid size={gridSize ?? 4}>
       <FormItem
         className={commonStyles.formItem}
-        label={L('LBL00506', 'Sales Site')}
+        label={L('LBL00011', 'Sales Site')}
         labelAlign='right'
         render={() => (
           <CustomDropdown
@@ -888,7 +888,7 @@ export const ProjectField = (props: ProjectFieldProps) => {
     <Grid size={gridSize ?? 4}>
       <FormItem
         className={commonStyles.formItem}
-        label={L(labelCode ?? 'LBL00507', 'Project')}
+        label={L(labelCode ?? 'LBL00617', 'Project')}
         labelAlign='right'
         render={() => (
           <PopupSearchInput
@@ -1041,7 +1041,7 @@ export const OwnerField = (props: OwnerFieldProps) => {
     <Grid size={gridSize ?? 4}>
       <FormItem
         className={commonStyles.formItem}
-        label={L('LBL00510', 'Owner')}
+        label={L('LBL00082', 'Owner')}
         labelAlign='right'
         render={() => (
           <PopupSearchInput
@@ -1149,7 +1149,7 @@ export const PeriodField = ({
     <Grid size={gridSize ?? 8}>
       <FormItem
         className={commonStyles.formItem}
-        label={label ?? L('LBL00505', 'Period')}
+        label={label ?? L('LBL00013', 'Period')}
         labelAlign='right'
         required
         render={() => (
@@ -1290,7 +1290,7 @@ export const BucketField = ({ value, onChange, gridSize }: BucketFieldProps) => 
     <Grid size={gridSize ?? 2}>
       <FormItem
         className={commonStyles.formItem}
-        label={L('LBL00511', 'Bucket')}
+        label={L('LBL00710', 'Bucket')}
         labelAlign='right'
         required
         render={() => (
@@ -1351,7 +1351,7 @@ export const VersionField = ({
     <Grid size={gridSize ?? 6}>
       <FormItem
         className={commonStyles.formItem}
-        label={label ?? L('LBL00513', 'Version')}
+        label={label ?? L('LBL00606', 'Version')}
         labelAlign='right'
         required
         render={() => (

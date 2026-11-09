@@ -22,7 +22,7 @@
 | 2 | MSG00260 | 저장 시 안전재고 영향 경고(l641) | **미구현(gap-resolve iter-1 재확정)** — `PKG_SCP0131` 는 현재 배포·VALID 상태(이전 회차 "미배포" 기록은 스테일). SAVE SP body(Oracle `ALL_SOURCE` 전문 실측) 에 안전재고 판정 로직 자체가 없음 — SP 변경 필요(convert-sp 후속, FE 단독 해소 불가) |
 | 3 | MSG00046 | 저장 확인 팝업(l662) | 표준 공통 규약으로 대체 — `useSaveWithValidation`/`useProcMutation` 저장 확인 다이얼로그 미배선(자매 SCP0037 동일 — 저장 확인 팝업은 NSCM 표준에 없음, 저장 즉시 실행 + 성공 toast) |
 | 4 | MSG00219 | From>To 저장 차단(l669) | `validateSaveRows` 3) — MSG.PERIOD_INVALID(MSG01135 "The start date can not be later than the end date.") |
-| 5 | MSG00175 | PRIO_RANK<1 저장 차단(l677) | `validateSaveRows` 2) — MSG.PRIO_MIN(MSG00699 "Please enter an integer greater than 0.") |
+| 5 | MSG00175 (`{0}`=PRIORITY) | PRIO_RANK<1 저장 차단(l677) | `validateSaveRows` 2) — MSG.PRIO_MIN(MSG01190 "{0} must be an integer greater than 0.", arg='PRIORITY' 전달 → AS-IS "PRIORITY은(는) 0보다 큰 정수를..." 등가) |
 | 6 | MSG00458 | Item 존재 확인(l695) | **미구현(gap-resolve iter-1 재확정, 독립 검증 react-gap-audit ISS-01)** — `PKG_SCP0131` 는 현재 배포·VALID 상태. SAVE SP body 실측 결과 `SCM_MST_ITEM` 참조 0건, 존재하지 않는 ITEM_ID 도 저장이 통과한다(FK 제약 없음) — 고위험 결함으로 격상, SP 변경 필요(convert-sp 후속) |
 | 7 | MSG00004 | 저장 성공(l783) | `useProcMutation` 표준 onSuccess toast — MSG.SAVE_SUCCESS(MSG00672 "{0} data saved.") |
 | 8 | (없음) | 저장 실패 errorMsg(l792) | `useProcMutation` 표준 실패 핸들(서버 메시지 표준 경로) |
@@ -65,8 +65,8 @@
 | LockColumn(377) | lock | 감사4칸+PRE_KEY_VALUES 항상 편집 불가 | `isCellEditable` — 동일(EDITABLE_COLUMNS 밖) |
 | Query(461, dataSource) | dataSource | GET SP 결과 바인딩 | `useTabProcQuery` data.o_rc1 -> DataGrid itemsSource |
 | LockColumn(462) | lock | 조회 직후 전체 read-only | **대체(확정, iter-3)** — 상시편집 white-list 로 대체(#SwitchLock 과 동일 근거) |
-| Insert(507) | other | 신규 행 삽입 | `GridAction.addRow(insertDefaults(division))` |
-| SetValue(516) | value | 신규행 기본값(defaultData: DIVISION_ID, VALID_YN="Y") | **해결(iter-3)** — `insertDefaults` DIVISION_ID(확정값) + `VALID_YN: 'Y'`(원본 실측 반영, iter-3 수정) |
+| Insert(507) | other | 신규 행 삽입 — AS-IS 조건은 `IsLock==false`(편집모드) 뿐, 불충족 시 메시지 없이 조용히 무시 | `GridAction.addRow(insertDefaults(division))` — 조회(filters) 선행 요구·알림 제거(2026-11-03), 기준 division 은 폼 선택값(searchCondition)에서 취득 |
+| SetValue(512,516) | value | 신규행 기본값: DIVISION_ID=`cboDivision.ControlValues`(폼 선택 Division, NOT 확정 조회조건), VALID_YN="Y" | **해결(2026-11-03 정정)** — `insertDefaults(s(searchCondition.divisionId))` + `VALID_YN:'Y'`. division 미선택/콤마다중이면 알림 없이 return(AS-IS IsLock 게이트 등가) |
 | LockRange(518) | lock | 신규행 DIVISION_ID 잠금 | `isCellEditable` 로 통합 처리(신규/기존행 공통 화이트리스트) |
 | LockRange(519) | lock | 신규행 감사4칸 잠금 | `isCellEditable` 로 통합 처리 |
 | SmartColMerge(854) | merge | 셀 병합 재계산(SpdMain_TopChange 내부) | **해결(iter-3, 대응 없음 확정)** — 프레임워크 `SpreadInfo.SmartColMergeOld()` 실측: 이 화면 어떤 컬럼도 `MergePolicy.Restricted` 미설정이라 시각적 병합이 발생하지 않는다. "미구현"이 아니라 "AS-IS 도 무병합" — TO-BE 대응 불필요 |

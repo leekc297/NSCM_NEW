@@ -1,10 +1,17 @@
 import { DataType } from '@mescius/wijmo';
-import { AllowMerging, CellType, type FlexGrid, type GridPanel } from '@mescius/wijmo.grid';
+import {
+  AllowMerging,
+  type CellRange,
+  CellType,
+  type FlexGrid,
+  type GridPanel,
+} from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { MutableRefObject } from 'react';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import type { FlexGridColumnConfig } from '@foundation/models';
+import { CustomMergeManager } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import { useWaterfallShipmentPlanSemiStore } from '../useWaterfallShipmentPlanSemiStore';
@@ -114,6 +121,52 @@ interface WaterfallShipmentPlanSemiGridProps {
 //   admin staticColumns 의 다른 속성(폭/정렬 등)은 그대로 두고 이 3컬럼의 visible 만 화면 로컬 규칙으로
 //   덮어쓴다 — 나머지 컬럼은 admin 메타 리터럴을 그대로 보존(CLAUDE.md §2 항목4).
 const EE_TOGGLE_COLUMNS = ['ELECTRODE_TYPE', 'ORIGIN_FROM_DIVISION_ID', 'ORIGIN_TO_DIVISION_ID'];
+
+// 세로 병합 대상 컬럼 = Measure 이전의 정적 식별/경로열(SCM_MST_SHEET_COLUMNS SORT_ORDER 1~14).
+//   Measure(15)·그 이후·동적 기간 셀은 병합하지 않는다. 실제 병합 범위는 아래 매니저의 restricted +
+//   빈 셀 끊김 규칙이 정한다(사용자 2026-11-03: 왼쪽 값이 있으면 뒤 컬럼까지 계속, 비면 그 전까지만).
+const MERGE_ELIGIBLE_BINDINGS = new Set([
+  'KEY_IDX',
+  'DIVISION_ID',
+  'OPERATION_GROUP_NAME',
+  'ITEM_ID',
+  'NICK_NAME',
+  'ELECTRODE_TYPE',
+  'ORIGIN_FROM_DIVISION_ID',
+  'FROM_SITE_NAME',
+  'BOH',
+  'ORIGIN_TO_DIVISION_ID',
+  'TO_SITE_NAME',
+  'TRANSPORT_MODE',
+  'LT_DAY',
+  'VERSION_NO',
+]);
+
+const isBlankCell = (value: unknown): boolean =>
+  value === null || value === undefined || (typeof value === 'string' && value.trim() === '');
+
+// AS-IS SmartColMerge(FPMerge.Restricted) 세로 병합 재현 — 왼쪽 식별열이 병합된 구간에서만 오른쪽도
+//   병합되고, 어느 컬럼이든 값이 비면 그 지점에서 체인이 끊겨 뒤 컬럼은 병합되지 않는다(사용자 2026-11-03).
+//   예) From Site 에 값이 있으면 BOH~Version 까지 값이 같은 만큼 계속 병합, From Site 가 비면 그 전
+//   (Origin From Div)까지만 병합. 공용 CustomMergeManager 의 좌→우 누적 키가 "왼쪽 값이 모두 같음"을
+//   보장하므로, 여기서는 왼쪽 visible 식별/경로열 중 빈 셀이 있으면 끊고 나머지는 super 에 위임한다.
+//   Measure 이후·동적 기간 셀(MERGE_ELIGIBLE 아님)은 병합하지 않는다. 헤더(기간 다단) 병합은 super 그대로.
+//   공용 DataGrid 가 정적 컬럼 allowMerging 을 grid 레벨 값으로 덮어 컬럼 단위 제어가 불가능하므로
+//   col.allowMerging 대신 매니저에서 직접 게이트한다.
+class WaterfallSemiMergeManager extends CustomMergeManager<WaterfallRow> {
+  override getMergedRange(panel: GridPanel, row: number, col: number): CellRange | null {
+    if (panel.cellType !== CellType.Cell) return super.getMergedRange(panel, row, col);
+    if (!MERGE_ELIGIBLE_BINDINGS.has(panel.columns[col]?.binding ?? '')) return null;
+    // restricted 끊김 — 이 컬럼 왼쪽의 visible 식별/경로열 중 하나라도 빈 값이면 병합하지 않는다.
+    for (let k = 0; k < col; k += 1) {
+      const left = panel.columns[k];
+      if (left?.visible === false) continue;
+      if (!MERGE_ELIGIBLE_BINDINGS.has(left?.binding ?? '')) continue;
+      if (isBlankCell(panel.getCellData(row, k, false))) return null;
+    }
+    return super.getMergedRange(panel, row, col);
+  }
+}
 
 export const WaterfallShipmentPlanSemiGrid = ({
   gridRef,
@@ -248,17 +301,105 @@ export const WaterfallShipmentPlanSemiGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dynColMetas, isWeeklyIso, bucket, searchParams.isSumChecked]);
 
-  // Bucket 전환 시(§2.5 매트릭스 재계산) — 컬럼 visible 재적용 트리거.
+  // ── Bucket·Sum 가시성 + 헤더 더블클릭 드릴(접기/펼치기) — AS-IS SetDblClickColumnShowHide 파리티,
+  //    자매 SCP0016 WaterfallShipmentPlanFgGrid 와 동형. drillVisRef = 사용자가 더블클릭으로 덮어쓴
+  //    컬럼별 가시성(없으면 dynVisible 기본값, §2.5 매트릭스). applyDynVisibility 를 updatedLayout 에 걸어
+  //    columnGroups 재대입·invalidate 뒤에도 가시성이 유지되게 한다(변경 있을 때만 invalidate — 재발화 없음).
+  const drillVisRef = useRef<Map<string, boolean>>(new Map());
+  const applyDynVisibilityRef = useRef<(() => void) | null>(null);
+
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
-    g.columns.forEach(col => {
-      const kind = kindOf(col.binding ?? '');
-      if (!kind) return;
-      col.visible = dynVisible(kind);
-    });
+    // bucket/sum/조회(동적 메타) 변경 = AS-IS SetSpreadColumn 재실행 등가 — 드릴 상태 리셋.
+    drillVisRef.current.clear();
+    const applyDynVisibility = () => {
+      let changed = false;
+      for (let i = 0; i < g.columns.length; i += 1) {
+        const col = g.columns[i];
+        const kind = kindOf(col.binding ?? '');
+        if (!kind) continue;
+        const want = drillVisRef.current.get(col.binding ?? '') ?? dynVisible(kind);
+        if (col.visible !== want) {
+          col.visible = want;
+          changed = true;
+        }
+      }
+      if (changed) g.invalidate(true);
+    };
+    applyDynVisibilityRef.current = applyDynVisibility;
+    g.updatedLayout.addHandler(applyDynVisibility);
+    applyDynVisibility();
+    return () => {
+      try {
+        g.updatedLayout?.removeHandler(applyDynVisibility);
+        applyDynVisibilityRef.current = null;
+      } catch {
+        /* unmount race */
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gridRef, dynamicColumns, bucket, searchParams.isSumChecked]);
+
+  // 헤더 더블클릭 드릴다운(접기/펼치기) — AS-IS SpdMain_CellDoubleClick → SetDblClickColumnShowHide
+  //   (SpreadInfo.cs L13648). WeeklyISO 는 월구분 없이 주별만 보이므로 무동작(AS-IS cs:975 가드).
+  //   M_(월) SUM 헤더 = 그 달 구간(다음 M_ 전까지) W_ 토글 + 보이는 D_ 접기(hideOnly) /
+  //   W_(주) SUM 헤더 = 그 주 구간(다음 W_/M_ 전까지) D_ 토글. 표시순서(g.columns)로 구간을 walk.
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g?.hostElement) return;
+    const host = g.hostElement;
+    const onDblClick = (ev: MouseEvent) => {
+      if (isWeeklyIso) return;
+      const hit = g.hitTest(ev);
+      if (hit.cellType !== CellType.ColumnHeader) return;
+      const clicked = g.columns[hit.col]?.binding ?? '';
+      const clickedKind = kindOf(clicked);
+      if (clickedKind !== 'M' && clickedKind !== 'W') return; // leaf(일)는 접을 하위 없음
+      const dyn: string[] = [];
+      for (let i = 0; i < g.columns.length; i += 1) {
+        const b = g.columns[i].binding ?? '';
+        if (kindOf(b) !== null) dyn.push(b);
+      }
+      const idx = dyn.indexOf(clicked);
+      if (idx < 0) return;
+      const flip = (target: string, hideOnly: boolean) => {
+        const col = g.columns.getColumn(target);
+        if (!col) return;
+        if (hideOnly && !col.visible) return; // M 드릴: 보이는 D_ 만 접는다(AS-IS 동일)
+        drillVisRef.current.set(target, hideOnly ? false : !col.visible);
+      };
+      for (let i = idx + 1; i < dyn.length; i += 1) {
+        const t = dyn[i];
+        const tk = kindOf(t);
+        if (clickedKind === 'M') {
+          if (tk === 'M') break;
+          if (tk === 'W') flip(t, false);
+          else if (tk === 'D') flip(t, true);
+        } else {
+          if (tk === 'W' || tk === 'M') break;
+          if (tk === 'D') flip(t, false);
+        }
+      }
+      applyDynVisibilityRef.current?.();
+    };
+    host.addEventListener('dblclick', onDblClick);
+    return () => host.removeEventListener('dblclick', onDblClick);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gridRef, dynamicColumns, bucket, isWeeklyIso]);
+
+  // 세로 병합 매니저 교체 — restricted + 빈 셀 끊김(위 WaterfallSemiMergeManager). col.allowMerging 는
+  //   공용 DataGrid 가 grid 레벨 값으로 덮어써 컬럼 단위 제어가 안 되므로 매니저 자체를 교체한다(자매
+  //   DMF0053 동형). DataGrid 가 updatedLayout 마다 TopLeft(No 코너) 병합으로 다시 감싸므로 두 동작 모두
+  //   유지된다. 컬럼 재생성 4트리거마다 재적용.
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    if (g.mergeManager instanceof WaterfallSemiMergeManager) return;
+    g.mergeManager = new WaterfallSemiMergeManager(g);
+    g.invalidate(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gridRef, staticColumns, dynamicColumns, bucket, searchParams.isSumChecked]);
 
   // 헤더 높이 자급 — 총 48px 를 보이는 헤더 tier 수로 나눠 강제(버킷별 단수 Daily 3단/Monthly 1단이 달라도
   //   총 높이 일정). 주의: updatedLayout 핸들러 안에서 invalidate 하면 중첩 컬럼그룹 헤더가 매 레이아웃마다
@@ -330,8 +471,9 @@ export const WaterfallShipmentPlanSemiGrid = ({
       dynamicColumns={dynamicColumns}
       comboParams={{ mnuId: `'${MENU_ID}'` }}
       isReadOnly
-      // 03_grid-columns.md §3.3 — SmartColMerge(프레임워크 공통, 4트리거) 대응. 정확한 병합 대상열은
-      //   확인 필요(FIXED_FLAG=Y measure_label 컬럼 + 좌측 키컬럼군 추정, §6#6) — 잠정 All 적용.
+      // 03_grid-columns.md §3.3 — SmartColMerge(프레임워크 공통, 4트리거) 대응. 그리드 레벨은 All 로 열고
+      //   (헤더 다단 병합·식별열 세로 병합 활성), 실제 세로 병합 범위는 위 WaterfallSemiMergeManager 가
+      //   restricted + 빈 셀 끊김 규칙으로 정한다(사용자 확인 2026-11-03).
       allowMerging={AllowMerging.All}
       headerRowHeight={dynColMetas.length === 0 ? HEADER_TOTAL_HEIGHT : HEADER_TOTAL_HEIGHT / 3}
       alternatingRowStep={1}

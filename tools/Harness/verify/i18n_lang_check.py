@@ -22,13 +22,17 @@ def norm(t):
     return re.sub(r'\s+', ' ', re.sub(r'\(F\d+\)$|[*.]$', '', (t or '').strip())).strip()  # 단축키·필수 표시·끝 점('Div'↔'Div.')은 같은 문구
 
 
-def judge(lang, texts, untr, by_text, by_id):
-    """by_text 문구 → {(id, 언어)} · by_id (id, 언어) → 문구"""
+def judge(lang, texts, untr, by_text, by_id, where=None, asis_fixed=None):
+    """by_text 문구 → {(id, 언어)} · by_id (id, 언어) → 문구 · where 문구 → 위치 설명(2026-11-06 사용자 지시 SCP0084 27·28번:
+    '정확하게 어떤 항목에 대한 LABEL 인지 기재' — 조회조건 라벨/그리드 헤더(시트·컬럼 ID)/버튼 · 없으면 종전 표기)
+    asis_fixed: AS-IS 메타(SCM_MST_SHEET_COLUMNS 라벨 문자열)에도 같은 한글 고정 라벨이 있는 문구(2026-11-07 T138 — AS-IS 와 동일 = 화면 결함 아님 · EN 문구 등록 여부는 사용자 결정 → 판정필요)"""
+    where = where or {}; asis_fixed = asis_fixed or set()
+    loc = lambda t: f" · {where[t]}" if t in where else ''
     if not texts:
         return 'ERROR', '[측정 경로 없음] 수집 문구 0'
     if untr:
         return 'FAIL', f"'_' 폴백 {len(untr)}건: {untr[:5]}"
-    wrong, miss, unknown, ok = [], [], [], 0
+    wrong, miss, unknown, ok, fixed = [], [], [], 0, []
     for t0 in sorted(set(texts)):
         t = norm(t0)
         if not t:
@@ -38,7 +42,10 @@ def judge(lang, texts, untr, by_text, by_id):
             ok += 1
             continue
         if lang != 'KO' and KO.search(t):
-            wrong.append(f"'{t}'(한글)")
+            if t in asis_fixed:
+                fixed.append(f"'{t}'(한글 · AS-IS 메타도 같은 고정 라벨{loc(t)})")
+            else:
+                wrong.append(f"'{t}'(한글{loc(t)})")
             continue
         if not hits:
             unknown.append(t)
@@ -46,12 +53,14 @@ def judge(lang, texts, untr, by_text, by_id):
         cur = {by_id.get((i, lang)) for i, _ in hits}
         cur.discard(None)
         if cur:
-            wrong.append(f"'{t}'→'{sorted(cur)[0]}'")
+            wrong.append(f"'{t}'→'{sorted(cur)[0]}'{('(' + where[t].lstrip(' ·') + ')') if t in where else ''}")
         else:
             miss.append(t)
     tail = f' · 사전에 없는 문구 {len(unknown)}건' if unknown else ''
     if wrong:
-        return 'FAIL', f'{lang} 화면에 다른 언어 문구 {len(wrong)}건: {", ".join(wrong[:6])}{tail}'
+        return 'FAIL', f'{lang} 화면에 다른 언어 문구 {len(wrong)}건: {", ".join(wrong[:12])}{tail}' + (f' · AS-IS 동일 고정 라벨 {len(fixed)}건: {", ".join(fixed[:6])}' if fixed else '')
+    if fixed:
+        return '판정필요', f'{lang} 화면 한글 고정 라벨 {len(fixed)}건 — AS-IS 메타(SCM_MST_SHEET_COLUMNS)도 같은 한글 문자열(LBL 코드 아님 · AS-IS 와 동일): {", ".join(fixed[:8])}{tail} — 사용자 결정: {lang} 문구 등록(메타 라벨→LBL 코드) 또는 설계 결정(검사 대상 제외)'
     if miss:
         return 'ERROR', f'[확인 대상] {lang} 번역 미등록 {len(miss)}건: {miss[:6]}{tail}'
     return 'PASS', f'{lang} 문구 {ok}건 일치{tail}'
@@ -105,12 +114,42 @@ def main(mid):
                 n = norm(t)
                 by_text.setdefault(n, set()).add((i, l))
                 by_id[(i, l)] = n
+        # 위치 설명용 — 이 화면 메타(SCM_MST_SHEET_COLUMNS)의 컬럼 라벨·다단 헤더 라벨 → 시트·컬럼 ID (라벨이 LBL 코드가 아니라 문자열로 들어간 칸을 짚기 위해)
+        col_of = {}
+        try:
+            cur.execute("select sheet_name, column_name, column_label_name, small_class_label_name, large_class_label_name from SCM_MST_SHEET_COLUMNS where program_id = :p", p=mid)
+            for sh, cn, lb, sm, lg in cur.fetchall():
+                for v, kind in ((lb, '컬럼 라벨'), (sm, '헤더 소분류'), (lg, '헤더 대분류')):
+                    if v:
+                        col_of.setdefault(norm(v), []).append(f'{sh}.{cn} {kind}')
+        except Exception as e:
+            print(f'[i18n_lang] {mid}: 컬럼 메타 조회 실패({str(e)[:80]}) — 위치 설명 생략')
+    # 2026-11-07 T138(SCP0084 I2 EN): AS-IS 메타(Doc/asisfacts/screens/<ID>/dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv)에도 같은 한글 문자열 라벨이면 AS-IS 와 동일 → FAIL 이 아니라 판정필요
+    asis_fixed = set()
+    _am = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', mid, 'dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv')
+    if os.path.exists(_am):
+        try:
+            with open(_am, encoding='utf-8-sig', newline='') as f:
+                for r in csv.DictReader(f):
+                    for k in ('COLUMN_LABEL_NAME', 'SMALL_CLASS_LABEL_NAME', 'LARGE_CLASS_LABEL_NAME'):
+                        v = norm(r.get(k) or '')
+                        if v and KO.search(v) and v in col_of:
+                            asis_fixed.add(v)
+        except Exception as e:
+            print(f'[i18n_lang] {mid}: AS-IS 메타 라벨 읽기 실패({str(e)[:80]}) — 고정 라벨 판정 생략')
     res = []
     for lang, x in d.items():
         if x.get('why'):
             res.append({'lang': lang, 'result': 'ERROR', 'why': f"[측정 경로 없음] {x['why']}"})
             continue
-        r, why = judge(lang, (x.get('labels') or []) + (x.get('headers') or []) + (x.get('buttons') or []), x.get('untr') or [], by_text, by_id)
+        where = {}
+        for kind, arr in (('조회조건·화면 라벨', x.get('labels') or []), ('그리드 헤더', x.get('headers') or []), ('버튼', x.get('buttons') or [])):
+            for t in arr:
+                n = norm(t)
+                if n and n not in where:
+                    cols = col_of.get(n) or []
+                    where[n] = kind + (f" = 메타 {', '.join(sorted(set(cols))[:3])}(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)" if cols and KO.search(n) else (f" = 메타 {', '.join(sorted(set(cols))[:3])}" if cols else ''))
+        r, why = judge(lang, (x.get('labels') or []) + (x.get('headers') or []) + (x.get('buttons') or []), x.get('untr') or [], by_text, by_id, where, asis_fixed)
         res.append({'lang': lang, 'result': r, 'why': why})
         if lang != 'KO' and x.get('koCells'):  # EG363 — 데이터 자체가 한글일 수 있어 확인 대상
             res.append({'lang': lang + ' 데이터', 'result': 'ERROR', 'why': '[확인 대상] 그리드 칸 한글 ' + ', '.join(f'{k} {v}행' for k, v in list(x['koCells'].items())[:8]) + ' — 명칭 칸이면 언어 미반영'})

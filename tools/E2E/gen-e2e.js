@@ -4,6 +4,7 @@
 //   node gen-e2e.js [ID ...] [--all]      ID 없고 --all 이면 Doc/gen/*/e2e_plan.json 전부
 //   산출: Doc/e2e/specs/<ID>.smoke.spec.ts / <ID>.crud.spec.ts / <ID>.auth.spec.ts / <ID>.authcrud.spec.ts(2026-10-20 계정별 권한 CRUD) / <ID>.plan.json, _index.csv, _matrix.csv
 const fs = require('fs'); const path = require('path');
+const VARIANT = require('../Harness/lib/variant');  // 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행
 const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, 'e2e.config.json'), 'utf8').replace(/^﻿/, ''));
 const a = process.argv.slice(2);
 // 2026-10-20 테스트 모드(화면 성격별 계정 축) — --mode single|admin|division|auto. 명시하면 users.json screens[<메뉴>].mode 에 저장돼 다음 기본값이 된다
@@ -44,7 +45,7 @@ const CATALOG = (() => {
 const HARNESS = (() => { try { return JSON.parse(fs.readFileSync(path.join(path.dirname(cfg.genOutDir), '..', 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^\uFEFF/, '')); } catch { return {}; } })();
 const asisHiddenControls = sd => { // designer.cs Visibility.Never → props.csv (target,prop='Control',value='this.<ctrl>') → 컨트롤명 집합
   try {
-    const files = readCsv(path.join(sd, 'files.csv')).filter(r => r.variant === 'current' && /designer\.cs$/i.test(r.file));
+    const files = readCsv(path.join(sd, 'files.csv')).filter(r => VARIANT.isMain(r, sd) && /designer\.cs$/i.test(r.file));
     const hiddenLayouts = new Set();
     for (const r of files) { const fp = path.join(HARNESS.asisSrcRoot || '', r.file); if (!fs.existsSync(fp)) continue; for (const m of fs.readFileSync(fp, 'utf8').matchAll(/this\.(\w+)\.Visibility\s*=\s*[\w.]*LayoutVisibility\.Never/g)) hiddenLayouts.add(m[1]); }
     if (!hiddenLayouts.size) return {};
@@ -56,7 +57,7 @@ const asisHiddenControls = sd => { // designer.cs Visibility.Never → props.csv
 // 2026-10-21: As-is 헤더 사양 — .cs 의 SetSheetHeaderColumn(_SI, N)(헤더 행 수)·ColumnHeaderSpan(…, "리터럴")(병합 헤더 글자, 예 "Qty") → smoke 가 To-Be 헤더 행 수·리터럴·높이를 대조
 const asisHeaderSpec = sd => {
   try {
-    const files = readCsv(path.join(sd, 'files.csv')).filter(r => r.variant === 'current' && /\.cs$/i.test(r.file) && !/designer\.cs$/i.test(r.file));
+    const files = readCsv(path.join(sd, 'files.csv')).filter(r => VARIANT.isMain(r, sd) && /\.cs$/i.test(r.file) && !/designer\.cs$/i.test(r.file));
     let rows = 0; const literals = new Set(); let spans = 0;
     for (const r of files) {
       const fp = path.join(HARNESS.asisSrcRoot || '', r.file); if (!fs.existsSync(fp)) continue; const t = fs.readFileSync(fp, 'utf8');
@@ -236,7 +237,10 @@ for (const id0 of planDirs) {
   }
   console.log(`  ${id} 테스트 모드 ${mode} (${modeSource}) → 계정 ${accs.length}: ${accs.map(x => x.id).join(', ')}`);
   // 2026-10-23 조회조건 동작 검사: 조회조건 기준표(tools/Harness/rules/search_cond.csv — 룰 E11) 의 MAIN 영역 To-Be 순서 · 제외(삭제/Sun-Set/버튼영역 이동 등) 조건
-  const condOrder = SCref ? [...new Map(SCref.main.filter(r => r.usage === 'USE' && r.tobe_order).sort((x, y) => Number(x.tobe_order) - Number(y.tobe_order)).map(r => [r.tobe_name, r.tobe_name])).values()] : [];
+  // 2026-11-06 사용자 지시(SCP0016 5번·SCP0084): 조회조건 순서·구성 기준 = Excel 문서(SCP_화면별 조회조건 정리 List 시트) 행 순서 = tobe_seq.
+  //   종전 tobe_order(하네스 정렬원칙으로 재배열 — Div 맨 앞)는 화면별 확정 순서와 달랐다(SCP0084 Month 먼저). tobe_seq 가 없을 때만 tobe_order
+  const seqOf = r => Number(r.tobe_seq || r.tobe_order);
+  const condOrder = SCref ? [...new Map(SCref.main.filter(r => r.usage === 'USE' && (r.tobe_seq || r.tobe_order)).sort((x, y) => seqOf(x) - seqOf(y)).map(r => [r.tobe_name, r.tobe_name])).values()] : [];
   const condGone = SCref ? SCref.main.filter(r => ['DROP', 'SUNSET', 'NOT_MIGRATED', 'BUTTON_AREA', 'IN_CALENDAR', 'COLUMN_PERSONAL', 'COMMON_BUTTON'].includes(r.usage) && r.asis_name && r.asis_name !== '-' && !SCref.main.some(u => u.usage === 'USE' && normLbl(u.tobe_name) === normLbl(r.asis_name))).map(r => ({ name: r.asis_name, usage: r.usage })) : [];
   // 2026-10-27: Division 연동 조회조건(CASCADE) — AS-IS 콤보 원천이 DIVISION_ID 로 거르는 조회조건 → 계획 fields 의 라벨로
   const comboSrc = readCsv(path.join(sdPack, 'combo_src.csv')).filter(r => r.target_kind === 'SEARCH');
@@ -256,6 +260,7 @@ for (const id0 of planDirs) {
   // ── smoke
   const relSmoke = path.relative(specs, path.join(__dirname, 'lib', 'smoke-extra')).replace(/\\/g, '/');
   fs.writeFileSync(path.join(specs, `${id}.smoke.spec.ts`), head + `import { conditionCycle, commonCycle, record } from '${relSmoke}';
+import { loadLabelAliases, aliasFor } from '${relSmoke.replace(/smoke-extra$/, 'labelalias')}';  // 2026-11-08 (a) 사양 표 공유 — 검사기(_trace G4)와 같은 라벨 별칭 표(label_alias.csv · CR-092 Valid→Active)
 ` + `
 test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
   test.use({ account: PLAN.sample.account || undefined });
@@ -274,7 +279,10 @@ test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
     const labelHits: string[] = [], labelMiss: string[] = [], labelSkip: string[] = [];
     for (const f of PLAN.fields) {
       if (f.excluded) { labelSkip.push(\`\${f.label}(\${f.asis}: \${f.excludedWhy})\`); continue; }
-      const hit = await nscm.fieldExistsAny(f.labels && f.labels.length ? f.labels : [f.label]);
+      // 2026-11-08 (a): 별칭 표의 TO-BE 명칭(예 Valid→Active)도 후보 — 검사기와 기대값 원천을 같이 쓴다(종전엔 smoke 만 별칭 없이 '누락' → 검사기 PASS 와 불일치)
+      const cands0: string[] = f.labels && f.labels.length ? f.labels : [f.label];
+      const AL = loadLabelAliases(MENU); const cands = [...new Set([...cands0, ...cands0.map((l: string) => aliasFor(l, AL)?.tobe_label || '').filter(Boolean)])];
+      const hit = await nscm.fieldExistsAny(cands);
       if (hit) labelHits.push(\`\${f.label}→\${hit}\`); else labelMiss.push(f.label);
       expect.soft(!!hit, \`조회조건 '\${f.label}' (\${f.component}) — 후보 [\${(f.labels || [f.label]).join(' | ')}]\`).toBeTruthy();
     }
@@ -295,7 +303,7 @@ test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
     // 컬럼 대사: 메타(sheet_columns) 있으면 메타, 없으면 As-is 라벨(soft)
-    const headers = await nscm.gridHeaders(0);
+    const headers = await nscm.gridHeadersAll(0);  // T162: 가로 가상화로 DOM 헤더가 일부만 보여 허위 누락
     // 기대 컬럼의 시트 = 실제 조회된 시트(첫 SEARCH call-proc 의 sheet → register.json adminSheetName). 매핑이 없으면 mainSheets[0]
     const titleSheets: string[] = (PLAN.dynamicHeader && PLAN.dynamicHeader.titleSheets) || [];
     const firstSearch = calls.find(c => /SEARCH/i.test(c.btn) && !titleSheets.includes(c.sheet)) || calls.find(c => /SEARCH/i.test(c.btn)) || calls[0]; // 타이틀(기간 헤더) 시트 호출은 제외
@@ -504,7 +512,23 @@ for (const acc of PLAN.accounts) {
   idxRows.push([id, MENU, P.asisName, P.fields.length, mainSheets.length, P.hasSave ? 'Y' : '', hasMeta ? 'Y' : '', plan.accounts.length, plan.sample.account, plan.sample.div, mode]);
   console.log(`  ${id} → ${MENU}  smoke/crud(${P.hasSave ? 'save' : 'read-only'})/auth(${plan.accounts.length}계정)/authcrud(기대 있음 ${plan.accounts.filter(x => x.expectedBtns).length}계정)  메타컬럼 ${hasMeta ? 'Y' : 'N'}`);
 }
-const atomicWrite = (f, s) => { const t = f + '.' + process.pid + '.tmp'; fs.writeFileSync(t, s, 'utf8'); fs.renameSync(t, f); };  // 2026-10-28 창별 동시 실행 — 공용 색인 반쯤 쓰인 파일을 다른 실행이 읽지 않게
-atomicWrite(path.join(specs, '_index.csv'), '﻿asis_id,menu_id,name,fields,main_sheets,has_save,meta_cols,accounts,sample_account,sample_div,mode\n' + idxRows.map(r => r.join(',')).join('\n') + '\n', 'utf8');
-atomicWrite(path.join(specs, '_matrix.csv'), '﻿menu_id,account,groups,division,role\n' + matrixRows.map(r => r.join(',')).join('\n') + '\n', 'utf8');
-console.log(`스펙 ${idxRows.length}화면 × 4(smoke·crud·auth·authcrud) → ${specs}  (계정×DIV 매트릭스 ${matrixRows.length}행)`);
+// 2026-11-06(사용자 지시 · 동시 실행 영향 차단): 화면 하나만 생성해도 공용 _index.csv·_matrix.csv 를 그 화면 행만으로 통째로 덮어써 다른 화면 행이 사라졌다
+//   (11-06 10:17 기준 _index.csv 1행 = 마지막 생성 화면뿐). --all 이 아니면 이번에 만든 화면 행만 교체하고 나머지 화면 행은 유지한다 —
+//   잠금(specs/_index.lock) 안에서 읽고-합치고-원자 교체(임시 파일 → rename, 다른 프로세스가 잠깐 열고 있으면 재시도).
+const sleepMs = ms => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+const atomicWrite = (f, s) => { const t = f + '.' + process.pid + '.tmp'; fs.writeFileSync(t, s, 'utf8'); for (let i = 0; ; i++) { try { fs.renameSync(t, f); return; } catch (e) { if (i >= 40 || !/^(EPERM|EBUSY|EACCES)$/.test(e.code || '')) { try { fs.unlinkSync(t); } catch { } throw e; } sleepMs(250); } } };  // 2026-10-28 창별 동시 실행 — 공용 색인 반쯤 쓰인 파일을 다른 실행이 읽지 않게
+const withIdxLock = fn => { const lf = path.join(specs, '_index.lock'); let fd = null; for (let i = 0; i < 480 && fd === null; i++) { try { fd = fs.openSync(lf, 'wx'); } catch (e) { if (e.code !== 'EEXIST') throw e; try { if (Date.now() - fs.statSync(lf).mtimeMs > 120000) { fs.unlinkSync(lf); continue; } } catch { } sleepMs(250); } } if (fd === null) throw new Error('색인 잠금 획득 실패(120초): ' + lf); try { return fn(); } finally { try { fs.closeSync(fd); } catch { } try { fs.unlinkSync(lf); } catch { } } };
+const mergeIdx = (file, head, rowsNew, col) => {
+  const mine = new Set(rowsNew.map(r => String(r[col] || '').toUpperCase()));
+  let keep = [];
+  if (!a.includes('--all') || ids.length) { try { keep = fs.readFileSync(file, 'utf8').replace(/^﻿/, '').split(/\r?\n/).slice(1).filter(l => l.trim() && !mine.has(String(l.split(',')[col] || '').toUpperCase())); } catch { keep = []; } }
+  const lines = keep.concat(rowsNew.map(r => r.join(','))).sort((x, y) => String(x.split(',')[col]).localeCompare(String(y.split(',')[col])));
+  atomicWrite(file, '﻿' + head + '\n' + lines.join('\n') + '\n');
+  return lines.length;
+};
+let idxTotal = 0, mtxTotal = 0;
+withIdxLock(() => {
+  idxTotal = mergeIdx(path.join(specs, '_index.csv'), 'asis_id,menu_id,name,fields,main_sheets,has_save,meta_cols,accounts,sample_account,sample_div,mode', idxRows, 1);
+  mtxTotal = mergeIdx(path.join(specs, '_matrix.csv'), 'menu_id,account,groups,division,role', matrixRows, 0);
+});
+console.log(`스펙 ${idxRows.length}화면 × 4(smoke·crud·auth·authcrud) → ${specs}  (계정×DIV 매트릭스 ${matrixRows.length}행 · 색인 전체 ${idxTotal}화면/${mtxTotal}행)`);

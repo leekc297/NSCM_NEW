@@ -23,18 +23,56 @@
   border-bottom: 1px solid #e5e5e5;
 }
 
+// division=82 전용 — 섹션 제목과 "All Prod/Ship Operation No Frozen" 상위 체크박스를 한 줄에.
+.sectionHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 2px;
+  border-bottom: 1px solid #e5e5e5;
+
+  .sectionTitle {
+    padding: 0;
+    border-bottom: none;
+  }
+}
+
 // 2열 폼. 각 FormItem 은 라벨(우측정렬) + 입력.
+//   align-items: start — No Frozen 때문에 키가 큰 칸(Pack/Module 등) 옆의 짧은 칸(Plan Type 등)이
+//   기본값(stretch)으로 늘어나 내부에서 세로 중앙정렬되면 두 칸 입력 박스의 세로 중심이 어긋난다.
+//   전부 위에서 시작시키면 같은 높이 박스끼리 중심도 자연히 한 줄로 맞는다(사용자 스크린샷 기준).
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px 24px;
+  align-items: start;
+}
+
+// division=82 전용 — Plan Type · Plan ID · LINK/Pack-Module/Cell 한 줄 3열(3행 반복).
+.gridFlat {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.6fr;
+  gap: 8px 24px;
+  align-items: start;
+}
+
+// Parameter / Desc. 하단 행 — Parameter 는 좁게, Desc 는 넓게(사용자 요청).
+.paramDescRow {
+  display: grid;
+  grid-template-columns: 0.6fr 1.4fr;
+  gap: 8px 24px;
+  // Ship. Frozen 과 다른 영역임을 보이도록 위 간격을 넓히고 구분선을 둔다(사용자 요청).
+  margin-top: 12px;
+  padding-top: 12px;
 }
 
 // AS-IS 범위형 셀: [시작] ~ [종료] 한 줄 + 그 아래 No Frozen 체크(AS-IS 줄맞춤).
+//   날짜 행(dateRange)은 그대로 두고 No Frozen 행만 조금 더 아래로 띄운다(사용자 요청 — 날짜 행
+//   자체는 Plan Type 등 옆 칸과 같은 선에 고정, No Frozen 만 아래 여백을 더 준다).
 .rangeWrap {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
 }
 
 // AS-IS 범위형: [시작(읽기전용)] ~ [종료(DatePicker)] + No Frozen 체크.
@@ -69,10 +107,48 @@
   }
 }
 
+// division=82 전용(LINK/Pack-Module/Cell 3단, .gridFlat 안) — 이 화면 안에서도 82 만 더 납작하게(30px).
+.gridFlat .dateRange {
+  :global {
+    .MuiBox-root:has(.MuiOutlinedInput-root),
+    .MuiOutlinedInput-root {
+      height: 30px !important;
+      min-height: 30px !important;
+    }
+  }
+}
+
+// 범위형 칸(Pack/Module·Cell·Period) 라벨을 날짜 행(36px) 높이의 세로 중앙에 둔다.
+//   FormItem 은 No Frozen 줄 때문에 flex-start 로 두므로, 라벨 칸 높이를 날짜 행과 맞춰
+//   옆 칸(Plan Type 등) 라벨과 같은 선에 오게 한다(사용자 요청).
+.rangeItem > :first-child {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+// division=82 는 날짜 행이 30px 이라 라벨 높이도 맞춘다.
+.gridFlat .rangeItem > :first-child {
+  height: 30px;
+}
+
 .tilde {
   flex: none;
   color: #888;
   padding: 0 2px;
+}
+
+// No Frozen 을 시작일 칸 너비만큼 띄워 종료일(~ 뒤) 쪽에서 시작하게 한다(사용자 요청 스크린샷 기준).
+.noFrozenRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.noFrozenSpacer {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .buttonWrapper {

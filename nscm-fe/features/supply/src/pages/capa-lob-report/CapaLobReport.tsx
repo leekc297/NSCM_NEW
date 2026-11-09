@@ -226,37 +226,16 @@ export const CapaLobReport = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   /**
-   * Insert(F8) / Delete(F9) — **관측 동작이 무동작이 아니다.** 베이스 `CheckValidation` 이 시트 잠금
-   * (`IsLock` 영구 true, 01 L-32)을 보고 각각 `MSG00008`/`MSG00009` 를 띄우고 화면 override 에
-   * 도달하지 않는다. TO-BE 는 **키를 존재시킨 채 alert 핸들러**를 둔다(TO-BE 코드는 `MSG01044`/
-   * `MSG01045` — AS-IS 번호를 그대로 쓰면 전혀 다른 문구가 뜬다).
-   *   `false`      -> 버튼이 사라져 AS-IS 와 시각적으로 달라진다
-   *   키 생략      -> 공용 SubTitle 기본 `addRow`/`removeRow` 가 살아나 AS-IS 에 없던 행 추가·삭제가 생긴다
-   * 둘 다 오답이다(01 L-27 / V-11·V-12 / 03 R-14 / V-30). 행 추가·제거 로직은 만들지 않는다.
-   * 등록 여부는 사용자 확정 완료 — `MNU_BTN_CD` 에 INSERT/DELETE 를 등록한다(goal.md BLK-4 DECIDED).
-   */
-  const handleInsert = () => {
-    void setAlert({
-      type: 'alert',
-      content: t(MSG.CANNOT_INSERT, {
-        defaultValue: 'Can not add as it is not in modify mode.',
-      }),
-    });
-  };
-  const handleDelete = () => {
-    void setAlert({
-      type: 'alert',
-      content: t(MSG.CANNOT_DELETE, {
-        defaultValue: 'Can not delete as it is not in modify mode.',
-      }),
-    });
-  };
-
-  /**
    * hotkeyConfig — 전 항목 `useTabBtnPermissions().hasButton()` 조건부(하드코딩 금지, CLAUDE.md §2 체크3).
+   * `insert`/`delete`: false — **버튼 비노출.** AS-IS 실측(사용자 확정 2026-11-04): 이 화면은 조회전용
+   *   Report 라 Insert/Delete 가 기능적으로 쓰이지 않는다 — `InsertButton()` override 는 빈 몸체(no-op,
+   *   cs:1284~1286), `DeleteButton()` 은 행 플래그가 `FlagI`('I'=삽입행)일 때만 `_si.Delete()` 하는데
+   *   Insert 가 행을 만들지 않아 'I' 행이 존재하지 않아 삭제도 일어나지 않는다(cs:1288~1306).
+   *   미사용 기능이므로 두 버튼을 숨긴다 — goal.md BLK-4 의 "MNU_BTN_CD INSERT/DELETE 등록 + alert
+   *   재현" 결정을 사용자가 재확정으로 뒤집었다(2026-11-04). SubTitle 은 값이 `false` 면 버튼을 그리지
+   *   않는다(SubTitle.tsx:406/420). DB `MNU_BTN_CD` 의 INSERT/DELETE 행은 남아 있어도 FE `false` 가
+   *   비노출을 결정하므로 무해하다(완전 정리하려면 메타 등록 해제 — 별도).
    * `save: false` — 저장 SP 가 존재하지 않는다(`QueryDics` 는 `DIC_GET_CAPA_LOB` 하나뿐, 03 §4.3).
-   *   AS-IS Save 는 `MSG00010` alert 만 뜨지만 저장 경로 자체가 없으므로 버튼을 노출하지 않는다
-   *   (사용자 확정: SAVE·EDIT 메타 미등록, goal.md BLK-4).
    * Edit 는 `customButtons` 에도 만들지 않는다 — AS-IS override 가 없어 클릭해도 메시지조차 없고
    *   편집모드 state 자체가 없다(01 L-31/L-33 / V-14).
    * `manual`/`upload` 는 AS-IS 에 없는 기능이라 false. Sort/Filter/Condition/Excel/Help 는 공통
@@ -264,8 +243,8 @@ export const CapaLobReport = ({ tabId, title }: PageProps<MENU_ID>) => {
    */
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    insert: hasButton('INSERT') ? handleInsert : false,
-    delete: hasButton('DELETE') ? handleDelete : false,
+    insert: false,
+    delete: false,
     save: false,
     manual: false,
     upload: false,

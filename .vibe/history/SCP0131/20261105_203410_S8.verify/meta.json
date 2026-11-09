@@ -1,0 +1,17 @@
+{
+  "id": "SCP0131",
+  "task": "S8.verify",
+  "scope": "none",
+  "note": "run_verify.py SCP0131",
+  "start": "2026-11-05T20:34:10+09:00",
+  "end": "2026-11-05T22:09:47+09:00",
+  "exit": 10,
+  "sources": [],
+  "source": "menu",
+  "label": "UI CheckList 전체 — 사실 보강→원장→E2E(@verify)→판정→CheckList·ActionItemList xlsx (보완 적용은 안 함)",
+  "text": "",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "changed": []
+}

@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 204,
+  "at": "2026-11-07T12:58:42.605Z",
+  "user": "minyonglee1",
+  "test": "언어 전환 문구 덤프(I2)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 3210,
+  "at": "2026-11-07T12:58:45.529Z",
+  "user": "minyonglee1",
+  "test": "언어 전환 문구 덤프(I2)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 195,
+  "at": "2026-11-07T12:58:50.626Z",
+  "user": "minyonglee1",
+  "test": "언어 전환 문구 덤프(I2)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 3265,
+  "at": "2026-11-07T12:58:53.587Z",
+  "user": "minyonglee1",
+  "test": "언어 전환 문구 덤프(I2)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 199,
+  "at": "2026-11-07T12:58:58.823Z",
+  "user": "minyonglee1",
+  "test": "언어 전환 문구 덤프(I2)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 3206,
+  "at": "2026-11-07T12:59:01.709Z",
+  "user": "minyonglee1",
+  "test": "언어 전환 문구 덤프(I2)"
+ }
+]

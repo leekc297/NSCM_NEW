@@ -30,7 +30,6 @@ import {
   reorderRows,
   serializeSavePayload,
   toHiddenColumnSet,
-  toZeroWidthColumnSet,
   type ColumnSettingFallback,
 } from './columnLayoutModal.utils';
 
@@ -49,6 +48,8 @@ import {
 type DualRow = {
   COLUMN_NAME: string;
   COLUMN_LABEL_NAME: string;
+  // 2단 머지헤더 소분류(그룹) 라벨 — showSmallClass 켠 화면에서만 열로 노출. 메타에 없으면 ''.
+  SMALL_CLASS_LABEL_NAME: string;
   COL_WIDTH: number;
   CELL_COLOR: string;
   TEXT_COLOR: string;
@@ -63,9 +64,10 @@ const HIDDEN_FROM_LIST = new Set(['MEASURE']);
 //   재조회 중에는 loading 이 true 라 아래 latch 가 옛 캐시를 먼저 적재하지 않는다.
 const ALWAYS_FRESH = { staleTime: 0, refetchOnMount: 'always' } as const;
 
-const toDualRow = (r: ColumnLayoutRow): DualRow => ({
+const toDualRow = (r: ColumnLayoutRow, smallClass = ''): DualRow => ({
   COLUMN_NAME: r.COLUMN_NAME,
   COLUMN_LABEL_NAME: r.COLUMN_LABEL_NAME,
+  SMALL_CLASS_LABEL_NAME: smallClass,
   COL_WIDTH: r.COL_WIDTH,
   CELL_COLOR: r.CELL_COLOR,
   TEXT_COLOR: r.TEXT_COLOR,
@@ -89,6 +91,18 @@ interface Props {
   leftTitle?: string;
   /** dual list 우측 상단 라벨 (예: 'Visible') */
   rightTitle?: string;
+  /**
+   * 화면별로 팝업 목록에서 감출 컬럼명 — MEASURE 와 동일 처리(좌/우 목록에서 빼고, 저장 시
+   *   USER_FLAG='Y' 로 고정해 그리드에는 그대로 둔다). AS-IS 가 특정 화면에서만 Height=0 으로
+   *   가리던 ID/NAME 컬럼을 TO-BE 공용 팝업에 이식할 때 쓴다(SCP0104 등 화면 전용).
+   */
+  hiddenColumns?: string[];
+  /**
+   * 목록에 소분류(SMALL_CLASS_LABEL_NAME) 열을 함께 노출한다 — 2단 머지헤더 화면에서 같은 leaf
+   *   라벨(예: Departure/Arrival 양쪽의 Port·Country·Port Code)을 그룹으로 구분하기 위함.
+   *   값은 팝업이 이미 조회하는 admin 컬럼 메타(sClsLblNm)에서 온다(화면 추가 배선 불필요).
+   */
+  showSmallClass?: boolean;
 }
 
 export const ColumnLayoutModal = ({
@@ -105,8 +119,20 @@ export const ColumnLayoutModal = ({
   title = 'Column Setting',
   leftTitle,
   rightTitle,
+  hiddenColumns,
+  showSmallClass = false,
 }: Props) => {
   const setAlert = useMessageStore.getState().setAlert;
+  // 다국어(SCM_ADM_MSG_M) — MSG01028~MSG01031. fallback 은 코드 미로드 시에만 노출.
+  const { t } = useTranslation();
+
+  // 목록에서 감출 컬럼 = 공용 고정(MEASURE) + 화면 전용(hiddenColumns). 둘 다 같은 규칙으로
+  //   다룬다: 좌/우 목록에서 빼고(아래 leftItems/rightItems), 저장 시 USER_FLAG='Y' 로 고정해
+  //   그리드에는 유지(buildSavePayload). AS-IS Height=0 숨김의 TO-BE 대응.
+  const hiddenFromList = useMemo(
+    () => new Set<string>([...HIDDEN_FROM_LIST, ...(hiddenColumns ?? [])]),
+    [hiddenColumns]
+  );
 
   const filters = useMemo(
     () => ({
@@ -162,24 +188,6 @@ export const ColumnLayoutModal = ({
 
   const excluded = useMemo(() => toHiddenColumnSet(metaRows ?? []), [metaRows]);
 
-  // ⭐ [2026-08-22 사용자 지시 · DMF0082] 관리자 기본 폭이 0 인 컬럼은 목록에서 감춘다.
-  //   폭 0 은 그리드에서 실질적으로 안 보이는데 목록에는 남아 있어 "켰는데 안 나온다" 가 된다
-  //   (실측 1,009행이 이 상태였다). 판정은 raw 응답의 `COLUMN_WIDTH` — `COL_WIDTH` 는 매핑 단계에서
-  //   0→100 으로 정규화되므로 쓸 수 없다(utils `toZeroWidthColumnSet` 주석 참조).
-  const zeroWidthColumns = useMemo(
-    () => toZeroWidthColumnSet(data ?? [], fallbackColumns),
-    [data, fallbackColumns]
-  );
-  /**
-   * 목록(좌/우 dual list)에서 감출 컬럼 = ①`MEASURE`(HIDDEN_FROM_LIST) ②관리자 폭 0.
-   * ⚠ `rows` 에서 빼지 않는다 — 저장 페이로드(`buildSavePayload`)가 이 집합을 후행 배치로
-   *   보존하므로, 목록에서만 감추고 값은 그대로 유지된다.
-   */
-  const hiddenFromList = useMemo(
-    () => new Set<string>([...HIDDEN_FROM_LIST, ...zeroWidthColumns]),
-    [zeroWidthColumns]
-  );
-
   // 고정 컬럼(좌우 이동 잠금) 판정 원본 = admin 메타의 USER_SELECTABLE_FLAG(personalizable).
   //   titleSet SP 커서에 이 플래그가 없을 수 있어 메타를 정본으로 덮어쓴다. 메타 조회 실패 시
   //   맵이 비므로 titleSet 행에서 파생한 값(deriveIsKey)이 그대로 남는다.
@@ -203,6 +211,17 @@ export const ColumnLayoutModal = ({
         (metaRows ?? [])
           .filter(m => m.colNm && m.colLblNm !== undefined && m.colLblNm !== '')
           .map(m => [m.colNm, String(m.colLblNm)])
+      ),
+    [metaRows]
+  );
+
+  // 소분류 라벨(SMALL_CLASS_LABEL_NAME) — showSmallClass 열의 값. admin 컬럼 메타가 정본.
+  const smallClassByName = useMemo(
+    () =>
+      new Map<string, string>(
+        (metaRows ?? [])
+          .filter(m => m.colNm && m.sClsLblNm !== undefined && m.sClsLblNm !== '')
+          .map(m => [m.colNm, String(m.sClsLblNm)])
       ),
     [metaRows]
   );
@@ -258,12 +277,18 @@ export const ColumnLayoutModal = ({
   );
 
   const leftItems = useMemo(
-    () => baseRows.filter(r => !hiddenFromList.has(r.COLUMN_NAME)).map(toDualRow),
-    [baseRows]
+    () =>
+      baseRows
+        .filter(r => !hiddenFromList.has(r.COLUMN_NAME))
+        .map(r => toDualRow(r, smallClassByName.get(r.COLUMN_NAME) ?? '')),
+    [baseRows, hiddenFromList, smallClassByName]
   );
   const rightItems = useMemo(
-    () => userRows.filter(r => !hiddenFromList.has(r.COLUMN_NAME)).map(toDualRow),
-    [userRows]
+    () =>
+      userRows
+        .filter(r => !hiddenFromList.has(r.COLUMN_NAME))
+        .map(r => toDualRow(r, smallClassByName.get(r.COLUMN_NAME) ?? '')),
+    [userRows, hiddenFromList, smallClassByName]
   );
 
   const keyColumns = useMemo(
@@ -317,11 +342,11 @@ export const ColumnLayoutModal = ({
   };
 
   // 고정 컬럼을 비표시로 옮기려 할 때 안내 — 왜 안 움직이는지 알려준다.
-  const FIXED_COLUMN_MSG = '고정 column 은 표시 상태를 변경할 수 없습니다.';
+  const FIXED_COLUMN_MSG = t('MSG01028', '_고정 column 은 표시 상태를 변경할 수 없습니다.');
 
   const moveToUser = () => {
     if (checkedLeft.size === 0) {
-      void setAlert({ type: 'alert', content: '좌측 column 선택' });
+      void setAlert({ type: 'alert', content: t('MSG01029', '_좌측 column 선택') });
       return;
     }
     showColumns(checkedLeft);
@@ -330,7 +355,7 @@ export const ColumnLayoutModal = ({
 
   const moveToBase = () => {
     if (checkedRight.size === 0) {
-      void setAlert({ type: 'alert', content: '우측 column 선택' });
+      void setAlert({ type: 'alert', content: t('MSG01030', '_우측 column 선택') });
       return;
     }
     if ([...checkedRight].every(k => keyColumns.has(k))) {
@@ -378,11 +403,22 @@ export const ColumnLayoutModal = ({
     </span>
   );
 
+  // 소분류 열 — showSmallClass 켠 화면에서만 Column 앞에 노출. 연속 동일 그룹은 세로 병합(MeasureSelectModal 동일).
+  const SMALL_CLASS_COLUMN: DualListColumn<DualRow> = {
+    key: 'SMALL_CLASS_LABEL_NAME',
+    header: 'Small Class',
+    width: 110,
+    align: 'left',
+    merge: true,
+  };
+
   const LEFT_COLUMNS: DualListColumn<DualRow>[] = [
+    ...(showSmallClass ? [SMALL_CLASS_COLUMN] : []),
     { key: 'COLUMN_LABEL_NAME', header: 'Column', align: 'left', render: renderLabel },
   ];
 
   const RIGHT_COLUMNS: DualListColumn<DualRow>[] = [
+    ...(showSmallClass ? [SMALL_CLASS_COLUMN] : []),
     { key: 'COLUMN_LABEL_NAME', header: 'Column', align: 'left', render: renderLabel },
     {
       key: 'COL_WIDTH',
@@ -458,7 +494,7 @@ export const ColumnLayoutModal = ({
   const handleOk = () => {
     // 가드는 목록에 보이는 컬럼 기준 — 숨김 컬럼(MEASURE)만 남은 상태를 통과시키면 안 된다.
     if (rightItems.length === 0) {
-      void setAlert({ type: 'alert', content: '최소 1개 column 은 표시 상태여야 합니다.' });
+      void setAlert({ type: 'alert', content: t('MSG01031', '_최소 1개 column 은 표시 상태여야 합니다.') });
       return;
     }
     // 표시 1..n → 숨김 컬럼 후행 → 비표시 0. 숨김 컬럼은 항상 표시로 저장된다(buildSavePayload 주석).

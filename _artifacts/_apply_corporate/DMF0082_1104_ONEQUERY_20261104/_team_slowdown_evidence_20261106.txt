@@ -1,0 +1,333 @@
+# DMF0082 Team 필터 속도 저하 증거 (사내오라클 ZIOUI1 · 수집 2026-11-06 18:08:27 )
+
+## 1. SCM_SYS_LOG_BATCH 11-06 14:00~16:30 PKG_DMF0082 GET_MAIN_DATA 호출 (시작/ING/정상종료)
+14:12:21 시작 user testa div 81 team ALL site ALL proj ALL ver Current
+14:12:22 ING user testa div 81 team ALL site ALL proj ALL ver Current
+14:12:29 정상종료 user testa div 81 team ALL site ALL proj ALL ver Current
+14:12:42 시작 user testa div 81 team 70021414 site ALL proj ALL ver Current
+14:12:43 ING user testa div 81 team 70021414 site ALL proj ALL ver Current
+14:12:44 정상종료 user testa div 81 team 70021414 site ALL proj ALL ver Current
+14:12:52 시작 user testa div 81 team 70084589 site ALL proj ALL ver Current
+14:12:53 ING user testa div 81 team 70084589 site ALL proj ALL ver Current
+14:12:53 정상종료 user testa div 81 team 70084589 site ALL proj ALL ver Current
+14:13:00 시작 user testa div 81 team 70021362 site ALL proj ALL ver Current
+14:13:01 ING user testa div 81 team 70021362 site ALL proj ALL ver Current
+14:13:02 정상종료 user testa div 81 team 70021362 site ALL proj ALL ver Current
+14:13:09 시작 user testa div 81 team 70021414 site ALL proj ALL ver Current
+14:13:10 ING user testa div 81 team 70021414 site ALL proj ALL ver Current
+14:13:11 정상종료 user testa div 81 team 70021414 site ALL proj ALL ver Current
+14:13:20 시작 user testa div 81 team 70084589 site ALL proj ALL ver Current
+14:13:21 ING user testa div 81 team 70084589 site ALL proj ALL ver Current
+14:13:21 정상종료 user testa div 81 team 70084589 site ALL proj ALL ver Current
+14:13:29 시작 user testa div 81 team 70084589 site ALL proj ALL ver Current
+14:13:30 ING user testa div 81 team 70084589 site ALL proj ALL ver Current
+14:17:54 ING user testa div 82 team ALL site ALL proj ALL ver Current
+14:17:54 시작 user testa div 82 team ALL site ALL proj ALL ver Current
+14:18:16 정상종료 user testa div 82 team ALL site ALL proj ALL ver Current
+14:18:38 시작 user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:18:39 ING user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:18:43 정상종료 user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:18:51 시작 user testa div 82 team 70021414 site ALL proj ALL ver Current
+14:18:52 ING user testa div 82 team 70021414 site ALL proj ALL ver Current
+14:18:54 정상종료 user testa div 82 team 70021414 site ALL proj ALL ver Current
+14:19:02 시작 user testa div 82 team 71067318 site ALL proj ALL ver Current
+14:19:04 ING user testa div 82 team 71067318 site ALL proj ALL ver Current
+14:19:05 정상종료 user testa div 82 team 71067318 site ALL proj ALL ver Current
+14:19:13 시작 user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:19:14 ING user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:19:15 정상종료 user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:19:24 시작 user testa div 82 team 70021414 site ALL proj ALL ver Current
+14:19:25 ING user testa div 82 team 70021414 site ALL proj ALL ver Current
+14:19:27 정상종료 user testa div 82 team 70021414 site ALL proj ALL ver Current
+14:19:35 시작 user testa div 82 team 70021414 site ALL proj ALL ver Current
+14:19:36 ING user testa div 82 team 70021414 site ALL proj ALL ver Current
+14:19:38 정상종료 user testa div 82 team 70021414 site ALL proj ALL ver Current
+14:19:46 시작 user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:19:47 ING user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:19:49 정상종료 user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:20:02 ING user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:20:02 시작 user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:20:25 정상종료 user testa div 82 team 30385415 site ALL proj ALL ver Current
+14:22:54 정상종료 user testa div 81 team 70084589 site ALL proj ALL ver Current
+15:19:06 시작 user attackgo div 40 team ALL site ALL proj ALL ver Current
+15:19:07 ING user attackgo div 40 team ALL site ALL proj ALL ver Current
+15:19:12 정상종료 user attackgo div 40 team ALL site ALL proj ALL ver Current
+15:19:28 시작 user attackgo div 40 team 58520274 site ALL proj ALL ver Current
+15:19:29 ING user attackgo div 40 team 58520274 site ALL proj ALL ver Current
+15:19:30 정상종료 user attackgo div 40 team 58520274 site ALL proj ALL ver Current
+15:19:47 시작 user attackgo div 40 team 58666055 site ALL proj ALL ver Current
+15:19:48 ING user attackgo div 40 team 58666055 site ALL proj ALL ver Current
+15:19:48 정상종료 user attackgo div 40 team 58666055 site ALL proj ALL ver Current
+15:19:59 ING user attackgo div 40 team 58666055 site ALL proj ALL ver Current
+15:19:59 시작 user attackgo div 40 team 58666055 site ALL proj ALL ver Current
+15:20:01 정상종료 user attackgo div 40 team 58666055 site ALL proj ALL ver Current
+15:20:20 ING user attackgo div 40 team 58666055 site ALL proj ALL ver Current
+15:20:20 시작 user attackgo div 40 team 58666055 site ALL proj ALL ver Current
+15:20:24 정상종료 user attackgo div 40 team 58666055 site ALL proj ALL ver Current
+15:20:41 시작 user attackgo div 40 team 70021414 site ALL proj ALL ver Current
+15:20:42 ING user attackgo div 40 team 70021414 site ALL proj ALL ver Current
+15:20:47 정상종료 user attackgo div 40 team 70021414 site ALL proj ALL ver Current
+15:20:50 ING user attackgo div 81 team ALL site ALL proj ALL ver Current
+15:20:50 시작 user attackgo div 81 team ALL site ALL proj ALL ver Current
+15:20:57 시작 user attackgo div 82 team ALL site ALL proj ALL ver Current
+15:20:58 ING user attackgo div 82 team ALL site ALL proj ALL ver Current
+15:21:18 정상종료 user attackgo div 82 team ALL site ALL proj ALL ver Current
+15:22:05 시작 user attackgo div 82 team 58187671 site ALL proj ALL ver Current
+15:22:06 ING user attackgo div 82 team 58187671 site ALL proj ALL ver Current
+15:22:22 정상종료 user attackgo div 82 team 58187671 site ALL proj ALL ver Current
+15:23:02 시작 user attackgo div 82 team 71059521 site ALL proj ALL ver Current
+15:23:03 ING user attackgo div 82 team 71059521 site ALL proj ALL ver Current
+15:23:07 정상종료 user attackgo div 82 team 71059521 site ALL proj ALL ver Current
+15:23:17 시작 user attackgo div 82 team 71059521 site ALL proj ALL ver Current
+15:23:18 ING user attackgo div 82 team 71059521 site ALL proj ALL ver Current
+15:23:38 정상종료 user attackgo div 82 team 71059521 site ALL proj ALL ver Current
+15:24:21 시작 user attackgo div 82 team 58187671 site ALL proj ALL ver Current
+15:24:22 ING user attackgo div 82 team 58187671 site ALL proj ALL ver Current
+15:24:41 정상종료 user attackgo div 82 team 58187671 site ALL proj ALL ver Current
+15:25:29 시작 user attackgo div 82 team 30385415 site ALL proj ALL ver Current
+15:25:30 ING user attackgo div 82 team 30385415 site ALL proj ALL ver Current
+15:25:55 정상종료 user attackgo div 82 team 30385415 site ALL proj ALL ver Current
+15:30:54 시작 user attackgo div 81 team ALL site ALL proj ALL ver Current
+15:30:55 ING user attackgo div 81 team ALL site ALL proj ALL ver Current
+15:35:55 시작 user attackgo div 81 team ALL site ALL proj ALL ver Current
+15:35:56 ING user attackgo div 81 team ALL site ALL proj ALL ver Current
+15:48:27 시작 user testa div 81 team ALL site ALL proj ALL ver Current
+15:48:29 ING user testa div 81 team ALL site ALL proj ALL ver Current
+15:53:28 시작 user testa div 81 team ALL site ALL proj ALL ver Current
+15:53:30 ING user testa div 81 team ALL site ALL proj ALL ver Current
+16:03:43 시작 user attackgo div 81 team 70000342 site ALL proj ALL ver Current
+16:03:45 ING user attackgo div 81 team 70000342 site ALL proj ALL ver Current
+16:08:44 시작 user attackgo div 81 team 70000342 site ALL proj ALL ver Current
+16:08:46 ING user attackgo div 81 team 70000342 site ALL proj ALL ver Current
+16:12:12 시작 user attackgo div 81 team 70000342 site ALL proj ALL ver Current
+16:12:15 ING user attackgo div 81 team 70000342 site ALL proj ALL ver Current
+16:17:13 시작 user attackgo div 81 team 70000342 site ALL proj ALL ver Current
+16:17:16 ING user attackgo div 81 team 70000342 site ALL proj ALL ver Current
+
+## 2. DBA_HIST_SQL_PLAN d019r0hbb0muh (원본 L1878 · 81 판가 arm SCM_MST_FUTURE_PRICE) 나쁜 계획 1955571232 (TIMESTAMP=생성)
+(0, 'INSERT STATEMENT ', None, None, 1717, '11-06 14:13:21')
+(1, ' LOAD TABLE CONVENTIONAL ', 'GT_DMF0082_TEMP_FCST_N_PRICE', None, None, '11-06 14:13:21')
+(2, '  VIEW ', None, 1, 1717, '11-06 14:13:21')
+(3, '   WINDOW SORT', None, 1, 1717, '11-06 14:13:21')
+(4, '    FILTER ', None, None, None, '11-06 14:13:21')
+(5, '     NESTED LOOPS ', None, 1, 1716, '11-06 14:13:21')
+(6, '      MERGE JOIN CARTESIAN', None, 1, 404, '11-06 14:13:21')
+(7, '       MERGE JOIN CARTESIAN', None, 1, 402, '11-06 14:13:21')
+(8, '        TABLE ACCESS FULL', 'GT_DMF0082_TEMP_SITE_ITEM', 1, 400, '11-06 14:13:21')
+(9, '        BUFFER SORT', None, 14, 2, '11-06 14:13:21')
+(10, '         TABLE ACCESS FULL', 'GT_DMF0082_T_WS_FCST', 14, 2, '11-06 14:13:21')
+(11, '       BUFFER SORT', None, 20, 402, '11-06 14:13:21')
+(12, '        TABLE ACCESS FULL', 'GT_DMF0082_TEMP_SELECT_MEASURE', 20, 2, '11-06 14:13:21')
+(13, '      TABLE ACCESS BY INDEX ROWID BATCHED', 'SCM_MST_FUTURE_PRICE', 1, 1312, '11-06 14:13:21')
+(14, '       INDEX RANGE SCAN', 'IDX02_SCM_MST_FUTURE_PRICE', 1, 1311, '11-06 14:13:21')
+
+## 3. 정상 계획 2726473740 (V$SQL child 0/1 · FIRST_LOAD 2026-10-22)
+(0, 'INSERT STATEMENT ', None, None, 155460)
+(1, ' LOAD TABLE CONVENTIONAL ', 'GT_DMF0082_TEMP_FCST_N_PRICE', None, None)
+(2, '  VIEW ', None, 38292, 155460)
+(3, '   WINDOW SORT', None, 38292, 155460)
+(4, '    FILTER ', None, None, None)
+(5, '     HASH JOIN ', None, 38292, 68813)
+(6, '      TABLE ACCESS FULL', 'GT_DMF0082_TEMP_SELECT_MEASURE', 31, 2)
+(7, '      HASH JOIN ', None, 38292, 68811)
+(8, '       TABLE ACCESS FULL', 'GT_DMF0082_T_WS_FCST', 14, 2)
+(9, '       HASH JOIN ', None, 43763, 68809)
+(10, '        TABLE ACCESS BY INDEX ROWID BATCHED', 'SCM_MST_FUTURE_PRICE', 155926, 46353)
+(11, '         INDEX SKIP SCAN', 'IX_YYYYMMDD_SCM_MST_FUTURE_PRICE', 155926, 510)
+(12, '        TABLE ACCESS FULL', 'GT_DMF0082_TEMP_SITE_ITEM', 43763, 401)
+
+## 4. DBA_HIST_SQLSTAT d019r0hbb0muh 계획별 (스냅샷 종료시각, 실행, 경과s, CPUs, buffer gets, rows)
+(682, '04:00', 2027738766, 0, 0, 0, 0, 0)
+(682, '04:00', 2726473740, 5, 26, 13, 1091076, 1457076)
+(683, '05:00', 2027738766, 0, 0, 0, 0, 0)
+(683, '05:00', 2726473740, 7, 36, 17, 1346244, 2350878)
+(685, '07:00', 2027738766, 0, 0, 0, 0, 0)
+(685, '07:00', 2726473740, 12, 62, 30, 2437337, 3807954)
+(693, '15:00', 1955571232, 2, 564, 563, 68489408, 273)
+(693, '15:00', 2027738766, 9, 28, 15, 2122635, 893802)
+(693, '15:00', 2726473740, 5, 2, 2, 356807, 188304)
+(694, '16:00', 1955571232, 0, 6652, 6609, 659216745, 0)
+(694, '16:00', 1955571232, 0, 6658, 6615, 659804807, 0)
+(694, '16:00', 2027738766, 6, 48, 23, 1900978, 2078763)
+(694, '16:00', 2726473740, 0, 0, 0, 0, 0)
+(695, '17:00', 1955571232, 0, 29016, 20464, 1359125520, 0)
+(695, '17:00', 1955571232, 0, 29022, 20470, 1359713582, 0)
+(695, '17:00', 2027738766, 0, 0, 0, 0, 0)
+(695, '17:00', 2726473740, 0, 0, 0, 0, 0)
+
+## 5. DBA_HIST_ACTIVE_SESS_HISTORY 14:05~17:15 d019r0hbb0muh 세션별 (첫/끝 표본, 초, 계획)
+(741, 37012, 'JDBC Thin Client', '14:13:40', '14:22:50', 1120, 1955571232)
+(613, 6806, 'JDBC Thin Client', '14:18:00', '14:18:00', 20, 2027738766)
+(875, 34127, 'JDBC Thin Client', '14:20:10', '14:20:10', 20, 2027738766)
+(875, 59483, 'JDBC Thin Client', '15:20:52', '17:10:05', 13120, 1955571232)
+(394, 28639, 'JDBC Thin Client', '15:21:02', '15:21:02', 20, 2027738766)
+(272, 11661, 'JDBC Thin Client', '15:22:12', '15:22:12', 20, 2027738766)
+(404, 28326, 'JDBC Thin Client', '15:23:22', '15:23:22', 20, 2027738766)
+(741, 45862, 'JDBC Thin Client', '15:25:32', '15:25:42', 40, 2027738766)
+(394, 6820, 'JDBC Thin Client', '15:31:02', '17:10:05', 11900, 1955571232)
+(398, 6805, 'JDBC Thin Client', '15:36:02', '17:10:05', 11300, 1955571232)
+(741, 49871, 'JDBC Thin Client', '15:48:33', '17:10:05', 9800, 1955571232)
+(272, 18000, 'JDBC Thin Client', '15:53:33', '17:09:45', 9160, 1955571232)
+(730, 56650, 'JDBC Thin Client', '16:03:53', '17:10:05', 7960, 1955571232)
+(396, 27044, 'JDBC Thin Client', '16:08:53', '17:10:05', 7360, 1955571232)
+(404, 24038, 'JDBC Thin Client', '16:12:23', '17:10:05', 6940, 1955571232)
+(613, 44556, 'JDBC Thin Client', '16:17:23', '17:10:05', 6340, 1955571232)
+
+## 6. V$ACTIVE_SESSION_HISTORY 나쁜 계획 실행 중 소비 지점 (plan line, op, 표본수, CPU)
+(14, 'INDEX RANGE SCAN', 31972, 24602, 'resmgr:cpu quantum')
+(13, 'TABLE ACCESS BY INDEX ROWID BATCHED', 5, 5, None)
+(11, 'BUFFER SORT', 1, 1, None)
+
+## 7. 원본 L1860~1890 (d019r0hbb0muh = PROGRAM_LINE# 1878)
+1860                 GROUP BY S.DIVISION_ID, S.PROJECT_CODE, S.SCM_SITE_ID, S.ITEM_ID, S.DOM_EXP, S.FCST_TYPE, S.INCOTERMS
+
+1861                        , S.MEASURE, S.PLANT_SITE_ID, S.YYYYMMDD ) A
+
+1862         INNER JOIN SCM_MGR.GT_DMF0082_TEMP_SELECT_MEASURE B
+
+1863             ON  B.MEASURE = A.MEASURE
+
+1864             AND NVL(B.USER_ID, '/') <> 'DM_ADMIN'   -- 강제 포함분(실적 Unit Price 계산 전용)은 계획구간 적재 제외
+
+1865         INNER JOIN SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM C
+
+1866             ON  C.DIVISION_ID  = A.DIVISION_ID
+
+1867             AND C.PROJECT_CODE = A.PROJECT_CODE
+
+1868             AND C.SCM_SITE_ID  = A.SCM_SITE_ID
+
+1869             AND C.ITEM_ID      = A.ITEM_ID
+
+1870             AND C.ITEM_VALID_YN = 'Y'
+
+1871         INNER JOIN SCM_MGR.GT_DMF0082_T_WS_FCST D
+
+1872             ON  D.FCST_TYPE = A.FCST_TYPE
+
+1873         WHERE  A.QTY <> 0;
+
+1874         END IF;  --[E20261002-DMF0082-81MKTAMT]
+
+1875 
+
+1876         -- 판가 (DM_PLN_CFM_SELLING_PRICE)
+
+1877         IF (p_division_id LIKE '81%' OR p_division_id = '82') THEN  --[DIV81] 81 테이블 분기 (하단 ELSE=40 원문 무수정)
+
+1878         INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+
+1879         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS
+
+1880         , MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY, MEASURE_GROUP
+
+1881         , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER, DEPT_ID, DEPT_NAME_KO
+
+1882         , FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE, PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE
+
+1883         , SOLDTO_CUSTOMER, COUNTRY_NAME, CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN
+
+1884         , CUST_GROUP, CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY
+
+1885         , FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL, FORECAST_INFO_SPEC
+
+1886         , FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME, CELL_PER_CAR, CELL_PER_MODULE
+
+1887         , MODULE_PER_CAR, SORT_ORDER_NO, ENERGE, CELL_QUANTITY, AS_FROM_SITE
+
+1888         , CREATE_DATE, LAST_UPDATED_BY, SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT
+
+1889         , CURRENCY, VERSION_NO, CUTOFF_YYYYMMDD, NOTATION)
+
+1890         --[E20260930-DMF0082ONEREAD] 구본 (IDX02 힌트 + T_LAST_DATA_SETUP_PRICE LD 조인) — 아래 신 SELECT 로 대체
+
+1891 --        SELECT /*+ INDEX(A IDX02_SCM_MST_FUTURE_PRICE) */ A.DIVISION_ID
+
+1892 --             , A.PROJECT_CODE
+
+1893 --             , A.PROJECT_CODE AS END_CUSTOMER  --[DIV81] 81 규약: END_CUSTOMER=PROJECT_CODE
+
+1894 --             , A.SCM_SITE_ID
+
+1895 --             , A.ITEM_ID
+
+1896 --             , A.DOM_EXP
+
+1897 --             , A.FCST_TYPE
+
+1898 --             , A.INCOTERMS
+
+1899 --             , A.MEASURE
+
+1900 --             , A.PLANT_SITE_ID
+
+1901 --             , '-' AS CELL_PROD_SITE_ID  --[DIV81] 컬럼 부재
+
+1902 --             , A.YYYYMMDD
+
+1903 --             , NVL(A.PRICE, 0)
+
+1904 --             , B.MEASURE_GROUP
+
+1905 --             , C.CELL_MODEL
+
+1906 --             , C.NICK_NAME
+
+1907 --             , C.DMS_SALES
+
+1908 --             , C.DMS_CUSTOMER
+
+1909 --             , C.OWNER
+
+1910 --             , C.DEPT_ID
+
+1911 --             , C.DEPT_NAME_KO
+
+1912 --             , C.FORECAST_INFO_CELL_PACK_COUNT
+
+1913 --             , C.ITEM_TYPE
+
+1914 --             , C.PROJECT_NAME
+
+1915 --             , C.PROJECT_OWNER
+
+1916 --             , C.BIZ_TYPE
+
+1917 --             , C.SOLDTO_CUSTOMER
+
+1918 --             , C.COUNTRY_NAME
+
+1919 --             , C.CITY_NAME
+
+1920 --             , C.PROJECT_STATUS
+
+1921 --             , C.ITEM_NAME
+
+1922 --             , C.VMI_YN
+
+1923 --             , C.CUST_GROUP
+
+1924 --             , C.CUST_GROUP_DTL
+
+1925 --             , C.APPLICATION
+
+1926 --             , C.ROUTE
+
+1927 --             , C.MDM_PROJECT_NAME
+
+1928 --             , C.MIN_CAPACITY
+
+1929 --             , C.FORECAST_INFO_BIZ_TYPE
+
+1930 --             , C.CELL_TYPE
+
+1931 --             , C.FORECAST_INFO_ALL
+
+1932 --             , C.FORECAST_INFO_SPEC
+
+1933 --             , C.FORECAST_INFOR_VERSION
+
+1934 --             , C.CELL_MODEL_NICK_NAME
+
+1935 --             , C.CELL_PER_CAR
+

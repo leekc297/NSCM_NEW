@@ -1,0 +1,935 @@
+{
+ "screen": "SCP0016",
+ "generated": "2026-11-08 16:12:32",
+ "vars": {
+  "dtDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SCP0016_WaterfallShipmentPlanFG.cs:205 ← SCP0016_WaterfallShipmentPlanFG.cs:50",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtBizType": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "SEARCH:cboBizType"
+   ],
+   "ref": "SCP0016_WaterfallShipmentPlanFG.cs:208 ← SCP0016_WaterfallShipmentPlanFG.cs:207",
+   "rows": [
+    {
+     "CODE": "P",
+     "NAME": "Pack"
+    },
+    {
+     "CODE": "A",
+     "NAME": "Cell"
+    },
+    {
+     "CODE": "E",
+     "NAME": "Electrode"
+    }
+   ]
+  },
+  "dtElecType": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "SEARCH:clbElecType"
+   ],
+   "ref": "SCP0016_WaterfallShipmentPlanFG.cs:211 ← SCP0016_WaterfallShipmentPlanFG.cs:210",
+   "rows": [
+    {
+     "CODE": "ANODE",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "CATHODE",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "ONESIDE",
+     "NAME": "OneSide"
+    }
+   ]
+  },
+  "dtBucketType": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "BucketISO",
+   "targets": [
+    "SEARCH:cboBucketType"
+   ],
+   "ref": "SCP0016_WaterfallShipmentPlanFG.cs:216 ← SCP0016_WaterfallShipmentPlanFG.cs:215",
+   "rows": [
+    {
+     "CODE": "DAILY",
+     "NAME": "Daily"
+    },
+    {
+     "CODE": "WEEKLY",
+     "NAME": "Weekly"
+    },
+    {
+     "CODE": "MONTHLY",
+     "NAME": "Monthly"
+    },
+    {
+     "CODE": "WEEKLY_ISO",
+     "NAME": "Only Weekly"
+    }
+   ]
+  },
+  "dtVersion": {
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "code": "WaterfallVer_FG21",
+   "targets": [
+    "SEARCH:clbVersion"
+   ],
+   "ref": "SCP0016_WaterfallShipmentPlanFG.cs:239 ← SCP0016_WaterfallShipmentPlanFG.cs:55",
+   "rows": [
+    {
+     "CODE": "SP_W_20261019",
+     "NAME": "SP_W_20261019 (W43)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260824",
+     "NAME": "SP_W_20260824 (W35)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260817",
+     "NAME": "SP_W_20260817 (W34)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260810",
+     "NAME": "SP_W_20260810 (W33)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260803",
+     "NAME": "SP_W_20260803 (W32) (No Plan)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260727",
+     "NAME": "SP_W_20260727 (W31)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260720",
+     "NAME": "SP_W_20260720 (W30)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260713",
+     "NAME": "SP_W_20260713 (W29)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260706",
+     "NAME": "SP_W_20260706 (W28)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260629",
+     "NAME": "SP_W_20260629 (W27)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260622",
+     "NAME": "SP_W_20260622 (W26)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260615",
+     "NAME": "SP_W_20260615 (W25)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260608",
+     "NAME": "SP_W_20260608 (W24)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260601",
+     "NAME": "SP_W_20260601 (W23)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260525",
+     "NAME": "SP_W_20260525 (W22)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    },
+    {
+     "CODE": "SP_W_20260518",
+     "NAME": "SP_W_20260518 (W21)"
+    }
+   ]
+  }
+ }
+}

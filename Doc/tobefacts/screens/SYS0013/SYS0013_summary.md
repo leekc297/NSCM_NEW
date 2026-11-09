@@ -9,7 +9,7 @@
 |---|---|---|
 | features/admin/src/pages/dynamic-query/components/DynamicQueryColumnsGrid.tsx | component | 50 |
 | features/admin/src/pages/dynamic-query/components/DynamicQueryForm.tsx | component | 85 |
-| features/admin/src/pages/dynamic-query/components/DynamicQueryMainGrid.tsx | component | 149 |
+| features/admin/src/pages/dynamic-query/components/DynamicQueryMainGrid.tsx | component | 153 |
 | features/admin/src/pages/dynamic-query/components/DynamicQueryMetaForm.module.scss | component | 8 |
 | features/admin/src/pages/dynamic-query/components/DynamicQueryMetaForm.tsx | component | 74 |
 | features/admin/src/pages/dynamic-query/components/DynamicQueryModal.tsx | component | 653 |
@@ -58,9 +58,9 @@
 | InputField | onChange | <arrow> setSearchCondition | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryForm.tsx | 41 |
 | InputField | onChange | <arrow> setSearchCondition | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryForm.tsx | 55 |
 | CustomDropdown | onChange | <arrow> setSearchCondition | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryForm.tsx | 73 |
-| DataGrid | selectionChanged | handleSelectionChanged | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryMainGrid.tsx | 130 |
-| DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryMainGrid.tsx | 131 |
-| DynamicQueryModal | onSaved | <arrow> gridRef.current?.collectionView.refresh,gridRef.current?.invalidate | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryMainGrid.tsx | 141 |
+| DataGrid | selectionChanged | handleSelectionChanged | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryMainGrid.tsx | 134 |
+| DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryMainGrid.tsx | 135 |
+| DynamicQueryModal | onSaved | <arrow> gridRef.current?.collectionView.refresh,gridRef.current?.invalidate | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryMainGrid.tsx | 145 |
 | InputField | onChange | <arrow> setReportNm | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryModal.tsx | 488 |
 | InputField | onChange | <arrow> setDescription | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryModal.tsx | 503 |
 | CustomDropdown | onChange | <arrow> setRole | jsx | features/admin/src/pages/dynamic-query/components/DynamicQueryModal.tsx | 522 |
@@ -131,15 +131,15 @@
 | LBL00718 | 3 |
 | LBL00608 | 3 |
 | LBL00720 | 3 |
-| MSG00149 | 1 |
-| MSG00150 | 9 |
-| MSG00148 | 1 |
+| MSG01486 | 1 |
+| MSG00013 | 9 |
+| MSG01166 | 1 |
 | LBL00760 | 1 |
 | LBL00652 | 2 |
 | LBL00359 | 1 |
 | LBL00646 | 2 |
 | LBL00621 | 2 |
-| LBL00622 | 2 |
+| LBL00108 | 2 |
 | LBL00726 | 2 |
 | LBL00111 | 1 |
 | LBL00107 | 1 |
@@ -164,7 +164,7 @@
 | code | const setSaveColumnsAndParametersList = useDynamicQueryStore( | features/admin/src/pages/dynamic-query/DynamicQuery.tsx | 139 |
 | code | ); | features/admin/src/pages/dynamic-query/DynamicQuery.tsx | 141 |
 | code | const missingValue = parameters.some(item => item.isUse && !item.value.trim()); | features/admin/src/pages/dynamic-query/DynamicQuery.tsx | 327 |
-| code | void setAlert({ type: 'alert', content: t('MSG00150', 'CONDITION에 해당하는 VALUE를 입력해 주세요.') }); | features/admin/src/pages/dynamic-query/DynamicQuery.tsx | 329 |
+| code | void setAlert({ type: 'alert', content: t('MSG00013', 'CONDITION에 해당하는 VALUE를 입력해 주세요.') }); | features/admin/src/pages/dynamic-query/DynamicQuery.tsx | 329 |
 | code | const leftover = findParamTokens(sql); | features/admin/src/pages/dynamic-query/DynamicQuery.tsx | 340 |
 | code | .map(n => `@${n}`) | features/admin/src/pages/dynamic-query/DynamicQuery.tsx | 347 |
 | code | }); | features/admin/src/pages/dynamic-query/DynamicQuery.tsx | 350 |

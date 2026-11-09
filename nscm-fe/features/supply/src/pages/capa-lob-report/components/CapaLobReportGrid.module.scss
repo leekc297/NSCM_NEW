@@ -12,3 +12,12 @@
 .negativeValue {
   color: #c0392b !important;
 }
+
+// 컬럼 개인화 셀 배경 (ColumnLayoutModal 저장 Cell Color) — 동적 hex 라 CSS 변수(--clr-cell-bg)로 받는다.
+//   선택 셀엔 미적용(:not) — 공통 선택 하이라이트(foundation _core.scss .wj-state-selected)가 그대로 이긴다
+//   (형제 ShipmentRequest.module.scss 선례). 색값은 변수·규칙은 여기 scss — inline 색 하드코딩 금지(§2.1 #5).
+.personalCellBg:not(:global(.wj-state-selected)):not(:global(.wj-state-multi-selected)):not(
+    :global(.wj-state-last-selected)
+  ) {
+  background-color: var(--clr-cell-bg) !important;
+}

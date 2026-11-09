@@ -1,28 +1,28 @@
-﻿set,column,asis_fill,tobe_fill,key_rows,mismatch,verdict,note
-1,CODE,1.000,1.000,56,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 56행 중 다름 0
-1,NAME,1.000,1.000,56,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 56행 중 다름 0
-1,division_id,1.000,1.000,56,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 56행 중 다름 0
-1,org_division_id,1.000,1.000,56,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 56행 중 다름 0
-1,SEQ,1.000,1.000,56,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 56행 중 다름 0
-2,CODE,0.990,0.990,98,0,PASS,채움 AS-IS 99% ↔ TO-BE 99% · 같은 키 98행 중 다름 0
-2,NAME,0.990,0.990,98,0,PASS,채움 AS-IS 99% ↔ TO-BE 99% · 같은 키 98행 중 다름 0
-2,division_id,1.000,1.000,98,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 98행 중 다름 0
-2,org_division_id,1.000,1.000,98,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 98행 중 다름 0
-3,CODE,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0
-3,NAME,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0
-3,division_id,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0
-3,org_division_id,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0
-3,operation_id,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0
-3,plant_id,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0
-3,factory_id,0.954,0.928,636,0,PASS,채움 AS-IS 95% ↔ TO-BE 93% · 같은 키 636행 중 다름 0
-3,SEQ,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0
-4,CODE,0.000,0.000,0,0,PASS,채움 AS-IS 0% ↔ TO-BE 0%
-4,NAME,0.000,0.000,0,0,PASS,채움 AS-IS 0% ↔ TO-BE 0%
-4,DIVISION_ID,0.000,0.000,0,0,PASS,채움 AS-IS 0% ↔ TO-BE 0%
-5,CODE,1.000,1.000,10,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 10행 중 다름 0
-5,NAME,1.000,1.000,10,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 10행 중 다름 0
-5,DIVISION_ID,1.000,1.000,10,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 10행 중 다름 0
-6,CODE,1.000,1.000,30,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 30행 중 다름 0
-6,NAME,1.000,1.000,30,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 30행 중 다름 0
-6,DIVISION_ID,1.000,1.000,30,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 30행 중 다름 0
-6,SEQ,1.000,1.000,30,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 30행 중 다름 0
+﻿set,column,asis_fill,tobe_fill,key_rows,mismatch,verdict,note,key_source,keys
+1,CODE,1.000,1.000,56,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 56행 중 다름 0,auto,code+name+divisionid
+1,NAME,1.000,1.000,56,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 56행 중 다름 0,auto,code+name+divisionid
+1,division_id,1.000,1.000,56,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 56행 중 다름 0,auto,code+name+divisionid
+1,org_division_id,1.000,1.000,56,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 56행 중 다름 0,auto,code+name+divisionid
+1,SEQ,1.000,1.000,56,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 56행 중 다름 0,auto,code+name+divisionid
+2,CODE,0.990,0.990,98,0,PASS,채움 AS-IS 99% ↔ TO-BE 99% · 같은 키 98행 중 다름 0,auto,code
+2,NAME,0.990,0.990,98,0,PASS,채움 AS-IS 99% ↔ TO-BE 99% · 같은 키 98행 중 다름 0,auto,code
+2,division_id,1.000,1.000,98,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 98행 중 다름 0,auto,code
+2,org_division_id,1.000,1.000,98,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 98행 중 다름 0,auto,code
+3,CODE,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0,auto,code+name+factoryid+plantid+operationid
+3,NAME,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0,auto,code+name+factoryid+plantid+operationid
+3,division_id,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0,auto,code+name+factoryid+plantid+operationid
+3,org_division_id,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0,auto,code+name+factoryid+plantid+operationid
+3,operation_id,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0,auto,code+name+factoryid+plantid+operationid
+3,plant_id,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0,auto,code+name+factoryid+plantid+operationid
+3,factory_id,0.954,0.928,636,0,PASS,채움 AS-IS 95% ↔ TO-BE 93% · 같은 키 636행 중 다름 0,auto,code+name+factoryid+plantid+operationid
+3,SEQ,1.000,1.000,636,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 636행 중 다름 0,auto,code+name+factoryid+plantid+operationid
+4,CODE,0.000,0.000,0,0,PASS,채움 AS-IS 0% ↔ TO-BE 0%,,
+4,NAME,0.000,0.000,0,0,PASS,채움 AS-IS 0% ↔ TO-BE 0%,,
+4,DIVISION_ID,0.000,0.000,0,0,PASS,채움 AS-IS 0% ↔ TO-BE 0%,,
+5,CODE,1.000,1.000,10,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 10행 중 다름 0,auto,divisionid+code
+5,NAME,1.000,1.000,10,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 10행 중 다름 0,auto,divisionid+code
+5,DIVISION_ID,1.000,1.000,10,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 10행 중 다름 0,auto,divisionid+code
+6,CODE,1.000,1.000,30,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 30행 중 다름 0,auto,code+name+divisionid
+6,NAME,1.000,1.000,30,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 30행 중 다름 0,auto,code+name+divisionid
+6,DIVISION_ID,1.000,1.000,30,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 30행 중 다름 0,auto,code+name+divisionid
+6,SEQ,1.000,1.000,30,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 30행 중 다름 0,auto,code+name+divisionid

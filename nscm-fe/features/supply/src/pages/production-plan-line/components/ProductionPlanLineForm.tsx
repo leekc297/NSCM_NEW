@@ -25,6 +25,7 @@ import {
   isCellTypeExtraSpecEnabled,
   isEeDivision,
   isElectrodeEnabled,
+  isStageEditableFor,
 } from '../utils/productionPlanLineEditLock';
 
 interface Props {
@@ -56,6 +57,7 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
   const set = useProductionPlanLineStore(s => s.setSearchCondition);
   const setDivision = useProductionPlanLineStore(s => s.setDivision);
   const setLatestVersion = useProductionPlanLineStore(s => s.setLatestVersion);
+  const setStageEditable = useProductionPlanLineStore(s => s.setStageEditable);
   const openSearchArea = useProductionPlanLineStore(s => s.openSearchArea);
 
   const tabId = useTabid();
@@ -302,6 +304,17 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
     setLatestVersion({ latestPlanStart: latestPlanDate, latestPlanSeq: firstPlanSeq });
   }, [latestPlanDate, firstPlanSeq, setLatestVersion]);
 
+  // 요청1(2026-11-04, FE 전용): 선택 plan stage 편집가능 여부를 Plan-type 콤보(선택값 + 옵션)로 판정해 스토어로 승격.
+  //   (1) FN 조회거나 (2) 콤보에 다음 단계(TE→PR→MA→SE→FN) 가 있으면 false. 그리드가 editContext.isStageEditable
+  //   로 소비해 그 경우 전건 읽기전용으로 막는다.
+  const stageEditable = useMemo(
+    () => isStageEditableFor(sc.planTypes[0] ?? '', planTypeOptions.map(o => o.value)),
+    [sc.planTypes, planTypeOptions]
+  );
+  useEffect(() => {
+    setStageEditable(stageEditable);
+  }, [stageEditable, setStageEditable]);
+
   // opGroup A/P → electrode ALL 고정 + disable (design 01 C1).
   useEffect(() => {
     if (!electrodeEnabled && sc.electrodeTypes.length > 0) set({ electrodeTypes: [] });
@@ -439,7 +452,7 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
           {/* Extra Spec — SP P_SCP0013_GET_EXTRA_SPEC(div=40) + OPERATION_GROUP 클라필터. div=40 에서만 enable. */}
           {multi(t(LBL.EXTRA_SPEC, '_Extra Spec'), sc.extraSpecs, extraSpecOptions, v => set({ extraSpecs: v }), !cellTypeEnabled)}
 
-          {/* Row1 — Plant Site / Line / Material / Model/Nickname(픽커 2개, 동일 팝업) */}
+          {/* Row1 — Plant Site / Line / Model/Nickname / Material(픽커 2개, 동일 팝업) */}
           {multi(t(LBL.PLANT_SITE, '_Plant Site'), sc.plantSiteIds, plantSiteOptions, v =>
             set({ plantSiteIds: v, lineIds: [] })
           )}
@@ -447,13 +460,14 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
           {/* Material(SCP0024 패리티) + Model/Nickname — 둘 다 MaterialByDivisionModal(COM0013) 픽커.
               AS-IS txtItemId(Material)·txtNickName(Nick Name) 분리 복원(사용자 지시 2026-10-12 — 2026-10-01
               통합 되돌림). Material→itemId(p_item_id), Model/Nickname→nickName(p_nick_name). 팝업 1회 선택이
-              둘을 함께 채운다(페이지 setSelectedValue: ITEM_ID→itemId / NICK_NAME→nickName). */}
-          {pickerField(t(LBL.MATERIAL, '_Material'), sc.itemId, v => set({ itemId: v }))}
+              둘을 함께 채운다(페이지 setSelectedValue: ITEM_ID→itemId / NICK_NAME→nickName).
+              Model/Nickname↔Material 순서 교체(사용자 지시 2026-11-03) — Model/Nickname 을 Material 앞으로. */}
           {pickerField(t(LBL.MODEL_NICKNAME, '_Model/Nickname'), sc.nickName, v => set({ nickName: v }))}
+          {pickerField(t(LBL.MATERIAL, '_Material'), sc.itemId, v => set({ itemId: v }))}
           {/* Model 줄의 남은 9칸을 비워 그 줄을 유지한다. 아래 Plan 버전이 Model 옆으로 올라오지 않게 하는 칸이다. */}
           <Grid size={9} />
 
-          {/* Row3 — Plan Date/Type/Seq / Bucket / Period / Sum. 접고펼침 없이 모두 항상 보이게 둔다(SCP0009
+          {/* Row3 — Plan Date/Type/Seq / Period / Bucket / Sum. 접고펼침 없이 모두 항상 보이게 둔다(SCP0009
               ShipmentPlanFgForm 동일, 사용자 지시 2026-11-02). extraConditions 를 넘기지 않아 펼치기 버튼도 없다. */}
           {/* Plan-date → Plan-type → Seq 는 AS-IS UsrCombo 단일선택 필수 종속 콤보(design 02 #9/#10). 공용
               PlanVersionCascade(종속 콤보 + 공유 캐스케이더)로 교체 — 클릭하면 date→type→seq 컬럼 팝업이 열려
@@ -481,17 +495,8 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
               }
             />
           </Grid>
-          {/* Bucket — chkAll 체크 시 AS-IS ChkAll_CheckedChanged 는 Daily 강제 → 선택 비활성(design 02 §1 row21/§3.3).
-              Bucket↔Period 순서 교체(사용자 지시 2026-10-21) — Bucket 을 Period 앞으로. */}
-          {single(
-            t(LBL.BUCKET, '_Bucket'),
-            sc.bucket,
-            bucketOptions,
-            v => set({ bucket: v as BUCKET_TYPE }),
-            false,
-            sc.chkAll
-          )}
-          {/* Period — Templates.tsx 의 임시 Period 컴포넌트(PeriodRangePicker)로 교체(사용자 지시 2026-10-01). */}
+          {/* Period — Templates.tsx 의 임시 Period 컴포넌트(PeriodRangePicker)로 교체(사용자 지시 2026-10-01).
+              Bucket↔Period 순서 재교체(사용자 지시 2026-11-03) — Period 를 Bucket 앞으로(2026-10-21 순서 되돌림). */}
           <Grid size={3}>
             <PeriodRangePicker
               className={commonStyles.formItem}
@@ -503,11 +508,20 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
               lastWeeks={divisionPeriod}
             />
           </Grid>
+          {/* Bucket — chkAll 체크 시 AS-IS ChkAll_CheckedChanged 는 Daily 강제 → 선택 비활성(design 02 §1 row21/§3.3). */}
+          {single(
+            t(LBL.BUCKET, '_Bucket'),
+            sc.bucket,
+            bucketOptions,
+            v => set({ bucket: v as BUCKET_TYPE }),
+            false,
+            sc.chkAll
+          )}
 
           {/* Sum(SUM 컬럼 토글). ALL/Line Assign 은 사용자 지시(2026-10-01)로 제거. SCP0009(ShipmentPlanFgForm)
               동일 패턴으로 교체 — 체크박스 앞·라벨 뒤(Checkbox labelText), FormItem 라벨 칸은 공백으로 두고
               customGrid 로 체크박스를 행 높이 기준 세로 중앙 정렬(사용자 지시 2026-10-21, Period 와 겹침 해소).
-              Row3 마지막 칸 size=3(cascade3+Bucket3+Period3+Sum3=12). */}
+              Row3 마지막 칸 size=3(cascade3+Period3+Bucket3+Sum3=12). */}
           <Grid size={3} className={commonStyles.customGrid}>
             <FormItem
               className={commonStyles.formItem}

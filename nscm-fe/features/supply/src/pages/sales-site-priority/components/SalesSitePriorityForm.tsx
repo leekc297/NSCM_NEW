@@ -96,6 +96,7 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
                 labelAlign='right'
                 render={() => (
                   <CustomDropdown
+                    disableClearable
                     useClearIcon
                     sortBy='label'
                     value={sc.divisionId}

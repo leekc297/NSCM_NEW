@@ -13,6 +13,9 @@ interface State {
   isOpenSearchArea: boolean;
   // Period 기본값(PERIOD_DEFAULT) 1회 적용 가드 — 이후 사용자 입력 보존 (design 02 §5, DMF0014 패턴).
   periodApplied: boolean;
+  // 권한 Division 코드(MyDivisionInEE_SCP 콤보 결과). Division 미선택 시 setFilters 가 이 코드를 열거해
+  //   보내 권한 밖 division 노출을 막는다(아래 setFilters 주석). page 가 콤보 로드 후 올린다.
+  authDivisions: string[];
 }
 
 interface Action {
@@ -23,6 +26,8 @@ interface Action {
   fetchStaticColumns: () => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
   applyPeriodDefault: (from: string, to: string) => void;
+  // page(콤보 소유)가 권한 Division 코드를 올린다 — setFilters 열거용.
+  setAuthDivisions: (codes: string[]) => void;
 }
 
 const initSearch: ScpIfBlockingSearch = {
@@ -38,6 +43,7 @@ const initState: State = {
   staticColumns: [],
   isOpenSearchArea: true,
   periodApplied: false,
+  authDivisions: [],
 };
 
 // 날짜 문자열 → YYYYMMDD 8자리(숫자만). drpPeriod `-` 제거 등가 (design 02 §5).
@@ -53,20 +59,29 @@ export const useScpIfBlockingStore = createPersistedStoreWithTab<State & Action>
       }),
     // 조회 필터 확정 — setFilter 참조 교체로 useTabProcQuery 자동 발사(refetch 직접호출 금지, nscm-patterns §5-1).
     //   p_division_id = 체크 CODE CSV(배열 금지, SRCH-06) / p_from·to_yyyymmdd(8자리) / language(@sesLangCd).
-    //   미선택(빈 배열)은 join('') 빈 문자열이 아니라 'ALL' 센티널로 보낸다 — GET SP 는 빈 문자열을
-    //   "매칭 division 없음"(0건)으로 보고 'ALL' 토큰일 때만 전체조회(V_DIV_ALL='Y')한다. 다중+ALL 공통 규약
-    //   (SSP0003 선례, [[material-by-division-modal-all-sentinel]]). AS-IS ALL 선택 = 전체 CODE 열거와 등가.
+    //   Division 미선택(빈 배열)은 리터럴 'ALL' 이 아니라 권한 Division 코드(authDivisions)를 열거해 보낸다 —
+    //   AS-IS GetCheckedListValue 2-arg(SCM0019_SCP_Interface_Blocking.cs:177)가 clbDivision "전체 체크"를
+    //   dtMyDivision(권한 division) 코드로 펼친 것과 등가. GET SP(PKG_SCM0019)는 P_DIVISION_ID 에 'ALL' 이
+    //   있으면 V_DIV_ALL='Y' 로 전체 division 을 반환하고 서버측 권한 재필터가 없어(ora.py 실측), 그 외엔
+    //   DIVISION_ID IN(split) 로 좁힌다 — 즉 'ALL' 을 보내면 권한 밖 division 데이터까지 노출된다(인가 우회).
+    //   권한 코드 열거로 IN(auth) 가드를 태운다(SCP0101/SCP0084 선례). 표시용 search.divisionIds 는 빈 배열 유지.
     setFilters: () => {
       const { divisionIds, fromYyyymmdd, toYyyymmdd } = get().search;
+      const divisionId =
+        divisionIds.length > 0 ? divisionIds.join(',') : get().authDivisions.join(',');
       set(state => {
         state.filters = {
-          divisionId: divisionIds.length > 0 ? divisionIds.join(',') : 'ALL',
+          divisionId,
           fromYyyymmdd: toYmd(fromYyyymmdd),
           toYyyymmdd: toYmd(toYyyymmdd),
           language: useSessionStore.getState().session.langCd ?? '',
         };
       });
     },
+    setAuthDivisions: codes =>
+      set(state => {
+        if (state.authDivisions.join(',') !== codes.join(',')) state.authDivisions = codes;
+      }),
     clearFilters: () =>
       set(state => {
         state.filters = undefined;

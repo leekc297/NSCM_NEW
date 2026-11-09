@@ -138,15 +138,17 @@ export const LongTermStock = ({ tabId, title }: PageProps<MENU_ID>) => {
   }, [tabId]);
 
   // 버튼 게이트 — search=hasButton('SEARCH')+권한0행 차단(R8) / save=hasButton('SAVE')(진입 즉시
-  //   수정모드라 editable 게이트 없음) / excel=실동작 / insert·delete=표시만(no-op) — 사용자 요청
-  //   2026-10-12 "안 쓰지만 달아놔": 버튼은 노출하되 행추가/삭제는 미사용(핸들러 무동작) /
+  //   수정모드라 editable 게이트 없음) / excel=실동작 / insert·delete=숨김(AS-IS 행추가/삭제 미제공) /
   //   manual·upload=미사용. Edit 버튼 제거(진입 즉시 수정모드).
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') && !noDivisionAuth ? handleSearch : false,
     save: hasButton('SAVE') ? () => void handleSave() : false,
     excel: handleExcel,
-    insert: false, // 행 추가 미사용 — 기능 없는 공통버튼은 숨김(TO-BE 룰 2026-10-26, 종전 no-op 노출 폐지)
-    delete: false, // 행 삭제 미사용 — 같은 룰
+    // 기존 no-op 표시 바인딩 보존 (2026-11-06): 동작 없는 버튼 노출 방지로 숨김 전환
+    // insert: () => undefined,
+    // delete: () => undefined,
+    insert: false,
+    delete: false,
     manual: false,
     upload: false,
   };

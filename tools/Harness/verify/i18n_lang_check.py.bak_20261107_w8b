@@ -1,0 +1,153 @@
+# -*- coding: utf-8 -*-
+"""언어 전환 문구 판정(2026-11-02 엔진 갭 EG361)
+
+  python tools/Harness/verify/i18n_lang_check.py <MENU_ID>   → Doc/verify/<ID>/i18n_lang.csv (eg_ingest 가 I2 행으로 반입)
+  python tools/Harness/verify/i18n_lang_check.py --selftest   판정 변이 입증
+
+  입력: E2E 덤프 Doc/verify/<ID>/lang_texts.json(언어별 라벨·버튼·헤더·'_' 폴백) · SCM_ADM_MSG_M(새로 조회)
+  판정: '_' 폴백 = FAIL · 한글 라벨이 ENG/CHN 화면에 있음 = FAIL · 다른 언어 등록 문구가 그대로 노출(현재 언어 문구가 따로 등록됨) = FAIL
+        번역 미등록(그 코드에 현재 언어 행 없음) = ERROR · 사전에 없는 문구 = 건수만
+  한계: 데이터 값·콤보 후보·서버 메시지는 재지 않는다 — 화면 라벨 표면만
+"""
+import re, csv, json, os, re, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
+csv.field_size_limit(10 ** 8)
+KO = re.compile(r'[가-힣]')
+COLS = ['lang', 'result', 'why']
+
+
+def norm(t):
+    return re.sub(r'\s+', ' ', re.sub(r'\(F\d+\)$|[*.]$', '', (t or '').strip())).strip()  # 단축키·필수 표시·끝 점('Div'↔'Div.')은 같은 문구
+
+
+def judge(lang, texts, untr, by_text, by_id, where=None):
+    """by_text 문구 → {(id, 언어)} · by_id (id, 언어) → 문구 · where 문구 → 위치 설명(2026-11-06 사용자 지시 SCP0084 27·28번:
+    '정확하게 어떤 항목에 대한 LABEL 인지 기재' — 조회조건 라벨/그리드 헤더(시트·컬럼 ID)/버튼 · 없으면 종전 표기)"""
+    where = where or {}
+    loc = lambda t: f" · {where[t]}" if t in where else ''
+    if not texts:
+        return 'ERROR', '[측정 경로 없음] 수집 문구 0'
+    if untr:
+        return 'FAIL', f"'_' 폴백 {len(untr)}건: {untr[:5]}"
+    wrong, miss, unknown, ok = [], [], [], 0
+    for t0 in sorted(set(texts)):
+        t = norm(t0)
+        if not t:
+            continue
+        hits = by_text.get(t, set())
+        if any(l == lang for _, l in hits):
+            ok += 1
+            continue
+        if lang != 'KO' and KO.search(t):
+            wrong.append(f"'{t}'(한글{loc(t)})")
+            continue
+        if not hits:
+            unknown.append(t)
+            continue
+        cur = {by_id.get((i, lang)) for i, _ in hits}
+        cur.discard(None)
+        if cur:
+            wrong.append(f"'{t}'→'{sorted(cur)[0]}'{('(' + where[t].lstrip(' ·') + ')') if t in where else ''}")
+        else:
+            miss.append(t)
+    tail = f' · 사전에 없는 문구 {len(unknown)}건' if unknown else ''
+    if wrong:
+        return 'FAIL', f'{lang} 화면에 다른 언어 문구 {len(wrong)}건: {", ".join(wrong[:12])}{tail}'
+    if miss:
+        return 'ERROR', f'[확인 대상] {lang} 번역 미등록 {len(miss)}건: {miss[:6]}{tail}'
+    return 'PASS', f'{lang} 문구 {ok}건 일치{tail}'
+
+
+def selftest():
+    for nm, by, want in (('조회 버튼 정상', {'KO': ['Search(F5)'], 'EN': ['Search(F5)']}, 'PASS'), ('기본값 폴백', {'KO': ['Search'], 'EN': ['Search(F5)']}, 'FAIL'), ('버튼 못 찾음', {'KO': ['X'], 'EN': ['Search(F5)']}, 'ERROR'), ('조회 없음', {'KO': ['X']}, 'NA')):
+        got = judge_search_btn(by)[0]
+        print(f"{'OK ' if got == want else 'NG '} {nm} → {got}(기대 {want})")
+        if got != want:
+            return 1
+    bt = {'저장': {('L1', 'KO')}, 'Save': {('L1', 'EN')}, '保存': {('L1', 'CN')}, '삭제': {('L2', 'KO')}}
+    bi = {('L1', 'KO'): '저장', ('L1', 'EN'): 'Save', ('L1', 'CN'): '保存', ('L2', 'KO'): '삭제'}
+    cases = [('영어 정상', judge('EN', ['Save'], [], bt, bi), 'PASS'), ('영어에 한글', judge('EN', ['Save', '조회'], [], bt, bi), 'FAIL'), ('다른 언어 문구', judge('CN', ['Save'], [], bt, bi), 'FAIL'), ('번역 미등록', judge('KO', ['Save'], [], {'Save': {('L9', 'EN')}}, {('L9', 'EN'): 'Save'}), 'ERROR'), ('폴백', judge('EN', ['Save'], ['_x'], bt, bi), 'FAIL'), ('수집 0', judge('EN', [], [], bt, bi), 'ERROR'), ('사전 밖', judge('EN', ['Save', 'XYZ'], [], bt, bi), 'PASS'), ('단축키 표기', judge('EN', ['Save(F7)'], [], bt, bi), 'PASS'), ('끝 점', judge('EN', [norm('Save.')], [], bt, bi), 'PASS')]
+    bad = 0
+    for n, got, want in cases:
+        k = got[0] == want
+        bad += 0 if k else 1
+        print(f"{'OK ' if k else 'NG '} {n} → {got[0]}(기대 {want}) {got[1]}")
+    print(f'{len(cases) - bad}/{len(cases)}')
+    return 1 if bad else 0
+
+
+def judge_search_btn(by_lang):
+    """언어별 버튼 문구 — 조회 버튼이 미등록 코드 기본값 'Search' 로 나오면 FAIL (EG333)"""
+    found = {l: [b for b in bs if re.match(r'^(search|조회|查询)', b.strip(), re.I)] for l, bs in by_lang.items()}
+    if not any(found.values()):
+        return 'NA', '조회 버튼 없음'
+    miss = [l for l, v in found.items() if not v]
+    if miss:
+        return 'ERROR', f'[확인 대상] {miss} 에서 조회 버튼 문구를 못 찾음 — {found}'
+    bad = [l for l, v in found.items() if any(b.strip().lower() == 'search' for b in v)]
+    if bad:
+        return 'FAIL', f"{bad} 조회 버튼이 기본값 'Search' — 라벨 코드 미등록 폴백"
+    return 'PASS', '조회 버튼 ' + ' · '.join(f'{l} {v[0]}' for l, v in found.items())
+
+
+def main(mid):
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, 'lang_texts.json')
+    if not os.path.exists(p):
+        print(f'[i18n_lang] {mid}: lang_texts.json 없음 — 생략')
+        return 0
+    d = json.load(open(p, encoding='utf-8'))
+    from dbconn import connect
+    by_text, by_id = {}, {}
+    with connect('tobe') as cx:
+        cur = cx.cursor()
+        cur.execute('select msg_id, lang_cd, msg_nm from SCM_ADM_MSG_M')
+        for i, l, t in cur.fetchall():
+            if t:
+                n = norm(t)
+                by_text.setdefault(n, set()).add((i, l))
+                by_id[(i, l)] = n
+        # 위치 설명용 — 이 화면 메타(SCM_MST_SHEET_COLUMNS)의 컬럼 라벨·다단 헤더 라벨 → 시트·컬럼 ID (라벨이 LBL 코드가 아니라 문자열로 들어간 칸을 짚기 위해)
+        col_of = {}
+        try:
+            cur.execute("select sheet_name, column_name, column_label_name, small_class_label_name, large_class_label_name from SCM_MST_SHEET_COLUMNS where program_id = :p", p=mid)
+            for sh, cn, lb, sm, lg in cur.fetchall():
+                for v, kind in ((lb, '컬럼 라벨'), (sm, '헤더 소분류'), (lg, '헤더 대분류')):
+                    if v:
+                        col_of.setdefault(norm(v), []).append(f'{sh}.{cn} {kind}')
+        except Exception as e:
+            print(f'[i18n_lang] {mid}: 컬럼 메타 조회 실패({str(e)[:80]}) — 위치 설명 생략')
+    res = []
+    for lang, x in d.items():
+        if x.get('why'):
+            res.append({'lang': lang, 'result': 'ERROR', 'why': f"[측정 경로 없음] {x['why']}"})
+            continue
+        where = {}
+        for kind, arr in (('조회조건·화면 라벨', x.get('labels') or []), ('그리드 헤더', x.get('headers') or []), ('버튼', x.get('buttons') or [])):
+            for t in arr:
+                n = norm(t)
+                if n and n not in where:
+                    cols = col_of.get(n) or []
+                    where[n] = kind + (f" = 메타 {', '.join(sorted(set(cols))[:3])}(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)" if cols and KO.search(n) else (f" = 메타 {', '.join(sorted(set(cols))[:3])}" if cols else ''))
+        r, why = judge(lang, (x.get('labels') or []) + (x.get('headers') or []) + (x.get('buttons') or []), x.get('untr') or [], by_text, by_id, where)
+        res.append({'lang': lang, 'result': r, 'why': why})
+        if lang != 'KO' and x.get('koCells'):  # EG363 — 데이터 자체가 한글일 수 있어 확인 대상
+            res.append({'lang': lang + ' 데이터', 'result': 'ERROR', 'why': '[확인 대상] 그리드 칸 한글 ' + ', '.join(f'{k} {v}행' for k, v in list(x['koCells'].items())[:8]) + ' — 명칭 칸이면 언어 미반영'})
+        elif lang != 'KO':  # 행이 없으면 한글 0 은 근거가 아니다(2026-11-02 DMF0005 CN 의심)
+            gr = x.get('gridRows') or 0
+            res.append({'lang': lang + ' 데이터', 'result': 'PASS' if gr > 0 else 'ERROR', 'why': f'그리드 {gr}행 · 칸 한글 0(앞 200행)' if gr > 0 else f'[측정 경로 없음] 언어 전환 뒤 조회 {gr}행 — 언어 조회 실패 여부 확인 필요'})
+    _bl = {l: x.get('buttons') or [] for l, x in d.items() if not x.get('why')}
+    if _bl:
+        r, why = judge_search_btn(_bl)
+        res.append({'lang': '조회 버튼', 'result': r, 'why': why})
+    with open(os.path.join(ROOT, 'Doc', 'verify', mid, 'i18n_lang.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=COLS)
+        w.writeheader()
+        w.writerows(res)
+    print(f'[i18n_lang] {mid}: ' + ' / '.join(f"{x['lang']} {x['result']} {x['why'][:160]}" for x in res))
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(selftest() if sys.argv[1] == '--selftest' else main(sys.argv[1].upper()))

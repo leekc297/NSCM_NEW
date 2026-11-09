@@ -30,7 +30,11 @@ import {
 import type { LineInfoRow, PlanGroupRow, SearchInfoRow } from './plan-group-master.types';
 import { usePlanGroupMasterStore } from './usePlanGroupMasterStore';
 import type { ActionRow } from './utils/plan-group-master.save';
-import { buildActionRows, buildSavePayload } from './utils/plan-group-master.save';
+import {
+  buildActionRows,
+  buildSavePayload,
+  toSaveErrorMessage,
+} from './utils/plan-group-master.save';
 
 export const PlanGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
@@ -149,16 +153,10 @@ export const PlanGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     (defaults as Record<string, unknown>)[COLUMNS.OPMZ_PLAN_GR_ITEM_ID] = '';
     (defaults as Record<string, unknown>)[COLUMNS.PRE_PLAN_GR_ID] = '';
     (defaults as Record<string, unknown>)[COLUMNS.PRE_PLAN_GR_ITEM_ID] = '';
-    GridAction.addRow(grid, defaults, 'above', true);
-  };
-
-  // Delete (사용자 지시 2026-10-14) — 선택행 삭제. 미저장 신규행은 그리드에서 제거, 기존행은 CRUD_TYPE='D'
-  //   마킹 후 저장 시 SAVE SP 의 'D' 경로(DELETE WHERE line/op/factory/plant + pre 키, 03_grid §3-d)로 반영.
-  //   canEdit 아니면 비활성(hotkeyConfig 차단) + 그리드 isReadOnly 로 removeRow 자체가 no-op.
-  const handleDelete = () => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    GridAction.removeRow(grid);
+    const added = GridAction.addRow(grid, defaults, 'above', true);
+    // 선택을 새 행으로 옮긴다 — 원래 행에 남으면 바로 Delete 할 때 새 행이 아니라 원래 행이 삭제 대상이 된다.
+    const addedRow = grid.rows.findIndex(row => row.dataItem === added);
+    if (addedRow >= 0) grid.select(addedRow, Math.max(grid.selection.col, 0));
   };
 
   // ^-결합 payload → call-proc 실제 저장 (SP MISSING — convert-sp 후속). false-success 판별(§5-10).
@@ -186,6 +184,12 @@ export const PlanGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       editTrackerRef.current?.clearChanges();
       void refetchMain();
+    } catch (error) {
+      // 저장 거부(결과 커서 CODE ≠ 0) — 공용 응답 처리가 오류로 던진다. 변경 표시는 그대로 둔다(갭분석 C-20).
+      void setAlert({
+        type: 'alert',
+        content: toSaveErrorMessage(error) ?? t(MSG.SAVE_FAIL, '_An error occurred while saving.'),
+      });
     } finally {
       savingRef.current = false;
     }
@@ -226,8 +230,12 @@ export const PlanGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     search: hasButton('SEARCH') ? handleSearch : false,
     save: hasButton('SAVE') && canEdit ? handleSave : false,
     insert: hasButton('INSERT') && canEdit ? handleInsert : false,
-    // Delete (사용자 지시 2026-10-14) — 선택행 삭제. 버튼권한 DELETE + canEdit 게이트.
-    delete: hasButton('DELETE') && canEdit ? handleDelete : false,
+    // Delete 미이식 — AS-IS SCP0121 에는 Delete 버튼이 없다(DeleteButton 오버라이드 없음). 삭제는
+    //   기존행 Plan Group 공백화 후 저장 시 'D' 처리뿐(cs:584-588). 전용 Delete 버튼 금지(AS-IS 일치,
+    //   사용자 지시 2026-11-03).
+    //   필수: false 로 명시한다 — 키를 생략하면 공용 SubTitle 의 DefaultButtonActions(F9=removeRow)가
+    //   스프레드 머지에서 그대로 살아남아 버튼이 노출·동작한다(delete===false 일 때만 숨김, SubTitle:420).
+    delete: false,
     manual: false,
     upload: false,
   };

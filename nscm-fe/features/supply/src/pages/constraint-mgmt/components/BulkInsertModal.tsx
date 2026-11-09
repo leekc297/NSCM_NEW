@@ -6,7 +6,7 @@ import { Button, FormItem, InputField } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { useMessageStore } from '@shared/stores';
 
-import { BULK_INSERT_MAX, BULK_INSERT_MIN, LBL, MSG } from '../constraint-mgmt.constants';
+import { BULK_INSERT_DEFAULT, BULK_INSERT_MAX, BULK_INSERT_MIN, LBL, MSG } from '../constraint-mgmt.constants';
 
 import styles from './BulkInsertModal.module.scss';
 
@@ -26,11 +26,11 @@ interface Props {
 export const BulkInsertModal = ({ open, modalClose, lookupType, onConfirm }: Props) => {
     const { t } = useTranslation();
     const setAlert = useMessageStore.getState().setAlert;
-    const [count, setCount] = useState('');
+    const [count, setCount] = useState(String(BULK_INSERT_DEFAULT));
 
     // 다시 열 때마다 입력칸을 비운다.
     useEffect(() => {
-        if (open) setCount('');
+        if (open) setCount(String(BULK_INSERT_DEFAULT));
     }, [open]);
 
     const handleSubmit = () => {
@@ -61,24 +61,27 @@ export const BulkInsertModal = ({ open, modalClose, lookupType, onConfirm }: Pro
             type='modal'
             position='basic'
             size={600}
+            // height 미지정 시 기본 '50vh' 라 내용(안내 + Lookup Type + 건수 입력 + 버튼)에 비해
+            //   세로로 과도하게 길다(사용자 신고 2026-11-05). 내용 높이에 맞춰 고정하고, 리사이즈
+            //   최소값도 초기 크기와 같게 둬 첫 드래그 시 기본 최소값(800x300)으로 튀지 않게 한다
+            //   (InsertMultipleModal 동형).
+            height={340}
             disableScale
+            minWidth={600}
+            minHeight={340}
             handleClose={modalClose}
             title='Bulk Insert'
             customContentArea={
                 <div className={styles.contentWrapper}>
                     <div className={styles.notice}>{`* 직접 입력, 최대 ${BULK_INSERT_MAX}건 가능`}</div>
 
-                    <div className={styles.sectionTitle}>{t(LBL.LOOKUP_VALUES, '_Lookup Values')}</div>
-
                     {/* 상위 Lookup Type — 보여주기만 하고 수정은 못 하게 disabled */}
-                    <div className={styles.lookupTypeBox}>
-                        <FormItem
-                            className={commonStyles.formItem}
-                            label={t(LBL.LOOKUP_TYPE, '_Lookup Type')}
-                            labelAlign='right'
-                            render={() => <InputField fullWidth disabled value={lookupType} />}
-                        />
-                    </div>
+                    <FormItem
+                        className={commonStyles.formItem}
+                        label={t(LBL.LOOKUP_TYPE, '_Lookup Type')}
+                        labelAlign='right'
+                        render={() => <InputField fullWidth disabled value={lookupType} />}
+                    />
 
                     {/* 추가 Row 수 — 숫자만 입력, Enter 로도 확인 */}
                     <FormItem

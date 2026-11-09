@@ -116,12 +116,31 @@ def write_csv(path, cursor, header=None, lower_header=True):
         cols = [c.lower() for c in cols]
     os.makedirs(os.path.dirname(path), exist_ok=True)
     n = 0
-    with open(path, 'w', newline='', encoding='utf-8-sig') as f:
-        w = csv.writer(f)
-        w.writerow(cols)
-        for row in cursor:
-            w.writerow(['' if v is None else (v.read() if hasattr(v, 'read') else v) for v in row])
-            n += 1
+    # 2026-11-06(동시 실행 영향 차단): 커서를 받는 동안(수 초) 반쯤 쓰인 CSV 를 다른 화면 실행(gen-e2e·검증엔진)이 읽지 않게
+    #   임시 파일에 다 쓴 뒤 원자 교체(os.replace). Windows 에서 다른 프로세스가 잠깐 열고 있으면(PermissionError) 0.25초 간격 최대 10초 재시도
+    tmp = f'{path}.{os.getpid()}.tmp'
+    try:
+        with open(tmp, 'w', newline='', encoding='utf-8-sig') as f:
+            w = csv.writer(f)
+            w.writerow(cols)
+            for row in cursor:
+                w.writerow(['' if v is None else (v.read() if hasattr(v, 'read') else v) for v in row])
+                n += 1
+        import time
+        for i in range(41):
+            try:
+                os.replace(tmp, path)
+                break
+            except PermissionError:
+                if i == 40:
+                    raise
+                time.sleep(0.25)
+    finally:
+        if os.path.exists(tmp):
+            try:
+                os.remove(tmp)
+            except OSError:
+                pass
     return n
 
 

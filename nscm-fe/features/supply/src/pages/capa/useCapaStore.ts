@@ -184,12 +184,12 @@ export const useCapaStore = createPersistedStoreWithTab<CapaState & CapaAction>(
       itemId: sp.materialId.trim() === '' ? 'ALL' : sp.materialId.trim(),
       nickName: 'ALL',
       bucket: sp.bucketDay ? 'D,M' : 'M',
-      // Loss = 조회조건 체크박스 사용자 값(cs:352 기본 N). Line/Tact/Yield = UI 없음 → CHECK_DEFAULTS(Y) 고정
-      //   (F6 복원값이 섞여도 고정값 유지).
+      // 체크박스 5종 사용자 값 전송(기본 Loss=N·Line/Tact/Yield=Y·Empty=N — 02 §4).
+      //   Line/Tact/Yield 는 사용자 지시(2026-11-04)로 UI 복원 → 더 이상 Y 고정이 아니라 사용자 값.
       checkLoss: sp.checkLoss ? 'Y' : 'N',
-      checkLine: 'Y',
-      checkTact: 'Y',
-      checkYield: 'Y',
+      checkLine: sp.checkLine ? 'Y' : 'N',
+      checkTact: sp.checkTact ? 'Y' : 'N',
+      checkYield: sp.checkYield ? 'Y' : 'N',
       checkEmpty: sp.checkEmpty ? 'Y' : 'N',
       userAuth,
       searchType: 'CAPA',

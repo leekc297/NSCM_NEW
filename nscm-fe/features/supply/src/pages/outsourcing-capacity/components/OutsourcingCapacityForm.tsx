@@ -58,7 +58,8 @@ export const OutsourcingCapacityForm = ({ onSearch, onItemSearch }: Props) => {
     [divisions]
   );
 
-  // division 기본값 = 첫 옵션 자동 선택. store 초기값(session.div)이 옵션에 없으면 첫 옵션으로 교정.
+  // division 기본값 = 콤보(EE 제외) 첫 옵션 자동 선택(AS-IS SCP0023 cs:50·135 GetDivisionWithoutEE
+  //   바인딩 후 첫 행 선택과 일치 — 세션/특정값 지정 없음). store 초기값('')이 옵션에 없으면 첫 옵션으로 교정.
   //   교정도 setDivision 경유(정본 SCP0025 Form 동일) — 초기 로드 시점이라 초기화 대상이 없어 사실상 Division 설정만 하고,
   //   공통 "Division 변경 = 조건·그리드 초기화" 규약을 한 액션으로 일원화한다.
   const firstDivision = divisionOptions[0]?.value ?? '';

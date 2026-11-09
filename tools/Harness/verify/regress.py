@@ -41,11 +41,24 @@ def harvest():
     pats = [os.path.join(ROOT, 'Doc', 'CheckList', '*_CheckList_v*.xlsx'), os.path.join(ROOT, 'Doc', 'CheckList', 'old', '*_CheckList_v*.xlsx'),
             os.path.join(ROOT, 'Doc', '화면분석서', '**', '*_정합검증서_v*.xlsx'), os.path.join(ROOT, 'Doc', '화면분석서', '**', '*_CheckList_v*.xlsx')]
     files = sorted({f for p in pats for f in glob.glob(p, recursive=True) if not os.path.basename(f).startswith('~$')}, key=os.path.getmtime)
-    ops = {}
+    # 2026-11-08 속도: 판 xlsx 262개를 매 실행 전부 여는 데 264s(SCP0122 --only K3 실측 · docs 단계의 95%) → 파일별 (mtime, size) 캐시 — 바뀐/새 판만 다시 읽는다(결과 동일 · 순서 = mtime)
+    CACHE = os.path.join(ROOT, 'Doc', 'verify', '_user_verdicts_cache.json')
+    try:
+        cache = json.load(open(CACHE, encoding='utf-8')) if os.path.exists(CACHE) else {}
+    except (OSError, ValueError):
+        cache = {}
+    ops = {}; hit = miss = 0
     for f in files:
         sid = os.path.basename(f).split('_')[0]
+        rel = os.path.relpath(f, ROOT).replace('\\', '/'); st = os.stat(f); key = f'{st.st_mtime_ns}:{st.st_size}'
+        c = cache.get(rel)
+        if c and c.get('key') == key:
+            for sid_, rid, *v in c.get('ops', []): ops[(sid_, rid)] = tuple(v)
+            hit += 1; continue
+        miss += 1; got = []
         try: wb = openpyxl.load_workbook(f, read_only=True, data_only=True)
-        except Exception: continue
+        except Exception:
+            cache[rel] = {'key': key, 'ops': []}; continue
         for ws in wb.worksheets:
             rows = list(ws.iter_rows(values_only=True))
             if not rows: continue
@@ -60,11 +73,24 @@ def harvest():
                 for c in ci:
                     if c < len(rr) and rr[c] and str(rr[c]).strip():
                         o = str(rr[c]).strip()
-                        ops[(sid, str(rr[1]))] = (o, str(rr[ri] if ri < len(rr) and rr[ri] else ''), str(rr[ti] if ti < len(rr) and rr[ti] else '')[:60], str(rr[ei] if ei is not None and ei < len(rr) and rr[ei] else '')[:160], os.path.relpath(f, ROOT))
-    with open(VERD, 'w', encoding='utf-8-sig', newline='') as fp:
+                        v_ = (o, str(rr[ri] if ri < len(rr) and rr[ri] else ''), str(rr[ti] if ti < len(rr) and rr[ti] else '')[:60], str(rr[ei] if ei is not None and ei < len(rr) and rr[ei] else '')[:160], os.path.relpath(f, ROOT))
+                        ops[(sid, str(rr[1]))] = v_; got.append([sid, str(rr[1]), *v_])
+        cache[rel] = {'key': key, 'ops': got}
+    # 2026-11-06(동시 실행 영향 차단): 여러 화면 CheckList 가 동시에 --harvest 하면 반쯤 쓰인 공용 파일을 다른 화면이 읽을 수 있었다 → 임시 파일 → 원자 교체
+    tmp = f'{VERD}.{os.getpid()}.tmp'
+    with open(tmp, 'w', encoding='utf-8-sig', newline='') as fp:
         w = csv.writer(fp); w.writerow(['menu_id', 'row_id', 'class', 'opinion', 'rule_id', 'target', 'explain', 'source_file'])
         for (s, rid), v in sorted(ops.items()): w.writerow([s, rid, cls(v[0]), v[0], v[1], v[2], v[3], v[4]])
-    print(f'사용자 판정 수집 {len(ops)}건 → {os.path.relpath(VERD, ROOT)}')
+    _replace(tmp, VERD)
+    try:  # 캐시도 원자 교체(동시 실행 보호) · 사라진 판 항목은 정리
+        live = {os.path.relpath(f, ROOT).replace('\\', '/') for f in files}
+        ctmp = f'{CACHE}.{os.getpid()}.tmp'
+        with open(ctmp, 'w', encoding='utf-8') as cf:
+            json.dump({k: v for k, v in cache.items() if k in live}, cf, ensure_ascii=False)
+        _replace(ctmp, CACHE)
+    except OSError as _ex:
+        print(f'[WARN] 판정 캐시 저장 실패(동작 영향 없음): {_ex}')
+    print(f'사용자 판정 수집 {len(ops)}건 → {os.path.relpath(VERD, ROOT)} · 판 {len(files)}개(캐시 적중 {hit} · 재파싱 {miss})')
     return ops
 
 
@@ -136,6 +162,13 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument('menus', nargs='*'); ap.add_argument('--harvest', action='store_true'); a = ap.parse_args()
     if a.harvest or not os.path.exists(VERD): harvest()
     verd = rd(VERD)
+    # 2026-11-06 W8(플랜 1-6·3-4): 대화·스냅샷 승인으로 받은 직접 판정(_user_verdicts_direct.csv)도 회귀 오라클 — PASS → 판정오류(다시 FAIL 이면 위반) · NA/SKIP → 대상아님 · FAIL → 실제오류확인
+    have = {(v['menu_id'], v['row_id']) for v in verd}
+    for d in rd(os.path.join(ROOT, 'Doc', 'verify', '_user_verdicts_direct.csv')):
+        v = (d.get('verdict') or '').strip().upper(); c = {'PASS': '판정오류', 'NA': '대상아님', 'SKIP': '대상아님', 'FAIL': '실제오류확인'}.get(v)
+        key = ((d.get('menu_id') or '').upper(), (d.get('row_id') or '').strip())
+        if c and key[1] and key not in have:
+            verd.append({'menu_id': key[0], 'row_id': key[1], 'class': c, 'opinion': d.get('opinion') or '', 'rule_id': '', 'target': '', 'explain': '', 'source_file': '_user_verdicts_direct.csv'}); have.add(key)
     menus = [m.upper() for m in a.menus] or sorted({v['menu_id'] for v in verd} | {os.path.basename(d) for d in glob.glob(os.path.join(ROOT, 'Doc', 'verify', '*')) if os.path.isdir(d) and os.path.exists(os.path.join(d, 'verify_ledger.csv'))})
     out = []; total = 0
     for mid in menus:
@@ -156,9 +189,38 @@ def main():
         for v in res['violations']: lines.append(f"- {v[0]} [{v[1]}] {v[2]} {v[3]} — {v[4]}")
         for o in res['oracle']: lines.append(f"- {'✔' if o['ok'] else '✖'} 오라클 {o['rule_id']} /{o['target_re']}/ 기대 {o['expected']} · 일치 {o['hits']}행{(' — ' + o['why']) if o['why'] else ''} · {o['note'][:80]}")
         lines.append('')
-    with open(REPORT, 'w', encoding='utf-8') as f: f.write('\n'.join(lines))
-    print(f"→ {os.path.relpath(REPORT, ROOT)} · 위반 {total}")
+    # 2026-11-06(사용자 지시 · 화면 ID 중간 폴더): 화면별 보고 Doc/verify/<ID>/_regress_report.md(그 화면 절만) — 동시에 도는 다른 화면이 공용 보고를 덮어써도
+    #   이 화면 CheckList 가 가리키는 보고는 남는다. 공용 Doc/verify/_regress_report.md 는 마지막 실행 전체(종전과 같음 · 원자 교체)
+    head = lines[:2]
+    for res in out:
+        sec, on = [], False
+        for ln in lines:
+            if ln.startswith('## '): on = ln.startswith(f"## {res['menu_id']} —")
+            if on: sec.append(ln)
+        omiss = [o for o in res['oracle'] if not o['ok']]
+        pd = os.path.join(ROOT, 'Doc', 'verify', res['menu_id'])
+        if os.path.isdir(pd):
+            _write_text(os.path.join(pd, '_regress_report.md'), '\n'.join(head + [lines[2], f"위반 합계: {len(res['violations']) + len(omiss)}", ''] + sec))
+    _write_text(REPORT, '\n'.join(lines))
+    print(f"→ {os.path.relpath(REPORT, ROOT)}{' · 화면별 Doc/verify/<ID>/_regress_report.md' if out else ''} · 위반 {total}")
     return 2 if total else 0
+
+
+def _replace(tmp, dst):
+    """원자 교체 — Windows 에서 다른 프로세스가 잠깐 열고 있으면(PermissionError) 0.25초 간격 최대 10초 재시도"""
+    import time
+    for i in range(41):
+        try:
+            os.replace(tmp, dst); return
+        except PermissionError:
+            if i == 40: raise
+            time.sleep(0.25)
+
+
+def _write_text(dst, text):
+    tmp = f'{dst}.{os.getpid()}.tmp'
+    with open(tmp, 'w', encoding='utf-8') as f: f.write(text)
+    _replace(tmp, dst)
 
 
 if __name__ == '__main__':

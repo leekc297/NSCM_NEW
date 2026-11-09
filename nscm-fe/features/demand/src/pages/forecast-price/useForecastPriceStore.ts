@@ -111,7 +111,7 @@ interface ForecastPriceAction {
   fetchStaticColumns: () => void;
   fetchStaticMeasures: () => void;
   fetchSavePriceColumns: (divisionId: string) => void;
-  fetchTemplateColumns: (divisionId: string) => Promise<void>;
+  fetchTemplateColumns: (divisionId: string) => Promise<RawFlexGridColumnConfig[]>;
   setStaticColumns: (staticColumns: RawFlexGridColumnConfig[]) => void;
   setDateColumns: (dateColumns: FlexGridColumnConfig[]) => void;
   setMeasureAuth: (rows: MeasureAuthRow[]) => void;
@@ -574,12 +574,15 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
           `/admin/menu/${MENU_ID}/column`,
           { sheetNm: TEMPLATE_META_SHEET, divisionId }
         );
+        const columns = result.data.result ?? [];
         // 이전 사업부의 늦은 응답이 현재 양식 메타를 덮어쓰지 않게 한다.
-        if (get().templateColumnsRequest !== request) return;
-        set({ templateColumns: result.data.result ?? [] });
+        if (get().templateColumnsRequest === request) set({ templateColumns: columns });
+        // Excel Form 직다운로드가 store 구독 없이 바로 쓰도록 조회 결과를 돌려준다.
+        return columns;
       } catch {
         // 빈 메타는 양식 생성 함수의 19컬럼 폴백으로 처리한다.
         if (get().templateColumnsRequest === request) set({ templateColumns: [] });
+        return [];
       }
     },
     setStaticColumns: staticColumns => {

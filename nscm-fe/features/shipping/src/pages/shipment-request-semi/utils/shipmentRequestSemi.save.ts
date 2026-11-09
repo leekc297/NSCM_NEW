@@ -79,11 +79,31 @@ export const collectSaveCells = (
         ? Object.keys(row).filter(isDayBinding)
         : Object.keys(changed.get(row) ?? {}).filter(isDayBinding);
     for (const binding of bindings) {
-      // 기간셀 값은 숫자 또는 숫자 문자열이다(SP PIVOT `SUM(CASE…)` / 사용자 입력). 다른 타입은
-      //   `String()` 이 '[object Object]' 로 무너지므로 애초에 수집 대상에서 뺀다.
       const raw = row[binding];
+      // 빈 셀(null/undefined/'') 처리는 행 상태로 갈린다(사용자 결정 2026-11-09):
+      //   - 'M' 행: bindings 가 이미 EditTracker 추적 셀로 좁혀져 있어 빈 값은 곧 **사용자가 값을
+      //     지운 clear 셀**이다. clear 를 저장하려면 빈 문자열 '' 로 전송한다(AS-IS cs:891-937 ③
+      //     "값 비어있음 제외" 와 의도적으로 갈린다). EditTracker 가 되돌린 값 타입이 null/undefined/''
+      //     로 제각각이라(editTracker.ts isBlank 주석 ①) 셋 다 빈칸으로 본다.
+      //   - 'I' 행: bindings 가 그리드 전 D_ 키라 빈 기간칸까지 섞인다. 빈 칸을 보내면 SP '^'
+      //     배열이 폭증하므로 값 있는 셀만 보낸다(빈칸 제외).
+      const isBlank = raw === null || raw === undefined || raw === '';
+      if (isBlank) {
+        if (flag !== CRUD_TYPE.MODIFY) continue; // I행: 빈칸 제외
+        // M행 clear 셀: '' 로 전송
+        out.push({
+          activeFlag: flag,
+          ...identity,
+          yyyymmdd: dayOfBinding(binding),
+          qty: '',
+          row,
+          binding,
+        });
+        continue;
+      }
+      // 값 있는 셀. 숫자 또는 숫자 문자열이 아니면(다른 타입) `String()` 이 '[object Object]' 로
+      //   무너지므로 수집 대상에서 뺀다.
       if (typeof raw !== 'number' && typeof raw !== 'string') continue;
-      if (raw === '') continue;
       out.push({
         activeFlag: flag,
         ...identity,

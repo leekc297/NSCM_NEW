@@ -27,7 +27,6 @@ export interface OptCapaAppliedCondition {
 
 /** 그리드 1행 — 컬럼셋이 8시트로 갈리므로 index signature 로 둔다(컬럼 하드코딩 금지). */
 export type GridRow = Record<string, unknown>;
-
 /** 조회조건/셀 콤보 옵션. */
 export interface ComboOption {
   label: string;

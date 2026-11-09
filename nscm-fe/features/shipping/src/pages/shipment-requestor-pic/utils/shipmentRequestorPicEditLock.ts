@@ -32,7 +32,8 @@ export const isPopupColumn = (binding: string): boolean =>
 
 // R10 (design 03 §3 R10, cs:628~633) — 신규행 Division 미선택 상태에서 종속 셀 편집/팝업 차단 판정.
 //   신규행('I') && DIVISION_ID 공백 && 대상열 != DIVISION_ID -> 편집 전 Division 선택 안내(MSG00097).
-//   신규행 DIVISION_ID 는 handleInsert 에서 조회 division 으로 시드되어 실무상 도달 드묾 — AS-IS 완전 파리티용 가드.
+//   handleInsert 는 Division 을 비운 채 행을 추가한다(AS-IS InsertRow 파리티) — 신규행은 Division 을
+//   고르기 전까지 이 가드로 종속셀(SITE/ITEM/User..) 편집이 막힌다.
 export const isDivisionRequired = (
   binding: string,
   row: Record<string, unknown> | undefined

@@ -1,6 +1,6 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-04T23:03:30.143Z",
+ "ts": "2026-11-08T02:53:34.285Z",
  "producer": "check.js",
  "id": "DMF0042",
  "final": true,
@@ -8,7 +8,7 @@
  "state": "completed",
  "verdict": "fail",
  "summary": {
-  "block": 24,
+  "block": 25,
   "warn": 102
  },
  "issues": [
@@ -320,6 +320,19 @@
     {
      "kind": "exec",
      "ref": "check.js B22"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "S01",
+   "class": "BLOCK",
+   "msg": "정적 게이트(run_verify.py --static) 실행 — 실행 결과 없음(rc=1) —                                                     ^^^ | UnboundLocalError: cannot access local variable 'mid' where it is not associated with a value",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js S01"
     }
    ],
    "grade": "hard"

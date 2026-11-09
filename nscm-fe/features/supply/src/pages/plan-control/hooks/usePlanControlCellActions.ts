@@ -464,6 +464,7 @@ export const usePlanControlCellActions = ({
   // E07 ComboSelChange 등가 — Plan ID 셀 값이 바뀌면 그 **행의 값**으로 단건 재조회해 4컬럼을 갱신한다
   //   (G18~G21). 조회조건이 아니라 행 값을 쓴다 — 조회조건으로 바꾸면 Plan Group 이 다른 행에서 틀린다.
   //   폴링 경로(3컬럼)와 달리 STAT_NAME 까지 갱신한다.
+  //   값이 그대로인 편집 종료는 PlanControlGrid handleCellEditEnded 가 미리 걸러 여기까지 오지 않는다.
   const handleCellEditEnded = useCallback(
     (grid: FlexGrid<PlanControlRow>, e: CellRangeEventArgs) => {
       if (grid.columns[e.col]?.binding !== ACTION_COLUMN.PLAN_ID) return;

@@ -236,7 +236,7 @@ export const MSG = {
   // PU04 팝업 OK 시 선택 0건 안내. AS-IS `MSG00071`(SCM0002_GetBODItemPrjRoutePopup.cs:337-340)과
   //   **번호·문구가 모두 일치**하는 드문 경우다 — TO-BE `SCM_ADM_MSG_M`/`public/locales` 실측
   //   'No rows selected.' / '선택된 행이 없습니다.'(hook #114 역조회 확인).
-  NO_ROWS_SELECTED: 'MSG00071',
+  NO_ROWS_SELECTED: 'MSG00014',
 } as const;
 
 // AS-IS `DateUtil.Check_PeriodDate` 3분기 중 최대 기간 = "from + 1 캘린더 연도 + 7일".

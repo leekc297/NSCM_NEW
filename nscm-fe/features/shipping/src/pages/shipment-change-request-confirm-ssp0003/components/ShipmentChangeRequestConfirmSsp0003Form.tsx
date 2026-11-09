@@ -54,6 +54,7 @@ export const ShipmentChangeRequestConfirmSsp0003Form = ({
   const set = useShipmentChangeRequestConfirmSsp0003Store(s => s.setSearchCondition);
   const setPeriod = useShipmentChangeRequestConfirmSsp0003Store(s => s.setPeriod);
   const openSearchArea = useShipmentChangeRequestConfirmSsp0003Store(s => s.openSearchArea);
+  const setAuthDivisions = useShipmentChangeRequestConfirmSsp0003Store(s => s.setAuthDivisions);
 
   // Division = MyDivisionInEE_SCP (권한범위 EE 포함) -> FE 클라 EE 제거(design 02 §2.1).
   const [divisions] = useTabComboQueries({ filters: [COMBO.DIVISION] });
@@ -70,6 +71,12 @@ export const ShipmentChangeRequestConfirmSsp0003Form = ({
 
   // Division: AS-IS 클라 필터 CODE!=='EE' 재현(design 02 §2.1). 안 하면 AS-IS 보다 넓어짐.
   const divisionOptions = toOptions(divisions).filter(o => o.value !== EXCLUDE_DIVISION);
+  // 권한 Division 코드를 store 로 올린다 — Division 미선택 조회 시 setFilter 가 'ALL'(권한 밖 노출) 대신
+  //   이 코드를 열거해 IN(auth) 가드를 태운다(인가 우회 차단, AS-IS GetCheckedListValue 2-arg 등가).
+  const divisionCodesKey = divisionOptions.map(o => o.value).join(',');
+  useEffect(() => {
+    setAuthDivisions(divisionCodesKey ? divisionCodesKey.split(',') : []);
+  }, [divisionCodesKey, setAuthDivisions]);
   // PlantSiteByDivision_SCP 는 선두 더미행('-')을 반환(ora.py 실측) — ALL 과 별개로 노출되므로 제외(design 02 §6).
   const fromSiteOptions = toOptions(fromSites).filter(o => o.value !== '-');
   const statusOptions = toOptions(changeStatus);

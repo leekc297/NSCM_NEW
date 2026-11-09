@@ -1,0 +1,7 @@
+﻿lang,result,why
+KO,PASS,KO 문구 18건 일치 · 사전에 없는 문구 37건
+EN,FAIL,"EN 화면에 다른 언어 문구 4건: '발생사유 상세'(한글 · 그리드 헤더 = 메타 Long Term Stock.OCCR_RSN_CTN 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '발생사유 유형'(한글 · 그리드 헤더 = 메타 Long Term Stock.OCCR_RSN_CD 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '소진방안 상'(한글 · 그리드 헤더 = 메타 Long Term Stock.EXHT_TP_CTN 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '소진방안 유형'(한글 · 그리드 헤더 = 메타 Long Term Stock.EXHT_TP_CD 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)) · 사전에 없는 문구 33건"
+EN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 PLANT_DESCRIPTION 9행, ITEM_NAME 3행, LONG_TERM_TYPE 200행, ITEM_TYPE 200행, PROCESS_GROUP 194행, PROCESS_DETAIL 56행, PIC 10행 — 명칭 칸이면 언어 미반영"
+CN,FAIL,"CN 화면에 다른 언어 문구 5건: 'Condition'→'条件'(버튼), '발생사유 상세'(한글 · 그리드 헤더 = 메타 Long Term Stock.OCCR_RSN_CTN 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '발생사유 유형'(한글 · 그리드 헤더 = 메타 Long Term Stock.OCCR_RSN_CD 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '소진방안 상'(한글 · 그리드 헤더 = 메타 Long Term Stock.EXHT_TP_CTN 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '소진방안 유형'(한글 · 그리드 헤더 = 메타 Long Term Stock.EXHT_TP_CD 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)) · 사전에 없는 문구 33건"
+CN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 PLANT_DESCRIPTION 9행, ITEM_NAME 3행, LONG_TERM_TYPE 200행, ITEM_TYPE 200행, PROCESS_GROUP 194행, PROCESS_DETAIL 56행, PIC 10행 — 명칭 칸이면 언어 미반영"
+조회 버튼,PASS,조회 버튼 KO Search(F5) · EN Search(F5) · CN Search(F5)

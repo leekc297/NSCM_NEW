@@ -297,7 +297,7 @@ export const DynamicQueryModal = ({
   //  - 구문 오류 시 SP 가 RAISE_APPLICATION_ERROR → 500(catch) 또는 CODE != '0' 로 내려온다.
   const validateSql = async (sql: string): Promise<ValidatedColumn[] | null> => {
     const failWithSyntaxError = () => {
-      void setAlert({ type: 'alert', content: t('MSG00149', '_SQL 구문이 틀렸습니다.') });
+      void setAlert({ type: 'alert', content: t('MSG01486', '_SQL 구문이 틀렸습니다.') });
       return null;
     };
 
@@ -327,7 +327,7 @@ export const DynamicQueryModal = ({
 
   const guardSqlThenValidate = async (): Promise<boolean> => {
     if (!sqlText.trim()) {
-      void setAlert({ type: 'alert', content: t('MSG00150', 'SQL 을 먼저 입력하세요.') });
+      void setAlert({ type: 'alert', content: t('MSG00013', 'SQL 을 먼저 입력하세요.') });
       return false;
     }
     setValidating(true);
@@ -339,7 +339,7 @@ export const DynamicQueryModal = ({
   //comfirm 버튼 클릭 이벤트
   const handleParsing = async () => {
     if (!sqlText.trim()) {
-      void setAlert({ type: 'alert', content: t('MSG00150', 'SQL 을 먼저 입력하세요.') });
+      void setAlert({ type: 'alert', content: t('MSG00013', 'SQL 을 먼저 입력하세요.') });
       return;
     }
     setValidating(true);
@@ -359,7 +359,7 @@ export const DynamicQueryModal = ({
 
     const tokens = findParamTokens(sqlText);
     setParameterRows(reconcileParameters(tokens, prevParameters, dqId));
-    setToast({ type: 'success', message: t('MSG00148', '검증되었습니다.') });
+    setToast({ type: 'success', message: t('MSG01166', '검증되었습니다.') });
   };
 
   const handleColumnInsert = async () => {
@@ -399,15 +399,15 @@ export const DynamicQueryModal = ({
 
   const handleSave = () => {
     if (!reportNm.trim()) {
-      void setAlert({ type: 'alert', content: t('MSG00150', '필수값을 입력하세요.') });
+      void setAlert({ type: 'alert', content: t('MSG00013', '필수값을 입력하세요.') });
       return;
     }
     if (!description.trim()) {
-      void setAlert({ type: 'alert', content: t('MSG00150', '필수값을 입력하세요.') });
+      void setAlert({ type: 'alert', content: t('MSG00013', '필수값을 입력하세요.') });
       return;
     }
     if (!sqlText.trim()) {
-      void setAlert({ type: 'alert', content: t('MSG00150', 'SQL 을 먼저 입력하세요.') });
+      void setAlert({ type: 'alert', content: t('MSG00013', 'SQL 을 먼저 입력하세요.') });
       return;
     }
 
@@ -580,7 +580,7 @@ export const DynamicQueryModal = ({
                         appearance='outlined'
                         priority='normal'
                         size='small'
-                        buttonLabel={t('LBL00622', 'Delete')}
+                        buttonLabel={t('LBL00108', 'Delete')}
                         onClick={handleColumnDelete}
                         iconComponent={<EditDeleteIcon appearance='lined' />}
                       />
@@ -611,7 +611,7 @@ export const DynamicQueryModal = ({
                         appearance='outlined'
                         priority='normal'
                         size='small'
-                        buttonLabel={t('LBL00622', 'Delete')}
+                        buttonLabel={t('LBL00108', 'Delete')}
                         onClick={handleConditionDelete}
                         iconComponent={<EditDeleteIcon appearance='lined' />}
                       />

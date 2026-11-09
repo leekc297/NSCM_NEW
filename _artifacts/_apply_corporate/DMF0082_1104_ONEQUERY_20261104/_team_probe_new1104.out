@@ -1,0 +1,128 @@
+=== new1104 pkg=PKG_DMF0082_1104 env=['zioui1', '2026-11-06 18:14:06'] pkg=[('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-06 06:09:06')] period=20261101~20270430 users=['k0101', 'minyonglee1'] divs=['40', '81', '82'] runs=2
+18:14:12 k0101_40 ALL(warm) proc=4.362s fetch=1.38s rows=8223 teams(n=18) top=[['58520274', 72410], ['70021343', 22198], ['58666055', 22030], ['58260040', 16905], ['70090866', 12534]]
+18:14:12 k0101_40 ALL r1 proc=4.228s fetch=1.304s rows=8223
+18:14:18 k0101_40 ALL r2 proc=4.166s fetch=1.304s rows=8223
+18:14:23 k0101_40 team1 r1 proc=2.506s fetch=0.489s rows=2695
+18:14:26 k0101_40 team1 r2 proc=2.483s fetch=0.471s rows=2695
+18:14:29 k0101_40 team2 r1 proc=2.886s fetch=0.641s rows=3466
+18:14:33 k0101_40 team2 r2 proc=2.684s fetch=0.593s rows=3466
+18:14:36 k0101_40 team3 r1 proc=3.141s fetch=0.802s rows=5186
+18:14:40 k0101_40 team3 r2 proc=3.039s fetch=0.813s rows=5186
+18:14:44 k0101_40 team5 r1 proc=3.507s fetch=0.967s rows=6265
+18:14:49 k0101_40 team5 r2 proc=3.481s fetch=1.053s rows=6265
+18:14:53 k0101_40 teamN18 r1 proc=4.346s fetch=1.371s rows=8223
+18:14:59 k0101_40 teamN18 r2 proc=4.17s fetch=1.296s rows=8223
+18:15:13 k0101_81 ALL(warm) proc=5.969s fetch=1.659s rows=8590 teams(n=28) top=[['70000347', 89051], ['70000342', 55694], ['70618869', 29515], ['70021298', 15856], ['58183074', 11736]]
+18:15:13 k0101_81 ALL r1 proc=6.04s fetch=1.571s rows=8590
+18:15:21 k0101_81 ALL r2 proc=6.158s fetch=1.583s rows=8590
+18:15:28 k0101_81 team1 r1 proc=3.69s fetch=0.597s rows=3034
+18:15:33 k0101_81 team1 r2 proc=3.628s fetch=0.631s rows=3034
+18:15:37 k0101_81 team2 r1 proc=4.641s fetch=1.034s rows=4998
+18:15:43 k0101_81 team2 r2 proc=4.559s fetch=0.962s rows=4998
+18:15:49 k0101_81 team3 r1 proc=5.047s fetch=1.195s rows=6010
+18:15:55 k0101_81 team3 r2 proc=5.061s fetch=1.184s rows=6010
+18:16:02 k0101_81 team5 r1 proc=5.806s fetch=1.439s rows=7187
+18:16:09 k0101_81 team5 r2 proc=5.681s fetch=1.424s rows=7187
+18:16:16 k0101_81 teamN28 r1 proc=6.453s fetch=1.754s rows=8590
+18:16:25 k0101_81 teamN28 r2 proc=6.231s fetch=1.639s rows=8590
+18:16:33 k0101_81 real_70000342 r1 proc=3.279s fetch=0.485s rows=1964
+18:16:37 k0101_81 real_70000342 r2 proc=3.196s fetch=0.478s rows=1964
+18:16:40 k0101_81 real_70084589 r1 proc=2.369s fetch=0.074s rows=0
+18:16:43 k0101_81 real_70084589 r2 proc=2.256s fetch=0.074s rows=0
+18:17:00 k0101_82 ALL(warm) proc=11.303s fetch=3.304s rows=16700 teams(n=28) top=[['58187671', 346260], ['70496991', 36829], ['71059521', 36611], ['70043790', 12856], ['71059515', 8514]]
+18:17:00 k0101_82 ALL r1 proc=11.314s fetch=3.498s rows=16700
+18:17:16 k0101_82 ALL r2 proc=11.329s fetch=3.503s rows=16700
+18:17:31 k0101_82 team1 r1 proc=9.211s fetch=2.601s rows=11997
+18:17:43 k0101_82 team1 r2 proc=9.263s fetch=2.612s rows=11997
+18:17:55 k0101_82 team2 r1 proc=10.069s fetch=2.809s rows=13254
+18:18:08 k0101_82 team2 r2 proc=9.934s fetch=2.816s rows=13254
+18:18:21 k0101_82 team3 r1 proc=10.349s fetch=3.067s rows=14515
+18:18:35 k0101_82 team3 r2 proc=10.482s fetch=3.123s rows=14515
+18:18:49 k0101_82 team5 r1 proc=10.854s fetch=3.167s rows=15395
+18:19:03 k0101_82 team5 r2 proc=10.716s fetch=3.315s rows=15395
+18:19:17 k0101_82 teamN28 r1 proc=11.342s fetch=3.362s rows=16700
+18:19:32 k0101_82 teamN28 r2 proc=11.192s fetch=3.22s rows=16700
+18:19:47 k0101_82 real_30385415+70021414+71067318 r1 proc=3.903s fetch=0.077s rows=4
+18:19:51 k0101_82 real_30385415+70021414+71067318 r2 proc=3.761s fetch=0.091s rows=4
+18:20:02 minyonglee1_40 ALL(warm) proc=4.899s fetch=1.313s rows=8223 teams(n=18) top=[['58520274', 72410], ['70021343', 22198], ['58666055', 22030], ['58260040', 16905], ['70090866', 12534]]
+18:20:02 minyonglee1_40 ALL r1 proc=4.778s fetch=1.372s rows=8223
+18:20:08 minyonglee1_40 ALL r2 proc=4.875s fetch=1.479s rows=8223
+18:20:14 minyonglee1_40 team1 r1 proc=2.743s fetch=0.539s rows=2695
+18:20:18 minyonglee1_40 team1 r2 proc=2.72s fetch=0.54s rows=2695
+18:20:21 minyonglee1_40 team2 r1 proc=3.096s fetch=0.656s rows=3466
+18:20:25 minyonglee1_40 team2 r2 proc=3.114s fetch=0.745s rows=3466
+18:20:29 minyonglee1_40 team3 r1 proc=3.542s fetch=0.977s rows=5186
+18:20:34 minyonglee1_40 team3 r2 proc=3.514s fetch=0.818s rows=5186
+18:20:38 minyonglee1_40 team5 r1 proc=4.331s fetch=0.928s rows=6265
+18:20:43 minyonglee1_40 team5 r2 proc=4.013s fetch=0.811s rows=6265
+18:20:48 minyonglee1_40 teamN18 r1 proc=4.848s fetch=1.132s rows=8223
+18:20:54 minyonglee1_40 teamN18 r2 proc=4.865s fetch=1.124s rows=8223
+18:21:09 minyonglee1_81 ALL(warm) proc=6.804s fetch=1.565s rows=8590 teams(n=28) top=[['70000347', 89051], ['70000342', 55694], ['70618869', 29515], ['70021298', 15856], ['58183074', 11736]]
+18:21:09 minyonglee1_81 ALL r1 proc=6.862s fetch=1.651s rows=8590
+18:21:18 minyonglee1_81 ALL r2 proc=6.735s fetch=1.755s rows=8590
+18:21:26 minyonglee1_81 team1 r1 proc=4.053s fetch=0.635s rows=3034
+18:21:31 minyonglee1_81 team1 r2 proc=4.136s fetch=0.608s rows=3034
+18:21:36 minyonglee1_81 team2 r1 proc=5.321s fetch=0.993s rows=4998
+18:21:43 minyonglee1_81 team2 r2 proc=5.268s fetch=0.986s rows=4998
+18:21:49 minyonglee1_81 team3 r1 proc=5.808s fetch=1.146s rows=6010
+18:21:56 minyonglee1_81 team3 r2 proc=5.793s fetch=1.152s rows=6010
+18:22:03 minyonglee1_81 team5 r1 proc=6.393s fetch=1.219s rows=7187
+18:22:11 minyonglee1_81 team5 r2 proc=6.337s fetch=1.31s rows=7187
+18:22:19 minyonglee1_81 teamN28 r1 proc=7.11s fetch=1.74s rows=8590
+18:22:28 minyonglee1_81 teamN28 r2 proc=7.298s fetch=1.733s rows=8590
+18:22:37 minyonglee1_81 real_70000342 r1 proc=3.417s fetch=0.409s rows=1964
+18:22:41 minyonglee1_81 real_70000342 r2 proc=3.374s fetch=0.363s rows=1964
+18:22:45 minyonglee1_81 real_70084589 r1 proc=2.352s fetch=0.067s rows=0
+18:22:48 minyonglee1_81 real_70084589 r2 proc=2.36s fetch=0.081s rows=0
+18:23:06 minyonglee1_82 ALL(warm) proc=12.458s fetch=3.262s rows=16700 teams(n=28) top=[['58187671', 346260], ['70496991', 36829], ['71059521', 36611], ['70043790', 12856], ['71059515', 8514]]
+18:23:06 minyonglee1_82 ALL r1 proc=12.468s fetch=2.811s rows=16700
+18:23:22 minyonglee1_82 ALL r2 proc=12.406s fetch=2.859s rows=16700
+18:23:37 minyonglee1_82 team1 r1 proc=10.305s fetch=2.062s rows=11997
+18:23:50 minyonglee1_82 team1 r2 proc=10.116s fetch=1.983s rows=11997
+18:24:02 minyonglee1_82 team2 r1 proc=10.741s fetch=2.172s rows=13254
+18:24:16 minyonglee1_82 team2 r2 proc=10.776s fetch=2.191s rows=13254
+18:24:29 minyonglee1_82 team3 r1 proc=11.459s fetch=2.377s rows=14515
+18:24:43 minyonglee1_82 team3 r2 proc=11.558s fetch=2.405s rows=14515
+18:24:57 minyonglee1_82 team5 r1 proc=12.016s fetch=2.561s rows=15395
+18:25:12 minyonglee1_82 team5 r2 proc=11.949s fetch=2.641s rows=15395
+18:25:27 minyonglee1_82 teamN28 r1 proc=11.995s fetch=3.078s rows=16700
+18:25:42 minyonglee1_82 teamN28 r2 proc=12.496s fetch=2.757s rows=16700
+18:25:58 minyonglee1_82 real_30385415+70021414+71067318 r1 proc=3.697s fetch=0.055s rows=4
+18:26:02 minyonglee1_82 real_30385415+70021414+71067318 r2 proc=3.722s fetch=0.055s rows=4
+--- median (proc / fetch / rows) by user,div,scen
+k0101 40 ALL(ntok=0): proc 4.20s fetch 1.30s total 5.50s rows [8223]
+k0101 40 team1(ntok=1): proc 2.49s fetch 0.48s total 2.97s rows [2695]
+k0101 40 team2(ntok=2): proc 2.79s fetch 0.62s total 3.40s rows [3466]
+k0101 40 team3(ntok=3): proc 3.09s fetch 0.81s total 3.90s rows [5186]
+k0101 40 team5(ntok=5): proc 3.49s fetch 1.01s total 4.50s rows [6265]
+k0101 40 teamN18(ntok=18): proc 4.26s fetch 1.33s total 5.59s rows [8223]
+k0101 81 ALL(ntok=0): proc 6.10s fetch 1.58s total 7.68s rows [8590]
+k0101 81 team1(ntok=1): proc 3.66s fetch 0.61s total 4.27s rows [3034]
+k0101 81 team2(ntok=2): proc 4.60s fetch 1.00s total 5.60s rows [4998]
+k0101 81 team3(ntok=3): proc 5.05s fetch 1.19s total 6.24s rows [6010]
+k0101 81 team5(ntok=5): proc 5.74s fetch 1.43s total 7.18s rows [7187]
+k0101 81 teamN28(ntok=28): proc 6.34s fetch 1.70s total 8.04s rows [8590]
+k0101 82 ALL(ntok=0): proc 11.32s fetch 3.50s total 14.82s rows [16700]
+k0101 82 team1(ntok=1): proc 9.24s fetch 2.61s total 11.84s rows [11997]
+k0101 82 team2(ntok=2): proc 10.00s fetch 2.81s total 12.81s rows [13254]
+k0101 82 team3(ntok=3): proc 10.42s fetch 3.10s total 13.51s rows [14515]
+k0101 82 team5(ntok=5): proc 10.79s fetch 3.24s total 14.03s rows [15395]
+k0101 82 teamN28(ntok=28): proc 11.27s fetch 3.29s total 14.56s rows [16700]
+minyonglee1 40 ALL(ntok=0): proc 4.83s fetch 1.43s total 6.25s rows [8223]
+minyonglee1 40 team1(ntok=1): proc 2.73s fetch 0.54s total 3.27s rows [2695]
+minyonglee1 40 team2(ntok=2): proc 3.10s fetch 0.70s total 3.81s rows [3466]
+minyonglee1 40 team3(ntok=3): proc 3.53s fetch 0.90s total 4.43s rows [5186]
+minyonglee1 40 team5(ntok=5): proc 4.17s fetch 0.87s total 5.04s rows [6265]
+minyonglee1 40 teamN18(ntok=18): proc 4.86s fetch 1.13s total 5.98s rows [8223]
+minyonglee1 81 ALL(ntok=0): proc 6.80s fetch 1.70s total 8.50s rows [8590]
+minyonglee1 81 team1(ntok=1): proc 4.09s fetch 0.62s total 4.72s rows [3034]
+minyonglee1 81 team2(ntok=2): proc 5.29s fetch 0.99s total 6.28s rows [4998]
+minyonglee1 81 team3(ntok=3): proc 5.80s fetch 1.15s total 6.95s rows [6010]
+minyonglee1 81 team5(ntok=5): proc 6.37s fetch 1.26s total 7.63s rows [7187]
+minyonglee1 81 teamN28(ntok=28): proc 7.20s fetch 1.74s total 8.94s rows [8590]
+minyonglee1 82 ALL(ntok=0): proc 12.44s fetch 2.83s total 15.27s rows [16700]
+minyonglee1 82 team1(ntok=1): proc 10.21s fetch 2.02s total 12.23s rows [11997]
+minyonglee1 82 team2(ntok=2): proc 10.76s fetch 2.18s total 12.94s rows [13254]
+minyonglee1 82 team3(ntok=3): proc 11.51s fetch 2.39s total 13.90s rows [14515]
+minyonglee1 82 team5(ntok=5): proc 11.98s fetch 2.60s total 14.58s rows [15395]
+minyonglee1 82 teamN28(ntok=28): proc 12.25s fetch 2.92s total 15.16s rows [16700]

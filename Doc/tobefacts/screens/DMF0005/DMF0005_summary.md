@@ -8,11 +8,11 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.module.scss | style | 37 |
-| features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | page | 211 |
+| features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | page | 223 |
 | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.module.scss | style | 41 |
 | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | page | 427 |
-| features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | page | 650 |
-| features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelPurchaseGrid.tsx | page | 125 |
+| features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | page | 664 |
+| features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelPurchaseGrid.tsx | page | 131 |
 | features/master/src/pages/sales-site-project-model/index.ts | index | 2 |
 | features/master/src/pages/sales-site-project-model/sales-site-project-model.constants.ts | constants | 131 |
 | features/master/src/pages/sales-site-project-model/sales-site-project-model.editBaseline.ts | other | 103 |
@@ -21,7 +21,7 @@
 | features/master/src/pages/sales-site-project-model/sales-site-project-model.scpGuard.ts | other | 83 |
 | features/master/src/pages/sales-site-project-model/sales-site-project-model.siteInfo.ts | other | 48 |
 | features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.module.scss | style | 21 |
-| features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.tsx | page | 326 |
+| features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.tsx | page | 328 |
 | features/master/src/pages/sales-site-project-model/useSalesSiteProjectModelSave.ts | hook | 84 |
 | features/master/src/pages/sales-site-project-model/useSalesSiteProjectModelStore.ts | store | 164 |
 
@@ -47,11 +47,11 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| Button | onClick | <arrow> handleExcel | jsx | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | 172 |
-| Button | onClick | handleInsert | jsx | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | 179 |
-| Button | onClick | handleDelete | jsx | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | 186 |
-| Button | onClick | handleSave | jsx | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | 196 |
-| Button | onClick | modalClose | jsx | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | 203 |
+| Button | onClick | <arrow> handleExcel | jsx | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | 180 |
+| Button | onClick | handleInsert | jsx | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | 189 |
+| Button | onClick | handleDelete | jsx | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | 196 |
+| Button | onClick | handleSave | jsx | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | 206 |
+| Button | onClick | modalClose | jsx | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | 215 |
 | SearchArea | onSearch | onSubmit | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 151 |
 | CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 167 |
 | CustomDropdown | onChange | <arrow> setSearchParams,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 208 |
@@ -65,18 +65,18 @@
 | Button | onClick | <arrow> setOpenOwnerByDivisionModal | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 348 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 376 |
 | Checkbox | onChange | <arrow> setActiveTab,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 389 |
-| grid | copying | handleCopying | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 167 |
-| grid | pastedCell | handlePastedTeam | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 168 |
-| grid.hostElement | keydown | handleClearTeam | addEventListener | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 169 |
-| grid | cellEditEnded | handleEditEnded | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 269 |
-| grid | pasted | handlePasted | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 270 |
-| grid | cellEditEnded | handleVmiEditEnded | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 350 |
-| grid | pasted | handleVmiPasted | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 351 |
-| grid | beginningEdit | cancelIfLocked | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 562 |
-| grid | pastingCell | cancelIfLocked | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 563 |
-| grid | formatItem | unmarkLocked | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 564 |
-| DataGrid | gotFocus | handleFocus | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 582 |
-| DataGrid | gotFocus | handleFocus | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelPurchaseGrid.tsx | 104 |
+| grid | copying | handleCopying | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 172 |
+| grid | pastedCell | handlePastedTeam | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 173 |
+| grid.hostElement | keydown | handleClearTeam | addEventListener | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 174 |
+| grid | cellEditEnded | handleEditEnded | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 274 |
+| grid | pasted | handlePasted | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 275 |
+| grid | cellEditEnded | handleVmiEditEnded | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 355 |
+| grid | pasted | handleVmiPasted | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 356 |
+| grid | beginningEdit | cancelIfLocked | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 574 |
+| grid | pastingCell | cancelIfLocked | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 575 |
+| grid | formatItem | unmarkLocked | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 576 |
+| DataGrid | gotFocus | handleFocus | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 596 |
+| DataGrid | gotFocus | handleFocus | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelPurchaseGrid.tsx | 110 |
 | grid | cellEditEnded | handler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.editBaseline.ts | 92 |
 | grid | pastedCell | handler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.editBaseline.ts | 93 |
 | grid | cellEditEnding | editEndingHandler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.salesCompanyGuard.ts | 661 |
@@ -84,7 +84,7 @@
 | grid | cellEditEnded | editEndedHandler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.salesCompanyGuard.ts | 663 |
 | grid | pastedCell | editEndedHandler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.salesCompanyGuard.ts | 664 |
 | grid | updatedLayout | updatedLayoutHandler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.salesCompanyGuard.ts | 665 |
-| SalesSiteProjectModelForm | onSubmit | handleSubmit | jsx | features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.tsx | 283 |
+| SalesSiteProjectModelForm | onSubmit | handleSubmit | jsx | features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.tsx | 285 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

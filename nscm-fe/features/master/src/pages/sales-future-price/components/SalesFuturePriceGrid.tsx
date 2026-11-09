@@ -23,6 +23,7 @@ import {
   GRID_CASCADE_CLEAR,
   MAIN_COLUMNS,
   MSG,
+  SHEETS,
 } from '../sales-future-price.constants';
 import type { FuturePriceRow } from '../sales-future-price.types';
 import styles from '../SalesFuturePrice.module.scss';
@@ -497,6 +498,9 @@ export const SalesFuturePriceGrid = ({
       const isDyn = !meta && /^[WM]_/.test(col.binding);
       const isInsert = rowItem?.CRUD_TYPE === 'I';
       const isLocRow = String(rowItem?.MEASURE ?? '') === 'LOC';
+      // 그리드가 읽기전용(main SAVE 권한 없음, saveAuth 자동 잠금)이면 편집가능(노란) 표시를 하지 않는다.
+      //   division 게이트(editable)만 보면 82 에서 SAVE 권한이 없어도 입력 항목처럼 보인다.
+      const canEdit = editable && !g.isReadOnly;
 
       // 범위 초과 분홍 (AS-IS L1475~1488 [PJ20200138]) — SP 가 행마다 내려주는 COL_LIST 에 든
       //   동적 컬럼(W_yyyymmdd) 셀만 분홍. COL_LIST 는 measure 무관 목록이라 같은 품목의 4행이
@@ -521,7 +525,7 @@ export const SalesFuturePriceGrid = ({
           return;
         }
         // 편집제약 division(메타 LOOKUP 구동, 82만 편집) 과 과거 버전 조회는 편집가능(노란) 표시 안 함.
-        toggleClass(e.cell, 'wj-cell-editable', !isPast && editable && isCurrentVersionRef.current);
+        toggleClass(e.cell, 'wj-cell-editable', !isPast && canEdit && isCurrentVersionRef.current);
         toggleClass(e.cell, 'wj-cell-non-editable', isPast);
         // ⭐ 변경 셀 빨강 (AS-IS red cell) — EditTracker 가 기록한 사용자 변경 셀만 빨간 글자.
         //   Wijmo 셀 재활용 → 미변경 셀은 color 제거(잔존 방지).
@@ -549,6 +553,7 @@ export const SalesFuturePriceGrid = ({
         //   입력 구분 M/O(어느 행이든 편집)도 신규 행에서 노랑 — beginningEdit 은 신규 행의 M/O 칸 편집을 이미
         //   허용하는데 여기서 IM/IO 만 보아, M 으로 바뀐 Currency 가 신규 행에서 입력은 되고 노랑이 빠졌다.
         const insertEditable =
+          !g.isReadOnly &&
           isInsert &&
           !isAutoMappedColumn(col.binding) &&
           (meta._inputEditType === 'IM' ||
@@ -561,7 +566,7 @@ export const SalesFuturePriceGrid = ({
         //   2026-10-13, Currency). beginningEdit 의 진입 조건(isAlwaysEditableMeta + 편집 가능 사업부 +
         //   Current 버전)과 같은 기준이다. 칸 이름을 보지 않는다 — 어느 칸을 열지는 설정이 정한다.
         const existingEditable =
-          !isInsert && isAlwaysEditableMeta(meta) && editable && isCurrentVersionRef.current;
+          !isInsert && isAlwaysEditableMeta(meta) && canEdit && isCurrentVersionRef.current;
         const editableForInsert = insertEditable || existingEditable;
         toggleClass(e.cell, 'wj-cell-editable', editableForInsert);
         toggleClass(e.cell, 'wj-cell-non-editable', false);
@@ -759,6 +764,11 @@ export const SalesFuturePriceGrid = ({
       e: { cancel: boolean; row: number; col: number }
     ) => {
       if (!editable) return; // 편집제약 division — wrapper cancel 유지
+      // 읽기전용(main SAVE 권한 없음) — 아래 LOC 분기의 e.cancel=false 가 잠금을 뒤집지 않도록 먼저 차단.
+      if (s.isReadOnly) {
+        e.cancel = true;
+        return;
+      }
       // 과거 버전 조회 — 붙여넣기도 편집이므로 명시 차단 (beginningEdit 의 isCurrentVersion 게이트와 동일 기준).
       if (!isCurrentVersionRef.current) {
         e.cancel = true;
@@ -946,6 +956,8 @@ export const SalesFuturePriceGrid = ({
     g.pastedCell.addHandler(cellEditEndedHandler);
 
     const dblclickHandler = (ev: MouseEvent) => {
+      // 읽기전용(main SAVE 권한 없음)이면 신규행 입력 팝업도 띄우지 않는다.
+      if (g.isReadOnly) return;
       const ht = g.hitTest(ev);
       if (ht.cellType !== CellType.Cell) return;
       const col = g.columns[ht.col];
@@ -1285,6 +1297,8 @@ export const SalesFuturePriceGrid = ({
       comboParams={comboParams}
       itemsSource={rows as unknown as WijmoRowItem[]}
       autoGenerateColumns={false}
+      // 읽기전용 자동 잠금을 main 시트 SAVE 권한으로 판정(메뉴 단위면 팝업 시트 SAVE 와 섞임)
+      saveAuth={{ sheetName: SHEETS.MAIN }}
       // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
       //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
       //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.

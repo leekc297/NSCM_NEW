@@ -1,0 +1,6 @@
+# SCP0108 · (AS-IS 짝 없음) ↔ PKG_SCP0108.P_SCP0108_GET_CAPA_LOB_CURRENT
+
+- 실행 2026-11-09 10:48:47 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 호출 #18 sheet=CURRENT btn=SEARCH user=minyonglee1 FE 응답 행 637 · 원천 Doc\verify\SCP0108\calls\_trace_W4c_정밀_판정_판정필요_해소_0.json
+- TO-BE 인자(FE 본문): `{"version": "202610", "versionSeq": 1, "divisionId": "81", "siteId": "", "plantId": "", "factoryId": "", "lineId": "A2A10,A2A13,A2A14,A3A01,A3A02,A3A03,A3A04,A3A05,A3A06,A3A07,A3A08,A4A01,A4A05,A4A06,A4A07,A5A01,A5A03,A6A04,A6A05,A6A06,A6A25,A7A08,A7A09,A7A10,A7A11,A7A12,A7A13,A7A14,A7A15,A7A16,A7A17,A7A18,A7A19,A7A20,A7A21,A7A22,A7A23,A7A24,A8A03,A8A04,A8A07,A8AA1,A8AA2,A8AB1,A8AB2,A8AF1,A8AF2,A9A01,AAA11,AAA13,AAA14,ACA26,ACA27,ACA28,AHAH1,AIA08,AIA09,DMY_3851,DMY_3852,DMY_3853,DMY_3854,DMY_3855,DMY_3856,DMY_3857,DMY_3858,DMY_3859", "operationId": "", "nickName": "", "electrodeType": "", "bottleneckFlag": "", "programId": "SCP0108", "sheetName": "CURRENT"}`
+- SKIP: sp_pair.csv 에 이 TO-BE proc 의 AS-IS 짝 없음 — gen_param_map.py 또는 source=manual 행 추가

@@ -1,0 +1,127 @@
+{
+  "menuId": "SSP0025",
+  "screenName": "ShipmentRequestorPIC",
+  "feature": "shipping",
+  "pageDir": "shipment-requestor-pic",
+  "routePath": "shipping/shipment-requestor-pic",
+  "sheets": [
+    {
+      "sheetName": "Project",
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": 11,
+      "popup": false
+    },
+    {
+      "sheetName": "Shipment Requestor PIC",
+      "rule": "META+코드연결",
+      "columns": 19,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "<field:dtMyDivision>",
+        "InitControls",
+        "clbDivision_SelectedIndexChanged",
+        "SetChangedControl",
+        "SpdMain_CellClick"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0025.P_",
+      "sheet": "Project",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP",
+      "asis_sp": "SSP0025_GET_ITEM_BY_DIVISION_POPUP",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0025.P_SSP0025_GET_ITEM_BY_DIVISION_POPUP",
+      "sheet": "Project",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "<field:dtYesOrNo>"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0025.P_",
+      "sheet": "Project",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0025_GET_SHIPMENT_REQUESTOR_PIC",
+      "asis_sp": "SSP0025_GET_SHIPMENT_REQUESTOR_PIC",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0025.P_SSP0025_GET_SHIPMENT_REQUESTOR_PIC",
+      "sheet": "Shipment Requestor PIC",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC",
+      "asis_sp": "SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0025.P_SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC",
+      "sheet": "Project",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0025_GET_USER_ID_CHECK",
+      "asis_sp": "SSP0025_GET_USER_ID_CHECK",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetUserIDChk"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0025.P_SSP0025_GET_USER_ID_CHECK",
+      "sheet": "Project",
+      "btn": "USER_ID_CHECK"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0002_GET_USER_INFO_LIST",
+      "asis_sp": "SSP0002_GET_USER_INFO_LIST",
+      "status": "MATCH",
+      "entries": [
+        "button:EditButton"
+      ],
+      "methods": [
+        "GetSSPUserCheck"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0025.P_SSP0002_GET_USER_INFO_LIST",
+      "sheet": "Project",
+      "btn": "USER_INFO_LIST"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

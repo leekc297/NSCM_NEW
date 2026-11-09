@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 164,
+  "at": "2026-11-07T10:17:48.072Z",
+  "user": "minyonglee1",
+  "test": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)"
+ }
+]

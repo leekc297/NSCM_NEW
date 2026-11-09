@@ -1,7 +1,7 @@
 # DMF0035 — To-Be Fact Pack 요약
 
 - page_key: `report/demand-plan-waterfall` · feature: report · As-is Fact Pack 있음
-- 파일 19 · 엔드포인트 호출 15 (미해결 2, 주석 속 0) · 이벤트 46 · 컴포넌트 사용 77 · 하드코딩 컬럼 10 · 메시지 34
+- 파일 25 · 엔드포인트 호출 15 (미해결 2, 주석 속 0) · 이벤트 82 · 컴포넌트 사용 95 · 하드코딩 컬럼 10 · 메시지 34
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 10건
 
 ## 1. 파일
@@ -10,6 +10,12 @@
 | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.module.scss | component | 17 |
 | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | component | 518 |
 | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | component | 423 |
+| features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.module.scss | component | 652 |
+| features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | component | 617 |
+| features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/olapFieldRail.utils.ts | component | 155 |
+| features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/RailIcons.tsx | component | 83 |
+| features/report/src/pages/demand-plan-waterfall/components/OlapChartPane.module.scss | component | 29 |
+| features/report/src/pages/demand-plan-waterfall/components/OlapChartPane.tsx | component | 77 |
 | features/report/src/pages/demand-plan-waterfall/components/WaterfallVersionModal.module.scss | component | 37 |
 | features/report/src/pages/demand-plan-waterfall/components/WaterfallVersionModal.tsx | component | 462 |
 | features/report/src/pages/demand-plan-waterfall/demand-plan-waterfall.constants.test.ts | test | 61 |
@@ -25,7 +31,7 @@
 | features/report/src/pages/demand-plan-waterfall/utils/waterfall.headerColors.ts | util | 93 |
 | features/report/src/pages/demand-plan-waterfall/utils/waterfall.merge.ts | util | 121 |
 | features/report/src/pages/demand-plan-waterfall/utils/waterfall.periods.ts | util | 74 |
-| features/report/src/pages/demand-plan-waterfall/__asis-mapping__.md | mapping | 629 |
+| features/report/src/pages/demand-plan-waterfall/__asis-mapping__.md | mapping | 603 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
@@ -54,7 +60,7 @@
 | salesPlanSpreadTitle | divisionId bucket fromYyyymmdd toYyyymmdd sesUserId userId | o_rc1 | PKG_DMF0035 P_DMF0035_GET_MKT_FCST_WATERFALL PKG_DMF0022 P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL PKG_DMF0051 P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL DMF0073_GET_VERSION_SALESPRICE |
 | bizPlanSpreadTitle | divisionId bucket fromYyyymmdd toYyyymmdd sesUserId userId | o_rc1 | PKG_DMF0035 P_DMF0035_GET_MKT_FCST_WATERFALL PKG_DMF0022 P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL PKG_DMF0051 P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL DMF0073_GET_VERSION_SALESPRICE |
 | version | startYyyymmdd endYyyymmdd createdBy divisionId versionType description | o_rc1 | PKG_DMF0035 P_DMF0035_GET_MKT_FCST_WATERFALL PKG_DMF0022 P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL PKG_DMF0051 P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL DMF0073_GET_VERSION_SALESPRICE |
-| versionWf | startYyyymmdd endYyyymmdd createdBy divisionId versionType versionNo | o_rc1 | PKG_DMF0035 P_DMF0035_SAVE_VERSION_MRF PKG_SCM0002 P_SCM0002_GET_VERSIONBYWATERFALLPOPUP P_DMF0035_GET_MKT_FCST_WATERFALL PKG_DMF0022 P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL PKG_DMF0051 P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL DMF0073_GET_VERSION_SALESPRICE |
+| versionWf | startYyyymmdd endYyyymmdd createdBy divisionId versionType versionNo | o_rc1 | PKG_SCM0002 P_SCM0002_GET_VERSIONBYWATERFALLPOPUP PKG_DMF0035 P_DMF0035_GET_MKT_FCST_WATERFALL PKG_DMF0022 P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL PKG_DMF0051 P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL DMF0073_GET_VERSION_SALESPRICE |
 
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
@@ -88,6 +94,42 @@
 | g | scrollPositionChanged | onScroll | addHandler | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | 298 |
 | host | dblclick | onDblClick | addEventListener | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | 325 |
 | g | formatItem | handler | addHandler | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | 370 |
+| div | onMouseDown | <arrow> e.stopPropagation | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 101 |
+| button | onClick | <arrow> editorRef.current?.clearEditor,editorRef.current?.updateFilter,onApplied,onClose | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 107 |
+| button | onClick | onClose | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 117 |
+| button | onClick | <arrow> editorRef.current?.updateFilter,onApplied,onClose | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 123 |
+| engine | viewDefinitionChanged | refresh | addHandler | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 165 |
+| engine | updatedView | refresh | addHandler | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 166 |
+| window | pointermove | move | addEventListener | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 241 |
+| window | pointerup | up | addEventListener | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 242 |
+| window | mousedown | close | addEventListener | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 286 |
+| window | mousedown | close | addEventListener | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 295 |
+| button | onClick | <arrow> onToggleOpen | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 309 |
+| div | onDragStart | <arrow> startDrag | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 323 |
+| div | onDragEnd | endDrag | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 324 |
+| div | onDragOver | onZoneDragOver(zone, index) | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 325 |
+| div | onDrop | <arrow> e.preventDefault,e.stopPropagation,dropTo | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 326 |
+| span | onMouseDown | <arrow> e.stopPropagation | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 339 |
+| button | onClick | <arrow> setFilterKey | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 344 |
+| FilterEditorPopover | onClose | <arrow> setFilterKey | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 353 |
+| FilterEditorPopover | onApplied | afterEdit | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 354 |
+| span | onMouseDown | <arrow> e.stopPropagation | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 360 |
+| button | onClick | <arrow> setAggMenuKey | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 364 |
+| button | onClick | <arrow> setAggregate,setAggMenuKey,afterEdit | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 375 |
+| button | onClick | <arrow> unplaceField,afterEdit | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 393 |
+| div | onDragOver | onZoneDragOver(zone, items.length) | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 416 |
+| div | onDrop | <arrow> e.preventDefault,dropTo | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 417 |
+| button | onClick | <arrow> onToggleOpen | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 445 |
+| select | onChange | <arrow> onRowTotalsChange | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 460 |
+| input | onChange | <arrow> setQuery | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 481 |
+| div | onPointerDown | <arrow> startSplit | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 491 |
+| div | onDragStart | <arrow> startDrag | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 516 |
+| div | onDragEnd | endDrag | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 517 |
+| button | onClick | <arrow> toggleField,afterEdit | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 524 |
+| div | onPointerDown | <arrow> startSplit | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 552 |
+| button | onClick | <arrow> handleDeferChange | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 571 |
+| button | onClick | handleUpdate | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 582 |
+| select | onChange | <arrow> onChartTypeChange,Number | jsx | features/report/src/pages/demand-plan-waterfall/components/OlapChartPane.tsx | 46 |
 | g.hostElement? | dblclick | onDbl | addEventListener | features/report/src/pages/demand-plan-waterfall/components/WaterfallVersionModal.tsx | 317 |
 | SearchArea | onSearch | handleFind | jsx | features/report/src/pages/demand-plan-waterfall/components/WaterfallVersionModal.tsx | 345 |
 | CustomDropdown | onChange | <arrow> setDivisionId,String | jsx | features/report/src/pages/demand-plan-waterfall/components/WaterfallVersionModal.tsx | 357 |
@@ -114,12 +156,16 @@
 | CustomDropdown | 9 |
 | Button | 4 |
 | Checkbox | 4 |
+| ResultArea | 3 |
 | SearchArea | 2 |
 | InputField | 2 |
 | PeriodField | 2 |
 | Stack | 2 |
 | DataGrid | 2 |
-| ResultArea | 2 |
+| FilterIcon | 2 |
+| GripVerticalIcon | 2 |
+| ChevronDownIcon | 2 |
+| CheckIcon | 2 |
 | ControlConfirmIcon | 2 |
 | DivisionField | 1 |
 | TeamField | 1 |
@@ -132,6 +178,15 @@
 | PlantSiteField | 1 |
 | OwnerField | 1 |
 | WaterfallVersionModal | 1 |
+| Columns3Icon | 1 |
+| Rows3Icon | 1 |
+| SigmaIcon | 1 |
+| ChevronLeftIcon | 1 |
+| FilterEditorPopover | 1 |
+| XIcon | 1 |
+| ChevronRightIcon | 1 |
+| SearchIcon | 1 |
+| PivotChart | 1 |
 | CustomDialog | 1 |
 | ProgressIndicator | 1 |
 | IcGridColumnSetup | 1 |

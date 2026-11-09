@@ -1,0 +1,602 @@
+{
+ "tag": "r1109",
+ "env": [
+  "zioui1",
+  "2026-11-09 11:23:46"
+ ],
+ "pkginfo": {
+  "PKG_DMF0082": [
+   [
+    "PACKAGE",
+    "VALID",
+    "2026-10-09 13:38:31"
+   ],
+   [
+    "PACKAGE BODY",
+    "VALID",
+    "2026-11-04 14:48:42"
+   ]
+  ],
+  "PKG_DMF0082_1104": [
+   [
+    "PACKAGE",
+    "VALID",
+    "2026-11-04 16:00:18"
+   ],
+   [
+    "PACKAGE BODY",
+    "VALID",
+    "2026-11-06 06:09:06"
+   ]
+  ]
+ },
+ "period": [
+  "20261101",
+  "20270430"
+ ],
+ "results": [
+  {
+   "user": "k0101",
+   "div": "40",
+   "scen": "Current",
+   "at": "11:27:36",
+   "verdict": "DRIFT_FAIL",
+   "drift": {
+    "A_eq_A2": false,
+    "A2_eq_B": false
+   },
+   "tA": [
+    84.2,
+    2.54
+   ],
+   "tB": [
+    5.26,
+    1.2
+   ],
+   "cursors": [
+    {
+     "cursor": 1,
+     "colsA": 413,
+     "colsB": 413,
+     "rowsA": 8213,
+     "rowsB": 8213,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_TIE",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "283ab65f102a4297",
+     "shaB": "283ab65f102a4297",
+     "cells": 3391969,
+     "order_keys": [
+      "DIVISION_ID",
+      "TEAM_ID",
+      "END_CUSTOMER",
+      "SCM_SITE_ID",
+      "PROJECT_CODE",
+      "ITEM_ID",
+      "NICK_NAME",
+      "INCOTERMS",
+      "FCST_TYPE",
+      "DOM_EXP",
+      "CURRENCY",
+      "PLANT_SITE_ID",
+      "GROUP_ID",
+      "VERSION_NO",
+      "BUCKET",
+      "NEW_FLAG",
+      "ATTR1",
+      "VMI_STD_DIO",
+      "AS_YN"
+     ]
+    },
+    {
+     "cursor": 2,
+     "colsA": 3,
+     "colsB": 3,
+     "rowsA": 6,
+     "rowsB": 6,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "32c7c2d68148114c",
+     "shaB": "32c7c2d68148114c",
+     "cells": 18
+    },
+    {
+     "cursor": 3,
+     "colsA": 3,
+     "colsB": 3,
+     "rowsA": 1,
+     "rowsB": 1,
+     "cols_equal": true,
+     "rows_equal": false,
+     "only_a": 1,
+     "only_b": 1,
+     "order": null,
+     "col_diff": {},
+     "samples": [],
+     "shaA": "604d32daeabab457",
+     "shaB": "3ee6d4b7a3dfa1bb",
+     "cells": 3,
+     "keys_onlyA": 1,
+     "keys_onlyB": 1,
+     "keys_both": 0,
+     "sample_onlyA": [
+      {
+       "TODAY_DATE": "20261109",
+       "TODAY_DAY": "MON",
+       "TODAY_TIME": "1125"
+      }
+     ],
+     "sample_onlyB": [
+      {
+       "TODAY_DATE": "20261109",
+       "TODAY_DAY": "MON",
+       "TODAY_TIME": "1127"
+      }
+     ]
+    },
+    {
+     "cursor": 4,
+     "colsA": 4,
+     "colsB": 4,
+     "rowsA": 5,
+     "rowsB": 5,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "9a09f00c1004cd02",
+     "shaB": "9a09f00c1004cd02",
+     "cells": 20
+    },
+    {
+     "cursor": 5,
+     "colsA": 7,
+     "colsB": 7,
+     "rowsA": 181,
+     "rowsB": 181,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "f368c929c4b91d89",
+     "shaB": "f368c929c4b91d89",
+     "cells": 1267
+    },
+    {
+     "cursor": 6,
+     "colsA": 2,
+     "colsB": 2,
+     "rowsA": 1,
+     "rowsB": 1,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "83b3321894c58f58",
+     "shaB": "83b3321894c58f58",
+     "cells": 2
+    }
+   ]
+  },
+  {
+   "user": "k0101",
+   "div": "40",
+   "scen": "team1=58520274",
+   "at": "11:29:07",
+   "verdict": "PASS",
+   "drift": null,
+   "tA": [
+    10.16,
+    1.15
+   ],
+   "tB": [
+    3.78,
+    0.44
+   ],
+   "cursors": [
+    {
+     "cursor": 1,
+     "colsA": 413,
+     "colsB": 413,
+     "rowsA": 2695,
+     "rowsB": 2695,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_TIE",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "0b8da735716ce5e6",
+     "shaB": "0b8da735716ce5e6",
+     "cells": 1113035,
+     "order_keys": [
+      "DIVISION_ID",
+      "TEAM_ID",
+      "END_CUSTOMER",
+      "SCM_SITE_ID",
+      "PROJECT_CODE",
+      "ITEM_ID",
+      "NICK_NAME",
+      "INCOTERMS",
+      "FCST_TYPE",
+      "DOM_EXP",
+      "CURRENCY",
+      "PLANT_SITE_ID",
+      "GROUP_ID",
+      "VERSION_NO",
+      "BUCKET",
+      "NEW_FLAG",
+      "ATTR1",
+      "VMI_STD_DIO",
+      "AS_YN"
+     ]
+    },
+    {
+     "cursor": 2,
+     "colsA": 3,
+     "colsB": 3,
+     "rowsA": 6,
+     "rowsB": 6,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "32c7c2d68148114c",
+     "shaB": "32c7c2d68148114c",
+     "cells": 18
+    },
+    {
+     "cursor": 3,
+     "colsA": 3,
+     "colsB": 3,
+     "rowsA": 1,
+     "rowsB": 1,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "0f73075f26a19e45",
+     "shaB": "0f73075f26a19e45",
+     "cells": 3
+    },
+    {
+     "cursor": 4,
+     "colsA": 4,
+     "colsB": 4,
+     "rowsA": 5,
+     "rowsB": 5,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "9a09f00c1004cd02",
+     "shaB": "9a09f00c1004cd02",
+     "cells": 20
+    },
+    {
+     "cursor": 5,
+     "colsA": 7,
+     "colsB": 7,
+     "rowsA": 181,
+     "rowsB": 181,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "f368c929c4b91d89",
+     "shaB": "f368c929c4b91d89",
+     "cells": 1267
+    },
+    {
+     "cursor": 6,
+     "colsA": 2,
+     "colsB": 2,
+     "rowsA": 1,
+     "rowsB": 1,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "83b3321894c58f58",
+     "shaB": "83b3321894c58f58",
+     "cells": 2
+    }
+   ]
+  },
+  {
+   "user": "k0101",
+   "div": "40",
+   "scen": "team3=58520274,70021343,58666055",
+   "at": "11:29:23",
+   "verdict": "PASS",
+   "drift": null,
+   "tA": [
+    27.15,
+    1.6
+   ],
+   "tB": [
+    4.39,
+    1.01
+   ],
+   "cursors": [
+    {
+     "cursor": 1,
+     "colsA": 413,
+     "colsB": 413,
+     "rowsA": 5186,
+     "rowsB": 5186,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_TIE",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "07083461fbfb36ad",
+     "shaB": "07083461fbfb36ad",
+     "cells": 2141818,
+     "order_keys": [
+      "DIVISION_ID",
+      "TEAM_ID",
+      "END_CUSTOMER",
+      "SCM_SITE_ID",
+      "PROJECT_CODE",
+      "ITEM_ID",
+      "NICK_NAME",
+      "INCOTERMS",
+      "FCST_TYPE",
+      "DOM_EXP",
+      "CURRENCY",
+      "PLANT_SITE_ID",
+      "GROUP_ID",
+      "VERSION_NO",
+      "BUCKET",
+      "NEW_FLAG",
+      "ATTR1",
+      "VMI_STD_DIO",
+      "AS_YN"
+     ]
+    },
+    {
+     "cursor": 2,
+     "colsA": 3,
+     "colsB": 3,
+     "rowsA": 6,
+     "rowsB": 6,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "32c7c2d68148114c",
+     "shaB": "32c7c2d68148114c",
+     "cells": 18
+    },
+    {
+     "cursor": 3,
+     "colsA": 3,
+     "colsB": 3,
+     "rowsA": 1,
+     "rowsB": 1,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "0f73075f26a19e45",
+     "shaB": "0f73075f26a19e45",
+     "cells": 3
+    },
+    {
+     "cursor": 4,
+     "colsA": 4,
+     "colsB": 4,
+     "rowsA": 5,
+     "rowsB": 5,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "9a09f00c1004cd02",
+     "shaB": "9a09f00c1004cd02",
+     "cells": 20
+    },
+    {
+     "cursor": 5,
+     "colsA": 7,
+     "colsB": 7,
+     "rowsA": 181,
+     "rowsB": 181,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "f368c929c4b91d89",
+     "shaB": "f368c929c4b91d89",
+     "cells": 1267
+    },
+    {
+     "cursor": 6,
+     "colsA": 2,
+     "colsB": 2,
+     "rowsA": 1,
+     "rowsB": 1,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "83b3321894c58f58",
+     "shaB": "83b3321894c58f58",
+     "cells": 2
+    }
+   ]
+  },
+  {
+   "user": "k0101",
+   "div": "40",
+   "scen": "MF_W MF_W_20260921_V001",
+   "at": "11:29:58",
+   "verdict": "PASS",
+   "drift": null,
+   "tA": [
+    2.8,
+    0.16
+   ],
+   "tB": [
+    1.92,
+    0.07
+   ],
+   "cursors": [
+    {
+     "cursor": 1,
+     "colsA": 413,
+     "colsB": 413,
+     "rowsA": 10,
+     "rowsB": 10,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "ed8858a402302bba",
+     "shaB": "ed8858a402302bba",
+     "cells": 4130
+    },
+    {
+     "cursor": 2,
+     "colsA": 3,
+     "colsB": 3,
+     "rowsA": 6,
+     "rowsB": 6,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "32c7c2d68148114c",
+     "shaB": "32c7c2d68148114c",
+     "cells": 18
+    },
+    {
+     "cursor": 3,
+     "colsA": 3,
+     "colsB": 3,
+     "rowsA": 1,
+     "rowsB": 1,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "6b07f95cb7fcd744",
+     "shaB": "6b07f95cb7fcd744",
+     "cells": 3
+    },
+    {
+     "cursor": 4,
+     "colsA": 4,
+     "colsB": 4,
+     "rowsA": 5,
+     "rowsB": 5,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "9a09f00c1004cd02",
+     "shaB": "9a09f00c1004cd02",
+     "cells": 20
+    },
+    {
+     "cursor": 5,
+     "colsA": 7,
+     "colsB": 7,
+     "rowsA": 181,
+     "rowsB": 181,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "f368c929c4b91d89",
+     "shaB": "f368c929c4b91d89",
+     "cells": 1267
+    },
+    {
+     "cursor": 6,
+     "colsA": 2,
+     "colsB": 2,
+     "rowsA": 1,
+     "rowsB": 1,
+     "cols_equal": true,
+     "rows_equal": true,
+     "only_a": 0,
+     "only_b": 0,
+     "order": "ORDER_SAME",
+     "col_diff": {},
+     "samples": [],
+     "shaA": "83b3321894c58f58",
+     "shaB": "83b3321894c58f58",
+     "cells": 2
+    }
+   ]
+  }
+ ]
+}

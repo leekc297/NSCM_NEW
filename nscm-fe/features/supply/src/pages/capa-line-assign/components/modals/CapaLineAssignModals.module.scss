@@ -25,6 +25,17 @@
   }
 }
 
+// 중첩 TabWrapper(ELTR/ASSEMBLY 교체식 1탭)의 TabItem 안쪽 래퍼.
+//   molecules/Tab 의 `.tabItem` 은 height:100% 만 있고 display:block 이라, 그 자식 ResultArea
+//   (flex:1 1 0)가 flex 부모를 못 만나 높이를 못 풀고 접힌다. flex column 래퍼를 끼워 ResultArea
+//   가 높이를 상속받게 한다(메인 화면 grid 컴포넌트는 자체 height:100% 라 불필요했음).
+.tabPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
 // 하단 버튼 — flex-end 정렬이라 DOM 순서상 마지막이 최우측이다.
 //   액션(OK) 먼저, Close 를 마지막에 둔다(nscm-patterns §3.7 / hook #34).
 .buttonWrapper {

@@ -20,6 +20,9 @@ interface WaterfallShipmentPlanSemiState {
   isOpenSearchArea: boolean;
   staticColumns: RawFlexGridColumnConfig[];
   staticMeasures: MeasureMeta[];
+  // Measure 팝업(MeasureSelectModal) OK 결과 — 표시 measure 코드(null = 전체). 그리드 행 필터 입력.
+  //   자매 SCP0016(waterfall-shipment-plan-fg) 파리티. Division 변경/reset 시 null 로 되돌린다.
+  visibleMeasures: string[] | null;
   // 조회 가능 Division 0건 시 조회조건 영역 전체 비활성(01_layout.md §2 트리거C, MSG00097).
   divisionAuthChecked: boolean;
   hasDivisionAuth: boolean;
@@ -39,6 +42,8 @@ interface WaterfallShipmentPlanSemiAction {
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: () => Promise<void>;
   fetchStaticMeasures: (sheetName: string) => Promise<void>;
+  /** Measure 팝업 OK — 표시 measure 코드(null = 전체)를 그리드 행 필터로 반영(자매 SCP0016 파리티). */
+  applyVisibleMeasures: (codes: string[] | null) => void;
   setDivisionAuth: (hasAuth: boolean) => void;
   /** F6 저장조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchParams 패치(진입 1회). */
   restoreSearchConditions: () => Promise<void>;
@@ -80,6 +85,7 @@ const initState: WaterfallShipmentPlanSemiState = {
   isOpenSearchArea: true,
   staticColumns: [],
   staticMeasures: [],
+  visibleMeasures: null,
   divisionAuthChecked: false,
   hasDivisionAuth: true,
   conditionsRestored: false, // F6 저장조건 복원 1회 가드
@@ -98,6 +104,7 @@ export const useWaterfallShipmentPlanSemiStore = createPersistedStoreWithTab<
         state.searchParams = { ...initSearchParams, ...defaultPeriod() }; // 기본 기간은 리셋 시점 기준 재계산
         state.filters = {};
         state.isOpenSearchArea = true;
+        state.visibleMeasures = null;
       }),
     setSearchParams: searchParams =>
       set(state => {
@@ -118,6 +125,7 @@ export const useWaterfallShipmentPlanSemiStore = createPersistedStoreWithTab<
           endYyyymmdd: cur.endYyyymmdd,
         };
         state.filters = {}; // 그리드 초기화 — 재조회(Search) 전까지 빈 상태
+        state.visibleMeasures = null; // Measure 개인화는 division 별로 다를 수 있어 기본으로 되돌림(SCP0016 파리티)
       }),
     setFilters: ({ userId }) => {
       set(state => {
@@ -187,12 +195,26 @@ export const useWaterfallShipmentPlanSemiStore = createPersistedStoreWithTab<
           sheetNm: sheetName,
         });
         set(state => {
-          state.staticMeasures = result.data.result ?? [];
+          const measures = result.data.result ?? [];
+          state.staticMeasures = measures;
+          // 저장분(DISPLAY_FLAG) 복원 — BE retrieveGridMeasures 가 SCM_MST_TITLESET_USER(개인 저장분)를
+          //   LEFT JOIN 해 measure 별 display 를 내려준다(PKG_NSCM_UI_COM_MENU.PR_GET_SHEET_MEASURE_LIST).
+          //   일부만 표시면 그 코드들을 visibleMeasures 로 초기화(그리드 행 필터·팝업 복원)해 새로고침 후에도
+          //   저장한 measure 세트가 유지되게 한다. 전부 표시/전부 비표시(시드·조인 실패 방어)/플래그 없음은
+          //   null(전체)로 둔다 — 0건 저장은 saveTitleSet 가 막으므로 전부-비표시는 비정상으로 간주.
+          const shown = measures.filter(m => m.display === true).map(m => m.colNm);
+          state.visibleMeasures =
+            shown.length > 0 && shown.length < measures.length ? shown : null;
         });
       } catch {
         /* 미적재 시 빈 배열 유지 — 모달 fallback */
       }
     },
+    // MeasureSelectModal OK — 표시 measure 코드(null = 전체). 그리드 행 필터 입력(Page visibleData).
+    applyVisibleMeasures: codes =>
+      set(state => {
+        state.visibleMeasures = codes;
+      }),
     setDivisionAuth: hasAuth =>
       set(state => {
         state.divisionAuthChecked = true;

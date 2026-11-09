@@ -1,7 +1,7 @@
 # SSP0012 — To-Be Fact Pack 요약
 
 - page_key: `shipping/shipment-plan-confirm-detail` · feature: shipping · As-is Fact Pack 있음
-- 파일 12 · 엔드포인트 호출 6 (미해결 0, 주석 속 2) · 이벤트 16 · 컴포넌트 사용 62 · 하드코딩 컬럼 50 · 메시지 12
+- 파일 12 · 엔드포인트 호출 6 (미해결 0, 주석 속 2) · 이벤트 17 · 컴포넌트 사용 62 · 하드코딩 컬럼 50 · 메시지 12
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 50건
 
 ## 1. 파일
@@ -11,12 +11,12 @@
 | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | component | 194 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | component | 265 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.module.scss | component | 21 |
-| features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | component | 149 |
+| features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | component | 168 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/index.ts | index | 2 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/shipment-plan-confirm-detail.constants.ts | constants | 110 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/shipment-plan-confirm-detail.types.ts | types | 28 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.module.scss | style | 6 |
-| features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | page | 298 |
+| features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | page | 301 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/useShipmentPlanConfirmDetailStore.ts | store | 422 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/__asis-mapping__.md | mapping | 77 |
 
@@ -46,12 +46,13 @@
 | PeriodField | onChange | <arrow> setPeriod | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 224 |
 | InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 238 |
 | InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 255 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 91 |
-| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 119 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 95 |
+| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 123 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 136 |
 | ShipmentPlanConfirmDetailForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 169 |
 | ShipmentPlanConfirmDetailForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 170 |
 | ShipmentPlanConfirmDetailGrid | onDrilldown | setDrilldown | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 194 |
-| ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[SHEETS.MAIN],columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 241 |
+| ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[SHEETS.MAIN],columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 244 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

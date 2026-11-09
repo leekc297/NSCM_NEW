@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 62,
+  "dur": 158,
+  "at": "2026-11-07T10:58:47.053Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"EE_UC\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 162,
+  "at": "2026-11-07T10:58:50.930Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ }
+]

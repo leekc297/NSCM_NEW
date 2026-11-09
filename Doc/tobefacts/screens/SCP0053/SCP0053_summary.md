@@ -13,7 +13,7 @@
 | features/supply/src/pages/scp-bom/index.ts | index | 2 |
 | features/supply/src/pages/scp-bom/scp-bom.constants.ts | constants | 85 |
 | features/supply/src/pages/scp-bom/scp-bom.types.ts | types | 17 |
-| features/supply/src/pages/scp-bom/ScpBom.tsx | page | 212 |
+| features/supply/src/pages/scp-bom/ScpBom.tsx | page | 213 |
 | features/supply/src/pages/scp-bom/useScpBomStore.ts | store | 175 |
 | features/supply/src/pages/scp-bom/utils/scp-bom.editLock.ts | util | 20 |
 | features/supply/src/pages/scp-bom/utils/scp-bom.save.ts | util | 92 |
@@ -48,9 +48,9 @@
 | g | beginningEdit | handler | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 107 |
 | g | pastingCell | handler | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 125 |
 | g | formatItem | handler | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 141 |
-| ScpBomForm | onSearch | handleSearch | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 174 |
-| ScpBomForm | onModelSearch | <arrow> setOpenMaterial | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 175 |
-| ScpBomForm | onDivisionAuth | setDivisionAuth | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 176 |
+| ScpBomForm | onSearch | handleSearch | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 175 |
+| ScpBomForm | onModelSearch | <arrow> setOpenMaterial | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 176 |
+| ScpBomForm | onDivisionAuth | setDivisionAuth | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 177 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -110,8 +110,11 @@
 | code | return () => g.formatItem?.removeHandler(handler); | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 160 |
 | code | }, [gridRef, rows]); | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 161 |
 | code | import { useScpBomValidation } from './hooks/useScpBomValidation'; | features/supply/src/pages/scp-bom/ScpBom.tsx | 21 |
+| code | import { findInvalidScpYnParents } from './utils/scp-bom.scpYn'; | features/supply/src/pages/scp-bom/ScpBom.tsx | 27 |
 | code | const { validateSearch } = useScpBomValidation(); // V1 가드 임시 비활성 (2026-10-07) | features/supply/src/pages/scp-bom/ScpBom.tsx | 37 |
 | code | if (!validateSearch(sc)) return; | features/supply/src/pages/scp-bom/ScpBom.tsx | 90 |
+| code | const invalidParents = findInvalidScpYnParents(src); | features/supply/src/pages/scp-bom/ScpBom.tsx | 136 |
+| code | }); | features/supply/src/pages/scp-bom/ScpBom.tsx | 144 |
 | endpoint | ui-dynamic-property-management — admin SCM_MST_SHEET_COLUMNS 동적 fetch(실측 27행, design 03 §1). | features/supply/src/pages/scp-bom/useScpBomStore.ts | 20 |
 | code | const parentKey = (r: Row) => `${s(r.DIVISION_ID)}\|${s(r.PARENT_ITEM_ID)}`; | features/supply/src/pages/scp-bom/utils/scp-bom.scpYn.ts | 9 |
 | code | if (yCount !== 1) hits.push(pk.split('\|')[1] ?? ''); | features/supply/src/pages/scp-bom/utils/scp-bom.scpYn.ts | 31 |

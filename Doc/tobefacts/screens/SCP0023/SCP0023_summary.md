@@ -7,7 +7,7 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | component | 167 |
+| features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | component | 168 |
 | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | component | 109 |
 | features/supply/src/pages/outsourcing-capacity/hooks/useOutsourcingCapacityValidation.ts | hook | 70 |
 | features/supply/src/pages/outsourcing-capacity/index.ts | index | 2 |
@@ -15,7 +15,7 @@
 | features/supply/src/pages/outsourcing-capacity/outsourcing-capacity.types.ts | types | 14 |
 | features/supply/src/pages/outsourcing-capacity/OutsourcingCapacity.module.scss | style | 12 |
 | features/supply/src/pages/outsourcing-capacity/OutsourcingCapacity.tsx | page | 172 |
-| features/supply/src/pages/outsourcing-capacity/useOutsourcingCapacityStore.ts | store | 170 |
+| features/supply/src/pages/outsourcing-capacity/useOutsourcingCapacityStore.ts | store | 172 |
 | features/supply/src/pages/outsourcing-capacity/utils/outsourcingCapacityColumns.ts | util | 66 |
 | features/supply/src/pages/outsourcing-capacity/utils/outsourcingCapacityEditLock.ts | util | 39 |
 | features/supply/src/pages/outsourcing-capacity/__asis-mapping__.md | mapping | 58 |
@@ -25,8 +25,8 @@
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | OutsourcingCapacityForm.tsx:50 |
 | SCP0023/main//call-proc | hook | 2 | Y | OutsourcingCapacity.tsx:52 OutsourcingCapacity.tsx:59 |
-| /admin/menu/SCP0023/column | http | 1 | Y | useOutsourcingCapacityStore.ts:120 |
-| /admin/menu/SCP0023/search-conditions | http | 1 | Y | useOutsourcingCapacityStore.ts:149 |
+| /admin/menu/SCP0023/column | http | 1 | Y | useOutsourcingCapacityStore.ts:122 |
+| /admin/menu/SCP0023/search-conditions | http | 1 | Y | useOutsourcingCapacityStore.ts:151 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -36,11 +36,11 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 77 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 91 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 120 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 157 |
-| Button | onClick | onItemSearch | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 152 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 78 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 92 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 121 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 158 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 153 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 56 |
 | g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 83 |
 | g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 84 |
@@ -88,7 +88,7 @@
 | MSG01268 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0023(8), SCP0025(2), SCP0020(1)
+- 화면ID: SCP0023(10), SCP0025(2), SCP0020(1)
 - SP/PKG: SCP0023_GET_OUTSOURCING_CAPA(2), PKG_SCP0023(2), SCP0023_SAVE_OUTSOURCING_CAPA(1), SCM0001_GET_PLANT_SITE_BY_DIVISION_OSP(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { ADMIN_SHEET_NAME, MENU_ID, SHEETS } from './shipment-requestor-pic.constants';
 import type { SearchCondition } from './shipment-requestor-pic.types';
@@ -34,8 +34,9 @@ interface Action {
 }
 
 const initSearch: SearchCondition = {
-  // 기본 사업부 = 세션 division. AS-IS 는 MyDivision 콤보 기본선택(명시 SelectedIndex 없음, design 02 §4).
-  divisionId: useSessionStore.getState().session.div ?? '',
+  // 기본 사업부 = Division 콤보(MyDivision 권한목록) 첫 항목(Form 자동선택). AS-IS SSP0025 는 바인딩 후
+  //   첫 행 선택(세션 미사용, cs:133) — session.div deviation 제거(2026-11-05).
+  divisionId: '',
   plantSiteIds: [],
   itemId: '',
   nickName: '',

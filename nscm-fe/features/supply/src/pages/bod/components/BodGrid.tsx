@@ -7,7 +7,7 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
+import { useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { ComboResponse } from '@foundation/models';
@@ -157,6 +157,13 @@ export const BodGrid = ({
     [divisionId]
   );
 
+  // 그리드 생성 신호 — beginningEdit/formatItem/allowMerging 핸들러 부착 effect 는 `[data]` 에만
+  //   의존하는데, gridRef 는 공용 DataGrid 의 Wijmo initialized 콜백(mount 직후)에서야 세팅된다.
+  //   첫 effect 실행 때 그리드가 없으면 빠져나가고, 조회 전에는 data 가 계속 [] 라 재실행 계기가
+  //   없어 핸들러가 영영 안 붙었다(조회 전 Insert 시 Incoterms PLANT 잠금 무동작). 이 상태를
+  //   의존성에 넣어 그리드가 준비되는 시점에 한 번 더 부착한다.
+  const [gridReady, setGridReady] = useState(false);
+
   // TO_SITE 셀 콤보 3분기 원천 + FROM_SITE 콤보(OSP_YN 포함) — AS-IS SCP0007_BOD.cs L60/62-64
   // Data_SCP.CommonAll(...) 1:1. 검색조건 콤보(BodForm)와 별개로 그리드가 자체 조회한다.
   // divisionId 는 빈값('')으로 보낸다 — Oracle 은 '' 를 NULL 로 취급하므로 세 콤보의 `@divisionId
@@ -277,7 +284,7 @@ export const BodGrid = ({
     return () => {
       g.updatedLayout?.removeHandler(apply);
     };
-  }, [gridRef, data]);
+  }, [gridRef, data, gridReady]);
 
   // 최신 캐시를 beginningEdit/cellEditEnded 클로저에서 참조하기 위한 ref(재등록 없이 최신값 사용).
   const countryCityRowsRef = useRef<CountryCityRow[]>(countryCityRows);
@@ -318,6 +325,17 @@ export const BodGrid = ({
       String(dataItem[BOD_COLUMN.TO_SITE_CODE] ?? ''),
       dataItem[BOD_COLUMN.DIVISION_ID]
     )?.SITE_TYPE ?? '';
+
+  // INCOTERMS_SSP 편집 잠금 판정 — AS-IS SetCityCode(L1418/1427)+EditButton(L482/496)는 To Site 가
+  //   dtCountryCity 캐시에서 '비PLANT' 로 확인된 행만 잠근다. To Site 가 비었거나 캐시에 없는 행
+  //   (drsTo.Length==0, L1346 가드)·신규행(InsertButton 기본 열림, L424-425)은 잠그지 않고 열어 둔다.
+  //   getToSiteType 만으로 `!== 'PLANT'` 를 쓰면 빈/미확인 To Site 까지 전부 잠겨 AS-IS 보다 과잉
+  //   잠금이 된다(SSP Incoterms 가 신규행에서 아예 수정불가로 보이던 원인).
+  const isIncotermsSspLocked = (dataItem: WijmoRowItem): boolean => {
+    const toSiteCode = String(dataItem[BOD_COLUMN.TO_SITE_CODE] ?? '');
+    const toSiteType = getToSiteType(dataItem);
+    return Boolean(toSiteCode) && Boolean(toSiteType) && toSiteType !== 'PLANT';
+  };
 
   /**
    * From/To Site 확정 시 Country/City 자동 채움 + PLANT 조건부 Incoterms 잠금/기본값 +
@@ -452,12 +470,12 @@ export const BodGrid = ({
       }
 
       if (binding === BOD_COLUMN.INCOTERMS_SSP) {
-        // INCOTERMS_SSP 행단위 조건부 편집잠금 — AS-IS EditButton(L438-503)+SetCityCode(L1415-1418)가
-        // TO_SITE=PLANT 인 행만 편집 허용하고, 그 외에는 LockRange 로 잠근다(④ #3). TO_SITE_TYPE 은
-        // dtCountryCity 캐시가 채운 TO_COUNTRY/TO_CITY 유무로 판정할 수 없어(PLANT 아닌 site 도 city
-        // 는 채워진다) applyCityCode 가 세팅한 SITE_TYPE 판정 결과를 별도 필드로 남기지 않는 대신,
-        // 매 편집 시도마다 캐시에서 TO_SITE_CODE 로 재조회해 판정한다(원본과 동일한 실시간 판정).
-        if (getToSiteType(dataItem) !== 'PLANT') e.cancel = true;
+        // INCOTERMS_SSP 행단위 조건부 편집잠금 — AS-IS EditButton(L438-503)+SetCityCode(L1415-1427)는
+        // TO_SITE 가 캐시에서 '비PLANT' 로 확인된 행만 잠그고, PLANT·빈/미확인 To Site 는 열어 둔다
+        // (isIncotermsSspLocked 주석 참조 — 원본과 동일한 실시간 판정). TO_SITE_TYPE 은 dtCountryCity
+        // 캐시가 채운 TO_COUNTRY/TO_CITY 유무로 판정할 수 없어(PLANT 아닌 site 도 city 는 채워진다)
+        // 매 편집 시도마다 캐시에서 TO_SITE_CODE 로 재조회해 판정한다.
+        if (isIncotermsSspLocked(dataItem)) e.cancel = true;
         return;
       }
 
@@ -475,7 +493,7 @@ export const BodGrid = ({
     grid.beginningEdit.addHandler(handler);
     return () => grid.beginningEdit.removeHandler(handler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, gridReady]);
 
   /**
    * 셀 cascade — AS-IS EditChange(SCP0007_BOD.cs L1328-1353) + SpdMain_Changed(L1277-1320) 1:1.
@@ -563,8 +581,10 @@ export const BodGrid = ({
       // Incoterms 계열 편집 가능 표시 — 공통 formatItem 은 컬럼 메타(INPUT_TP_CD)만 보고 노란 바탕
       // (wj-cell-editable)을 붙인다. 실제 편집은 beginningEdit 가 To Site 타입으로 막으므로, 막히는
       // 셀의 클래스만 여기서 걷어 바탕색과 편집 가능 여부를 맞춘다(클래스를 새로 붙이지는 않는다).
-      // INCOTERMS_SSP 는 PLANT 일 때만, INCOTERMS 는 PLANT 가 아닐 때만 편집 가능하다.
-      if (binding === BOD_COLUMN.INCOTERMS_SSP && getToSiteType(dataItem) !== 'PLANT') {
+      // INCOTERMS_SSP 는 비PLANT 로 확인된 행에서만(isIncotermsSspLocked), INCOTERMS 는 PLANT 행에서만
+      // 잠기므로, 그 행의 노란 바탕 클래스만 걷어 바탕색과 편집 가능 여부를 맞춘다(빈/미확인 To Site
+      // 는 열려 있어 그대로 둔다 — beginningEdit 과 동일 판정).
+      if (binding === BOD_COLUMN.INCOTERMS_SSP && isIncotermsSspLocked(dataItem)) {
         e.cell.classList.remove('wj-cell-editable');
       } else if (binding === BOD_COLUMN.INCOTERMS && getToSiteType(dataItem) === 'PLANT') {
         e.cell.classList.remove('wj-cell-editable');
@@ -597,7 +617,7 @@ export const BodGrid = ({
     grid.invalidate();
     return () => grid.formatItem.removeHandler(handler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, gridReady]);
 
   // ROUTE_ID/BOD_ID 는 SP 에서 Oracle NUMBER 로 와서 Wijmo 가 천단위 콤마를 붙인다(dataType=String
   // 만으로는 원시 숫자값에 그대로 포맷이 적용됨 — 실측). 표시·저장 모두 문자열이 맞으므로
@@ -638,6 +658,7 @@ export const BodGrid = ({
       cellEditEnded={handleCellEdit}
       pastedCell={handleCellEdit}
       dblClick={handleDblClick}
+      initialized={() => setGridReady(true)}
     />
   );
 };

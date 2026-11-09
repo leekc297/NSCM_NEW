@@ -1,0 +1,390 @@
+# -*- coding: utf-8 -*-
+"""
+SSP 배치 프로그램 분석서·흐름 생성기 (2026-11-09)
+원천(전부 파일·DB 팩트 — 추측 없음):
+  - AS-IS SQL Agent 잡 정의  : Doc/asisfacts/db/batch/agent_jobs.csv · agent_jobsteps.csv · agent_schedules.csv · agent_jobhistory_summary.csv (asis_batch_facts.py 가 msdb 에서 추출)
+  - SSP 자체 스케줄러        : Doc/asisfacts/db/batch/ssp_int_systemexe.csv (PR_SSP_INT_SYSTEMEXEC_RUNJOB 이 읽는 잡 표)
+  - SP 본문                  : Doc/asisfacts/db/modules/dbo.<SP>.sql (ssp_flow.parse_sp 재사용 · 읽기 FROM/JOIN · 쓰기 INSERT/UPDATE/MERGE/DELETE · 중첩 EXEC 깊이 3)
+  - 객체 카탈로그            : Doc/asisfacts/db/db_objects.csv (비객체 이름 제외)
+  - 화면↔테이블              : Doc/화면분석서/SSP_FLOW_<date>/ssp_screen_sp_table.csv (ssp_flow.py 산출)
+  - TO-BE 이관 상태          : Doc/tobefacts/db/procs_catalog.csv
+  - 외부 실행기 소스         : GSCM/20.RFC/SAPRFC_Batch_NERP/NERP.cs (RFC 함수 카탈로그) · GSCM/24.WebSheduler (Quartz 프로토타입)
+산출: SSP_BATCH_ANALYSIS.md · SSP_BATCH_FLOW.md · ssp_batch_inventory.csv · ssp_batch_sp_table.csv (ssp_flow 출력 폴더에 함께)
+"""
+import sys, os, io, re, csv, json, html, time, collections
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ssp_flow as SF
+
+ROOT = SF.ROOT
+BATCH = os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'batch')
+PROCS_CATALOG = os.path.join(ROOT, 'Doc', 'tobefacts', 'db', 'procs_catalog.csv')
+NERP_CS = os.path.join(ROOT, 'GSCM', '20.RFC', 'SAPRFC_Batch_NERP', 'NERP.cs')
+RX_EXEC = re.compile(r'(?is)\bEXEC(?:UTE)?\s+(?:@\w+\s*=\s*)?((?:\[?\w+\]?\s*\.\s*){0,2}\[?\w+\]?)((?:[^\n;]|\n(?!\s*(?:GO|EXEC)))*)')
+RX_SSP_SP = re.compile(r'^(PR_SSP_|SCM_SSP_|SSP\d{4}_|PR_DM_SSP_|PR_SCP_PLN_SSP_|PR_DM_TO_XIF_DM_SSPM|PR_GSCM_XIF_SSP_)', re.I)
+
+GROUPS = [  # (그룹, 정규식 · SP 이름 기준 · 위에서부터 첫 일치)
+    ('수신 I/F(외부 → SSP)', r'_XIF_.*_R(_\w+)?$|_R$'),
+    ('송신 I/F(SSP → 외부)', r'_XIF_.*_S(_\w+)?$|_S$|_SEND$'),
+    ('외부 연계 데이터 적재(SCM_DNM·SSP_DNM)', r'_DNM_'),
+    ('알림(메일·SMS)', r'MAIL|SMS'),
+    ('KPI·BI', r'_KPI_|_BI_'),
+    ('집계·계획 생성(ANL·PLN)', r'_ANL_|_PLN_|CUTOFF|BALANCE'),
+    ('동기화·마스터·운영', r'SYNC|_MST_|_INT_|COMPRESS|SNAPSHOT'),
+]
+EXT_SYS = {'ERP': 'ERP(SAP)', 'NERP': 'ERP(SAP)', 'SCS': 'SCS', 'OWMS': 'OWMS', 'IWMS': 'IWMS', 'MES': 'MES', 'PLM': 'PLM', 'FP': 'FP(공장계획)', 'DW': 'DW', 'IFS': 'IFS(SMS)', 'SALES': 'Sales', 'GMES': 'GMES'}
+
+
+def group_of(sp):
+    for g, rx in GROUPS:
+        if re.search(rx, sp, re.I): return g
+    return '기타'
+
+
+def ext_of(sp):
+    m = re.search(r'_XIF_([A-Z]+)_', sp, re.I)
+    if m: return EXT_SYS.get(m.group(1).upper(), m.group(1).upper())
+    m = re.search(r'_DNM_([A-Z]+)_', sp, re.I)
+    if m and m.group(1).upper() in EXT_SYS: return EXT_SYS[m.group(1).upper()]
+    return ''
+
+
+FREQ_SUB = {1: '지정 시각 1회', 2: '초', 4: '분', 8: '시간'}
+DOW = ['일', '월', '화', '수', '목', '금', '토']
+
+
+def hhmmss(v):
+    try: v = int(v)
+    except Exception: return ''
+    return f'{v // 10000:02d}:{(v // 100) % 100:02d}'
+
+
+def decode_schedule(s):
+    """msdb.sysschedules 열 → 사람이 읽는 문장(공식 문서 freq_type 의미 그대로)"""
+    try:
+        ft = int(s['freq_type']); fi = int(s['freq_interval']); st = int(s['freq_subday_type']); si = int(s['freq_subday_interval']); rf = int(s['freq_recurrence_factor'] or 0)
+    except Exception:
+        return '해독 불가'
+    base = {1: '1회', 4: f'매 {fi}일', 8: f'매 {rf}주 ' + ','.join(d for i, d in enumerate(DOW) if fi & (1 << i)) + '요일', 16: f'매 {rf}개월 {fi}일', 32: f'매 {rf}개월 상대일', 64: 'Agent 시작 시', 128: '유휴 시'}.get(ft, f'freq_type {ft}')
+    if st in (2, 4, 8): sub = f' · {si}{FREQ_SUB[st]}마다 ({hhmmss(s["active_start_time"])}~{hhmmss(s["active_end_time"])})'
+    else: sub = f' · {hhmmss(s["active_start_time"])}'
+    return base + sub + (' · 스케줄 사용 안 함' if s.get('enabled') == '0' else '')
+
+
+def main():
+    t0 = time.strftime('%Y-%m-%d %H:%M')
+    out_dirs = sorted([d for d in os.listdir(os.path.join(ROOT, 'Doc', '화면분석서')) if d.startswith('SSP_FLOW_')])
+    out_dir = os.path.join(ROOT, 'Doc', '화면분석서', out_dirs[-1])
+    rd = SF.rd
+    jobs = {j['name']: j for j in rd(os.path.join(BATCH, 'agent_jobs.csv'))}
+    steps = rd(os.path.join(BATCH, 'agent_jobsteps.csv'))
+    scheds = rd(os.path.join(BATCH, 'agent_schedules.csv'))
+    hist = {h['job_name']: h for h in rd(os.path.join(BATCH, 'agent_jobhistory_summary.csv'))}
+    sysexe = rd(os.path.join(BATCH, 'ssp_int_systemexe.csv'))
+    objs = {r['name'].upper(): r['type'].strip() for r in rd(SF.DB_OBJECTS) if r.get('type', '').strip() in ('U', 'V', 'SN')}
+    nonobj = collections.Counter()
+    def only_obj(names):
+        keep = set()
+        for t in names:
+            if t in objs: keep.add(t)
+            else: nonobj[t] += 1
+        return keep
+    # 화면↔테이블 (ssp_flow 산출)
+    scr_rows = rd(os.path.join(out_dir, 'ssp_screen_sp_table.csv'))
+    scr_w = collections.defaultdict(set); scr_r = collections.defaultdict(set); scr_sps = collections.defaultdict(set)
+    for r in scr_rows:
+        if r['table']:
+            (scr_w if r['rw'] == 'W' else scr_r)[r['table']].add(r['screen_id'])
+        scr_sps[r['screen_id']].add(r['sp'])
+    # TO-BE 카탈로그
+    tobe_procs = rd(PROCS_CATALOG)
+    tobe_names = collections.defaultdict(list)
+    for r in tobe_procs:
+        for key in {r['object_name'].upper(), (r['procedure_name'] or '').upper()}:
+            if key: tobe_names[key].append(r)
+    def tobe_status(sp):
+        sp = sp.upper(); hits = []
+        for key, rows in tobe_names.items():
+            if key == sp or key == 'NERP_' + sp or key == 'P_' + sp or key.endswith('_' + sp) or (sp in key and key.startswith('P_')):
+                for r in rows: hits.append(f"{r['object_name']}{('.' + r['procedure_name']) if r['procedure_name'] else ''}({r['status']})")
+        return ' · '.join(sorted(set(hits))) if hits else '미이관(TO-BE 카탈로그 없음)'
+
+    # ── SP 파싱(캐시)
+    sp_cache = {}
+    def sp_info(sp):
+        sp = sp.upper()
+        if sp not in sp_cache:
+            info = SF.parse_sp(sp)
+            info['reads'] = only_obj(info['reads']); info['writes'] = only_obj(info['writes']); info['body'] = SF.sp_body(sp) is not None
+            sp_cache[sp] = info
+        return sp_cache[sp]
+
+    # ── 잡 스텝 → SP
+    job_steps = collections.defaultdict(list)
+    for s in steps: job_steps[s['job_name']].append(s)
+    def step_execs(cmd):
+        out = []
+        for m in RX_EXEC.finditer(cmd or ''):
+            name = SF.norm_name(m.group(1))
+            if not name or name in SF.KW or name.startswith('SP_'): continue
+            out.append((name, ' '.join((m.group(2) or '').split())[:120]))
+        return out
+    # ── 잡 분류
+    inv = []  # 잡 인벤토리 행
+    job_sps = {}; job_rw = {}
+    for jn, j in sorted(jobs.items()):
+        sts = sorted(job_steps.get(jn, []), key=lambda x: int(x['step_id']))
+        sps = []  # (step_id, sp, args)
+        for s in sts:
+            for name, args in step_execs(s['command']): sps.append((int(s['step_id']), name, args))
+        reads = set(); writes = set(); closure = set(); missing = set()
+        for _, sp, _ in sps:
+            inf = sp_info(sp); reads |= inf['reads']; writes |= inf['writes']; closure.add(sp); closure |= {c for c, _ in inf['calls']}; missing |= set(inf['missing'])
+        ssp_sp = sorted({x for x in closure if RX_SSP_SP.match(x)})
+        ssp_w = sorted(t for t in writes if SF.classify(t) == 'SSP'); ssp_r = sorted(t for t in reads if SF.classify(t) == 'SSP')
+        direct_ssp = [sp for _, sp, _ in sps if RX_SSP_SP.match(sp)]
+        if 'SSP' in jn.upper() or direct_ssp: cat = 'SSP 배치'
+        elif ssp_sp: cat = '타 도메인 배치(SSP SP 중첩 호출)'
+        elif ssp_w: cat = '타 도메인 배치(SSP 표 쓰기)'
+        elif ssp_r: cat = '타 도메인 배치(SSP 표 읽기)'
+        else: continue
+        main_sps = [sp for _, sp, _ in sps] or [jn]
+        grp = collections.Counter(group_of(sp) for sp in main_sps).most_common(1)[0][0]
+        sch = [x for x in scheds if x['job_name'] == jn]
+        job_sps[jn] = sps; job_rw[jn] = (reads, writes, closure, missing)
+        inv.append({'job_name': jn, 'category': cat, 'group': grp, 'enabled': 'Y' if j['enabled'] == '1' else 'N', 'description': ' '.join((j['description'] or '').split()),
+                    'created': (j['date_created'] or '')[:10], 'modified': (j['date_modified'] or '')[:10], 'steps': len(sts), 'sp_chain': ' → '.join(sp for _, sp, _ in sps),
+                    'schedule': ' | '.join(decode_schedule(x) + f"[{x['schedule_name']}]" for x in sch) or '스케줄 없음(DEV 복제본)',
+                    'history_runs': hist.get(jn, {}).get('runs', ''), 'writes_ssp': ' '.join(ssp_w), 'reads_ssp': ' '.join(ssp_r),
+                    'writes_other': ' '.join(sorted(t for t in writes if SF.classify(t) != 'SSP')), 'reads_other_n': len([t for t in reads if SF.classify(t) != 'SSP']),
+                    'screens_reading_output': ' '.join(sorted(set().union(*[scr_r.get(t, set()) for t in writes]) if writes else set())),
+                    'screens_writing_input': ' '.join(sorted(set().union(*[scr_w.get(t, set()) for t in reads]) if reads else set())),
+                    'ext_system': ' '.join(sorted({ext_of(sp) for sp in closure if ext_of(sp)})), 'missing_body': ' '.join(sorted(missing)),
+                    'tobe': ' / '.join(f'{sp}: {tobe_status(sp)}' for _, sp, _ in sps)})
+    # ── SSP_INT_SYSTEMEXE 잡
+    for r in sysexe:
+        sp = r['spname'].upper(); inf = sp_info(sp)
+        reads, writes = inf['reads'], inf['writes']
+        inv.append({'job_name': f"SYSTEMEXE:{r['jobid']}", 'category': 'SSP 배치(자체 스케줄러)', 'group': group_of(sp), 'enabled': 'Y' if r['useyn'] == 'Y' else 'N', 'description': r['jobdesc'],
+                    'created': (r.get('insdttm') or '')[:10], 'modified': (r.get('upddttm') or '')[:10], 'steps': 1, 'sp_chain': sp,
+                    'schedule': f"{r['execclcval']} {r['execclctype']} 주기 · 다음 실행 {r['nextexecdttm']} · 러너 PR_SSP_INT_SYSTEMEXEC_RUNJOB(SQL Agent JOB.PR_SSP_INT_SYSTEMEXEC_RUNJOB)",
+                    'history_runs': '', 'writes_ssp': ' '.join(sorted(t for t in writes if SF.classify(t) == 'SSP')), 'reads_ssp': ' '.join(sorted(t for t in reads if SF.classify(t) == 'SSP')),
+                    'writes_other': ' '.join(sorted(t for t in writes if SF.classify(t) != 'SSP')), 'reads_other_n': len([t for t in reads if SF.classify(t) != 'SSP']),
+                    'screens_reading_output': ' '.join(sorted(set().union(*[scr_r.get(t, set()) for t in writes]) if writes else set())),
+                    'screens_writing_input': ' '.join(sorted(set().union(*[scr_w.get(t, set()) for t in reads]) if reads else set())),
+                    'ext_system': ext_of(sp), 'missing_body': ' '.join(sorted(inf['missing'])), 'tobe': f'{sp}: {tobe_status(sp)}'})
+        job_sps[f"SYSTEMEXE:{r['jobid']}"] = [(1, sp, '')]; job_rw[f"SYSTEMEXE:{r['jobid']}"] = (reads, writes, {sp} | {c for c, _ in inf['calls']}, set(inf['missing']))
+    # ── PR_SSP 전수 인벤토리와 호출처
+    all_pr = sorted({f[4:-4].upper() for f in os.listdir(SF.MODULES) if RX_SSP_SP.match(f[4:-4]) and f[4:-4].upper().startswith(('PR_', 'SCM_SSP_'))})
+    callers = collections.defaultdict(set)  # sp → 호출처
+    for jn, sps in job_sps.items():
+        for _, sp, _ in sps:
+            callers[sp].add('JOB ' + jn)
+            for c, _ in sp_info(sp)['calls']: callers[c.upper()].add('SP ' + sp)
+    for sid, sps in scr_sps.items():
+        for sp in sps:
+            for c, _ in sp_info(sp)['calls']: callers[c.upper()].add('화면 ' + sid + ' ' + sp)
+    for sp in all_pr:
+        for c, _ in sp_info(sp)['calls']: callers[c.upper()].add('SP ' + sp)
+    # ── SAPRFC 카탈로그
+    rfc = []
+    if os.path.exists(NERP_CS):
+        sec = ''
+        for ln in io.open(NERP_CS, encoding='utf-8', errors='replace'):
+            m = re.match(r'\s*//\s*(DM|SSP|SCP)\s*$', ln)
+            if m: sec = m.group(1); continue
+            m = re.match(r'\s*public static string (XIF_\w+)\s*=\s*"([^"]+)"', ln)
+            if m and sec: rfc.append({'func': m.group(1), 'rfc': m.group(2), 'section': sec})
+            if 'RfcConfigParameters' in ln: break
+    rfc_tabs = {f"{r['func']}_SN": r for r in rfc}
+    rfc_used = {}  # XIF 표 → 읽는 SSP SP/화면
+    all_ssp_reads = collections.defaultdict(set)
+    for jn, (reads, writes, closure, _) in job_rw.items():
+        for t in reads: all_ssp_reads[t].add('JOB ' + jn)
+    for r in scr_rows:
+        if r['table']: all_ssp_reads[r['table']].add('화면 ' + r['screen_id'])
+    for t, r in rfc_tabs.items():
+        hits = all_ssp_reads.get(t, set()) | all_ssp_reads.get(t[:-3], set())
+        if hits: rfc_used[t] = hits
+
+    # ── CSV
+    cols = list(inv[0].keys())
+    with io.open(os.path.join(out_dir, 'ssp_batch_inventory.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, cols); w.writeheader(); w.writerows(sorted(inv, key=lambda x: (x['category'], x['group'], x['job_name'])))
+    with io.open(os.path.join(out_dir, 'ssp_batch_sp_table.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.writer(f); w.writerow(['job_name', 'step_id', 'sp', 'args', 'body_found', 'table', 'rw', 'table_domain', 'entity'])
+        for jn, sps in sorted(job_sps.items()):
+            for sid, sp, args in sps:
+                inf = sp_info(sp)
+                rows = [(t, 'W') for t in sorted(inf['writes'])] + [(t, 'R') for t in sorted(inf['reads'] - inf['writes'])]
+                if not rows: w.writerow([jn, sid, sp, args, 'Y' if inf['body'] else 'N', '', '', '', ''])
+                for t, rw in rows: w.writerow([jn, sid, sp, args, 'Y' if inf['body'] else 'N', t, rw, SF.classify(t), SF.entity_of(t) if SF.classify(t) == 'SSP' else ''])
+
+    # ── 집계
+    ssp_inv = [r for r in inv if r['category'].startswith('SSP 배치')]
+    other_inv = [r for r in inv if not r['category'].startswith('SSP 배치')]
+    by_group = collections.defaultdict(list)
+    for r in inv: by_group[r['group']].append(r)
+    stage_of_screen = {}
+    inv_scr = rd(os.path.join(out_dir, 'ssp_screen_inventory.csv'))
+    for r in inv_scr: stage_of_screen[r['screen_id']] = SF.stage_of({'tobe_desc': r['tobe_desc'], 'name': r['asis_name']})
+    unref = [sp for sp in all_pr if not callers.get(sp)]
+    ui_batch = sorted({(c.split(' ')[1], c.split(' ')[2], sp) for sp, cs in callers.items() for c in cs if c.startswith('화면 ') and sp in set(all_pr)})
+    n_hist = sum(1 for r in inv if r['history_runs'])
+
+    # ── 분석서 md
+    A = [f'# SSP 배치 프로그램 분석서 — {t0} 생성 · 생성기 `tools/Analysis/ssp_batch_flow.py`', '',
+         '> 배치 = 화면(UI) 이 아닌 스케줄러가 실행하는 프로그램. AS-IS 에서는 ① SQL Agent 잡(T-SQL 스텝이 PR_* SP 실행) ② SSP 자체 스케줄러 표 `SSP_INT_SYSTEMEXE`(러너 `PR_SSP_INT_SYSTEMEXEC_RUNJOB`) ③ 외부 실행기(SAP RFC 콘솔 `SAPRFC_Batch_NERP.exe`) ④ 화면 저장이 뒤에서 호출하는 배치형 SP(화면 유발) 네 경로로 실행된다.', '',
+         '## 0. 원천과 한계(먼저 읽을 것)', '',
+         f"- 잡 정의 원천 = **AS-IS DEV(LGCE_SCMDEV) msdb** 2026-11-09 06:08 추출(`Doc/asisfacts/db/batch/_extract_log.md`): 잡 {len(jobs)} · 스텝 {len(steps)} · 스케줄 {len(scheds)} · 실행 이력 보유 잡 {len(hist)}. **enabled 잡 {sum(1 for j in jobs.values() if j['enabled'] == '1')}개** — DEV 복제본이라 운영 스케줄·실행 이력은 여기 없다. 아래 '스케줄' 열은 DEV 에 남은 스케줄 정의만이며, 없는 잡은 '스케줄 없음(DEV 복제본)' 으로 표기 · 운영 주기는 잡 설명(description) 문구를 그대로 인용했다.",
+         f'- SP→테이블 = SP 본문 정규식(ssp_flow 와 동일) · 객체 카탈로그에 없는 이름 {len(nonobj)}종 제외 · 본문 없는 SP 는 `missing_body` 열.',
+         f'- SSP 자체 스케줄러 로그 `SSP_INT_SYSTEMEXELOG` 는 DEV 에서 0행(06:08 조회) — 실행 이력 미측정.',
+         '- 운영 실행 시각·소요·성공률은 **미측정**(운영 msdb 또는 `SCM_SYS_LOG_BATCH` 8,006,871행 — 인덱스 없음, GROUP BY 금지 기억) — 측정하려면 운영 DBA 에게 `msdb.dbo.sysjobhistory` 추출 요청.', '',
+         '## 1. 실행 기반', '',
+         '| 경로 | 실체 | SSP 관련 수량(이번 실측) | 비고 |', '|---|---|---|---|',
+         f"| SQL Agent 잡 | msdb sysjobs · T-SQL 스텝 EXEC PR_* | SSP 배치 {len([r for r in ssp_inv if not r['job_name'].startswith('SYSTEMEXE')])} · SSP 표 연계 타 도메인 배치 {len(other_inv)} | 스텝 서브시스템 TSQL {sum(1 for s in steps if s['subsystem'] == 'TSQL')} · SSIS {sum(1 for s in steps if s['subsystem'] == 'SSIS')} · PowerShell {sum(1 for s in steps if s['subsystem'] == 'PowerShell')} |",
+         f"| SSP 자체 스케줄러 | `SSP_INT_SYSTEMEXE` {len(sysexe)}행 → `PR_SSP_INT_SYSTEMEXEC_RUNJOB`(SQL Agent 잡 JOB.PR_SSP_INT_SYSTEMEXEC_RUNJOB 이 주기 실행) | {len(sysexe)} (USEYN=Y {sum(1 for r in sysexe if r['useyn'] == 'Y')}) | 주기 = EXECCLCVAL/EXECCLCTYPE · 30분 초과 실행 중이면 비정상 종료로 보고 재실행(러너 주석) |",
+         f"| 외부 실행기 | `GSCM/20.RFC/SAPRFC_Batch_NERP.exe`(SAP RFC → XIF_ERP_*_R 표 적재) | RFC 함수 {len(rfc)}(SSP 절 {sum(1 for r in rfc if r['section'] == 'SSP')}) · SSP 가 읽는 XIF 표 {len(rfc_used)} | 실행 스케줄 원천 **미확인**(SQL Agent 스텝에 exe 호출 0건 → Windows 작업 스케줄러 추정 금지, 담당자 확인) |",
+         '| WebScheduler(Quartz) | `GSCM/24.WebSheduler` JOB_GET_XIF_DW_RESULT 10분 주기 | 0 | DW 뷰 → `TBL_TEST1` 복사 프로토타입 · SSP 무관 |',
+         f'| 화면 유발 배치 | 화면 저장 SP 가 EXEC 하는 PR_SSP_* | {len(ui_batch)} (화면,SP) 쌍 | §4 |', '',
+         '## 2. 배치 인벤토리(SSP 배치 · 그룹별)', '',
+         '- 그룹 = SP 이름 규칙(수신 I/F `_XIF_*_R` · 송신 `_S` · DNM 가공 · 메일/SMS · KPI/BI · ANL/PLN 집계 · 동기화/마스터) · 상세는 §3 · 전체 열은 `ssp_batch_inventory.csv`', '']
+    for g, _ in GROUPS + [('기타', '')]:
+        rows = [r for r in ssp_inv if r['group'] == g]
+        if not rows: continue
+        A += [f'### {g} ({len(rows)})', '', '| 잡 | 사용 | 스케줄(DEV 정의) | 설명(원문) | SP 체인 | SSP 쓰기 표 | 출력을 읽는 화면 | 외부 |', '|---|---|---|---|---|---|---|---|']
+        for r in sorted(rows, key=lambda x: x['job_name']):
+            A.append(f"| {r['job_name']} | {r['enabled']} | {r['schedule']} | {r['description'][:120]} | {r['sp_chain'] or '-'} | {r['writes_ssp'] or '-'} | {r['screens_reading_output'] or '-'} | {r['ext_system'] or '-'} |")
+        A.append('')
+    A += [f'### 타 도메인 배치 중 SSP 표를 쓰거나 읽는 잡 ({len(other_inv)})', '', '| 잡 | 분류 | 설명 | SP 체인 | SSP 쓰기 | SSP 읽기 |', '|---|---|---|---|---|---|']
+    for r in sorted(other_inv, key=lambda x: (x['category'], x['job_name'])):
+        A.append(f"| {r['job_name']} | {r['category']} | {r['description'][:100]} | {r['sp_chain'][:160] or '-'} | {r['writes_ssp'] or '-'} | {r['reads_ssp'][:200] or '-'} |")
+    A += ['', '## 3. 잡별 상세(SSP 배치)', '', '> 스텝 순서 · 실행 명령 원문 · SP 가 쓰는/읽는 표(엔터티) · 연계 화면 · TO-BE 이관 상태. 중첩 호출은 깊이 3 까지 포함.', '']
+    for r in sorted(ssp_inv, key=lambda x: (x['group'], x['job_name'])):
+        jn = r['job_name']; reads, writes, closure, missing = job_rw[jn]
+        A += [f"### {jn}", '', f"- 그룹 {r['group']} · 사용 {r['enabled']} · 생성 {r['created']} · 수정 {r['modified']} · 스케줄 {r['schedule']}", f"- 설명(원문): {r['description'] or '-'}", f"- TO-BE: {r['tobe']}", '']
+        if jn.startswith('SYSTEMEXE:'):
+            A += ['| 순서 | SP | 인자 |', '|---|---|---|', f"| 1 | {r['sp_chain']} | (러너가 조회 기간 인자 전달) |", '']
+        else:
+            A += ['| 스텝 | 이름 | DB | 명령(원문) | 성공 시 | 실패 시 |', '|---|---|---|---|---|---|']
+            for s in sorted(job_steps.get(jn, []), key=lambda x: int(x['step_id'])):
+                A.append(f"| {s['step_id']} | {s['step_name']} | {s['database_name']} | `{' '.join((s['command'] or '').split())[:200]}` | {s['on_success_action']} | {s['on_fail_action']} |")
+            A.append('')
+        A += ['| SP | 본문 | 쓰기(W) | 읽기(R) | 중첩 호출 |', '|---|---|---|---|---|']
+        for sid, sp, args in job_sps[jn]:
+            inf = sp_info(sp)
+            A.append(f"| {sp} | {'Y' if inf['body'] else 'N'} | {', '.join(sorted(inf['writes'])) or '-'} | {', '.join(sorted(inf['reads'] - inf['writes'])) or '-'} | {', '.join(sorted({c for c, _ in inf['calls']})) or '-'} |")
+        A += ['', f"- 출력을 읽는 화면: {r['screens_reading_output'] or '-'} · 입력을 만드는 화면: {r['screens_writing_input'] or '-'}" + (f" · 본문 없음: {r['missing_body']}" if r['missing_body'] else ''), '']
+    A += ['## 4. 화면 유발 배치(화면 저장 SP → PR_SSP_* EXEC)', '', '| 화면 | 화면 SP | 호출되는 배치형 SP | 그룹 | TO-BE |', '|---|---|---|---|---|']
+    for sid, ssp_, sp in ui_batch: A.append(f'| {sid} | {ssp_} | {sp} | {group_of(sp)} | {tobe_status(sp)} |')
+    A += ['', f'## 5. PR_SSP_* 전수({len(all_pr)}) — 호출처', '', '| SP | 그룹 | 호출처(잡/SP/화면) | TO-BE |', '|---|---|---|---|']
+    for sp in all_pr: A.append(f"| {sp} | {group_of(sp)} | {', '.join(sorted(callers.get(sp, []))) or '**호출처 없음**(dead · 외부 스케줄러 · 동적 호출 중 하나 — 확인 필요)'} | {tobe_status(sp)} |")
+    A += ['', f'- 호출처 없는 PR_SSP_* {len(unref)}: {", ".join(unref) or "없음"}', '',
+          '## 6. SAP RFC 배치(SAPRFC_Batch_NERP) 함수 카탈로그와 SSP 사용', '', '| RFC 래퍼 함수(=적재 표) | SAP RFC | 소스 절 | SSP 에서 읽음 |', '|---|---|---|---|']
+    for r in rfc: A.append(f"| {r['func']} | {r['rfc']} | {r['section']} | {', '.join(sorted(rfc_used.get(r['func'] + '_SN', set())))[:200] or '-'} |")
+    A += ['', '## 7. TO-BE 이관 현황 요약', '']
+    st = collections.Counter('이관' if '미이관' not in tobe_status(sp) else '미이관' for sp in all_pr)
+    A += [f"- PR_SSP_* {len(all_pr)} 중 TO-BE 카탈로그(`procs_catalog.csv` {len(tobe_procs)}행)에 대응 객체 있음 {st['이관']} · 없음 {st['미이관']} (이름 일치 기준: 동일 · NERP_ 접두 · PKG 안 P_ 접두)",
+          '- TO-BE BE(`nscm-be`)에는 스케줄러 코드(@Scheduled/Quartz) 0건(11-09 grep) — 배치 실행 기반(Oracle DBMS_SCHEDULER 또는 별도 배치 서버)은 **미결정 사항**으로 담당자 확인 필요.', '',
+          '> 흐름 다이어그램 = `SSP_BATCH_FLOW.md` · 근거 행 = `ssp_batch_sp_table.csv` · 잡 원문 = `Doc/asisfacts/db/batch/*.csv`']
+    io.open(os.path.join(out_dir, 'SSP_BATCH_ANALYSIS.md'), 'w', encoding='utf-8', newline='\n').write('\n'.join(A) + '\n')
+
+    # ── 흐름 md
+    def jnode(jn):
+        r = next(x for x in inv if x['job_name'] == jn)
+        return f'J_{SF.mm_id(jn)}["{html.escape(jn.replace("JOB.", "").replace("SYSTEMEXE:", "⏱"))}<br/>{r["group"][:12]}{"" if r["enabled"] == "Y" else " (off)"}"]'
+    F = [f'# SSP 배치 흐름(Batch Flow) — {t0} 생성', '', '> 분석서 `SSP_BATCH_ANALYSIS.md` 의 그림판. 그룹·엔터티 규칙은 화면 흐름과 동일(`ssp_flow.py` ENTITY_RULES · 배치 그룹 GROUPS).', '',
+         '## 1. 실행 기반 구조', '', '```mermaid', 'flowchart LR',
+         f'  AG["SQL Agent(msdb)<br/>잡 {len(jobs)} · SSP 배치 {len([r for r in ssp_inv if not r["job_name"].startswith("SYSTEMEXE")])}"]',
+         '  RUN["JOB.PR_SSP_INT_SYSTEMEXEC_RUNJOB<br/>러너"]', f'  EXE[("SSP_INT_SYSTEMEXE<br/>{len(sysexe)}잡 · 주기 표")]',
+         f'  RFC["SAPRFC_Batch_NERP.exe<br/>RFC {len(rfc)}함수"]', '  SAP["SAP ERP"]', '  XIF[("XIF_ERP_*_R_SN")]', '  WS["WebScheduler(Quartz)<br/>프로토타입 · SSP 무관"]']
+    for g, _ in GROUPS + [('기타', '')]:
+        rows = [r for r in ssp_inv if r['group'] == g and not r['job_name'].startswith('SYSTEMEXE')]
+        if rows: F.append(f'  G_{SF.mm_id(g)}["{html.escape(g)}<br/>{len(rows)}잡"]'); F.append(f'  AG --> G_{SF.mm_id(g)}')
+    F += ['  AG --> RUN --> EXE']
+    for r in sysexe: F.append(f'  EXE -.->|{r["execclcval"]} {r["execclctype"]}| S_{SF.mm_id(r["jobid"])}["{html.escape(r["jobdesc"])}<br/>{r["spname"]}{"" if r["useyn"] == "Y" else " (off)"}"]')
+    g_in = GROUPS[0][0]
+    F += ['  SAP --> RFC --> XIF', f'  XIF -."R(SSP SP 가 읽는 XIF 표 {len(rfc_used)})".-> G_{SF.mm_id(g_in)}' if any(r['group'] == g_in and not r['job_name'].startswith('SYSTEMEXE') for r in ssp_inv) else '  XIF -.-> AG', '```', '',
+          '## 2. 배치 그룹 ⇒ SSP 엔터티 ⇒ 읽는 화면 단계 (배치가 만든 데이터를 화면이 봄)', '', '- 대상 = SSP 배치(자체 스케줄러 포함) · 라벨 = 테이블 수 · 화면 단계 = ssp_flow 의 stage_of · 공통·로그 표 제외', '', '```mermaid', 'flowchart LR']
+    gw = collections.defaultdict(set); er = collections.defaultdict(set); gr = collections.defaultdict(set); ew = collections.defaultdict(set)
+    for r in ssp_inv:  # SSP 배치만(타 도메인 연계 잡은 분석서 §2 표)
+        reads, writes, _, _ = job_rw[r['job_name']]
+        for t in writes:
+            if SF.classify(t) == 'SSP' and not re.search(r'_LOG|_HIST$', t):
+                en = SF.entity_of(t); gw[(r['group'], en)].add(t)
+                for sid in scr_r.get(t, set()): er[(en, stage_of_screen.get(sid, 'Etc'))].add(t)
+        for t in reads:
+            if SF.classify(t) == 'SSP' and not re.search(r'_LOG|_HIST$', t):
+                en = SF.entity_of(t); gr[(en, r['group'])].add(t)
+                for sid in scr_w.get(t, set()): ew[(stage_of_screen.get(sid, 'Etc'), en)].add(t)
+    F.append('  subgraph BG["배치 그룹(W)"]')
+    for g in sorted({k[0] for k in gw}): F.append(f'    BW_{SF.mm_id(g)}["{html.escape(g)}"]')
+    F += ['  end', '  subgraph EN["SSP 엔터티"]']
+    for en in sorted({k[1] for k in gw} | {k[0] for k in er}): F.append(f'    E_{SF.mm_id(en)}[("{html.escape(en)}")]')
+    F += ['  end', '  subgraph SS["읽는 화면 단계(R)"]']
+    for st in sorted({k[1] for k in er}): F.append(f'    SR_{st}["{st}"]')
+    F.append('  end')
+    for (g, en), ts in sorted(gw.items()): F.append(f'  BW_{SF.mm_id(g)} =="W {len(ts)}"==> E_{SF.mm_id(en)}')
+    for (en, st), ts in sorted(er.items()): F.append(f'  E_{SF.mm_id(en)} -."R {len(ts)}".-> SR_{st}')
+    F += ['```', '', '## 3. 화면 단계 ⇒ SSP 엔터티 ⇒ 배치 그룹 (화면이 만든 데이터를 배치가 가져감)', '', '```mermaid', 'flowchart LR', '  subgraph SS["쓰는 화면 단계(W)"]']
+    for st in sorted({k[0] for k in ew}): F.append(f'    SW_{st}["{st}"]')
+    F += ['  end', '  subgraph EN["SSP 엔터티"]']
+    for en in sorted({k[1] for k in ew} | {k[0] for k in gr}): F.append(f'    E_{SF.mm_id(en)}[("{html.escape(en)}")]')
+    F += ['  end', '  subgraph BG["배치 그룹(R)"]']
+    for g in sorted({k[1] for k in gr}): F.append(f'    BR_{SF.mm_id(g)}["{html.escape(g)}"]')
+    F.append('  end')
+    for (st, en), ts in sorted(ew.items()): F.append(f'  SW_{st} =="W {len(ts)}"==> E_{SF.mm_id(en)}')
+    for (en, g), ts in sorted(gr.items()): F.append(f'  E_{SF.mm_id(en)} -."R {len(ts)}".-> BR_{SF.mm_id(g)}')
+    # 배치 간 의존(그룹 집계 + 잡 단위 표)
+    dep = collections.defaultdict(set)
+    fam = {}  # 동일 SP 체인 잡 묶음 대표
+    for r in ssp_inv: fam.setdefault(r['sp_chain'], r['job_name'])
+    def famname(jn):
+        r = next(x for x in inv if x['job_name'] == jn); rep_ = fam.get(r['sp_chain'], jn); n = sum(1 for x in ssp_inv if x['sp_chain'] == r['sp_chain'])
+        return rep_ + (f' 외 {n - 1}' if n > 1 and rep_ == jn else '')
+    for a in ssp_inv:
+        for b in ssp_inv:
+            if fam.get(a['sp_chain']) != a['job_name'] or fam.get(b['sp_chain']) != b['job_name']: continue  # 묶음 대표만
+            if a['job_name'] == b['job_name']: continue
+            common = {t for t in job_rw[a['job_name']][1] if SF.classify(t) == 'SSP' and not re.search(r'_LOG|_HIST$', t)} & job_rw[b['job_name']][0]  # SSP 표 매개만(타 도메인·공통 표 매개는 범위 밖)
+            if common: dep[(a['job_name'], b['job_name'])] = common
+    F += ['```', '', '## 4. 배치 간 데이터 의존(잡 A 가 쓴 SSP 표를 잡 B 가 읽음) — 그룹 집계', '', '- 대상 = SSP 배치 · 동일 SP 체인 잡은 묶음 대표 1건("외 n") · 실선 = (잡쌍,표) 5 이상 · 점선 = 미만 · 잡 단위 전체는 아래 표', '', '```mermaid', 'flowchart LR']
+    gmap = {r['job_name']: r['group'] for r in inv}
+    agg = collections.Counter()
+    for (a, b), ts in dep.items():
+        if gmap[a] != gmap[b]: agg[(gmap[a], gmap[b])] += len(ts)
+    for g in sorted({k for p in agg for k in p}): F.append(f'  D_{SF.mm_id(g)}["{html.escape(g)}"]')
+    for (a, b), n in sorted(agg.items(), key=lambda x: -x[1]): F.append(f'  D_{SF.mm_id(a)} {"-->" if n >= 5 else "-.->"}|{n}| D_{SF.mm_id(b)}')
+    F += ['```', '', '| 선행 잡(쓰기) | 후행 잡(읽기) | 매개 표 |', '|---|---|---|']
+    for (a, b), ts in sorted(dep.items(), key=lambda x: -len(x[1])): F.append(f"| {famname(a)} | {famname(b)} | {', '.join(sorted(ts))[:300]} |")
+    F += ['', '## 5. 외부 시스템 인터페이스 맵(수신·송신 배치)', '', '```mermaid', 'flowchart LR', '  SSP[("SSP 테이블")]']
+    exts = collections.defaultdict(lambda: [set(), set()])
+    for r in ssp_inv:
+        for sp in job_rw[r['job_name']][2]:
+            e = ext_of(sp)
+            if not e: continue
+            if re.search(r'_R(_\w+)?$', sp): exts[e][0].add(r['job_name'].replace('JOB.', '').replace('SYSTEMEXE:', '⏱'))
+            elif re.search(r'_S(_\w+)?$|_SEND', sp): exts[e][1].add(r['job_name'].replace('JOB.', '').replace('SYSTEMEXE:', '⏱'))
+    for e, (rin, sout) in sorted(exts.items()):
+        F.append(f'  X_{SF.mm_id(e)}["{html.escape(e)}"]')
+        if rin: F.append(f'  X_{SF.mm_id(e)} -->|"수신 {len(rin)}: {html.escape("<br/>".join(sorted(rin)[:6]))}{"…" if len(rin) > 6 else ""}"| SSP')
+        if sout: F.append(f'  SSP -->|"송신 {len(sout)}: {html.escape("<br/>".join(sorted(sout)[:6]))}{"…" if len(sout) > 6 else ""}"| X_{SF.mm_id(e)}')
+    F += ['```', '', '## 6. 잡별 상세 다이어그램(스텝 → SP → 엔터티)', '', '- 엔터티 단위(SSP) · 타 도메인은 도메인명 · 라벨 = 테이블 수 · 테이블 단위는 분석서 §3 표', '']
+    for r in sorted(ssp_inv, key=lambda x: (x['group'], x['job_name'])):
+        jn = r['job_name']
+        F += [f'### {jn}', '', '```mermaid', 'flowchart LR', '  ' + jnode(jn)]
+        prev = f'J_{SF.mm_id(jn)}'
+        for sid, sp, args in job_sps[jn]:
+            inf = sp_info(sp); pid = f'P_{SF.mm_id(sp)}'
+            F.append(f'  {pid}{{{{"{sid}. {sp}{"" if inf["body"] else " (본문 없음)"}"}}}}'); F.append(f'  {prev} --> {pid}'); prev = pid
+            def grp(t): return SF.entity_of(t) if SF.classify(t) == 'SSP' else SF.classify(t)
+            for en, n in sorted(collections.Counter(grp(t) for t in inf['writes']).items()): F.append(f'  {pid} =="W {n}"==> E_{SF.mm_id(en)}[("{html.escape(en)}")]')
+            for en, n in sorted(collections.Counter(grp(t) for t in inf['reads'] - inf['writes']).items()): F.append(f'  E_{SF.mm_id(en)}[("{html.escape(en)}")] -."R {n}".-> {pid}')
+        scr = r['screens_reading_output'].split()
+        if scr: F.append(f'  SCR["읽는 화면 {len(scr)}<br/>{html.escape(" ".join(scr[:8]))}{"…" if len(scr) > 8 else ""}"]'); F.append(f'  {prev} -.-> SCR')
+        F += ['```', '']
+    io.open(os.path.join(out_dir, 'SSP_BATCH_FLOW.md'), 'w', encoding='utf-8', newline='\n').write('\n'.join(F) + '\n')
+    print(f'[ssp_batch_flow] 잡 {len(jobs)} → SSP 배치 {len(ssp_inv)}(SYSTEMEXE {len(sysexe)}) · 타 도메인 연계 {len(other_inv)} · PR_SSP 전수 {len(all_pr)}(호출처 없음 {len(unref)}) · 화면 유발 {len(ui_batch)} · 배치 간 의존 {len(dep)} · RFC {len(rfc)} · 비객체 {len(nonobj)} → {os.path.relpath(out_dir, ROOT)}')
+
+
+if __name__ == '__main__':
+    main()

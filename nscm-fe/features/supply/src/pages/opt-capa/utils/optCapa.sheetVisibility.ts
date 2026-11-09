@@ -3,11 +3,15 @@ import {
   EE_UC_DIVISION_TOKEN,
   GRID_SHEETS,
   SHEETS,
+  SPD_SHEET_ORDER,
   type GridSheet,
 } from '../opt-capa.constants';
 import type { ExcludedSheetRow } from '../opt-capa.types';
 
 import { str } from './optCapa.candidates';
+
+/** AS-IS `CreateSpread` 가 `Preparation Rate` 탭을 만드는 첫 Division(cs:617). */
+const PREP_RT_CREATE_DIVISION = '40';
 
 /**
  * 탭 집합 · 조회영역 전용버튼 노출 파생 — AS-IS 명령형 3회 호출을 순수함수로 이식.
@@ -37,12 +41,8 @@ export const buildExcludedSheetNames = (
 };
 
 /**
- * 노출 탭 — 운영 AS-IS 캡처는 Division 이동 이력과 **무관하게 항상 같은 순서**를 보여준다
- * (사용자 지시 2026-10-20: 이미지=실화면 우선). `GRID_SHEETS`(= 실화면 탭 순서)에서 제외 탭만 뺀
- * **정규 순서**를 쓴다 — 직전 순서에 의존하지 않아 "제외됐다 돌아온 탭이 맨 뒤로 밀리는" 드리프트가 없다.
- *
- * (구 `nextTabOrder` 는 직전 순서 유지 + 미싱 탭 맨 뒤 append 로 이동 이력에 순서가 달라졌다(design 01
- *  R14). 운영 AS-IS 는 고정 순서라 폐기한다. 탭 집합은 여전히 제외목록 단일 원천이다.)
+ * 노출 탭 기본 집합 — `init` 응답 전에만 쓴다. 응답 뒤의 탭 순서는 {@link buildInitialSheets} ·
+ * {@link nextTabOrder} 가 정한다.
  */
 export const buildVisibleSheets = (
   exclusionRows: readonly ExcludedSheetRow[],
@@ -50,6 +50,45 @@ export const buildVisibleSheets = (
 ): GridSheet[] => {
   const excluded = buildExcludedSheetNames(exclusionRows, divisionId);
   return GRID_SHEETS.filter(sheet => !excluded.has(ADMIN_SHEET_NAME[sheet]));
+};
+
+/**
+ * 첫 진입 탭 — AS-IS `CreateSpread`(cs:595-639) 이식.
+ * `Preparation Rate` 는 첫 Division 이 `40` 일 때만 만들고, 그 뒤 제외 탭을 지운다.
+ */
+export const buildInitialSheets = (
+  exclusionRows: readonly ExcludedSheetRow[],
+  divisionId: string
+): GridSheet[] => {
+  const excluded = buildExcludedSheetNames(exclusionRows, divisionId);
+  const prepRt: readonly GridSheet[] = divisionId === PREP_RT_CREATE_DIVISION ? [SHEETS.PREP_RT] : [];
+  const created: GridSheet[] = [
+    SHEETS.NO_WORK,
+    SHEETS.DAILY_CAPA,
+    SHEETS.SOP_EOP,
+    SHEETS.RAMP_UP,
+    SHEETS.RAMP_UP_ITVL,
+    ...prepRt,
+    SHEETS.UTIL_RT,
+    SHEETS.YLD_ELEC,
+  ];
+  return created.filter(sheet => !excluded.has(ADMIN_SHEET_NAME[sheet]));
+};
+
+/**
+ * Division 변경 시 탭 — AS-IS `ClbDivision_SelectedIndexChanged`(cs:3710-3768) 이식.
+ * 제외 탭을 지우고, 없는 탭을 `SPD_SHEET_ORDER` 순서로 맨 뒤에 붙인다. 순서는 이동 이력에 따라 달라진다.
+ */
+export const nextTabOrder = (
+  currentSheets: readonly GridSheet[],
+  exclusionRows: readonly ExcludedSheetRow[],
+  divisionId: string
+): GridSheet[] => {
+  const excluded = buildExcludedSheetNames(exclusionRows, divisionId);
+  const isShown = (sheet: GridSheet) => !excluded.has(ADMIN_SHEET_NAME[sheet]);
+  const kept = currentSheets.filter(isShown);
+  const added = SPD_SHEET_ORDER.filter(sheet => isShown(sheet) && !kept.includes(sheet));
+  return [...kept, ...added];
 };
 
 /**

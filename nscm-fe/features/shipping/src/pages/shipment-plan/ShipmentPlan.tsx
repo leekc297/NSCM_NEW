@@ -645,7 +645,15 @@ export const ShipmentPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // ── Main 드릴다운 (03 §3-D — BOH_TYPE / MEASURE 분기) ──
   const handleMainDrilldown = (row: MainRow, binding: string) => {
-    const overrides = { itemId: str(row.ITEM_ID), fromSite: str(row.FROM_SITE) };
+    // 드릴다운 공통 override — 이 화면은 PRODUCT_LEVEL1 로 묶어 보므로 재고/상세 조회 시 클릭 행의
+    //   productLevel1 을 반드시 넘긴다(테스터 신고 2026-11-05: BOH 헤더 oWMS/MES/ERP 숫자 클릭 시
+    //   하단 재고가 productLevel1 미전달로 빈 결과). 세 BOH 시트(STOCK_DETAIL/OWMS_DETAIL/MES_STOCK)와
+    //   PlanDetail 드릴 모두 common.productLevel1(= overrides?.productLevel1) 경로를 타므로 여기서 채운다.
+    const overrides = {
+      itemId: str(row.ITEM_ID),
+      fromSite: str(row.FROM_SITE),
+      productLevel1: str(row.PRODUCT_LEVEL1),
+    };
     // 편집 기본 ON(convert-core §2.4) — 드릴다운 시 별도 편집모드 해제 없음(AS-IS bEdit_Mode=false 미이식).
     if (binding === 'BOH_QTY' && str(row.BOH_TYPE) === 'MES') {
       // MES 는 MES Stock Detail + MES Stock 2-sheet 연속 조회, 활성 탭은 MES Stock

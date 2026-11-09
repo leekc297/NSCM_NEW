@@ -80,11 +80,14 @@ function parseCsv(t) {
   if (cell !== '' || row.length) { row.push(cell); out.push(row); }
   return out;
 }
+// 1.9.42(2026-11-06 사용자 지시): run-e2e.cmd <종류> <ID 1개> 의 결과는 화면 폴더 Doc/e2e/results/<ID>/ — 화면 요약은 그 폴더 파일을 먼저, 없으면(전환 전 결과) 공용 색인
+//   (공용 색인은 다른 화면 실행에도 갱신 시각이 바뀌어 '이번 실행에서 갱신됨' 판정이 거짓 통과할 수 있었다)
+function e2eSummaryFile(p, id) { const f = path.join(p.e2eOutDir, 'results', String(id || '').toUpperCase(), '_summary.csv'); return id && fs.existsSync(f) ? f : path.join(p.e2eOutDir, 'results', '_summary.csv'); }
 function verifyStep(p, v, id) {
   if (process.env.VIBE_CHAIN_NO_VERIFY === '1') return { ok: true, why: '검증 생략(VIBE_CHAIN_NO_VERIFY)' }; // 모의 테스트 전용
   try {
     if (v.type === 'e2eRows') {
-      const f = path.join(p.e2eOutDir, 'results', '_summary.csv'); if (!fs.existsSync(f)) return { ok: false, why: `E2E 요약 없음: ${f}` };
+      const f = e2eSummaryFile(p, id); if (!fs.existsSync(f)) return { ok: false, why: `E2E 요약 없음: ${f}` };
       const since = v._since || 0; const mt = fs.statSync(f).mtimeMs; if (since && mt < since) return { ok: false, why: `E2E 요약이 이번 실행에서 갱신되지 않음(Playwright 미실행 가능성) — ${path.relative(p.root, f)}` };
       const rows = fs.readFileSync(f, 'utf8').split(/\r?\n/).filter(l => l.includes(`"${id}"`) && (!v.kind || l.includes(`"${v.kind}"`)));
       if (!rows.length) return { ok: false, why: `E2E 결과에 ${id}${v.kind ? '/' + v.kind : ''} 행이 없음(스펙 미생성 또는 실행 실패)` };
@@ -199,8 +202,8 @@ const UI = {
   st_pick: ['Set a screen ID to see its progress, gates and outputs here.', '화면ID 를 입력하면 그 화면의 단계 현황·산출물이 여기 나옵니다.'], st_progress: ['Progress', '진행률'], st_stages: ['stages done', '단계 완료'], st_dod: ['DoD', 'DoD'], st_fe: ['FE Gate', 'FE 게이트'], st_pkg: ['PKG Gate', 'PKG 게이트'], st_chk: ['CheckList open', 'CheckList 조치 필요'], st_e2e: ['E2E', 'E2E'],
   st_notrun: ['not run', '미실행'], st_nospec: ['no spec', '스펙 없음'], st_items: ['items', '건'], st_outputs: ['Outputs', '산출물'], st_docs: ['Documents', '문서'], st_recent: ['Recent work', '최근 작업'], st_none: ['none', '없음'], st_changed: ['changed', '변경'], st_open: ['open', '진행중'], st_pipeline: ['Last pipeline', '마지막 파이프라인'],
   tb: [{ reload: 'Reload', edit: 'Edit', view: 'View', save: 'Save', editor: 'Open in editor', os: 'Open with OS', close: 'Close tab' }, { reload: '새로고침', edit: '편집', view: '보기', save: '저장', editor: '에디터로', os: 'OS 로 열기', close: '탭 닫기' }],
-  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', retry: 'retry', optional: 'optional', warn: 'Done w/ warnings', pending: 'Reported · follow-up work still running', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', SKIP: 'skipped', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
-       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', retry: '재시도', optional: '선택', warn: '경고 포함 완료', pending: '보고 완료 · 후속 작업 진행 중', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', SKIP: '건너뜀', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
+  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', retry: 'retry', stage: 'Stage', sub: 'sub', runN: 'run', optional: 'optional', warn: 'Done w/ warnings', pending: 'Reported · follow-up work still running', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', SKIP: 'skipped', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
+       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', retry: '재시도', stage: '단계', sub: '세부', runN: '번째 실행', optional: '선택', warn: '경고 포함 완료', pending: '보고 완료 · 후속 작업 진행 중', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', SKIP: '건너뜀', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
   st_menu: ['Menu', '메뉴'], st_page: ['Page', '페이지'], st_click: ['Click a stage to run it', '단계를 누르면 실행됩니다'],
 };
 const t = (p, k) => (UI[k] || [k, k])[(p && p.language) === 'ko' ? 1 : 0];
@@ -861,7 +864,7 @@ class WB {
   //   재시험이 통과하면 그 단계에 기대던 단계(E2E_DEPENDS — crud 뒤 authcrud)도 이어서 재시험. 결과는 통과/아직 실패만 알리고 상세는 E2E_REPAIR.md.
   async repairE2E(p, item, id, harness) {
     const kinds = ['smoke', 'crud', 'auth', 'authcrud'];
-    let rows = []; try { rows = fs.readFileSync(path.join(p.e2eOutDir, 'results', '_summary.csv'), 'utf8').split(/\r?\n/).filter(l => l.startsWith(`"${id}",`)); } catch { }
+    let rows = []; try { rows = fs.readFileSync(e2eSummaryFile(p, id), 'utf8').split(/\r?\n/).filter(l => l.replace(/^﻿/, '').startsWith(`"${id}",`)); } catch { }
     const failed = kinds.filter(k => rows.some(l => l.startsWith(`"${id}","${k}"`) && l.includes('"FAIL"')));
     if (!failed.length) { this.out('task', `ℹ ${id}: 최근 E2E 결과에 실패가 없습니다 — 보완할 것이 없습니다\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager ${id}: 실패한 E2E 가 없습니다`); return; }
     const kind = failed[0]; const label = { smoke: '스모크', crud: 'CRUD', auth: '권한', authcrud: '권한별 CRUD' };
@@ -1409,6 +1412,12 @@ function fmtSec(s){s=Math.max(0,Math.round(s));return s<60?s+'s':Math.floor(s/60
 function firstLine(t){return (String(t||'').split('\\n').find(x=>x.trim())||'').replace(/^[#>*\\-\\s]+/,'').replace(/\\*\\*/g,'').trim();}
 function chatStick(){const c=$('chat');return c.scrollHeight-c.scrollTop-c.clientHeight<80;}
 function chatScroll(stick){if(stick)$('chat').scrollTop=$('chat').scrollHeight;}
+// 1.9.43(2026-11-06 사용자): 패널을 가로로 줄이면 내용이 세로로 길어져 맨 아래 항목(새 세션 줄 등)이 가려짐 — 바닥에 붙어 있던 상태면 크기가 바뀐 뒤 다시 맨 아래로(채팅·로그 상자 공통)
+let chatWasStick=true;
+function stickWatch(){const c=$('chat');if(!c||c._stickWatch)return;c._stickWatch=1;c.addEventListener('scroll',()=>{chatWasStick=chatStick();});
+  const ro=new ResizeObserver(es=>{for(const e of es){const el=e.target;if(el===c){if(chatWasStick)requestAnimationFrame(()=>chatScroll(true));}else if(el._ws!==false)requestAnimationFrame(()=>{el.scrollTop=el.scrollHeight;});}});
+  ro.observe(c);for(const id of ['log','belog','felog']){const b=$(id);if(!b)continue;b._ws=true;b.addEventListener('scroll',()=>{b._ws=b.scrollHeight-b.scrollTop-b.clientHeight<40;});ro.observe(b);}}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',stickWatch);else stickWatch();
 // 1.9.30: LITE 질의(산출물 없는 질문·확인) = Step 상황판 숨김 → 질문 + 결과만.
 //   시작 시 프롬프트로 예측(attach-context 훅과 같은 기준, 화면 컨텍스트 접두 제외) → 응답 첫 줄 [LITE] 면 LITE 확정,
 //   [T# …] 표기·할 일 목록(TodoWrite) 이 오면 작업(FULL) 으로 확정해 상황판을 다시 보임.
@@ -1572,36 +1581,64 @@ function flowStep(m){
 }
 // 1.9.17: E2E 단계 카드 — Task Log 로 흘러온 Playwright 결과 줄(ok/x N [chromium] › spec › 제목 (시간))을 테스트별로 집계.
 //   같은 제목이 다시 나오면 재시도(실패 뒤 ok = ⚠ flaky). 'Running N tests' = 그 단계의 전체 건수 → 진행바·카드 머리 'n/N'.
-function e2eOf(s){if(!s.e2e){const d=el('div','e2elist');s.body.insertBefore(d,s.tail);s.e2e={tests:{},order:[],total:0,el:d};}return s.e2e;}
+// 1.9.42(2026-11-06 사용자 지시): CheckList 진행 = 전체 단계 안의 위치 — 대분류 '[단계 i/N] 이름' · 중분류 '[세부 j/M] 도구'(run_verify.py·prereq.py 출력) ·
+//   테스트 n/N 은 Playwright 실행('Running N tests')마다 따로 센다. 종전엔 한 작업 안에서 Playwright 가 여러 번 돌면(smoke 3 → 검증엔진 72 → 팝업·권한 9)
+//   전체 수만 새 값으로 바뀌고 완료 목록은 누적돼 '73/9' 처럼 전체가 사라졌다. 테스트 목록은 실행(구간)별 머리줄로 나눠 보여 준다.
+function e2eOf(s){if(!s.e2e){const d=el('div','e2elist');s.body.insertBefore(d,s.tail);s.e2e={tests:{},order:[],total:0,el:d,stage:null,sub:null,seg:null,segs:[]};}return s.e2e;}
+function e2eStageName(e){return e.stage?e.stage.name.replace(/\\s+—\\s.*$/,'').replace(/\\s+·\\s.*$/,''):'';}
 function e2eLine(s,ln){
   const L=String(ln).replace(/^\\s*│\\s?/,'');
-  let m=/^\\s*Running (\\d+) tests?/.exec(L);
-  if(m){e2eOf(s).total=+m[1];e2eRender(s);return;}
+  let m=/^\\s*\\[단계 (\\d+)\\/(\\d+)\\]\\s*(.*)$/.exec(L);
+  if(m){const e=e2eOf(s);e.stage={i:+m[1],n:+m[2],name:m[3]};e.sub=null;e.seg=null;e2eRender(s);return;}
+  m=/^\\s*\\[세부 (\\d+)\\/(\\d+)\\]\\s*(.*)$/.exec(L);
+  if(m){const e=e2eOf(s);e.sub={j:+m[1],m:+m[2],name:m[3]};e2eRender(s);return;}
+  m=/^\\s*Running (\\d+) tests?/.exec(L);
+  if(m){const e=e2eOf(s);e.seg={no:e.segs.length+1,total:+m[1],keys:[],label:e.stage?(UI_BD.stage+' '+e.stage.i+'/'+e.stage.n+' '+e2eStageName(e)):''};e.segs.push(e.seg);e.total=e.seg.total;e2eRender(s);return;}
   m=/^\\s*(ok|x|✘|✓|-)\\s+\\d+\\s+\\[[^\\]]+\\]\\s+›\\s+(.+?)(?:\\s+\\(retry #(\\d+)\\))?(?:\\s+\\((\\d[\\d.]*(?:ms|s|m|h))\\))?\\s*$/.exec(L); // 소요시간 = 37.3s · 2.7m · 850ms
   if(!m)return;
-  const e=e2eOf(s);const key=m[2];const st=(m[1]==='ok'||m[1]==='✓')?'ok':m[1]==='-'?'skip':'fail';const prev=e.tests[key];
-  if(!prev)e.order.push(key);
-  e.tests[key]={st:(prev&&prev.st==='fail'&&st==='ok')?'flaky':st,dur:m[4]||'',tries:m[3]?(+m[3]+1):(prev?prev.tries+1:1)}; // Playwright 재시도 줄 = 제목 뒤 '(retry #N)'
+  const e=e2eOf(s);if(!e.seg){e.seg={no:e.segs.length+1,total:0,keys:[],label:''};e.segs.push(e.seg);}
+  const key=e.seg.no+'|'+m[2];const st=(m[1]==='ok'||m[1]==='✓')?'ok':m[1]==='-'?'skip':'fail';const prev=e.tests[key]; // 같은 제목이라도 다른 실행(구간)이면 다른 테스트
+  if(!prev){e.order.push(key);e.seg.keys.push(key);}
+  e.tests[key]={st:(prev&&prev.st==='fail'&&st==='ok')?'flaky':st,dur:m[4]||'',tries:m[3]?(+m[3]+1):(prev?prev.tries+1:1),title:m[2],seg:e.seg.no}; // Playwright 재시도 줄 = 제목 뒤 '(retry #N)'
   e2eRender(s);
 }
-function e2eCount(e){const c={ok:0,fail:0,flaky:0,skip:0};e.order.forEach(k=>{c[e.tests[k].st]++;});return c;}
-function e2eSum(s){const e=s.e2e;const c=e2eCount(e);return '🧪 '+e.order.length+'/'+(e.total||'?')+' · ✅'+c.ok+(c.flaky?' · ⚠'+c.flaky:'')+' · ✖'+c.fail+(c.skip?' · ○'+c.skip:'');}
+function e2eCount(e,keys){const c={ok:0,fail:0,flaky:0,skip:0};(keys||e.order).forEach(k=>{c[e.tests[k].st]++;});return c;}
+function e2eSum(s){
+  const e=s.e2e;const c=e2eCount(e);const parts=[];
+  if(e.stage)parts.push('📍 '+UI_BD.stage+' '+e.stage.i+'/'+e.stage.n+' '+e2eStageName(e));
+  if(e.sub)parts.push(UI_BD.sub+' '+e.sub.j+'/'+e.sub.m+' '+e.sub.name);
+  if(e.seg)parts.push('🧪 '+e.seg.keys.length+'/'+(e.seg.total||'?')+(e.segs.length>1?' ('+e.seg.no+UI_BD.runN+')':''));
+  if(e.order.length)parts.push('✅'+c.ok+(c.flaky?' · ⚠'+c.flaky:'')+' · ✖'+c.fail+(c.skip?' · ○'+c.skip:''));
+  return parts.join(' · ');
+}
 function e2eRender(s){
   const e=s.e2e;if(!e)return;const ic={ok:'✅',fail:'✖',flaky:'⚠',skip:'○'};
   const running=(s.status==='RUN'||s.status==='REPAIR');
   e.el.textContent='';e.el.appendChild(el('div','e2ehead',e2eSum(s)+(running?' · ⏳ '+UI_BD.running:'')));
-  e.order.forEach(k=>{const t=e.tests[k];e.el.appendChild(el('div','e2erow '+t.st,ic[t.st]+' '+k.replace(/^\\S+\\.spec\\.ts:\\d+:\\d+\\s+›\\s+/,'')+(t.dur?' ('+t.dur+')':'')+(t.tries>1?' · '+UI_BD.retry+' '+(t.tries-1):'')));});
+  e.segs.forEach(g=>{
+    if(!g.keys.length&&g!==e.seg)return;
+    const gc=e2eCount(e,g.keys);
+    if(e.segs.length>1||g.label)e.el.appendChild(el('div','e2ehead','▶ '+g.no+UI_BD.runN+(g.label?' · '+g.label:'')+' · 🧪 '+g.keys.length+'/'+(g.total||'?')+' · ✅'+gc.ok+' · ✖'+gc.fail));
+    g.keys.forEach(k=>{const t=e.tests[k];e.el.appendChild(el('div','e2erow '+t.st,ic[t.st]+' '+t.title.replace(/^\\S+\\.spec\\.ts:\\d+:\\d+\\s+›\\s+/,'')+(t.dur?' ('+t.dur+')':'')+(t.tries>1?' · '+UI_BD.retry+' '+(t.tries-1):'')));});
+  });
   if(running)s.sum.querySelector('.slast').textContent=e2eSum(s);
+}
+// 진행 비율 — 단계 표시가 있으면 (끝난 단계 + 지금 단계 안의 세부·테스트 비율) / 전체 단계, 없으면 종전대로 테스트 완료 비율
+function e2ePart(e){
+  if(!e)return 0.5;
+  const inner=e.seg&&e.seg.total?e.seg.keys.length/e.seg.total:(e.sub&&e.sub.m?e.sub.j/e.sub.m:0);
+  if(e.stage&&e.stage.n)return Math.min(0.95,((e.stage.i-1)+Math.min(1,inner))/e.stage.n);
+  return e.total?Math.min(0.95,e.order.length/e.total):0.5;
 }
 function flowHead(){
   const f=FLOW;if(!f)return;const b=f.board;
   const done=f.steps.filter(s=>s.status==='OK'||s.status==='WARN').length;
   const cur=f.done?done:Math.min(f.total,done+(f.active?1:0));
   b.querySelector('.bcur').textContent=f.active?f.active.no:cur;b.querySelector('.bk-done').textContent=done;
-  const ae=f.active&&f.active.e2e;const part=ae&&ae.total?Math.min(0.95,ae.order.length/ae.total):0.5; // 1.9.17: E2E 단계는 테스트 완료 비율만큼
+  const ae=f.active&&f.active.e2e;const part=e2ePart(ae); // 1.9.17: E2E 단계는 테스트 완료 비율만큼 · 1.9.42: CheckList 는 단계·세부·테스트 비율
   const prog=f.done?done:Math.max(0,done+(f.active?part:0));
   b.querySelector('.bbar i').style.width=(f.total?Math.round(100*prog/f.total):0)+'%';
-  b.querySelector('.bnow').textContent=f.active?('▶ '+f.active.sum.querySelector('.sttl').textContent):'';
+  b.querySelector('.bnow').textContent=f.active?('▶ '+f.active.sum.querySelector('.sttl').textContent+(ae&&ae.stage?' · '+e2eSum(f.active):'')):'';
 }
 function flowOut(text){
   const f=FLOW;if(!f||f.done||!f.active)return;const s=f.active;
@@ -1805,13 +1842,34 @@ async function confirmScreenIdOrPick(wb, curId, actionLabel) {
   items.push({ label: '✏️ 다른 ID 직접 입력', description: '형식: 2~4자 영문 + 2~6자리 숫자 (예: DMF0052, SCP0096)', _action: 'input' });
   items.push({ label: '🔎 AS-IS DB 프로그램 목록에서 선택', description: 'TB_FX_ProgramInfo WHERE UseYN=\'Y\' (.env.asis 접속 필요)', _action: 'list' });
   items.push({ label: '⛔ 취소', description: '이 작업을 실행하지 않음', _action: 'cancel' });
-  const pick = await vscode.window.showQuickPick(items, {
-    title: `워크벤치 #${wb.inst} · "${actionLabel}" 실행 전 화면 ID 확정`,
-    placeHolder: curId ? `현재 저장된 ID: ${curId}` : '화면 ID 가 설정되지 않았습니다 — 입력 또는 선택하세요',
-    matchOnDescription: true,
-    ignoreFocusOut: true
+  // 1.9.41(2026-11-05 사용자 "UI ID 미지정 상태에서 최초 UI ID 입력하면 반응하지 않고 한번 더 입력해야 입력됨"):
+  //   이 QuickPick 의 입력칸은 '목록 필터' 라서 ID(예 SCP0084)를 바로 치면 맞는 항목이 0개 → Enter 무반응 → ✏️ 를 골라 입력창에 다시 쳐야 했다.
+  //   보완: 입력값이 ID 형식이면 맨 위에 '✅ <ID> 로 지정' 항목을 즉시 만들어 Enter 한 번으로 확정한다(기존 4개 선택지는 그대로).
+  const ID_RE = /^[A-Z]{2,4}[0-9]{2,6}$/;
+  const pick = await new Promise(resolve => {
+    const qp = vscode.window.createQuickPick();
+    let done = false;
+    const finish = v => { if (done) return; done = true; resolve(v); qp.hide(); };
+    qp.title = `워크벤치 #${wb.inst} · "${actionLabel}" 실행 전 화면 ID 확정`;
+    qp.placeholder = (curId ? `현재 저장된 ID: ${curId} · ` : '화면 ID 가 설정되지 않았습니다 · ') + '여기에 화면 ID 를 바로 입력하고 Enter(예: SCP0084) 또는 아래에서 선택';
+    qp.matchOnDescription = true;
+    qp.ignoreFocusOut = true;
+    qp.items = items;
+    const typedItem = v => { const s = String(v || '').trim().toUpperCase(); return ID_RE.test(s) ? { label: `✅ ${s} 로 지정`, description: '입력한 화면 ID 로 바로 확정', _action: 'typed', _id: s, alwaysShow: true } : null; };
+    qp.onDidChangeValue(v => {
+      const ti = typedItem(v);
+      qp.items = ti ? [ti, ...items] : items;
+      if (ti) qp.activeItems = [qp.items[0]];
+    });
+    qp.onDidAccept(() => {
+      const sel = (qp.selectedItems && qp.selectedItems[0]) || (qp.activeItems && qp.activeItems[0]) || typedItem(qp.value);
+      if (sel) finish(sel);  // 형식이 아닌 값 + 선택 없음 = 그대로 대기(닫지 않음)
+    });
+    qp.onDidHide(() => { finish(undefined); qp.dispose(); });
+    qp.show();
   });
   if (!pick || pick._action === 'cancel') return null;
+  if (pick._action === 'typed') return pick._id;
   if (pick._action === 'keep') return curId;
   if (pick._action === 'input') {
     const nid = await vscode.window.showInputBox({
@@ -2083,7 +2141,7 @@ function open(api, opts) {
             const vars = { root: p.root, id: effId };
             if (/\$\{kind\}/.test(item.prompt || '')) {
               const kinds = ['smoke', 'crud', 'auth', 'authcrud'];
-              let def = 'smoke'; try { const rows = fs.readFileSync(path.join(p.e2eOutDir, 'results', '_summary.csv'), 'utf8').split(/\r?\n/).filter(l => l.includes(`"${effId}"`) && l.includes('"FAIL"')); const m = rows.length && /^"[^"]*","([^"]*)"/.exec(rows[0]); if (m && kinds.includes(m[1])) def = m[1]; } catch { }
+              let def = 'smoke'; try { const rows = fs.readFileSync(e2eSummaryFile(p, effId), 'utf8').split(/\r?\n/).filter(l => l.includes(`"${effId}"`) && l.includes('"FAIL"')); const m = rows.length && /^"[^"]*","([^"]*)"/.exec(rows[0]); if (m && kinds.includes(m[1])) def = m[1]; } catch { }
               const pick = await vscode.window.showQuickPick(kinds.map(k => ({ label: k, description: k === def ? '최근 FAIL' : '' })).sort((a, b) => (a.label === def ? -1 : 0) - (b.label === def ? -1 : 0)), { placeHolder: `수선할 E2E 종류 (${effId})`, ignoreFocusOut: true });
               if (!pick) return;
               let round = 1; try { const md = fs.readFileSync(path.join(p.genDir, effId, 'E2E_REPAIR.md'), 'utf8'); round = (md.match(/^## 수선 /gm) || []).length + 1; } catch { }

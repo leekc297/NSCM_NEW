@@ -1,0 +1,358 @@
+{
+  "id": "SCP0127",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0127",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plan Group",
+    "SCM Site",
+    "Stage",
+    "Model/Nickname",
+    "Type",
+    "Period",
+    "Active"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "PrecedeSafetyStockDay",
+  "routePath": "supply/precede-safety-stock-day",
+  "asisName": "PrecedeSafetyStockDay",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "Div → Div. · 명칭",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "planGroups",
+      "label": "Plan Group",
+      "lbl": "LBL00002",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbPlanGroup",
+      "tobeLabel": "Plan Group",
+      "catalog": "Plan Group → Plan Group",
+      "labels": [
+        "Plan Group"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "siteIds",
+      "label": "SCM Site",
+      "lbl": "LBL00016",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbSite",
+      "tobeLabel": "SCM Site",
+      "catalog": "SCM Site → SCM Site",
+      "labels": [
+        "SCM Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "stage",
+      "label": "Stage",
+      "lbl": "LBL00061",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboStage",
+      "tobeLabel": "Stage",
+      "catalog": "Stage → Stage",
+      "labels": [
+        "Stage"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendar",
+      "tobeLabel": "Period",
+      "catalog": "Period → Period",
+      "labels": [
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "type",
+      "label": "Type",
+      "lbl": "LBL00052",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboType",
+      "tobeLabel": "Type",
+      "catalog": "Type → Type",
+      "labels": [
+        "Type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValid",
+      "tobeLabel": "Active",
+      "catalog": "",
+      "labels": [
+        "Active"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "Precede/Safety Stock Day",
+  "asisMapping": "",
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "PRECEDE / SAFETY STOCK DAY",
+      "key": "PRECEDE_SAFETY_STOCK_DAY",
+      "labels": [
+        "Create By",
+        "Creation Date",
+        "Division*",
+        "Valid From*",
+        "Model*",
+        "Last Update Date",
+        "Last Update By",
+        "Plan Group*",
+        "PLAN_GROUP_NAME",
+        "PRE_KEY_VALUES",
+        "SCM site*",
+        "Stage*",
+        "Valid To*",
+        "Day*",
+        "Valid",
+        "Description",
+        "Type*"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "PRECEDE / SAFETY STOCK DAY",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0127.P_",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCP0127_GET_SEARCH_INFO",
+      "sheet": "PRECEDE / SAFETY STOCK DAY",
+      "btn": "SEARCH_INFO",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0127.P_SCP0127_GET_SEARCH_INFO",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY",
+      "sheet": "PRECEDE / SAFETY STOCK DAY",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0127.P_SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+      "sheet": "PRECEDE / SAFETY STOCK DAY",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0127.P_SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "PRECEDE / SAFETY STOCK DAY": {
+      "40": [],
+      "81": [],
+      "82": []
+    }
+  },
+  "hasMeta": false,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "SAVE",
+        "INSERT",
+        "DELETE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SEARCH",
+      "SAVE",
+      "INSERT",
+      "DELETE"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
+    ],
+    "SCP Planner": [
+      "SEARCH",
+      "SAVE",
+      "DELETE",
+      "INSERT"
+    ]
+  },
+  "menuBtnCodes": [
+    "SEARCH",
+    "SAVE",
+    "INSERT",
+    "DELETE"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "menuId": "SCP0127",
+  "screenName": "PrecedeSafetyStockDay",
+  "feature": "supply",
+  "pageDir": "precede-safety-stock-day",
+  "routePath": "supply/precede-safety-stock-day",
+  "sheets": [
+    {
+      "sheetName": "PRECEDE / SAFETY STOCK DAY",
+      "rule": "META+코드연결",
+      "columns": 17,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "InitControls"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0127.P_",
+      "sheet": "PRECEDE / SAFETY STOCK DAY",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0127_GET_SEARCH_INFO",
+      "asis_sp": "SCP0127_GET_SEARCH_INFO",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSearchInfo"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0127.P_SCP0127_GET_SEARCH_INFO",
+      "sheet": "PRECEDE / SAFETY STOCK DAY",
+      "btn": "SEARCH_INFO",
+      "allowed_gap": "사용자별 조회조건 저장/복원(G1) → /admin/menu/{MENU}/search-conditions (store fetchStaticColumns 내장)"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY",
+      "asis_sp": "SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0127.P_SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY",
+      "sheet": "PRECEDE / SAFETY STOCK DAY",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+      "asis_sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0127.P_SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+      "sheet": "PRECEDE / SAFETY STOCK DAY",
+      "btn": "SAVE"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

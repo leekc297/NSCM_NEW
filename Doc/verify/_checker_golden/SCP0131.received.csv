@@ -1,0 +1,36 @@
+﻿row_id,rule_id,target,result,evidence_head,saved_at,approved_by,approved_at,verdict_src
+V-c8cd860a,G3,SCP0131 화면,FAIL,"E2E smoke 공통 'Condition(F6) Period 비저장(기간 조건 제외)' [FAIL] 기간 키 저장됨: fromDate, toD",2026-11-07 20:32,,,received
+V-11d9fee9,F2,SCP0131 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I,FAIL,[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I: 저장 요청 없음 · 저장 요청 없음 · 저장 요청 0 · 편집기 null,2026-11-07 20:32,,,received
+V-e3be1cc0,G9,조회조건 Model/Nickname,PASS,"'Model/Nickname' 에 'AMCOME782-A1-0A0,AMCOME782-A1-0K0' 입력 조회 → ITEM_ID 6행 · 'AMC",2026-11-07 20:32,,,received
+V-13d89aae,G9,[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건,PASS,규칙 G9 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-e3be1cc0] 조회조건 Model/Nickname: 'Model,2026-11-07 20:32,,,received
+V-19b83fac,G9,[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 —,PASS,규칙 G9 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-e3be1cc0] 조회조건 Model/Nickname: 'Model,2026-11-07 20:32,,,received
+V-3a29440b,F1,SCP0131 화면,ERROR,[검증엔진 미기동] 검증엔진 테스트 'CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F,2026-11-07 20:32,,,received
+V-ef6e0fe0,F2,SCP0131 화면,ERROR,[검증엔진 미기동] 검증엔진 테스트 'CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F,2026-11-07 20:32,,,received
+V-8d56c801,F4,SCP0131 화면,ERROR,[검증엔진 미기동] 검증엔진 테스트 'CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F,2026-11-07 20:32,,,received
+V-1986aabd,F6,SCP0131 화면,ERROR,[검증엔진 미기동] 검증엔진 테스트 'CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F,2026-11-07 20:32,,,received
+V-d3a39193,F6,SCP0131 다른 셀 편집 값 유지,PASS,OPMZ_PLAN_GR_ID 편집 뒤 PRIO_RANK '7' 유지,2026-11-07 20:32,,,received
+V-df0a5895,F4,SCP0131 경계값 저장,ERROR,[검증엔진 미기동] 검증엔진 테스트 'CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F,2026-11-07 20:32,,,received
+V-cc130142,H11,SCP0131 화면,판정필요,[시험 검사 CM-003 — FAIL 승격 전(화면 2개 이상 사용자 확인 뒤 check_maturity.csv status=confirmed),2026-11-07 20:32,,,received
+V-16479b26,G8,조회조건 Model/Nickname,PASS,'Model/Nickname' 에 'amcome782-a1-0a0'(기본 결과 값 'AMCOME782-A1-0A0' 대소문자 반전) 입력 조회 ,2026-11-07 20:32,,,received
+V-9dc0b9d8,G1,SCP0131 텍스트 부분일치 Model/Nickname,PASS,Model/Nickname · 'MCOME782-A1-0A' 부분일치 3행 · 원래 값 포함,2026-11-07 20:32,,,received
+V-b28c9b7e,G5,new SCM0002_MaterialByDivisionPopup(),ERROR,[검증엔진 미기동] 검증엔진 테스트 'CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F,2026-11-07 20:32,,,received
+V-8164addc,G5,popItem.ShowDialog(),ERROR,[검증엔진 미기동] 검증엔진 테스트 'CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F,2026-11-07 20:32,,,received
+V-9005ec0b,M4,그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택),PASS,규칙 M4 판정 8행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [T-9385d7a4] ITEM_ID: ITEM_ID: ITEM_ID 더,2026-11-07 20:32,,,received
+V-14b33b52,G1,[DMF0053 결함 유형] Project·Owner 조회조건(Model/Nickname 정상),PASS,규칙 G1 판정 6행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-2c20da20] 조회조건 Model/Nickname: Model/,2026-11-07 20:32,,,received
+V-60c47723,G1,[DMF0005 결함 일반화] 텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN),PASS,규칙 G1 판정 5행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-2c20da20] 조회조건 Model/Nickname: Model/,2026-11-07 20:32,,,received
+V-bc7a7adc,G1,[SYS0003 결함 일반화] API Name 조회조건,PASS,규칙 G1 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-2c20da20] 조회조건 Model/Nickname: Model/,2026-11-07 20:32,,,received
+V-c264be4a,G8,[SYS0003 결함 일반화] API Name 조회조건,PASS,규칙 G8 판정 1행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-16479b26] 조회조건 Model/Nickname: 'Model,2026-11-07 20:32,,,received
+V-87eed4bb,M4,[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJ,PASS,규칙 M4 판정 9행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [T-9385d7a4] ITEM_ID: ITEM_ID: ITEM_ID 더,2026-11-07 20:32,,,received
+V-9b17501e,G8,[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건,PASS,규칙 G8 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-16479b26] 조회조건 Model/Nickname: 'Model,2026-11-07 20:32,,,received
+V-15bbd74e,M4,[DMF0074 결함 일반화] 조회조건 Model/Nickname(MODEL) 팝업 Close(취소) 시 기존 값 유지 — 선택값이 있을 때만 ,PASS,규칙 M4 판정 4행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [EG-e89c3712] SCP0131 팝업 SCM0002_Materia,2026-11-07 20:32,,,received
+V-1d830eb7,G1,[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 —,PASS,규칙 G1 판정 10행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-2c20da20] 조회조건 Model/Nickname: Model,2026-11-07 20:32,,,received
+V-ed2bf6c7,G8,[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 —,PASS,규칙 G8 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-16479b26] 조회조건 Model/Nickname: 'Model,2026-11-07 20:32,,,received
+V-c8de8ce2,G1,텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN),PASS,규칙 G1 판정 5행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-2c20da20] 조회조건 Model/Nickname: Model/,2026-11-07 20:32,,,received
+V-b04eb014,G1,API Name 조회조건,PASS,규칙 G1 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [V-2c20da20] 조회조건 Model/Nickname: Model/,2026-11-07 20:32,,,received
+T-3114f582,G5,3 · spdMain.CellClick,ERROR,행 집계 — 대조표 3 'spdMain.CellClick' 의 G5 8요소: NA:6 · ERROR:2,2026-11-07 20:32,,,received
+T-731746d6,G5,4 · spdMain.CellDoubleClick,ERROR,행 집계 — 대조표 4 'spdMain.CellDoubleClick' 의 G5 8요소: NA:6 · ERROR:2,2026-11-07 20:32,,,received
+T-24b0e192,G5,5 · spdMain.ClipboardPasted,ERROR,행 집계 — 대조표 5 'spdMain.ClipboardPasted' 의 G5 8요소: NA:6 · ERROR:2,2026-11-07 20:32,,,received
+T-f5c02117,X-ROW,SCP0131_SalesSitePriority.btnItemId_Click,ERROR,진입점 집계 9검사 — PASS:4 · NA:3 · ERROR:2,2026-11-07 20:32,,,received
+EG-af11d7fa,H4,SCP0131 팝업 SCM0002_MaterialByDivisionPopup CELL:ITEM_ID RESIZE_MIN,PASS,"기대 축소 → 조건·버튼 겹침 없음 · 실제 rect {""x"":360,""y"":315,""w"":1200,""h"":450} · 겹침 [] · 근거 문서",2026-11-07 20:32,,,received
+EG-9656a930,M4,SCP0131 팝업 SCM0002_MaterialByDivisionPopup COND:Model PICK_OK,PASS,기대 OK → 대상 칸에 선택 값 · 실제 대상 '' → 'AAEF1001I-A1-000' · OK 버튼 'OK' · 닫힘 true · 대응 컬,2026-11-07 20:32,,,received
+EG-7487849c,M4,SCP0131 팝업 SCM0002_MaterialByDivisionPopup COND:Model PICK_DBL,NA,기대 더블클릭 → OK 와 같은 결과 · 실제 더블클릭 후 닫히지 않음 — AS-IS 더블클릭 확정 여부 SCM0002_MaterialByDiv,2026-11-07 20:32,,,received

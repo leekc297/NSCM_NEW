@@ -35,7 +35,7 @@ export const CASCADE_LEVELS = {
   team: {
     code: 'TEAM_CODE',
     name: 'TEAM_NAME',
-    labelCode: 'LBL00502',
+    labelCode: 'LBL00044',
     labelEn: 'Team',
     multiple: true,
     allOption: true,
@@ -53,7 +53,7 @@ export const CASCADE_LEVELS = {
   salesSite: {
     code: 'SALES_SITE_CODE',
     name: 'SALES_SITE_NAME',
-    labelCode: 'LBL00506',
+    labelCode: 'LBL00011',
     labelEn: 'Sales Site',
     multiple: true,
     allOption: true,

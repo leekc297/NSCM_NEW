@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 293,
+  "at": "2026-11-07T08:47:16.749Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ }
+]

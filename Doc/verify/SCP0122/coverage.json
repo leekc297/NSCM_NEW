@@ -4,10 +4,10 @@
   {
    "rule_id": "A1",
    "rows": 21,
-   "measured": 7,
+   "measured": 8,
    "inherited": 0,
    "not_run_error": 0,
-   "review": 14,
+   "review": 13,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "Y",
@@ -16,13 +16,13 @@
   },
   {
    "rule_id": "A5",
-   "rows": 32,
+   "rows": 33,
    "measured": 13,
    "inherited": 12,
    "not_run_error": 0,
    "review": 0,
-   "na": 7,
-   "na_pct": 21.9,
+   "na": 8,
+   "na_pct": 24.2,
    "feature_present": "",
    "suspect_na100": "",
    "na_reasons": "기대 Measure 버튼 · 실제 버튼·설정 창 없×2 | OPMZ_PRS_CD 화면 표시=N (기대 표시 여×1 | OPMZ_PLAN_GR_ID 화면 표시=N (기대×1 | PRE_OPMZ_ACTV_CD 화면 표시=N (기대×1"
@@ -42,13 +42,13 @@
   },
   {
    "rule_id": "B1",
-   "rows": 5,
-   "measured": 4,
+   "rows": 6,
+   "measured": 5,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
    "na": 1,
-   "na_pct": 20.0,
+   "na_pct": 16.7,
    "feature_present": "",
    "suspect_na100": "",
    "na_reasons": "실측T-8cf6e894: 검사기(_verify.×1"
@@ -107,13 +107,13 @@
   },
   {
    "rule_id": "C1",
-   "rows": 6,
-   "measured": 1,
+   "rows": 7,
+   "measured": 2,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
    "na": 5,
-   "na_pct": 83.3,
+   "na_pct": 71.4,
    "feature_present": "Y",
    "suspect_na100": "",
    "na_reasons": "상속(TRACE T-3bfb2186): 행 `Clb×1 | 행 `ClbDivision_SelectedIndex×1 | 행 `CboPlanGroup_SelectedInde×1 | 'Div' → '40 Mobility & IT Ba×1"
@@ -174,14 +174,14 @@
    "rule_id": "D1",
    "rows": 39,
    "measured": 30,
-   "inherited": 3,
+   "inherited": 2,
    "not_run_error": 1,
    "review": 0,
-   "na": 5,
-   "na_pct": 12.8,
+   "na": 6,
+   "na_pct": 15.4,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "기대 AS-IS GROUP·행 값 잠금 규칙 · 실×2 | 조회 결과에 병합 칸 없음×1 | 기대 AS-IS Insert GROUP 분기 · 실×1 | 기대 GET_ADMIN_GROUP_MEASURE 행×1"
+   "na_reasons": "기대 AS-IS GROUP·행 값 잠금 규칙 · 실×2 | 조회 결과에 병합 칸 없음×1 | TO-BE 룰 CR-093 — TO-BE 는 진입×1 | 기대 AS-IS Insert GROUP 분기 · 실×1"
   },
   {
    "rule_id": "D3",
@@ -224,8 +224,8 @@
   },
   {
    "rule_id": "D6",
-   "rows": 3,
-   "measured": 3,
+   "rows": 4,
+   "measured": 4,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
@@ -263,26 +263,26 @@
   },
   {
    "rule_id": "E3",
-   "rows": 8,
-   "measured": 3,
+   "rows": 9,
+   "measured": 4,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
    "na": 5,
-   "na_pct": 62.5,
+   "na_pct": 55.6,
    "feature_present": "Y",
    "suspect_na100": "",
    "na_reasons": "Excel Upload 버튼 없음 · 요청 0건×1 | 필수 조회조건 없음(플랜 required 0 · 기×1 | 행 집계 — 대조표 필수검증(actv_cd/actv×1 | 행 집계 — 대조표 MSG00001 '필수 공백'×1"
   },
   {
    "rule_id": "E4",
-   "rows": 20,
-   "measured": 0,
+   "rows": 21,
+   "measured": 2,
    "inherited": 0,
-   "not_run_error": 3,
+   "not_run_error": 2,
    "review": 0,
    "na": 17,
-   "na_pct": 85.0,
+   "na_pct": 81.0,
    "feature_present": "",
    "suspect_na100": "",
    "na_reasons": "검사 대상 아님 — catch 블록 예외 메시지(프×7 | MSG00001: 위반 입력 자동 생성 불가(검사기×2 | MSG00443: 위반 입력 자동 생성 불가(검사기×2 | SCP0122_PlanActivityMgmt.Set×2"
@@ -302,39 +302,39 @@
   },
   {
    "rule_id": "F1",
-   "rows": 4,
-   "measured": 0,
+   "rows": 5,
+   "measured": 1,
    "inherited": 0,
    "not_run_error": 4,
    "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "Y",
-   "suspect_na100": "Y",
-   "na_reasons": "업무 검증 차단 표본 값이 저장 전 검증에 막힘×1 | 편집 가능 2컬럼 중 왕복 2 · 입력 경로 실패×1 | OPMZ_ACTV_SEQ r0 → 2 · 측정 경×1 | 측정 중단 앞 단계 행 식별 실패 — ⚠ 수동×1"
+   "suspect_na100": "",
+   "na_reasons": "업무 검증 차단 표본 값이 저장 전 검증에 막힘×1 | 편집 가능 2컬럼 중 왕복 1 · 입력 경로 실패×1 | OPMZ_ACTV_SEQ r0 → 2 · 측정 경×1 | 업무 검증 차단 OPMZ_ACTV_SEQ 두 행×1"
   },
   {
    "rule_id": "F2",
-   "rows": 2,
-   "measured": 0,
+   "rows": 3,
+   "measured": 1,
    "inherited": 0,
    "not_run_error": 2,
    "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "Y",
-   "suspect_na100": "Y",
-   "na_reasons": "업무 검증 차단 표본 값이 저장 전 검증에 막힘×1 | OPMZ_ACTV_SEQ r0→r1 '1' · 붙여×1"
+   "suspect_na100": "",
+   "na_reasons": "업무 검증 차단 표본 값이 저장 전 검증에 막힘×1 | 측정 경로 없음 자동 기존행 수정 + 신규행×1"
   },
   {
    "rule_id": "F3",
-   "rows": 3,
-   "measured": 1,
+   "rows": 6,
+   "measured": 3,
    "inherited": 0,
    "not_run_error": 0,
-   "review": 0,
+   "review": 1,
    "na": 2,
-   "na_pct": 66.7,
+   "na_pct": 33.3,
    "feature_present": "",
    "suspect_na100": "",
    "na_reasons": "조회 결과에 병합 칸 없음×1 | 검사 대상 아님 — AS-IS 진입점 미연결 — S×1"
@@ -344,13 +344,13 @@
    "rows": 9,
    "measured": 5,
    "inherited": 0,
-   "not_run_error": 2,
+   "not_run_error": 1,
    "review": 0,
-   "na": 2,
-   "na_pct": 22.2,
+   "na": 3,
+   "na_pct": 33.3,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "업무 검증 차단 표본 값이 저장 전 검증에 막힘×2 | PKG_COM0000.P_SCP0121_GET_SE×1 | PKG_SCP0122.P_SCP0122_SAVE_P×1"
+   "na_reasons": "AS-IS 최대값이 있는 편집 컬럼 없음 — 경계값×1 | PKG_COM0000.P_SCP0121_GET_SE×1 | PKG_SCP0122.P_SCP0122_SAVE_P×1 | 업무 검증 차단 표본 값이 저장 전 검증에 막힘×1"
   },
   {
    "rule_id": "F5",
@@ -368,15 +368,15 @@
   {
    "rule_id": "F6",
    "rows": 5,
-   "measured": 1,
+   "measured": 2,
    "inherited": 0,
-   "not_run_error": 4,
+   "not_run_error": 3,
    "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "측정 중단 앞 단계 행 식별 실패 — ⚠ 수동×2 | 업무 검증 차단 표본 값이 저장 전 검증에 막힘×1 | 측정 경로 누락 비교 가능한 업무 표 없음 ·×1"
+   "na_reasons": "업무 검증 차단 표본 값이 저장 전 검증에 막힘×1 | 측정 경로 없음 저장이 성공한 왕복이 없어 DB×1 | OPMZ_ACTV_SEQ r0 '1'→빈값 AS-×1"
   },
   {
    "rule_id": "G1",
@@ -406,16 +406,16 @@
   },
   {
    "rule_id": "G4",
-   "rows": 13,
+   "rows": 14,
    "measured": 3,
    "inherited": 6,
    "not_run_error": 0,
    "review": 0,
-   "na": 4,
-   "na_pct": 30.8,
+   "na": 5,
+   "na_pct": 35.7,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "기대 AS-IS Div·GROUP 분기 문장 · 실×2 | 돋보기 버튼 달린 입력칸 없음 · 좌표×1 | 기대 Year·Version 초기값 문장 · 실제×1"
+   "na_reasons": "기대 AS-IS Div·GROUP 분기 문장 · 실×2 | 돋보기 버튼 달린 입력칸 없음 · 좌표×1 | 재실측 스냅샷 조회조건 골든 없음(승인 전) ·×1 | 기대 Year·Version 초기값 문장 · 실제×1"
   },
   {
    "rule_id": "G5",
@@ -432,13 +432,13 @@
   },
   {
    "rule_id": "G6",
-   "rows": 12,
-   "measured": 5,
+   "rows": 13,
+   "measured": 6,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
    "na": 7,
-   "na_pct": 58.3,
+   "na_pct": 53.8,
    "feature_present": "",
    "suspect_na100": "",
    "na_reasons": "Version 조건 없음×1 | 대조표 행 `GetPlanGroupByUserID(×1 | 대조표 행 `Data.Common(LookupCom×1 | 대조표 행 `ClbDivision_SelectedI×1"
@@ -471,16 +471,16 @@
   },
   {
    "rule_id": "H4",
-   "rows": 6,
+   "rows": 8,
    "measured": 6,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 0,
-   "na_pct": 0.0,
+   "na": 2,
+   "na_pct": 25.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": ""
+   "na_reasons": "재실측 스냅샷 화면샷 골든 없음(승인 전) ·×2"
   },
   {
    "rule_id": "H5",
@@ -510,8 +510,8 @@
   },
   {
    "rule_id": "H10",
-   "rows": 1,
-   "measured": 0,
+   "rows": 2,
+   "measured": 1,
    "inherited": 0,
    "not_run_error": 1,
    "review": 0,
@@ -523,42 +523,42 @@
   },
   {
    "rule_id": "I1",
-   "rows": 2,
+   "rows": 6,
    "measured": 2,
    "inherited": 0,
-   "not_run_error": 0,
+   "not_run_error": 3,
    "review": 0,
-   "na": 0,
-   "na_pct": 0.0,
+   "na": 1,
+   "na_pct": 16.7,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": ""
+   "na_reasons": "다국어 확인 필요 같은 문구 다른 코드 · MS×3 | 설계 결정(GAP USER-1 · DD-215 ·×1"
   },
   {
    "rule_id": "I2",
    "rows": 7,
-   "measured": 5,
+   "measured": 4,
    "inherited": 0,
    "not_run_error": 2,
    "review": 0,
-   "na": 0,
-   "na_pct": 0.0,
+   "na": 1,
+   "na_pct": 14.3,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "확인 대상 그리드 칸 한글 OPMZ_PRS_NA×2"
+   "na_reasons": "확인 대상 그리드 칸 한글 OPMZ_PRS_NA×2 | 설계 결정(GAP USER-2 · DD-216 ·×1"
   },
   {
    "rule_id": "J2",
    "rows": 66,
-   "measured": 63,
+   "measured": 64,
    "inherited": 0,
-   "not_run_error": 1,
+   "not_run_error": 0,
    "review": 0,
    "na": 2,
    "na_pct": 3.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "기대 AS-IS Div·GROUP 분기 문장 · 실×1 | 기대 AS-IS Insert GROUP 분기 · 실×1 | 근거 불충분 FAIL 로 적을 AS-IS/확정×1"
+   "na_reasons": "기대 AS-IS Div·GROUP 분기 문장 · 실×1 | 기대 AS-IS Insert GROUP 분기 · 실×1"
   },
   {
    "rule_id": "K1",
@@ -588,16 +588,16 @@
   },
   {
    "rule_id": "K4",
-   "rows": 22,
+   "rows": 23,
    "measured": 22,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 0,
-   "na_pct": 0.0,
+   "na": 1,
+   "na_pct": 4.3,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": ""
+   "na_reasons": "재실측 스냅샷 버튼 골든 없음(승인 전) · 골×1"
   },
   {
    "rule_id": "K-SA",
@@ -615,8 +615,8 @@
   {
    "rule_id": "SC1",
    "rows": 1,
-   "measured": 0,
-   "inherited": 1,
+   "measured": 1,
+   "inherited": 0,
    "not_run_error": 0,
    "review": 0,
    "na": 0,
@@ -681,14 +681,14 @@
    "rule_id": "X-ROW",
    "rows": 18,
    "measured": 0,
-   "inherited": 9,
-   "not_run_error": 5,
-   "review": 1,
-   "na": 3,
-   "na_pct": 16.7,
+   "inherited": 6,
+   "not_run_error": 6,
+   "review": 2,
+   "na": 4,
+   "na_pct": 22.2,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "진입점 집계 4검사 — NOT_RUN:3 · PAS×2 | 진입점 집계 1검사 — NA:1×1 | 검사 대상 아님 — AS-IS 진입점 미연결 — S×1 | 실측T-cf26c2d7: 진입점 동작 재현 시나×1"
+   "na_reasons": "진입점 집계 4검사 — NOT_RUN:3 · PAS×2 | 진입점 집계 5검사 — NOPATH:2 · PASS×1 | 진입점 집계 1검사 — NA:1×1 | 검사 대상 아님 — AS-IS 진입점 미연결 — S×1"
   },
   {
    "rule_id": "A2",
@@ -771,15 +771,15 @@
   {
    "rule_id": "J1",
    "rows": 16,
-   "measured": 11,
+   "measured": 9,
    "inherited": 0,
-   "not_run_error": 0,
+   "not_run_error": 4,
    "review": 0,
-   "na": 5,
-   "na_pct": 31.2,
+   "na": 3,
+   "na_pct": 18.8,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "기대 Division 칸 · 실제 조회영역에 Div×3 | 기대 후보 다수 — 기본 선택 · 실제 빈값 · A×1 | 기대 후보 = 메뉴 권한 그룹의 부문 권한(USE_×1"
+   "na_reasons": "기대 Division 칸 · 실제 조회영역에 Div×3 | 기대 후보 안의 값 · 실제 측정 경로 없음 D×2 | 기대 후보 = 메뉴 권한 그룹의 부문 권한 (없음)×1 | 기대 후보 = 메뉴 권한 그룹의 부문 권한 81,8×1"
   },
   {
    "rule_id": "J3",
@@ -810,15 +810,15 @@
   {
    "rule_id": "L1",
    "rows": 3,
-   "measured": 0,
+   "measured": 2,
    "inherited": 0,
-   "not_run_error": 2,
+   "not_run_error": 1,
    "review": 0,
-   "na": 1,
-   "na_pct": 33.3,
+   "na": 0,
+   "na_pct": 0.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "| 검사기(_trace.spec(@trace) W×1 | 근거 불충분 FAIL 로 적을 AS-IS/확정×1 | 측정 경로 없음 방향키 이동 6회만 측정(행 부×1"
+   "na_reasons": "측정 경로 없음 방향키 이동 6회만 측정(행 부×1"
   },
   {
    "rule_id": "M1",
@@ -922,20 +922,20 @@
    "na_pct": 33.3,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "| 검사기(tools/Harness/verify/×1 | 측정 경로 없음 저장 대상에 이력 표 없음 ·×1 | 측정 경로 없음 저장 1회×1"
+   "na_reasons": "측정 경로 없음 저장이 성공한 왕복이 없어 DB×2 | | 검사기(tools/Harness/verify/×1"
   },
   {
    "rule_id": "F8",
-   "rows": 3,
-   "measured": 0,
+   "rows": 4,
+   "measured": 1,
    "inherited": 0,
    "not_run_error": 2,
    "review": 0,
    "na": 1,
-   "na_pct": 33.3,
+   "na_pct": 25.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "| 검사기(tools/Harness/verify/×1 | 측정 경로 누락 변경된 행이 없어 감사 컬럼을×1 | 측정 경로 없음 비교할 원장 변경 0건·이력 행×1"
+   "na_reasons": "측정 경로 없음 저장이 성공한 왕복이 없어 DB×2 | | 검사기(tools/Harness/verify/×1"
   },
   {
    "rule_id": "G7",
@@ -1094,8 +1094,5 @@
    "na_reasons": "그리드 1개 — 상단·하단(HEAD/DETAIL)×1"
   }
  ],
- "suspect_na100": [
-  "F1",
-  "F2"
- ]
+ "suspect_na100": []
 }

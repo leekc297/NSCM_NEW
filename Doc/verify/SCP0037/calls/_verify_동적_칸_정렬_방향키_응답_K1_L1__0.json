@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 320,
+  "at": "2026-11-07T08:41:01.557Z",
+  "user": "minyonglee1",
+  "test": "동적 칸 정렬·방향키 응답(K1·L1)"
+ }
+]

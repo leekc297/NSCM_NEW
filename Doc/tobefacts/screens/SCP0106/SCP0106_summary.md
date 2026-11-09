@@ -1,29 +1,29 @@
 # SCP0106 — To-Be Fact Pack 요약
 
 - page_key: `supply/capa-loss-plan` · feature: supply · As-is Fact Pack 있음
-- 파일 21 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 30 · 컴포넌트 사용 58 · 하드코딩 컬럼 1 · 메시지 28
+- 파일 21 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 32 · 컴포넌트 사용 59 · 하드코딩 컬럼 1 · 메시지 29
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/capa-loss-plan/capa-loss-plan.constants.ts | constants | 504 |
+| features/supply/src/pages/capa-loss-plan/capa-loss-plan.constants.ts | constants | 510 |
 | features/supply/src/pages/capa-loss-plan/capa-loss-plan.types.ts | types | 175 |
-| features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | page | 351 |
+| features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | page | 367 |
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanColumnModal.tsx | component | 79 |
-| features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | component | 445 |
+| features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | component | 444 |
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.module.scss | component | 26 |
-| features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | component | 343 |
+| features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | component | 407 |
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanItemPopup.tsx | component | 56 |
 | features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanCellEdit.ts | hook | 162 |
 | features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanCombos.ts | hook | 315 |
-| features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanQuery.ts | hook | 159 |
-| features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanSave.ts | hook | 210 |
+| features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanQuery.ts | hook | 169 |
+| features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanSave.ts | hook | 218 |
 | features/supply/src/pages/capa-loss-plan/index.ts | index | 2 |
 | features/supply/src/pages/capa-loss-plan/useCapaLossPlanStore.ts | store | 417 |
 | features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.combos.ts | util | 463 |
-| features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.dateColumns.ts | util | 176 |
-| features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.editLock.ts | util | 211 |
+| features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.dateColumns.ts | util | 180 |
+| features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.editLock.ts | util | 213 |
 | features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.recalc.ts | util | 424 |
 | features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.save.ts | util | 207 |
 | features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.sheetKey.ts | util | 115 |
@@ -33,9 +33,9 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | useCapaLossPlanCombos.ts:81 |
-| SCP0106/{?Exclude<SHEETS, SHEETS.SPREAD_TITLE>}//call-proc | hook | 1 | Y | useCapaLossPlanQuery.ts:78 |
-| SCP0106/spreadTitle//call-proc | hook | 1 | Y | useCapaLossPlanQuery.ts:86 |
-| /SCP0106/{?Exclude<SHEETS, SHEETS.SPREAD_TITLE>}/SAVE/call-proc | http | 1 | Y | useCapaLossPlanSave.ts:125 |
+| SCP0106/{?Exclude<SHEETS, SHEETS.SPREAD_TITLE>}//call-proc | hook | 1 | Y | useCapaLossPlanQuery.ts:82 |
+| SCP0106/spreadTitle//call-proc | hook | 1 | Y | useCapaLossPlanQuery.ts:90 |
+| /SCP0106/{?Exclude<SHEETS, SHEETS.SPREAD_TITLE>}/SAVE/call-proc | http | 1 | Y | useCapaLossPlanSave.ts:128 |
 | /admin/menu/SCP0106/search-conditions | http | 1 | Y | useCapaLossPlanStore.ts:203 |
 | /admin/menu/SCP0106/column | http | 1 | Y | useCapaLossPlanStore.ts:355 |
 | /admin/menu/SCP0106/measure | http | 1 | Y | useCapaLossPlanStore.ts:382 |
@@ -46,34 +46,36 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CapaLossPlanForm | onSearch | handleSearch | jsx | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 307 |
-| CapaLossPlanForm | onOpenItemPopup | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 308 |
-| CapaLossPlanGrid | onCellEditEnded | handleCellEditEnded | jsx | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 337 |
-| CapaLossPlanColumnModal | onClose | <arrow> setOpenColumnSetting | jsx | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 342 |
-| CapaLossPlanItemPopup | onClose | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 347 |
+| CapaLossPlanForm | onSearch | handleSearch | jsx | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 323 |
+| CapaLossPlanForm | onOpenItemPopup | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 324 |
+| CapaLossPlanGrid | onCellEditEnded | handleCellEditEnded | jsx | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 353 |
+| CapaLossPlanColumnModal | onClose | <arrow> setOpenColumnSetting | jsx | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 358 |
+| CapaLossPlanItemPopup | onClose | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 363 |
 | ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,Number,String,clearFilters,onClose | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanColumnModal.tsx | 60 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 106 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 123 |
-| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 143 |
-| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 158 |
-| CustomDropdown | onChange | <arrow> setProgressStatus,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 184 |
-| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 201 |
-| CustomDropdown | onChange | <arrow> setDivisionType,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 226 |
-| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 247 |
-| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 273 |
-| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 299 |
-| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 323 |
-| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 352 |
-| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 376 |
-| InputField | onChange | <arrow> setSearchCondition | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 404 |
-| InputField | onDoubleClick | onOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 405 |
-| Button | onClick | onOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 413 |
-| Checkbox | onChange | <arrow> setSearchCondition,Boolean | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 434 |
-| grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 192 |
-| grid | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 209 |
-| grid | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 220 |
-| grid | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 238 |
-| grid.hostElement? | keydown | keyDownHandler | addEventListener | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 272 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 100 |
+| RadioGroup | onChange | <arrow> setDivisionType,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 120 |
+| InputField | onChange | <arrow> setSearchCondition | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 146 |
+| InputField | onDoubleClick | onOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 147 |
+| Button | onClick | onOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 155 |
+| Checkbox | onChange | <arrow> setSearchCondition,Boolean | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 177 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 200 |
+| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 220 |
+| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 235 |
+| CustomDropdown | onChange | <arrow> setProgressStatus,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 260 |
+| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 276 |
+| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 306 |
+| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 332 |
+| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 358 |
+| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 382 |
+| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 409 |
+| CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 433 |
+| grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 209 |
+| grid | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 228 |
+| grid | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 239 |
+| grid | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 260 |
+| grid | selectionChanged | selectionChangedHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 272 |
+| grid.hostElement? | keydown | keyDownHandler | addEventListener | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 306 |
+| grid | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 333 |
 | CapaItemPopup | onClose | onClose | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanItemPopup.tsx | 41 |
 | CapaItemPopup | onSelect | <arrow> selectedAll.map(item=>sc.divisionType===DIVISION_TYPE.ELTR?toStr(item.itemId):toStr(item.nickName)).filter,selectedAll.map,toStr,Array.from(newSet(values)).join,Array.from,setSearchCondition | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanItemPopup.tsx | 43 |
 
@@ -82,7 +84,7 @@
 |---|---|
 | Grid | 15 |
 | FormItem | 15 |
-| CustomDropdown | 12 |
+| CustomDropdown | 11 |
 | InputField | 2 |
 | IcGridColumnSetup | 1 |
 | MainTitle | 1 |
@@ -93,6 +95,8 @@
 | CapaLossPlanItemPopup | 1 |
 | ColumnLayoutModal | 1 |
 | SearchArea | 1 |
+| RadioGroup | 1 |
+| Radio | 1 |
 | Button | 1 |
 | FunctionSearchIcon | 1 |
 | Checkbox | 1 |
@@ -102,14 +106,14 @@
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| buildPeriodColumns | row.COLUMN_NAME | String(row.COLUMN_LABEL_NAME ?? row.COLUMN_NAME) | columnWidth | true |  |  | object | features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.dateColumns.ts | 143 |
+| buildPeriodColumns | row.COLUMN_NAME | String(row.COLUMN_LABEL_NAME ?? row.COLUMN_NAME) | columnWidth | true |  |  | object | features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.dateColumns.ts | 147 |
 
 ## 7. 메시지 코드
 | code | count |
 |---|---|
 | MSG00667 | 1 |
 | MSG01406 | 1 |
-| MSG01454 | 1 |
+| MSG00109 | 1 |
 | MSG00096 | 1 |
 | MSG00672 | 1 |
 | MSG00006 | 1 |
@@ -119,7 +123,11 @@
 | LBL00765 | 1 |
 | LBL00038 | 1 |
 | LBL01059 | 1 |
+| LBL01143 | 1 |
 | LBL00112 | 1 |
+| LBL00054 | 1 |
+| LBL00669 | 1 |
+| LBL01117 | 1 |
 | LBL00001 | 1 |
 | LBL00053 | 1 |
 | LBL00606 | 1 |
@@ -130,17 +138,14 @@
 | LBL00010 | 1 |
 | LBL00009 | 1 |
 | LBL00056 | 1 |
-| LBL00054 | 1 |
-| LBL00669 | 1 |
-| LBL01117 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0105(29), SCP0106(14), SCP0104(2), SCP0006(1), SCP0020(1)
+- 화면ID: SCP0105(25), SCP0106(16), SCP0104(2), SCP0006(1), SCP0020(1)
 - SP/PKG: PKG_SCP0106(7), PKG_SCP0104(3), P_SCP0104_GET_SPREAD_TITLE(3), P_SCP0106_GET_CAPA_LOSS_PLAN_(1), P_SCP0106_SAVE_CAPA_LOSS_PLAN_(1), PKG_NSCM_UI_COM_MENU(1), PR_GET_SHEET_COLUMN_LIST(1), SCP0104_GET_SPREAD_TITLE(1), SCP0106_SAVE_CAPA_LOSS_PLAN_(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| endpoint | 진입 자동조회 금지 — keep-alive 잔여 filters 무효화 + 메타 1회 fetch(nscm-patterns §5-7). | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 117 |
+| endpoint | 진입 자동조회 금지 — keep-alive 잔여 filters 무효화 + 메타 1회 fetch(nscm-patterns §5-7). | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | 133 |
 | jsx | 개인화 조회조건 복원 (SubTitle F6 저장분 되불러오기, 1회) — basic-check #3, 자매 정본 `capa-speed-plan`/`capa-line-assign`. 저장측은 Page 가 `<SubTitle searchParam={sc}>` 로 이미 배선돼 있으나([[f6-save-needs-searchparam-prop]]), 복원측이 없으면 저장은 되는데 **새로고침/재진입 시 조건이 사라진다**(신규 스캐 | features/supply/src/pages/capa-loss-plan/useCapaLossPlanStore.ts | 172 |
 | endpoint | Measure 메타 fetch(PIVOT 화면 의무) — 현재 시트분만. 코드 하드코딩 배열 금지. | features/supply/src/pages/capa-loss-plan/useCapaLossPlanStore.ts | 379 |
 

@@ -1,0 +1,957 @@
+{
+ "screen": "SCP0037",
+ "generated": "2026-11-08 11:47:57",
+ "vars": {
+  "dtMyDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SCP0037_OperationLT.cs:176 ← SCP0037_OperationLT.cs:45",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtOperationLT": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "SEARCH:cboLTOperation"
+   ],
+   "ref": "SCP0037_OperationLT.cs:177 ← SCP0037_OperationLT.cs:55",
+   "rows": [
+    {
+     "CODE": "SLITTING",
+     "NAME": "Slitting"
+    },
+    {
+     "CODE": "OSP_LT",
+     "NAME": "OSP LT"
+    },
+    {
+     "CODE": "PRE_INSP",
+     "NAME": "Pre Inspection"
+    },
+    {
+     "CODE": "CTP_LT",
+     "NAME": "Coating to PKG"
+    }
+   ]
+  },
+  "dtPlantSiteByDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "code": "PlantByDivisionOperNonOsp1",
+   "targets": [
+    "SEARCH:clbPlantSite"
+   ],
+   "ref": "SCP0037_OperationLT.cs:194 ← SCP0037_OperationLT.cs:47",
+   "rows": [
+    {
+     "CODE": "AZ00-A",
+     "NAME": "AZ Mobile Assy-Cell"
+    },
+    {
+     "CODE": "AZ00-E",
+     "NAME": "AZ Mobile Elec-Electrode"
+    },
+    {
+     "CODE": "HQ05_40-W",
+     "NAME": "LGESOC IT & New Application Waranty HQ05"
+    },
+    {
+     "CODE": "HQ06-A",
+     "NAME": "LGESOC Cell HQ06"
+    },
+    {
+     "CODE": "HQ06-E",
+     "NAME": "LGESOC Elec HQ06"
+    },
+    {
+     "CODE": "HQ10-A",
+     "NAME": "HQ OC2 Mobile Prod-Cell"
+    },
+    {
+     "CODE": "HQ10-E",
+     "NAME": "OC_2 Mobile Elec-Electrode"
+    },
+    {
+     "CODE": "HQ10-P",
+     "NAME": "HQ OC2 Mobile Prod-Pack"
+    },
+    {
+     "CODE": "NJ01-A",
+     "NAME": "LGESNJ Cell NJ01"
+    },
+    {
+     "CODE": "NJ01-E",
+     "NAME": "LGESNJ Elec NJ01"
+    },
+    {
+     "CODE": "NJ01-P",
+     "NAME": "LGESNJ BATTERY-Pack"
+    },
+    {
+     "CODE": "EG01_81-W",
+     "NAME": "LGESEG Automotive Waranty EG01"
+    },
+    {
+     "CODE": "HQ05-W",
+     "NAME": "LGESOC Automotive Waranty HQ05"
+    },
+    {
+     "CODE": "HQ07-A",
+     "NAME": "LGESOC Cell HQ07"
+    },
+    {
+     "CODE": "HQ07-E",
+     "NAME": "LGESOC Elec HQ07"
+    },
+    {
+     "CODE": "HQ07-P",
+     "NAME": "LGESOC Pack HQ07"
+    },
+    {
+     "CODE": "HQ11-A",
+     "NAME": "HQ OC2 Auto Prod-Cell"
+    },
+    {
+     "CODE": "HQ11-E",
+     "NAME": "OC_2 Auto Elec-Electrode"
+    },
+    {
+     "CODE": "HQ11-P",
+     "NAME": "OC_2 Auto Pack-Pack"
+    },
+    {
+     "CODE": "MI00_81-W",
+     "NAME": "LGESMI Automotive Waranty MI00"
+    },
+    {
+     "CODE": "MI00-A",
+     "NAME": "LGESMI Cell MI00"
+    },
+    {
+     "CODE": "MI00-E",
+     "NAME": "LGESMI Elec MI00"
+    },
+    {
+     "CODE": "MI00-P",
+     "NAME": "LGESMI Pack MI00"
+    },
+    {
+     "CODE": "MI02-A",
+     "NAME": "MI_LS Auto Assy/Pack-Cell"
+    },
+    {
+     "CODE": "MI02-E",
+     "NAME": "MI_LS Auto Elec-Electrode"
+    },
+    {
+     "CODE": "MI03_81-W",
+     "NAME": "LGESMI Hazel Park Automotive Waranty MI03"
+    },
+    {
+     "CODE": "MI03-P",
+     "NAME": "ESMI-Hazel Park-Pack"
+    },
+    {
+     "CODE": "NA00-A",
+     "NAME": "LGESNA Cell NA00"
+    },
+    {
+     "CODE": "NA00-E",
+     "NAME": "LGESNA Elec NA00"
+    },
+    {
+     "CODE": "NA00-P",
+     "NAME": "LGESNA Pack NA00"
+    },
+    {
+     "CODE": "NB01-A",
+     "NAME": "LGESNB Cell NB01"
+    },
+    {
+     "CODE": "NB01-E",
+     "NAME": "LGESNB Electrode-Electrode NB01"
+    },
+    {
+     "CODE": "NB01-P",
+     "NAME": "LGESNB Pack NB01"
+    },
+    {
+     "CODE": "WA00_81-W",
+     "NAME": "LGESWA Automotive Waranty WA00"
+    },
+    {
+     "CODE": "WA00-A",
+     "NAME": "LGESWA Cell WA00"
+    },
+    {
+     "CODE": "WA00-E",
+     "NAME": "LGESWA Elec WA00"
+    },
+    {
+     "CODE": "WA00-P",
+     "NAME": "LGESWA Pack WA00"
+    },
+    {
+     "CODE": "HG00-A",
+     "NAME": "ESHG Auto Assy-Cell"
+    },
+    {
+     "CODE": "HG00-E",
+     "NAME": "ESHG Auto Elec-Electrode"
+    },
+    {
+     "CODE": "HM00-A",
+     "NAME": "HM Auto Assy-Cell"
+    },
+    {
+     "CODE": "HM00-E",
+     "NAME": "HM Auto Elec-Electrode"
+    },
+    {
+     "CODE": "ST00-A",
+     "NAME": "OT Auto Assy/Pack-Cell"
+    },
+    {
+     "CODE": "ST00-E",
+     "NAME": "OT Auto Elec-Electrode"
+    },
+    {
+     "CODE": "ST00-P",
+     "NAME": "OT Auto Assy/Pack-Pack"
+    },
+    {
+     "CODE": "GM00-A",
+     "NAME": "Ultium Cells (A) - Lordstown-Cell"
+    },
+    {
+     "CODE": "GM00-E",
+     "NAME": "Ultium Cells (E) - Lordstown-Electrode"
+    },
+    {
+     "CODE": "GM01-A",
+     "NAME": "GM2_TN Auto Assy-Cell"
+    },
+    {
+     "CODE": "GM01-E",
+     "NAME": "GM2_TN Auto Elec-Electrode"
+    },
+    {
+     "CODE": "EG01_82-W",
+     "NAME": "LGESEG ESS Waranty EG01"
+    },
+    {
+     "CODE": "HQ05_82-W",
+     "NAME": "LGESOC ESS Waranty HQ05"
+    },
+    {
+     "CODE": "HQ08-A",
+     "NAME": "LGESOC Cell HQ08"
+    },
+    {
+     "CODE": "MI01-A",
+     "NAME": "MI ESS Assy-Cell"
+    },
+    {
+     "CODE": "MI01-E",
+     "NAME": "MI ESS Elec-Electrode"
+    },
+    {
+     "CODE": "MI01-P",
+     "NAME": "MI ESS Assy/Pack-Pack"
+    },
+    {
+     "CODE": "MI04-P",
+     "NAME": "MI Arizona Phoenix ESS Prod-Pack"
+    },
+    {
+     "CODE": "NB02-A",
+     "NAME": "LGESNB ESS-Cell"
+    },
+    {
+     "CODE": "NJ02_82-W",
+     "NAME": "LGESNJ ESS Waranty NJ02"
+    },
+    {
+     "CODE": "NJ02-A",
+     "NAME": "LGESNJ Cell NJ02"
+    },
+    {
+     "CODE": "VP_GM01-A",
+     "NAME": "virtual plant(GM01)-Cell"
+    },
+    {
+     "CODE": "VP_HD00-A",
+     "NAME": "virtual plant(HD00)-Cell"
+    },
+    {
+     "CODE": "VP_MI02-A",
+     "NAME": "virtual plant(MI02)-Cell"
+    },
+    {
+     "CODE": "VP_ST00-A",
+     "NAME": "virtual plant(ST00)-Cell"
+    },
+    {
+     "CODE": "VP_ST00-P",
+     "NAME": "virtual plant(ST00)-Pack"
+    },
+    {
+     "CODE": "WA01-A",
+     "NAME": "PL WRO ESS Prod-Cell"
+    },
+    {
+     "CODE": "WA01-E",
+     "NAME": "PL WRO ESS Prod-Electrode"
+    },
+    {
+     "CODE": "HD00-A",
+     "NAME": "ES Honda JV Auto Assy/Pack-Cell"
+    },
+    {
+     "CODE": "HD00-E",
+     "NAME": "ES Honda JV Auto Elec-Electrode"
+    },
+    {
+     "CODE": "HD00-P",
+     "NAME": "ES Honda JV Auto Assy/Pack-Pack"
+    }
+   ]
+  },
+  "dtPlantSite": {
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "code": "PlantByDivisionOperNonOsp1",
+   "targets": [
+    "SEARCH:clbPlantSite"
+   ],
+   "ref": "SCP0037_OperationLT.cs:217 ← SCP0037_OperationLT.cs:53",
+   "rows": [
+    {
+     "CODE": "AZ00-A",
+     "NAME": "AZ Mobile Assy-Cell"
+    },
+    {
+     "CODE": "AZ00-E",
+     "NAME": "AZ Mobile Elec-Electrode"
+    },
+    {
+     "CODE": "HQ05_40-W",
+     "NAME": "LGESOC IT & New Application Waranty HQ05"
+    },
+    {
+     "CODE": "HQ06-A",
+     "NAME": "LGESOC Cell HQ06"
+    },
+    {
+     "CODE": "HQ06-E",
+     "NAME": "LGESOC Elec HQ06"
+    },
+    {
+     "CODE": "HQ10-A",
+     "NAME": "HQ OC2 Mobile Prod-Cell"
+    },
+    {
+     "CODE": "HQ10-E",
+     "NAME": "OC_2 Mobile Elec-Electrode"
+    },
+    {
+     "CODE": "HQ10-P",
+     "NAME": "HQ OC2 Mobile Prod-Pack"
+    },
+    {
+     "CODE": "NJ01-A",
+     "NAME": "LGESNJ Cell NJ01"
+    },
+    {
+     "CODE": "NJ01-E",
+     "NAME": "LGESNJ Elec NJ01"
+    },
+    {
+     "CODE": "NJ01-P",
+     "NAME": "LGESNJ BATTERY-Pack"
+    },
+    {
+     "CODE": "EG01_81-W",
+     "NAME": "LGESEG Automotive Waranty EG01"
+    },
+    {
+     "CODE": "HQ05-W",
+     "NAME": "LGESOC Automotive Waranty HQ05"
+    },
+    {
+     "CODE": "HQ07-A",
+     "NAME": "LGESOC Cell HQ07"
+    },
+    {
+     "CODE": "HQ07-E",
+     "NAME": "LGESOC Elec HQ07"
+    },
+    {
+     "CODE": "HQ07-P",
+     "NAME": "LGESOC Pack HQ07"
+    },
+    {
+     "CODE": "HQ11-A",
+     "NAME": "HQ OC2 Auto Prod-Cell"
+    },
+    {
+     "CODE": "HQ11-E",
+     "NAME": "OC_2 Auto Elec-Electrode"
+    },
+    {
+     "CODE": "HQ11-P",
+     "NAME": "OC_2 Auto Pack-Pack"
+    },
+    {
+     "CODE": "MI00_81-W",
+     "NAME": "LGESMI Automotive Waranty MI00"
+    },
+    {
+     "CODE": "MI00-A",
+     "NAME": "LGESMI Cell MI00"
+    },
+    {
+     "CODE": "MI00-E",
+     "NAME": "LGESMI Elec MI00"
+    },
+    {
+     "CODE": "MI00-P",
+     "NAME": "LGESMI Pack MI00"
+    },
+    {
+     "CODE": "MI02-A",
+     "NAME": "MI_LS Auto Assy/Pack-Cell"
+    },
+    {
+     "CODE": "MI02-E",
+     "NAME": "MI_LS Auto Elec-Electrode"
+    },
+    {
+     "CODE": "MI03_81-W",
+     "NAME": "LGESMI Hazel Park Automotive Waranty MI03"
+    },
+    {
+     "CODE": "MI03-P",
+     "NAME": "ESMI-Hazel Park-Pack"
+    },
+    {
+     "CODE": "NA00-A",
+     "NAME": "LGESNA Cell NA00"
+    },
+    {
+     "CODE": "NA00-E",
+     "NAME": "LGESNA Elec NA00"
+    },
+    {
+     "CODE": "NA00-P",
+     "NAME": "LGESNA Pack NA00"
+    },
+    {
+     "CODE": "NB01-A",
+     "NAME": "LGESNB Cell NB01"
+    },
+    {
+     "CODE": "NB01-E",
+     "NAME": "LGESNB Electrode-Electrode NB01"
+    },
+    {
+     "CODE": "NB01-P",
+     "NAME": "LGESNB Pack NB01"
+    },
+    {
+     "CODE": "WA00_81-W",
+     "NAME": "LGESWA Automotive Waranty WA00"
+    },
+    {
+     "CODE": "WA00-A",
+     "NAME": "LGESWA Cell WA00"
+    },
+    {
+     "CODE": "WA00-E",
+     "NAME": "LGESWA Elec WA00"
+    },
+    {
+     "CODE": "WA00-P",
+     "NAME": "LGESWA Pack WA00"
+    },
+    {
+     "CODE": "HG00-A",
+     "NAME": "ESHG Auto Assy-Cell"
+    },
+    {
+     "CODE": "HG00-E",
+     "NAME": "ESHG Auto Elec-Electrode"
+    },
+    {
+     "CODE": "HM00-A",
+     "NAME": "HM Auto Assy-Cell"
+    },
+    {
+     "CODE": "HM00-E",
+     "NAME": "HM Auto Elec-Electrode"
+    },
+    {
+     "CODE": "ST00-A",
+     "NAME": "OT Auto Assy/Pack-Cell"
+    },
+    {
+     "CODE": "ST00-E",
+     "NAME": "OT Auto Elec-Electrode"
+    },
+    {
+     "CODE": "ST00-P",
+     "NAME": "OT Auto Assy/Pack-Pack"
+    },
+    {
+     "CODE": "GM00-A",
+     "NAME": "Ultium Cells (A) - Lordstown-Cell"
+    },
+    {
+     "CODE": "GM00-E",
+     "NAME": "Ultium Cells (E) - Lordstown-Electrode"
+    },
+    {
+     "CODE": "GM01-A",
+     "NAME": "GM2_TN Auto Assy-Cell"
+    },
+    {
+     "CODE": "GM01-E",
+     "NAME": "GM2_TN Auto Elec-Electrode"
+    },
+    {
+     "CODE": "EG01_82-W",
+     "NAME": "LGESEG ESS Waranty EG01"
+    },
+    {
+     "CODE": "HQ05_82-W",
+     "NAME": "LGESOC ESS Waranty HQ05"
+    },
+    {
+     "CODE": "HQ08-A",
+     "NAME": "LGESOC Cell HQ08"
+    },
+    {
+     "CODE": "MI01-A",
+     "NAME": "MI ESS Assy-Cell"
+    },
+    {
+     "CODE": "MI01-E",
+     "NAME": "MI ESS Elec-Electrode"
+    },
+    {
+     "CODE": "MI01-P",
+     "NAME": "MI ESS Assy/Pack-Pack"
+    },
+    {
+     "CODE": "MI04-P",
+     "NAME": "MI Arizona Phoenix ESS Prod-Pack"
+    },
+    {
+     "CODE": "NB02-A",
+     "NAME": "LGESNB ESS-Cell"
+    },
+    {
+     "CODE": "NJ02_82-W",
+     "NAME": "LGESNJ ESS Waranty NJ02"
+    },
+    {
+     "CODE": "NJ02-A",
+     "NAME": "LGESNJ Cell NJ02"
+    },
+    {
+     "CODE": "VP_GM01-A",
+     "NAME": "virtual plant(GM01)-Cell"
+    },
+    {
+     "CODE": "VP_HD00-A",
+     "NAME": "virtual plant(HD00)-Cell"
+    },
+    {
+     "CODE": "VP_MI02-A",
+     "NAME": "virtual plant(MI02)-Cell"
+    },
+    {
+     "CODE": "VP_ST00-A",
+     "NAME": "virtual plant(ST00)-Cell"
+    },
+    {
+     "CODE": "VP_ST00-P",
+     "NAME": "virtual plant(ST00)-Pack"
+    },
+    {
+     "CODE": "WA01-A",
+     "NAME": "PL WRO ESS Prod-Cell"
+    },
+    {
+     "CODE": "WA01-E",
+     "NAME": "PL WRO ESS Prod-Electrode"
+    },
+    {
+     "CODE": "HD00-A",
+     "NAME": "ES Honda JV Auto Assy/Pack-Cell"
+    },
+    {
+     "CODE": "HD00-E",
+     "NAME": "ES Honda JV Auto Elec-Electrode"
+    },
+    {
+     "CODE": "HD00-P",
+     "NAME": "ES Honda JV Auto Assy/Pack-Pack"
+    }
+   ]
+  },
+  "dtPlantSiteByDivisionForSpread": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "PlantSiteByDivision",
+   "targets": [
+    "GRID:SCM_SITE_ID",
+    "PARAM:PlantByDivisionOperation"
+   ],
+   "ref": "SCP0037_OperationLT.cs:240 ← SCP0037_OperationLT.cs:50",
+   "rows": [
+    {
+     "CODE": "AZ00-A",
+     "NAME": "AZ Mobile Assy-Cell"
+    },
+    {
+     "CODE": "AZ00-E",
+     "NAME": "AZ Mobile Elec-Electrode"
+    },
+    {
+     "CODE": "CN00254300_40-P",
+     "NAME": "NEXCON_CN_NJ"
+    },
+    {
+     "CODE": "CN00732500_40-P",
+     "NAME": "C-TECH_CN_CQ"
+    },
+    {
+     "CODE": "CN02072800_40-P",
+     "NAME": "Elentec_CN"
+    },
+    {
+     "CODE": "HQ05_40-W",
+     "NAME": "LGESOC IT & New Application Waranty HQ05"
+    },
+    {
+     "CODE": "HQ06-A",
+     "NAME": "LGESOC Cell HQ06"
+    },
+    {
+     "CODE": "HQ06-E",
+     "NAME": "LGESOC Elec HQ06"
+    },
+    {
+     "CODE": "HQ10-A",
+     "NAME": "HQ OC2 Mobile Prod-Cell"
+    },
+    {
+     "CODE": "HQ10-E",
+     "NAME": "OC_2 Mobile Elec-Electrode"
+    },
+    {
+     "CODE": "HQ10-P",
+     "NAME": "HQ OC2 Mobile Prod-Pack"
+    },
+    {
+     "CODE": "IN00142000_40-P",
+     "NAME": "Elentec_IN"
+    },
+    {
+     "CODE": "KR00496300_40-P",
+     "NAME": "SUNTEL_KR_VN"
+    },
+    {
+     "CODE": "KR00781800_40-P",
+     "NAME": "POWERLOGICS_KR"
+    },
+    {
+     "CODE": "KR00797800_40-P",
+     "NAME": "PeopleWorks-KR-1"
+    },
+    {
+     "CODE": "KR00995200_40-P",
+     "NAME": "DONGHWAES_KR"
+    },
+    {
+     "CODE": "KR01297200_40-P",
+     "NAME": "Elentec_KR"
+    },
+    {
+     "CODE": "KR02149300_40-A",
+     "NAME": "SEOWON_NJ-CELL"
+    },
+    {
+     "CODE": "KR02265100_40_KR-P",
+     "NAME": "ITM_KR"
+    },
+    {
+     "CODE": "KR02265100_40-P",
+     "NAME": "ITM_KR_VN"
+    },
+    {
+     "CODE": "KR03346900_40-P",
+     "NAME": "DEOKYANG"
+    },
+    {
+     "CODE": "KR04179400_40-E",
+     "NAME": "Enetech_KR_CJ_ELEC"
+    },
+    {
+     "CODE": "KR04595000_40-P",
+     "NAME": "INFAC_KR"
+    },
+    {
+     "CODE": "KR40408500_40-P",
+     "NAME": "Elentec_Yongin"
+    },
+    {
+     "CODE": "NJ01-A",
+     "NAME": "LGESNJ Cell NJ01"
+    },
+    {
+     "CODE": "NJ01-E",
+     "NAME": "LGESNJ Elec NJ01"
+    },
+    {
+     "CODE": "NJ01-P",
+     "NAME": "LGESNJ BATTERY-Pack"
+    },
+    {
+     "CODE": "TW00177500_40-P",
+     "NAME": "C-TECH_TW"
+    },
+    {
+     "CODE": "VN00188600_40-P",
+     "NAME": "POWERLOGICS_VN"
+    },
+    {
+     "CODE": "EG01_81-W",
+     "NAME": "LGESEG Automotive Waranty EG01"
+    },
+    {
+     "CODE": "HQ05-W",
+     "NAME": "LGESOC Automotive Waranty HQ05"
+    },
+    {
+     "CODE": "HQ07-A",
+     "NAME": "LGESOC Cell HQ07"
+    },
+    {
+     "CODE": "HQ07-E",
+     "NAME": "LGESOC Elec HQ07"
+    },
+    {
+     "CODE": "HQ07-P",
+     "NAME": "LGESOC Pack HQ07"
+    },
+    {
+     "CODE": "HQ11-A",
+     "NAME": "HQ OC2 Auto Prod-Cell"
+    },
+    {
+     "CODE": "HQ11-E",
+     "NAME": "OC_2 Auto Elec-Electrode"
+    },
+    {
+     "CODE": "HQ11-P",
+     "NAME": "OC_2 Auto Pack-Pack"
+    },
+    {
+     "CODE": "KR02239900_81-P",
+     "NAME": "CS-ENERTECH_PACK"
+    },
+    {
+     "CODE": "MI00_81-W",
+     "NAME": "LGESMI Automotive Waranty MI00"
+    },
+    {
+     "CODE": "MI00-A",
+     "NAME": "LGESMI Cell MI00"
+    },
+    {
+     "CODE": "MI00-E",
+     "NAME": "LGESMI Elec MI00"
+    },
+    {
+     "CODE": "MI00-P",
+     "NAME": "LGESMI Pack MI00"
+    },
+    {
+     "CODE": "MI02-A",
+     "NAME": "MI_LS Auto Assy/Pack-Cell"
+    },
+    {
+     "CODE": "MI02-E",
+     "NAME": "MI_LS Auto Elec-Electrode"
+    },
+    {
+     "CODE": "MI03_81-W",
+     "NAME": "LGESMI Hazel Park Automotive Waranty MI03"
+    },
+    {
+     "CODE": "MI03-P",
+     "NAME": "ESMI-Hazel Park-Pack"
+    },
+    {
+     "CODE": "NA00-A",
+     "NAME": "LGESNA Cell NA00"
+    },
+    {
+     "CODE": "NA00-E",
+     "NAME": "LGESNA Elec NA00"
+    },
+    {
+     "CODE": "NA00-P",
+     "NAME": "LGESNA Pack NA00"
+    },
+    {
+     "CODE": "NB01-A",
+     "NAME": "LGESNB Cell NB01"
+    },
+    {
+     "CODE": "NB01-E",
+     "NAME": "LGESNB Electrode-Electrode NB01"
+    },
+    {
+     "CODE": "NB01-P",
+     "NAME": "LGESNB Pack NB01"
+    },
+    {
+     "CODE": "WA00_81-W",
+     "NAME": "LGESWA Automotive Waranty WA00"
+    },
+    {
+     "CODE": "WA00-A",
+     "NAME": "LGESWA Cell WA00"
+    },
+    {
+     "CODE": "WA00-E",
+     "NAME": "LGESWA Elec WA00"
+    },
+    {
+     "CODE": "WA00-P",
+     "NAME": "LGESWA Pack WA00"
+    },
+    {
+     "CODE": "CN00249500-P",
+     "NAME": "Peopleworks_CN"
+    },
+    {
+     "CODE": "CN05104100_82-P",
+     "NAME": "SHIP"
+    },
+    {
+     "CODE": "EG01_82-W",
+     "NAME": "LGESEG ESS Waranty EG01"
+    },
+    {
+     "CODE": "HQ05_82-W",
+     "NAME": "LGESOC ESS Waranty HQ05"
+    },
+    {
+     "CODE": "HQ08-A",
+     "NAME": "LGESOC Cell HQ08"
+    },
+    {
+     "CODE": "KR00697200_82-P",
+     "NAME": "Intor"
+    },
+    {
+     "CODE": "KR00797800-P",
+     "NAME": "PeopleWorks-KR-1"
+    },
+    {
+     "CODE": "KR04851000-P",
+     "NAME": "PeopleWorks-KR-2"
+    },
+    {
+     "CODE": "KR32625300_82-P",
+     "NAME": "PeopleWorks-KR-3"
+    },
+    {
+     "CODE": "MI01-A",
+     "NAME": "MI ESS Assy-Cell"
+    },
+    {
+     "CODE": "MI01-E",
+     "NAME": "MI ESS Elec-Electrode"
+    },
+    {
+     "CODE": "MI01-P",
+     "NAME": "MI ESS Assy/Pack-Pack"
+    },
+    {
+     "CODE": "MI04-P",
+     "NAME": "MI Arizona Phoenix ESS Prod-Pack"
+    },
+    {
+     "CODE": "NB02-A",
+     "NAME": "LGESNB ESS-Cell"
+    },
+    {
+     "CODE": "NJ02_82-W",
+     "NAME": "LGESNJ ESS Waranty NJ02"
+    },
+    {
+     "CODE": "NJ02-A",
+     "NAME": "LGESNJ Cell NJ02"
+    },
+    {
+     "CODE": "PL01279700_82-P",
+     "NAME": "INFAC"
+    },
+    {
+     "CODE": "US02182600_82-P",
+     "NAME": "PeopleWorks-US-AZ"
+    },
+    {
+     "CODE": "US02279100_82-P",
+     "NAME": "PeopleWorks-US CHI"
+    },
+    {
+     "CODE": "US02562600_82-P",
+     "NAME": "Sebang Lithium Battery Ohio LLC"
+    },
+    {
+     "CODE": "VP_GM01-A",
+     "NAME": "virtual plant(GM01)-Cell"
+    },
+    {
+     "CODE": "VP_HD00-A",
+     "NAME": "virtual plant(HD00)-Cell"
+    },
+    {
+     "CODE": "VP_MI02-A",
+     "NAME": "virtual plant(MI02)-Cell"
+    },
+    {
+     "CODE": "VP_ST00-A",
+     "NAME": "virtual plant(ST00)-Cell"
+    },
+    {
+     "CODE": "VP_ST00-P",
+     "NAME": "virtual plant(ST00)-Pack"
+    },
+    {
+     "CODE": "WA01-A",
+     "NAME": "PL WRO ESS Prod-Cell"
+    },
+    {
+     "CODE": "WA01-E",
+     "NAME": "PL WRO ESS Prod-Electrode"
+    }
+   ]
+  },
+  "<meta Data.Type.LookupCommon>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "GRID:LT_OPERATION"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SCP0037/Operation LT/LT_OPERATION ← SCM_MST_SHEET_COLUMNS SCP0037/Operation LT/LT_OPERATION",
+   "rows": []
+  }
+ }
+}

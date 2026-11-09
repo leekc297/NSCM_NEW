@@ -1,7 +1,7 @@
 # SCP0121 — To-Be Fact Pack 요약
 
 - page_key: `supply/plan-group-master` · feature: supply · As-is Fact Pack 있음
-- 파일 18 · 엔드포인트 호출 12 (미해결 2, 주석 속 1) · 이벤트 24 · 컴포넌트 사용 51 · 하드코딩 컬럼 0 · 메시지 21
+- 파일 18 · 엔드포인트 호출 12 (미해결 2, 주석 속 1) · 이벤트 24 · 컴포넌트 사용 51 · 하드코딩 컬럼 0 · 메시지 23
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
@@ -9,35 +9,35 @@
 |---|---|---|
 | features/supply/src/pages/plan-group-master/components/modals/owner-select-modal.constants.ts | constants | 39 |
 | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.module.scss | component | 56 |
-| features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | component | 332 |
+| features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | component | 333 |
 | features/supply/src/pages/plan-group-master/components/modals/ownerSelectModalStore.ts | store | 41 |
-| features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.module.scss | component | 54 |
-| features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | component | 273 |
+| features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.module.scss | component | 52 |
+| features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | component | 280 |
 | features/supply/src/pages/plan-group-master/components/modals/planGroupInfoModalStore.ts | store | 41 |
-| features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | component | 264 |
-| features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | component | 138 |
-| features/supply/src/pages/plan-group-master/hooks/usePlanGroupMasterValidation.ts | hook | 113 |
+| features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | component | 280 |
+| features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | component | 139 |
+| features/supply/src/pages/plan-group-master/hooks/usePlanGroupMasterValidation.ts | hook | 129 |
 | features/supply/src/pages/plan-group-master/index.ts | index | 2 |
-| features/supply/src/pages/plan-group-master/plan-group-master.constants.ts | constants | 97 |
+| features/supply/src/pages/plan-group-master/plan-group-master.constants.ts | constants | 96 |
 | features/supply/src/pages/plan-group-master/plan-group-master.types.ts | types | 37 |
-| features/supply/src/pages/plan-group-master/PlanGroupMaster.tsx | page | 296 |
+| features/supply/src/pages/plan-group-master/PlanGroupMaster.tsx | page | 304 |
 | features/supply/src/pages/plan-group-master/usePlanGroupMasterStore.ts | store | 163 |
-| features/supply/src/pages/plan-group-master/utils/plan-group-master.save.ts | util | 96 |
+| features/supply/src/pages/plan-group-master/utils/plan-group-master.save.ts | util | 112 |
 | features/supply/src/pages/plan-group-master/utils/plan-group-master.searchInfo.ts | util | 112 |
 | features/supply/src/pages/plan-group-master/__asis-mapping__.md | mapping | 59 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| SCP0121/ownerPopup//call-proc | hook | 1 | Y | OwnerSelectModal.tsx:82 |
+| SCP0121/ownerPopup//call-proc | hook | 1 | Y | OwnerSelectModal.tsx:83 |
 | /admin/menu/DMF000/column | http | 1 | Y | ownerSelectModalStore.ts:28 |
-| (useTabComboQueries) | hook | 2 | Y | PlanGroupInfoModal.tsx:83 PlanGroupMasterForm.tsx:58 |
-| {?GET_URL} | http | 1 | N | PlanGroupInfoModal.tsx:95 |
-| {?SAVE_URL} | http | 1 | N | PlanGroupInfoModal.tsx:134 |
+| (useTabComboQueries) | hook | 2 | Y | PlanGroupInfoModal.tsx:84 PlanGroupMasterForm.tsx:63 |
+| {?GET_URL} | http | 1 | N | PlanGroupInfoModal.tsx:96 |
+| {?SAVE_URL} | http | 1 | N | PlanGroupInfoModal.tsx:135 |
 | /admin/menu/SCP0121/column | http | 2 | Y | planGroupInfoModalStore.ts:30 usePlanGroupMasterStore.ts:151 |
-| SCP0121/searchInfo//call-proc | hook | 1 | Y | PlanGroupMaster.tsx:68 |
-| SCP0121/main//call-proc | hook | 1 | Y | PlanGroupMaster.tsx:80 |
-| /SCP0121/main/SAVE/call-proc | http | 1 | Y | PlanGroupMaster.tsx:169 |
+| SCP0121/searchInfo//call-proc | hook | 1 | Y | PlanGroupMaster.tsx:72 |
+| SCP0121/main//call-proc | hook | 1 | Y | PlanGroupMaster.tsx:84 |
+| /SCP0121/main/SAVE/call-proc | http | 1 | Y | PlanGroupMaster.tsx:167 |
 | /admin/menu/SCP0121/search-conditions | http | 1 | Y | usePlanGroupMasterStore.ts:85 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -50,30 +50,30 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | handleSearch | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 228 |
-| InputField | onChange | <arrow> setUserInput | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 238 |
-| InputField | onKeyDown | <arrow> handleSearch | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 239 |
-| Button | onClick | handleMoveToUser | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 278 |
-| Button | onClick | handleMoveToBase | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 285 |
-| Button | onClick | handleConfirm | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 317 |
-| Button | onClick | modalClose | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 324 |
-| Button | onClick | handleInsert | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 242 |
-| Button | onClick | handleSave | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 250 |
-| Button | onClick | modalClose | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 257 |
-| OwnerSelectModal | onConfirm | handleOwnerConfirm | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 268 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 140 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 154 |
-| CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 178 |
-| CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 197 |
-| CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 216 |
-| CustomDropdown | onChange | <arrow> changeCondition | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 235 |
-| CustomDropdown | onChange | <arrow> changeCondition | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 254 |
+| SearchArea | onSearch | handleSearch | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 229 |
+| InputField | onChange | <arrow> setUserInput | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 239 |
+| InputField | onKeyDown | <arrow> handleSearch | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 240 |
+| Button | onClick | handleMoveToUser | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 279 |
+| Button | onClick | handleMoveToBase | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 286 |
+| Button | onClick | handleConfirm | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 318 |
+| Button | onClick | modalClose | jsx | features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx | 325 |
+| Button | onClick | handleInsert | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 249 |
+| Button | onClick | handleSave | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 257 |
+| Button | onClick | modalClose | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 264 |
+| OwnerSelectModal | onConfirm | handleOwnerConfirm | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 275 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 153 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,setDivisionKey | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 168 |
+| CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 194 |
+| CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 213 |
+| CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 232 |
+| CustomDropdown | onChange | <arrow> changeCondition | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 251 |
+| CustomDropdown | onChange | <arrow> changeAndClearGrid | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 270 |
 | grid | pastingCell | <arrow> sender.getColumn,dataMap.getDisplayValues,names.map,String,dataMap.getKeyValue,resolvePlanGroupCode | addHandler | features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | 85 |
 | DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | 122 |
-| ModelByDivisionPopup | onClose | <arrow> setOpenItemModal | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | 130 |
-| ModelByDivisionPopup | onSelect | <arrow> setItemId | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | 131 |
-| PlanGroupMasterForm | onSearch | handleSearch | jsx | features/supply/src/pages/plan-group-master/PlanGroupMaster.tsx | 266 |
-| PlanGroupInfoModal | onRegistered | handlePlanGroupRegistered | jsx | features/supply/src/pages/plan-group-master/PlanGroupMaster.tsx | 291 |
+| ModelByDivisionPopup | onClose | <arrow> setOpenItemModal | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | 132 |
+| ModelByDivisionPopup | onSelect | <arrow> setItemId | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | 133 |
+| PlanGroupMasterForm | onSearch | handleSearch | jsx | features/supply/src/pages/plan-group-master/PlanGroupMaster.tsx | 274 |
+| PlanGroupInfoModal | onRegistered | handlePlanGroupRegistered | jsx | features/supply/src/pages/plan-group-master/PlanGroupMaster.tsx | 299 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -114,19 +114,21 @@
 | LBL00111 | 1 |
 | LBL00627 | 1 |
 | MSG00097 | 1 |
-| MSG00060 | 1 |
+| MSG01427 | 1 |
 | MSG00672 | 1 |
 | MSG00004 | 1 |
 | MSG00618 | 1 |
+| MSG01496 | 1 |
+| MSG01497 | 1 |
 | LBL00001 | 1 |
-| LBL00009 | 1 |
+| LBL00027 | 1 |
 | LBL00030 | 1 |
 | LBL00008 | 1 |
 | LBL00010 | 1 |
 | LBL00002 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0121(5), COM0004(2), SCM0002(1), SCP0002(1), DMF0020(1)
+- 화면ID: SCP0121(6), COM0004(2), SCM0002(1), SCP0002(1), DMF0020(1)
 - SP/PKG: PKG_SCP0121(2), P_SCP0121_GET_OWNER_DATA_POPUP(1), P_SCP0121_GET_PLAN_GROUP_POPUP(1), P_SCP0121_SAVE_PLAN_GR_POPUP(1), PKG_COM0000(1), P_SCP0121_GET_SEARCH_INFO(1), SCP0121_SAVE_PLAN_GROUP_LINE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

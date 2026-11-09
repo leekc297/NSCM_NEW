@@ -9,13 +9,13 @@
 |---|---|---|
 | features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.module.scss | component | 57 |
 | features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx | component | 381 |
-| features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | component | 401 |
+| features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | component | 398 |
 | features/master/src/pages/nn-master-mapping/index.ts | index | 2 |
 | features/master/src/pages/nn-master-mapping/nn-master-mapping.constants.ts | constants | 48 |
 | features/master/src/pages/nn-master-mapping/nn-master-mapping.types.ts | types | 11 |
 | features/master/src/pages/nn-master-mapping/NnMasterMapping.module.scss | style | 181 |
-| features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx | page | 403 |
-| features/master/src/pages/nn-master-mapping/useNnMasterMappingStore.ts | store | 124 |
+| features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx | page | 406 |
+| features/master/src/pages/nn-master-mapping/useNnMasterMappingStore.ts | store | 127 |
 | features/master/src/pages/nn-master-mapping/utils/nn-master-mapping.merge.ts | util | 40 |
 | features/master/src/pages/nn-master-mapping/utils/searchCombos.ts | util | 100 |
 | features/master/src/pages/nn-master-mapping/__asis-mapping__.md | mapping | 75 |
@@ -26,10 +26,10 @@
 | /admin/menu/DMF0072/search-conditions | http | 1 | Y | NnMasterMappingForm.tsx:54 |
 | DMF0072/dataType//call-proc | hook | 1 | Y | NnMasterMappingForm.tsx:73 |
 | (useTabComboQueries) | hook | 4 | Y | NnMasterMappingForm.tsx:87 NnMasterMappingForm.tsx:93 NnMasterMappingForm.tsx:96 NnMasterMapping.tsx:75 |
-| (useTabLookupQueries) | hook | 1 | Y | NnMasterMappingGrid.tsx:84 |
+| (useTabLookupQueries) | hook | 1 | Y | NnMasterMappingGrid.tsx:81 |
 | DMF0072/main//call-proc | hook | 1 | Y | NnMasterMapping.tsx:94 |
-| /DMF0072/main/SAVE/call-proc | http | 1 | Y | NnMasterMapping.tsx:319 |
-| /admin/menu/DMF0072/column | http | 1 | Y | useNnMasterMappingStore.ts:91 |
+| /DMF0072/main/SAVE/call-proc | http | 1 | Y | NnMasterMapping.tsx:322 |
+| /admin/menu/DMF0072/column | http | 1 | Y | useNnMasterMappingStore.ts:94 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -47,11 +47,11 @@
 | InputField | onChange | <arrow> set | jsx | features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx | 313 |
 | InputField | onDoubleClick | <arrow> setOpenItemModal | jsx | features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx | 324 |
 | Button | onClick | <arrow> setOpenItemModal | jsx | features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx | 320 |
-| grid | updatedLayout | attach | addHandler | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 115 |
-| g | beginningEdit | handleBeginningEdit | addHandler | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 175 |
-| g | formatItem | handleFormatItem | addHandler | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 206 |
-| DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 352 |
-| NnMasterMappingForm | onSearch | handleSearch | jsx | features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx | 383 |
+| grid | updatedLayout | attach | addHandler | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 112 |
+| g | beginningEdit | handleBeginningEdit | addHandler | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 172 |
+| g | formatItem | handleFormatItem | addHandler | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 203 |
+| DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 349 |
+| NnMasterMappingForm | onSearch | handleSearch | jsx | features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx | 386 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -100,12 +100,12 @@
 | MSG00618 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0004(4), DMF0043_01(1), DMF0072(1), SCP0048(1), DMF0021(1), DMF0005(1)
+- 화면ID: DMF0004(4), DMF0043_01(1), SCP0048(1), DMF0021(1), DMF0005(1)
 - SP/PKG: PR_GET_SHEET_COLUMN_LIST(2), DMF0072_GET_NNMASTER_MAPPING(1), DMF0008_GET_MY_DIVISION_LIST(1), SCM0001_GET_LOOKUP_VALUES(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | (change-effect 는 grid mount 전에 early-return 될 수 있다 — SCP0048 선례). | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 107 |
+| code | (change-effect 는 grid mount 전에 early-return 될 수 있다 — SCP0048 선례). | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 104 |
 | code | const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용) | features/master/src/pages/nn-master-mapping/nn-master-mapping.constants.ts | 20 |
 | endpoint | BE 메타 SHEET_COLUMNS 동적 fetch (admin UI Category Setup 즉시 반영, 룰 #65) | features/master/src/pages/nn-master-mapping/useNnMasterMappingStore.ts | 23 |
 | endpoint | fetchStaticColumns — admin SHEET_COLUMNS 동적 fetch (DMF0004 표준). 메모리 feedback_admin_meta_dynamic_fetch + feedback_grid_no_hardcoded_static_columns. BE: POST /admin/menu/{MENU_ID}/column { sheetNm } | features/master/src/pages/nn-master-mapping/useNnMasterMappingStore.ts | 83 |

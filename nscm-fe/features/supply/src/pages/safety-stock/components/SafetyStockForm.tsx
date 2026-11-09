@@ -7,7 +7,7 @@ import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
-import { useMessageStore } from '@shared/stores';
+import { confirmIfDirtyKey, tabDirtyKey, useMessageStore } from '@shared/stores';
 
 import { COMBO, INIT_SET, LBL, MENU_ID, SHEETS } from '../safety-stock.constants';
 import { useSafetyStockStore } from '../useSafetyStockStore';
@@ -123,7 +123,17 @@ export const SafetyStockForm = ({ tabId }: SafetyStockFormProps) => {
                   <CustomDropdown
                     value={searchParams.divisionId}
                     options={divisions?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
-                    onChange={(_, option) => setSearchParams({ divisionId: option })}
+                    onChange={(_, option) => {
+                      // TO-BE 공통: Division(싱글 콤보) 변경 = 하위 조회조건 + 그리드 초기화.
+                      //   편집중(dirty)이면 MSG00704 confirm 후에만 적용, 취소 시 controlled 콤보가
+                      //   이전 Division 으로 자동 복귀(commit 51d4e9fa 패턴). ok 후 setSearchParams 가
+                      //   cascade 하위(PlanGroup/Site/Stage)를 비우고 filters 를 undefined 로 되돌려
+                      //   그리드를 초기화한다(useSafetyStockStore.setSearchParams 내부 처리).
+                      void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                        if (!ok) return;
+                        setSearchParams({ divisionId: option });
+                      });
+                    }}
                   />
                 )}
               />
@@ -230,7 +240,9 @@ export const SafetyStockForm = ({ tabId }: SafetyStockFormProps) => {
             </Grid>
             <Grid size={3}>
               <PeriodRangePicker
+                className={commonStyles.formItem}
                 label={t(LBL.PERIOD, '_Period')}
+                required
                 start={searchParams.periodFrom}
                 end={searchParams.periodTo}
                 onChange={(start, end) => setSearchParams({ periodFrom: start, periodTo: end })}

@@ -15,6 +15,7 @@ import { useSessionStore } from '@shared/stores';
 
 import { NoWorkBatchModal } from './components/modals/NoWorkBatchModal';
 import { NoWorkExcelUploadModal } from './components/modals/NoWorkExcelUploadModal';
+import { NoWorkWeekModal } from './components/modals/NoWorkWeekModal';
 import { OptCapaForm } from './components/OptCapaForm';
 import { OptCapaGrid } from './components/OptCapaGrid';
 import { useOptCapaActions } from './hooks/useOptCapaActions';
@@ -35,7 +36,6 @@ import type { GridRow } from './opt-capa.types';
 import styles from './OptCapa.module.scss';
 import { useOptCapaStore } from './useOptCapaStore';
 import { str } from './utils/optCapa.candidates';
-import { buildWeekCandidates } from './utils/optCapa.week';
 
 /**
  * 시트별 ref 저장소 — 8탭 각각의 `DataGrid` 인스턴스를 따로 가리킨다.
@@ -163,12 +163,6 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
       );
   }, [staticColumns, sc.bucket]);
 
-  // Week 모드 `WEEK_NAME` 셀 콤보 후보 — 조회 Period 가 걸치는 ISO 주차 라벨('2026-W40').
-  const weekCandidates = useMemo(
-    () => buildWeekCandidates(sc.fromYyyymm, sc.toYyyymm),
-    [sc.fromYyyymm, sc.toYyyymm]
-  );
-
   const actions = useOptCapaActions({
     tabId,
     sheet,
@@ -241,7 +235,6 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
       selectedPlantCodes: sheets.selectedPlantCodes,
       plantCandidates: sheets.plantAll,
       lineCandidates: sheets.lineAll,
-      weekCandidates,
     }),
     [
       sheets.plantAll,
@@ -250,7 +243,6 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
       sheets.lineTypeAll,
       sheets.noWorkTypeAll,
       sheets.selectedPlantCodes,
-      weekCandidates,
     ]
   );
 
@@ -316,6 +308,7 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
                 divisionId={actions.divisionId}
                 comboSources={comboSources}
                 onItemCellDblClick={actions.openItemPopup}
+                onWeekCellDblClick={actions.showWeekPopup}
               />
             </TabItem>
           ))}
@@ -348,6 +341,13 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
           operationGroup: '',
           itemId: sc.itemId,
         }}
+      />
+
+      <NoWorkWeekModal
+        open={actions.openWeekPopup}
+        anchor={actions.weekPopupAnchor}
+        onClose={actions.closeWeekPopup}
+        onSelect={actions.handleWeekSelect}
       />
 
       {/* Excel upload — 완료 후 메인 재조회(AS-IS MSG00265 Yes 재조회 재현). */}

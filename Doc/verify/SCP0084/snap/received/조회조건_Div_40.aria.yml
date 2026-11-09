@@ -1,0 +1,13 @@
+- text: Month
+- button "calendar"
+- textbox "YYYY.MM": "2026.09"
+- text: Div
+- combobox "ALL"
+- button "Open"
+- text: Plant
+- combobox "ALL"
+- button "Open"
+- text: Long Term Type
+- combobox "ALL"
+- button "Open"
+# visual-order: Month > Div > Plant > Long Term Type

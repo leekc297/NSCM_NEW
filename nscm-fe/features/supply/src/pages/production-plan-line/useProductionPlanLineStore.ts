@@ -34,6 +34,9 @@ interface State {
   //   Form 이 콤보 옵션 로드 시 갱신 → 페이지 canFixUnfixNew 가 선택값과 대조(마지막 주차/SEQ 여부).
   latestPlanStart: string;
   latestPlanSeq: string;
+  // 선택 plan stage 편집가능 여부 — Form 이 Plan-type 콤보(선택값+보이는 옵션)로 판정해 올린다(요청1, 2026-11-04).
+  //   true 면 그리드 편집 허용, false(이전 단계·FN·TE)면 전건 읽기전용. 그리드 editContext.isStageEditable 로 소비.
+  stageEditable: boolean;
 }
 
 interface Action {
@@ -41,6 +44,7 @@ interface Action {
   setSearchCondition: (p: Partial<SearchCondition>) => void;
   setDivision: (divisionId: string) => void;
   setLatestVersion: (p: { latestPlanStart?: string; latestPlanSeq?: string }) => void;
+  setStageEditable: (v: boolean) => void;
   setFilter: () => void;
   clearFilters: () => void;
   // Load 팝업 — 부모 조회조건을 파라미터로 주입(design 01 P / BtnLoad_Click cs:944).
@@ -100,6 +104,7 @@ const initState: State = {
   staticMeasures: [],
   latestPlanStart: '',
   latestPlanSeq: '',
+  stageEditable: false,
 };
 
 // 다중 선택 배열 → SP 파라미터. 빈 배열(전체선택)은 '' — Oracle 바인드에서 NULL 취급되어 SP 옵션필터
@@ -136,6 +141,10 @@ export const useProductionPlanLineStore = createPersistedStoreWithTab<State & Ac
         state.searchCondition = { ...get().searchCondition, ...p };
       }),
     // Form 이 콤보 옵션 idx0(최신 버전)을 밀어넣는다 — 페이지 canFixUnfixNew 엄밀판정 입력(design 01 R2).
+    setStageEditable: v =>
+      set(state => {
+        state.stageEditable = v;
+      }),
     setLatestVersion: p =>
       set(state => {
         if (p.latestPlanStart !== undefined) state.latestPlanStart = p.latestPlanStart;

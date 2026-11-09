@@ -65,6 +65,8 @@ export const MSG = {
   /** Main 중복(LOOKUP_TYPE 1키) — "The same {0} exists.", {0}=Lookup Type. */
   DUPLICATE_MASTER: 'MSG01092',
   SELECT_LOOKUP_TYPE: 'MSG00624',
+  /** 하단 미저장 중 다른 Lookup Type 클릭 확인 — "수정 중인 데이터가 있습니다. 조회 하시겠습니까?" */
+  CONFIRM_DISCARD_DETAIL: 'MSG00704',
   /** 조회권한 없음 — AS-IS R-29 CanSelect 불통과 시의 안내와 같은 자리. */
   NO_PERMISSION: 'MSG00096',
   /** DISPLAY_SEQ 정수 사전검사 실패. SP 의 ORA-20002 원문 노출을 대신한다. */
@@ -72,7 +74,7 @@ export const MSG = {
   /** 저장 대상이 아닌 영역에 변경분이 남아 있을 때의 확인 문구(전용 MSG 미등록 대체분). */
   UNSAVED_DATA: 'MSG01059',
    /** 건수 입력이 1~1000 정수가 아닐 때. "{0}" 자리에 입력값이 들어간다. */
-  INVALID_NUMBER: 'MSG00050',
+  INVALID_NUMBER: 'MSG01082',
 } as const;
 
 /**
@@ -140,3 +142,6 @@ export const DISPLAY_SEQ_MAX = 2147483647;
 /** Bulk Insert 팝업의 추가 가능 건수 범위. */
 export const BULK_INSERT_MIN = 1;
 export const BULK_INSERT_MAX = 1000;
+
+/** 입력칸을 비워 두고 확인을 누르면 추가하는 건수. placeholder 로도 보여준다. */
+export const BULK_INSERT_DEFAULT = 100;

@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0016",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
+  "status": 200,
+  "rows": 440,
+  "dur": 183,
+  "at": "2026-11-07T12:48:41.024Z",
+  "user": "minyonglee1",
+  "test": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 3193,
+  "at": "2026-11-07T12:48:43.922Z",
+  "user": "minyonglee1",
+  "test": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)"
+ }
+]

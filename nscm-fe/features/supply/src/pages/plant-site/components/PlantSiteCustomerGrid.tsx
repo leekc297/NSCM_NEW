@@ -150,9 +150,9 @@ export const PlantSiteCustomerGrid = ({
     const binding = GridUtils.getBinding(grid, ht.col);
     if (!row || !binding) return;
     if (binding !== 'SOLDTO_CODE' && binding !== 'SHIPTO_CODE') return;
-    // 더블클릭 팝업은 beginningEdit 를 거치지 않는 별도 DOM 이벤트라 편집 가드(R-06①·EDIT_FLAG='N'
-    //   행 잠금, hook #128)를 직접 다시 태워야 한다 — 안 그러면 잠긴 행도 팝업으로 값을 바꿀 수 있었다
-    //   (사용자 보고 2026-09-28). 타이핑 잠금과 동일하게 행 잠금은 alert 없이 조용히 차단한다.
+    // 더블클릭 팝업은 beginningEdit 를 거치지 않는 별도 DOM 이벤트라 편집 가드(R-06①·셀 편집가부)를
+    //   직접 다시 태워야 한다 — 안 그러면 수정불가 셀도 팝업으로 값을 바꿀 수 있었다(사용자 보고
+    //   2026-09-28·2026-11-05). 타이핑 잠금과 동일하게 조용히(alert 없이) 차단한다.
     if (isMainDirty()) {
       void setAlert({
         type: 'alert',
@@ -160,7 +160,10 @@ export const PlantSiteCustomerGrid = ({
       });
       return;
     }
-    if (isCustomerCellRowLocked(row)) return;
+    // 수정불가 셀이면 팝업을 열지 않는다 — SOLDTO/SHIPTO 는 INPUT_TP_CD='IM'(insert-only)라 기존행
+    //   (CRUD_TYPE!='I')·EDIT_FLAG='N' 행에서는 편집 불가다. 타이핑 잠금과 같은 공용 판정
+    //   (GridUtils.isEditableCell = INPUT_TP_CD + CRUD_TYPE + EDIT_FLAG)을 그대로 쓴다.
+    if (!GridUtils.isEditableCell(grid, ht.row, ht.col)) return;
     setClickedRow(ht.row);
     setOpenCustomer(true);
   };

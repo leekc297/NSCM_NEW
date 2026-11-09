@@ -82,24 +82,41 @@ def newest(d):
 
 # 2026-10-28: 공용 생산자 잠금 — 여러 창(화면)이 동시에 CheckList 를 돌릴 때 TO-BE 메타 export·TobeFacts 인덱스 같은 공용 산출물은 1개 실행만 만든다.
 #   다른 실행이 만들고 있으면 끝날 때까지 기다리고(최대 30분), 기다린 뒤에는 호출자가 최신 여부를 다시 판단한다.
-def producer_lock(name, work, timeout_s=1800):
-    lk = D('Doc', 'tobefacts', f'_producer.{name}.lock'); waited = 0
-    while os.path.exists(lk):
-        try:
-            info = json.load(open(lk, encoding='utf-8')); pid = int(info.get('pid') or 0)
-            alive = subprocess.run(['tasklist', '/FI', f'PID eq {pid}', '/FO', 'CSV', '/NH'], capture_output=True, text=True).stdout.find(f'"{pid}"') >= 0 if pid else False
-        except Exception:
-            alive = False
-        if not alive or waited >= timeout_s:
-            try: os.remove(lk)
-            except Exception: pass
-            if waited: return ('WAITED', f'다른 실행(PID {pid})이 {name} 생산 중이라 {waited // 60}분 대기')
-            break
-        if waited == 0: print(f'[WAIT] 다른 실행이 {name} 을 만드는 중 — 끝나기를 기다림', flush=True)
-        time.sleep(10); waited += 10
+def producer_lock(name, work, timeout_s=7200, skip_if_waited=True):
+    """2026-11-06 보완(사용자 지시 '동시 수행이 안 되는 항목은 대기 후 진행'):
+    · 잠금 파일을 원자적으로 만든다(O_CREAT|O_EXCL — 종전 '있나 확인 → 만들기' 사이에 두 실행이 동시에 들어올 수 있었다)
+    · 살아 있는 실행의 잠금은 지우지 않는다(종전 30분 지나면 삭제 → 공용 파일 동시 쓰기). 보유 프로세스가 죽었으면 잠금을 치운다
+    · skip_if_waited=True(공용 생산물 — 메타·인덱스): 기다린 뒤에는 작업 없이 ('WAITED', 사유) → 호출자가 최신 여부 재판단
+      skip_if_waited=False(화면별로 내용이 다른 공용 파일 — golden_cases.csv·스펙 색인): 기다린 뒤 이어서 작업한다
+    · timeout_s(기본 120분) 초과 = (4, 사유) — 4 = 잠금(환경)"""
+    lk = D('Doc', 'tobefacts', f'_producer.{name}.lock'); waited = 0; pid = 0
     os.makedirs(os.path.dirname(lk), exist_ok=True)
+    while True:
+        try:
+            fd = os.open(lk, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            with os.fdopen(fd, 'w', encoding='utf-8') as f:
+                json.dump({'pid': os.getpid(), 'name': name, 'at': datetime.datetime.now().isoformat(timespec='seconds')}, f)
+            break
+        except FileExistsError:
+            try:
+                info = json.load(open(lk, encoding='utf-8')); pid = int(info.get('pid') or 0)
+                alive = subprocess.run(['tasklist', '/FI', f'PID eq {pid}', '/FO', 'CSV', '/NH'], capture_output=True, text=True, timeout=20).stdout.find(f'"{pid}"') >= 0 if pid else False
+            except json.JSONDecodeError:
+                alive = True  # 다른 실행이 막 쓰는 중(내용 아직 없음) — 살아 있는 것으로 본다
+            except Exception:
+                alive = True  # tasklist 지연·오류를 '죽음' 으로 보지 않는다(runlock 과 같은 보수 판정)
+            if not alive:
+                try: os.remove(lk)
+                except Exception: pass
+                continue
+            if waited >= timeout_s:
+                return (4, f'[WAIT 초과] 다른 실행(PID {pid})이 {name} 을 {waited // 60}분째 사용 중 — 잠금 {os.path.relpath(lk, ROOT)}')
+            if waited == 0: print(f'[WAIT] 다른 실행(PID {pid})이 {name} 을 사용 중 — 끝나면 이어서 진행(최대 {timeout_s // 60}분)', flush=True)
+            time.sleep(10); waited += 10
     try:
-        json.dump({'pid': os.getpid(), 'name': name, 'at': datetime.datetime.now().isoformat(timespec='seconds')}, open(lk, 'w', encoding='utf-8'))
+        if waited and skip_if_waited:
+            return ('WAITED', f'다른 실행(PID {pid})이 {name} 생산 중이라 {waited // 60}분 대기')
+        if waited: print(f'[INFO] {name} 잠금 획득 — {waited // 60}분 {waited % 60}초 대기 후 진행', flush=True)
         return work()
     finally:
         try: os.remove(lk)
@@ -115,9 +132,15 @@ def main():
     mid = a.menu_id.upper()
     asis = (a.asis or next((m['asis_id'] for m in read_csv(D('tools', 'Harness', 'rules', 'map_screen.csv')) if m.get('tobe_id', '').upper() == mid), mid)).upper()
     items = []
+    # 2026-11-06(사용자 지시 · CheckList 진행 표시): 사전 작업 = run_verify 단계 1 — 항목마다 '[세부 j/M] 항목 — 상태' 줄(VM Flow 카드가 읽는다)
+    #   M = 이 실행에서 점검할 항목 수: DB·Fact Pack·TO-BE 메타·TO-BE 인덱스·FE 대조표·골든(6) + 조회조건 기준표(SCP·SSP) + E2E(--skip-e2e 면 1, 아니면 plan·스펙·smoke 3)
+    #   --docs(문서 체인)는 항목 구성이 달라 표시하지 않는다
+    pre_total = 0 if a.docs else 6 + (1 if mid.startswith(('SCP', 'SSP')) else 0) + (1 if a.skip_e2e else 3)
 
     def put(key, what, status, producer='', evidence=''):
         items.append({'key': key, 'what': what, 'status': status, 'producer': producer, 'evidence': evidence[:600]})
+        if pre_total:
+            print(f"[세부 {min(len(items), pre_total)}/{pre_total}] {what} — {status}", flush=True)
         print(f"[{status}] {what} — {evidence[:200]}", flush=True)
 
     print(f'== UI CheckList 사전 작업 점검 {mid} (AS-IS {asis})', flush=True)
@@ -197,7 +220,7 @@ def main():
     gc = D('Doc', 'golden', 'golden_cases.csv')
     have = [r for r in read_csv(gc) if (r.get('screen') or '').upper() == mid]
     if not have:
-        rc, ev = run([PY, D('tools', 'DbConn', 'gen_golden_cases.py'), mid])
+        rc, ev = producer_lock('golden_cases', lambda: run([PY, D('tools', 'DbConn', 'gen_golden_cases.py'), mid]), skip_if_waited=False)  # 공용 golden_cases.csv 동시 쓰기 방지(11-06)
         have = [r for r in read_csv(gc) if (r.get('screen') or '').upper() == mid]
         put('golden', '골든 케이스(golden_cases.csv)', 'DONE' if have else 'ERROR', 'tools/DbConn/gen_golden_cases.py <ID>',
             (f"{len(have)}건 생성 (GET {sum(1 for r in have if r.get('kind') != 'SAVE')} · SAVE {sum(1 for r in have if r.get('kind') == 'SAVE')}) · {ev}") if have else f'생성 0건 — endpoints.csv 에 짝지을 AS-IS SP 없음 또는 TO-BE PROC 미매칭 · {ev}')
@@ -224,31 +247,44 @@ def main():
         put('e2e_plan', 'E2E plan(Doc/gen/<ID>/e2e_plan.json)', 'OK', 'tools/Harness/gen.js', '있음')
     spec = D('Doc', 'e2e', 'specs', f'{mid}.plan.json')
     if not os.path.exists(spec) or mtime(spec) < max(mtime(plan), mtime(D('Doc', 'tobefacts', 'db', 'menu.csv'))):
-        rc, ev = run(['node', D('tools', 'E2E', 'gen-e2e.js'), mid], cwd=D('tools', 'E2E'))
+        rc, ev = producer_lock('e2e_specs', lambda: run(['node', D('tools', 'E2E', 'gen-e2e.js'), mid], cwd=D('tools', 'E2E')), skip_if_waited=False)  # 공용 specs/_index.csv·_matrix.csv 동시 쓰기 방지(11-06)
         put('e2e_spec', 'E2E 스펙(Doc/e2e/specs/<ID>.*)', 'DONE' if os.path.exists(spec) and mtime(spec) >= mtime(plan) else 'FAIL', 'tools/E2E/gen-e2e.js <ID>', ev)
         if not os.path.exists(spec):
             return finish(mid, asis, items, 6)
     else:
         put('e2e_spec', 'E2E 스펙(Doc/e2e/specs/<ID>.*)', 'OK', 'tools/E2E/gen-e2e.js', '최신')
     # smoke — 결과가 없거나 FE 소스보다 오래되면 실행(run-e2e.cmd 가 자기 잠금·서버 점검을 한다 → run_verify 의 E2E 잠금보다 먼저 끝난다)
-    summ = D('Doc', 'e2e', 'results', '_summary.csv')
-    last = [r for r in read_csv(summ) if (r.get('menu_id') or '').upper() == mid and r.get('kind') == 'smoke']
+    # 2026-11-06(사용자 지시): smoke 결과·로그는 화면 폴더(Doc/e2e/results/<ID>/ · Doc/e2e/logs/<ID>/) — 없으면(전환 전) 공용 위치. 찾는 규칙 = e2e_paths
+    import e2e_paths
+    last = e2e_paths.summary_rows(mid, 'smoke')
     # _summary.csv 에는 시각 열이 없다 → 이 화면 smoke 실행 로그(run_<RUNID>_smoke.log 첫 줄 '==== … run-e2e smoke <ID>')의 시각 = 마지막 smoke 시각
-    smoke_at = max((mtime(f) for f in glob.glob(D('Doc', 'e2e', 'logs', 'run_*_smoke.log'))
-                    if re.search(rf'run-e2e smoke\b.*\b{mid}\b', open(f, encoding='utf-8', errors='ignore').readline())), default=0)
-    if os.path.exists(spec) and (not last or smoke_at < newest(pdir)):
-        rc, ev = run(['cmd', '/c', D('tools', 'E2E', 'run-e2e.cmd'), 'smoke', mid], cwd=D('tools', 'E2E'), timeout=7200)
-        last = [r for r in read_csv(summ) if (r.get('menu_id') or '').upper() == mid and r.get('kind') == 'smoke']
+    smoke_at = max((mtime(f) for f in e2e_paths.run_logs(mid, 'smoke')), default=0)
+    # 2026-11-06 T65(SCP0084 K-SA): 기준이 FE 소스뿐이라 smoke 엔진 보완(T57 smoke-extra.ts 11-05 10:49) 전 결과(11-05 06:24)를 그대로 재사용 → 고친 결함이 다시 ERROR.
+    #   smoke 엔진 파일·이 화면 smoke 스펙이 결과보다 새로우면 다시 실행한다.
+    eng = [D('tools', 'E2E', 'lib', 'smoke-extra.ts'), D('tools', 'E2E', 'lib', 'nscm.ts'), D('Doc', 'e2e', 'specs', f'{mid}.smoke.spec.ts')]
+    eng_at = max((mtime(f) for f in eng if os.path.exists(f)), default=0)
+    if os.path.exists(spec) and (not last or smoke_at < newest(pdir) or smoke_at < eng_at):
+        # 2026-11-06: run-e2e.cmd smoke <ID> 는 화면별 잠금(_run.e2e.<ID>.lock)·화면 폴더라 다른 화면 smoke 와 동시에 돈다.
+        #   잠금(rc 4)은 같은 화면 E2E 또는 공용(여러 화면·전체) E2E 가 도는 중일 때만 — 그때는 풀릴 때까지 30초 간격 재시도(최대 120분) 후 진행
+        sw = 0
+        while True:
+            rc, ev = run(['cmd', '/c', D('tools', 'E2E', 'run-e2e.cmd'), 'smoke', mid], cwd=D('tools', 'E2E'), timeout=7200)
+            if rc != 4 or sw >= 7200:
+                break
+            if sw == 0: print(f'[WAIT] 같은 화면({mid}) E2E 또는 공용(여러 화면·전체) E2E 가 실행 중 — 끝나면 이어서 smoke 실행(30초 간격 · 최대 120분 · tools/E2E: node runlock.js status)', flush=True)
+            time.sleep(30); sw += 30
+        if sw and rc != 4: print(f'[INFO] smoke 잠금 획득 — {sw // 60}분 대기 후 실행', flush=True)
+        last = e2e_paths.summary_rows(mid, 'smoke')
         # rc 1 = smoke 안에 FAIL 이 있음(실행은 됨) · 4 = 다른 E2E 실행 중 · 5 = 서버 미기동
         st = 'DONE' if last and rc in (0, 1) else 'FAIL'
         why = {4: '다른 E2E 실행 중(잠금)', 5: 'FE/BE 미기동'}.get(rc, '')
-        put('smoke', 'smoke 결과(Doc/e2e/results/_summary.csv)', st, 'tools/E2E/run-e2e.cmd smoke <ID>',
+        put('smoke', 'smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)', st, 'tools/E2E/run-e2e.cmd smoke <ID>',
             (f"smoke {len(last)}건 실행{' (FAIL 포함 — 결과는 판정 근거로 반입)' if rc == 1 else ''} · {ev}") if st == 'DONE' else f'{why or "실행 실패"} — smoke 근거 규칙(G3·K4·SC1·K1·K2·I2)을 측정할 수 없어 검증을 중단한다 · {ev}')
         if st == 'FAIL':
             return finish(mid, asis, items, 5 if rc in (4, 5) else 6)  # 5 = 서버/잠금(환경) · 6 = 생산 실패
     else:
-        put('smoke', 'smoke 결과(Doc/e2e/results/_summary.csv)', 'OK' if last else 'FAIL', 'tools/E2E/run-e2e.cmd smoke',
-            f"{len(last)}건 · 마지막 smoke {datetime.datetime.fromtimestamp(smoke_at).strftime('%m-%d %H:%M') if smoke_at else '-'} (FE 소스보다 최신)" if last else 'smoke 결과 행 없음(스펙은 있음) — 검증 중단')
+        put('smoke', 'smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)', 'OK' if last else 'FAIL', 'tools/E2E/run-e2e.cmd smoke',
+            f"{len(last)}건 · 마지막 smoke {datetime.datetime.fromtimestamp(smoke_at).strftime('%m-%d %H:%M') if smoke_at else '-'} (FE 소스·smoke 엔진보다 최신)" if last else 'smoke 결과 행 없음(스펙은 있음) — 검증 중단')
         if not last:
             return finish(mid, asis, items, 6)
     return finish(mid, asis, items, 0)

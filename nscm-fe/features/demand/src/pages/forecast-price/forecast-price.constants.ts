@@ -52,16 +52,7 @@ export enum RESPONSE_SET {
 
 /**
  * Excel 업로드 — SCM_ADM_EXCEL_COLUMNS PROGRAM_ID='DMF0082' SHEET_NAME='FcstNPrice' 실측
- * (HEADER_CONTENT '|' 구분 19 토큰 — Error Detail grid 라벨. 사내 실측 2026-09-23).
- *
- * ⚠ [E20260923-XLSUPHDR] 이 배열은 **HEADER_CONTENT 와 1:1 순서로 정확히 일치**해야 한다.
- *   FcstUploadModal 은 `ATTRIBUTE{n}` → `UPLOAD_HEADERS[n-1]` 로만 라벨을 붙이므로,
- *   어긋나면 Error Detail 에 **양식에 없는 컬럼명**이 뜨고(구 10컬럼 잔존 사고 2026-09-23 —
- *   Sales Site/Incoterms/FCST Type/Customs Handbook/Cell Prod Site/Measure 가 표시됨),
- *   라벨이 모자란 뒤쪽 속성은 `ATTRIBUTE11` 같은 원시 키로 노출된다.
- *   2026-09-21 [E20260921-XLSFORMASIS] 로 양식이 AS-IS DMF0020 파리티(19컬럼)로 바뀌었는데
- *   이 상수만 구 판본(10컬럼)으로 남아 있었다.
- *   HEADER_CONTENT 변경 시 이 배열도 **반드시 동시 개정**한다.
+ * (HEADER_CONTENT '|' 구분 23 헤더 — Error Detail grid 라벨. 기이관 확인 2026-07-12).
  */
 export const UPLOAD_SHEET = 'FcstNPrice' as const;
 // export const UPLOAD_HEADERS = [
@@ -82,14 +73,12 @@ export const UPLOAD_SHEET = 'FcstNPrice' as const;
 // Error Detail 라벨을 Excel Form(Sales Price Template) 헤더와 동일하게 맞춘다.
 // 순서는 HEADER_CONTENT 와 같아야 한다 (ATTRIBUTEn 과 1:1).
 export const UPLOAD_HEADERS = [
-  // 식별 6컬럼 — P_DMF0082_EXCEL_UPLOAD 의 ATTRIBUTE1~6
   'Div',
   'Team',
   'End Customer',
   'Project Code',
   'Currency',
   'Model',
-  // 기간 13컬럼 — ATTRIBUTE7~19 (M0 = 당월, M12 = 당월+12)
   'M0',
   'M1',
   'M2',
@@ -237,13 +226,6 @@ export const PRICE_MEASURES = ['LOC', 'KRW', 'USD'] as const;
  * 이 집합은 "권한 판정 대상 measure" 화이트리스트 (그 외 measure = 항상 read-only).
  */
 export const AUTH_MEASURES = ['SCM_FCST', 'MKT_FCST', 'LOC', 'VMI_In_Req', 'AS_In_Req'] as const;
-
-/**
- * 참고값 컬럼 — 행 키가 아니다 (사용자 요청 2026-10-27 · DB [E20261027-DMF0082LASTUPD]/[LASTUPDORD] 와 짝).
- * 조회 SP 는 이 두 컬럼을 줄 묶음·정렬에서 빼고 키마다 최신 수정 1쌍만 준다. 화면도 셀 병합에서 뺀다 —
- * 자기 셀은 병합하지 않고, 다른 컬럼의 병합 키(좌측 누적)에도 넣지 않는다.
- */
-export const REFERENCE_ONLY_BINDINGS: ReadonlySet<string> = new Set(['LAST_UPDATED_BY', 'LAST_UPDATE_DATE']);
 
 /**
  * AS-IS MSG 매핑 — 사내 MSG_M 실문구 대사 완료 (2026-07-12, fallback 신뢰 금지 룰).

@@ -1,7 +1,7 @@
 # SCP0030 — To-Be Fact Pack 요약
 
 - page_key: `supply/bod-item` · feature: supply · As-is Fact Pack 있음
-- 파일 14 · 엔드포인트 호출 8 (미해결 0, 주석 속 1) · 이벤트 20 · 컴포넌트 사용 47 · 하드코딩 컬럼 17 · 메시지 22
+- 파일 14 · 엔드포인트 호출 8 (미해결 0, 주석 속 0) · 이벤트 20 · 컴포넌트 사용 47 · 하드코딩 컬럼 17 · 메시지 21
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 17건
 
 ## 1. 파일
@@ -9,8 +9,8 @@
 |---|---|---|
 | features/supply/src/pages/bod-item/bod-item.constants.ts | constants | 241 |
 | features/supply/src/pages/bod-item/bod-item.types.ts | types | 23 |
-| features/supply/src/pages/bod-item/BodItem.module.scss | style | 15 |
-| features/supply/src/pages/bod-item/BodItem.tsx | page | 433 |
+| features/supply/src/pages/bod-item/BodItem.module.scss | style | 7 |
+| features/supply/src/pages/bod-item/BodItem.tsx | page | 400 |
 | features/supply/src/pages/bod-item/components/BodExcludedGrid.tsx | component | 136 |
 | features/supply/src/pages/bod-item/components/BodItemForm.module.scss | component | 12 |
 | features/supply/src/pages/bod-item/components/BodItemForm.tsx | component | 221 |
@@ -25,8 +25,8 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| SCP0030/bodItem//call-proc | hook | 2 | Y | BodItem.tsx:77 BodItem.tsx:105 |
-| SCP0030/bodItemExcluded//call-proc | hook | 2 | Y | BodItem.tsx:97 BodItem.tsx:116 |
+| SCP0030/bodItem//call-proc | hook | 2 | Y | BodItem.tsx:65 BodItem.tsx:80 |
+| SCP0030/bodItemExcluded//call-proc | hook | 2 | Y | BodItem.tsx:72 BodItem.tsx:85 |
 | (useTabComboQueries) | hook | 1 | Y | BodItemForm.tsx:44 |
 | SCP0030/bodPopup//call-proc | hook | 1 | Y | GetBodItemModal.tsx:72 |
 | /admin/menu/SCP0030/column | http | 1 | Y | useBodItemStore.ts:133 |
@@ -43,10 +43,10 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| BodItemForm | onSearch | handleSearch | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 344 |
-| BodItemForm | onOpenItemSearch | <arrow> setItemSearchOpen | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 345 |
-| BodExcludedGrid | onItemCellDblClick | <arrow> setItemPopup | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 383 |
-| BodExcludedGrid | onBodCellDblClick | <arrow> setBodPopup | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 384 |
+| BodItemForm | onSearch | handleSearch | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 319 |
+| BodItemForm | onOpenItemSearch | <arrow> setItemSearchOpen | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 320 |
+| BodExcludedGrid | onItemCellDblClick | <arrow> setItemPopup | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 350 |
+| BodExcludedGrid | onBodCellDblClick | <arrow> setBodPopup | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 351 |
 | grid | beginningEdit | handler | addHandler | features/supply/src/pages/bod-item/components/BodExcludedGrid.tsx | 98 |
 | grid | updatedLayout | apply | addHandler | features/supply/src/pages/bod-item/components/BodExcludedGrid.tsx | 113 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 70 |
@@ -132,7 +132,6 @@
 | MSG00129 | 1 |
 | MSG01230 | 1 |
 | MSG00611 | 1 |
-| MSG00002 | 1 |
 | MSG00085 | 2 |
 
 ## 8. 주석 속 As-is 참조
@@ -141,9 +140,8 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| endpoint | Search(=setFilters 가 새 filters 객체를 만듦)마다 재조회 — 기존 useTabProcQuery(filters 참조 변경 시 조회)와 같은 규약. | features/supply/src/pages/bod-item/BodItem.tsx | 91 |
-| code | 메인(BOD Item): action != 'I' 면 즉시 return하고, InsertButton(cs:247~)은 본문 전건 주석("insert 없음", | features/supply/src/pages/bod-item/BodItem.tsx | 175 |
-| code | DELETE 도 Excluded 전용 — BOD Item 은 Insert 없음 → 신규행 없음 → AS-IS DeleteButton(action!='I' return)상 삭제 불가(cs:239-245). | features/supply/src/pages/bod-item/BodItem.tsx | 319 |
+| code | 메인(BOD Item): action != 'I' 면 즉시 return하고, InsertButton(cs:247~)은 본문 전건 주석("insert 없음", | features/supply/src/pages/bod-item/BodItem.tsx | 152 |
+| code | DELETE 도 Excluded 전용 — BOD Item 은 Insert 없음 → 신규행 없음 → AS-IS DeleteButton(action!='I' return)상 삭제 불가(cs:239-245). | features/supply/src/pages/bod-item/BodItem.tsx | 296 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

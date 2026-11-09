@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 291,
+  "at": "2026-11-07T08:48:07.305Z",
+  "user": "minyonglee1",
+  "test": "셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성"
+ }
+]

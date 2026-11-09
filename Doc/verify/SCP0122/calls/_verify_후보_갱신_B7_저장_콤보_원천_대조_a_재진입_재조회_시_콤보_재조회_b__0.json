@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 168,
+  "at": "2026-11-07T10:29:03.382Z",
+  "user": "minyonglee1",
+  "test": "후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)"
+ }
+]

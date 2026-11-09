@@ -1,0 +1,72 @@
+{
+  "menuId": "SCP0108",
+  "screenName": "CAPA_LOB_Report",
+  "feature": "supply",
+  "pageDir": "capa-lob-report",
+  "routePath": "supply/capa-lob-report",
+  "sheets": [
+    {
+      "sheetName": "CURRENT",
+      "rule": "META+코드연결",
+      "columns": 14,
+      "popup": false
+    },
+    {
+      "sheetName": "CUTOFF",
+      "rule": "META+코드연결",
+      "columns": 15,
+      "popup": false
+    },
+    {
+      "sheetName": "MAIN",
+      "rule": "메타 정의만, 코드 미참조(미사용 가능)",
+      "columns": 15,
+      "popup": false
+    },
+    {
+      "sheetName": "spreadTitle",
+      "rule": "동적 헤더(기간 컬럼) — SCP0104_GET_SPREAD_TITLE",
+      "columns": 0,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "<field:dtYesOrNo>",
+        "RefreshBottleneck"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0108.P_",
+      "sheet": "CURRENT",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0104_GET_SPREAD_TITLE",
+      "asis_sp": "SCP0104_GET_SPREAD_TITLE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:this.cboDivision.SelectedIndexChanged",
+        "event:this.cboVersion.SelectedIndexChanged",
+        "event:this.cboVersionSeq.SelectedIndexChanged",
+        "event:this.rgrpDivisionType.SelectedIndexChanged"
+      ],
+      "methods": [
+        "GetSpdTitle"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0108.P_SCP0104_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "allowed_gap": "그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

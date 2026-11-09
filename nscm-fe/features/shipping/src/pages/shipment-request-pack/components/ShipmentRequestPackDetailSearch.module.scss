@@ -19,15 +19,16 @@
   min-width: 180px;
 }
 
-/* 날짜 range(Shipment Date)는 피커 2개+구분자라 더 넓은 최소폭이 필요. */
+/* 날짜 range(Shipment Date)는 피커 2개+구분자+라벨이라 더 넓은 최소폭이 필요. */
 .detailBarDateField {
-  min-width: 300px;
+  min-width: 340px;
 
-  /* PeriodRangePicker(공용)는 전달한 className 을 내부 FormItem 에 쓴다. detailBarFieldItem 라벨축소가
-     닿도록 이 wrapper 안의 .formItem 라벨 컬럼만 좁혀(minmax) 'Shipment Date' 라벨칸을 맞춘다.
+  /* PeriodRangePicker(공용)는 전달한 className 을 내부 FormItem 에 쓴다. 라벨 컬럼을 과도하게 좁히면
+     'Shipment Date' 가 두 줄로 접히므로(사용자 신고 2026-11-04), SSP0060(PeriodField) 와 동일하게
+     기본 formItem 라벨 폭(minmax 70~140px)을 써서 한 줄로 유지한다.
      commonStyles.formItem 은 CSS module 해시명이라 부분일치 global 선택자로 잡는다. */
   :global([class*='formItem']) {
-    grid-template-columns: minmax(48px, 72px) auto !important;
+    grid-template-columns: minmax(70px, 140px) auto !important;
   }
 }
 

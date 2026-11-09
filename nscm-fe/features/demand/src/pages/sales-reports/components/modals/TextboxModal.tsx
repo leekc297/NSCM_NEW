@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import dayjs from '@foundation/dayjs';
 import { CustomDialog } from '@shared/components';
-import { useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { Button, InputField } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -35,6 +35,10 @@ export const TextboxModal = ({ open, modalClose, versionNo }: Props) => {
   const setToast = useMessageStore.getState().setToast;
   const [edited, setEdited] = useState<Record<number, Record<string, string>>>({});
   const [saving, setSaving] = useState(false);
+  // Save 노출 = textbox 시트 SAVE 권한(시트 단위). 메뉴 단위 hasButton('SAVE') 는 titleSet SAVE 를
+  //   가진 DM Viewer 에게도 true 라 group menu 에서 textbox SAVE 를 꺼도 버튼이 남는다.
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID, enabled: open });
+  const canSave = hasButton('SAVE', SHEETS.TEXTBOX);
 
   useEffect(() => {
     if (open) setEdited({});
@@ -180,14 +184,16 @@ export const TextboxModal = ({ open, modalClose, versionNo }: Props) => {
             </table>
           </div>
           <div className={styles.modalButtonWrapper}>
-            <Button
-              appearance='contained'
-              priority='primary'
-              size='medium'
-              buttonLabel='Save'
-              disabled={saving}
-              onClick={() => void handleSave()}
-            />
+            {canSave && (
+              <Button
+                appearance='contained'
+                priority='primary'
+                size='medium'
+                buttonLabel='Save'
+                disabled={saving}
+                onClick={() => void handleSave()}
+              />
+            )}
             <Button
               appearance='outlined'
               priority='normal'

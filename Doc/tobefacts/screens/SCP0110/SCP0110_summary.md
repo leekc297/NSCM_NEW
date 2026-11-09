@@ -13,7 +13,7 @@
 | features/supply/src/pages/demand-group-master/demand-group-master.constants.ts | constants | 75 |
 | features/supply/src/pages/demand-group-master/demand-group-master.types.ts | types | 15 |
 | features/supply/src/pages/demand-group-master/DemandGroupMaster.module.scss | style | 45 |
-| features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx | page | 266 |
+| features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx | page | 265 |
 | features/supply/src/pages/demand-group-master/hooks/useDemandGroupMasterValidation.ts | hook | 114 |
 | features/supply/src/pages/demand-group-master/index.ts | index | 2 |
 | features/supply/src/pages/demand-group-master/useDemandGroupMasterStore.ts | store | 175 |
@@ -52,10 +52,10 @@
 | DataGrid | gotFocus | <arrow> onFocus | jsx | features/supply/src/pages/demand-group-master/components/GroupMasterGrid.tsx | 88 |
 | g | updatedLayout | resetExcludedMerge | addHandler | features/supply/src/pages/demand-group-master/components/ModelListGrid.tsx | 80 |
 | DataGrid | gotFocus | <arrow> onFocus | jsx | features/supply/src/pages/demand-group-master/components/ModelListGrid.tsx | 95 |
-| DemandGroupMasterForm | onSearch | handleSearch | jsx | features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx | 232 |
-| GroupMasterGrid | onFocus | setActiveGrid | jsx | features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx | 249 |
-| GroupMasterGrid | onRowDblClick | setModelListFilter | jsx | features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx | 250 |
-| ModelListGrid | onFocus | setActiveGrid | jsx | features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx | 259 |
+| DemandGroupMasterForm | onSearch | handleSearch | jsx | features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx | 231 |
+| GroupMasterGrid | onFocus | setActiveGrid | jsx | features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx | 248 |
+| GroupMasterGrid | onRowDblClick | setModelListFilter | jsx | features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx | 249 |
+| ModelListGrid | onFocus | setActiveGrid | jsx | features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx | 258 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

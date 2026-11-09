@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 243,
+  "at": "2026-11-07T10:18:01.462Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"EE_HG\",\"planGroupId\":\"\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 164,
+  "at": "2026-11-07T10:18:05.002Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ }
+]

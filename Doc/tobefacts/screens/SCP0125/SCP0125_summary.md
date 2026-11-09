@@ -10,7 +10,7 @@
 | features/supply/src/pages/workbench/components/WorkbenchForm.tsx | component | 328 |
 | features/supply/src/pages/workbench/components/WorkbenchGrid.tsx | component | 336 |
 | features/supply/src/pages/workbench/hooks/useWorkbenchData.ts | hook | 223 |
-| features/supply/src/pages/workbench/hooks/useWorkbenchValidation.ts | hook | 283 |
+| features/supply/src/pages/workbench/hooks/useWorkbenchValidation.ts | hook | 287 |
 | features/supply/src/pages/workbench/index.ts | index | 4 |
 | features/supply/src/pages/workbench/useWorkbenchStore.ts | store | 178 |
 | features/supply/src/pages/workbench/utils/workbench.cascade.ts | util | 62 |
@@ -22,7 +22,7 @@
 | features/supply/src/pages/workbench/utils/workbench.gridCombos.ts | util | 209 |
 | features/supply/src/pages/workbench/utils/workbench.insert.ts | util | 71 |
 | features/supply/src/pages/workbench/utils/workbench.save.ts | util | 219 |
-| features/supply/src/pages/workbench/workbench.constants.ts | constants | 573 |
+| features/supply/src/pages/workbench/workbench.constants.ts | constants | 596 |
 | features/supply/src/pages/workbench/Workbench.tsx | page | 460 |
 | features/supply/src/pages/workbench/workbench.types.ts | types | 66 |
 | features/supply/src/pages/workbench/__asis-mapping__.md | mapping | 358 |
@@ -132,7 +132,7 @@
 | kind | snippet | file | line |
 |---|---|---|---|
 | code | if (!underEdit) e.cell.textContent = toDisplayDate(row?.[COL.DUE_DATE]); | features/supply/src/pages/workbench/components/WorkbenchGrid.tsx | 169 |
-| code | 저장 대상 행을 검증하고 실제로 보낼 행만 돌려준다. 실패 시 alert 후 `undefined` (AS-IS 는 첫 위반에서 `return` 하며 그 행 이후는 검사하지 않는다 — 같은 동작). | features/supply/src/pages/workbench/hooks/useWorkbenchValidation.ts | 124 |
+| code | 저장 대상 행을 검증하고 실제로 보낼 행만 돌려준다. 실패 시 alert 후 `undefined` (AS-IS 는 첫 위반에서 `return` 하며 그 행 이후는 검사하지 않는다 — 같은 동작). | features/supply/src/pages/workbench/hooks/useWorkbenchValidation.ts | 125 |
 | code | R15 저장 — 3중 가드(EDIT 권한 / 빈 그리드는 Toast) 후 검증 39건 → `^` 결합 payload. `CRUD_TYPE` 마킹 행만 대상이며 자체 행상태 필드는 쓰지 않는다. AS-IS D13("Edit 모드 아니면 return")은 모드가 아니라 `canEdit` 로 재표현한다(규범 §2.4). | features/supply/src/pages/workbench/Workbench.tsx | 319 |
 
 ## 10. __asis-mapping__.md 상태

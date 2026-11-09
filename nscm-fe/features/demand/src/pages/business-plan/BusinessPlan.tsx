@@ -2,7 +2,7 @@ import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { IcGridColumnSetup } from '@foundation/assets';
+import { IcExchangeRate, IcGridColumnSetup } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import { GridAction, type EditTracker } from '@foundation/utils';
@@ -517,7 +517,9 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     search: hasButton('SEARCH') ? handleSearch : false,
     insert: hasButton('INSERT') ? handleInsert : false,
     delete: hasButton('DELETE') ? handleDelete : false,
-    save: hasButton('SAVE') ? () => void handleSave() : false,
+    // Save 는 시트 단위 — 메뉴 단위면 exchangeRate/titleSet SAVE 와 합쳐져 group menu 에서
+    //   Biz Plan SAVE 만 꺼도 버튼이 남는다(저장은 Biz Plan/SAVE 로 간다).
+    save: hasButton('SAVE', SHEETS.MAIN) ? () => void handleSave() : false,
     manual: false,
     upload: false,
   };
@@ -542,7 +544,8 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
             label: t('LBL00661', 'Exchange Rate'),
             title: t('LBL00661', 'Exchange Rate'),
             action: handleExchangeRate,
-            buttonLabel: t('LBL00661', 'Exchange Rate'),
+            iconComponent: <IcExchangeRate />,
+            buttonLabel: '',
           },
         ]
       : []),

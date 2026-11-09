@@ -1,19 +1,32 @@
 import { AllowMerging, CellType } from '@mescius/wijmo.grid';
-import type { FlexGrid as FlexGridType, FormatItemEventArgs } from '@mescius/wijmo.grid';
+import type {
+  CellRangeEventArgs,
+  FlexGrid as FlexGridType,
+  FormatItemEventArgs,
+} from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import { GridUtils } from '@foundation/utils';
+import { GridUtils, paintNegativeText, toGridNumber, type EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
-import { ADMIN_SHEET_NAME, SHEETS, type BohMode } from '../shipment-request-electrode.constants';
+import {
+  ADMIN_SHEET_NAME,
+  MEASURE,
+  SHEETS,
+  type BohMode,
+} from '../shipment-request-electrode.constants';
 import type { SearchParamProps, ShipmentPsiRow } from '../shipment-request-electrode.types';
 import {
   bohSumColumnVisibility,
   isDynamicColumnVisible,
   parseDynamicColumnTag,
 } from '../utils/shipment-request-electrode.dynamicColumn';
+import {
+  isShipmentPsiCellEditable,
+  isShipmentPsiPastTinted,
+} from '../utils/shipment-request-electrode.editLock';
 import {
   buildDynamicColumns,
   buildDynColMetas,
@@ -24,11 +37,33 @@ import {
   type SpreadTitleRow,
 } from '../utils/shipment-request-electrode.spreadHeader';
 
+// AS-IS MEASURE-1 = 측정라벨 컬럼(SCM_MST_SHEET_COLUMNS 실측 SORT 29, MEASURE 바로 앞). ETA 요청 팝업 트리거 셀.
+const MEASURE_LABEL_BINDING = 'MEASURE_NAME';
+// 공용 DataGrid 의 팝업 셀 표준 클래스(packages/foundation _grid.scss) — MUI OpenInNew(↗) 아이콘 + pointer.
+//   FPModal/FPTextModal 셀에 공용 util 이 붙이는 바로 그 클래스. 읽기전용 pivot 의 조건부(행별) 셀이라
+//   컬럼 타입(FPModal) 대신 formatItem 으로 직접 부착한다(아이콘·커서는 전역 CSS 가 그린다).
+const POPUP_CELL_CLASS = 'wj-cell-popup';
+
+/** BACK_COLOR "R,G,B" → CSS rgb(). 형식 불일치면 '' (틴트 미적용). AS-IS Color.FromArgb(sValues[0..2]). */
+const backColorToRgb = (backColor: string): string => {
+  const parts = backColor.split(',').map(v => Number(v.trim()));
+  if (parts.length !== 3 || parts.some(n => !Number.isFinite(n))) return '';
+  return `rgb(${parts[0]}, ${parts[1]}, ${parts[2]})`;
+};
+
 interface Props {
   rows: ShipmentPsiRow[];
   gridRef: MutableRefObject<FlexGridType<ShipmentPsiRow> | undefined>;
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
+  // 메인 pivot 편집 변경추적(AS-IS ForeColor=="Red" 등가) — 저장 수집부(collectMainSaveCells)가 읽는다.
+  editTrackerRef?: MutableRefObject<EditTracker<ShipmentPsiRow> | undefined>;
   staticColumns: RawFlexGridColumnConfig[];
+  // 편집 전역 게이트 = canEdit(SAVE 권한) && realFlag(최신 Plan) && isSspUser(SSP0002 체크). false 면 전 셀 읽기전용.
+  mainEditable: boolean;
+  // 조회기간 시작일(YYYYMMDD) — AS-IS drpPeriod.Text1. 확정일 컬럼이 이 범위 밖이면 편집/틴트 없음(intEndIdx=-1).
+  periodStart: string;
+  // 조회기간 종료일(YYYYMMDD) — AS-IS drpPeriod.Text2, 편집 가능 상한(cs:1550). searchParams.toYyyymmdd.
+  periodEnd: string;
   bohMode: BohMode;
   bucketType: SearchParamProps['bucketType'];
   sumChecked: boolean;
@@ -52,7 +87,11 @@ export const ShipmentRequestElectrodeMainGrid = ({
   rows,
   gridRef,
   gridFilterRef,
+  editTrackerRef,
   staticColumns,
+  mainEditable,
+  periodStart,
+  periodEnd,
   bohMode,
   bucketType,
   sumChecked,
@@ -130,6 +169,14 @@ export const ShipmentRequestElectrodeMainGrid = ({
   // 주말 D_ leaf 헤더 색(토 파랑 / 일 빨강, AS-IS cs:767) — formatItem(헤더)이 ref 로 최신 맵을 읽는다.
   const weekendColorRef = useRef<Map<string, string>>(new Map());
   weekendColorRef.current = useMemo(() => buildWeekendColorByBinding(renderMetas), [renderMetas]);
+
+  // 편집 게이트·틴트는 ref 로 최신값을 읽어 핸들러 재등록 없이 반영한다(semi 동형).
+  const mainEditableRef = useRef(mainEditable);
+  mainEditableRef.current = mainEditable;
+  const periodStartRef = useRef(periodStart);
+  periodStartRef.current = periodStart;
+  const periodEndRef = useRef(periodEnd);
+  periodEndRef.current = periodEnd;
 
   // 기본 표시(base) 맵 — 현재 버킷/chkSum/pastPeriod 규칙(isDynamicColumnVisible). 드릴 오버라이드가
   //   없으면 이 값이 그대로 col.visible 이 된다.
@@ -233,6 +280,125 @@ export const ShipmentRequestElectrodeMainGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dynamicColumns]);
 
+  // ETA 요청 팝업 트리거 셀 표시 — R_SHIP_REQ_ETA 행의 측정라벨(MEASURE_NAME) 셀에 돋보기 인디케이터를 붙인다
+  //   (AS-IS cellTypeImage, cs:3503). 그 셀만 더블클릭으로 팝업이 열리므로(handleDblClick) 사용자에게 가능 영역을 알린다.
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const markTrigger = (_s: FlexGridType<ShipmentPsiRow>, e: FormatItemEventArgs) => {
+      if (e.panel.cellType !== CellType.Cell) return;
+      if (e.panel.columns[e.col]?.binding !== MEASURE_LABEL_BINDING) return;
+      const item = e.panel.rows[e.row]?.dataItem as ShipmentPsiRow | undefined;
+      if (String(item?.MEASURE ?? '') === MEASURE.SHIP_REQ_ETA) {
+        e.cell.classList.add(POPUP_CELL_CLASS);
+      }
+    };
+    g.formatItem.addHandler(markTrigger);
+    g.invalidate();
+    return () => {
+      try {
+        g.formatItem?.removeHandler(markTrigger);
+      } catch {
+        /* unmount race */
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [staticColumns]);
+
+  // 메인 pivot 편집 게이트 + 확정(과거)구간 틴트 — AS-IS EditButton spdMain(cs:1500-1562) + SaveData 변경 마킹.
+  //   편집: beginningEdit/pastingCell 가 isShipmentPsiCellEditable 1벌로 X_D_ '확정일 이후' 셀만 개방한다
+  //   (mainEditable=false — 권한無/과거Plan/비SSP — 이면 전면 차단). 정적 표시컬럼은 공용 메타(INPUT_TP_CD='S')가 잠근다.
+  //   표시(formatItem paint): ① 편집 가능 셀 = 표준 노랑(.wj-cell-editable #fff8cd, 행별 교정) ②
+  //   확정(과거) 구간 = 행 BACK_COLOR(RGB) 틴트(cs:1526-1538) ③ 음수 = 빨간 글자(표준 #c0392b, 전 기간칼럼 상시).
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+
+    const beginningEdit = (sender: FlexGridType<ShipmentPsiRow>, e: CellRangeEventArgs) => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      if (!parseDynamicColumnTag(binding)) return; // 동적 pivot 컬럼만 화면이 판정(정적은 메타 소관)
+      const row = sender.rows[e.row]?.dataItem as ShipmentPsiRow | undefined;
+      if (!row) {
+        e.cancel = true;
+        return;
+      }
+      const editable =
+        mainEditableRef.current &&
+        isShipmentPsiCellEditable({
+          row: row as Record<string, unknown>,
+          binding,
+          periodStartYyyymmdd: periodStartRef.current,
+          periodEndYyyymmdd: periodEndRef.current,
+        });
+      e.cancel = !editable;
+    };
+    g.beginningEdit.addHandler(beginningEdit);
+    // 붙여넣기도 같은 함수로 막는다(nscm-patterns §5-16 / semi 동형).
+    g.pastingCell.addHandler(beginningEdit as never);
+
+    const paint = (_s: FlexGridType<ShipmentPsiRow>, e: FormatItemEventArgs) => {
+      if (e.panel.cellType !== CellType.Cell) return;
+      const binding = e.panel.columns[e.col]?.binding ?? '';
+      if (!parseDynamicColumnTag(binding)) return; // 동적 pivot 셀만(정적 표시컬럼은 대상 아님)
+      // 셀 DOM 재사용 — 매 렌더 초기화 후 재판정(메모리 wijmo-editable-yellow / gridNegativeText 규약).
+      e.cell.style.backgroundColor = '';
+      const row = e.panel.rows[e.row]?.dataItem as ShipmentPsiRow | undefined;
+      if (!row) {
+        e.cell.classList.toggle('wj-cell-editable', false);
+        paintNegativeText(e.cell, 0);
+        return;
+      }
+      const r = row as Record<string, unknown>;
+      // 음수 = 빨간 글자(표준 #c0392b) — AS-IS NumberCellType.NegativeRed(cs:355/359, 전 기간칼럼 상시).
+      //   편집 가부와 무관하게 적용(열람 모드에서도 음수는 빨강). 공용 paintNegativeText 가 색·해제·우선순위 담당.
+      paintNegativeText(e.cell, toGridNumber(r[binding]));
+      // 편집 가능 셀 = 표준 노랑(전역 .wj-cell-editable #fff8cd). wijmo 가 컬럼단위로 전 행에 자동부착하므로
+      //   행별 판정으로 셀마다 교정한다(메모리 wijmo-editable-yellow-is-css-class-not-inline-toggle-per-cell).
+      const editable =
+        mainEditableRef.current &&
+        isShipmentPsiCellEditable({
+          row: r,
+          binding,
+          periodStartYyyymmdd: periodStartRef.current,
+          periodEndYyyymmdd: periodEndRef.current,
+        });
+      e.cell.classList.toggle('wj-cell-editable', editable);
+      // 확정(과거) 구간 틴트 — 편집 가능 상태(열람 모드 아님)에서, 편집셀이 아닌 과거 X_D_ 에만 BACK_COLOR(RGB).
+      if (
+        !editable &&
+        mainEditableRef.current &&
+        isShipmentPsiPastTinted({
+          row: r,
+          binding,
+          periodStartYyyymmdd: periodStartRef.current,
+          periodEndYyyymmdd: periodEndRef.current,
+        })
+      ) {
+        const rgb = backColorToRgb((row as { BACK_COLOR?: string }).BACK_COLOR ?? '');
+        if (rgb) e.cell.style.backgroundColor = rgb;
+      }
+    };
+    g.formatItem.addHandler(paint);
+    g.invalidate();
+
+    return () => {
+      try {
+        g.beginningEdit?.removeHandler(beginningEdit);
+        g.pastingCell?.removeHandler(beginningEdit as never);
+        g.formatItem?.removeHandler(paint);
+      } catch {
+        /* unmount race */
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [staticColumns]);
+
+  // 편집 게이트·틴트 재평가 — mainEditable/periodEnd/컬럼 변경 시 재도색(핸들러는 ref 로 최신값 사용).
+  useEffect(() => {
+    gridRef.current?.invalidate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainEditable, periodStart, periodEnd, dynamicColumns]);
+
   // 동적 컬럼 visible 적용 — base(현재 버킷 규칙) 기본, 드릴 오버라이드(drillVisRef) 우선.
   //   columnGroups 재대입마다(updatedLayout) 되돌아가므로 매번 재적용. bucket/조건 변경 = 드릴 리셋.
   useEffect(() => {
@@ -320,27 +486,32 @@ export const ShipmentRequestElectrodeMainGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staticColumns]);
 
-  // AS-IS SpdMain_CellDoubleClick(cs:1362-1420) — MEASURE-1 컬럼 더블클릭 시 ShipmentRequestPopup 오픈
-  //   (bRealFlag 가드). 팝업 자체는 이번 회차 미착수(04 미완 항목).
+  // AS-IS SpdMain_CellDoubleClick(cs:1362-1399) — MEASURE-1(= 측정라벨 MEASURE_NAME) 컬럼을 더블클릭하고(cs:1366)
+  //   그 행 measure 가 R_SHIP_REQ_ETA 일 때만(cs:1378) ShipmentRequestPopup(ETA 요청 입력) 오픈. 즉 임의 데이터셀이
+  //   아니라 "측정라벨 셀"에서만 열린다. bRealFlag(cs:1368)·편집권한(canEdit) 가드는 호출부(page)가 적용한다.
   const handleDblClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
     if (!grid) return;
     const ht = grid.hitTest(mouseEvent);
     if (ht.cellType !== CellType.Cell) return;
+    if (grid.columns[ht.col]?.binding !== MEASURE_LABEL_BINDING) return;
     const dataItem = GridUtils.getRow(grid, ht.row);
-    if (dataItem) onCellDoubleClick?.(dataItem);
+    if (!dataItem) return;
+    if (String((dataItem as { MEASURE?: string | number }).MEASURE ?? '') !== MEASURE.SHIP_REQ_ETA)
+      return;
+    onCellDoubleClick?.(dataItem);
   };
 
   return (
     <DataGrid<ShipmentPsiRow>
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
+      editTrackerRef={editTrackerRef}
       itemsSource={rows}
       staticColumns={staticColumns}
       dynamicColumns={dynamicColumns}
       sheetName={ADMIN_SHEET_NAME[SHEETS.MAIN]}
       allowMerging={AllowMerging.All}
-      isReadOnly
       gotFocus={onFocus}
       dblClick={handleDblClick}
     />

@@ -1,3 +1,21 @@
+## 1.9.43 패널 가로 축소 시 맨 아래 항목 유지 — 채팅·로그 상자가 바닥에 붙어 있던 상태면 크기 변경 뒤 자동으로 맨 아래로(ResizeObserver) (2026-11-06 · workbench.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자: "VM UI 를 가로로 줄였을 때 마지막 항목이 보이도록 VSCROLL 을 맨 아래로" — 종전엔 새 메시지가 올 때만 바닥으로 갔고, 가로 축소로 내용이 길어지면 스크롤 위치가 그대로라 마지막 줄이 가려졌다.
+
+## 1.9.42 화면 ID 중간 폴더(동시 실행 격리) · CheckList 진행 = 단계 i/7 · 세부 j/M · 테스트 n/N (2026-11-06 · workbench.js·extension.js·flow-panel.js·quick.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자: "results.json 을 UI ID 별로 … 다른 작업에 영향을 미치지 않도록 세션별/UI별로 파일을 다르게" · "UI_ID 별 작업은 중간 폴더로 UI_ID 를 넣어서" · "변경된 폴더의 결과를 찾아서 사용할 때 제대로 찾도록"
+- **원인(실측 11-06 10:17~10:47)**: SCP0084·0037·0016 smoke 가 동시에 돌며 공용 `Doc/e2e/results/results.json`(10:26 다른 화면이 덮음)·`artifacts`(Playwright 가 시작 때 비움 → SCP0084 trace 없음)·`_summary.csv` 를 공유 → SCP0084 실패 원인을 읽을 수 없었다.
+- **E2E(tools/E2E)**: `run-e2e.cmd <종류> <ID 1개>` → 결과 `Doc/e2e/results/<ID>/`(results.json·html·artifacts·shots·_summary.*) · 로그 `Doc/e2e/logs/<ID>/` · 잠금 `_run.e2e.<ID>.lock`(같은 화면만 직렬). 여러 화면·전체 = 종전 공용 폴더·`_run.lock`(둘은 서로 막음). `report.js` = 화면별 요약이 정본 · 공용 `_summary.csv/.md` 는 잠금 안 재조립 색인(원자 교체). `gen-e2e.js` `_index.csv`·`_matrix.csv` = 이번 화면 행만 교체(종전: 마지막 화면 1행만 남음). `probe-accounts.js`·`dbconn.write_csv`(Doc/tobefacts/db) 원자 쓰기.
+- **골든·회귀**: `golden.py` 화면별 `Doc/golden/<ID>/_summary.csv` + 공용 색인 잠금 병합(`--case` 는 그 케이스만 교체) · `regress.py` 화면별 `Doc/verify/<ID>/_regress_report.md` + 원자 쓰기.
+- **읽는 쪽(화면 폴더 먼저, 없으면 공용)**: `tools/Harness/verify/e2e_paths.py`(prereq·judge·mapping_trace·make_test_report·sort_check) · `e2e-judge.js`(로그도 화면 것만 — 종전엔 화면 구분 없이 최신 로그) · VM `e2eSummaryFile`(체인 e2eRows 검증·E2E 보완·종류 선택) · `flow-panel.js` · 트리 'E2E 결과'·'골든 테스트'(PASS 를 verdict 열로 셈 — 종전 줄 끝 ',PASS' 는 order 열을 셌다) · 'E2E 결과 열기'·'HTML 리포트' 메뉴 = 현재 화면 폴더 파일(e2eForId).
+- **CheckList 진행 표시**: 종전 Flow 카드는 'Running N tests' 마다 전체 수만 바꾸고 완료 목록은 누적 → 검증엔진 72개 뒤 팝업·권한 9개가 시작되면 '73/9'. 이제 `run_verify.py` 가 `[단계 i/7] 이름`(사전 작업 → AS-IS 사실·원장 → 정적 검사 → E2E 검증엔진 → 팝업·권한 검사기 → 사후 판정 → 문서) · `[세부 j/M] 도구`(건너뛴 조건부 도구도 번호 사용 · 예정 수와 어긋나면 [WARN]) 를, `prereq.py` 가 사전 작업 항목마다 `[세부 j/M]` 을 내고, 카드 머리 = `📍 단계 i/7 이름 · 세부 j/M 도구 · 🧪 n/N (k번째 실행) · ✅ · ✖`, 테스트 목록은 실행별 머리줄, 진행바 = (끝난 단계 + 단계 안 비율)/7.
+- 확인: report.js 두 화면 동시 실행(임시 폴더) 색인 70행 유지·두 화면 반영 · gen-e2e 3회 생성 4화면/5행 유지 · golden 요약 6화면 동시 병합 손실 0 · runlock 6가지 규칙 · 실제 `run-e2e.cmd smoke SCP0122`(11:21~11:22, 3 passed) 결과·로그가 화면 폴더에 생성·공용 results.json 무변경(10:26:05) · Flow 카드 모의(smoke 3 → 72 → 9) '📍 단계 5/7 … 🧪 1/9 (3번째 실행)' · VS Code 창 표시는 미확인(다시 로드 후 사용자 확인 필요). 백업 *.bak_20261106.
+
+## 1.9.41 화면 ID 첫 입력 무반응 보완 — 확정 창에 ID 를 바로 치고 Enter 한 번으로 지정 (2026-11-05 · workbench.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자: "VM 에서 UI ID 미지정 상태에서 최초 UI ID 입력하면 반응하지 않습니다, 한번더 입력해야 입력됩니다."
+- **원인(코드 확인)**: 📍 ID 버튼·needsId 메뉴의 화면 ID 확정 창(`confirmScreenIdOrPick`)은 `showQuickPick` 이라 입력칸이 '목록 필터'다. ID 미지정이면 안내문이 "입력 또는 선택하세요"라서 그 칸에 `SCP0084` 를 바로 치게 되는데, 맞는 항목이 0개라 Enter 가 무반응 → '✏️ 다른 ID 직접 입력' 을 골라 입력창에 다시 쳐야 했다.
+- **보완**: `createQuickPick` 로 바꾸고, 입력값이 ID 형식(2~4자 영문 + 2~6자리 숫자)이면 맨 위에 `✅ <ID> 로 지정` 항목을 즉시 만들어 활성화 → Enter 한 번으로 확정. 형식이 아니면 Enter 해도 닫히지 않고 대기. 기존 선택지(현재 ID 유지·✏️ 직접 입력·🔎 AS-IS 목록·⛔ 취소)와 확정 후 동작(세션 리셋·setId·탭 제목)은 그대로.
+- 확인: `node --check workbench.js` 통과. 실제 창 조작 확인은 미실행(VS Code 창 다시 로드 후 사용자 확인 필요). 백업 *.bak_20261105.
+
 ## 1.9.40 작업 실패 시 원인 줄 표시 — 로그의 [FAIL]/[ERROR] 줄을 작업창·채팅·Flow 보드·VS Code 알림에 (2026-11-04 · workbench.js·package.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
 - 사용자: "VM CHECKLIST 작업 수행 시 오류 발생 — 작업창에 어떤 오류인지가 보이지 않습니다. 오류 발생 시 어떤 오류가 발생했는지 쉽게 인지할 수 있도록 알려주세요."
 - **증상**: 🔎 CheckList SCP0122(17:04:59) 가 `✖ 실패 — … (exit 6) · 844s` 로만 끝남. 실제 원인 `[FAIL] SCP0122: files.csv current 변형 없음 — AsisFacts 먼저 실행` 은 Task Log 65줄 안에 묻혀 있었다(10-30 SCP0125 exit 6 도 같은 줄).

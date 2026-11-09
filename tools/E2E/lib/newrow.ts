@@ -36,3 +36,28 @@ export function asisInsertNoop(acts: Record<string, string>[], ents: Record<stri
   const body = acts.filter(z => ms.has(z.method) && !['CALL_LOCAL', 'RETURN', 'BRANCH', 'LOCAL'].includes(z.kind));
   return { noop: body.length === 0, ref: body.length ? `${body[0].method}:${body[0].line}` : `AS-IS ${[...ms].join(',')} 실행 문장 0` };
 }
+
+// 2026-11-09 T173(SSP0025 2번 F5 허위 FAIL) — AS-IS Delete 가 신규 행만 지우는지. tools/Harness/verify/asis_delete.py 와 같은 규칙(단일 규칙 · 양쪽 일치 시험 asisdelete.selftest.js)
+//   DeleteButton 에서 CALL_LOCAL 로 도달하는 화면 메서드(깊이 6)의 삭제 문장(DATA_OP·CALL_EXT · target .Delete/.DeleteRow/.Rows.Remove/.RemoveRow(s))
+//   전부가 유효 guard(호출 경로 guard ▸ 문장 guard)의 if 조각에 '== CAppSetting.StringI|FlagI' 를 가지면 신규 행 전용('else of (...)' 조각 제외)
+//   종전 _trace.spec.ts 판정(DeleteButton 의 FlagI BRANCH)은 위임(this.Delete() → sv.Rows.Remove · guard == StringI)을 놓쳤다
+const DEL_RX = /\.(Delete|DeleteRow|Rows\.Remove|RemoveRows?)$/;
+const NEWI_RX = /==\s*CAppSetting\.(StringI|FlagI)\b/;
+export function asisDeleteStmts(acts: Record<string, string>[], entry = 'DeleteButton', depth = 6): { a: Record<string, string>; g: string }[] {
+  const by = new Map<string, Record<string, string>[]>(); for (const a of acts) { const m = a.method || ''; if (!by.has(m)) by.set(m, []); by.get(m)!.push(a); }
+  const out: { a: Record<string, string>; g: string }[] = []; const seen = new Set<string>();
+  const walk = (m: string, chain: string, d: number): void => {
+    if (seen.has(m) || d > depth) return; seen.add(m);
+    for (const a of by.get(m) || []) {
+      const g = [chain, a.guard || ''].filter(Boolean).join(' ▸ '); const k = a.kind || '';
+      if (k === 'CALL_LOCAL') { const n = String(a.target || '').replace(/^this\./, '').split('.').pop() || ''; if (by.has(n)) walk(n, g, d + 1); }
+      else if ((k === 'DATA_OP' || k === 'CALL_EXT') && DEL_RX.test(a.target || '')) out.push({ a, g });
+    }
+  };
+  walk(entry, '', 0); return out;
+}
+export function asisDeleteNewOnly(acts: Record<string, string>[]): { newOnly: boolean; ref: string } {
+  const st = asisDeleteStmts(acts);
+  const ok = st.length > 0 && st.every(({ g }) => g.split('▸').map(s => s.trim()).some(seg => !seg.startsWith('else of') && NEWI_RX.test(seg)));
+  return { newOnly: ok, ref: ok ? `${st[0].a.method}:${st[0].a.line}` : '' };
+}

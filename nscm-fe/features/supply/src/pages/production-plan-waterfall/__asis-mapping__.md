@@ -115,7 +115,7 @@
 | D00-3-053 | §3 SetValue / 주컬럼_D = weekSum_D |  | R15 주합계_D SP 서버계산 반환 표시(design 03 §3.1) — FE 재계산 없음 | 해당없음 |
 | D00-3-054 | §3 SetValue / 월컬럼_D = monthSum_D |  | R15 월합계_D SP 서버계산 반환 표시(design 03 §3.1) — FE 재계산 없음 | 해당없음 |
 | D00-3-055 | §3 SetDblClickColumnShowHide / (sender, e) 더블클릭 컬럼 show/hide | ProductionPlanWaterfallGrid.tsx:226-250 (헤더 더블클릭 드릴 하위 rank 토글 R14) |  | 구현 |
-| D00-4b-001 | §4b Data_SCP.Common / MyDivisionInEE / dtMyDivision | ProductionPlanWaterfallForm.tsx:63 (COMBO.DIVISION+mnuId), constants COMBO.DIVISION='MyDivisionInEE_SCP':46 |  | 구현 |
+| D00-4b-001 | §4b Data_SCP.Common / MyDivisionInEE / dtMyDivision | ProductionPlanWaterfallForm.tsx:63 (COMBO.DIVISION+mnuId), constants COMBO.DIVISION='Division_SCP':46 | MyDivisionInEE_SCP 와 후보집합 1:1 동일(권한 WHERE·EE포함·VALID_YN 동일, ora.py 실측 2026-11-04). ORDER BY ATTRIBUTE1(업무순 81 먼저)로 AS-IS 사업부 표시순서 복원 | 구현 |
 | D00-4b-002 | §4b Data.Common / LookupCommon / dtElectrodeType | ProductionPlanWaterfallForm.tsx:75 (useTabLookupQueries ELECTRODE_LOOKUP), constants ELECTRODE_LOOKUP:57 |  | 구현 |
 | D00-4b-003 | §4b Data_SCP.Common / BucketISO / dt | ProductionPlanWaterfallForm.tsx:72 (COMBO.BUCKET), constants COMBO.BUCKET='BucketISO_SCP':54 |  | 구현 |
 | D00-4b-004 | §4b Data_SCP.Common / OperationGroupEE / dtOperationGroup | ProductionPlanWaterfallForm.tsx:64 (isEe ? OP_GROUP_EE), constants OP_GROUP_EE='OperationGroupEE_SCP':47 |  | 구현 |
@@ -176,7 +176,7 @@
 
 | AS-IS | To-Be |
 |---|---|
-| Division `MyDivisionInEE_SCP` (52,217) | `COMBO.DIVISION` + `{mnuId}` (Form) |
+| Division `MyDivisionInEE_SCP` (52,217) | `COMBO.DIVISION`=`Division_SCP` + `{mnuId}` (Form) — 집합 동일·ORDER BY ATTRIBUTE1 업무순 |
 | OperationGroup `OperationGroupEE_SCP`/`OperationGroup_SCP` (949) | `isEe ? OP_GROUP_EE : OP_GROUP` 스왑 |
 | PlantSite `PlantSiteProdPlan_SCP`/`PlantByDivisionOperation` (958) | isEe 스왑 + `{attribute2/segment2}` or `{divisionId/operationGroup}` |
 | Line `LineProdPlanLine_SCP`/`LineByOperationAddOSP_SCP` (994) | isEe 스왑, `'-'` sentinel 필터 + 조회 파라미터 '' 치환(store) |

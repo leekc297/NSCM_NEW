@@ -13,6 +13,7 @@
 1. `A_DB/30_META_SCP0125.sql` — META·문구·콤보
 1. `A_DB/40_GRANT_SCP0125.sql` — 권한·시노님
 1. `A_DB/90_VERIFY.sql` — 확인(읽기 전용)
+1. `A_DB/91_SPEED_MEASURE.sql` — (2026-11-06 추가) Stock 탭 조회 속도 측정(읽기 전용 · 끝에 ROLLBACK) — 1번 FIX_LINES 로 10-30 보완 반영 여부 먼저 확인 · 3번은 DBeaver 서버 출력 창에 나옴 · 결과 1~4번을 그대로 전달
 1. `A_DB/99_ROLLBACK.sql` — 원복(문제 시에만)
 
 ## 이관 축 점검표

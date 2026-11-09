@@ -97,7 +97,11 @@ export const DynamicQueryMainGrid = ({ gridRef, gridFilterRef, data, goViewTab, 
       return;
     }
 
-    if (binding === 'DQ_NAME') {
+    // 그리드가 읽기전용(SAVE 권한 없음)이면 Report Name 편집 팝업을 띄우지 않는다.
+    //   View 이동은 편집이 아니므로 위에서 그대로 허용한다.
+    const canEdit = !grid.isReadOnly;
+
+    if (canEdit && binding === 'DQ_NAME') {
       // AS-IS spdMain_CellDoubleClick(편집 분기): 클릭 row 를 팝업에 넘겨 pre-populate.
       setClickedRow(dataItem);
       setDynamicQueryModalOpen(true);

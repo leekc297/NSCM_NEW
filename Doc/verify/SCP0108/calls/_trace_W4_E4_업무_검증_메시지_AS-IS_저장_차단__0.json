@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0108",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"fromYyyymm\":\"202611\",\"programId\":\"SCP0108\",\"sheetName\":\"MAIN\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 156,
+  "at": "2026-11-09T01:12:23.909Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 757,
+  "dur": 394,
+  "at": "2026-11-09T01:12:27.628Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ }
+]

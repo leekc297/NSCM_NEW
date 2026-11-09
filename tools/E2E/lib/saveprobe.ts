@@ -7,7 +7,7 @@ import { probe } from './probe';
 
 /** Save 뒤 요청이 없을 때 사유 — 변경 인식 실패(결함) · 업무 검증 차단(입력값 문제 · 결함 아님) · 사유 불명(측정 실패) */
 export function classifyNoCall(msg: string): 'NOCHANGE' | 'VALIDATION' | 'UNKNOWN' { if (!msg.trim() || /성공|success/i.test(msg)) return 'UNKNOWN'; if (/수정한 내용|변경.*없|No change|nothing/i.test(msg)) return 'NOCHANGE'; return 'VALIDATION'; }
-export type Trip = { ms?: number; blocked?: 'NOCHANGE' | 'VALIDATION' | 'UNKNOWN'; inputFail?: boolean; b: string; row: number; orig: string; next: string; called: boolean; ok: boolean; got: string; restored: boolean; note: string };
+export type Trip = { ms?: number; blocked?: 'NOCHANGE' | 'VALIDATION' | 'UNKNOWN'; inputFail?: boolean; keyLinked?: string; b: string; row: number; orig: string; next: string; called: boolean; ok: boolean; got: string; restored: boolean; note: string };
 const norm = (s: string) => String(s ?? '').replace(/,/g, '').trim();
 const same = (a: string, b: string) => norm(a) === norm(b) || (norm(a) !== '' && norm(b) !== '' && !isNaN(Number(norm(a))) && Number(norm(a)) === Number(norm(b)));
 
@@ -70,18 +70,24 @@ export function recordTouched(item: Record<string, unknown>, at: string): void {
   const same0 = JSON.stringify(item); if ((cur as { item: unknown }[]).some(x => JSON.stringify(x.item) === same0)) return; cur.push({ at, item }); fs.mkdirSync(path.dirname(fp), { recursive: true }); fs.writeFileSync(fp, JSON.stringify(cur));
 }
 
-export async function cellRoundTrip(nscm: Nscm, row: number, b: string, value?: string, hooks: { afterSave?: () => Promise<void> } = {}): Promise<Trip & { stop: boolean; newRow: number }> {
+export async function cellRoundTrip(nscm: Nscm, row: number, b: string, value?: string, hooks: { afterSave?: () => Promise<void>; guardKeys?: string[] } = {}): Promise<Trip & { stop: boolean; newRow: number }> {
   const p = nscm.page; const ident = await probe.rowIdentity(p, row, [b]); const orig = (await probe.displayText(p, row, b)) ?? '';
+  const keyBefore = hooks.guardKeys && hooks.guardKeys.length ? (await probe.rowItem(p, row).catch(() => null)) as Record<string, unknown> | null : null;  // T74
+  const item0 = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; const d = c && c.rows[${row}] && c.rows[${row}].dataItem; return d ? JSON.parse(JSON.stringify(d)) : {}; })()`).catch(() => ({})) as Record<string, unknown>; const localAt = new Date(Date.now() - 3_000 - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 19);  // T152: 편집 전 값
   const t: Trip & { stop: boolean; newRow: number } = { b, row, orig, next: '', called: false, ok: false, got: '', restored: false, note: '', stop: false, newRow: row };
   // 원값이 빈칸이면 DB 에 그 행이 없을 수 있다(조회가 외부 조인으로 만든 칸) — 저장하면 새 행이 생기고 원복이 안 된다(2026-10-31 SCP0028 LOT_SIZE 잔존 사고)
-  if (norm(orig) === '') { t.note = '원값 빈칸 — DB 행이 없을 수 있어 제외'; t.restored = true; return t; }
+  // 2026-11-06 사용자 지시(SCP0084 MEMO 전 행 빈 값): 빈 칸도 저장 시험 대상 — 값 입력 → 저장 → 재조회 확인 → 지움 → 저장 → 재조회 확인(빈 값 저장 경로까지 측정)
+  if (norm(orig) === '') t.note = '원값 빈칸 — 입력·저장 후 지워서 저장까지 왕복';
   const nv = value ?? await nextOf(nscm, row, b, orig);
   if (nv == null) { t.note = '바꿀 값 없음(후보 1개·날짜)'; t.restored = true; return t; }
   t.next = nv;
   const ti = await typeCell(nscm, row, b, nv);
   if (!ti.ok) { t.note = `입력 경로 실패: ${ti.how}`; t.inputFail = true; t.restored = true; return t; }
-  const item0 = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; const d = c && c.rows[${row}] && c.rows[${row}].dataItem; return d ? JSON.parse(JSON.stringify(d)) : {}; })()`).catch(() => ({})) as Record<string, unknown>; const localAt = new Date(Date.now() - 3_000 - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 19);
-  recordTouched(item0, localAt);  // 저장 직전 값 기준 — 왕복 원복이 성공해도 SP 가 다른 칸을 바꿨을 수 있다(2026-11-02 SALES_PLAN_ADJUST_YN)
+  // 2026-11-06 T74(SCP0122 F6 허위 FAIL): 입력이 같은 행의 저장 키를 함께 바꾸는 연동 칸(OPMZ_ACTV_NAME → OPMZ_ACTV_CD)이면 저장하지 않는다 —
+  //   키가 바뀐 실저장은 행 식별·DB 전후 대조·복원이 키를 따라가지 못한다(행 수 '삭제 1' 오판 · 원복 실패). 재조회로 입력을 버리고 제외로 돌려준다
+  if (keyBefore && hooks.guardKeys) { const after = (await probe.rowItem(p, row).catch(() => null)) as Record<string, unknown> | null; const ch = after ? hooks.guardKeys.filter(k => k in keyBefore && String(keyBefore[k] ?? '') !== String(after[k] ?? '')) : []; if (ch.length) { t.keyLinked = ch.map(k => `${k} '${String(keyBefore[k] ?? '')}'→'${String(after![k] ?? '')}'`).join(', '); t.note = `[저장 키 연동] ${b} 입력이 저장 키를 바꿈(${t.keyLinked}) — 실저장 제외`; t.restored = true; await nscm.search().catch(() => undefined); await nscm.clearDialogs().catch(() => undefined); return t; } }
+  // 2026-11-07 T152(SCP0037 F6): 기록 값은 '편집 전' 행이어야 한다 — 입력(typeCell) 뒤에 읽은 dataItem 은 이미 바뀐 값(LT_DAY 6 · 빈값 None)이라 restore_touched 가 편집 값으로 '복원'한다
+  recordTouched(item0, localAt);  // 저장 직전(편집 전) 값 기준 — 왕복 원복이 성공해도 SP 가 다른 칸을 바꿨을 수 있다(2026-11-02 SALES_PLAN_ADJUST_YN)
   const s1 = await saveReload(nscm); t.called = s1.called;
   if (!s1.called) { t.note = s1.msg ? `화면 메시지 '${s1.msg.slice(0, 80)}'` : '화면 메시지 없음'; t.blocked = classifyNoCall(s1.msg); t.restored = true; return t; }  // 재조회로 입력이 버려졌으므로 DB 변화 없음
   if (hooks.afterSave) await hooks.afterSave();  // 저장 직후 DB 스냅샷(2026-11-01 EG235·EG237·EG240)
@@ -116,7 +122,7 @@ export async function twoRowSave(nscm: Nscm, rows: [number, number], b: string):
   return { result: lost ? 'ERROR' : bad ? 'FAIL' : 'PASS', evidence: `${b} 저장 1회 — ${ev.join(' · ')}${s1.err ? ` · 저장 오류 ${s1.err}` : ''}`, stop: lost };
 }
 
-/** 값이 있고 편집 가능한 행 — 빈칸은 DB 행이 없을 수 있어 쓰지 않는다. skip 행 제외 · 없으면 -1 */
+/** 값이 있고 편집 가능한 행(우선) — 없으면 빈 칸 행(2026-11-06 사용자 지시). skip 행 제외 · 없으면 -1 */
 export async function editableValueRow(nscm: Nscm, b: string, skip: number[] = [], allCols: string[] = []): Promise<number> {
   // 다른 편집 칸이 빈 행은 DB 행이 없을 수 있다 — 기본값(Y/N)이 보이는 칸만 보면 DB 행 없는 행을 고르게 된다(2026-10-31 SCP0028 r0). 빈 편집 칸이 가장 적은 행부터 쓴다
   const p = nscm.page; const q = JSON.stringify(b); const cols = JSON.stringify(allCols.filter(c => c !== b)); const has = `d[${q}] != null && String(d[${q}]).trim() !== ''`;
@@ -127,5 +133,7 @@ export async function editableValueRow(nscm: Nscm, b: string, skip: number[] = [
     for (const r of rs) { if (skip.includes(r)) continue; if (await probe.editable(p, r, b)) return r; }
     if (allCols.length === 0) break;
   }
+  // 2026-11-06 사용자 지시: 값 있는 편집 행이 없으면 빈 칸 행도 쓴다(입력·저장 후 지워서 저장까지 왕복 — SCP0084 MEMO)
+  for (const r of await probe.findRowsByValue(p, `d => !(${has})`, 60)) { if (skip.includes(r)) continue; if (await probe.editable(p, r, b)) return r; }
   return -1;
 }

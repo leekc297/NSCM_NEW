@@ -23,6 +23,9 @@ interface ProjectRouteWarrantyState {
     [key in RESPONSE_SET]: RawFlexGridColumnConfig[];
   };
   openSearchArea: boolean;
+  // 권한 Division 코드(Division_SCP, EE 제외 콤보 결과). Division 미선택/ALL 시 setFilters 가 이 코드를
+  //   열거해 보내 권한 밖 division 노출을 막는다(아래 setFilters 주석). Form(콤보 소유)이 로드 후 올린다.
+  authDivisions: string[];
 }
 
 interface ProjectRouteWarrantyAction {
@@ -34,6 +37,8 @@ interface ProjectRouteWarrantyAction {
   clearMainFilter: () => void;
   fetchStaticColumns: () => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
+  // Form(콤보 소유)이 권한 Division 코드를 올린다 — setFilters 열거용.
+  setAuthDivisions: (codes: string[]) => void;
 }
 
 const initSearchParams = (): SearchParamProps => ({
@@ -59,6 +64,7 @@ const initState = (): ProjectRouteWarrantyState => ({
     [RESPONSE_SET.MAIN]: [],
   },
   openSearchArea: true,
+  authDivisions: [],
 });
 
 export const useProjectRouteWarrantyStore = createPersistedStoreWithTab<
@@ -87,8 +93,18 @@ export const useProjectRouteWarrantyStore = createPersistedStoreWithTab<
         //   ALL sentinel → 빈값(BE PROC 가 NULL 치환, design/02 §4 cs L360). operationGroup 도
         //   plantSite/validFlag 와 동일 ALL→'' 치환(cboOperationGroup 기본 ALL=전체). FROM/TO_YYYYMM 은
         //   AS-IS FindData 가 항상 "" 전송(design/03 §4.2) — 이 화면 조회조건에 기간 없음.
+        // Division 미선택/ALL 은 리터럴 'ALL' 이 아니라 권한 Division 코드(authDivisions)를 열거해 보낸다 —
+        //   GET SP(PKG_SCP0048) 는 V_DIVISION_ID='ALL' 이면 NULL 치환 후 TRIM(..) IS NULL 로 전체 division 을
+        //   반환하고(line 145·265) 서버측 권한 재필터가 없어(ora.py 실측), 'ALL' 을 보내면 권한 밖 division
+        //   까지 노출된다(인가 우회). AS-IS GetCheckedListValue 2-arg(cs:193)가 clbDivision 전체체크를
+        //   dtMyDivision(EE제외 권한) 코드로 펼친 것과 등가 — 권한 코드 열거로 IN(auth) 가드를 태운다
+        //   (SCP0101/SCM0019 선례). 표시용 searchParams.divisionId 는 ALL 유지.
+        const divisionId =
+          p.divisionId && p.divisionId !== ALL_SENTINEL
+            ? p.divisionId
+            : get().authDivisions.join(',');
         state.filters[SHEETS.MAIN] = {
-          divisionId: p.divisionId,
+          divisionId,
           plantSite: p.plantSite === ALL_SENTINEL ? '' : p.plantSite,
           operationGroup: p.operationGroup === ALL_SENTINEL ? '' : p.operationGroup,
           itemId: p.itemId,
@@ -146,6 +162,11 @@ export const useProjectRouteWarrantyStore = createPersistedStoreWithTab<
     setOpenSearchArea: open =>
       set(state => {
         state.openSearchArea = open ?? !state.openSearchArea;
+      }),
+
+    setAuthDivisions: codes =>
+      set(state => {
+        if (state.authDivisions.join(',') !== codes.join(',')) state.authDivisions = codes;
       }),
   };
 }, 'project-route-warranty');

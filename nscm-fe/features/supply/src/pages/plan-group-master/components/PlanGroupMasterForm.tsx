@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
@@ -53,6 +53,11 @@ export const PlanGroupMasterForm = ({
   const initialized = usePlanGroupMasterStore(state => state.initialized);
   const searchParams = usePlanGroupMasterStore(state => state.searchParams);
   const setSearchParams = usePlanGroupMasterStore(state => state.setSearchParams);
+  const clearMainFilters = usePlanGroupMasterStore(state => state.clearMainFilters);
+
+  // Div 확인창 Cancel 때 콤보 표시 원복용 key(갭분석 C-01). 선택 칸(MUI Autocomplete)은 value 가 그대로여도
+  //   입력란 글자를 클릭한 항목으로 바꿔 두므로, Cancel 이면 key 를 바꿔 다시 그려 이전 Div 로 되돌린다.
+  const [divisionKey, setDivisionKey] = useState(0);
 
   // Division 콤보 — Division_SCP (권한필터, EE 포함). Division_SCP_NoEE/MyDivision 오매핑 금지(02 §2-A).
   const [divisions] = useTabComboQueries({
@@ -111,11 +116,19 @@ export const PlanGroupMasterForm = ({
     [lineRows, division, searchParams.operation, searchParams.plant, searchParams.building]
   );
 
-  // Division 외 조회조건(Operation/Plant/Building/Line/Plan Group) 변경은 조건만 갱신하고 그리드는 보존한다.
-  //   그리드 초기화는 cascade root 인 Division 변경에서만(store setSearchParams 가 filters 를 비움, SRCH-07).
-  //   비-Division 변경은 결과를 지우지 않으므로 dirty 가드 불필요(조회(Search) 전까지 편집분 유지).
+  // Line 은 조건만 갱신한다 — AS-IS 는 Line 변경 이벤트가 없어 그리드를 유지한다(cs:313-317).
   const changeCondition = (patch: Partial<typeof searchParams>) => {
     setSearchParams(patch);
+  };
+
+  // Operation/Plant/Building/Plan Group 변경 = 그리드 비움(AS-IS ClearDataSource cs:861-886, 갭분석 F-01).
+  //   결과를 지우므로 Division 과 같이 저장 안 한 변경이 있으면 MSG00704 확인 후에만 진행한다.
+  const changeAndClearGrid = (patch: Partial<typeof searchParams>) => {
+    void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+      if (!ok) return;
+      setSearchParams(patch);
+      clearMainFilters();
+    });
   };
 
   // 상위축(Op/Plant/Building) 변경 → Line 재필터 + Line 선택 prune (02 §3).
@@ -128,7 +141,7 @@ export const PlanGroupMasterForm = ({
       next.plant,
       next.building
     );
-    changeCondition({ ...patch, line: pruneSelection(next.line, nextLineOptions) });
+    changeAndClearGrid({ ...patch, line: pruneSelection(next.line, nextLineOptions) });
   };
 
   const disabled = noDivision;
@@ -148,13 +161,16 @@ export const PlanGroupMasterForm = ({
               required
               render={() => (
                 <CustomDropdown
+                  key={divisionKey}
                   value={division}
                   disabled={disabled}
                   options={divisions?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
                   onChange={(_, value) => {
                     // Division 변경 = 하위 5 리셋 + 그리드 clear(store). 편집 중이면 MSG00704 confirm 후에만(GAP-01).
+                    //   취소 시 key 를 바꿔 콤보를 이전 Div 로 다시 그린다(갭분석 C-01).
                     void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
                       if (ok) setSearchParams({ divisionId: value });
+                      else setDivisionKey(k => k + 1);
                     });
                   }}
                 />
@@ -251,7 +267,7 @@ export const PlanGroupMasterForm = ({
                   disabled={disabled}
                   value={searchParams.planGroup}
                   options={planGroupOptions}
-                  onChange={(_, value) => changeCondition({ planGroup: value || ALL })}
+                  onChange={(_, value) => changeAndClearGrid({ planGroup: value || ALL })}
                 />
               )}
             />

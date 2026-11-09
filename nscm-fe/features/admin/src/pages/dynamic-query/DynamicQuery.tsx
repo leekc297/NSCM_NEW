@@ -282,7 +282,7 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
         void setAlert({
           type: 'alert',
           content: t(
-            'MSG00150',
+            'MSG00013',
             `${missing.map(name => `@${name}`).join(', ')} 는 필수값이니 값을 입력하세요.`
           ),
         });
@@ -302,7 +302,7 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
           void setAlert({
             type: 'alert',
             content: t(
-              'MSG00150',
+              'MSG00013',
               `@${periodLimit.fromParam}, @${periodLimit.toParam} 는 YYYYMMDD 8자리로 입력하세요.`
             ),
           });
@@ -314,7 +314,7 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
           void setAlert({
             type: 'alert',
             content: t(
-              'MSG00150',
+              'MSG00013',
               `조회기간은 최대 ${periodLimit.maxMonths}개월까지만 조회 가능합니다.`
             ),
           });
@@ -326,7 +326,7 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
     // USE(VALID_YN='Y') 인 Condition 만 값이 필수 — 하나라도 비어있으면 실행 차단.
     // const missingValue = parameters.some(item => item.isUse && !item.value.trim());
     // if (missingValue) {
-    //   void setAlert({ type: 'alert', content: t('MSG00150', 'CONDITION에 해당하는 VALUE를 입력해 주세요.') });
+    //   void setAlert({ type: 'alert', content: t('MSG00013', 'CONDITION에 해당하는 VALUE를 입력해 주세요.') });
     //   return;
     // }
 
@@ -420,7 +420,7 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
 
       if (go) {
-        void setAlert({ type: 'alert', content: t('MSG00150', '_필수값을 입력하세요.') });
+        void setAlert({ type: 'alert', content: t('MSG00013', '_필수값을 입력하세요.') });
         return;
       }
 

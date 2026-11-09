@@ -1,0 +1,5004 @@
+{
+ "combos": {
+  "{\"comboId\":\"BucketISO_SCP\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "DAILY",
+    "v": "Daily"
+   },
+   {
+    "c": "WEEKLY",
+    "v": "Weekly"
+   },
+   {
+    "c": "MONTHLY",
+    "v": "Monthly"
+   },
+   {
+    "c": "WEEKLY_ISO",
+    "v": "Only Weekly"
+   }
+  ],
+  "{\"comboId\":\"OperationGroup_SCP\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "P",
+    "v": "Pack"
+   },
+   {
+    "c": "A",
+    "v": "Cell"
+   }
+  ],
+  "{\"comboId\":\"MyDivisionInEE_SCP\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "40",
+    "v": "40 Mobility & IT Battery"
+   },
+   {
+    "c": "81",
+    "v": "81 Automotive Battery"
+   },
+   {
+    "c": "81_HD",
+    "v": "81_HD Automotive Battery(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "81_HG Automotive Battery(HG)"
+   },
+   {
+    "c": "81_HM",
+    "v": "81_HM Automotive Battery(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "81_ST Automotive Battery(ST)"
+   },
+   {
+    "c": "81_UC",
+    "v": "81_UC Automotive Battery(UC)"
+   },
+   {
+    "c": "82",
+    "v": "82 ESS Battery"
+   },
+   {
+    "c": "EE",
+    "v": "EE Electrode"
+   },
+   {
+    "c": "EE_HD",
+    "v": "EE_HD Electrode(HD)"
+   },
+   {
+    "c": "EE_HG",
+    "v": "EE_HG Electrode(HG)"
+   },
+   {
+    "c": "EE_HM",
+    "v": "EE_HM Electrode(HM)"
+   },
+   {
+    "c": "EE_ST",
+    "v": "EE_ST Electrode(ST)"
+   },
+   {
+    "c": "EE_UC",
+    "v": "EE_UC Electrode(UC)"
+   }
+  ],
+  "{\"comboId\":\"MyDivision\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "81",
+    "v": "81 Automotive Battery"
+   },
+   {
+    "c": "40",
+    "v": "40 Mobility & IT Battery"
+   },
+   {
+    "c": "82",
+    "v": "82 ESS Battery"
+   },
+   {
+    "c": "81_UC",
+    "v": "81_UC Automotive Battery(UC)"
+   },
+   {
+    "c": "81_HM",
+    "v": "81_HM Automotive Battery(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "81_ST Automotive Battery(ST)"
+   },
+   {
+    "c": "81_HD",
+    "v": "81_HD Automotive Battery(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "81_HG Automotive Battery(HG)"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "40",
+    "v": "Mobility & IT Battery"
+   },
+   {
+    "c": "81",
+    "v": "Automotive Battery"
+   },
+   {
+    "c": "81_HD",
+    "v": "Automotive Battery(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "Automotive Battery(HG)"
+   },
+   {
+    "c": "81_HM",
+    "v": "Automotive Battery(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "Automotive Battery(ST)"
+   },
+   {
+    "c": "81_UC",
+    "v": "Automotive Battery(UC)"
+   },
+   {
+    "c": "82",
+    "v": "ESS Battery"
+   },
+   {
+    "c": "EE",
+    "v": "Electrode"
+   },
+   {
+    "c": "EE_HD",
+    "v": "Electrode(HD)"
+   },
+   {
+    "c": "EE_HG",
+    "v": "Electrode(HG)"
+   },
+   {
+    "c": "EE_HM",
+    "v": "Electrode(HM)"
+   },
+   {
+    "c": "EE_ST",
+    "v": "Electrode(ST)"
+   },
+   {
+    "c": "EE_UC",
+    "v": "Electrode(UC)"
+   }
+  ],
+  "{\"comboId\":\"EndCustomer\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "-",
+    "v": "-"
+   },
+   {
+    "c": "1X Technologies",
+    "v": "1X Technologies"
+   },
+   {
+    "c": "ABS",
+    "v": "ABS"
+   },
+   {
+    "c": "ACE KR",
+    "v": "ACE KR"
+   },
+   {
+    "c": "AJ상사",
+    "v": "AJ상사"
+   },
+   {
+    "c": "ANDURIL",
+    "v": "ANDURIL"
+   },
+   {
+    "c": "APRO",
+    "v": "APRO"
+   },
+   {
+    "c": "AXON",
+    "v": "AXON"
+   },
+   {
+    "c": "Acculon Energy",
+    "v": "Acculon Energy"
+   },
+   {
+    "c": "Acell Electronic",
+    "v": "Acell Electronic"
+   },
+   {
+    "c": "Acer(개발1)",
+    "v": "Acer(개발1)"
+   },
+   {
+    "c": "Aeon Motor",
+    "v": "Aeon Motor"
+   },
+   {
+    "c": "Aima",
+    "v": "Aima"
+   },
+   {
+    "c": "Aimsak",
+    "v": "Aimsak"
+   },
+   {
+    "c": "Airwheel",
+    "v": "Airwheel"
+   },
+   {
+    "c": "Akasol",
+    "v": "Akasol"
+   },
+   {
+    "c": "Alelion",
+    "v": "Alelion"
+   },
+   {
+    "c": "Also",
+    "v": "Also"
+   },
+   {
+    "c": "Alte",
+    "v": "Alte"
+   },
+   {
+    "c": "Amazon Prime Air",
+    "v": "Amazon Prime Air"
+   },
+   {
+    "c": "Amazon Web Services",
+    "v": "Amazon Web Services"
+   },
+   {
+    "c": "Amazon(개발)",
+    "v": "Amazon(개발)"
+   },
+   {
+    "c": "Anjin",
+    "v": "Anjin"
+   },
+   {
+    "c": "Anker",
+    "v": "Anker"
+   },
+   {
+    "c": "Anker MDF",
+    "v": "Anker MDF"
+   },
+   {
+    "c": "Anrui",
+    "v": "Anrui"
+   },
+   {
+    "c": "Aoxiang",
+    "v": "Aoxiang"
+   },
+   {
+    "c": "Apex",
+    "v": "Apex"
+   },
+   {
+    "c": "Apex Tech",
+    "v": "Apex Tech"
+   },
+   {
+    "c": "Archer",
+    "v": "Archer"
+   },
+   {
+    "c": "Arcimoto",
+    "v": "Arcimoto"
+   },
+   {
+    "c": "Arlo",
+    "v": "Arlo"
+   },
+   {
+    "c": "Arrival(US)",
+    "v": "Arrival(US)"
+   },
+   {
+    "c": "Askoll",
+    "v": "Askoll"
+   },
+   {
+    "c": "Atemitech",
+    "v": "Atemitech"
+   },
+   {
+    "c": "Atemitech_01",
+    "v": "Atemitech_01"
+   },
+   {
+    "c": "Atex",
+    "v": "Atex"
+   },
+   {
+    "c": "Audi",
+    "v": "Audi"
+   },
+   {
+    "c": "Audi(개발)",
+    "v": "Audi(개발)"
+   },
+   {
+    "c": "Aurora Flight",
+    "v": "Aurora Flight"
+   },
+   {
+    "c": "Avant Tecno",
+    "v": "Avant Tecno"
+   },
+   {
+    "c": "B&S",
+    "v": "B&S"
+   },
+   {
+    "c": "BAE Systems",
+    "v": "BAE Systems"
+   },
+   {
+    "c": "BAIC",
+    "v": "BAIC"
+   },
+   {
+    "c": "BFG",
+    "v": "BFG"
+   },
+   {
+    "c": "BK Energy",
+    "v": "BK Energy"
+   },
+   {
+    "c": "BMSPro",
+    "v": "BMSPro"
+   },
+   {
+    "c": "BMW",
+    "v": "BMW"
+   },
+   {
+    "c": "BMW(개발)",
+    "v": "BMW(개발)"
+   },
+   {
+    "c": "BMZ ETC",
+    "v": "BMZ ETC"
+   },
+   {
+    "c": "BMZ Gardentool",
+    "v": "BMZ Gardentool"
+   },
+   {
+    "c": "BMZ LEV(CV)",
+    "v": "BMZ LEV(CV)"
+   },
+   {
+    "c": "BMZ LEV(E-bike)",
+    "v": "BMZ LEV(E-bike)"
+   },
+   {
+    "c": "BMZ LEV(Forklift)",
+    "v": "BMZ LEV(Forklift)"
+   },
+   {
+    "c": "BMZ Powertool",
+    "v": "BMZ Powertool"
+   },
+   {
+    "c": "BMZ Vacuum",
+    "v": "BMZ Vacuum"
+   },
+   {
+    "c": "BRP",
+    "v": "BRP"
+   },
+   {
+    "c": "BYD Group",
+    "v": "BYD Group"
+   },
+   {
+    "c": "BYD LEV",
+    "v": "BYD LEV"
+   },
+   {
+    "c": "BYD MDF",
+    "v": "BYD MDF"
+   },
+   {
+    "c": "BYD VC",
+    "v": "BYD VC"
+   },
+   {
+    "c": "BYD-1",
+    "v": "BYD-1"
+   },
+   {
+    "c": "Bafang",
+    "v": "Bafang"
+   },
+   {
+    "c": "Bafang MDF",
+    "v": "Bafang MDF"
+   },
+   {
+    "c": "BakNew Power",
+    "v": "BakNew Power"
+   },
+   {
+    "c": "Bear robotics",
+    "v": "Bear robotics"
+   },
+   {
+    "c": "Beta Technologies",
+    "v": "Beta Technologies"
+   },
+   {
+    "c": "Bikebank",
+    "v": "Bikebank"
+   },
+   {
+    "c": "Bissell",
+    "v": "Bissell"
+   },
+   {
+    "c": "Bluebird",
+    "v": "Bluebird"
+   },
+   {
+    "c": "Blueway",
+    "v": "Blueway"
+   },
+   {
+    "c": "Blueway Energy VC",
+    "v": "Blueway Energy VC"
+   },
+   {
+    "c": "Blueway MDF",
+    "v": "Blueway MDF"
+   },
+   {
+    "c": "Bodo",
+    "v": "Bodo"
+   },
+   {
+    "c": "Boosted",
+    "v": "Boosted"
+   },
+   {
+    "c": "Bosch(GardenTool)",
+    "v": "Bosch(GardenTool)"
+   },
+   {
+    "c": "Boston Dynamics",
+    "v": "Boston Dynamics"
+   },
+   {
+    "c": "Boston Dynamics(개발)",
+    "v": "Boston Dynamics(개발)"
+   },
+   {
+    "c": "Brisk EV",
+    "v": "Brisk EV"
+   },
+   {
+    "c": "Bumhan Unisolution",
+    "v": "Bumhan Unisolution"
+   },
+   {
+    "c": "Bumhan Unisolution(개발)",
+    "v": "Bumhan Unisolution(개발)"
+   },
+   {
+    "c": "C&T Asia",
+    "v": "C&T Asia"
+   },
+   {
+    "c": "C-Tech_01",
+    "v": "C-Tech_01"
+   },
+   {
+    "c": "CS Enertech",
+    "v": "CS Enertech"
+   },
+   {
+    "c": "CTNS",
+    "v": "CTNS"
+   },
+   {
+    "c": "Caban",
+    "v": "Caban"
+   },
+   {
+    "c": "Candela",
+    "v": "Candela"
+   },
+   {
+    "c": "Canoo",
+    "v": "Canoo"
+   },
+   {
+    "c": "Caterpillar",
+    "v": "Caterpillar"
+   },
+   {
+    "c": "Celltech",
+    "v": "Celltech"
+   },
+   {
+    "c": "Celxpert_01",
+    "v": "Celxpert_01"
+   },
+   {
+    "c": "Changan",
+    "v": "Changan"
+   },
+   {
+    "c": "Chaoli",
+    "v": "Chaoli"
+   },
+   {
+    "c": "Chennuo",
+    "v": "Chennuo"
+   },
+   {
+    "c": "Chennuo LEV",
+    "v": "Chennuo LEV"
+   },
+   {
+    "c": "Chery_CV",
+    "v": "Chery_CV"
+   },
+   {
+    "c": "Chery_PV",
+    "v": "Chery_PV"
+   },
+   {
+    "c": "Chezhiyi",
+    "v": "Chezhiyi"
+   },
+   {
+    "c": "China Effort LEV",
+    "v": "China Effort LEV"
+   },
+   {
+    "c": "Chuangdian",
+    "v": "Chuangdian"
+   },
+   {
+    "c": "Chuanghuiyuan",
+    "v": "Chuanghuiyuan"
+   },
+   {
+    "c": "Chuanghuiyuan LEV",
+    "v": "Chuanghuiyuan LEV"
+   },
+   {
+    "c": "Cleantron",
+    "v": "Cleantron"
+   },
+   {
+    "c": "Comlink",
+    "v": "Comlink"
+   },
+   {
+    "c": "Continental",
+    "v": "Continental"
+   },
+   {
+    "c": "Coppercell",
+    "v": "Coppercell"
+   },
+   {
+    "c": "Corun",
+    "v": "Corun"
+   },
+   {
+    "c": "Corvus",
+    "v": "Corvus"
+   },
+   {
+    "c": "Cummins",
+    "v": "Cummins"
+   },
+   {
+    "c": "Curo",
+    "v": "Curo"
+   },
+   {
+    "c": "Cygni Energy",
+    "v": "Cygni Energy"
+   },
+   {
+    "c": "Cyoshin",
+    "v": "Cyoshin"
+   },
+   {
+    "c": "DAFTRUCKS N.V.",
+    "v": "DAFTRUCKS N.V."
+   },
+   {
+    "c": "DC EnergySolution",
+    "v": "DC EnergySolution"
+   },
+   {
+    "c": "DEOKYANG",
+    "v": "DEOKYANG"
+   },
+   {
+    "c": "DIC",
+    "v": "DIC"
+   },
+   {
+    "c": "DLG LEV",
+    "v": "DLG LEV"
+   },
+   {
+    "c": "DNA MOTORS",
+    "v": "DNA MOTORS"
+   },
+   {
+    "c": "DRN LEV",
+    "v": "DRN LEV"
+   },
+   {
+    "c": "DTAG(개발)",
+    "v": "DTAG(개발)"
+   },
+   {
+    "c": "Daedong Mobility",
+    "v": "Daedong Mobility"
+   },
+   {
+    "c": "Daimler(Evobus)",
+    "v": "Daimler(Evobus)"
+   },
+   {
+    "c": "Damon Motors",
+    "v": "Damon Motors"
+   },
+   {
+    "c": "Dayang",
+    "v": "Dayang"
+   },
+   {
+    "c": "Dayi",
+    "v": "Dayi"
+   },
+   {
+    "c": "Debao",
+    "v": "Debao"
+   },
+   {
+    "c": "Debo",
+    "v": "Debo"
+   },
+   {
+    "c": "Debo LEV",
+    "v": "Debo LEV"
+   },
+   {
+    "c": "Delingxun",
+    "v": "Delingxun"
+   },
+   {
+    "c": "Delingxun LEV",
+    "v": "Delingxun LEV"
+   },
+   {
+    "c": "Dell(개발)",
+    "v": "Dell(개발)"
+   },
+   {
+    "c": "Desay LEV",
+    "v": "Desay LEV"
+   },
+   {
+    "c": "Desay-1",
+    "v": "Desay-1"
+   },
+   {
+    "c": "Dhoot",
+    "v": "Dhoot"
+   },
+   {
+    "c": "Doosan",
+    "v": "Doosan"
+   },
+   {
+    "c": "Dreame",
+    "v": "Dreame"
+   },
+   {
+    "c": "Dualtron",
+    "v": "Dualtron"
+   },
+   {
+    "c": "Dynapack_01",
+    "v": "Dynapack_01"
+   },
+   {
+    "c": "E-tess",
+    "v": "E-tess"
+   },
+   {
+    "c": "E3 Mobility",
+    "v": "E3 Mobility"
+   },
+   {
+    "c": "EATON",
+    "v": "EATON"
+   },
+   {
+    "c": "EATON_01",
+    "v": "EATON_01"
+   },
+   {
+    "c": "EMBS",
+    "v": "EMBS"
+   },
+   {
+    "c": "EMNI",
+    "v": "EMNI"
+   },
+   {
+    "c": "ENCOS",
+    "v": "ENCOS"
+   },
+   {
+    "c": "EPlus",
+    "v": "EPlus"
+   },
+   {
+    "c": "EUP",
+    "v": "EUP"
+   },
+   {
+    "c": "EVThai",
+    "v": "EVThai"
+   },
+   {
+    "c": "Eclipse Space",
+    "v": "Eclipse Space"
+   },
+   {
+    "c": "Ecovacs",
+    "v": "Ecovacs"
+   },
+   {
+    "c": "Edison Tech",
+    "v": "Edison Tech"
+   },
+   {
+    "c": "Eicher Motors",
+    "v": "Eicher Motors"
+   },
+   {
+    "c": "Electrum",
+    "v": "Electrum"
+   },
+   {
+    "c": "Elentec",
+    "v": "Elentec"
+   },
+   {
+    "c": "Elitop LEV",
+    "v": "Elitop LEV"
+   },
+   {
+    "c": "Enable Int’l",
+    "v": "Enable Int’l"
+   },
+   {
+    "c": "Enertect Vision",
+    "v": "Enertect Vision"
+   },
+   {
+    "c": "Enervision",
+    "v": "Enervision"
+   },
+   {
+    "c": "Estes",
+    "v": "Estes"
+   },
+   {
+    "c": "FAW Hongqi",
+    "v": "FAW Hongqi"
+   },
+   {
+    "c": "FEIXIANG",
+    "v": "FEIXIANG"
+   },
+   {
+    "c": "FLEXTRONICS (Shenzhen)",
+    "v": "FLEXTRONICS (Shenzhen)"
+   },
+   {
+    "c": "Facebook(개발)",
+    "v": "Facebook(개발)"
+   },
+   {
+    "c": "Fengxi LEV",
+    "v": "Fengxi LEV"
+   },
+   {
+    "c": "Ferrari",
+    "v": "Ferrari"
+   },
+   {
+    "c": "Fiberdraft",
+    "v": "Fiberdraft"
+   },
+   {
+    "c": "Figure",
+    "v": "Figure"
+   },
+   {
+    "c": "Figure(미주)",
+    "v": "Figure(미주)"
+   },
+   {
+    "c": "Ford",
+    "v": "Ford"
+   },
+   {
+    "c": "Ford(개발)",
+    "v": "Ford(개발)"
+   },
+   {
+    "c": "Futurepath",
+    "v": "Futurepath"
+   },
+   {
+    "c": "GREAT POWER",
+    "v": "GREAT POWER"
+   },
+   {
+    "c": "GREENWAY LEV",
+    "v": "GREENWAY LEV"
+   },
+   {
+    "c": "GWKC",
+    "v": "GWKC"
+   },
+   {
+    "c": "Gaius",
+    "v": "Gaius"
+   },
+   {
+    "c": "Gamma",
+    "v": "Gamma"
+   },
+   {
+    "c": "Gamma LEV",
+    "v": "Gamma LEV"
+   },
+   {
+    "c": "Genju",
+    "v": "Genju"
+   },
+   {
+    "c": "Gesits",
+    "v": "Gesits"
+   },
+   {
+    "c": "Ghost Robotics",
+    "v": "Ghost Robotics"
+   },
+   {
+    "c": "Gillig",
+    "v": "Gillig"
+   },
+   {
+    "c": "Google_01",
+    "v": "Google_01"
+   },
+   {
+    "c": "Grab",
+    "v": "Grab"
+   },
+   {
+    "c": "Greenway MDF",
+    "v": "Greenway MDF"
+   },
+   {
+    "c": "Greenway(개발)",
+    "v": "Greenway(개발)"
+   },
+   {
+    "c": "Gushine",
+    "v": "Gushine"
+   },
+   {
+    "c": "Gushine MDF",
+    "v": "Gushine MDF"
+   },
+   {
+    "c": "Guxin",
+    "v": "Guxin"
+   },
+   {
+    "c": "HDI LEV",
+    "v": "HDI LEV"
+   },
+   {
+    "c": "HD건설기계",
+    "v": "HD건설기계"
+   },
+   {
+    "c": "HD한국조선해양",
+    "v": "HD한국조선해양"
+   },
+   {
+    "c": "HEID",
+    "v": "HEID"
+   },
+   {
+    "c": "HLDS",
+    "v": "HLDS"
+   },
+   {
+    "c": "HMG",
+    "v": "HMG"
+   },
+   {
+    "c": "HP(개발)",
+    "v": "HP(개발)"
+   },
+   {
+    "c": "HUAYOU",
+    "v": "HUAYOU"
+   },
+   {
+    "c": "HUAYOU MDF",
+    "v": "HUAYOU MDF"
+   },
+   {
+    "c": "HWT",
+    "v": "HWT"
+   },
+   {
+    "c": "HY Mobility",
+    "v": "HY Mobility"
+   },
+   {
+    "c": "Haimao",
+    "v": "Haimao"
+   },
+   {
+    "c": "Han Win Tech",
+    "v": "Han Win Tech"
+   },
+   {
+    "c": "HansungWT",
+    "v": "HansungWT"
+   },
+   {
+    "c": "Hanwha Aerospace",
+    "v": "Hanwha Aerospace"
+   },
+   {
+    "c": "Hanwha Defense",
+    "v": "Hanwha Defense"
+   },
+   {
+    "c": "Hanwha Engine",
+    "v": "Hanwha Engine"
+   },
+   {
+    "c": "Hanyu LEV",
+    "v": "Hanyu LEV"
+   },
+   {
+    "c": "Harbinger Motors",
+    "v": "Harbinger Motors"
+   },
+   {
+    "c": "Hexagon Purus",
+    "v": "Hexagon Purus"
+   },
+   {
+    "c": "Highpower",
+    "v": "Highpower"
+   },
+   {
+    "c": "Himcen",
+    "v": "Himcen"
+   },
+   {
+    "c": "Hitachi(GardenTool)",
+    "v": "Hitachi(GardenTool)"
+   },
+   {
+    "c": "Honda",
+    "v": "Honda"
+   },
+   {
+    "c": "Hongfugang",
+    "v": "Hongfugang"
+   },
+   {
+    "c": "Honhai",
+    "v": "Honhai"
+   },
+   {
+    "c": "Honhai(개발)",
+    "v": "Honhai(개발)"
+   },
+   {
+    "c": "Hope",
+    "v": "Hope"
+   },
+   {
+    "c": "Huachuangli LEV",
+    "v": "Huachuangli LEV"
+   },
+   {
+    "c": "Huagreen",
+    "v": "Huagreen"
+   },
+   {
+    "c": "Huawei",
+    "v": "Huawei"
+   },
+   {
+    "c": "Huilai",
+    "v": "Huilai"
+   },
+   {
+    "c": "Hyosung",
+    "v": "Hyosung"
+   },
+   {
+    "c": "Hyundai Kefico",
+    "v": "Hyundai Kefico"
+   },
+   {
+    "c": "Hyundai Mobis",
+    "v": "Hyundai Mobis"
+   },
+   {
+    "c": "Hyundai Motor",
+    "v": "Hyundai Motor"
+   },
+   {
+    "c": "Hyundai Motor Lab",
+    "v": "Hyundai Motor Lab"
+   },
+   {
+    "c": "Hyundai Motor Lab(개발1)",
+    "v": "Hyundai Motor Lab(개발1)"
+   },
+   {
+    "c": "Hyundai Motor Lab(개발2)",
+    "v": "Hyundai Motor Lab(개발2)"
+   },
+   {
+    "c": "IBS",
+    "v": "IBS"
+   },
+   {
+    "c": "IBS(ESS)",
+    "v": "IBS(ESS)"
+   },
+   {
+    "c": "IBS(LEV)",
+    "v": "IBS(LEV)"
+   },
+   {
+    "c": "ICON LEV",
+    "v": "ICON LEV"
+   },
+   {
+    "c": "ICON-1",
+    "v": "ICON-1"
+   },
+   {
+    "c": "IM MDF",
+    "v": "IM MDF"
+   },
+   {
+    "c": "IM(개발NJ)",
+    "v": "IM(개발NJ)"
+   },
+   {
+    "c": "IM(개발OC)",
+    "v": "IM(개발OC)"
+   },
+   {
+    "c": "IM-Re",
+    "v": "IM-Re"
+   },
+   {
+    "c": "INFAC",
+    "v": "INFAC"
+   },
+   {
+    "c": "ITM",
+    "v": "ITM"
+   },
+   {
+    "c": "Idneo",
+    "v": "Idneo"
+   },
+   {
+    "c": "Igreatpower LEV",
+    "v": "Igreatpower LEV"
+   },
+   {
+    "c": "Impossible Aero",
+    "v": "Impossible Aero"
+   },
+   {
+    "c": "Incell",
+    "v": "Incell"
+   },
+   {
+    "c": "Ingeniarts",
+    "v": "Ingeniarts"
+   },
+   {
+    "c": "InnoTM",
+    "v": "InnoTM"
+   },
+   {
+    "c": "Innov LEV",
+    "v": "Innov LEV"
+   },
+   {
+    "c": "Intilion",
+    "v": "Intilion"
+   },
+   {
+    "c": "Intretech",
+    "v": "Intretech"
+   },
+   {
+    "c": "Inventus power-1",
+    "v": "Inventus power-1"
+   },
+   {
+    "c": "Invox",
+    "v": "Invox"
+   },
+   {
+    "c": "Isuzu",
+    "v": "Isuzu"
+   },
+   {
+    "c": "Isuzu(개발)",
+    "v": "Isuzu(개발)"
+   },
+   {
+    "c": "Isuzu(개발1)",
+    "v": "Isuzu(개발1)"
+   },
+   {
+    "c": "J Starcom",
+    "v": "J Starcom"
+   },
+   {
+    "c": "JJ Solstice",
+    "v": "JJ Solstice"
+   },
+   {
+    "c": "JRBS",
+    "v": "JRBS"
+   },
+   {
+    "c": "JRES",
+    "v": "JRES"
+   },
+   {
+    "c": "JS Tech",
+    "v": "JS Tech"
+   },
+   {
+    "c": "Jetech LEV",
+    "v": "Jetech LEV"
+   },
+   {
+    "c": "Jiexin",
+    "v": "Jiexin"
+   },
+   {
+    "c": "Jinding",
+    "v": "Jinding"
+   },
+   {
+    "c": "Jinkang",
+    "v": "Jinkang"
+   },
+   {
+    "c": "Jinle",
+    "v": "Jinle"
+   },
+   {
+    "c": "Jinle_01",
+    "v": "Jinle_01"
+   },
+   {
+    "c": "Jiutong",
+    "v": "Jiutong"
+   },
+   {
+    "c": "Jiuyi",
+    "v": "Jiuyi"
+   },
+   {
+    "c": "Joby",
+    "v": "Joby"
+   },
+   {
+    "c": "John Deere",
+    "v": "John Deere"
+   },
+   {
+    "c": "John Deere(개발)",
+    "v": "John Deere(개발)"
+   },
+   {
+    "c": "Judong",
+    "v": "Judong"
+   },
+   {
+    "c": "Judong LEV",
+    "v": "Judong LEV"
+   },
+   {
+    "c": "Junchang",
+    "v": "Junchang"
+   },
+   {
+    "c": "KDP",
+    "v": "KDP"
+   },
+   {
+    "c": "KGM",
+    "v": "KGM"
+   },
+   {
+    "c": "KLM",
+    "v": "KLM"
+   },
+   {
+    "c": "KR Motors",
+    "v": "KR Motors"
+   },
+   {
+    "c": "KTM AG",
+    "v": "KTM AG"
+   },
+   {
+    "c": "KULR",
+    "v": "KULR"
+   },
+   {
+    "c": "Kabra Extrusion",
+    "v": "Kabra Extrusion"
+   },
+   {
+    "c": "Kais",
+    "v": "Kais"
+   },
+   {
+    "c": "Kawasaki",
+    "v": "Kawasaki"
+   },
+   {
+    "c": "Kayo",
+    "v": "Kayo"
+   },
+   {
+    "c": "Keyway",
+    "v": "Keyway"
+   },
+   {
+    "c": "Kingin",
+    "v": "Kingin"
+   },
+   {
+    "c": "Kion",
+    "v": "Kion"
+   },
+   {
+    "c": "Kstrong",
+    "v": "Kstrong"
+   },
+   {
+    "c": "Kstrong LEV",
+    "v": "Kstrong LEV"
+   },
+   {
+    "c": "Kswheel",
+    "v": "Kswheel"
+   },
+   {
+    "c": "Kswheel LEV",
+    "v": "Kswheel LEV"
+   },
+   {
+    "c": "Kubota",
+    "v": "Kubota"
+   },
+   {
+    "c": "LERA",
+    "v": "LERA"
+   },
+   {
+    "c": "LGCDJ",
+    "v": "LGCDJ"
+   },
+   {
+    "c": "LGCN",
+    "v": "LGCN"
+   },
+   {
+    "c": "LGE(개발)",
+    "v": "LGE(개발)"
+   },
+   {
+    "c": "LGI",
+    "v": "LGI"
+   },
+   {
+    "c": "LGI-1",
+    "v": "LGI-1"
+   },
+   {
+    "c": "LX INTL SINGAPORE",
+    "v": "LX INTL SINGAPORE"
+   },
+   {
+    "c": "Lamborghini",
+    "v": "Lamborghini"
+   },
+   {
+    "c": "Lanwwei",
+    "v": "Lanwwei"
+   },
+   {
+    "c": "Leineng",
+    "v": "Leineng"
+   },
+   {
+    "c": "Lenovo(개발)",
+    "v": "Lenovo(개발)"
+   },
+   {
+    "c": "Li Auto",
+    "v": "Li Auto"
+   },
+   {
+    "c": "Lichi",
+    "v": "Lichi"
+   },
+   {
+    "c": "Lika",
+    "v": "Lika"
+   },
+   {
+    "c": "Lingguan",
+    "v": "Lingguan"
+   },
+   {
+    "c": "Lion Electric",
+    "v": "Lion Electric"
+   },
+   {
+    "c": "Litens",
+    "v": "Litens"
+   },
+   {
+    "c": "Lithos Energy",
+    "v": "Lithos Energy"
+   },
+   {
+    "c": "Livewire",
+    "v": "Livewire"
+   },
+   {
+    "c": "Longji",
+    "v": "Longji"
+   },
+   {
+    "c": "Longood",
+    "v": "Longood"
+   },
+   {
+    "c": "Lordstown",
+    "v": "Lordstown"
+   },
+   {
+    "c": "Lucid Motors(개발)",
+    "v": "Lucid Motors(개발)"
+   },
+   {
+    "c": "Lyft",
+    "v": "Lyft"
+   },
+   {
+    "c": "MAZDA",
+    "v": "MAZDA"
+   },
+   {
+    "c": "MBAG",
+    "v": "MBAG"
+   },
+   {
+    "c": "MBAG(개발)",
+    "v": "MBAG(개발)"
+   },
+   {
+    "c": "MEC",
+    "v": "MEC"
+   },
+   {
+    "c": "MITSUBISHI",
+    "v": "MITSUBISHI"
+   },
+   {
+    "c": "MPS",
+    "v": "MPS"
+   },
+   {
+    "c": "MPS Korea",
+    "v": "MPS Korea"
+   },
+   {
+    "c": "MPST",
+    "v": "MPST"
+   },
+   {
+    "c": "Magna Yuma",
+    "v": "Magna Yuma"
+   },
+   {
+    "c": "Mahindra",
+    "v": "Mahindra"
+   },
+   {
+    "c": "Mahindra(개발)",
+    "v": "Mahindra(개발)"
+   },
+   {
+    "c": "Makita(GardenTool)",
+    "v": "Makita(GardenTool)"
+   },
+   {
+    "c": "Makita(개발)",
+    "v": "Makita(개발)"
+   },
+   {
+    "c": "Matter Energy",
+    "v": "Matter Energy"
+   },
+   {
+    "c": "Medion",
+    "v": "Medion"
+   },
+   {
+    "c": "Meiko",
+    "v": "Meiko"
+   },
+   {
+    "c": "Meituan",
+    "v": "Meituan"
+   },
+   {
+    "c": "Mercedes Benz",
+    "v": "Mercedes Benz"
+   },
+   {
+    "c": "Merry",
+    "v": "Merry"
+   },
+   {
+    "c": "Meta",
+    "v": "Meta"
+   },
+   {
+    "c": "Mica",
+    "v": "Mica"
+   },
+   {
+    "c": "Micropower",
+    "v": "Micropower"
+   },
+   {
+    "c": "Microsoft",
+    "v": "Microsoft"
+   },
+   {
+    "c": "Midea",
+    "v": "Midea"
+   },
+   {
+    "c": "Millor Battery",
+    "v": "Millor Battery"
+   },
+   {
+    "c": "Mini Battery",
+    "v": "Mini Battery"
+   },
+   {
+    "c": "Mini Motors",
+    "v": "Mini Motors"
+   },
+   {
+    "c": "Mombike",
+    "v": "Mombike"
+   },
+   {
+    "c": "Myvelo",
+    "v": "Myvelo"
+   },
+   {
+    "c": "NASA",
+    "v": "NASA"
+   },
+   {
+    "c": "NIO",
+    "v": "NIO"
+   },
+   {
+    "c": "NT(개발1)",
+    "v": "NT(개발1)"
+   },
+   {
+    "c": "NT(개발10)",
+    "v": "NT(개발10)"
+   },
+   {
+    "c": "NT(개발11)",
+    "v": "NT(개발11)"
+   },
+   {
+    "c": "NT(개발12)",
+    "v": "NT(개발12)"
+   },
+   {
+    "c": "NT(개발13)",
+    "v": "NT(개발13)"
+   },
+   {
+    "c": "NT(개발14)",
+    "v": "NT(개발14)"
+   },
+   {
+    "c": "NT(개발15)",
+    "v": "NT(개발15)"
+   },
+   {
+    "c": "NT(개발16)",
+    "v": "NT(개발16)"
+   },
+   {
+    "c": "NT(개발17)",
+    "v": "NT(개발17)"
+   },
+   {
+    "c": "NT(개발18)",
+    "v": "NT(개발18)"
+   },
+   {
+    "c": "NT(개발19)",
+    "v": "NT(개발19)"
+   },
+   {
+    "c": "NT(개발2)",
+    "v": "NT(개발2)"
+   },
+   {
+    "c": "NT(개발20)",
+    "v": "NT(개발20)"
+   },
+   {
+    "c": "NT(개발21)",
+    "v": "NT(개발21)"
+   },
+   {
+    "c": "NT(개발22)",
+    "v": "NT(개발22)"
+   },
+   {
+    "c": "NT(개발23)",
+    "v": "NT(개발23)"
+   },
+   {
+    "c": "NT(개발24)",
+    "v": "NT(개발24)"
+   },
+   {
+    "c": "NT(개발25)",
+    "v": "NT(개발25)"
+   },
+   {
+    "c": "NT(개발26)",
+    "v": "NT(개발26)"
+   },
+   {
+    "c": "NT(개발27)",
+    "v": "NT(개발27)"
+   },
+   {
+    "c": "NT(개발28)",
+    "v": "NT(개발28)"
+   },
+   {
+    "c": "NT(개발29)",
+    "v": "NT(개발29)"
+   },
+   {
+    "c": "NT(개발3)",
+    "v": "NT(개발3)"
+   },
+   {
+    "c": "NT(개발30)",
+    "v": "NT(개발30)"
+   },
+   {
+    "c": "NT(개발31)",
+    "v": "NT(개발31)"
+   },
+   {
+    "c": "NT(개발32)",
+    "v": "NT(개발32)"
+   },
+   {
+    "c": "NT(개발33)",
+    "v": "NT(개발33)"
+   },
+   {
+    "c": "NT(개발34)",
+    "v": "NT(개발34)"
+   },
+   {
+    "c": "NT(개발35)",
+    "v": "NT(개발35)"
+   },
+   {
+    "c": "NT(개발36)",
+    "v": "NT(개발36)"
+   },
+   {
+    "c": "NT(개발37)",
+    "v": "NT(개발37)"
+   },
+   {
+    "c": "NT(개발38)",
+    "v": "NT(개발38)"
+   },
+   {
+    "c": "NT(개발39)",
+    "v": "NT(개발39)"
+   },
+   {
+    "c": "NT(개발4)",
+    "v": "NT(개발4)"
+   },
+   {
+    "c": "NT(개발40)",
+    "v": "NT(개발40)"
+   },
+   {
+    "c": "NT(개발41)",
+    "v": "NT(개발41)"
+   },
+   {
+    "c": "NT(개발42)",
+    "v": "NT(개발42)"
+   },
+   {
+    "c": "NT(개발43)",
+    "v": "NT(개발43)"
+   },
+   {
+    "c": "NT(개발44)",
+    "v": "NT(개발44)"
+   },
+   {
+    "c": "NT(개발45)",
+    "v": "NT(개발45)"
+   },
+   {
+    "c": "NT(개발46)",
+    "v": "NT(개발46)"
+   },
+   {
+    "c": "NT(개발47)",
+    "v": "NT(개발47)"
+   },
+   {
+    "c": "NT(개발48)",
+    "v": "NT(개발48)"
+   },
+   {
+    "c": "NT(개발49)",
+    "v": "NT(개발49)"
+   },
+   {
+    "c": "NT(개발5)",
+    "v": "NT(개발5)"
+   },
+   {
+    "c": "NT(개발50)",
+    "v": "NT(개발50)"
+   },
+   {
+    "c": "NT(개발51)",
+    "v": "NT(개발51)"
+   },
+   {
+    "c": "NT(개발52)",
+    "v": "NT(개발52)"
+   },
+   {
+    "c": "NT(개발53)",
+    "v": "NT(개발53)"
+   },
+   {
+    "c": "NT(개발54)",
+    "v": "NT(개발54)"
+   },
+   {
+    "c": "NT(개발55)",
+    "v": "NT(개발55)"
+   },
+   {
+    "c": "NT(개발56)",
+    "v": "NT(개발56)"
+   },
+   {
+    "c": "NT(개발57)",
+    "v": "NT(개발57)"
+   },
+   {
+    "c": "NT(개발58)",
+    "v": "NT(개발58)"
+   },
+   {
+    "c": "NT(개발59)",
+    "v": "NT(개발59)"
+   },
+   {
+    "c": "NT(개발6)",
+    "v": "NT(개발6)"
+   },
+   {
+    "c": "NT(개발60)",
+    "v": "NT(개발60)"
+   },
+   {
+    "c": "NT(개발61)",
+    "v": "NT(개발61)"
+   },
+   {
+    "c": "NT(개발7)",
+    "v": "NT(개발7)"
+   },
+   {
+    "c": "NT(개발8)",
+    "v": "NT(개발8)"
+   },
+   {
+    "c": "NT(개발9)",
+    "v": "NT(개발9)"
+   },
+   {
+    "c": "Nanku",
+    "v": "Nanku"
+   },
+   {
+    "c": "Naverlabs",
+    "v": "Naverlabs"
+   },
+   {
+    "c": "Navistar",
+    "v": "Navistar"
+   },
+   {
+    "c": "Near East Univ.",
+    "v": "Near East Univ."
+   },
+   {
+    "c": "Newflyer",
+    "v": "Newflyer"
+   },
+   {
+    "c": "Nexcon",
+    "v": "Nexcon"
+   },
+   {
+    "c": "Nikola Motor(개발)",
+    "v": "Nikola Motor(개발)"
+   },
+   {
+    "c": "Ninebot",
+    "v": "Ninebot"
+   },
+   {
+    "c": "Ninebot LEV",
+    "v": "Ninebot LEV"
+   },
+   {
+    "c": "Nintendo",
+    "v": "Nintendo"
+   },
+   {
+    "c": "Nintendo(개발)",
+    "v": "Nintendo(개발)"
+   },
+   {
+    "c": "Non Hyper Scaler",
+    "v": "Non Hyper Scaler"
+   },
+   {
+    "c": "Novonix",
+    "v": "Novonix"
+   },
+   {
+    "c": "Number king",
+    "v": "Number king"
+   },
+   {
+    "c": "O&J",
+    "v": "O&J"
+   },
+   {
+    "c": "OCEANWING-1",
+    "v": "OCEANWING-1"
+   },
+   {
+    "c": "OLA Electric",
+    "v": "OLA Electric"
+   },
+   {
+    "c": "OP Mobility",
+    "v": "OP Mobility"
+   },
+   {
+    "c": "OP Mobility_01",
+    "v": "OP Mobility_01"
+   },
+   {
+    "c": "OTS_신시장",
+    "v": "OTS_신시장"
+   },
+   {
+    "c": "OnePlus",
+    "v": "OnePlus"
+   },
+   {
+    "c": "Oshkosh",
+    "v": "Oshkosh"
+   },
+   {
+    "c": "PCTEST",
+    "v": "PCTEST"
+   },
+   {
+    "c": "PHYLION LEV",
+    "v": "PHYLION LEV"
+   },
+   {
+    "c": "PNE SYSTEMS",
+    "v": "PNE SYSTEMS"
+   },
+   {
+    "c": "PT Bluetek",
+    "v": "PT Bluetek"
+   },
+   {
+    "c": "PT TVS Motor",
+    "v": "PT TVS Motor"
+   },
+   {
+    "c": "PT. Garda",
+    "v": "PT. Garda"
+   },
+   {
+    "c": "PYTES",
+    "v": "PYTES"
+   },
+   {
+    "c": "PYTES LEV",
+    "v": "PYTES LEV"
+   },
+   {
+    "c": "PYTES MDF",
+    "v": "PYTES MDF"
+   },
+   {
+    "c": "PYTES VN",
+    "v": "PYTES VN"
+   },
+   {
+    "c": "Palfinger",
+    "v": "Palfinger"
+   },
+   {
+    "c": "Panacycle",
+    "v": "Panacycle"
+   },
+   {
+    "c": "Panasonic",
+    "v": "Panasonic"
+   },
+   {
+    "c": "Pantrue",
+    "v": "Pantrue"
+   },
+   {
+    "c": "Panture",
+    "v": "Panture"
+   },
+   {
+    "c": "Partron",
+    "v": "Partron"
+   },
+   {
+    "c": "Patron",
+    "v": "Patron"
+   },
+   {
+    "c": "Penghui",
+    "v": "Penghui"
+   },
+   {
+    "c": "Philip Morris(개발)",
+    "v": "Philip Morris(개발)"
+   },
+   {
+    "c": "Phisemi MDF",
+    "v": "Phisemi MDF"
+   },
+   {
+    "c": "Phylion MDF",
+    "v": "Phylion MDF"
+   },
+   {
+    "c": "Piaggio",
+    "v": "Piaggio"
+   },
+   {
+    "c": "Pinxin",
+    "v": "Pinxin"
+   },
+   {
+    "c": "Polstar",
+    "v": "Polstar"
+   },
+   {
+    "c": "Porsche",
+    "v": "Porsche"
+   },
+   {
+    "c": "Porta Power LEV",
+    "v": "Porta Power LEV"
+   },
+   {
+    "c": "Positec",
+    "v": "Positec"
+   },
+   {
+    "c": "Power7",
+    "v": "Power7"
+   },
+   {
+    "c": "Powerglobal",
+    "v": "Powerglobal"
+   },
+   {
+    "c": "Powerlogics",
+    "v": "Powerlogics"
+   },
+   {
+    "c": "Powtech",
+    "v": "Powtech"
+   },
+   {
+    "c": "Powtech MDF",
+    "v": "Powtech MDF"
+   },
+   {
+    "c": "Proterra(개발)",
+    "v": "Proterra(개발)"
+   },
+   {
+    "c": "Pure Watercraft",
+    "v": "Pure Watercraft"
+   },
+   {
+    "c": "Quanta",
+    "v": "Quanta"
+   },
+   {
+    "c": "ReBuild",
+    "v": "ReBuild"
+   },
+   {
+    "c": "Regent",
+    "v": "Regent"
+   },
+   {
+    "c": "Renault Korea Motors",
+    "v": "Renault Korea Motors"
+   },
+   {
+    "c": "Rihuida MDF",
+    "v": "Rihuida MDF"
+   },
+   {
+    "c": "Rimac Technology",
+    "v": "Rimac Technology"
+   },
+   {
+    "c": "Ritwin",
+    "v": "Ritwin"
+   },
+   {
+    "c": "River Mobility",
+    "v": "River Mobility"
+   },
+   {
+    "c": "Rivian Automotive(개발)",
+    "v": "Rivian Automotive(개발)"
+   },
+   {
+    "c": "Roam",
+    "v": "Roam"
+   },
+   {
+    "c": "Robostar",
+    "v": "Robostar"
+   },
+   {
+    "c": "Rockrobo",
+    "v": "Rockrobo"
+   },
+   {
+    "c": "Romeo Power(개발)",
+    "v": "Romeo Power(개발)"
+   },
+   {
+    "c": "Roofer",
+    "v": "Roofer"
+   },
+   {
+    "c": "Rugged Logic",
+    "v": "Rugged Logic"
+   },
+   {
+    "c": "Ruipu",
+    "v": "Ruipu"
+   },
+   {
+    "c": "Runeng",
+    "v": "Runeng"
+   },
+   {
+    "c": "Runing Power",
+    "v": "Runing Power"
+   },
+   {
+    "c": "Ryder LEV",
+    "v": "Ryder LEV"
+   },
+   {
+    "c": "SB&D(GardenTool)",
+    "v": "SB&D(GardenTool)"
+   },
+   {
+    "c": "SB&D(개발)",
+    "v": "SB&D(개발)"
+   },
+   {
+    "c": "SCUD LEV",
+    "v": "SCUD LEV"
+   },
+   {
+    "c": "SCUD MDF",
+    "v": "SCUD MDF"
+   },
+   {
+    "c": "SEDA-M",
+    "v": "SEDA-M"
+   },
+   {
+    "c": "SFT LEV",
+    "v": "SFT LEV"
+   },
+   {
+    "c": "SHINDEN",
+    "v": "SHINDEN"
+   },
+   {
+    "c": "SKIO LEV",
+    "v": "SKIO LEV"
+   },
+   {
+    "c": "SOBEN",
+    "v": "SOBEN"
+   },
+   {
+    "c": "SONGUO",
+    "v": "SONGUO"
+   },
+   {
+    "c": "SRAM TW",
+    "v": "SRAM TW"
+   },
+   {
+    "c": "STL_01",
+    "v": "STL_01"
+   },
+   {
+    "c": "SUNWODA LEV",
+    "v": "SUNWODA LEV"
+   },
+   {
+    "c": "SUZUKI",
+    "v": "SUZUKI"
+   },
+   {
+    "c": "Samsung Electronics(개발)",
+    "v": "Samsung Electronics(개발)"
+   },
+   {
+    "c": "Samsung Electronics(개발1)",
+    "v": "Samsung Electronics(개발1)"
+   },
+   {
+    "c": "Samsung Electronics(개발10)",
+    "v": "Samsung Electronics(개발10)"
+   },
+   {
+    "c": "Samsung Electronics(개발11)",
+    "v": "Samsung Electronics(개발11)"
+   },
+   {
+    "c": "Samsung Electronics(개발12)",
+    "v": "Samsung Electronics(개발12)"
+   },
+   {
+    "c": "Samsung Electronics(개발13)",
+    "v": "Samsung Electronics(개발13)"
+   }
+  ],
+  "{\"comboId\":\"WaterfallVer_FG2_SCP\",\"divisionId\":\"'40'\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "SP_W_20261026",
+    "v": "SP_W_20261026 (W44)"
+   },
+   {
+    "c": "SP_W_20261019",
+    "v": "SP_W_20261019 (W43)"
+   },
+   {
+    "c": "SP_W_20261012",
+    "v": "SP_W_20261012 (W42)"
+   },
+   {
+    "c": "SP_W_20261005",
+    "v": "SP_W_20261005 (W41)"
+   },
+   {
+    "c": "SP_W_20260928",
+    "v": "SP_W_20260928 (W40)"
+   },
+   {
+    "c": "SP_W_20260921",
+    "v": "SP_W_20260921 (W39)"
+   },
+   {
+    "c": "SP_W_20260914",
+    "v": "SP_W_20260914 (W38)"
+   },
+   {
+    "c": "SP_W_20260907",
+    "v": "SP_W_20260907 (W37)"
+   },
+   {
+    "c": "SP_W_20260831",
+    "v": "SP_W_20260831 (W36)"
+   },
+   {
+    "c": "SP_W_20260824",
+    "v": "SP_W_20260824 (W35)"
+   }
+  ],
+  "{\"comboId\":\"TeambyDivision\",\"divisionId\":\"''\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "30385415",
+    "v": "Admin T.Treasury P"
+   },
+   {
+    "c": "70021414",
+    "v": "AI/빅데이터1.빅데이터분석팀"
+   },
+   {
+    "c": "70084589",
+    "v": "AI/빅데이터1.제품개발AI팀"
+   },
+   {
+    "c": "71067318",
+    "v": "AX거버넌스팀"
+   },
+   {
+    "c": "70021362",
+    "v": "ESG팀"
+   },
+   {
+    "c": "70318554",
+    "v": "ESS.EaaS.EaaS국내사업팀"
+   },
+   {
+    "c": "58570391",
+    "v": "ESS.SCM.SCM1팀"
+   },
+   {
+    "c": "71059518",
+    "v": "ESS.SCM.SCM2팀"
+   },
+   {
+    "c": "70084594",
+    "v": "ESS.개발.Cell.Cell개발1팀"
+   },
+   {
+    "c": "58611232",
+    "v": "ESS.개발.개발기획팀"
+   },
+   {
+    "c": "71073846",
+    "v": "ESS.마케팅1.AIDC SI팀"
+   },
+   {
+    "c": "70496991",
+    "v": "ESS.마케팅1.미주SI1팀"
+   },
+   {
+    "c": "71059515",
+    "v": "ESS.마케팅1.미주SI2팀"
+   },
+   {
+    "c": "70496179",
+    "v": "ESS.마케팅1담당"
+   },
+   {
+    "c": "58187671",
+    "v": "ESS.마케팅2.N2팀"
+   },
+   {
+    "c": "70043790",
+    "v": "ESS.마케팅2.미주컴포넌트1팀"
+   },
+   {
+    "c": "71050265",
+    "v": "ESS.마케팅2.미주컴포넌트2팀"
+   },
+   {
+    "c": "71053017",
+    "v": "ESS.마케팅2담당"
+   },
+   {
+    "c": "58611471",
+    "v": "ESS.마케팅3.신시장팀"
+   },
+   {
+    "c": "71059516",
+    "v": "ESS.마케팅3.유럽팀"
+   },
+   {
+    "c": "58281104",
+    "v": "ESS.마케팅3.한국팀"
+   },
+   {
+    "c": "71060756",
+    "v": "ESS.사업개발.AIDC사업개발팀"
+   },
+   {
+    "c": "70428391",
+    "v": "ESS.사업개발.사업개발팀"
+   },
+   {
+    "c": "70084600",
+    "v": "ESS.상품기획/전략.MI전략팀"
+   },
+   {
+    "c": "70084599",
+    "v": "ESS.상품기획/전략.사업전략팀"
+   },
+   {
+    "c": "58175902",
+    "v": "ESS.상품기획/전략.상품기획1팀"
+   },
+   {
+    "c": "58410415",
+    "v": "ESS.상품기획/전략.상품기획2팀"
+   },
+   {
+    "c": "71059520",
+    "v": "ESS.전력망PE.M&E PE팀"
+   },
+   {
+    "c": "71059521",
+    "v": "ESS.전력망PE.N2 PE팀"
+   },
+   {
+    "c": "71059519",
+    "v": "ESS.전력망PE.사업관리PE팀"
+   },
+   {
+    "c": "70262361",
+    "v": "ESS.전력망PE.커미셔닝PE팀"
+   },
+   {
+    "c": "58188308",
+    "v": "ESS.전력망PM.전력망PM1팀"
+   },
+   {
+    "c": "58141111",
+    "v": "ESS.전력망PM.전력망PM2팀"
+   },
+   {
+    "c": "58366861",
+    "v": "ESS전지.마케팅1.유럽팀"
+   },
+   {
+    "c": "70087295",
+    "v": "ESS전지경영관리팀"
+   },
+   {
+    "c": "71060716",
+    "v": "ESS전지원가관리팀"
+   },
+   {
+    "c": "70095001",
+    "v": "ESS전지인사지원팀"
+   },
+   {
+    "c": "70041728",
+    "v": "Global대외협력팀"
+   },
+   {
+    "c": "71067319",
+    "v": "Global제휴팀"
+   },
+   {
+    "c": "71059513",
+    "v": "HR Lab"
+   },
+   {
+    "c": "70021351",
+    "v": "IR기획팀"
+   },
+   {
+    "c": "70021352",
+    "v": "IR커뮤니케이션팀"
+   },
+   {
+    "c": "71065524",
+    "v": "LGESEG.유럽신규수주TFT"
+   },
+   {
+    "c": "70018238",
+    "v": "LGESGM.생산기획1팀"
+   },
+   {
+    "c": "70096092",
+    "v": "LGESGM.생산기획2팀"
+   },
+   {
+    "c": "70096097",
+    "v": "LGESGM.전극/Cell기술.조립공정기술팀"
+   },
+   {
+    "c": "70188777",
+    "v": "LGESHD.생산기획팀"
+   },
+   {
+    "c": "70618963",
+    "v": "LGESHM.영업P"
+   },
+   {
+    "c": "58668905",
+    "v": "LGESMI.PM P"
+   },
+   {
+    "c": "70340720",
+    "v": "LGESMI.신규수주팀"
+   },
+   {
+    "c": "58601187",
+    "v": "LGESNB.Cell담당"
+   },
+   {
+    "c": "71068932",
+    "v": "LGESNP.전략/시너지.기획팀"
+   },
+   {
+    "c": "70563210",
+    "v": "LGESOT.생산기획팀(Sales P)"
+   },
+   {
+    "c": "71060704",
+    "v": "LGESVT.GI&Operation.배터리PE팀"
+   },
+   {
+    "c": "70262366",
+    "v": "LGESVT.Marketing.북미영업팀"
+   },
+   {
+    "c": "70618880",
+    "v": "LGESVT.Marketing.수주관리팀"
+   },
+   {
+    "c": "70043760",
+    "v": "LGESVT.경영기획팀"
+   },
+   {
+    "c": "70016324",
+    "v": "LGESWA.Cell/Module.Module Tech.Module Product Tech Team"
+   },
+   {
+    "c": "71060723",
+    "v": "LGESWA.PGE TFT"
+   },
+   {
+    "c": "71064451",
+    "v": "LGESWA.PGE TFT.Sales P"
+   },
+   {
+    "c": "70006181",
+    "v": "LGESWA.PM Team"
+   },
+   {
+    "c": "58670816",
+    "v": "LGESWA.Production Planning Team"
+   },
+   {
+    "c": "70006180",
+    "v": "LGESWA.Sales Team"
+   },
+   {
+    "c": "70087293",
+    "v": "MI전략팀"
+   },
+   {
+    "c": "30234912",
+    "v": "New Business T"
+   },
+   {
+    "c": "70188791",
+    "v": "Quality Solution.분석.분석시너지팀"
+   },
+   {
+    "c": "30426977",
+    "v": "Sales Part"
+   },
+   {
+    "c": "30338000",
+    "v": "Sales T.Global Service P"
+   },
+   {
+    "c": "30277380",
+    "v": "Sales T.Porsche/BMW P"
+   },
+   {
+    "c": "30303316",
+    "v": "Sales T.VW/Audi P"
+   },
+   {
+    "c": "70094913",
+    "v": "Staff인사지원팀"
+   },
+   {
+    "c": "30339338",
+    "v": "Technology Planning Team"
+   },
+   {
+    "c": "58175940",
+    "v": "경영전략1팀"
+   },
+   {
+    "c": "70318553",
+    "v": "경쟁력혁신1팀"
+   },
+   {
+    "c": "58570422",
+    "v": "고객품질.ESS.ESS CS운영팀"
+   },
+   {
+    "c": "58560563",
+    "v": "고객품질.ESS.ESS아시아CS팀"
+   },
+   {
+    "c": "58281283",
+    "v": "고객품질.ESS.ESS유럽CS팀"
+   },
+   {
+    "c": "50070352",
+    "v": "고객품질.북미/아시아.소형CS팀"
+   },
+   {
+    "c": "58691357",
+    "v": "고객품질.북미/아시아고객품질담당"
+   },
+   {
+    "c": "50003801",
+    "v": "고무／특수수지.여수.Latex생산팀"
+   },
+   {
+    "c": "58570429",
+    "v": "구매.Cell소재구매.분리막구매팀"
+   },
+   {
+    "c": "58611552",
+    "v": "구매.Cell소재구매.음극재구매팀"
+   },
+   {
+    "c": "70021367",
+    "v": "구매.Pack부품구매.BMS구매팀"
+   },
+   {
+    "c": "58691646",
+    "v": "구매.메탈사업.Recycle Sourcing팀"
+   },
+   {
+    "c": "70006103",
+    "v": "구매.메탈사업.메탈사업팀"
+   },
+   {
+    "c": "70294006",
+    "v": "구매.양극재구매.양극재구매2팀"
+   },
+   {
+    "c": "70294007",
+    "v": "구매.양극재구매.양극재구매3팀"
+   },
+   {
+    "c": "70064927",
+    "v": "구매.자재.자재혁신팀"
+   },
+   {
+    "c": "70315125",
+    "v": "구매.중국구매.중국개발구매팀"
+   },
+   {
+    "c": "58690145",
+    "v": "대외협력팀"
+   },
+   {
+    "c": "70012019",
+    "v": "디지털커뮤니케이션팀"
+   },
+   {
+    "c": "70012018",
+    "v": "마케팅커뮤니케이션팀"
+   },
+   {
+    "c": "58313950",
+    "v": "물류기획팀"
+   },
+   {
+    "c": "70618930",
+    "v": "사업개발1팀"
+   },
+   {
+    "c": "70090876",
+    "v": "생산기술혁신.Pack기술.소형Pack.소형Pack설비기술팀"
+   },
+   {
+    "c": "71060747",
+    "v": "생산기술혁신.파우치/각형.설비.각형활성화설비기술팀"
+   },
+   {
+    "c": "71068121",
+    "v": "생산기획.외주생산관리팀(파크원)"
+   },
+   {
+    "c": "71067310",
+    "v": "소형.PM.PM1팀"
+   },
+   {
+    "c": "70000479",
+    "v": "소형.PM.PM3팀"
+   },
+   {
+    "c": "71065630",
+    "v": "소형.PM.PM4팀"
+   },
+   {
+    "c": "58520276",
+    "v": "소형.SCM.SCM최적화팀"
+   },
+   {
+    "c": "70090866",
+    "v": "소형.마케팅.FT.FT1팀"
+   },
+   {
+    "c": "58124984",
+    "v": "소형.마케팅.미주/유럽.미주팀"
+   },
+   {
+    "c": "58260040",
+    "v": "소형.마케팅.미주/유럽.유럽1팀"
+   },
+   {
+    "c": "70090867",
+    "v": "소형.마케팅.미주/유럽.유럽2팀"
+   },
+   {
+    "c": "58099468",
+    "v": "소형.마케팅.신시장.신시장1팀"
+   },
+   {
+    "c": "58666055",
+    "v": "소형.마케팅.신시장.신시장2팀"
+   },
+   {
+    "c": "70618872",
+    "v": "소형.마케팅.신시장.신시장3팀"
+   },
+   {
+    "c": "71060790",
+    "v": "소형.마케팅.아시아1.신사업P"
+   },
+   {
+    "c": "58520274",
+    "v": "소형.마케팅.아시아1.아시아1팀"
+   },
+   {
+    "c": "70021343",
+    "v": "소형.마케팅.아시아1.아시아2팀"
+   },
+   {
+    "c": "70318556",
+    "v": "소형.마케팅.아시아2.BSS솔루션사업팀"
+   },
+   {
+    "c": "70000478",
+    "v": "소형.마케팅.아시아2.인도/동남아팀"
+   },
+   {
+    "c": "70267799",
+    "v": "소형.마케팅.아시아2.일본팀"
+   },
+   {
+    "c": "70174158",
+    "v": "소형.상품기획/전략.KooRoo사업팀"
+   },
+   {
+    "c": "70045174",
+    "v": "소형.상품기획/전략.사업전략팀"
+   },
+   {
+    "c": "58427750",
+    "v": "소형.상품기획/전략.상품기획1팀"
+   },
+   {
+    "c": "LESIB",
+    "v": "업무용"
+   },
+   {
+    "c": "70055761",
+    "v": "업무혁신.ERP.영업/서비스PI팀"
+   },
+   {
+    "c": "58183091",
+    "v": "업무혁신.SCM PI.공급/생산SCM PI팀"
+   },
+   {
+    "c": "70010540",
+    "v": "업무혁신.SCM PI.물류SCM PI팀"
+   },
+   {
+    "c": "70021361",
+    "v": "유럽/기후정책팀"
+   },
+   {
+    "c": "58691649",
+    "v": "윤리사무국"
+   },
+   {
+    "c": "70021329",
+    "v": "자동차.PM.PMO팀"
+   },
+   {
+    "c": "71021208",
+    "v": "자동차.PM.미주PM.Ford PM팀"
+   },
+   {
+    "c": "70021330",
+    "v": "자동차.PM.미주PM.GM PM팀"
+   },
+   {
+    "c": "58410080",
+    "v": "자동차.PM.미주PM.Stellantis PM팀"
+   },
+   {
+    "c": "71060742",
+    "v": "자동차.PM.미주PM.수주PM팀"
+   },
+   {
+    "c": "70448133",
+    "v": "자동차.PM.아시아PM.Toyota PM팀"
+   },
+   {
+    "c": "70021336",
+    "v": "자동차.PM.유럽PM.Porsche PM팀"
+   },
+   {
+    "c": "70021331",
+    "v": "자동차.PM.유럽PM.Renault PM팀"
+   },
+   {
+    "c": "70000346",
+    "v": "자동차.PM.유럽PM.독일PM팀"
+   },
+   {
+    "c": "58558163",
+    "v": "자동차.PM.유럽PM1.Volvo PM팀"
+   },
+   {
+    "c": "70157544",
+    "v": "자동차.SCM.SCM최적화팀"
+   },
+   {
+    "c": "70490156",
+    "v": "자동차.개발.각형.각형개발기획팀"
+   },
+   {
+    "c": "71021889",
+    "v": "자동차.개발.유럽.유럽/미주Pack제품시험검증팀(서초)"
+   },
+   {
+    "c": "70055754",
+    "v": "자동차.마케팅.OTS.OTS1팀"
+   },
+   {
+    "c": "70055755",
+    "v": "자동차.마케팅.OTS.OTS2팀"
+   },
+   {
+    "c": "58127819",
+    "v": "자동차.마케팅.마케팅1.미주마케팅1팀"
+   },
+   {
+    "c": "70021298",
+    "v": "자동차.마케팅.마케팅1.미주마케팅2팀"
+   },
+   {
+    "c": "71060741",
+    "v": "자동차.마케팅.마케팅1.신시장마케팅팀"
+   },
+   {
+    "c": "70000342",
+    "v": "자동차.마케팅.마케팅2.AS마케팅팀"
+   },
+   {
+    "c": "58183074",
+    "v": "자동차.마케팅.마케팅2.유럽마케팅1팀"
+   },
+   {
+    "c": "70618869",
+    "v": "자동차.마케팅.마케팅2.한국마케팅1팀"
+   },
+   {
+    "c": "58124293",
+    "v": "자동차.마케팅.마케팅2.한국마케팅2팀"
+   },
+   {
+    "c": "70000347",
+    "v": "자동차.마케팅.마케팅3.독일마케팅1팀"
+   },
+   {
+    "c": "70000345",
+    "v": "자동차.마케팅.마케팅3.독일마케팅2팀"
+   },
+   {
+    "c": "58665469",
+    "v": "자동차.마케팅.마케팅4.Stellantis1팀"
+   },
+   {
+    "c": "58611459",
+    "v": "자동차.마케팅.마케팅4.유럽마케팅2팀"
+   },
+   {
+    "c": "70094904",
+    "v": "자동차.마케팅.마케팅4.일본마케팅1팀"
+   },
+   {
+    "c": "70618870",
+    "v": "자동차.마케팅.마케팅4.일본마케팅2팀"
+   },
+   {
+    "c": "58148696",
+    "v": "자동차.마케팅.유럽1.Volvo팀"
+   },
+   {
+    "c": "58520303",
+    "v": "자동차.마케팅3.중국사업팀"
+   },
+   {
+    "c": "58684913",
+    "v": "자동차.사업전략.EV솔루션사업팀"
+   },
+   {
+    "c": "70094901",
+    "v": "자동차.사업전략.MI전략팀"
+   },
+   {
+    "c": "58665465",
+    "v": "자동차.사업전략.사업전략팀"
+   },
+   {
+    "c": "70014187",
+    "v": "자동차.사업전략.전략제휴1팀"
+   },
+   {
+    "c": "70094998",
+    "v": "자동차.사업전략.전략제휴팀"
+   },
+   {
+    "c": "58297422",
+    "v": "자동차.상품기획.상품기획1팀"
+   },
+   {
+    "c": "70000343",
+    "v": "자동차.상품기획.상품기획2팀"
+   },
+   {
+    "c": "71060792",
+    "v": "자동차.상품기획.수주원가경쟁력강화TFT"
+   },
+   {
+    "c": "70021348",
+    "v": "자동차전지비용분석팀"
+   },
+   {
+    "c": "58691630",
+    "v": "자동차전지원가관리팀"
+   },
+   {
+    "c": "71060749",
+    "v": "전략커뮤니케이션P"
+   },
+   {
+    "c": "70055766",
+    "v": "조직문화팀"
+   },
+   {
+    "c": "71072193",
+    "v": "중국R&D.기획P"
+   },
+   {
+    "c": "70618964",
+    "v": "중국전략기획팀"
+   },
+   {
+    "c": "71061668",
+    "v": "중국지역Group,중국경영관리담당,물류T,대형전지물류1Part"
+   },
+   {
+    "c": "70265667",
+    "v": "직무역량개발팀"
+   },
+   {
+    "c": "58690148",
+    "v": "커뮤니케이션팀"
+   },
+   {
+    "c": "70090872",
+    "v": "품질경영.Pack양산품질.ESS Pack QA팀"
+   },
+   {
+    "c": "70021357",
+    "v": "해외커뮤니케이션팀"
+   }
+  ],
+  "{\"comboId\":\"SalesSite\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "A002-40-AS",
+    "v": "A002_40-W"
+   },
+   {
+    "c": "HQ05-40-AS",
+    "v": "HQ05_40-W"
+   },
+   {
+    "c": "Sunwoda_CN_SZX",
+    "v": "Sunwoda_CN_SZX"
+   },
+   {
+    "c": "LGE_KR_PTK",
+    "v": "LGE_KR_PTK"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "BYD Electronics_CN_SZX",
+    "v": "BYD Electronics_CN_SZX"
+   },
+   {
+    "c": "Desay_CN_HUI",
+    "v": "Desay_CN_HUI"
+   },
+   {
+    "c": "Desay_CN_XIY",
+    "v": "Desay_CN_XIY"
+   },
+   {
+    "c": "Dynapack_CN_WJA",
+    "v": "Dynapack_CN_WJA"
+   },
+   {
+    "c": "Dynapack_TW_TYN",
+    "v": "Dynapack_TW_TYN"
+   },
+   {
+    "c": "Foxlink_CN_DGG",
+    "v": "Foxlink_CN_DGG"
+   },
+   {
+    "c": "Goertek Inc._CN_WFG",
+    "v": "Goertek Inc._CN_WFG"
+   },
+   {
+    "c": "Goertek Inc._VN_BNH",
+    "v": "Goertek Inc._VN_BNH"
+   },
+   {
+    "c": "Hongfujin Chengdu_CN_CTU",
+    "v": "Hongfujin Chengdu_CN_CTU"
+   },
+   {
+    "c": "Huapu_CN_CGU",
+    "v": "Huapu_CN_CGU"
+   },
+   {
+    "c": "Inventec_CN_SHA",
+    "v": "Inventec_CN_SHA"
+   },
+   {
+    "c": "Inventec_TW_TPE",
+    "v": "Inventec_TW_TPE"
+   },
+   {
+    "c": "Luxshare Electronic_CN_KUS",
+    "v": "Luxshare Electronic_CN_KUS"
+   },
+   {
+    "c": "Luxshare Precision_CN_JNX",
+    "v": "Luxshare Precision_CN_JNX"
+   },
+   {
+    "c": "Luxshare Precision_CN_KUS",
+    "v": "Luxshare Precision_CN_KUS"
+   },
+   {
+    "c": "Luxshare Precision_VN_BGG",
+    "v": "Luxshare Precision_VN_BGG"
+   },
+   {
+    "c": "Luxshare Technology_CN_JAN",
+    "v": "Luxshare Technology_CN_JAN"
+   },
+   {
+    "c": "NT Computer_CN_CGU",
+    "v": "NT Computer_CN_CGU"
+   },
+   {
+    "c": "NT Computer_TW_HSZ",
+    "v": "NT Computer_TW_HSZ"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_DGG",
+    "v": "NT_CN_DGG"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_SZX",
+    "v": "NT_CN_SZX"
+   },
+   {
+    "c": "NT_CN_WJA",
+    "v": "NT_CN_WJA"
+   },
+   {
+    "c": "NT_TW_HSZ",
+    "v": "NT_TW_HSZ"
+   },
+   {
+    "c": "NT_US_CUO",
+    "v": "NT_US_CUO"
+   },
+   {
+    "c": "NT_VN_BGG",
+    "v": "NT_VN_BGG"
+   },
+   {
+    "c": "NVT_CN_DGG",
+    "v": "NVT_CN_DGG"
+   },
+   {
+    "c": "NVT_HK_HKG",
+    "v": "NVT_HK_HKG"
+   },
+   {
+    "c": "Salcomp PIC_BR_MAO",
+    "v": "Salcomp PIC_BR_MAO"
+   },
+   {
+    "c": "Salcomp PIC_FI_SAL",
+    "v": "Salcomp PIC_FI_SAL"
+   },
+   {
+    "c": "Simplo(CN)_CN_CGU",
+    "v": "Simplo(CN)_CN_CGU"
+   },
+   {
+    "c": "Simplo_CN_CGU",
+    "v": "Simplo_CN_CGU"
+   },
+   {
+    "c": "Simplo_TW_HSZ",
+    "v": "Simplo_TW_HSZ"
+   },
+   {
+    "c": "Sunwoda_CN_SZX",
+    "v": "Sunwoda_CN_SZX"
+   },
+   {
+    "c": "Sunwoda_India_IN_NDA",
+    "v": "Sunwoda_India_IN_NDA"
+   },
+   {
+    "c": "Xiexun Electronic_CN_JAN",
+    "v": "Xiexun Electronic_CN_JAN"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_SZX",
+    "v": "NT_CN_SZX"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "Goertek Inc._VN_BNH",
+    "v": "Goertek Inc._VN_BNH"
+   },
+   {
+    "c": "Goertek Inc._VN_BNH",
+    "v": "Goertek Inc._VN_BNH"
+   },
+   {
+    "c": "Goertek Inc._VN_BNH",
+    "v": "Goertek Inc._VN_BNH"
+   },
+   {
+    "c": "Goertek Inc._VN_BNH",
+    "v": "Goertek Inc._VN_BNH"
+   },
+   {
+    "c": "Sunwoda_CN_SZX",
+    "v": "Sunwoda_CN_SZX"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_SZX",
+    "v": "NT_CN_SZX"
+   },
+   {
+    "c": "NT_CN_SZX",
+    "v": "NT_CN_SZX"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_SZX",
+    "v": "NT_CN_SZX"
+   },
+   {
+    "c": "NT_CN_SZX",
+    "v": "NT_CN_SZX"
+   },
+   {
+    "c": "NT_CN_SZX",
+    "v": "NT_CN_SZX"
+   },
+   {
+    "c": "NT_CN_SZX",
+    "v": "NT_CN_SZX"
+   },
+   {
+    "c": "NT_CN_SZX",
+    "v": "NT_CN_SZX"
+   },
+   {
+    "c": "Goertek Inc._VN_BNH",
+    "v": "Goertek Inc._VN_BNH"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_US_CUO",
+    "v": "NT_US_CUO"
+   },
+   {
+    "c": "NT_CN_DGG",
+    "v": "NT_CN_DGG"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_DGG",
+    "v": "NT_CN_DGG"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "NT_CN_CGU",
+    "v": "NT_CN_CGU"
+   },
+   {
+    "c": "NT_CN_HUI",
+    "v": "NT_CN_HUI"
+   },
+   {
+    "c": "OP Mobility_US_EKI",
+    "v": "OP Mobility_US_EKI"
+   },
+   {
+    "c": "OP Mobility_FR_QVQ",
+    "v": "OP Mobility_FR_QVQ"
+   },
+   {
+    "c": "OP Mobility_US_EKI",
+    "v": "OP Mobility_US_EKI"
+   },
+   {
+    "c": "Sunwoda_CN_SZX",
+    "v": "Sunwoda_CN_SZX"
+   },
+   {
+    "c": "Amazon Robotics_US_NRG",
+    "v": "Amazon Robotics_US_NRG"
+   },
+   {
+    "c": "Amazon_US_SEA",
+    "v": "Amazon_US_SEA"
+   },
+   {
+    "c": "Arcimoto_US_EUG",
+    "v": "Arcimoto_US_EUG"
+   },
+   {
+    "c": "Aurora Flight_US_CHN",
+    "v": "Aurora Flight_US_CHN"
+   },
+   {
+    "c": "Aurora Flight_US_VAB",
+    "v": "Aurora Flight_US_VAB"
+   },
+   {
+    "c": "B2B_US_JMH",
+    "v": "B2B_US_JMH"
+   },
+   {
+    "c": "Canoo_US_TOA",
+    "v": "Canoo_US_TOA"
+   },
+   {
+    "c": "Damon Motors_CA_VAN",
+    "v": "Damon Motors_CA_VAN"
+   },
+   {
+    "c": "Damon Motors_US_PUM",
+    "v": "Damon Motors_US_PUM"
+   },
+   {
+    "c": "Faraday&Future_US_CPM",
+    "v": "Faraday&Future_US_CPM"
+   },
+   {
+    "c": "Faraday&Future_US_GAC",
+    "v": "Faraday&Future_US_GAC"
+   },
+   {
+    "c": "Ford_CN_NJG",
+    "v": "Ford_CN_NJG"
+   },
+   {
+    "c": "Ford_DE_222",
+    "v": "Ford_DE_222"
+   },
+   {
+    "c": "Ford_US_DEO",
+    "v": "Ford_US_DEO"
+   },
+   {
+    "c": "Ford_US_LVI",
+    "v": "Ford_US_LVI"
+   },
+   {
+    "c": "Ford_US_ROU",
+    "v": "Ford_US_ROU"
+   },
+   {
+    "c": "Ford_DE_222",
+    "v": "Ford_DE_222"
+   },
+   {
+    "c": "Ford_US_LVI",
+    "v": "Ford_US_LVI"
+   },
+   {
+    "c": "GM_US_DET",
+    "v": "GM_US_DET"
+   },
+   {
+    "c": "Harley Davidson_US_MKE",
+    "v": "Harley Davidson_US_MKE"
+   },
+   {
+    "c": "Harley Davidson_US_NUQ",
+    "v": "Harley Davidson_US_NUQ"
+   },
+   {
+    "c": "Lordstown_MY_KLM",
+    "v": "Lordstown_MY_KLM"
+   },
+   {
+    "c": "Lordstown_US_WRN",
+    "v": "Lordstown_US_WRN"
+   },
+   {
+    "c": "Lucid Motors_US_FNC",
+    "v": "Lucid Motors_US_FNC"
+   },
+   {
+    "c": "Lucid Motors_US_HLM",
+    "v": "Lucid Motors_US_HLM"
+   },
+   {
+    "c": "Lucid Motors_US_NKQ",
+    "v": "Lucid Motors_US_NKQ"
+   },
+   {
+    "c": "Lucid Motors_US_OGD",
+    "v": "Lucid Motors_US_OGD"
+   },
+   {
+    "c": "Lucid Motors_US_PAO",
+    "v": "Lucid Motors_US_PAO"
+   },
+   {
+    "c": "Lucid Motors_US_TPE",
+    "v": "Lucid Motors_US_TPE"
+   },
+   {
+    "c": "Lucid Motors_US_NKQ",
+    "v": "Lucid Motors_US_NKQ"
+   },
+   {
+    "c": "Lucid Motors_US_TPE",
+    "v": "Lucid Motors_US_TPE"
+   },
+   {
+    "c": "Powerglobal_US_PSD",
+    "v": "Powerglobal_US_PSD"
+   },
+   {
+    "c": "Rivian Automotive_US_IVN",
+    "v": "Rivian Automotive_US_IVN"
+   },
+   {
+    "c": "Rivian Automotive_US_LVI",
+    "v": "Rivian Automotive_US_LVI"
+   },
+   {
+    "c": "Rivian Automotive_US_TUN",
+    "v": "Rivian Automotive_US_TUN"
+   },
+   {
+    "c": "Rivian Automotive_US_LVI",
+    "v": "Rivian Automotive_US_LVI"
+   },
+   {
+    "c": "Rivian Automotive_US_TUN",
+    "v": "Rivian Automotive_US_TUN"
+   },
+   {
+    "c": "Romeo Power_US_CYQ",
+    "v": "Romeo Power_US_CYQ"
+   },
+   {
+    "c": "Romeo Power_US_SMO",
+    "v": "Romeo Power_US_SMO"
+   },
+   {
+    "c": "Stark Future_ES_BCN",
+    "v": "Stark Future_ES_BCN"
+   },
+   {
+    "c": "Anjin_AA_TES",
+    "v": "Anjin_AA_TES"
+   },
+   {
+    "c": "Airbus_FR_SCY",
+    "v": "Airbus_FR_SCY"
+   },
+   {
+    "c": "Akasol Inc_US_HZP",
+    "v": "Akasol Inc_US_HZP"
+   },
+   {
+    "c": "Akasol_DE_DAR",
+    "v": "Akasol_DE_DAR"
+   },
+   {
+    "c": "BorgWarner Akasol_DE_DAR",
+    "v": "BorgWarner Akasol_DE_DAR"
+   },
+   {
+    "c": "Akku_DE_SDF",
+    "v": "Akku_DE_SDF"
+   },
+   {
+    "c": "JJ Solstice_DE_ESC",
+    "v": "JJ Solstice_DE_ESC"
+   },
+   {
+    "c": "JJ Solstice_DE_FRA",
+    "v": "JJ Solstice_DE_FRA"
+   },
+   {
+    "c": "Ansmann_CN_HUI",
+    "v": "Ansmann_CN_HUI"
+   },
+   {
+    "c": "Ansmann_DE_ASA",
+    "v": "Ansmann_DE_ASA"
+   },
+   {
+    "c": "Ansmann_HK_HKG",
+    "v": "Ansmann_HK_HKG"
+   },
+   {
+    "c": "Askoll_IT_DUV",
+    "v": "Askoll_IT_DUV"
+   },
+   {
+    "c": "Atex_IT_SVT",
+    "v": "Atex_IT_SVT"
+   },
+   {
+    "c": "Audi_DE_ING",
+    "v": "Audi_DE_ING"
+   },
+   {
+    "c": "Avant Tecno_FI_YJA",
+    "v": "Avant Tecno_FI_YJA"
+   },
+   {
+    "c": "BK Energy_HK_HKG",
+    "v": "BK Energy_HK_HKG"
+   },
+   {
+    "c": "Blueway Energy_CN_HUI",
+    "v": "Blueway Energy_CN_HUI"
+   },
+   {
+    "c": "Blueway Energy_CN_HUI",
+    "v": "Blueway Energy_CN_HUI"
+   },
+   {
+    "c": "BMZ_DE_FRA",
+    "v": "BMZ_DE_FRA"
+   },
+   {
+    "c": "BMZ_DE_KSN",
+    "v": "BMZ_DE_KSN"
+   },
+   {
+    "c": "BMZ_HK_HKG",
+    "v": "BMZ_HK_HKG"
+   },
+   {
+    "c": "BMZ_HK_KWN",
+    "v": "BMZ_HK_KWN"
+   },
+   {
+    "c": "BMZ_JP_MST",
+    "v": "BMZ_JP_MST"
+   },
+   {
+    "c": "BMZ_PL_GWC",
+    "v": "BMZ_PL_GWC"
+   },
+   {
+    "c": "BMZ_US_VAB",
+    "v": "BMZ_US_VAB"
+   },
+   {
+    "c": "BMZ_DE_KSN",
+    "v": "BMZ_DE_KSN"
+   },
+   {
+    "c": "BMZ_HK_HKG",
+    "v": "BMZ_HK_HKG"
+   },
+   {
+    "c": "BMZ_JP_MST",
+    "v": "BMZ_JP_MST"
+   },
+   {
+    "c": "BMZ_PL_GWC",
+    "v": "BMZ_PL_GWC"
+   },
+   {
+    "c": "BMZ-1_US_VAB",
+    "v": "BMZ-1_US_VAB"
+   },
+   {
+    "c": "BMZ_DE_KSN",
+    "v": "BMZ_DE_KSN"
+   },
+   {
+    "c": "BMZ_HK_HKG",
+    "v": "BMZ_HK_HKG"
+   },
+   {
+    "c": "BMZ_HK_HKN",
+    "v": "BMZ_HK_HKN"
+   },
+   {
+    "c": "BMZ_PL_GWC",
+    "v": "BMZ_PL_GWC"
+   },
+   {
+    "c": "BMZ_US_VAB",
+    "v": "BMZ_US_VAB"
+   },
+   {
+    "c": "BMZ-1_US_VAB",
+    "v": "BMZ-1_US_VAB"
+   },
+   {
+    "c": "BMZ_DE_KSN",
+    "v": "BMZ_DE_KSN"
+   },
+   {
+    "c": "BMZ_HK_HKG",
+    "v": "BMZ_HK_HKG"
+   },
+   {
+    "c": "BMZ_PL_GWC",
+    "v": "BMZ_PL_GWC"
+   },
+   {
+    "c": "BMZ_US_VAB",
+    "v": "BMZ_US_VAB"
+   },
+   {
+    "c": "BMZ_CN_SZX",
+    "v": "BMZ_CN_SZX"
+   },
+   {
+    "c": "BMZ_DE_KSN",
+    "v": "BMZ_DE_KSN"
+   },
+   {
+    "c": "BMZ_HK_HKG",
+    "v": "BMZ_HK_HKG"
+   },
+   {
+    "c": "BMZ_HK_HKN",
+    "v": "BMZ_HK_HKN"
+   },
+   {
+    "c": "BMZ_HK_KWN",
+    "v": "BMZ_HK_KWN"
+   },
+   {
+    "c": "BMZ_JP_MST",
+    "v": "BMZ_JP_MST"
+   },
+   {
+    "c": "BMZ_MK_SKO",
+    "v": "BMZ_MK_SKO"
+   },
+   {
+    "c": "BMZ_MK_SKP",
+    "v": "BMZ_MK_SKP"
+   },
+   {
+    "c": "BMZ_PL_GWC",
+    "v": "BMZ_PL_GWC"
+   },
+   {
+    "c": "Vestel_TR_IST",
+    "v": "Vestel_TR_IST"
+   },
+   {
+    "c": "BMZ-1_US_VAB",
+    "v": "BMZ-1_US_VAB"
+   },
+   {
+    "c": "BMZ_DE_KSN",
+    "v": "BMZ_DE_KSN"
+   },
+   {
+    "c": "BMZ_HK_HKG",
+    "v": "BMZ_HK_HKG"
+   },
+   {
+    "c": "BMZ_PL_GWC",
+    "v": "BMZ_PL_GWC"
+   },
+   {
+    "c": "BMZ_US_VAB",
+    "v": "BMZ_US_VAB"
+   },
+   {
+    "c": "BMZ_DE_KSN",
+    "v": "BMZ_DE_KSN"
+   },
+   {
+    "c": "BMZ_HK_HKG",
+    "v": "BMZ_HK_HKG"
+   },
+   {
+    "c": "BMZ_PL_GWC",
+    "v": "BMZ_PL_GWC"
+   },
+   {
+    "c": "BMZ_DE_KSN",
+    "v": "BMZ_DE_KSN"
+   },
+   {
+    "c": "BMZ_HK_HKG",
+    "v": "BMZ_HK_HKG"
+   },
+   {
+    "c": "BMZ_HK_HKN",
+    "v": "BMZ_HK_HKN"
+   },
+   {
+    "c": "BMZ_PL_GWC",
+    "v": "BMZ_PL_GWC"
+   },
+   {
+    "c": "Bosch Mcp_CN_SHA",
+    "v": "Bosch Mcp_CN_SHA"
+   },
+   {
+    "c": "Bosch Mcp_DE_BRE",
+    "v": "Bosch Mcp_DE_BRE"
+   },
+   {
+    "c": "Bosch Mcp_HU_MCQ",
+    "v": "Bosch Mcp_HU_MCQ"
+   },
+   {
+    "c": "Bosch PgP_MY_BLE",
+    "v": "Bosch PgP_MY_BLE"
+   },
+   {
+    "c": "EMBS_PL_GWC",
+    "v": "EMBS_PL_GWC"
+   },
+   {
+    "c": "JMBS_PL_GWC",
+    "v": "JMBS_PL_GWC"
+   },
+   {
+    "c": "Bosch Mcp_HU_MCQ",
+    "v": "Bosch Mcp_HU_MCQ"
+   },
+   {
+    "c": "Cleantron_NL_NVP",
+    "v": "Cleantron_NL_NVP"
+   },
+   {
+    "c": "Akasol Inc_US_HZP",
+    "v": "Akasol Inc_US_HZP"
+   },
+   {
+    "c": "Cummins_GB_MIK",
+    "v": "Cummins_GB_MIK"
+   },
+   {
+    "c": "DAFTRUCKS N.V._NL_EIN",
+    "v": "DAFTRUCKS N.V._NL_EIN"
+   },
+   {
+    "c": "Akasol Inc_US_HZP",
+    "v": "Akasol Inc_US_HZP"
+   },
+   {
+    "c": "BorgWarner Akasol_DE_DAR",
+    "v": "BorgWarner Akasol_DE_DAR"
+   },
+   {
+    "c": "Desay_CN_HUI",
+    "v": "Desay_CN_HUI"
+   },
+   {
+    "c": "DTAG_DE_STR",
+    "v": "DTAG_DE_STR"
+   },
+   {
+    "c": "DTAG_US_AAD",
+    "v": "DTAG_US_AAD"
+   },
+   {
+    "c": "DTAG_US_AAO",
+    "v": "DTAG_US_AAO"
+   },
+   {
+    "c": "ATA Industrial_MY_JHB",
+    "v": "ATA Industrial_MY_JHB"
+   },
+   {
+    "c": "Dyson_GB_MMB",
+    "v": "Dyson_GB_MMB"
+   },
+   {
+    "c": "Dyson_MY_JHB",
+    "v": "Dyson_MY_JHB"
+   },
+   {
+    "c": "Dyson_PH_NGT",
+    "v": "Dyson_PH_NGT"
+   },
+   {
+    "c": "Flex Ltd._MY_PGU",
+    "v": "Flex Ltd._MY_PGU"
+   },
+   {
+    "c": "Flex Ltd._SG_SIN",
+    "v": "Flex Ltd._SG_SIN"
+   },
+   {
+    "c": "Flextronics_MY_JHB",
+    "v": "Flextronics_MY_JHB"
+   },
+   {
+    "c": "Kinpo Electronics_PH_BTG",
+    "v": "Kinpo Electronics_PH_BTG"
+   },
+   {
+    "c": "Microtronics_MY_JHB",
+    "v": "Microtronics_MY_JHB"
+   },
+   {
+    "c": "V.S. Industry_MY_SEI",
+    "v": "V.S. Industry_MY_SEI"
+   },
+   {
+    "c": "VS Electronics_MY_SEI",
+    "v": "VS Electronics_MY_SEI"
+   },
+   {
+    "c": "Ecocoach_CH_BRU",
+    "v": "Ecocoach_CH_BRU"
+   },
+   {
+    "c": "Chunju_CN_SUZ",
+    "v": "Chunju_CN_SUZ"
+   },
+   {
+    "c": "Electrolux_HU_JAS",
+    "v": "Electrolux_HU_JAS"
+   },
+   {
+    "c": "Huapu_CN_CGU",
+    "v": "Huapu_CN_CGU"
+   },
+   {
+    "c": "Kingclean_CN_SUZ",
+    "v": "Kingclean_CN_SUZ"
+   },
+   {
+    "c": "Kwonnie_CN_DGG",
+    "v": "Kwonnie_CN_DGG"
+   },
+   {
+    "c": "Kwonnie_HK_HKG",
+    "v": "Kwonnie_HK_HKG"
+   },
+   {
+    "c": "Simplo_CN_CGU",
+    "v": "Simplo_CN_CGU"
+   },
+   {
+    "c": "Skypower_TW_TPE",
+    "v": "Skypower_TW_TPE"
+   },
+   {
+    "c": "Videoton_BG_KAT",
+    "v": "Videoton_BG_KAT"
+   },
+   {
+    "c": "Videoton_BG_KVN",
+    "v": "Videoton_BG_KVN"
+   },
+   {
+    "c": "Videoton_BG_SZR",
+    "v": "Videoton_BG_SZR"
+   },
+   {
+    "c": "eleo_tech_NL_HLM",
+    "v": "eleo_tech_NL_HLM"
+   },
+   {
+    "c": "Elring Klinger AG_DE_DTG",
+    "v": "Elring Klinger AG_DE_DTG"
+   },
+   {
+    "c": "EMBS_PL_GWC",
+    "v": "EMBS_PL_GWC"
+   },
+   {
+    "c": "EMI_FR_BKR",
+    "v": "EMI_FR_BKR"
+   },
+   {
+    "c": "IBS_FR_BKR",
+    "v": "IBS_FR_BKR"
+   },
+   {
+    "c": "Ferrari_IT_MAR",
+    "v": "Ferrari_IT_MAR"
+   },
+   {
+    "c": "FEY_DE_HAM",
+    "v": "FEY_DE_HAM"
+   },
+   {
+    "c": "Fiberdraft_AT_FLT",
+    "v": "Fiberdraft_AT_FLT"
+   },
+   {
+    "c": "Forsee_CN_ZGA",
+    "v": "Forsee_CN_ZGA"
+   },
+   {
+    "c": "Forsee_CN_ZSN",
+    "v": "Forsee_CN_ZSN"
+   },
+   {
+    "c": "Forsee_FR_PAR",
+    "v": "Forsee_FR_PAR"
+   },
+   {
+    "c": "Forsee_FR_SCN",
+    "v": "Forsee_FR_SCN"
+   },
+   {
+    "c": "Forsee_HK_HKG",
+    "v": "Forsee_HK_HKG"
+   },
+   {
+    "c": "Forsee_IN_PNE",
+    "v": "Forsee_IN_PNE"
+   },
+   {
+    "c": "Donlim_CN_FOS",
+    "v": "Donlim_CN_FOS"
+   },
+   {
+    "c": "DRN_CN_DGG",
+    "v": "DRN_CN_DGG"
+   },
+   {
+    "c": "G-Tech_CN_DGG",
+    "v": "G-Tech_CN_DGG"
+   },
+   {
+    "c": "TWS_CN_CA0",
+    "v": "TWS_CN_CA0"
+   },
+   {
+    "c": "TWS_HK_HKG",
+    "v": "TWS_HK_HKG"
+   },
+   {
+    "c": "Akasol Inc_US_HZP",
+    "v": "Akasol Inc_US_HZP"
+   },
+   {
+    "c": "Greyp_HR_SVN",
+    "v": "Greyp_HR_SVN"
+   },
+   {
+    "c": "Hilti_DE_KAG",
+    "v": "Hilti_DE_KAG"
+   },
+   {
+    "c": "Hilti_PL_GWC",
+    "v": "Hilti_PL_GWC"
+   },
+   {
+    "c": "Hilti_SG_SIN",
+    "v": "Hilti_SG_SIN"
+   },
+   {
+    "c": "JMBS_PL_GWC",
+    "v": "JMBS_PL_GWC"
+   },
+   {
+    "c": "Pana JV_CN_SHA",
+    "v": "Pana JV_CN_SHA"
+   },
+   {
+    "c": "Husqvarna_GB_AYF",
+    "v": "Husqvarna_GB_AYF"
+   },
+   {
+    "c": "Husqvarna_PL_MLC",
+    "v": "Husqvarna_PL_MLC"
+   },
+   {
+    "c": "Husqvarna_SE_JKG",
+    "v": "Husqvarna_SE_JKG"
+   },
+   {
+    "c": "IBS_FR_BKR",
+    "v": "IBS_FR_BKR"
+   },
+   {
+    "c": "IBS_FR_BKR",
+    "v": "IBS_FR_BKR"
+   },
+   {
+    "c": "IBS_FR_BKR",
+    "v": "IBS_FR_BKR"
+   },
+   {
+    "c": "Innotech_CN_BHY",
+    "v": "Innotech_CN_BHY"
+   },
+   {
+    "c": "Fabricators_CN_QIN",
+    "v": "Fabricators_CN_QIN"
+   },
+   {
+    "c": "Invox_CN_NKG",
+    "v": "Invox_CN_NKG"
+   },
+   {
+    "c": "JJ Solstice_DE_ESC",
+    "v": "JJ Solstice_DE_ESC"
+   },
+   {
+    "c": "JJ Solstice_DE_FRA",
+    "v": "JJ Solstice_DE_FRA"
+   },
+   {
+    "c": "JJ Solstice_KR_GUN",
+    "v": "JJ Solstice_KR_GUN"
+   },
+   {
+    "c": "Totex Manufacturing_US_TOA",
+    "v": "Totex Manufacturing_US_TOA"
+   },
+   {
+    "c": "EMBS_PL_GWC",
+    "v": "EMBS_PL_GWC"
+   },
+   {
+    "c": "JMBS_PL_GWC",
+    "v": "JMBS_PL_GWC"
+   },
+   {
+    "c": "OP Mobility_FR_QVQ",
+    "v": "OP Mobility_FR_QVQ"
+   },
+   {
+    "c": "CEM S.P.A_IT_QUO",
+    "v": "CEM S.P.A_IT_QUO"
+   },
+   {
+    "c": "JMBS_PL_GWC",
+    "v": "JMBS_PL_GWC"
+   },
+   {
+    "c": "Kion_DE_KSN",
+    "v": "Kion_DE_KSN"
+   },
+   {
+    "c": "KTM AG_AT_ANF",
+    "v": "KTM AG_AT_ANF"
+   },
+   {
+    "c": "Kwonnie_CN_DGG",
+    "v": "Kwonnie_CN_DGG"
+   },
+   {
+    "c": "Kwonnie_HK_HKG",
+    "v": "Kwonnie_HK_HKG"
+   },
+   {
+    "c": "Lamborghini_IT_SBN",
+    "v": "Lamborghini_IT_SBN"
+   },
+   {
+    "c": "LGI_KR_INC",
+    "v": "LGI_KR_INC"
+   },
+   {
+    "c": "LGI_KR_SYS",
+    "v": "LGI_KR_SYS"
+   },
+   {
+    "c": "LGI_KR_INC",
+    "v": "LGI_KR_INC"
+   },
+   {
+    "c": "Longji_CN_HUI",
+    "v": "Longji_CN_HUI"
+   },
+   {
+    "c": "Masstex_HK_HKG",
+    "v": "Masstex_HK_HKG"
+   },
+   {
+    "c": "MG Energy_NL_LWR",
+    "v": "MG Energy_NL_LWR"
+   },
+   {
+    "c": "MG Energy_NL_LWR",
+    "v": "MG Energy_NL_LWR"
+   },
+   {
+    "c": "Micropower_SE_VXO",
+    "v": "Micropower_SE_VXO"
+   },
+   {
+    "c": "Millor Battery_ES_BCN",
+    "v": "Millor Battery_ES_BCN"
+   },
+   {
+    "c": "Myvelo_KR_SYS",
+    "v": "Myvelo_KR_SYS"
+   },
+   {
+    "c": "Nexcon_CN_NKG",
+    "v": "Nexcon_CN_NKG"
+   },
+   {
+    "c": "Nexcon_KR_SUO",
+    "v": "Nexcon_KR_SUO"
+   },
+   {
+    "c": "Noras_PT_LIS",
+    "v": "Noras_PT_LIS"
+   },
+   {
+    "c": "OP Mobility_FR_QVQ",
+    "v": "OP Mobility_FR_QVQ"
+   },
+   {
+    "c": "Avant Tecno_FI_YJA",
+    "v": "Avant Tecno_FI_YJA"
+   },
+   {
+    "c": "Peg-Perego_IT_ARC",
+    "v": "Peg-Perego_IT_ARC"
+   },
+   {
+    "c": "Pellenc_CN_DGG",
+    "v": "Pellenc_CN_DGG"
+   },
+   {
+    "c": "Pellenc_FR_PAR",
+    "v": "Pellenc_FR_PAR"
+   },
+   {
+    "c": "Desay_CN_HUI",
+    "v": "Desay_CN_HUI"
+   },
+   {
+    "c": "Elentec_CN_AOY",
+    "v": "Elentec_CN_AOY"
+   },
+   {
+    "c": "Elentec_CN_SHF",
+    "v": "Elentec_CN_SHF"
+   },
+   {
+    "c": "Elentec_KR_HWS",
+    "v": "Elentec_KR_HWS"
+   },
+   {
+    "c": "Flex Ltd._CN_ZUH",
+    "v": "Flex Ltd._CN_ZUH"
+   },
+   {
+    "c": "Flex Ltd._HK_HKG",
+    "v": "Flex Ltd._HK_HKG"
+   },
+   {
+    "c": "Flex Ltd._SG_SIN",
+    "v": "Flex Ltd._SG_SIN"
+   },
+   {
+    "c": "Intretech_CN_XMN",
+    "v": "Intretech_CN_XMN"
+   },
+   {
+    "c": "LGCDJ_KR_TJN",
+    "v": "LGCDJ_KR_TJN"
+   },
+   {
+    "c": "Nexcon_KR_SUO",
+    "v": "Nexcon_KR_SUO"
+   },
+   {
+    "c": "Philip Morris_HU_GYL",
+    "v": "Philip Morris_HU_GYL"
+   },
+   {
+    "c": "Tonly_HK_ZTW",
+    "v": "Tonly_HK_ZTW"
+   },
+   {
+    "c": "Venture_MY_JHB",
+    "v": "Venture_MY_JHB"
+   },
+   {
+    "c": "Venture_SG_SIN",
+    "v": "Venture_SG_SIN"
+   },
+   {
+    "c": "Flex Ltd._HK_HKG",
+    "v": "Flex Ltd._HK_HKG"
+   },
+   {
+    "c": "Donlim_CN_FOS",
+    "v": "Donlim_CN_FOS"
+   },
+   {
+    "c": "Flex Ltd._CN_ZUH",
+    "v": "Flex Ltd._CN_ZUH"
+   },
+   {
+    "c": "Flex Ltd._HK_HKG",
+    "v": "Flex Ltd._HK_HKG"
+   },
+   {
+    "c": "Flex Ltd._SG_SIN",
+    "v": "Flex Ltd._SG_SIN"
+   },
+   {
+    "c": "Flextronics_HK_HKG",
+    "v": "Flextronics_HK_HKG"
+   },
+   {
+    "c": "Giken Sakata_ID_BTM",
+    "v": "Giken Sakata_ID_BTM"
+   },
+   {
+    "c": "Giken Sakata_SG_SIN",
+    "v": "Giken Sakata_SG_SIN"
+   },
+   {
+    "c": "High Power (Icon)_HK_HKG",
+    "v": "High Power (Icon)_HK_HKG"
+   },
+   {
+    "c": "Kingclean_CN_SUZ",
+    "v": "Kingclean_CN_SUZ"
+   },
+   {
+    "c": "Totex Manufacturing_HK_HKG",
+    "v": "Totex Manufacturing_HK_HKG"
+   },
+   {
+    "c": "Rimac Automobili_HR_SVN",
+    "v": "Rimac Automobili_HR_SVN"
+   },
+   {
+    "c": "Roam_KE_EMB",
+    "v": "Roam_KE_EMB"
+   },
+   {
+    "c": "Kwonnie_HK_HKG",
+    "v": "Kwonnie_HK_HKG"
+   },
+   {
+    "c": "Rowenta_FR_VRN",
+    "v": "Rowenta_FR_VRN"
+   },
+   {
+    "c": "Runeng_CN_JHA",
+    "v": "Runeng_CN_JHA"
+   },
+   {
+    "c": "Wuxi_CN_AIN",
+    "v": "Wuxi_CN_AIN"
+   },
+   {
+    "c": "Scutum_ES_BCN",
+    "v": "Scutum_ES_BCN"
+   },
+   {
+    "c": "Scutum_ES_BCN",
+    "v": "Scutum_ES_BCN"
+   },
+   {
+    "c": "Soho_CN_NKG",
+    "v": "Soho_CN_NKG"
+   },
+   {
+    "c": "Vestel_TR_IST",
+    "v": "Vestel_TR_IST"
+   },
+   {
+    "c": "Stark Future_ES_BCN",
+    "v": "Stark Future_ES_BCN"
+   },
+   {
+    "c": "Longji_CN_HUI",
+    "v": "Longji_CN_HUI"
+   },
+   {
+    "c": "Totex Manufacturing_HK_HKG",
+    "v": "Totex Manufacturing_HK_HKG"
+   },
+   {
+    "c": "Totex Manufacturing_US_TOA",
+    "v": "Totex Manufacturing_US_TOA"
+   },
+   {
+    "c": "Toyota_SE_MJB",
+    "v": "Toyota_SE_MJB"
+   },
+   {
+    "c": "Ingeniarts_CA_QUE",
+    "v": "Ingeniarts_CA_QUE"
+   },
+   {
+    "c": "Ugowork_CA_QUE",
+    "v": "Ugowork_CA_QUE"
+   },
+   {
+    "c": "Varta RO_RO_OTP",
+    "v": "Varta RO_RO_OTP"
+   },
+   {
+    "c": "Varta-2_DE_NON",
+    "v": "Varta-2_DE_NON"
+   },
+   {
+    "c": "Varta_CN_SHA",
+    "v": "Varta_CN_SHA"
+   },
+   {
+    "c": "Varta_DE_NON",
+    "v": "Varta_DE_NON"
+   },
+   {
+    "c": "Varta RO_RO_OTP",
+    "v": "Varta RO_RO_OTP"
+   },
+   {
+    "c": "Varta-2_DE_NON",
+    "v": "Varta-2_DE_NON"
+   },
+   {
+    "c": "Varta_DE_NON",
+    "v": "Varta_DE_NON"
+   },
+   {
+    "c": "Varta RO_RO_OTP",
+    "v": "Varta RO_RO_OTP"
+   },
+   {
+    "c": "Varta-2_DE_NON",
+    "v": "Varta-2_DE_NON"
+   },
+   {
+    "c": "Varta_DE_NON",
+    "v": "Varta_DE_NON"
+   },
+   {
+    "c": "Vertical Aerospace_GB_BRS",
+    "v": "Vertical Aerospace_GB_BRS"
+   },
+   {
+    "c": "JJ Solstice_DE_FRA",
+    "v": "JJ Solstice_DE_FRA"
+   },
+   {
+    "c": "Vestel_TR_IST",
+    "v": "Vestel_TR_IST"
+   },
+   {
+    "c": "Wuxi_CN_AIN",
+    "v": "Wuxi_CN_AIN"
+   },
+   {
+    "c": "BorgWarner Akasol_DE_DAR",
+    "v": "BorgWarner Akasol_DE_DAR"
+   },
+   {
+    "c": "Volvo_SE_GOT",
+    "v": "Volvo_SE_GOT"
+   },
+   {
+    "c": "BorgWarner Akasol_DE_DAR",
+    "v": "BorgWarner Akasol_DE_DAR"
+   },
+   {
+    "c": "Blueway Energy_CN_HUI",
+    "v": "Blueway Energy_CN_HUI"
+   },
+   {
+    "c": "Vorwerk_CN_SHA",
+    "v": "Vorwerk_CN_SHA"
+   },
+   {
+    "c": "Vorwerk_DE_WUP",
+    "v": "Vorwerk_DE_WUP"
+   },
+   {
+    "c": "Arrival_GB_ZDO",
+    "v": "Arrival_GB_ZDO"
+   },
+   {
+    "c": "Webasto_DE_HGB",
+    "v": "Webasto_DE_HGB"
+   },
+   {
+    "c": "Webasto Roof_DE_SKF",
+    "v": "Webasto Roof_DE_SKF"
+   },
+   {
+    "c": "WINLIFE_ES_BCN",
+    "v": "WINLIFE_ES_BCN"
+   },
+   {
+    "c": "Longji_CN_HUI",
+    "v": "Longji_CN_HUI"
+   },
+   {
+    "c": "Runeng_CN_JHA",
+    "v": "Runeng_CN_JHA"
+   },
+   {
+    "c": "Wuxi_CN_AIN",
+    "v": "Wuxi_CN_AIN"
+   },
+   {
+    "c": "Wuxi_CN_SZH",
+    "v": "Wuxi_CN_SZH"
+   },
+   {
+    "c": "Kreisel Elec._AT_RIM",
+    "v": "Kreisel Elec._AT_RIM"
+   },
+   {
+    "c": "Xerotech_IE_GWY",
+    "v": "Xerotech_IE_GWY"
+   },
+   {
+    "c": "Younth_CN_NGB",
+    "v": "Younth_CN_NGB"
+   },
+   {
+    "c": "유럽신시장_DE_222",
+    "v": "유럽신시장_DE_222"
+   },
+   {
+    "c": "유럽신시장_DE_222",
+    "v": "유럽신시장_DE_222"
+   },
+   {
+    "c": "유럽신시장_DE_222",
+    "v": "유럽신시장_DE_222"
+   },
+   {
+    "c": "유럽신시장_DE_222",
+    "v": "유럽신시장_DE_222"
+   },
+   {
+    "c": "Acell_TW_NTC",
+    "v": "Acell_TW_NTC"
+   },
+   {
+    "c": "Acell Electronic_TW_NTC",
+    "v": "Acell Electronic_TW_NTC"
+   },
+   {
+    "c": "Greenway_CN_DGG",
+    "v": "Greenway_CN_DGG"
+   },
+   {
+    "c": "Airwheel_CN_CZX",
+    "v": "Airwheel_CN_CZX"
+   },
+   {
+    "c": "Delingxun_CN_CZX",
+    "v": "Delingxun_CN_CZX"
+   },
+   {
+    "c": "All Good Energy_HK_HKG",
+    "v": "All Good Energy_HK_HKG"
+   },
+   {
+    "c": "All Good Energy_TW_TYN",
+    "v": "All Good Energy_TW_TYN"
+   },
+   {
+    "c": "Apex_TW_TXG",
+    "v": "Apex_TW_TXG"
+   },
+   {
+    "c": "Alte_KR_SEL",
+    "v": "Alte_KR_SEL"
+   },
+   {
+    "c": "Ananda_CN_SHA",
+    "v": "Ananda_CN_SHA"
+   },
+   {
+    "c": "Ananda_CN_WUX",
+    "v": "Ananda_CN_WUX"
+   },
+   {
+    "c": "Anjin_CN_SHA",
+    "v": "Anjin_CN_SHA"
+   },
+   {
+    "c": "Aoxiang_CN_SZX",
+    "v": "Aoxiang_CN_SZX"
+   },
+   {
+    "c": "Oceanwing Anker_CN_DGG",
+    "v": "Oceanwing Anker_CN_DGG"
+   },
+   {
+    "c": "Oceanwing Anker_CN_SZX",
+    "v": "Oceanwing Anker_CN_SZX"
+   },
+   {
+    "c": "Oceanwing_CN_CSX",
+    "v": "Oceanwing_CN_CSX"
+   },
+   {
+    "c": "Oceanwing_CN_SZX",
+    "v": "Oceanwing_CN_SZX"
+   },
+   {
+    "c": "Oceanwing_VN_BGG",
+    "v": "Oceanwing_VN_BGG"
+   },
+   {
+    "c": "Ryder_CN_SZX",
+    "v": "Ryder_CN_SZX"
+   },
+   {
+    "c": "Oceanwing Anker_CN_SZX",
+    "v": "Oceanwing Anker_CN_SZX"
+   },
+   {
+    "c": "Anrui_CN_SZH",
+    "v": "Anrui_CN_SZH"
+   },
+   {
+    "c": "Apack Tech_TW_NTC",
+    "v": "Apack Tech_TW_NTC"
+   },
+   {
+    "c": "Apex_TW_TXG",
+    "v": "Apex_TW_TXG"
+   },
+   {
+    "c": "Fuji_CN_HUI",
+    "v": "Fuji_CN_HUI"
+   },
+   {
+    "c": "Fuji_CN_SZX",
+    "v": "Fuji_CN_SZX"
+   },
+   {
+    "c": "Kayo_CN_DNN",
+    "v": "Kayo_CN_DNN"
+   },
+   {
+    "c": "Celxpert_CN_KUS",
+    "v": "Celxpert_CN_KUS"
+   },
+   {
+    "c": "Atemitech_CN_KUS",
+    "v": "Atemitech_CN_KUS"
+   },
+   {
+    "c": "Atemitech_TW_TYN",
+    "v": "Atemitech_TW_TYN"
+   },
+   {
+    "c": "Atemitech_VN_BNH",
+    "v": "Atemitech_VN_BNH"
+   },
+   {
+    "c": "Bafang_CN_SZH",
+    "v": "Bafang_CN_SZH"
+   },
+   {
+    "c": "Phylion_CN_SUZ",
+    "v": "Phylion_CN_SUZ"
+   },
+   {
+    "c": "Bafang_CN_SZH",
+    "v": "Bafang_CN_SZH"
+   },
+   {
+    "c": "BAIC_CN_BJS",
+    "v": "BAIC_CN_BJS"
+   },
+   {
+    "c": "Baicheng_CN_PDG",
+    "v": "Baicheng_CN_PDG"
+   },
+   {
+    "c": "BakNew Power_CN_SUH",
+    "v": "BakNew Power_CN_SUH"
+   },
+   {
+    "c": "Banglilai_CN_SZX",
+    "v": "Banglilai_CN_SZX"
+   },
+   {
+    "c": "Banglilai_HK_HKG",
+    "v": "Banglilai_HK_HKG"
+   },
+   {
+    "c": "Vinzo_CN_DGG",
+    "v": "Vinzo_CN_DGG"
+   },
+   {
+    "c": "Bissell_HK_HKG",
+    "v": "Bissell_HK_HKG"
+   },
+   {
+    "c": "Bluebird_CN_DGG",
+    "v": "Bluebird_CN_DGG"
+   },
+   {
+    "c": "Bluebird_CN_DNN",
+    "v": "Bluebird_CN_DNN"
+   },
+   {
+    "c": "Blueway Energy_CN_HUI",
+    "v": "Blueway Energy_CN_HUI"
+   },
+   {
+    "c": "Lanwwei_CN_HUI",
+    "v": "Lanwwei_CN_HUI"
+   },
+   {
+    "c": "Lanwwei_CN_HUI",
+    "v": "Lanwwei_CN_HUI"
+   },
+   {
+    "c": "Bmspow Deyi_CN_SZX",
+    "v": "Bmspow Deyi_CN_SZX"
+   },
+   {
+    "c": "Bmspow Dianzi_CN_SZX",
+    "v": "Bmspow Dianzi_CN_SZX"
+   },
+   {
+    "c": "BMSPOW1_CN_SZX",
+    "v": "BMSPOW1_CN_SZX"
+   },
+   {
+    "c": "Bmspow_CN_SZX",
+    "v": "Bmspow_CN_SZX"
+   },
+   {
+    "c": "Bmspow_TW_TPE",
+    "v": "Bmspow_TW_TPE"
+   },
+   {
+    "c": "BMSPro_CN_SZX",
+    "v": "BMSPro_CN_SZX"
+   },
+   {
+    "c": "Tianhong_CN_HZH",
+    "v": "Tianhong_CN_HZH"
+   },
+   {
+    "c": "GLW_HK_HKG",
+    "v": "GLW_HK_HKG"
+   },
+   {
+    "c": "BYD Group_CN_SZX",
+    "v": "BYD Group_CN_SZX"
+   },
+   {
+    "c": "BYD_CN_SZX",
+    "v": "BYD_CN_SZX"
+   },
+   {
+    "c": "China Effort_CN_SZX",
+    "v": "China Effort_CN_SZX"
+   },
+   {
+    "c": "iRobot_CN_SZX",
+    "v": "iRobot_CN_SZX"
+   },
+   {
+    "c": "Oceanwing Anker_CN_CSX",
+    "v": "Oceanwing Anker_CN_CSX"
+   },
+   {
+    "c": "BYD Group_CN_SZX",
+    "v": "BYD Group_CN_SZX"
+   },
+   {
+    "c": "BYD_CN_SZX",
+    "v": "BYD_CN_SZX"
+   },
+   {
+    "c": "BYD_CN_SZX",
+    "v": "BYD_CN_SZX"
+   },
+   {
+    "c": "BYD_CN_SZX",
+    "v": "BYD_CN_SZX"
+   },
+   {
+    "c": "BYD_CN_SZX",
+    "v": "BYD_CN_SZX"
+   },
+   {
+    "c": "C&T Asia_HK_HKG",
+    "v": "C&T Asia_HK_HKG"
+   },
+   {
+    "c": "C-Tech_CN_CKG",
+    "v": "C-Tech_CN_CKG"
+   },
+   {
+    "c": "C-Tech_TW_TPE",
+    "v": "C-Tech_TW_TPE"
+   },
+   {
+    "c": "Celxpert_CN_KUS",
+    "v": "Celxpert_CN_KUS"
+   },
+   {
+    "c": "Celxpert_TW_TYN",
+    "v": "Celxpert_TW_TYN"
+   },
+   {
+    "c": "Changan_CN_CKG",
+    "v": "Changan_CN_CKG"
+   },
+   {
+    "c": "ChangHuiYuan_CN_SZX",
+    "v": "ChangHuiYuan_CN_SZX"
+   },
+   {
+    "c": "Chaoli_CN_FTI",
+    "v": "Chaoli_CN_FTI"
+   },
+   {
+    "c": "Chehejia_CN_CZX",
+    "v": "Chehejia_CN_CZX"
+   },
+   {
+    "c": "Chennuo_CN_SZH",
+    "v": "Chennuo_CN_SZH"
+   },
+   {
+    "c": "Chennuo_CN_SZH",
+    "v": "Chennuo_CN_SZH"
+   },
+   {
+    "c": "Chervon_CN_NJG",
+    "v": "Chervon_CN_NJG"
+   },
+   {
+    "c": "Chery_CN_WHI",
+    "v": "Chery_CN_WHI"
+   },
+   {
+    "c": "Chery_CN_WHI",
+    "v": "Chery_CN_WHI"
+   },
+   {
+    "c": "Chezhiyi_CN_SZX",
+    "v": "Chezhiyi_CN_SZX"
+   },
+   {
+    "c": "China Effort_CN_SZX",
+    "v": "China Effort_CN_SZX"
+   },
+   {
+    "c": "China Effort_HK_HKG",
+    "v": "China Effort_HK_HKG"
+   },
+   {
+    "c": "Desay_CN_HUI",
+    "v": "Desay_CN_HUI"
+   },
+   {
+    "c": "China Effort_CN_SZX",
+    "v": "China Effort_CN_SZX"
+   },
+   {
+    "c": "China Effort_HK_HKG",
+    "v": "China Effort_HK_HKG"
+   },
+   {
+    "c": "Chuangdian_CN_DGG",
+    "v": "Chuangdian_CN_DGG"
+   },
+   {
+    "c": "ChangHuiYuan_CN_SZX",
+    "v": "ChangHuiYuan_CN_SZX"
+   },
+   {
+    "c": "Comlink_TW_TYN",
+    "v": "Comlink_TW_TYN"
+   },
+   {
+    "c": "Continental_CZ_BNL",
+    "v": "Continental_CZ_BNL"
+   },
+   {
+    "c": "Continental_DE_SC1",
+    "v": "Continental_DE_SC1"
+   },
+   {
+    "c": "Continental_MX_AGU",
+    "v": "Continental_MX_AGU"
+   }
+  ],
+  "{\"comboId\":\"WaterfallVer_FG2_SCP\",\"divisionId\":\"'81'\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "SP_W_20261026",
+    "v": "SP_W_20261026 (W44)"
+   },
+   {
+    "c": "SP_W_20261019",
+    "v": "SP_W_20261019 (W43)"
+   },
+   {
+    "c": "SP_W_20261012",
+    "v": "SP_W_20261012 (W42)"
+   },
+   {
+    "c": "SP_W_20261005",
+    "v": "SP_W_20261005 (W41)"
+   },
+   {
+    "c": "SP_W_20260928",
+    "v": "SP_W_20260928 (W40)"
+   },
+   {
+    "c": "SP_W_20260921",
+    "v": "SP_W_20260921 (W39)"
+   },
+   {
+    "c": "SP_W_20260914",
+    "v": "SP_W_20260914 (W38)"
+   },
+   {
+    "c": "SP_W_20260907",
+    "v": "SP_W_20260907 (W37)"
+   },
+   {
+    "c": "SP_W_20260831",
+    "v": "SP_W_20260831 (W36)"
+   },
+   {
+    "c": "SP_W_20260824",
+    "v": "SP_W_20260824 (W35)"
+   }
+  ],
+  "{\"comboId\":\"WaterfallVer_FG2_SCP\",\"divisionId\":\"'81_HD'\",\"mnuId\":\"SCP0016\"}": [
+   {
+    "c": "SP_W_20261026",
+    "v": "SP_W_20261026 (W44)"
+   },
+   {
+    "c": "SP_W_20261019",
+    "v": "SP_W_20261019 (W43)"
+   },
+   {
+    "c": "SP_W_20261012",
+    "v": "SP_W_20261012 (W42)"
+   },
+   {
+    "c": "SP_W_20261005",
+    "v": "SP_W_20261005 (W41)"
+   },
+   {
+    "c": "SP_W_20260928",
+    "v": "SP_W_20260928 (W40)"
+   },
+   {
+    "c": "SP_W_20260921",
+    "v": "SP_W_20260921 (W39)"
+   },
+   {
+    "c": "SP_W_20260914",
+    "v": "SP_W_20260914 (W38)"
+   },
+   {
+    "c": "SP_W_20260907",
+    "v": "SP_W_20260907 (W37)"
+   },
+   {
+    "c": "SP_W_20260831",
+    "v": "SP_W_20260831 (W36)"
+   },
+   {
+    "c": "SP_W_20260824",
+    "v": "SP_W_20260824 (W35)"
+   }
+  ]
+ },
+ "popupFields": {},
+ "at": "2026-11-07T12:54:33.535Z"
+}

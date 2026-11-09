@@ -44,8 +44,9 @@ export const BulkUpdateModal = ({
   return (
     <CustomDialog
       size={520}
-      // 기본 높이(50vh x 배율 1.5)는 입력 2칸 + 버튼 내용에 비해 커서 내용에 맞춘다(배율 적용 후 약 420px).
       height={280}
+      // 배율 미적용(disableScale) — 입력 2칸 + 버튼뿐이라 1.5배 확대 없이 원본 크기(520x280)로 띄운다.
+      disableScale
       // 리사이즈 최소값을 초기 크기와 같게 둔다. 기본 최소값(800x300)이 더 커서 첫 드래그에 팝업이 튀는 것을 막는다.
       minWidth={520}
       minHeight={280}

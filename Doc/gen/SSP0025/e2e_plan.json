@@ -1,0 +1,331 @@
+{
+  "menuId": "SSP0025",
+  "page": "ShipmentRequestorPic",
+  "feature": "shipping",
+  "routePath": "shipping/shipment-requestor-pic",
+  "asisName": "ShipmentRequestorPIC",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite"
+    },
+    {
+      "key": "itemIds",
+      "label": "Material",
+      "lbl": "LBL00021",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtModelId"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Project",
+      "key": "PROJECT",
+      "popup": false,
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": [
+        "CELL_TYPE",
+        "DIVISION_ID",
+        "DIVISION_NAME",
+        "ELECTRODE_TYPE",
+        "FROM_SITE",
+        "FROM_SITE_CODE",
+        "ITEM_ID",
+        "ITEM_UOM",
+        "MODEL_ID",
+        "NICK_NAME",
+        "UOM_CONVERT_IN_TACT_TIME"
+      ],
+      "labels": [
+        "Cell Type",
+        "division",
+        "division",
+        "Electrode Type",
+        "From Site",
+        "From Site Code",
+        "Material",
+        "UOM",
+        "Model",
+        "Nick Name",
+        "Pancake (m/cell)"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Requestor PIC",
+      "key": "SHIPMENT_REQUESTOR_PIC",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CELL_TYPE",
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DIVISION_ID",
+        "ELECTRODE_TYPE",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "MODEL_ID",
+        "NICK_NAME",
+        "PART_LEADER",
+        "PART_LEADER_NAME",
+        "SITE_DESCRIPTION",
+        "TEAM_LEADER",
+        "TEAM_LEADER_NAME",
+        "TO_SITE",
+        "USER_ID",
+        "USER_NAME",
+        "VALID_YN"
+      ],
+      "labels": [
+        "Cell Type",
+        "Created By",
+        "Creation Date",
+        "Division",
+        "Electrode Type",
+        "Material*",
+        "Last Update Date",
+        "Last Updated By",
+        "Model",
+        "Nick Name",
+        "Part Leader",
+        "Part Leader Name",
+        "Plant Site*",
+        "Team Leader",
+        "Team Leader Name",
+        "Plant Site Code",
+        "User ID*",
+        "User Name",
+        "Valid*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Project",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0025.P_",
+      "entries": []
+    },
+    {
+      "sp": "SSP0025_GET_ITEM_BY_DIVISION_POPUP",
+      "sheet": "Project",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0025.P_SSP0025_GET_ITEM_BY_DIVISION_POPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Project",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0025.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0025_GET_SHIPMENT_REQUESTOR_PIC",
+      "sheet": "Shipment Requestor PIC",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0025.P_SSP0025_GET_SHIPMENT_REQUESTOR_PIC",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC",
+      "sheet": "Project",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0025.P_SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0025_GET_USER_ID_CHECK",
+      "sheet": "Project",
+      "btn": "USER_ID_CHECK",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0025.P_SSP0025_GET_USER_ID_CHECK",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0002_GET_USER_INFO_LIST",
+      "sheet": "Project",
+      "btn": "USER_INFO_LIST",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0025.P_SSP0002_GET_USER_INFO_LIST",
+      "entries": [
+        "button:EditButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP",
+        "biz:CommonData.CommonDataList [code=FromSiteByAssembly]",
+        "biz:CommonData.CommonDataList [code=PlantCell]"
+      ]
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainCell",
+      "target": "spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=PlantCell]"
+      ]
+    },
+    {
+      "name": "handleSpdMainComboSelChange",
+      "target": "spdMain",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleCboDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=PlantCell]"
+      ]
+    },
+    {
+      "name": "handleItemId",
+      "target": "btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleModelId",
+      "target": "btnModelId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

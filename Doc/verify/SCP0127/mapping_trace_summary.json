@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SCP0127",
  "asis_id": "SCP0127",
- "generated": "2026-10-26T12:55:34",
+ "generated": "2026-11-08T21:11:59",
  "mapping_file": "",
  "rows": 499,
  "fe_rows": 0,
@@ -10,60 +10,68 @@
  "fe_page": "nscm-fe\\features\\supply\\src\\pages\\precede-safety-stock-day",
  "fe_mapping_missing": true,
  "verdict": {
-  "미검증": 473,
-  "검증완료": 26
+  "미검증": 27,
+  "해당없음": 48,
+  "검증완료": 187,
+  "FAIL": 237
  },
- "instances": 141,
+ "instances": 169,
  "instance_result": {
-  "NOPATH": 7,
-  "REVIEW": 50,
-  "NA": 10,
-  "NOT_RUN": 71,
-  "PASS": 3
+  "NOPATH": 3,
+  "NA": 77,
+  "ERROR": 9,
+  "PASS": 72,
+  "FAIL": 5,
+  "REVIEW": 2,
+  "NOT_RUN": 1
  },
  "by_layer": {
   "동적 생성·조회": {
    "NOPATH": 1,
-   "REVIEW": 28,
-   "NOT_RUN": 13
+   "NA": 8,
+   "ERROR": 6,
+   "PASS": 22,
+   "FAIL": 4,
+   "REVIEW": 1
   },
   "Cascade": {
-   "REVIEW": 11,
-   "NA": 4,
-   "NOT_RUN": 16
+   "NA": 22,
+   "PASS": 6
   },
   "정적 디자인": {
-   "REVIEW": 3,
-   "NA": 1,
-   "NOT_RUN": 7,
-   "NOPATH": 1
+   "PASS": 6,
+   "NA": 4,
+   "NOPATH": 1,
+   "ERROR": 1
   },
   "편집·검증": {
-   "NA": 1,
-   "NOT_RUN": 23,
-   "REVIEW": 5
+   "NA": 27,
+   "PASS": 18
   },
   "CRUD": {
-   "NOT_RUN": 3,
-   "NOPATH": 2
+   "PASS": 3,
+   "FAIL": 1,
+   "ERROR": 1
   },
   "DB 실행·접근": {
-   "NOT_RUN": 3,
-   "PASS": 3
+   "PASS": 6
   },
   "콤보 후보": {
    "NA": 4
   },
+  "권한": {
+   "PASS": 2
+  },
   "팝업": {
-   "NOT_RUN": 4,
-   "NOPATH": 3,
-   "REVIEW": 3
+   "NOT_RUN": 1,
+   "PASS": 8,
+   "NOPATH": 1,
+   "NA": 12,
+   "REVIEW": 1,
+   "ERROR": 1
   },
   "공통 기능": {
-   "NOT_RUN": 1
-  },
-  "권한": {
-   "NOT_RUN": 1
+   "PASS": 1
   }
  },
  "by_check": {
@@ -71,14 +79,13 @@
    "REVIEW": 1
   },
   "A10": {
-   "NOT_RUN": 1
+   "PASS": 1
   },
   "A5": {
-   "REVIEW": 1,
-   "NOT_RUN": 1
+   "PASS": 2
   },
   "A6": {
-   "NOT_RUN": 1
+   "FAIL": 1
   },
   "B3": {
    "NA": 2
@@ -87,117 +94,134 @@
    "NA": 2
   },
   "C1": {
-   "NOT_RUN": 6
+   "NA": 1,
+   "PASS": 5
   },
   "C2": {
-   "REVIEW": 4,
-   "NOT_RUN": 5
+   "NA": 7
   },
   "C3": {
-   "REVIEW": 7,
-   "NOT_RUN": 5
+   "NA": 11
+  },
+  "C4": {
+   "PASS": 1
   },
   "C6": {
-   "NA": 4
+   "NA": 3
   },
   "D1": {
-   "NOT_RUN": 4,
-   "REVIEW": 1
+   "PASS": 4,
+   "NA": 2
   },
   "D3": {
-   "NOT_RUN": 4,
-   "REVIEW": 1
+   "PASS": 10
   },
   "D5": {
    "NA": 1
   },
   "D6": {
-   "NOT_RUN": 1
+   "PASS": 1
   },
   "DB-SYN": {
    "PASS": 3
   },
   "E1": {
-   "NOT_RUN": 2
+   "NA": 2
+  },
+  "E3": {
+   "NA": 1
   },
   "E4": {
-   "NOT_RUN": 12,
-   "REVIEW": 3
+   "NA": 21,
+   "PASS": 3
   },
   "F1": {
-   "NOT_RUN": 1
+   "PASS": 1
   },
   "F2": {
-   "NOPATH": 1
+   "FAIL": 1
   },
   "F3": {
-   "NOT_RUN": 1
+   "PASS": 1
   },
   "F4": {
-   "NOT_RUN": 3
+   "PASS": 3
   },
   "F5": {
-   "NOT_RUN": 1
+   "PASS": 1
   },
   "F6": {
-   "NOPATH": 1
+   "ERROR": 1
   },
   "G03-WIRE": {
    "NOPATH": 1
   },
   "G1": {
-   "NOT_RUN": 7
+   "PASS": 5,
+   "ERROR": 1,
+   "NA": 1
   },
   "G4": {
-   "NOT_RUN": 3,
+   "PASS": 3,
    "NOPATH": 1
   },
   "G5": {
-   "NOPATH": 2,
-   "REVIEW": 1
+   "NOPATH": 1,
+   "NA": 8
   },
   "G6": {
-   "NOT_RUN": 3
+   "PASS": 3
   },
   "H2": {
-   "REVIEW": 2,
-   "NOT_RUN": 1
+   "NA": 3
   },
   "H4": {
-   "NOT_RUN": 1
+   "PASS": 1
   },
   "H5": {
    "NA": 1
   },
   "H6": {
    "NOT_RUN": 1,
-   "NOPATH": 1,
-   "REVIEW": 1
+   "PASS": 7,
+   "NA": 1
   },
   "I1": {
-   "NOT_RUN": 1
+   "ERROR": 1
+  },
+  "J1": {
+   "PASS": 1
   },
   "J2": {
-   "NOT_RUN": 1
+   "PASS": 1
   },
   "K4": {
-   "NOT_RUN": 1
+   "PASS": 1
+  },
+  "M3": {
+   "NA": 2
   },
   "M4": {
-   "NOT_RUN": 3,
-   "REVIEW": 1
+   "REVIEW": 1,
+   "PASS": 1,
+   "NA": 1,
+   "ERROR": 1
   },
   "X-REOPEN": {
-   "NOT_RUN": 1
+   "PASS": 1
   },
   "X-ROW": {
-   "REVIEW": 27
+   "NA": 7,
+   "ERROR": 5,
+   "PASS": 12,
+   "FAIL": 3
   }
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "NOPATH": 414,
-  "REVIEW": 258,
-  "NOT_RUN": 1080
+  "NOPATH": 14,
+  "ERROR": 15,
+  "NOT_RUN": 2,
+  "REVIEW": 2
  }
 }

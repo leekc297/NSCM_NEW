@@ -15,7 +15,7 @@
 | features/supply/src/pages/production-plan-fix/production-plan-fix.types.ts | types | 22 |
 | features/supply/src/pages/production-plan-fix/ProductionPlanFix.module.scss | style | 12 |
 | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | page | 241 |
-| features/supply/src/pages/production-plan-fix/useProductionPlanFixStore.ts | store | 208 |
+| features/supply/src/pages/production-plan-fix/useProductionPlanFixStore.ts | store | 209 |
 | features/supply/src/pages/production-plan-fix/utils/productionPlanFixColumns.ts | util | 156 |
 | features/supply/src/pages/production-plan-fix/utils/productionPlanFixDerive.ts | util | 29 |
 | features/supply/src/pages/production-plan-fix/utils/productionPlanFixEditLock.ts | util | 77 |
@@ -30,9 +30,9 @@
 | (useTabComboQueries) | hook | 1 | Y | ProductionPlanFixForm.tsx:51 |
 | (useTabLookupQueries) | hook | 1 | Y | ProductionPlanFixForm.tsx:60 |
 | SCP0024/main//call-proc | hook | 2 | Y | ProductionPlanFix.tsx:64 ProductionPlanFix.tsx:74 |
-| /admin/menu/SCP0024/column | http | 1 | Y | useProductionPlanFixStore.ts:141 |
-| /admin/menu/SCP0024/measure | http | 1 | Y | useProductionPlanFixStore.ts:162 |
-| /admin/menu/SCP0024/search-conditions | http | 1 | Y | useProductionPlanFixStore.ts:185 |
+| /admin/menu/SCP0024/column | http | 1 | Y | useProductionPlanFixStore.ts:142 |
+| /admin/menu/SCP0024/measure | http | 1 | Y | useProductionPlanFixStore.ts:163 |
+| /admin/menu/SCP0024/search-conditions | http | 1 | Y | useProductionPlanFixStore.ts:186 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -114,7 +114,7 @@
 | LBL00772 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0024(15), SCP0013(12), SCP0025(5), SCP0020(3), DMF0082(1)
+- 화면ID: SCP0024(16), SCP0013(12), SCP0025(5), SCP0020(3), DMF0082(1)
 - SP/PKG: PKG_SCP0024(8), P_SCP0024_SAVE_PLAN_FIX_DS(3), P_SCP0024_GET_PROD_PLAN_FIX(1), P_DATA(1), P_USER_ID(1), P_SCP0024_SAVE_PROD_PLAN_FIX(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

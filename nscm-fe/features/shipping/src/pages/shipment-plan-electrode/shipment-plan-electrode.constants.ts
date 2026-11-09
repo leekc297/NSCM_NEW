@@ -355,7 +355,7 @@ export const MSG = {
   //   (MSG00189) ERP 에 DO 가 생성되어 변경요청 불가. {0}=CONFIRM_ID 목록
   STATUS_ERP_DO_CREATED: 'MSG01202',
   //   (MSG00247) 같은 SO 번호로 생성된 다른 건 존재 — SO 단위 일괄 변경 필요. {0}=SO NO
-  SO_NO_COUNT_MISMATCH: 'MSG00247',
+  SO_NO_COUNT_MISMATCH: 'MSG01257',
   //   (MSG00404) ERP I/F 로 이전 작업 2분 뒤 변경 가능(SCM_SSP_CHECK_CONFIRM_CHANGETIME 'X')
   CONFIRM_CHANGETIME_LOCK: 'MSG01395',
   // ERP 연쇄 단계 버튼 라우팅·권한 미등록 — "사용 권한이 없습니다." + 버튼 경로. 세 화면 공통 문구.

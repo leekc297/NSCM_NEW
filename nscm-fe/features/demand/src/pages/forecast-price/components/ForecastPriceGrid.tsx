@@ -35,7 +35,6 @@ import {
   MSG,
   NON_GROUPING_BINDINGS,
   PRICE_MEASURES,
-  REFERENCE_ONLY_BINDINGS,
   SHEETS,
 } from '../forecast-price.constants';
 import type { ForecastPriceRow, SpreadTitleRow } from '../forecast-price.types';
@@ -91,54 +90,8 @@ class FcstHeaderMergeManager extends CustomMergeManager<ForecastPriceRow> {
     return panel.cellType === CellType.Cell;
   }
 
-  // ⭐ [2026-10-27 사용자 요청] 참고값 컬럼(LAST_UPDATED_BY · LAST_UPDATE_DATE)은 셀 병합에서 뺀다.
-  //   ① 자기 셀은 병합하지 않는다.
-  //   ② 공용 머지키는 좌측 전 컬럼 값 누적(`_getMergeKey`, private)이라, 이 컬럼이 왼쪽에 있으면 오른쪽
-  //      컬럼(SENDER_NAME · CELL_PROD_SITE_ID · CURRENCY · VERSION_NO …)의 병합이 수정일·수정자 차이로 끊긴다.
-  //      ⇒ 왼쪽에 참고값 컬럼이 있을 때만 이 화면에서 범위를 계산한다 — 키에서 참고값 컬럼만 빼고
-  //        나머지 판정(allowMerging · 신규행 제외 · 화면 범위)은 공용 `_getCellMergedRange` 와 같게 둔다.
-  //        빈 셀 병합 허용은 이 화면 규칙(allowEmptyCellMerge = 전 컬럼 허용) 그대로라 빈 셀 가드는 두지 않는다.
-  //   참고값 컬럼이 왼쪽에 없으면 공용 동작 그대로(회귀 0).
-  private getCellRangeWithoutReference(panel: GridPanel, r: number, c: number): CellRange | null {
-    const bindingAt = (i: number): string => panel.columns[i]?.binding ?? '';
-    if (REFERENCE_ONLY_BINDINGS.has(bindingAt(c))) return null;
-    let hasReferenceLeft = false;
-    for (let i = 0; i < c; i++) if (REFERENCE_ONLY_BINDINGS.has(bindingAt(i))) hasReferenceLeft = true;
-    if (!hasReferenceLeft) return super.getMergedRange(panel, r, c);
-
-    if (!panel.columns[c]?.allowMerging) return null;
-    if (![AllowMerging.All, AllowMerging.Cells].includes(panel.grid.allowMerging)) return null;
-    const items = panel.grid.collectionView.items as ForecastPriceRow[];
-    if (isInsertRow(items[r])) return null;
-
-    const keyOf = (row: number): string => {
-      const parts: string[] = [];
-      for (let i = 0; i <= c; i++) {
-        if (!REFERENCE_ONLY_BINDINGS.has(bindingAt(i))) parts.push(String(panel.getCellData(row, i, false)));
-      }
-      return parts.join('|');
-    };
-
-    // 화면 범위 · 첫 행 보정 = 공용 _getCellMergedRange 와 동일
-    let minRow = panel.viewRange.row;
-    const maxRow = panel.viewRange.row2;
-    const staticHeight = panel.grid.rows.defaultSize;
-    const checkCount = minRow * staticHeight + panel.grid.scrollPosition.y + staticHeight;
-    if (1 < checkCount && checkCount <= 15 && ((minRow === 0 && checkCount <= 12) || minRow > 0)) minRow = minRow + 1;
-
-    const key = keyOf(r);
-    const rng = new CellRange(r, c);
-    while (rng.row > minRow && rng.row > 0 && keyOf(rng.row - 1) === key && !isInsertRow(items[rng.row - 1])) rng.row--;
-    while (rng.row2 < maxRow && keyOf(rng.row2 + 1) === key && !isInsertRow(items[rng.row2 + 1])) rng.row2++;
-    return rng.isSingleCell ? null : rng;
-  }
-
   getMergedRange(panel: GridPanel, r: number, c: number): CellRange | null {
-    // Cell = 참고값 컬럼 제외 병합 (그 외 공용 동작) / TopLeft = 기존 동작 유지 (회귀 0)
-    if (panel.cellType === CellType.Cell) {
-      if (r < 0 || c < 0 || r >= panel.rows.length || c >= panel.columns.length) return null;
-      return this.getCellRangeWithoutReference(panel, r, c);
-    }
+    // TopLeft / Cell = 기존 동작 유지 (회귀 0)
     if (panel.cellType !== CellType.ColumnHeader) return super.getMergedRange(panel, r, c);
 
     const keys = this.getKeys();
@@ -2116,14 +2069,10 @@ export const ForecastPriceGrid = ({
       //       PlantByDivisionCompany 45→12 / FcstTypeByUserGroupDMF0082 14→4 / CELL_PROD_SITE_ID 4→1
       //     나머지 14종(Measure·Incoterms·CurrencyList 등)은 토큰이 없어 무영향.
       comboParams={{ mnuId: `'${MENU_ID}'`, divisionId: q(searchParams.divisionId) }}
-      // ⭐ [E20260901-CPSDISP] Cell Prod Site 표시 콤보는 **파라미터 없이**(전체 목록) 조회한다.
-      //   이 콤보는 division 을 받으면 AS-IS BIZ_TYPE 분기로 '-'(Common) 1행만 반환해(실측: 무파라미터
-      //   5행 / divisionId 전달 1행), 그 축소본이 dataMap 이 되면 원장 코드(HQ06-A 등)가 CODE→NAME
-      //   매핑을 잃고 raw 코드로 표시된다(사용자 신고 2026-09-01). 편집 후보 제한은 행별
-      //   applyCellProdSites(division+item)가 계속 담당 — "표시용 ↔ 편집용 이원화" 규약.
-      comboParamExcludes={['CELL_PROD_SITE_ID']}
       // 이 그리드의 셀 콤보에 시트 스코프 sheetName 을 함께 실어 @sheetName 을 해소한다(mnuId 와 짝).
       sheetName={SHEETS.FCST_N_PRICE_40}
+      // 읽기전용 자동 잠금을 FcstNPrice 시트 SAVE 권한으로 판정(메뉴 단위면 다른 시트 SAVE 와 섞임)
+      saveAuth={{ sheetName: SHEETS.FCST_N_PRICE_40 }}
       selectionMode={SelectionMode.MultiRange}
       allowMerging={AllowMerging.All}
       alternatingRowStep={1}

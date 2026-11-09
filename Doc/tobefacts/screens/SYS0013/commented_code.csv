@@ -4,7 +4,7 @@
 "admin/dynamic-query","SYS0013","features/admin/src/pages/dynamic-query/DynamicQuery.tsx","139","code","const setSaveColumnsAndParametersList = useDynamicQueryStore("
 "admin/dynamic-query","SYS0013","features/admin/src/pages/dynamic-query/DynamicQuery.tsx","141","code",");"
 "admin/dynamic-query","SYS0013","features/admin/src/pages/dynamic-query/DynamicQuery.tsx","327","code","const missingValue = parameters.some(item => item.isUse && !item.value.trim());"
-"admin/dynamic-query","SYS0013","features/admin/src/pages/dynamic-query/DynamicQuery.tsx","329","code","void setAlert({ type: 'alert', content: t('MSG00150', 'CONDITION에 해당하는 VALUE를 입력해 주세요.') });"
+"admin/dynamic-query","SYS0013","features/admin/src/pages/dynamic-query/DynamicQuery.tsx","329","code","void setAlert({ type: 'alert', content: t('MSG00013', 'CONDITION에 해당하는 VALUE를 입력해 주세요.') });"
 "admin/dynamic-query","SYS0013","features/admin/src/pages/dynamic-query/DynamicQuery.tsx","340","code","const leftover = findParamTokens(sql);"
 "admin/dynamic-query","SYS0013","features/admin/src/pages/dynamic-query/DynamicQuery.tsx","347","code",".map(n => `@${n}`)"
 "admin/dynamic-query","SYS0013","features/admin/src/pages/dynamic-query/DynamicQuery.tsx","350","code","});"

@@ -18,9 +18,10 @@
 | division EE(1774) | B3 OperationGroup 코드셋 스왑 | `isEeDivision` → COMBO.OP_GROUP_EE 스왑 |
 | OperationGroup A/P(3886) | C1/C2 Electrode ALL+disable | `isElectrodeEnabled` + Form effect |
 | PlanDate/Type/Seq change(3996) | D1 Fix/Unfix/New enable | `canFixUnfixNew`(util) + 페이지 `canFix` |
-| 버전 변경(3947) | D2 그리드 clear | `setDivision`/planDate·Type onChange filters clear |
-| Edit(648)/is_editable(681) | F1/F2 셀 잠금/편집행 해제 | `isRowEditable`+`isPivotCellEditable` (서버 is_editable+4규칙) |
-| SetLockSumColumn(1155) | F3 SUM(W_/M_) 잠금 | `editablePivotKindForBucket`(SUM kind 제외) |
+| 버전 변경(3947) | D2 그리드 clear | `setDivision`/planDate·Type onChange filters clear + 선택버전≠조회버전 시 `clearFilters`(요청2, 2026-11-04) |
+| (FE 전용 요청) FN 또는 다음 단계 존재 시 수정 불가 | 사용자 지시 2026-11-04 — (1) FN 조회 (2) 콤보에 다음 단계(FN→SE→MA→PR→TE) 존재 | Form 이 Plan-type 콤보로 `isStageEditableFor` 판정→store `stageEditable`→`editContext.isStageEditable`, false 면 그리드 전건 읽기전용(SP/BE 무관) |
+| Edit(648)/is_editable(681) | F1/F2 셀 잠금/편집행 해제 | `isRowEditable`+`isPivotCellEditable` (서버 is_editable+4규칙+stage게이트) |
+| SetLockSumColumn(1155) | F3 SUM(W_/M_) 잠금 — Daily=W_·M_ 잠금, Weekly·Monthly=M_ 잠금(Monthly 는 M_만 보여 전건 읽기전용) | `editablePivotKindForBucket`(Daily→D/Weekly→W/Monthly→null) |
 | FindData_Main(2088) | G2 조회직후 전 컬럼 잠금 | pivot baseline readOnly + beginningEdit white-list |
 | chkAll/chkSum/chkLineAssign | H1~H3 | store `chkAll/chkSum/chkLineAssign` + 22-param |
 | btnW26/52/WLast(961) | H5 기간 프리셋 | 페이지 `handlePreset`(dayjs 로컬) |

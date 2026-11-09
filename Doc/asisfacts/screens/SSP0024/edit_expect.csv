@@ -1,0 +1,26 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+DIVISION_ID,Y,Y,N,,잠금 (EditButton:255),,기존행 SSP0024_ItembyDivisionPopup:255 LockColumn,,Ship Master Elec
+PLANT_SITE_CODE,Y,N,N,잠금 (InsertRow:385),잠금 (EditButton:255),,기존행 SSP0024_ItembyDivisionPopup:255 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:385 LockRange,,Ship Master Elec
+PLANT_SITE_ID,Y,Y,N,,잠금 (EditButton:255),,기존행 SSP0024_ItembyDivisionPopup:255 LockColumn,,Ship Master Elec
+MATERIAL_ID,Y,Y,N,,잠금 (EditButton:255),,기존행 SSP0024_ItembyDivisionPopup:255 LockColumn,,Ship Master Elec
+MODEL_ID,Y,N,N,잠금 (InsertRow:386),잠금 (EditButton:255),,기존행 SSP0024_ItembyDivisionPopup:255 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:386 LockRange,,Ship Master Elec
+CELL_TYPE,Y,N,N,잠금 (InsertRow:386),잠금 (EditButton:255),,기존행 SSP0024_ItembyDivisionPopup:255 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:386 LockRange,,Ship Master Elec
+NICK_NAME,Y,N,N,잠금 (InsertRow:386),잠금 (EditButton:255),,기존행 SSP0024_ItembyDivisionPopup:255 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:386 LockRange,,Ship Master Elec
+ELECTRODE_TYPE,Y,N,N,잠금 (InsertRow:386),잠금 (EditButton:255),,기존행 SSP0024_ItembyDivisionPopup:255 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:386 LockRange,,Ship Master Elec
+ITEM_UOM,Y,N,N,잠금 (InsertRow:386),잠금 (EditButton:255),,기존행 SSP0024_ItembyDivisionPopup:255 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:386 LockRange,,Ship Master Elec
+POST_OPER,Y,Y,Y,,,,,,Ship Master Elec
+POST_OPER_LT,Y,N,N,잠금 (InsertRow:387),잠금 (EditButton:256),,기존행 SSP0024_ItembyDivisionPopup:256 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:387 LockRange,,Ship Master Elec
+UOM_CONVERT_IN_TACT_TIME,Y,N,N,잠금 (InsertRow:387),잠금 (EditButton:256),,기존행 SSP0024_ItembyDivisionPopup:256 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:387 LockRange,,Ship Master Elec
+PC_ROLL_LENGTH,Y,Y,Y,,,,,,Ship Master Elec
+PACKAGE_TYPE_CODE,Y,Y,Y,,,,,,Ship Master Elec
+STEELCRATE_PER_CUT,Y,Y,Y,,,,,,Ship Master Elec
+BOX_PER_CUT,Y,Y,Y,,,,,,Ship Master Elec
+STEELRACK_PER_CUT,Y,Y,Y,,,,,,Ship Master Elec
+DOM_EXP_TYPE_CODE,Y,Y,Y,,,,,,Ship Master Elec
+BUILDING,Y,Y,Y,,,,,,Ship Master Elec
+BUILDING_DESC,Y,N,N,잠금 (InsertRow:388),잠금 (EditButton:257),,기존행 SSP0024_ItembyDivisionPopup:257 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:388 LockRange,,Ship Master Elec
+REMARKS,Y,Y,Y,,,,,,Ship Master Elec
+CREATED_BY,Y,N,N,잠금 (InsertRow:389),잠금 (EditButton:258),,기존행 SSP0024_ItembyDivisionPopup:258 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:389 LockRange,,Ship Master Elec
+CREATION_DATE,Y,N,N,잠금 (InsertRow:389),잠금 (EditButton:258),,기존행 SSP0024_ItembyDivisionPopup:258 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:389 LockRange,,Ship Master Elec
+LAST_UPDATED_BY,Y,N,N,잠금 (InsertRow:389),잠금 (EditButton:258),,기존행 SSP0024_ItembyDivisionPopup:258 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:389 LockRange,,Ship Master Elec
+LAST_UPDATE_DATE,Y,N,N,잠금 (InsertRow:389),잠금 (EditButton:258),,기존행 SSP0024_ItembyDivisionPopup:258 LockColumn | 신규행 SSP0024_ItembyDivisionPopup:389 LockRange,,Ship Master Elec

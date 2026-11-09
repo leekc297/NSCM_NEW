@@ -1,0 +1,124 @@
+// SCP0098 Production Plan Line (CAPA Mobility IT / CAPA Report Small)
+//   AS-IS: GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0098_CAPAReprotSmall/SCP0098_CAPAReprotSmall.cs
+//   TO-BE 전환 상수 SSOT. MENU_ID / SHEETS(BE 라우팅 키) / RESPONSE_SET / measure·bucket·category 정적값.
+
+export const MENU_ID = 'SCP0098' as const;
+export type MENU_ID = typeof MENU_ID;
+
+/** Excel 파일명 접두 — AS-IS this.Name(폼 클래스명, .cs:557 sFileName). AS-IS 와 동일 파일명 유지. */
+export const EXCEL_FILE_PREFIX = 'SCP0098_CAPAReprotSmall' as const;
+
+/**
+ * SHEETS — value = BE 프로시저 라우팅 키(SCM_ADM_MNU_BTN_MPG_M.SHT_NM). procedures.d.ts 유니온과 정합.
+ * - `MAIN`             = 메인 조회 (PKG_SCP0098.P_GET_CAPA_MOBILITYIT)
+ * - `CAPA_PRODUCT_RATE`= 생산준비율 저장 (P_SAVE_SCP_CAPA_PRODUCT_RATE)
+ * - `CAPA_MONTH`       = Capa(월) 저장 (P_SAVE_SCP_CAPA)
+ * - `CAPA_WORK`        = Capa Work(일) 저장 (P_SAVE_SCP_CAPA_WORK)
+ * - `COPY`             = Week/Month 복사 (P_COPY_MONTH_WEEK)
+ * - `TITLE_SET`        = 공용 Column/Measure 설정 모달이 리터럴 'titleSet' 으로 호출 — BTN_MPG 소유 시트.
+ */
+export enum SHEETS {
+  MAIN = 'main',
+  CAPA_PRODUCT_RATE = 'capaProductRate',
+  CAPA_MONTH = 'capaMonth',
+  CAPA_WORK = 'capaWork',
+  COPY = 'copy',
+  TITLE_SET = 'titleSet',
+}
+
+/**
+ * RESPONSE_SET — OUT ref cursor 이름(lowercase) 기준 (hook #80 sp-cursor-name-response-key).
+ *   GET/SAVE/COPY 모두 O_RC(데이터) + O_RESULT_CURSOR(결과상태). 데이터 접근은 리터럴 'o_rc'.
+ */
+export const RESPONSE_SET = { MAIN: 'o_rc' } as const;
+
+/**
+ * admin UI Category Setup 의 SHEET_NAME — AS-IS 원본명 그대로(룰 #91). SCM_MST_SHEET_COLUMNS/
+ *   SCM_MST_SHEET_MEASURE 의 PROGRAM_ID='SCP0098' AND SHEET_NAME='CAPA_SMALL' (DB 실측 19/4행).
+ */
+export const ADMIN_SHEET_NAME = 'CAPA_SMALL' as const;
+
+/**
+ * MSG — AS-IS MSG_ID 를 그대로 쓰지 않고 TO-BE 표준 ID 로 매핑(Hook #114). 등가 없으면 영문
+ *   defaultValue fallback(임의 한글 INSERT 금지 — convert-core §2.3).
+ *   - SAVE_CONFIRM/SAVED/NO_CHANGES = ForecastPrice(DMF0082) 대사 완료 TO-BE ID 재사용.
+ *   - 화면 고유 검증(Y/N·범위)은 fallback 문구로 처리.
+ */
+export const MSG = {
+  SAVE_CONFIRM: 'MSG00001', // 저장 하시겠습니까? (AS-IS MSG00012)
+  SAVED: 'MSG00002', // 성공적으로 저장되었습니다.
+  NO_CHANGES: 'MSG00004', // 저장할 데이터가 없습니다. (AS-IS validations #20)
+  SAVE_ERROR: 'MSG00618', // 저장 중 오류가 발생했습니다.
+  PERIOD_REQUIRED: 'MSG00108', // 조회 기간을 입력하세요.
+  COPY_WEEK: 'MSG01462', // 전 주 데이터를 금 주로 복사 (Copy Type 팝업 안내)
+  COPY_MONTH: 'MSG01461', // 전 월 데이터를 금 월로 복사 (Copy Type 팝업 안내)
+} as const;
+
+/** Bucket — To-Be 문서(SCP0098)에서 조회조건이 삭제되어 DAILY 고정. */
+export const DEFAULT_BUCKET = 'DAILY' as const;
+
+/** Measure 코드 — SCM_MST_SHEET_MEASURE 4행(DB 실측). 편집 축 분기(D_ / M_)의 단일 출처. */
+export const MEASURE = {
+  NO_WORK: 'NO_WORK',
+  LOAD_RATE: 'LOAD_RATE',
+  RAMP_UP: 'RAMP_UP',
+  DAILY_CAPA: 'DAILY_CAPA',
+} as const;
+
+/** M_(월) 컬럼 편집 measure — 그 외(NO_WORK/LOAD_RATE/RAMP_UP)는 D_(일) 컬럼 편집. (design 03 §1.2) */
+export const M_EDIT_MEASURES: readonly string[] = [MEASURE.DAILY_CAPA];
+export const D_EDIT_MEASURES: readonly string[] = [
+  MEASURE.NO_WORK,
+  MEASURE.LOAD_RATE,
+  MEASURE.RAMP_UP,
+];
+
+/**
+ * 일괄입력 Category(cboCategory) — AS-IS Form_Load dtCategoryList 하드코딩 정적(cs L186~192).
+ *   Bulk Update 대상 measure 구분. label = measure 표시명, value = measure 코드.
+ *   To-Be 에서는 조회조건/드롭다운이 아니라 그리드 선택 행의 MEASURE_UI 로 정해지며, 팝업 표시명 조회에 쓴다.
+ */
+export const CATEGORY_OPTIONS = [
+  { label: 'No Work', value: MEASURE.NO_WORK },
+  { label: 'Load Rate', value: MEASURE.LOAD_RATE },
+  { label: 'Ramp-up', value: MEASURE.RAMP_UP },
+  { label: 'Daily Capa', value: MEASURE.DAILY_CAPA },
+] as const;
+
+/** Division 고정값 — AS-IS cboDivision.ControlValues='40'; Enabled=false (cs L182~183). */
+export const FIXED_DIVISION = '40' as const;
+
+/**
+ * 조회조건 콤보 SQL_ID — SCM_ADM_CMBO_SQL_M 실측(design 02 §2, DB 확인).
+ *   DIVISION   = Division_SCP             (SCP 권한필터본, @sesUserId 세션+@mnuId. 비활성·'40' 고정 표시용)
+ *   PLANT_SITE = PlantByDivisionOperation (@divisionId='40')
+ *   LINE       = LineByOperation          (@divisionId='40'+@plantId, '-' 미선택 UNION 행)
+ */
+export const COMBO = {
+  DIVISION: 'Division_SCP',
+  PLANT_SITE: 'PlantByDivisionOperation',
+  LINE: 'LineByOperation',
+  DAY_PERIOD: 'SCM0001_GET_SCP_DAY_PERIOD', // @fromDate(='')/@offsetDay/@timeZone → CODE='YYYYMMDD:YYYYMMDD'
+} as const;
+
+/** Period 초기범위 offset — AS-IS GetDayRange(PeriodType.W52): 52주*7-1 = 363일(일요일 보정 -1). */
+export const PERIOD_OFFSET_DAY = '363' as const;
+
+/** CAPA_WORK(일) 저장 상한 — AS-IS validations #16/#23 (iCount_CAPA_WORK > 10000). */
+export const CAPA_WORK_SAVE_LIMIT = 10000;
+
+/** i18n UI 라벨 — DB 실측 LBL ID (design 02 §4.5, 전건 존재·임의 생성 0). */
+export const LBL = {
+  DIVISION: 'LBL00001',
+  PLANT_SITE: 'LBL00005',
+  LINE: 'LBL00010',
+  PERIOD: 'LBL00013',
+  MODEL_NICKNAME: 'LBL00618',
+  SEARCH: 'LBL00112',
+  COPY_DATA: 'LBL01064',
+  MEASURE: 'LBL00310',
+  DAY_TYPE: 'LBL01066', // Day Type
+  VALUE: 'LBL01084', // Input Value
+  OK: 'LBL00716',
+  CLOSE: 'LBL00627',
+} as const;

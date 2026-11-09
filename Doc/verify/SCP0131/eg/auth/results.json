@@ -1,0 +1,615 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "eg_auth",
+      "--workers",
+      "1",
+      "--retries",
+      "0",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0131/eg/auth/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0131\\eg\\auth\\artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "eg_auth.spec.ts",
+      "file": "eg_auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "E03 Division·권한 SCP0131 @eg-auth",
+          "file": "eg_auth.spec.ts",
+          "line": 85,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18549,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG271 NA\":1,\"EG275 NA\":1,\"EG369 NA\":1,\"EG369 PASS\":42,\"EG212 PASS\":1,\"EG257 PASS\":3,\"EG024 PASS\":1,\"EG024 NA\":1,\"EG294 NA\":1}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-07T11:23:33.560Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-bb516e5d06f454d4466b",
+              "file": "eg_auth.spec.ts",
+              "line": 92,
+              "column": 7
+            },
+            {
+              "title": "계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 1500000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 92070,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] SCP/40/SCP Planner 11s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/40/SCP Tester 18s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 ERROR\":1,\"EG365 ERROR\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "  EG366 ERROR Division 후보 [SCP/40/SCP Tester] 기대 후보 = 메뉴 권한 그룹의 부문 권한 (없음) · 실측 [측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '' ·  \n"
+                        },
+                        {
+                          "text": "  EG365 ERROR 자동 선택 [SCP/40/SCP Tester] 기대 후보 안의 값 · 실측 [측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '' · DM-65 \n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/40/SCM Viewer 18s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 ERROR\":1,\"EG365 ERROR\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "  EG366 ERROR Division 후보 [SCP/40/SCM Viewer] 기대 후보 = 메뉴 권한 그룹의 부문 권한 (없음) · 실측 [측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '' ·  \n"
+                        },
+                        {
+                          "text": "  EG365 ERROR 자동 선택 [SCP/40/SCM Viewer] 기대 후보 안의 값 · 실측 [측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '' · DM-65 \n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/40/ADMIN 11s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/40/SCM PI Admin 11s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/81/SCP Planner 11s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 11s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0131 {}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-07T11:23:54.881Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-bb6c73c7d7eb5137f29e",
+              "file": "eg_auth.spec.ts",
+              "line": 249,
+              "column": 7
+            },
+            {
+              "title": "개인화 후보 Div 순회 — Measure 후보·컬럼 필수 표시 = UI Category(Div 별)",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13355,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG022 NA\":1,\"EG402 NA\":1,\"EG160 NA\":1}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-07T11:25:31.017Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-64c3f7cb78ea3f153e65",
+              "file": "eg_auth.spec.ts",
+              "line": 362,
+              "column": 7
+            },
+            {
+              "title": "Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15728,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG109 NA\":1,\"EG373 NA\":1,\"EG140 NA\":1,\"EG319 NA\":1,\"EG126 ERROR\":1}\n"
+                        },
+                        {
+                          "text": "  EG126 ERROR Sort 상태 Insert [SCP0131] 기대 헤더 클릭 정렬 · 실측 헤더 13칸 클릭 후 정렬 상태 없음 — 측정 경로 없음 ·  \n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-07T11:25:48.531Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-8663bd555b6d52580bf2",
+              "file": "eg_auth.spec.ts",
+              "line": 413,
+              "column": 7
+            },
+            {
+              "title": "편집 — AS-IS 규칙(GROUP·행 값)·룩업 시간창 × 계정",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 306,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG377 NA\":1,\"EG378 NA\":1,\"EG124 NA\":1,\"EG123 NA\":1,\"EG113 NA\":1,\"EG376 NA\":1,\"EG067 NA\":1}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-07T11:26:08.404Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-5cea558ce33be65bfe90",
+              "file": "eg_auth.spec.ts",
+              "line": 484,
+              "column": 7
+            },
+            {
+              "title": "헤더 병합 — AS-IS ColumnHeaderSpan ↔ TO-BE 병합 헤더",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4648,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG315 NA\":1}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-07T11:26:13.041Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-87dbcaec4255ebbc9437",
+              "file": "eg_auth.spec.ts",
+              "line": 554,
+              "column": 7
+            },
+            {
+              "title": "개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 285,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG032 ERROR\":1}\n"
+                        },
+                        {
+                          "text": "  EG032 ERROR SCP0131 [계정쌍] 기대 TITLESET_USER 보유·미보유 계정쌍 · 실측 명부에 쌍 없음(보유 N · 미보유 Y) · SCM_MST_TITLESET_USER \n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-07T11:26:21.782Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-5fd6cd9c0934eef02249",
+              "file": "eg_auth.spec.ts",
+              "line": 570,
+              "column": 7
+            },
+            {
+              "title": "개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4731,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG395 NA\":1}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-07T11:26:26.279Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-2cf7e581d6c9eb005456",
+              "file": "eg_auth.spec.ts",
+              "line": 600,
+              "column": 7
+            },
+            {
+              "title": "무권한 기본 화면(EG380) — 세션 메뉴 없음 상태의 FE 첫 화면",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 279,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] SCP0131 {\"EG380 ERROR\":1}\n"
+                        },
+                        {
+                          "text": "  EG380 ERROR 무권한 첫 화면 [실계정 없음] 기대 Auth Request(권한 신청) 화면 메인 — DM-247 · 실측 명부에 GUEST 전용 계정 없음 → 세션 응답 변조로 FE 만 측정(BE 판정 미측정) · DM-247·GAP-475 메뉴 0건 세션 변조는 BE 로그인 판정을 대신하지 못해 판정하지 않음 — users.json 에 GUEST 전용 계정 필요\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-07T11:26:35.188Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-da783de24aec8a54b80c",
+              "file": "eg_auth.spec.ts",
+              "line": 625,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-07T11:23:33.158Z",
+    "duration": 187359.092,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

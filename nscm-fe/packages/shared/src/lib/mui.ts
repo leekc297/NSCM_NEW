@@ -15,5 +15,6 @@ export {
   useTheme,
   InputAdornment,
   Box,
+  Popover,
   ThemeProvider,
 } from '@mui/material';

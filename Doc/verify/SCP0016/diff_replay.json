@@ -1,0 +1,14 @@
+{
+ "_why": "2026-11-06 실측: FE 가 보낸 versionNo SP_W_20260824 는 AS-IS DEV MSSQL 에 없음(DEV 최신 SP_W_20260622 · 그 버전은 AS-IS 153,784 ↔ TO-BE 1,145,872 로 부분 적재). SP_W_20260615·SP_W_20260608 은 AS-IS = TO-BE 건수 동일. SP_W_20260615 는 TO-BE PKG 가 ORA-01722(값 20260615_40_18650_004_S005 숫자 변환) 로 실패 → 판정필요 후보(20:5x 실측). SP_W_20260608 로 비교.",
+ "overrides": {
+  "versionNo": "SP_W_20260608"
+ },
+ "findings": [
+  "(해결 2026-11-06 22:23) TO-BE PKG_SCP0016 WATERFALL 버전 SP_W_20260615 ORA-01722 — 원인은 뷰 SCP_PLN_SALES_ONHAND_V·SCP_OPT_PLANT_ONHAND_V 의 TO_NUMBER(REGEXP_SUBSTR(A.OPT_PLAN_ID…)) 구포맷 ID 변환 → DEFAULT NULL ON CONVERSION ERROR 가드 적용(_artifacts/_apply_corporate/ONHAND_V_SEQ_GUARD_20261106) · 적용 후 0615 호출 454행 OK"
+ ],
+ "user_verdicts": {
+  "2-a": "DEPT_NAME_KO AS-IS '-' ↔ TO-BE 팀명 = 결함 아님(DEV 부서 데이터 부재) · AD-4a2e1baf PASS",
+  "2-b": "헤더 Team 누락 = 차후 확인",
+  "2-c": "ORA-01722 = 보완대상 → 적용 완료"
+ }
+}

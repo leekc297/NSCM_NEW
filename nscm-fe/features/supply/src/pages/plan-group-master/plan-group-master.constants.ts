@@ -65,9 +65,8 @@ export const MSG = {
   // Division 권한 0건 → SearchArea disable + 경고 (01_layout R2, SetDivisionAuthCheck 등가).
   //   MSG00097 = "Please select Division." / "Division 을 선택하세요." (문구 일치 — 유지).
   REQUIRE_DIVISION: 'MSG00097',
-  // 동일 키 중복 (W10). MSG00060 = "Duplicate key exists." / "중복된 키가 존재합니다."
-  //   AS-IS MSG00443 은 TO-BE 미등록(0행)이라 재사용 불가.
-  DUPLICATE_KEY: 'MSG00060',
+  // 동일 키 중복 (W10). MSG01427 = "중복된 항목이 있습니다." (사용자 지정 2026-11-03 — AS-IS MSG00443 의 등가 TO-BE 코드).
+  DUPLICATE_KEY: 'MSG01427',
   // 저장 성공 N건 (W13). MSG00672 = "{0} data saved." / "{0}개의 데이터가 저장되었습니다." ({0}=저장 건수).
   //   AS-IS MSG00004 는 TO-BE 에서 "No changes to save." 라 재사용 시 성공 toast 에 "변경없음" 이 뜬다.
   SAVE_SUCCESS: 'MSG00672',
@@ -78,17 +77,17 @@ export const MSG = {
   //   "An error occurred while saving." / "저장 중 오류가 발생했습니다." (자매 shipment-working-day 규약).
   //   AS-IS MSG00005 는 TO-BE 에서 "Please save your changes first." 라 재사용 금지.
   SAVE_FAIL: 'MSG00618',
-  // W11/W12 literal — AS-IS 번호 없는 화면 고유 메시지. TO-BE SCM_ADM_MSG_M 역조회 0행(2026-10-13 실측).
-  //   MSG-05: 미등록 코드는 자체 채번·INSERT 금지 → 서버 담당자 등록 요청(SPEC.msg_ids 인벤토리, 04 기록).
-  //   등록 전까지 '_' 접두 fallback(MSG-03) 유지 — EN 은 동작, KO/CN 은 등록 후 지역화된다.
-  ALL_MODEL_MIX: '_SCP0121_ALL_MODEL_MIX',
-  MULTI_PLAN_GROUP_ALL: '_SCP0121_MULTI_PLAN_GROUP_ALL',
+  // W11/W12 — AS-IS 번호 없는 화면 고유 하드코딩 메시지. 서버 SCM_ADM_MSG_M 에 등록 완료(2026-11-04).
+  //   W11 = MSG01496 "동일 Line에 동일Plan Group에 All(-)과 모델을 같이 지정할 수 없습니다."
+  //   W12 = MSG01497 "동일 Line에 2개 이상의 Plan Group을 지정할 경우, All(-)을 사용할 수 없다."
+  ALL_MODEL_MIX: 'MSG01496',
+  MULTI_PLAN_GROUP_ALL: 'MSG01497',
 } as const;
 
 // 조회조건 라벨 (02 §4.5 — 전건 기존 LBL, 신규채번 0).
 export const LABELS = {
   DIVISION: 'LBL00001',
-  OPERATION: 'LBL00009',
+  OPERATION: 'LBL00027', // Operation group(조회조건 표준, 갭분석 표-02)
   PLANT: 'LBL00030',
   BUILDING: 'LBL00008',
   LINE: 'LBL00010',

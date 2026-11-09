@@ -7,17 +7,17 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/master/src/components/contributeVersionModal/contribute-version-modal.constants.ts | constants | 21 |
+| features/master/src/components/contributeVersionModal/contribute-version-modal.constants.ts | constants | 25 |
 | features/master/src/components/contributeVersionModal/ContributeVersionModal.module.scss | style | 22 |
-| features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | page | 451 |
+| features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | page | 469 |
 | features/master/src/components/contributeVersionModal/contributeVersionModalStore.ts | store | 52 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| DMF0043/yearPopup//call-proc | hook | 1 | Y | ContributeVersionModal.tsx:111 |
-| DMF0043/ratePopup//call-proc | hook | 1 | Y | ContributeVersionModal.tsx:134 |
-| /DMF0043/version/SAVE/call-proc | http | 1 | Y | ContributeVersionModal.tsx:323 |
+| DMF0043/yearPopup//call-proc | hook | 1 | Y | ContributeVersionModal.tsx:119 |
+| DMF0043/ratePopup//call-proc | hook | 1 | Y | ContributeVersionModal.tsx:142 |
+| /DMF0043/version/SAVE/call-proc | http | 1 | Y | ContributeVersionModal.tsx:333 |
 | /admin/menu/DMF0043/column | http | 1 | Y | contributeVersionModalStore.ts:40 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -26,16 +26,16 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| globalThis.window | keydown | handler | addEventListener | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 85 |
-| grid | formatItem | <arrow>  | addHandler | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 195 |
-| GridHotkeys | onInsert | handleInsert | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 365 |
-| GridHotkeys | onDelete | handleDelete | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 365 |
-| SearchArea | onSearch | handleFind | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 368 |
-| CustomDropdown | onChange | <arrow> yearOptions.find,String,setSelectedYear,String(opt?.CODE).substring | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 383 |
-| Button | onClick | handleInsert | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 420 |
-| Button | onClick | handleDelete | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 427 |
-| Button | onClick | <arrow> handleSave | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 436 |
-| Button | onClick | <arrow> modalClose | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 443 |
+| globalThis.window | keydown | handler | addEventListener | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 86 |
+| grid | formatItem | <arrow>  | addHandler | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 203 |
+| GridHotkeys | onInsert | handleInsert | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 375 |
+| GridHotkeys | onDelete | handleDelete | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 375 |
+| SearchArea | onSearch | handleFind | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 378 |
+| CustomDropdown | onChange | <arrow> yearOptions.find,String,setSelectedYear,String(opt?.CODE).substring | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 393 |
+| Button | onClick | handleInsert | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 433 |
+| Button | onClick | handleDelete | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 442 |
+| Button | onClick | <arrow> handleSave | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 453 |
+| Button | onClick | <arrow> modalClose | jsx | features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx | 461 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

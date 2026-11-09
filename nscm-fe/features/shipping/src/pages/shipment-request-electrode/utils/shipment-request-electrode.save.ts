@@ -17,7 +17,9 @@
 import { apiClient } from '@foundation/apis';
 import dayjs from '@foundation/dayjs';
 
-import { MENU_ID, SHEETS } from '../shipment-request-electrode.constants';
+import { MEASURE, MENU_ID, SHEETS } from '../shipment-request-electrode.constants';
+
+import { dayOfPivotBinding, isPivotDayXBinding } from './shipment-request-electrode.editLock';
 
 export type SaveRow = Record<string, unknown>;
 
@@ -70,11 +72,17 @@ export const checkPeriodRange = (fromRaw: string, toRaw: string): PeriodError | 
 export const collectChangedRows = (rows: SaveRow[]): SaveRow[] =>
   rows.filter(r => CHANGED_ACTIONS.has(str(r.CRUD_TYPE)));
 
-/** Insert 신규행 기본값 — DIVISION_ID 자동세팅(cs:1457) + EDIT_FLAG='N'(신규 미확정). CRUD_TYPE='I' 는 addRow 가 부여. */
+/**
+ * Insert 신규행 기본값 — AS-IS InsertRow(cs:1447-1472)는 DIVISION_ID 만 SetValue 하고 EDIT_FLAG 는 설정하지 않는다.
+ *   필수: EDIT_FLAG 에 'N' 을 넣지 않는다 — 공용 GridAction.addRowSet 는 `itemsSource.every(EDIT_FLAG==='N')`
+ *   이면 행추가를 차단한다(gridAction.ts:822-824). 신규행에 'N' 을 박으면 빈 그리드에 한 행 추가 후 둘째부터,
+ *   조회 데이터가 전부 'N' 이면 첫 행부터 추가가 막힌다(2026-11-04 사용자 지적, AS-IS 에 없는 비충실 값이 원인).
+ *   CRUD_TYPE='I' 는 addRowSet 이 부여하고, 신규행 편집범위는 editLock 의 isNewRow(CRUD_TYPE) 가 판정하므로
+ *   EDIT_FLAG 는 신규행에 불필요하다(기존행 EDIT_FLAG 분기는 조회로 내려온 행에만 적용).
+ */
 export const buildNewRow = (divisionId: string): SaveRow => ({
   DIVISION_ID: divisionId,
   ORIGIN_DIVISION_ID: divisionId,
-  EDIT_FLAG: 'N',
 });
 
 /**
@@ -178,14 +186,14 @@ const readMsg = (row: Record<string, unknown> | undefined): string =>
   row ? str(row.MSG ?? row.msg ?? '') : '';
 
 /**
- * 요청상세 저장 실행. HTTP 200·code:0 이어도 o_rc1 첫 칸이 'S' 가 아니면 저장되지 않았다(AS-IS cs:2665~2706).
+ * '^'-폴딩 payload 를 P_SSP0022_SAVE_SHIPMENT_REQUEST 로 POST 하고 o_rc1 결과를 해석한다.
+ *   HTTP 200·code:0 이어도 o_rc1 첫 칸이 'S' 가 아니면 저장되지 않았다(AS-IS cs:2665~2706).
  *   인터셉터가 500/403 도 resolve 하므로 status/code 분기가 없으면 실패가 성공으로 샌다.
+ *   요청상세(spdDetail)와 ETA 요청팝업(ShipmentRequestInsertModal)이 같은 SP 를 공유한다.
  */
-export const submitShipmentRequestSave = async (
-  rows: SaveRow[],
-  ctx: SaveContext
+export const postShipmentRequestSave = async (
+  payload: Record<string, string>
 ): Promise<SaveResult> => {
-  const payload = buildSavePayload(rows, ctx);
   const res = await apiClient.post<Record<string, Record<string, unknown>[]>>(
     `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
     payload
@@ -196,4 +204,128 @@ export const submitShipmentRequestSave = async (
   const first = res.data.result?.o_rc1?.[0];
   const code = readCode(first);
   return { ok: true, code: (code as SaveResult['code']) || '', message: readMsg(first) };
+};
+
+/**
+ * 요청상세 저장 실행 — 변경행을 '^'-폴딩(buildSavePayload)해 저장한다.
+ */
+export const submitShipmentRequestSave = async (
+  rows: SaveRow[],
+  ctx: SaveContext
+): Promise<SaveResult> => postShipmentRequestSave(buildSavePayload(rows, ctx));
+
+// ── 메인 pivot(spdMain) 저장 — AS-IS SaveData(cs:2729-2924) 이식 ──
+//   요청상세 저장(위)과 **같은 SP**(P_SSP0022_SAVE_SHIPMENT_REQUEST)·엔드포인트를 쓰나, 수집 단위가 다르다:
+//   요청상세는 '행', 메인은 '셀'(= R_SHIP_REQ_ETA 행 × 변경된 X_D_ 일 셀, cs:2775-2813). AS-IS 는
+//   `ForeColor.Name=="Red"`(사용자가 실제로 바꾼 칸)로 판정했고, TO-BE 는 그 등가물인 EditTracker 변경 추적을 쓴다.
+//   메인 저장은 요청상세와 달리 **저장 전 확인창이 없다**(cs:2729-2924 전 구간 GMessageBox(Yes/No) 없음 — R12).
+
+/** 메인 pivot 저장 1건 = (R_SHIP_REQ_ETA 행 × 변경된 X_D_ 일 셀). */
+export interface MainSaveCell {
+  activeFlag: string; // 행 CRUD_TYPE — 조회된 기존 행 인라인 편집이라 실질 'M'
+  divisionId: string; // AS-IS p_division_id = TEMPCOLUMN(cs:2796)
+  bodId: string;
+  incoterms: string;
+  transportMode: string;
+  plantId: string;
+  scmSiteId: string;
+  fromSite: string;
+  toSite: string;
+  modelId: string;
+  itemId: string;
+  etaDate: string; // X_D_ 뒤 yyyymmdd(= 그 셀의 날짜, cs:2789 strDayName)
+  qty: string;
+}
+
+/**
+ * 변경 셀 수집 — AS-IS SaveData 루프(cs:2775-2813)의 조건 1:1.
+ *   ① 행 CRUD_TYPE 이 'I'/'M' (cs:2784 — 메인 pivot 은 신규행 경로가 없어 실질 'M')
+ *   ② 컬럼이 X_D_ 일 셀 (cs:2781)
+ *   ③ 값이 비어있지 않음 (cs:2793)
+ *   ④ **실제로 바뀐 셀**만 — AS-IS ForeColor=="Red", TO-BE EditTracker 변경 목록(semi K9 동형)
+ *   방어 가드: MEASURE==='R_SHIP_REQ_ETA' — 편집 게이트(isShipmentPsiCellEditable)가 이 행만 열지만
+ *   붙여넣기·직접입력 우회 대비로 수집 단계에서도 재확인한다(editLock 과 동일 축).
+ *
+ * @param changed EditTracker.getOriginalValues() 결과(행 객체 → {binding: 원값}).
+ */
+export const collectMainSaveCells = (
+  rows: readonly SaveRow[],
+  changed: ReadonlyMap<object, Record<string, unknown>>
+): MainSaveCell[] => {
+  const out: MainSaveCell[] = [];
+  for (const row of rows) {
+    const flag = str(row.CRUD_TYPE);
+    if (flag !== 'I' && flag !== 'M') continue;
+    if (str(row.MEASURE) !== MEASURE.SHIP_REQ_ETA) continue;
+    const bindings = Object.keys(changed.get(row) ?? {}).filter(isPivotDayXBinding);
+    for (const binding of bindings) {
+      const raw = row[binding];
+      if (typeof raw !== 'number' && typeof raw !== 'string') continue;
+      const qty = String(raw).replace(/,/g, '').trim();
+      if (qty === '') continue; // 비공백만(cs:2793)
+      out.push({
+        activeFlag: flag,
+        // AS-IS p_division_id = TEMPCOLUMN(ORIGIN division). 미존재 시 폴백(ETA 모달 DIVISION_ORG 동일 체인).
+        divisionId: str(row.TEMPCOLUMN) || str(row.ORIGIN_FROM_DIVISION_ID) || str(row.DIVISION_ID),
+        bodId: str(row.BOD_ID),
+        incoterms: str(row.INCOTERMS),
+        transportMode: str(row.TRANSPORT_MODE),
+        plantId: str(row.PLANT_ID),
+        scmSiteId: str(row.SCM_SITE_ID),
+        fromSite: str(row.FROM_SITE),
+        toSite: str(row.TO_SITE),
+        // AS-IS 메인 SaveData 는 Model/Item 을 ToUpper 하지 않는다(cs:2804-2805 raw) — 요청상세 fold 와 다름.
+        modelId: str(row.MODEL_ID),
+        itemId: str(row.ITEM_ID),
+        etaDate: dayOfPivotBinding(binding),
+        qty,
+      });
+    }
+  }
+  return out;
+};
+
+/**
+ * MainSaveCell[] → SAVE SP payload(camelCase, '^'-폴딩 13 + createdBy/debugMode 스칼라).
+ *   AS-IS p_company_id 는 스칼라(cs:2834)지만, SP 가 `SCM_ARR_SPL_CNT(p_item_id,'^')` 로 루프 수를 정하므로
+ *   **모든 배열의 토큰 수가 같아야** 밀리지 않는다 — companyId 를 셀 수만큼 반복해 정합을 보장한다(요청상세 fold 동일 방침).
+ */
+export const buildMainSavePayload = (
+  cells: readonly MainSaveCell[],
+  ctx: SaveContext
+): Record<string, string> => {
+  const join = (sel: (c: MainSaveCell) => string): string => cells.map(sel).join('^');
+  return {
+    activeFlag: join(c => c.activeFlag),
+    divisionId: join(c => c.divisionId),
+    companyId: join(() => ctx.companyId),
+    scmSiteId: join(c => c.scmSiteId),
+    plantId: join(c => c.plantId),
+    modelId: join(c => c.modelId),
+    itemId: join(c => c.itemId),
+    fromSite: join(c => c.fromSite),
+    toSite: join(c => c.toSite),
+    etaDate: join(c => c.etaDate),
+    bodId: join(c => c.bodId),
+    incoterms: join(c => c.incoterms),
+    transportMode: join(c => c.transportMode),
+    qty: join(c => c.qty),
+    createdBy: ctx.userId,
+    debugMode: 'N',
+  };
+};
+
+/**
+ * 메인 pivot 저장 실행 — 변경 X_D_ 셀을 수집·'^'-폴딩해 저장한다. 변경 셀 0건이면 저장하지 않고 count=0 반환
+ *   (호출부가 MSG00005 "변경/추가된 데이터가 없습니다" 안내, AS-IS cs:2905-2908).
+ */
+export const submitMainSave = async (
+  rows: readonly SaveRow[],
+  changed: ReadonlyMap<object, Record<string, unknown>>,
+  ctx: SaveContext
+): Promise<{ result: SaveResult; count: number }> => {
+  const cells = collectMainSaveCells(rows, changed);
+  if (cells.length === 0) return { result: { ok: true, code: '', message: '' }, count: 0 };
+  const result = await postShipmentRequestSave(buildMainSavePayload(cells, ctx));
+  return { result, count: cells.length };
 };

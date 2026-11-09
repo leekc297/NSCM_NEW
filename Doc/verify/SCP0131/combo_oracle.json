@@ -1,0 +1,119 @@
+{
+ "mid": "SCP0131",
+ "asis_id": "SCP0131",
+ "account": "minyonglee1",
+ "group": "ADMIN",
+ "results": [
+  {
+   "kind": "SEARCH",
+   "target": "Div",
+   "label": "Division*",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 14,
+   "asis_src": "UP_FX_GetCommonDataList_SCP Division @InitControls (SCP0131_SalesSitePriority.cs:155 ← SCP0131_SalesSitePriority)",
+   "asis_n": 14,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 14건 집합 일치",
+   "b3": "판정필요",
+   "b3_why": "원문 ORDER BY 있음·정렬 키 해석 불가 — AS-IS 반환 순서와 다름: TO-BE ['40', '81', '81_HD', '81_HG', '81_HM'] / AS-IS ['81', '40', '82', 'EE', '81_UC']",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SCP0131_SalesSitePriority.cs:155) = TO-BE 표시 NAME (CODE≠NAME 후보 14/14건 확인)"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Plan Group",
+   "label": "Plan Group",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 15,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtPlanGroup 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "SCM Site",
+   "label": "SCM Site",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 486,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtScmSite 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Active",
+   "label": "",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 2,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID",
+   "target": "OPMZ_PLAN_GR_ID",
+   "label": "Plan Group",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 15,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtPlanGroup 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "OPMZ_PLAN_GR_ID",
+   "label": "Plan Group",
+   "scenario": "기존행(DIVISION_ID=81, SCM_SITE_ID=ATL_DE_RDG, ITEM_ID=AMCOME782-A1-0A0)",
+   "tobe_n": 15,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtPlanGroup 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "GRID",
+   "target": "SCM_SITE_ID",
+   "label": "SCM site",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 486,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "SCM_SITE_ID",
+   "label": "SCM site",
+   "scenario": "기존행(DIVISION_ID=81, SCM_SITE_ID=ATL_DE_RDG, ITEM_ID=AMCOME782-A1-0A0)",
+   "tobe_n": 486,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID",
+   "target": "VALID_YN",
+   "label": "Active",
+   "scenario": "신규행(DIVISION_ID=81)",
+   "tobe_n": 2,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  },
+  {
+   "kind": "GRID_EX",
+   "target": "VALID_YN",
+   "label": "Active",
+   "scenario": "기존행(DIVISION_ID=81, SCM_SITE_ID=ATL_DE_RDG, ITEM_ID=AMCOME782-A1-0A0)",
+   "tobe_n": 2,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 미발견(combo_src 에 이 대상 바인딩 없음)"
+  }
+ ]
+}

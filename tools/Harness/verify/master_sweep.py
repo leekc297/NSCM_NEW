@@ -9,7 +9,27 @@
   ACTIVE_CAND: 콤보 후보(combo_runtime.json) ↔ 활성 컬럼이 있는 SCM_* 표 전체(소유자 무관 · 시노님 뒤 FP_MGR 표 포함)의 PK 컬럼별 값 — 비활성 코드가 후보에 있으면 ERROR(확인 대상 · AS-IS 후보 대조는 combo_oracle)
   한계: AS-IS 표 이름이 다르면 NA · 키 값은 대문자·공백 제거·빈 값 센티널('-','/') 같은 값으로 비교
 """
-import csv, json, os, re, sys
+import csv, json, os, re, sys, time
+
+_HERE_ = os.path.dirname(os.path.abspath(__file__)); _ROOT_ = os.path.abspath(os.path.join(_HERE_, '..', '..', '..'))
+CACHE_PATH = os.path.join(_ROOT_, 'Doc', 'verify', '_master_sweep_cache.json'); CACHE_TTL_SEC = 12 * 3600
+try:
+    _CACHE = json.load(open(CACHE_PATH, encoding='utf-8')) if os.path.exists(CACHE_PATH) else {}
+except (OSError, ValueError):
+    _CACHE = {}
+
+
+def _cache_save():
+    """GROUP BY 결과 캐시 저장(원자 교체 · 동시 실행 보호) — 바뀐 게 있을 때만"""
+    if not _CACHE.pop('_dirty', False):
+        return
+    try:
+        tmp = f'{CACHE_PATH}.{os.getpid()}.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(_CACHE, f, ensure_ascii=False)
+        os.replace(tmp, CACHE_PATH)
+    except OSError:
+        pass
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn')); sys.path.insert(0, HERE)
@@ -134,12 +154,19 @@ def active_rows(tc, cands):
         for k, c in tc.fetchall():
             by.setdefault(k, []).append(c)
         for col in key_cols(tbl, by):
-            try:
-                tc.execute(f'SELECT "{col}", MAX(CASE WHEN UPPER("{flag}") IN (\'Y\',\'1\',\'TRUE\') THEN 1 ELSE 0 END) FROM {owner}."{tbl}" GROUP BY "{col}"')
-            except Exception as e:  # 권한 없는 표
-                out.append({'kind': 'ACTIVE_CAND', 'target': f'{owner}.{tbl}', 'result': 'ERROR', 'why': f'[측정 경로 없음] {str(e)[:80]}'})
-                break
-            rows = tc.fetchall()
+            # 2026-11-08 속도: 표×키 컬럼마다 GROUP BY 전체 스캔(SCP0122 실측 36s · post 단계의 70%) → 12시간 캐시(Doc/verify/_master_sweep_cache.json · 기준표 활성값은 하루 안에 거의 안 바뀜 · 결과 동일)
+            ck = f'{owner}.{tbl}.{col}|{flag}'
+            hit = _CACHE.get(ck)
+            if hit and (time.time() - float(hit.get('at') or 0)) < CACHE_TTL_SEC:
+                rows = [tuple(x) for x in hit['rows']]
+            else:
+                try:
+                    tc.execute(f'SELECT "{col}", MAX(CASE WHEN UPPER("{flag}") IN (\'Y\',\'1\',\'TRUE\') THEN 1 ELSE 0 END) FROM {owner}."{tbl}" GROUP BY "{col}"')
+                except Exception as e:  # 권한 없는 표
+                    out.append({'kind': 'ACTIVE_CAND', 'target': f'{owner}.{tbl}', 'result': 'ERROR', 'why': f'[측정 경로 없음] {str(e)[:80]}'})
+                    break
+                rows = tc.fetchall()
+                _CACHE[ck] = {'at': time.time(), 'rows': [[None if a is None else str(a), int(b or 0)] for a, b in rows]}; _CACHE['_dirty'] = True
             keys = {norm_key(a) for a, _ in rows}
             inactive = {norm_key(a) for a, b in rows if not b}
             if not inactive:
@@ -214,6 +241,7 @@ def main(mid):
         w = csv.DictWriter(f, COLS); w.writeheader(); w.writerows(res)
     c = {}
     for x in res: c[x['result']] = c.get(x['result'], 0) + 1
+    _cache_save()
     print(f'[master_sweep] {mid} 표 {len(tables)} · {c} → {p}')
     return 0
 

@@ -140,9 +140,13 @@ export const LineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     const grid = mainGridRef.current;
     if (!grid) return;
     const target = grid.selectedItems[0] as Record<string, unknown> | undefined;
-    // 기존행 삭제는 AS-IS 미구현(SAVE SP 에 D 분기 없음) — 신규행만 제거.
+    // 기존행 삭제는 AS-IS 미구현(SAVE SP 에 D 분기 없음, DeleteButton cs:401 action==FlagI 만 Delete) — 신규행('I')만 제거.
+    //   AS-IS 는 기존행 선택 시 무반응(silent)이나, 왜 안 되는지 알리도록 alert MSG00608 안내(사용자 지시 2026-11-09).
     if (target && target.CRUD_TYPE !== 'I') {
-      setToast({ type: 'error', message: t(MSG.READ_ONLY, '_Cannot delete existing row.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.DELETE_INSERT_ONLY, '_Only newly inserted rows can be deleted.'),
+      });
       return;
     }
     GridAction.removeRow(grid);
@@ -215,7 +219,8 @@ export const LineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       />
 
       {/* AS-IS FpSpread 시트탭(shtMain/shtPacker) 등가 — Plant/Packer 2 탭(표준 TabWrapper).
-          탭 전환 = setMode(하위 cascade·필터 초기화) → 재조회 필요. 단일 그리드라 활성 탭만 마운트(persist 미사용). */}
+          탭 전환 = setMode(시트마다 도메인이 다른 PlantSite/Line/Building/Operation 조회조건만 초기화 —
+          Division·Valid·시트별 그리드는 보존). 단일 그리드라 활성 탭만 마운트(persist 미사용). */}
       <TabWrapper
         activeTabIndex={isPlant ? 0 : 1}
         setActiveTabIndex={index => setMode(index === 1 ? LINE_MODE.PACKER : LINE_MODE.PLANT)}

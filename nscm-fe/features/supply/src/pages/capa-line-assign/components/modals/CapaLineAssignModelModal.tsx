@@ -9,6 +9,8 @@ import {
   DataGrid,
   ResultArea,
   SearchArea,
+  TabItem,
+  TabWrapper,
 } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, ProgressIndicator } from '@shared/lges';
@@ -103,6 +105,13 @@ export const CapaLineAssignModelModal = ({
   const divisionType = divisionTypeOfSheet(sheet);
   const effectiveSheet = sheet;
   const isEltr = divisionType === DIVISION_TYPE.ELTR;
+
+  // AS-IS `SCP0104_CAPA_Line_Assign_Model` 은 SOP_MODEL_ELTR/SOP_MODEL_ASSEMBLY 두 시트를 두되
+  //   Division Type 에 따라 현재 모드 1개만 FpSpread 시트탭으로 보인다(..._Model.cs:696-698
+  //   `Visible=(i==_sheet_idx)`, 교체식). 메인 화면과 동일하게 중첩 TabWrapper 로 '탭 아래 탭'
+  //   외형을 만들고, 현재 모드 1개 탭만 렌더한다. 탭 라벨은 AS-IS 시트명 그대로
+  //   (`SOP_MODEL_ELTR`/`SOP_MODEL_ASSEMBLY`)를 쓴다(= effectiveSheet 값).
+  const modeTabLabel = effectiveSheet;
 
   type SopModelFilters = ProcRequest<MENU_ID, SHEETS.SOP_MODEL_ASSEMBLY>;
   const [applied, setApplied] = useState<SopModelFilters | null>(null);
@@ -398,16 +407,28 @@ export const CapaLineAssignModelModal = ({
               open={isLoading || isFetching}
               placement='parent'
             />
-            <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
-              <DataGrid
-                gridRef={gridRef}
-                gridFilterRef={gridFilterRef}
-                hideStatusColumn
-                itemsSource={rows as unknown as WijmoRowItem[]}
-                staticColumns={columns}
-                sheetName={ADMIN_SHEET_NAME[effectiveSheet]}
-              />
-            </ResultArea>
+            {/* AS-IS 교체식 시트탭(현재 모드 1개)을 메인 화면과 동일한 중첩 TabWrapper 로 재현. */}
+            <TabWrapper>
+              <TabItem label={modeTabLabel}>
+                <div className={styles.tabPane}>
+                  <ResultArea
+                    title=''
+                    count={rows.length}
+                    gridRef={gridRef}
+                    gridFilterRef={gridFilterRef}
+                  >
+                    <DataGrid
+                      gridRef={gridRef}
+                      gridFilterRef={gridFilterRef}
+                      hideStatusColumn
+                      itemsSource={rows as unknown as WijmoRowItem[]}
+                      staticColumns={columns}
+                      sheetName={ADMIN_SHEET_NAME[effectiveSheet]}
+                    />
+                  </ResultArea>
+                </div>
+              </TabItem>
+            </TabWrapper>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

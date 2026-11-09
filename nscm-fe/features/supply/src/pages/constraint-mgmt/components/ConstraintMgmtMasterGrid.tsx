@@ -17,15 +17,18 @@ interface ConstraintMgmtMasterGridProps {
   editTrackerRef: MutableRefObject<EditTracker<MasterRow> | undefined>;
   data: MasterRow[];
   canEdit: boolean;
+  /** 하단 미저장 변경을 버리고 진행해도 되는지. 변경이 없으면 바로 true 다. */
+  confirmDiscardDetail: () => Promise<boolean>;
 }
 
-/** 상단 Lookup Type 그리드. 더블클릭이 하단의 컬럼 사전과 조회 키를 동시에 만든다. */
+/** 상단 Lookup Type 그리드. 행 클릭이 하단의 컬럼 사전과 조회 키를 동시에 만든다. */
 export const ConstraintMgmtMasterGrid = ({
   gridRef,
   gridFilterRef,
   editTrackerRef,
   data,
   canEdit,
+  confirmDiscardDetail,
 }: ConstraintMgmtMasterGridProps) => {
   const staticColumns = useConstraintMgmtStore(state => state.staticColumns.lookupMaster);
   const setActiveGrid = useConstraintMgmtStore(state => state.setActiveGrid);
@@ -49,16 +52,18 @@ export const ConstraintMgmtMasterGrid = ({
   };
 
   /**
-   * 마스터 더블클릭 -> Sub 컬럼 재구성 + Sub 조회(drill-down).
+   * 마스터 클릭 -> Sub 컬럼 재구성 + Sub 조회(drill-down).
+   *
+   * AS-IS 는 spdMain.CellDoubleClick 이지만 TO-BE 는 단일 클릭으로 조회한다(2026-11-04).
+   * 더블클릭도 클릭 두 번이라 그대로 조회된다.
    *
    * AS-IS 가드 3개 중 첫 번째(`siMain.IsLock==true` 일 때만 = Main 이 조회모드일 때만)는
    * 이식하지 않는다 — 편집이 기본값인 TO-BE 에서는 그 가드가 Sub 조회를 영구 차단한다
    * (decisions.md §2). 나머지 2개(행 존재 / LOOKUP_TYPE 비어있지 않음)는 유지한다.
    *
-   * 수정 가능한 컬럼을 더블클릭하면 편집 진입이 목적이므로 하단 조회(drill-down)를 걸지 않는다.
-   * 잠금 컬럼(INPUT_TP_CD='S')이나 편집권한 없음(canEdit=false)일 때만 조회로 넘어간다.
+   * 하단에 미저장 변경이 있으면 확인창을 띄우고, 취소하면 하단을 그대로 둔다.
    */
-  const handleDblClick = (mouseEvent: MouseEvent) => {
+  const handleSelectLookupType = async (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
     if (!grid) return;
 
@@ -74,23 +79,10 @@ export const ConstraintMgmtMasterGrid = ({
     if (!lookupType) return;
     // 이미 하단에 띄운 LOOKUP_TYPE 이면 재조회 생략(2026-10-15).
     if (lookupType === mainLookupTypeRef.current) return;
+    if (!(await confirmDiscardDetail())) return;
 
     applyDynamicSubColumns(dataItem);
     setSubFilters(lookupType);
-  };
-
-  // 편집 종료로 셀이 다시 그려지면 브라우저 dblclick 이 빠질 수 있어 같은 행 연속 클릭도 더블클릭으로 본다.
-  //   중복 호출은 위 같은 LOOKUP_TYPE 가드가 막는다.
-  const lastClickRef = useRef({ row: -1, time: 0 });
-  const handleClick = (mouseEvent: MouseEvent) => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    const hitTest = grid.hitTest(mouseEvent);
-    if (hitTest.cellType !== CellType.Cell) return;
-    const now = Date.now();
-    const last = lastClickRef.current;
-    lastClickRef.current = { row: hitTest.row, time: now };
-    if (last.row === hitTest.row && now - last.time < 500) handleDblClick(mouseEvent);
   };
 
   return (
@@ -102,8 +94,7 @@ export const ConstraintMgmtMasterGrid = ({
       staticColumns={staticColumns}
       sheetName={SHEETS.LOOKUP_MASTER}
       gotFocus={handleGotFocus}
-      dblClick={handleDblClick}
-      click={handleClick}
+      click={mouseEvent => void handleSelectLookupType(mouseEvent)}
     />
   );
 };

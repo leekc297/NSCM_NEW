@@ -2,10 +2,6 @@ import { describe, expect, it } from 'vitest';
 
 import { isDiv40, isPlantSiteDisabled } from './sales-monitoring.combos';
 
-// [E20260901-COMMONSYNC] 공통소스 8f0b2a60 "salesplan 미사용 콤보 제거" 가 BIZ_TYPE_COMBO_ID /
-//   bizTypeComboFilterOf export 를 제거했는데 자기 test 는 미정합(공통 HEAD 컴파일 불가 계보 — 3번째).
-//   해당 describe 를 소스와 정합 삭제 — 잔여 유틸 2종 검증은 유지.
-
 describe('isDiv40', () => {
   it('40 만 true, 그 외 division 은 false', () => {
     expect(isDiv40('40')).toBe(true);
@@ -16,6 +12,10 @@ describe('isDiv40', () => {
     expect(isDiv40(undefined)).toBe(false);
   });
 });
+
+// Biz Type 은 2026-08-22 콤보 통일로 division 별 원천 스왑(bizTypeComboFilterOf /
+//   BIZ_TYPE_COMBO_ID)이 폐지됐다. FilterBizType(#3) 하나가 두 갈래를 UNION 으로 내려주므로
+//   화면이 DIVISION_ID 축으로만 좁힌다 - 판정 함수 자체가 없어 여기서 검증할 대상도 없다.
 
 // 이슈 2026-08-20 — 82 Div 에서 Plant Site 가 비활성. AS-IS 는 40 만 비활성.
 describe('isPlantSiteDisabled', () => {
@@ -30,3 +30,6 @@ describe('isPlantSiteDisabled', () => {
     expect(isPlantSiteDisabled('82')).toBe(false);
   });
 });
+
+// 2026-08-22 콤보 통일 — Plant Site 는 카탈로그 기본 'PlantSitebyEndCustomer' 를 쓴다.
+//   화면이 comboId 를 넘기지 않으므로 상수 자체가 사라졌다.

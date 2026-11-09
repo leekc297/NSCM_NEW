@@ -237,6 +237,8 @@ export async function cellPoint(page: Page, tag: string, row: number): Promise<{
   return page.evaluate(`(async () => { const c = ${CTLS(tag)}[0]; if (!c) return null; let colI = -1; for (let i = 0; i < c.columns.length; i++) { const x = c.columns[i]; if (x.visible !== false && x.binding && (x.dataType !== 3)) { colI = i; break; } } if (colI < 0) return null;
     c.scrollIntoView(${row}, colI); await new Promise(r => setTimeout(r, 200)); const el = c.cells.getCellElement(${row}, colI); if (!el) return null; const r = el.getBoundingClientRect();
     let check = null; for (let i = 0; i < c.columns.length; i++) { const e2 = c.cells.getCellElement(${row}, i); const inp = e2 && e2.querySelector && e2.querySelector('input[type="checkbox"]'); if (inp) { const q = inp.getBoundingClientRect(); check = { x: q.left + q.width / 2, y: q.top + q.height / 2 }; break; } }
+    /* 2026-11-07 T148: 공용 모달 multiCheckbox(useCheckbox) 는 체크박스를 행 헤더 패널(rowHeaders)에 그린다 — cells 만 보면 체크 없음으로 오인해 행 클릭+OK → 조건 칸 '' (SCP0131 COND:Model PICK_OK ERROR · 15:4x 단독 실측: rowheaders 체크 뒤 OK → 'AAEF1001I-A1-000' 반영) */
+    if (!check && c.rowHeaders) { for (let i = 0; i < c.rowHeaders.columns.length; i++) { const e3 = c.rowHeaders.getCellElement(${row}, i); const inp = e3 && e3.querySelector && e3.querySelector('input[type="checkbox"]'); if (inp) { const q = inp.getBoundingClientRect(); check = { x: q.left + q.width / 2, y: q.top + q.height / 2 }; break; } } }
     return { x: r.left + r.width / 2, y: r.top + r.height / 2, check }; })()`).catch(() => null) as Promise<{ x: number; y: number; check: { x: number; y: number } | null } | null>;
 }
 

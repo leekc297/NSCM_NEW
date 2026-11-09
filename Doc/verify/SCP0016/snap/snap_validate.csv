@@ -1,0 +1,8 @@
+﻿key,kind,scope,status,missing,order,type_warn,extra,basis
+조회조건_Div_40,조회조건,Div 40,MISMATCH,,시각 순서 division > operationgroup > pjt > modelnickname > electrode > ver > bucket > period > sum ≠ 기준표 division > ver > operationgroup > pjt > modelnickname > electrode > period > bucket > sum,"Electrode:선택≠img,text;DOM 순서≠기준표(경고): Ver.→Operation group;Period→Bucket",,
+버튼_Div_40,버튼,Div 40,OK,,,SEARCH: Search(F5) 는 조회영역(SearchArea) 안의 버튼 — SubTitle 버튼 바 스냅샷 대상 아님(조회조건 스냅샷에서 확인),,plan.json accounts[0].expectedBtns / menuBtnCodes(btn_auth) · buttons(AS-IS 메서드)
+헤더_Waterfall_Shipment_Plan,헤더,Waterfall Shipment Plan,OK,,,,01;02;03;04;05;06;07;08;09;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;date;w,PR_GET_SHEET_COLUMN_LIST(user=minyonglee1 · div=40 · 개인화 21행 · SHEET_PRSL_YN=Y) — TO-BE BE 와 같은 SP 출력(DISPLAY_FLAG=Y 순)
+팝업_PJT,팝업,PJT,NA,,,,,AS-IS 유래 기대 없음(팝업·화면샷) — 사람 확인
+팝업_Model_Nickname,팝업,Model/Nickname,NA,,,,,AS-IS 유래 기대 없음(팝업·화면샷) — 사람 확인
+화면샷_1920,화면샷,1920,NA,,,,,화면샷 — 사람 확인(NEW)
+화면샷_1366,화면샷,1366,NA,,,,,화면샷 — 사람 확인(NEW)

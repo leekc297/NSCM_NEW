@@ -307,7 +307,7 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
         appearance='outlined'
         priority='normal'
         size='small'
-        buttonLabel={t('LBL00622', 'Delete')}
+        buttonLabel={t('LBL00108', 'Delete')}
         onClick={handleDelete}
         iconComponent={<EditDeleteIcon appearance='lined' />}
       />

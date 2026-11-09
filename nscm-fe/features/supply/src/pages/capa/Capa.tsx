@@ -448,6 +448,10 @@ export const Capa = ({ tabId, title }: PageProps<MENU_ID>) => {
         toggleOpenSearchArea={setOpenSearchArea}
       />
       {isOpenSearchArea && <CapaForm onSearch={() => void handleSearch()} />}
+      {/* 조회 전용 안내 — 버튼·요약 배지와 한 줄에서 경합하지 않도록 툴바 위 전체 폭 단독 줄로 분리(2026-11-05). */}
+      <div className={styles.readonlyNotice}>
+        ※ 본 화면은 조회 전용 화면입니다. 데이터 저장 및 변경은 기존 시스템에서 가능합니다
+      </div>
       <SubTitle
         menuId={MENU_ID}
         grid={gridRef}
@@ -507,6 +511,15 @@ export const Capa = ({ tabId, title }: PageProps<MENU_ID>) => {
         sheetName={ADMIN_SHEET_NAME}
         columnType={TITLESET_COLUMN_TYPE}
         divisionId={searchParams.divisionId}
+        /*
+          AS-IS 파리티(20개): BEF 실적 컬럼(BEF_*)은 AS-IS 가 SCM_MST_SHEET_COLUMNS.ATTRIBUTE6='N'
+          (TO-BE USER_SELECTABLE_FLAG='N' 로 전환)으로 걸어 컬럼설정 팝업에서 제외한다(SCP0049_CAPA.cs
+          BtnColumn_Click 주석). 공용 모달은 'N' 을 '목록 표시 + 이동 잠금(고정)'으로 다뤄(2026-08-17
+          계약) BEF 16개가 고정 컬럼으로 남아 36개로 뜬다. 공용 계약은 그대로 두고, 이 화면만
+          hiddenColumns 로 BEF 를 목록에서 뺀다(그리드에는 그대로 — 저장 시 USER_FLAG='Y' 고정).
+          USER_SELECTABLE_FLAG='N' ⟺ BEF_* (DB 실측 일치)라 접두로 집는다.
+        */
+        hiddenColumns={staticColumns.map(c => c.colNm).filter(name => name.startsWith('BEF_'))}
         fallbackColumns={staticColumns.map(c => ({
           key: c.colNm,
           header: c.colLblNm || c.colNm,

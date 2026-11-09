@@ -64,7 +64,9 @@ const ARRAY_KEYS = new Set<string>(['fromSiteIds']);
 const makeInitState = (): State => ({
   initialized: false,
   searchCondition: {
-    divisionId: useSessionStore.getState().session.div ?? '',
+    // 기본 사업부 = Division 콤보 첫 항목(page clamp effect). AS-IS SSP0014 는 MyDivisionCMM 바인딩 후
+    //   첫 행 선택(세션 미사용, cs:189) — session.div deviation 제거(2026-11-05).
+    divisionId: '',
     operationGroup: ALL,
     fromSiteIds: [],
     validYn: ALL,

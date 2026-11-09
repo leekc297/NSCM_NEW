@@ -1,7 +1,19 @@
 {
   "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "eg_auth",
+      "--workers",
+      "1",
+      "--retries",
+      "0",
+      "--reporter=list,json"
+    ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
@@ -14,25 +26,14 @@
       "actualWorkers": 1
     },
     "preserveOutput": "always",
-    "reporter": [
-      [
-        "list"
-      ],
-      [
-        "json"
-      ]
-    ],
-    "reportSlowTests": {
-      "max": 5,
-      "threshold": 15000
-    },
-    "quiet": false,
     "projects": [
       {
         "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0122/eg/auth/artifacts",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -43,9 +44,60 @@
         "timeout": 180000
       }
     ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0122\\eg\\auth\\artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
     "shard": null,
-    "updateSnapshots": "missing",
-    "version": "1.49.1",
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
     "workers": 1,
     "webServer": null
   },
@@ -60,7 +112,7 @@
         {
           "title": "E03 Division·권한 SCP0122 @eg-auth",
           "file": "eg_auth.spec.ts",
-          "line": 67,
+          "line": 85,
           "column": 6,
           "specs": [
             {
@@ -84,8 +136,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 42848,
+                      "duration": 18084,
                       "errors": [],
                       "stdout": [
                         {
@@ -94,7 +147,13 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T10:23:17.783Z",
+                      "startTime": "2026-11-07T10:31:16.996Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
                       "attachments": []
                     }
                   ],
@@ -103,7 +162,7 @@
               ],
               "id": "fce9d8edbd378244cae8-c6860a5e134a90f7c0f2",
               "file": "eg_auth.spec.ts",
-              "line": 73,
+              "line": 92,
               "column": 7
             },
             {
@@ -127,54 +186,64 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 351876,
+                      "duration": 278455,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP/40/SCP Planner 84s\n"
+                          "text": "[eg_auth] SCP/40/SCP Planner 67s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0122 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCP Tester 80s\n"
+                          "text": "[eg_auth] SCP/40/SCP Tester 67s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0122 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM Viewer 80s\n"
+                          "text": "[eg_auth] SCP/40/SCM Viewer 67s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0122 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/ADMIN 20s\n"
+                          "text": "[eg_auth] SCP/40/ADMIN 10s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0122 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM PI Admin 18s\n"
+                          "text": "[eg_auth] SCP/40/SCM PI Admin 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0122 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCP Planner 24s\n"
+                          "text": "[eg_auth] SCP/81/SCP Planner 19s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0122 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 PASS\":1,\"EG365 판정필요\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0122 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 ERROR\":1,\"EG365 ERROR\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM PI Admin 42s\n"
+                          "text": "  EG366 ERROR Division 후보 [SCP/81/SCP Planner] 기대 후보 = 메뉴 권한 그룹의 부문 권한 (없음) · 실측 [측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '' ·  \n"
                         },
                         {
-                          "text": "[eg_auth] SCP0122 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 FAIL\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "  EG365 ERROR 자동 선택 [SCP/81/SCP Planner] 기대 후보 안의 값 · 실측 [측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '' · DM-65 \n"
                         },
                         {
-                          "text": "  EG365 FAIL 자동 선택 [SCP/81/SCM PI Admin] 기대 후보 안의 값() · 실측 81 · DM-65 \n"
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 37s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0122 {\"EG382 PASS\":1,\"EG366 ERROR\":1,\"EG365 ERROR\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "  EG366 ERROR Division 후보 [SCP/81/SCM PI Admin] 기대 후보 = 메뉴 권한 그룹의 부문 권한 81,82,EE · 실측 [측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '81' ·  \n"
+                        },
+                        {
+                          "text": "  EG365 ERROR 자동 선택 [SCP/81/SCM PI Admin] 기대 후보 안의 값 · 실측 [측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '81' · DM-65 \n"
                         },
                         {
                           "text": "[eg_auth] SCP0122 {}\n"
@@ -182,7 +251,13 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T10:24:15.639Z",
+                      "startTime": "2026-11-07T10:31:39.026Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
                       "attachments": []
                     }
                   ],
@@ -191,7 +266,7 @@
               ],
               "id": "fce9d8edbd378244cae8-fcbb021c8a2bc8a47cb7",
               "file": "eg_auth.spec.ts",
-              "line": 230,
+              "line": 249,
               "column": 7
             },
             {
@@ -215,8 +290,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 27992,
+                      "duration": 12918,
                       "errors": [],
                       "stdout": [
                         {
@@ -225,7 +301,13 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T10:30:18.116Z",
+                      "startTime": "2026-11-07T10:36:21.665Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
                       "attachments": []
                     }
                   ],
@@ -234,7 +316,7 @@
               ],
               "id": "fce9d8edbd378244cae8-b895f6f6f64c9b4c083f",
               "file": "eg_auth.spec.ts",
-              "line": 330,
+              "line": 362,
               "column": 7
             },
             {
@@ -258,8 +340,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 25421,
+                      "duration": 14716,
                       "errors": [],
                       "stdout": [
                         {
@@ -271,7 +354,13 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T10:30:52.928Z",
+                      "startTime": "2026-11-07T10:36:38.730Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
                       "attachments": []
                     }
                   ],
@@ -280,7 +369,7 @@
               ],
               "id": "fce9d8edbd378244cae8-756a20556b49dfd874d7",
               "file": "eg_auth.spec.ts",
-              "line": 381,
+              "line": 413,
               "column": 7
             },
             {
@@ -299,8 +388,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 781,
+                      "duration": 283,
                       "errors": [],
                       "stdout": [
                         {
@@ -309,7 +399,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T10:31:24.771Z",
+                      "startTime": "2026-11-07T10:36:57.572Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -318,7 +409,7 @@
               ],
               "id": "fce9d8edbd378244cae8-aefaad5ecf4ee3138c61",
               "file": "eg_auth.spec.ts",
-              "line": 452,
+              "line": 484,
               "column": 7
             },
             {
@@ -342,8 +433,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 13414,
+                      "duration": 4658,
                       "errors": [],
                       "stdout": [
                         {
@@ -352,7 +444,13 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T10:31:32.315Z",
+                      "startTime": "2026-11-07T10:37:01.978Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
                       "attachments": []
                     }
                   ],
@@ -361,7 +459,7 @@
               ],
               "id": "fce9d8edbd378244cae8-230f1c809862426a84fa",
               "file": "eg_auth.spec.ts",
-              "line": 522,
+              "line": 554,
               "column": 7
             },
             {
@@ -380,8 +478,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 829,
+                      "duration": 288,
                       "errors": [],
                       "stdout": [
                         {
@@ -393,7 +492,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T10:31:52.759Z",
+                      "startTime": "2026-11-07T10:37:10.849Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -402,7 +502,7 @@
               ],
               "id": "fce9d8edbd378244cae8-423a4ab8c011662e173c",
               "file": "eg_auth.spec.ts",
-              "line": 536,
+              "line": 570,
               "column": 7
             },
             {
@@ -426,8 +526,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 14018,
+                      "duration": 4869,
                       "errors": [],
                       "stdout": [
                         {
@@ -436,7 +537,13 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T10:32:00.209Z",
+                      "startTime": "2026-11-07T10:37:15.902Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
                       "attachments": []
                     }
                   ],
@@ -445,7 +552,7 @@
               ],
               "id": "fce9d8edbd378244cae8-10c4daad683b111b02ec",
               "file": "eg_auth.spec.ts",
-              "line": 566,
+              "line": 600,
               "column": 7
             },
             {
@@ -464,8 +571,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 905,
+                      "duration": 308,
                       "errors": [],
                       "stdout": [
                         {
@@ -477,7 +585,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T10:32:21.145Z",
+                      "startTime": "2026-11-07T10:37:25.077Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -486,7 +595,7 @@
               ],
               "id": "fce9d8edbd378244cae8-959b2bca29485e652a17",
               "file": "eg_auth.spec.ts",
-              "line": 591,
+              "line": 625,
               "column": 7
             }
           ]
@@ -496,8 +605,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-04T10:23:14.282Z",
-    "duration": 556551.981,
+    "startTime": "2026-11-07T10:31:16.410Z",
+    "duration": 373953.577,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

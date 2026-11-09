@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import {
   type AuthContext,
+  type EditLockContext,
   INSERT_ROW_ONLY_EDITABLE,
+  isBohCellEditable,
   isInsertRowCellEditable,
   isPivotCellValueEmpty,
 } from './integrationPsiEditLock';
@@ -10,6 +12,12 @@ import {
 const GENERAL: AuthContext = { isAdmin: false, isPiAdmin: false, isPlanner: false };
 const PLANNER: AuthContext = { isAdmin: false, isPiAdmin: false, isPlanner: true };
 const ADMIN: AuthContext = { isAdmin: true, isPiAdmin: false, isPlanner: false };
+
+const ctxOf = (auth: AuthContext): EditLockContext => ({
+  division: '81',
+  auth,
+  multiChildItems: new Set<string>(),
+});
 
 // AS-IS InsertRow 가 삽입 직후 거는 LockRange:
 //   일반(cs:1054) PLAN_TYPE..VALUE_TYPE + (cs:1057) TO_SITE_DESCRIPTION..마지막컬럼(= YYYYMM 월 컬럼 포함)
@@ -80,5 +88,26 @@ describe('isPivotCellValueEmpty — AS-IS 셀단위 빈값 잠금', () => {
     expect(isPivotCellValueEmpty({ '202610': 23 }, '202610')).toBe(false);
     expect(isPivotCellValueEmpty({ '202610': -8 }, '202610')).toBe(false);
     expect(isPivotCellValueEmpty({ '202610': '5' }, '202610')).toBe(false);
+  });
+});
+
+// BOH_QTY 편집 — AS-IS EditButton 권한 2-분기 (SCP0111_IntegrationPSI.cs cs:573 / cs:650-652).
+describe('isBohCellEditable — BOH 권한 2-분기', () => {
+  const invRow = { MEASURE: 'INV', SEQ_FLAG: '160' }; // measureFlag=6
+  const prodRow = { MEASURE: 'PROD_PLAN', SEQ_FLAG: '150' }; // non-INV
+
+  it('ADMIN(System Administrator)은 전 행 BOH 편집 가능(cs:573 분기)', () => {
+    expect(isBohCellEditable(invRow, ctxOf(ADMIN))).toBe(true);
+    expect(isBohCellEditable(prodRow, ctxOf(ADMIN))).toBe(true); // 비-INV 행도 편집
+  });
+
+  it('SCP Planner 는 INV(measureFlag=6) 행만 편집(cs:650-652 isEdit)', () => {
+    expect(isBohCellEditable(invRow, ctxOf(PLANNER))).toBe(true);
+    expect(isBohCellEditable(prodRow, ctxOf(PLANNER))).toBe(false);
+  });
+
+  it('일반 유저는 BOH 편집 불가', () => {
+    expect(isBohCellEditable(invRow, ctxOf(GENERAL))).toBe(false);
+    expect(isBohCellEditable(prodRow, ctxOf(GENERAL))).toBe(false);
   });
 });

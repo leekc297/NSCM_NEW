@@ -63,6 +63,7 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
   const sc = useProductionPlanLineStore(s => s.searchCondition);
   const filters = useProductionPlanLineStore(s => s.filters);
   const setFilter = useProductionPlanLineStore(s => s.setFilter);
+  const clearFilters = useProductionPlanLineStore(s => s.clearFilters);
   const setLoadFilter = useProductionPlanLineStore(s => s.setLoadFilter);
   const setSearchCondition = useProductionPlanLineStore(s => s.setSearchCondition);
   const openSearchArea = useProductionPlanLineStore(s => s.openSearchArea);
@@ -83,6 +84,10 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
   // Measure 설정 팝업 OK 결과 — 표시할 measure 코드(null=전체). AS-IS btnMeasure(TitleSet) 표시 토글 등가.
   //   titleSet 영구저장 proc 은 SCP0013 미배선(9버튼에 titleSet 없음)이라 클라이언트 표시 필터로 재현한다.
   const [visibleMeasures, setVisibleMeasures] = useState<string[] | null>(null);
+  // 선택 plan stage 편집가능 여부(요청1, 2026-11-04) — Form 이 Plan-type 콤보(선택값+옵션)로 판정해 올린다.
+  //   (1) FN 조회거나 (2) 콤보에 다음 단계(FN→SE→MA→PR→TE) 가 있으면 false → 그리드 전건 읽기전용.
+  //   SP/BE 무관, 화면에 보이는 범위로만 결정적 판정(사용자 지시: "그냥 fe에서 두 경우에는 수정못하게 막아라").
+  const stageEditable = useProductionPlanLineStore(s => s.stageEditable);
 
   // ⚠ 임시: MOCK_MAIN_ENABLED(DEV 전용)이면 조회 SP(main/SEARCH)를 호출하지 않고(enabled:false) 목데이터로
   //   그리드를 채운다. SP 성능 개선 완료 후 production-plan-line.mock.ts 와 이 분기(3곳)를 제거한다.
@@ -198,8 +203,12 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
       return typeof measure === 'string' && visibleMeasures.includes(measure);
     });
   }, [rows, visibleMeasures]);
-  // 편집판정 컨텍스트 — 조회결과 전체에서 최종 PlanType/FN 존재 파생 (design 01 F2, 표시 필터 무관).
-  const editContext = useMemo(() => deriveEditContext(rows), [rows]);
+  // 편집판정 컨텍스트 — 조회결과 전체에서 최종 PlanType/FN 존재 파생 (design 01 F2, 표시 필터 무관) +
+  //   선택 stage 편집가능 게이트(Form 이 Plan-type 콤보로 판정, store.stageEditable). false 면 전건 읽기전용(요청1).
+  const editContext = useMemo(
+    () => ({ ...deriveEditContext(rows), isStageEditable: stageEditable }),
+    [rows, stageEditable]
+  );
   const visibilityCtx = useMemo(
     () => ({ division: sc.divisionId, operationGroup: sc.operationGroupId }),
     [sc.divisionId, sc.operationGroupId]
@@ -303,6 +312,27 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
       return false; // 서버 판정 실패 = 저장 불가로 간주(AS-IS 동치, 안전측)
     }
   };
+
+  const mainFilter = filters[SHEETS.MAIN];
+
+  // 요청2(2026-11-04): Plan Date/Type/Seq 선택이 조회확정분(filters[MAIN])과 달라지면 메인 그리드 clear.
+  //   선택과 조회결과 불일치 상태로 편집·저장되는 사고 방지 — 재조회(Search) 전까지 빈 상태로 둔다.
+  //   filters 가 비면(division 변경·초기) early-return. 편집잠금(요청1)은 Form 이 콤보로 stageEditable 을 갱신해 담당.
+  useEffect(() => {
+    const f = mainFilter as
+      | { planStartYyyymmdd?: string | null; planType?: string | null; seq?: string | null }
+      | undefined;
+    if (!f) return;
+    const norm = (v: unknown): string =>
+      typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+    if (
+      norm(f.planStartYyyymmdd) !== (sc.planStartYyyymmdds[0] ?? '') ||
+      norm(f.planType) !== (sc.planTypes[0] ?? '') ||
+      norm(f.seq) !== (sc.planSeqs[0] ?? '')
+    ) {
+      clearFilters();
+    }
+  }, [mainFilter, sc.planStartYyyymmdds, sc.planTypes, sc.planSeqs, clearFilters]);
 
   const handleSave = async () => {
     const dirty = dirtyRows();

@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 94,
+  "dur": 183,
+  "at": "2026-11-07T10:56:56.784Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 62,
+  "dur": 156,
+  "at": "2026-11-07T10:57:00.459Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 16,
+  "dur": 162,
+  "at": "2026-11-07T10:57:04.035Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ }
+]

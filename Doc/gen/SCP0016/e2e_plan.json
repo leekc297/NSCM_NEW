@@ -1,0 +1,398 @@
+{
+  "menuId": "SCP0016",
+  "page": "WaterfallShipmentPlanFg",
+  "feature": "supply",
+  "routePath": "supply/waterfall-shipment-plan-fg",
+  "asisName": "WaterfallShipmentPlanFG",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "version",
+      "label": "Ver.",
+      "lbl": "LBL00031",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbVersion"
+    },
+    {
+      "key": "bizType",
+      "label": "Operation group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "BizTypeField",
+      "comboId": "BizTypeByDivision",
+      "popup": false,
+      "asis": "cboBizType"
+    },
+    {
+      "key": "projectCodes",
+      "label": "PJT",
+      "lbl": "LBL00617",
+      "kind": "popup",
+      "component": "ProjectField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtProject"
+    },
+    {
+      "key": "itemId",
+      "label": "Model/Nickname",
+      "lbl": "LBL00618",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtItem_Id"
+    },
+    {
+      "key": "elecType",
+      "label": "Electrode",
+      "lbl": "LBL00038",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbElecType"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendar"
+    },
+    {
+      "key": "bucketType",
+      "label": "Bucket",
+      "lbl": "LBL00710",
+      "kind": "single",
+      "component": "BucketField",
+      "comboId": "BucketType",
+      "popup": false,
+      "asis": "cboBucketType"
+    },
+    {
+      "key": "sumYn",
+      "label": "Sum",
+      "lbl": "LBL00687",
+      "kind": "check",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkSum"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "column",
+      "label": "Column",
+      "lbl": "LBL00711",
+      "kind": "subtitle-custom",
+      "tobe": "COLUMN_SETUP",
+      "asis": "btnColumn"
+    },
+    {
+      "key": "measure",
+      "label": "Measure",
+      "lbl": "LBL00310",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "itemId",
+      "label": "Item Id",
+      "lbl": "LBL01142",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnItem_Id"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Waterfall Shipment Plan",
+      "key": "WATERFALL_SHIPMENT_PLAN",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "biz_type",
+        "biz_type_name",
+        "bod_id",
+        "boh",
+        "DEPT_NAME_KO",
+        "DIVISION_ID",
+        "ELECTRODE_TYPE",
+        "from_site",
+        "from_site_name",
+        "incoterms",
+        "item_id",
+        "ITEM_TYPE",
+        "KEY_IDX",
+        "lt_day",
+        "measure",
+        "measure_label",
+        "measure_order_no",
+        "nick_name",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "project_code",
+        "PROJECT_NAME",
+        "PROJECT_OWNER",
+        "to_site",
+        "to_site_name",
+        "to_yyyymmdd",
+        "transport_mode",
+        "version_no"
+      ],
+      "labels": [
+        "biz_type",
+        "Operation Group",
+        "bod_id",
+        "BOH (To Site)",
+        "Team",
+        "Division",
+        "Electrode Type",
+        "from_site",
+        "From Site",
+        "Incoterms",
+        "Model",
+        "Item Type",
+        "KEY_IDX",
+        "L/T(Day)",
+        "measure",
+        "Measure",
+        "MEASURE_ORDER_NO",
+        "Nick Name",
+        "Origin From Div",
+        "Origin To Div",
+        "Project Code",
+        "Project",
+        "Project Owner",
+        "to_site",
+        "To Site",
+        "to_yyyymmdd",
+        "Trans Mode",
+        "Version"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Waterfall Shipment Plan",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0016.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+      "sheet": "Waterfall Shipment Plan",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0016.P_SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0016.P_SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+      "sheet": "spreadTitleIso",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0016.P_SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+      "entries": [
+        "event:this.Load",
+        "event:this.cboBucketType.SelectedIndexChanged",
+        "event:this.dCalendar.ValueChanged",
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0016.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.Load",
+        "event:this.cboBucketType.SelectedIndexChanged",
+        "event:this.dCalendar.ValueChanged",
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "button:FindButton"
+      ]
+    }
+  ],
+  "hasSave": false,
+  "hasSpreadTitle": true,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "biz:CommonData.CommonDataList [code=LookupCommon]"
+      ]
+    },
+    {
+      "name": "handleCboDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleClbVersion",
+      "target": "clbVersion",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleBucketType",
+      "target": "this.cboBucketType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handledCalendarValue",
+      "target": "this.dCalendar",
+      "event": "ValueChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleSum",
+      "target": "this.chkSum",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleProject",
+      "target": "this.btnProject",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItem_Id",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleMeasure",
+      "target": "this.btnMeasure",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "this.spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "this.spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleColumn",
+      "target": "this.btnColumn",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

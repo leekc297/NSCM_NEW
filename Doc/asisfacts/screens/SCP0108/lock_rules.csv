@@ -1,0 +1,2 @@
+﻿method,line,api,scope,locked,lock_expr,columns,expand,cond,guard,control,raw
+AfterFindData,1406,LockColumn,ALL_ROWS,Y,,PLANT_NAME;LINE_NAME;NICK_NAME;OPERATION_NAME;DV;VER_ID;VER_SEQ;COMPANY_ID;DIVISION_ID;SITE_NAME;PLANT_ID;LINE_ID;OPERATION_ID;SITE_ID;ELTR_LN_TP_CD,ALL,,,_si,"_si.LockColumn(0, _si.GetMaxColumnIndex(), true)"

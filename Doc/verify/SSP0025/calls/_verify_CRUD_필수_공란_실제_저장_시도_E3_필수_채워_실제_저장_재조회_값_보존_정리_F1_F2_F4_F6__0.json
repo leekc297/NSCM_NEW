@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 428,
+  "at": "2026-11-09T02:12:41.331Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 17,
+  "dur": 330,
+  "at": "2026-11-09T02:12:42.390Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"kyb0716\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 157,
+  "at": "2026-11-09T02:12:50.747Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 18,
+  "dur": 275,
+  "at": "2026-11-09T02:12:51.247Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 18,
+  "dur": 601,
+  "at": "2026-11-09T02:12:56.427Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ }
+]

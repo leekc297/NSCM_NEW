@@ -1,0 +1,93 @@
+[
+ {
+  "menu": "SCP0127",
+  "sheet": "init",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/init/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 2835,
+  "dur": 286,
+  "at": "2026-11-07T12:22:24.146Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 209,
+  "at": "2026-11-07T12:22:25.498Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"AAEN4128I-A1-000\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 164,
+  "at": "2026-11-07T12:22:26.747Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"aaen4128i-a1-000\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 162,
+  "at": "2026-11-07T12:22:27.774Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"AEN4128I-A1-00\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 169,
+  "at": "2026-11-07T12:22:28.740Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"AAEN4128I-A1-000,AAEN4129I-A1-300\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 5,
+  "dur": 169,
+  "at": "2026-11-07T12:22:29.730Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 208,
+  "at": "2026-11-07T12:22:30.686Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ }
+]

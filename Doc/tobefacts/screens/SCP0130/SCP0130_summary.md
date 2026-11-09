@@ -7,14 +7,14 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | component | 292 |
+| features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | component | 315 |
 | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationMainGrid.tsx | component | 129 |
 | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationVirtualBomGrid.tsx | component | 205 |
 | features/supply/src/pages/scheduled-receipt-information/index.ts | index | 2 |
 | features/supply/src/pages/scheduled-receipt-information/scheduled-receipt-information.constants.ts | constants | 128 |
 | features/supply/src/pages/scheduled-receipt-information/scheduled-receipt-information.types.ts | types | 40 |
-| features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx | page | 394 |
-| features/supply/src/pages/scheduled-receipt-information/useScheduledReceiptInformationStore.ts | store | 164 |
+| features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx | page | 395 |
+| features/supply/src/pages/scheduled-receipt-information/useScheduledReceiptInformationStore.ts | store | 173 |
 | features/supply/src/pages/scheduled-receipt-information/utils/scheduledReceiptInformationDate.ts | util | 30 |
 | features/supply/src/pages/scheduled-receipt-information/utils/scheduledReceiptInformationEditLock.ts | util | 59 |
 | features/supply/src/pages/scheduled-receipt-information/utils/scheduledReceiptInformationSaveValidation.ts | util | 210 |
@@ -24,12 +24,12 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 7 | Y | ScheduledReceiptInformationForm.tsx:62 ScheduledReceiptInformationForm.tsx:65 ScheduledReceiptInformationForm.tsx:66 ScheduledReceiptInformationForm.tsx:67 ScheduledReceiptInformationForm.tsx:68 ScheduledReceiptInformationVirtualBomGrid.tsx:69 |
-| SCP0130/virtualBom//call-proc | hook | 1 | Y | ScheduledReceiptInformation.tsx:134 |
-| SCP0130/scheduledReceipt//call-proc | hook | 1 | Y | ScheduledReceiptInformation.tsx:141 |
-| /SCP0130/virtualBom\|scheduledReceipt/SAVE/call-proc | http | 1 | Y | ScheduledReceiptInformation.tsx:159 |
-| /admin/menu/SCP0130/column | http | 1 | Y | useScheduledReceiptInformationStore.ts:116 |
-| /admin/menu/SCP0130/search-conditions | http | 1 | Y | useScheduledReceiptInformationStore.ts:144 |
+| (useTabComboQueries) | hook | 7 | Y | ScheduledReceiptInformationForm.tsx:63 ScheduledReceiptInformationForm.tsx:66 ScheduledReceiptInformationForm.tsx:67 ScheduledReceiptInformationForm.tsx:68 ScheduledReceiptInformationForm.tsx:69 ScheduledReceiptInformationVirtualBomGrid.tsx:69 |
+| SCP0130/virtualBom//call-proc | hook | 1 | Y | ScheduledReceiptInformation.tsx:135 |
+| SCP0130/scheduledReceipt//call-proc | hook | 1 | Y | ScheduledReceiptInformation.tsx:142 |
+| /SCP0130/virtualBom\|scheduledReceipt/SAVE/call-proc | http | 1 | Y | ScheduledReceiptInformation.tsx:160 |
+| /admin/menu/SCP0130/column | http | 1 | Y | useScheduledReceiptInformationStore.ts:125 |
+| /admin/menu/SCP0130/search-conditions | http | 1 | Y | useScheduledReceiptInformationStore.ts:153 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -40,15 +40,15 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 134 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 151 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 173 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 148 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 165 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 187 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 216 |
-| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 212 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 234 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 255 |
-| DatePickerCalendar | onChange | <arrow> setSearchParams,date?.format | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 271 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 201 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 230 |
+| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 226 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,clearGrid | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 251 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 278 |
+| DatePickerCalendar | onChange | <arrow> setSearchParams,date?.format | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 294 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationMainGrid.tsx | 60 |
 | g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationMainGrid.tsx | 61 |
 | g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationMainGrid.tsx | 75 |
@@ -60,8 +60,8 @@
 | g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationVirtualBomGrid.tsx | 119 |
 | g | pastedCell | pastedPlanGroupHandler | addHandler | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationVirtualBomGrid.tsx | 146 |
 | DataGrid | gotFocus | <arrow> onFocus | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationVirtualBomGrid.tsx | 185 |
-| ScheduledReceiptInformationVirtualBomGrid | onFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx | 375 |
-| ScheduledReceiptInformationMainGrid | onFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx | 387 |
+| ScheduledReceiptInformationVirtualBomGrid | onFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx | 376 |
+| ScheduledReceiptInformationMainGrid | onFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx | 388 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -111,14 +111,14 @@
 | MSG00003 | 3 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0130(20), SCP0129(3), SCP0128(2), SCP0053(2), SCP0025(1), SCP0122(1), SCP0127(1)
+- 화면ID: SCP0130(21), SCP0129(3), SCP0128(2), SCP0053(2), SCP0025(1), SCP0122(1), SCP0127(1)
 - SP/PKG: PKG_SCP0130(4), P_USER_ID(4), SCP0130_GET_VIRTUAL_BOM(1), SCP0130_GET_SCHEDULED_RECIEPT_INFORMATION(1), FN_GET_DIVISION(1), SCP0130_GET_SEARCH_INFO(1), P_SCP0130_SVAE_VIRTUAL_BOM(1), P_SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
 | endpoint | Virtual Bom 시트 그리드 — design/03_grid-columns.md §1.2/§3 white-list 재현. ITEM_ID 셀 더블클릭 → 품목 팝업(`MaterialByDivisionModal`, design/02_search-combo.md §4.6 확정 재사용, gridSignals#21 SetText 재현) — buttonGuards#4/#5(헤더 더블클릭 제외 / 잠금 또는 비편집모드&&비신규행 시 팝 | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationVirtualBomGrid.tsx | 37 |
 | endpoint | 컬럼 메타 fetch(/admin/menu/SCP0130/column)의 sheetNm 은 SCM_MST_SHEET_COLUMNS.SHEET_NAME 과 정확히 일치해야 한다(BE 가 문자열 그대로 매칭). DB 실측(design/03_grid-columns.md §1) 값을 그대로 쓴다 — 코드 키(SHEETS)와 분리(formation.constants.ts 선례와 동일 패턴). | features/supply/src/pages/scheduled-receipt-information/scheduled-receipt-information.constants.ts | 27 |
-| code | buttonGuards#1 — fps==null(선택 행 없음) 시 무동작 return(design/01_layout.md §2 #3, | features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx | 227 |
+| code | buttonGuards#1 — fps==null(선택 행 없음) 시 무동작 return(design/01_layout.md §2 #3, | features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx | 228 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

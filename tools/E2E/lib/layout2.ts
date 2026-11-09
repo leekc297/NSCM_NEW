@@ -1,5 +1,5 @@
 // 헤더 높이·중복 스크롤·헤더 잘림·조건 후보 '-'·ALL 조회·입력 중 재렌더 판정(2026-11-02 엔진 갭 EG325·EG326·EG327·EG459·EG254·EG263·EG419). 순수 함수 — layout2.selftest.js
-export type J = { result: 'PASS' | 'FAIL' | 'ERROR' | 'NA'; why: string };
+export type J = { result: 'PASS' | 'FAIL' | 'ERROR' | 'NA' | '판정필요'; why: string };
 
 /** 시점별 헤더 높이(px) — 1px 넘게 달라지면 FAIL */
 export function judgeHeaderHeight(s: { steps: { name: string; h: number }[] }): J {
@@ -20,7 +20,8 @@ export function judgeScroll(s: { page: boolean; nested: string[]; rows: number }
 /** 헤더 글자 잘림 — seen 렌더된 헤더 수 · clipped 잘린 컬럼 */
 export function judgeHeaderFit(s: { seen: number; clipped: string[] }): J {
   if (!s.seen) return { result: 'ERROR', why: `[측정 경로 없음] 렌더된 헤더 0` };
-  if (s.clipped.length) return { result: 'FAIL', why: `헤더 ${s.seen}개 중 글자 잘림 ${s.clipped.length}개: ${s.clipped.slice(0, 5).join(', ')}` };
+  // 2026-11-06 사용자 지시(SCP0016 2번 '오류아님, 판정 필요로 이관'): 헤더 글자 잘림은 칸 폭(메타 COLUMN_WIDTH)·사용자 조정 영역이라 기계가 결함으로 확정하지 않는다 → 판정필요
+  if (s.clipped.length) return { result: '판정필요', why: `헤더 ${s.seen}개 중 글자 잘림 ${s.clipped.length}개: ${s.clipped.slice(0, 5).join(', ')} — 칸 폭(COLUMN_WIDTH) 확인 대상(사람 판정)` };
   return { result: 'PASS', why: `렌더된 헤더 ${s.seen}개 글자 잘림 0` };
 }
 
@@ -61,11 +62,14 @@ export function judgeFilterItems(s: { b: string; items: string[]; distinct: numb
 }
 
 /** 연속 조회 본문 — same 조건 그대로 재조회 때 달라진 키 · changed 조건 하나 바꾼 뒤 달라진 키 · 조건 키는 1개까지 허용 (EG252·EG291) */
-export function judgeBodyDiff(s: { sent: boolean; same: string[]; changed: string[]; typed: boolean }): J {
+export function judgeBodyDiff(s: { sent: boolean; same: string[]; changed: string[]; typed: boolean; sent2?: boolean; label?: string; required?: string }): J {
   if (!s.sent) return { result: 'ERROR', why: `[측정 경로 없음] 조회 본문을 못 읽음` };
   if (s.same.length) return { result: 'FAIL', why: `조건 그대로 재조회인데 본문 키가 달라짐: ${s.same.slice(0, 5).join(', ')}` };
   if (!s.typed) return { result: 'PASS', why: `조건 그대로 재조회 본문 동일 · 글자 입력 조건 없어 변경 시험 미측정` };
-  if (!s.changed.length) return { result: 'FAIL', why: `조건을 바꿨는데 조회 본문 변화 없음` };
+  // 2026-11-06(SCP0016 3번): 바꾼 조건·조회 요청 여부·필수 알림을 증거에 남긴다 — 조건 변경 뒤 조회 요청이 안 나갔으면(필수 조건 알림 등) '본문 변화 없음' 이 아니라 그 사실로 적는다
+  const at = s.label ? `'${s.label}' 에 'E2E' 입력 뒤 ` : '';
+  if (s.sent2 === false) return { result: 'FAIL', why: `${at}조회 요청이 나가지 않음${s.required ? ` — 필수 조건 알림: ${s.required.slice(0, 160)}` : ''}` };
+  if (!s.changed.length) return { result: 'FAIL', why: `${at}조회 본문 변화 없음(입력한 조건이 조회 인자로 전달되지 않음)${s.required ? ` · 필수 조건 알림: ${s.required.slice(0, 160)}` : ''}` };
   if (s.changed.length > 1) return { result: 'ERROR', why: `[확인 대상] 조건 1개 변경에 본문 키 ${s.changed.length}개 달라짐: ${s.changed.slice(0, 6).join(', ')}` };
   return { result: 'PASS', why: `재조회 본문 동일 · 조건 변경 시 키 ${s.changed[0]} 만 달라짐` };
 }

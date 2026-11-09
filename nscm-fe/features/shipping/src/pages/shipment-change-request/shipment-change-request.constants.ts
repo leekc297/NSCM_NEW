@@ -262,7 +262,7 @@ export const MSG = {
   SAVE_FAIL: 'MSG00003', // 저장 실패
   // R8 ERP 중단기간 차단 — **TO-BE 등가 미등록**(역조회 0건). 번호를 다른 코드로 빌리면 그 코드가
   //   등록되는 순간 엉뚱한 문구가 뜬다(#114) → AS-IS 번호 유지 + 영문 fallback. 자매 SSP0200 도 동일.
-  ERP_BLOCK: 'MSG00267',
+  ERP_BLOCK: 'MSG01202',
   // AS-IS MSG00174 -> 등가 MSG01189 'You have already requested to change your shipment plan'
   //   (SHIPMENT_STATUS='R' 저장 차단. MSG00174 는 TO-BE 미등록 — ora.py 실측 0행)
   ALREADY_COMPLETE: 'MSG01189',
@@ -294,7 +294,7 @@ export const MSG = {
   ERP_STATUS_LOCKED: 'MSG01202',
   // 아래 2종은 **TO-BE 등가 미등록**(역조회 0건) — AS-IS 번호 유지 + 영문 fallback. SSP0200 도 동일.
   REASON_CODE_REQUIRED: 'MSG00287', // Reason Detail 입력 전 Reason Code 필수
-  FROM_SITE_REQUIRED: 'MSG00098', // To Site/Incoterms 선행 필수(From Site 등)
+  FROM_SITE_REQUIRED: 'MSG01126', // To Site/Incoterms 선행 필수(From Site 등)
   // AS-IS MSG00293(TransMode 후보 없음) -> 근사 MSG01296 'BOD (Trans mode, Incoterms) information
   //   corresponding to Div, From Site, To Site is invalid.' MSG00293 전용 등가는 TO-BE 미등록이라
   //   뜻이 가장 가까운 등록 문구를 쓴다(SSP0200 과 같은 근사 — 04 확인필요 유지).
@@ -323,8 +323,8 @@ export const MSG = {
   REQUEST_COMPLETED: 'MSG01188',
   // 아래 2종은 TO-BE 미등록(역조회 0건) — AS-IS 번호 유지 + 영문 fallback.
   //   완료 SP 결과 커서의 실패 사유 분기다(AS-IS cs:2305~2320).
-  APPROVER_UNAVAILABLE: 'MSG00316', // 'Unauthorized' — 모델 담당자 미등록으로 승인자 지정 불가
-  MODEL_PIC_MISMATCH: 'MSG00353', // 'UnModelPic'/'UnModelItem' — 서로 다른 PIC·Model 혼재
+  APPROVER_UNAVAILABLE: 'MSG01317', // 'Unauthorized' — 모델 담당자 미등록으로 승인자 지정 불가
+  MODEL_PIC_MISMATCH: 'MSG01347', // 'UnModelPic'/'UnModelItem' — 서로 다른 PIC·Model 혼재
 } as const;
 
 // ====================================================================================

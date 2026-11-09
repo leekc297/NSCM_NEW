@@ -51,6 +51,7 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
   const searchParams = useScheduledReceiptInformationStore(state => state.searchParams);
   const setSearchParams = useScheduledReceiptInformationStore(state => state.setSearchParams);
   const setDivision = useScheduledReceiptInformationStore(state => state.setDivision);
+  const clearGrid = useScheduledReceiptInformationStore(state => state.clearGrid);
   const setFilters = useScheduledReceiptInformationStore(state => state.setFilters);
   const fetchStaticColumns = useScheduledReceiptInformationStore(state => state.fetchStaticColumns);
   const openSearchArea = useScheduledReceiptInformationStore(state => state.isOpenSearchArea);
@@ -103,11 +104,16 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
   //   Division 필터 + CODE 중복제거(CopyPlantSite 의 Distinct(CODE,NAME)). 등록 콤보가
   //   (site×plangroup)/(child×plangroup×site…) 조합마다 행을 내려주므로 CODE 기준 first-wins 로
   //   합친다(dev-manual 04 §4.5). allowedDivisions 가 비면 전량, 있으면 그 DIVISION_ID 만.
-  const buildDivisionOptions = (rows: ComboResponse[], allowedDivisions: string[]) => {
+  const buildDivisionOptions = (
+    rows: ComboResponse[],
+    allowedDivisions: string[],
+    allowedPlanGroups?: string[]
+  ) => {
     const seen = new Set<string>();
     const out: { label: string; value: string }[] = [];
     for (const row of rows) {
       if (allowedDivisions.length && !allowedDivisions.includes(row.DIVISION_ID)) continue;
+      if (allowedPlanGroups && !allowedPlanGroups.includes(row.OPMZ_PLAN_GR_ID)) continue;
       if (seen.has(row.CODE)) continue;
       seen.add(row.CODE);
       out.push({ label: row.NAME, value: row.CODE });
@@ -115,9 +121,17 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
     return out;
   };
   const rawDivisions = searchParams.divisionId ? [searchParams.divisionId] : [];
+  // Site 콤보 2단 축소(SCP0130-03) — AS-IS RefreshSiteByPlanGroup(.cs:333-349): Scheduled Receipt 시트에서는
+  //   Site 를 선택 Plan Group 으로도 좁힌다(Plan Group=ALL 이면 축소 없음). Virtual Bom 시트는 Division 필터만
+  //   (RefreshSiteByDivision). 활성 시트(isVirtualBom)로 분기한다.
+  const sitePlanGroupFilter =
+    !isVirtualBom && searchParams.planGroupIds !== 'ALL'
+      ? searchParams.planGroupIds.split(',')
+      : undefined;
   const siteOptions = buildDivisionOptions(
     sitesAll ?? [],
-    siteDivisionFilter(searchParams.divisionId)
+    siteDivisionFilter(searchParams.divisionId),
+    sitePlanGroupFilter
   );
   const childMaterialOptions = buildDivisionOptions(childMaterialsAll ?? [], rawDivisions);
 
@@ -231,7 +245,16 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
                     allOption
                     value={searchParams.planGroupIds}
                     options={planGroupOptions.map(item => ({ label: item.NAME, value: item.CODE }))}
-                    onChange={(_, value) => setSearchParams({ planGroupIds: value })}
+                    // AS-IS CboPlanGroup_SelectedIndexChanged(.cs:1299-1306): Plan Group 변경 시 그리드를
+                    //   비운다(ClearDataSource). 편집중(dirty)이면 확인 후에만 — 취소 시 controlled 콤보가
+                    //   이전 값으로 복귀(Division 변경과 동일 가드). 조건은 유지하고 그리드만 비운다(clearGrid).
+                    onChange={(_, value) => {
+                      void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                        if (!ok) return;
+                        setSearchParams({ planGroupIds: value });
+                        clearGrid();
+                      });
+                    }}
                   />
                 )}
               />

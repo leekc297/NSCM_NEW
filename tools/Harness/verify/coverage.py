@@ -39,6 +39,14 @@ def feature_present(rule, sd):
         if (l.get('locked') or '').upper() == 'N': unlocked |= cols
         elif (l.get('locked') or '').upper() == 'Y' and (l.get('scope') or '') in ('ALL_ROWS', 'MODE'): locked_all |= cols
     num_cols = {(c.get('column') or '').upper() for c in cell if c.get('cell_type') == 'NUMBER'} | {(d.get('column') or d.get('binding') or '').upper() for d in dyn if d.get('cell_type') == 'NUMBER'}
+    # 2026-11-06 T62: AS-IS EditButton 의 SwitchLock(locked=TOGGLE) = 조회 때 전 컬럼 잠금을 푼다. 같은 메서드가 다시 잠그는(locked=Y, 범위 무관) 컬럼만 잠김으로 남는다.
+    #   종전엔 TOGGLE 을 무시해 SCP0127 TYPE_APPLY_DAY(Edit 후 편집 가능)를 '숫자 편집 칸 없음'으로 봤다. SCP0084 는 같은 메서드가 MEMO 외 전부 ROW_COND 재잠금 → 그대로 잠김.
+    for tm in {l.get('method') for l in locks if (l.get('locked') or '').upper() == 'TOGGLE'}:
+        relocked = set()
+        for l in locks:
+            if l.get('method') == tm and (l.get('locked') or '').upper() == 'Y':
+                relocked |= {c.strip().upper() for c in (l.get('columns') or '').split(';') if c.strip()}
+        unlocked |= (num_cols - relocked)
     num_editable = any(c and (c not in locked_all or c in unlocked) for c in num_cols) if locks else num
     table = {
         'C4': 'GRID_CLEAR' in kinds and changed, 'C1': ('LIST_REBIND' in kinds or 'COMBO_DATA' in kinds) and changed,
@@ -82,8 +90,12 @@ def main():
         fp = feature_present(rid, sd)
         # 근거 있는 미측정(다른 FAIL 에 명시 연결된 차단 · TO-BE 설계로 대상 없음 · 데이터/컨트롤 조건)만으로 이뤄진 규칙은 SUSPECT 가 아니다(2026-10-30 SCP0111 E1/E3)
         by_id = {r['row_id']: r for r in led}
+        num_ed = feature_present('E1', sd)  # T56 과 같은 근거: AS-IS 잠금을 뺀 편집 가능 숫자 컬럼 유무
         def benign(r):
             ev = r.get('evidence') or ''
+            # 2026-11-06 T62(SCP0084 F6): AS-IS 가 숫자 컬럼을 전부 잠그는 화면이면 '숫자 편집 칸 없음' 은 근거 있는 미측정(E1 T56 과 같은 사실)
+            if num_ed is False and re.search(r'값 있는 숫자 편집 셀 없음|편집 가능한 숫자 칸 없음', ev):
+                return True
             if ev.startswith('[편집 불가로 미측정]'):
                 return any(by_id.get(m, {}).get('result') == 'FAIL' for m in re.findall(r'\b([VT]-[0-9a-f]{8})\b', ev))
             # 2026-11-05 T56: '편집 가능한 행 없음(입력 경로 없음)' · 'Division 기본 순회 — …(표시는 A5·편집은 D1 행에서 판정)' 도 근거 있는 미측정

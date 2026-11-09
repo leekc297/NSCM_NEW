@@ -1,3 +1,4 @@
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 
 import type {
@@ -96,9 +97,17 @@ export const buildPivotColumns = (months: PivotMonthMeta[]): FlexGridColumnConfi
     };
   });
 
-// SUBTOTAL/GAP/비고 — admin 메타 밖 코드리터럴 칼럼(design 03 §1.2). 비고만 편집대상(isEditable prop).
-export const buildDerivedColumns = (isEditable: boolean, isGapTab: boolean): FlexGridColumnConfig[] => [
-  { binding: 'SUBTOTAL', header: '소계', align: 'right', width: 70, isReadOnly: true, format: '#,##0' },
+// SUBTOTAL/GAP/비고 — admin 메타 밖 코드리터럴 칼럼(design 03 §1.2). 비고만 편집대상.
+//   비고(NOTE)는 _inputEditType 를 설정해 공통 인프라(GridUtils.isEditableCell→setEditablecolumns 편집 허용,
+//   EditTracker 변경추적, formatEditableColumns 스타일)가 '편집 컬럼'으로 인식하게 한다. 이게 없으면
+//   isEditableCell default:false 로 떨어져 편집은 돼도 변경추적이 안 돼 저장 시 '수정 내용 없음'이 된다.
+//   Main = OPTIONAL(편집), Gap = SEARCH_ONLY(읽기전용). GridUtils.getColumn 이 columnGroups(config)를 읽어
+//   동적컬럼 config 의 _inputEditType 가 그대로 반영된다(ora 아님, 코드 실측).
+// allowSorting:false — AS-IS SCP0055 는 어느 컬럼도 사용자 헤더 클릭 정렬을 켜지 않는다
+//   (FarPoint AllowAutoSort 기본 false, SpreadInfo Add* 헬퍼의 SetColumnAllowAutoSort 호출 전부 주석,
+//   .cs 는 프로그램 1회 SortRows(4키)만 수행). pivot 월컬럼(buildPivotColumns)과 동일하게 명시 차단.
+export const buildDerivedColumns = (isGapTab: boolean): FlexGridColumnConfig[] => [
+  { binding: 'SUBTOTAL', header: '소계', align: 'right', width: 70, isReadOnly: true, format: '#,##0', allowSorting: false },
   ...(isGapTab
     ? []
     : [
@@ -109,6 +118,7 @@ export const buildDerivedColumns = (isEditable: boolean, isGapTab: boolean): Fle
           width: 70,
           isReadOnly: true,
           format: '#,##0',
+          allowSorting: false,
         } as FlexGridColumnConfig,
       ]),
   {
@@ -116,9 +126,11 @@ export const buildDerivedColumns = (isEditable: boolean, isGapTab: boolean): Fle
     header: '비고',
     align: 'left',
     width: 200,
-    isReadOnly: !isEditable,
+    isReadOnly: isGapTab,
+    _inputEditType: isGapTab ? CELL_INPUT_EDIT_TYPE.SEARCH_ONLY : CELL_INPUT_EDIT_TYPE.OPTIONAL,
     multiLine: true,
     wordWrap: true,
+    allowSorting: false,
   },
 ];
 

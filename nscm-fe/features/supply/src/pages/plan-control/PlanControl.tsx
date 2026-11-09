@@ -5,7 +5,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import {
+  useInvalidateCombos,
+  useTabBtnPermissions,
+  useTabComboQueries,
+  useTabProcQuery,
+} from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -56,6 +61,7 @@ export const PlanControl = ({ tabId, title }: PageProps<MENU_ID>) => {
   const planIdCreateContext = usePlanControlStore(state => state.planIdCreateContext);
   const setPlanIdCreateContext = usePlanControlStore(state => state.setPlanIdCreateContext);
   const queryClient = useQueryClient();
+  const invalidateCombos = useInvalidateCombos();
 
   // R18 — 사용자가 포커스한 그리드로 SubTitle 의 동작 대상(Excel/Sort/Filter)이 따라간다.
   //   건수 배지는 상단 고정(countGrid)이다.
@@ -182,10 +188,9 @@ export const PlanControl = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   생략해 공용 DefaultButtonActions.excelDownload 를 그대로 쓰고, 없으면 false 로 감춘다.
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    // Insert/Delete/Save 기능 없음 → 숨김(TO-BE 룰 2026-10-26, 종전 no-op 노출 폐지)
     insert: false,
     delete: false,
-    save: false,
+    save: () => undefined,
     manual: false,
     upload: false,
     ...(hasButton('EXCEL') ? {} : { excel: false as const }),
@@ -258,7 +263,12 @@ export const PlanControl = ({ tabId, title }: PageProps<MENU_ID>) => {
       <PlanIdCreatePopup
         context={planIdCreateContext}
         onClose={() => setPlanIdCreateContext(null)}
-        onSaved={() => void queryClient.invalidateQueries({ queryKey: [tabId] })}
+        onSaved={() => {
+          void queryClient.invalidateQueries({ queryKey: [tabId] });
+          // 새로 생성한 Plan ID 를 상단 그리드 OPMZ_PLAN_ID 셀 콤보에 바로 반영한다 — 그 콤보는
+          //   tabId 축이 아니라 comboId 축으로 캐시되어 위 invalidateQueries 가 닿지 않는다(COMBO.PLAN_ID 주석).
+          void invalidateCombos([COMBO.PLAN_ID]);
+        }}
       />
     </>
   );

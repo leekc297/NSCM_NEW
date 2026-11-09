@@ -45,8 +45,9 @@ interface Props {
 /**
  * 메인 그리드 — design/03_grid-columns.md §3.1 white-list 재현. TO-BE 는 EditButton 편집모드
  * 토글(잠금 토글 절차)만 이식하지 않으며(§11 전 화면 공통 결정), 편집가능 여부는 신규/기존행
- * 구분 없이 컬럼 white-list 로 판정한다(design 01 §2 L108·L113) — DIVISION_ID·감사컬럼·ITEM_ID
- * 를 뺀 나머지는 기존행도 즉시 편집 가능(판정 로직은 utils/safetyStockEditLock.ts
+ * 구분 없이 컬럼 white-list 로 판정한다(design 01 §2 L108·L113) — DIVISION_ID·감사컬럼을
+ * 뺀 나머지는 기존행도 즉시 편집 가능(ITEM_ID 는 DB FPTextModal/INPUT_TP_CD='M' 실측상 키인
+ * 허용 컬럼이라 더블클릭 팝업과 키인을 함께 연다, 자매 SCP0127 동형)(판정 로직은 utils/safetyStockEditLock.ts
  * `isMainCellEditable` 단일 진실원 — 공용 `isCellEditable` prop 부재, DataGrid 는 조건부 편집을
  * `beginningEdit`/`pastingCell` 로 위임).
  *

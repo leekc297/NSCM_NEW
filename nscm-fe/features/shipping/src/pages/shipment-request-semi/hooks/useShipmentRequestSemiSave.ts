@@ -76,7 +76,7 @@ export const useShipmentRequestSemiSave = ({
       if (negatives.length > 0) {
         void setAlert({
           type: 'alert',
-          content: `${t(MSG.NEGATIVE_QTY, { defaultValue: 'Please enter an integer greater than 0.' })} [${negatives[0].binding}]`,
+          content: t(MSG.NEGATIVE_QTY, { defaultValue: 'Please enter an integer greater than 0.' }),
         });
         return;
       }

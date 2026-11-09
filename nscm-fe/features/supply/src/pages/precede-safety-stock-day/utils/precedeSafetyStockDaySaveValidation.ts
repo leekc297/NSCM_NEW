@@ -62,39 +62,60 @@ export const validatePrecedeSafetyStockDayRow = (
     return { msgId: MSG.TYPE_APPLY_DAY_NEGATIVE, message: '_Day 는 0 이상이어야 합니다.' };
   }
 
-  // #6 MSG00458 — 품목 미존재(dtItem.Rows.Count<=0). ITEM_ID 는 #1 필수검증을 통과했으므로
-  //   여기서는 형식만 재확인 — 실제 존재 검증은 SP(ITEM_ID FK) 응답으로만 최종 확정 가능(확인 필요).
-  if (str(row.ITEM_ID).trim() === '') {
-    return { msgId: MSG.ITEM_NOT_FOUND, message: '_존재하지 않는 품목입니다.' };
-  }
+  // #6 MSG00458 — 품목 미존재는 여기(행별 동기 검증)서 다루지 않는다. AS-IS 는 Division 유효 품목
+  //   집합(dtItemAll)과 ITEM_ID 를 대조하는데, 그 집합은 비동기 조회가 필요하므로 저장 흐름에서
+  //   findInvalidItemIdRow(utils/precedeSafetyStockDayItemValidation.ts)로 별도 검증한다.
+  //   (공백 ITEM_ID 는 위 #1 필수검증이 선처리하므로 중복 가드하지 않는다.)
 
   return null;
 };
 
 /**
- * #2 MSG00260 — 중복 저장 방지(dtPreSafeStock.Rows.Count>0 && action!=FlagD).
+ * #2 MSG00428(AS-IS MSG00260 재번호) — 중복 저장 방지. AS-IS `SaveData`(.cs:656~682)는 각 변경행
+ * (action!=Delete)의 조합을 조회결과 스냅샷 `dtPreSafeStockAll` 과 대조해 이미 존재하면 AS-IS
+ * `GMessageBox("MSG00260")`("신규 입력 데이터 중 중복된 데이터가 있습니다.")로 막는다. TO-BE 는
+ * 그리드에 로드된 전체 행(기존 미변경 + 신규/수정)을 받아 이 "조회결과 대조"를 재현한다 — 종전엔
+ * 신규행끼리만 대조해 기존 행과 같은 조합의 신규행 1건을 놓쳐 SP `ORA-20010` 원문이 떴다(사용자
+ * 신고 2026-11-03).
  *
- * AS-IS `filterCalls#5`(line674, `sb.ToString()` 동적 조합식)는 원식 미상(design/00_checklist.md
- * §3b·§5 확인 필요) — 저장 대상 행 중 (DIVISION_ID, OPMZ_PLAN_GR_ID, SCM_SITE_ID, ITEM_ID, STAGE,
- * VALUE_TYPE) 조합이 같은 신규행 2건 이상이면 화면 로컬에서만 중복을 재현한다(서버 SP 실측 전
- * best-evidence). SP 배포 후 서버측 유니크 검증과 대사 필요(§7 확인 필요).
+ * 비교 키는 SAVE SP/DB 유니크인 PK 8칼럼(DIVISION_ID/OPMZ_PLAN_GR_ID/SCM_SITE_ID/STAGE/VALUE_TYPE/
+ * ITEM_ID/FROM_YYYYMMDD/TO_YYYYMMDD — saveRequest.ts WHERE 실측). AS-IS 는 값칼럼까지 포함한 11칼럼
+ * 전체일치였으나 DB 유니크는 이 8칼럼이라, 같은 PK·다른 값인 행은 AS-IS 가 놓치고 SP 가 거부한다 —
+ * PK 로 좁혀 "SP 가 거부할 조합" 을 FE 가 먼저 MSG00428 로 막는다(TO-BE Oracle 에서 AS-IS 번호
+ * MSG00260 은 무관한 "중복된 조합이 존재합니다…"로 재번호됨, 문구 역조회로 MSG00428 확정 2026-11-05).
+ *   - 삭제행(CRUD_TYPE='D')은 제외: 저장 후 사라져 PK 를 점유하지 않는다.
+ *   - 변경행(I/C/M)의 PK 가 살아남는 다른 행과 겹치면 중복(기존행 복제·신규행 충돌·키편집 충돌 포함).
+ *     미변경 기존행끼리는 DB PK 가 이미 보장하므로 트리거 주체에서 빼고, count>1 로 자기자신만
+ *     매칭되는 무변경 수정행의 오탐도 배제한다.
  */
 export const findDuplicatePrecedeSafetyStockDayRows = (
-  rows: WijmoRowItem[]
+  allRows: WijmoRowItem[]
 ): { msgId: string; message: string } | null => {
-  const insertRows = rows.filter(row => row.CRUD_TYPE === 'I' || row.CRUD_TYPE === 'C');
-  const seen = new Set<string>();
-  for (const row of insertRows) {
-    const key = [
+  const pkOf = (row: WijmoRowItem): string =>
+    [
       str(row.DIVISION_ID),
       str(row.OPMZ_PLAN_GR_ID),
       str(row.SCM_SITE_ID),
-      str(row.ITEM_ID),
       str(row.STAGE),
       str(row.VALUE_TYPE),
+      str(row.ITEM_ID),
+      toYmd8(row.FROM_YYYYMMDD),
+      toYmd8(row.TO_YYYYMMDD),
     ].join('\x1f');
-    if (seen.has(key)) return { msgId: MSG.DUPLICATE_EXISTS, message: '_이미 존재하는 데이터입니다.' };
-    seen.add(key);
+
+  // 저장 후 살아남을 행(삭제 아님)만 PK 빈도를 센다.
+  const survivors = allRows.filter(row => str(row.CRUD_TYPE) !== 'D');
+  const keyCount = new Map<string, number>();
+  for (const row of survivors) {
+    const key = pkOf(row);
+    keyCount.set(key, (keyCount.get(key) ?? 0) + 1);
+  }
+  // 변경행(I/C/M) 중 PK 가 둘 이상 존재하면 중복.
+  for (const row of survivors) {
+    if (!str(row.CRUD_TYPE)) continue;
+    if ((keyCount.get(pkOf(row)) ?? 0) > 1) {
+      return { msgId: MSG.DUPLICATE_EXISTS, message: '_신규 입력 데이터 중 중복된 데이터가 있습니다.' };
+    }
   }
   return null;
 };

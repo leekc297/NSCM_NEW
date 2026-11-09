@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 506,
+  "at": "2026-11-09T02:06:20.774Z",
+  "user": "minyonglee1",
+  "test": "W4 M4 팝업 선택값 반영 = AS-IS"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 17,
+  "dur": 283,
+  "at": "2026-11-09T02:06:23.725Z",
+  "user": "minyonglee1",
+  "test": "W4 M4 팝업 선택값 반영 = AS-IS"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 327,
+  "at": "2026-11-09T02:06:34.901Z",
+  "user": "minyonglee1",
+  "test": "W4 M4 팝업 선택값 반영 = AS-IS"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 598,
+  "at": "2026-11-09T02:06:34.927Z",
+  "user": "minyonglee1",
+  "test": "W4 M4 팝업 선택값 반영 = AS-IS"
+ }
+]

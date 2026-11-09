@@ -1,0 +1,241 @@
+{
+  "menuId": "SCP0131",
+  "page": "SalesSitePriority",
+  "feature": "supply",
+  "routePath": "supply/sales-site-priority",
+  "asisName": "SalesSitePriority",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "planGroups",
+      "label": "Plan Group",
+      "lbl": "LBL00002",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbPlanGroup"
+    },
+    {
+      "key": "siteIds",
+      "label": "SCM Site",
+      "lbl": "LBL00016",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbSite"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendar"
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValid"
+    }
+  ],
+  "buttons": [],
+  "sheets": [
+    {
+      "name": "Sales Site Priority",
+      "key": "SALES_SITE_PRIORITY",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DIVISION_ID",
+        "FROM_YYYYMMDD",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "OPMZ_PLAN_GR_ID",
+        "PRE_KEY_VALUES",
+        "PRIO_RANK",
+        "SCM_SITE_ID",
+        "TO_YYYYMMDD",
+        "VALID_YN",
+        "VALUE_DESCRIPTION"
+      ],
+      "labels": [
+        "Create By",
+        "Creation Date",
+        "Division*",
+        "Valid From*",
+        "Model*",
+        "Last Update Date",
+        "Last Update By",
+        "Plan Group*",
+        "PRE_KEY_VALUES",
+        "Priority*",
+        "SCM site*",
+        "Valid To*",
+        "Valid",
+        "Description"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Sales Site Priority",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0131.P_",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCP0128_GET_SEARCH_INFO",
+      "sheet": "Sales Site Priority",
+      "btn": "SEARCH_INFO",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0131.P_SCP0128_GET_SEARCH_INFO",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0131_GET_SALES_SITE_PRIORITY",
+      "sheet": "Sales Site Priority",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0131.P_SCP0131_GET_SALES_SITE_PRIORITY",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+      "sheet": "Sales Site Priority",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0131.P_SCP0131_SAVE_SALES_SITE_PRIORITY",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "biz:CommonData.YesOrNo"
+      ]
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "this.spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMainCell",
+      "target": "this.spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "this.spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainClipboardPasted",
+      "target": "this.spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleClbDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

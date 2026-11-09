@@ -1,17 +1,17 @@
 # SCP0049 — To-Be Fact Pack 요약
 
 - page_key: `supply/capa` · feature: supply · As-is Fact Pack 있음
-- 파일 19 · 엔드포인트 호출 17 (미해결 2, 주석 속 0) · 이벤트 36 · 컴포넌트 사용 78 · 하드코딩 컬럼 12 · 메시지 65
+- 파일 19 · 엔드포인트 호출 17 (미해결 2, 주석 속 0) · 이벤트 39 · 컴포넌트 사용 81 · 하드코딩 컬럼 12 · 메시지 65
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 12건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/capa/capa.constants.ts | constants | 227 |
-| features/supply/src/pages/capa/Capa.module.scss | style | 25 |
-| features/supply/src/pages/capa/Capa.tsx | page | 550 |
+| features/supply/src/pages/capa/Capa.module.scss | style | 34 |
+| features/supply/src/pages/capa/Capa.tsx | page | 563 |
 | features/supply/src/pages/capa/capa.types.ts | types | 72 |
-| features/supply/src/pages/capa/components/CapaForm.tsx | component | 359 |
+| features/supply/src/pages/capa/components/CapaForm.tsx | component | 386 |
 | features/supply/src/pages/capa/components/CapaGrid.tsx | component | 362 |
 | features/supply/src/pages/capa/components/modals/CapaExcelUploadModal.module.scss | component | 41 |
 | features/supply/src/pages/capa/components/modals/CapaExcelUploadModal.tsx | component | 192 |
@@ -31,7 +31,7 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | {?{comboId:COMBO.VERSION,divisionId:`'${divId}'`}} | http | 1 | N | Capa.tsx:102 |
-| (useTabComboQueries) | hook | 5 | Y | Capa.tsx:118 Capa.tsx:150 CapaForm.tsx:46 CapaForm.tsx:83 NewVersionConfirmModal.tsx:45 |
+| (useTabComboQueries) | hook | 5 | Y | Capa.tsx:118 Capa.tsx:150 CapaForm.tsx:48 CapaForm.tsx:85 NewVersionConfirmModal.tsx:45 |
 | {?url} | http | 1 | N | Capa.tsx:125 |
 | /SCP0049/fpInstance/SEARCH/call-proc | http | 1 | Y | Capa.tsx:136 |
 | /SCP0049/dayRange/SEARCH/call-proc | http | 1 | Y | Capa.tsx:172 |
@@ -57,20 +57,23 @@
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
 | CapaForm | onSearch | <arrow> handleSearch | jsx | features/supply/src/pages/capa/Capa.tsx | 450 |
-| VersionInfoModal | onClose | <arrow> setVersionInfoOpen | jsx | features/supply/src/pages/capa/Capa.tsx | 497 |
-| ColumnLayoutModal | onSave | <arrow> settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,index)=>({name:s.COLUMN_NAME,sortOrderNo:index+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map,setAlert,t | jsx | features/supply/src/pages/capa/Capa.tsx | 519 |
-| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 133 |
-| InputField | onChange | <arrow> onChange | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 173 |
-| Button | onClick | onOpenPopup | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 169 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 185 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,changeDivision | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 201 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 220 |
-| CustomDropdown | onChange | <arrow> changeVersion,String | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 248 |
-| PeriodField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 283 |
-| CustomDropdown | onChange | <arrow> String(picked??'').split,String,setSearchParams,codes.includes | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 299 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 314 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 319 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 324 |
+| VersionInfoModal | onClose | <arrow> setVersionInfoOpen | jsx | features/supply/src/pages/capa/Capa.tsx | 501 |
+| ColumnLayoutModal | onSave | <arrow> settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,index)=>({name:s.COLUMN_NAME,sortOrderNo:index+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map,setAlert,t | jsx | features/supply/src/pages/capa/Capa.tsx | 532 |
+| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 135 |
+| InputField | onChange | <arrow> onChange | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 175 |
+| Button | onClick | onOpenPopup | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 171 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 187 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,changeDivision | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 203 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 222 |
+| PeriodField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 271 |
+| CustomDropdown | onChange | <arrow> String(picked??'').split,String,setSearchParams,codes.includes | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 289 |
+| CustomDropdown | onChange | <arrow> changeVersion,String | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 310 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 326 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 331 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 336 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 341 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 346 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 351 |
 | g | beginningEdit | beginningEdit | addHandler | features/supply/src/pages/capa/components/CapaGrid.tsx | 314 |
 | g | pastingCell | pastingCell | addHandler | features/supply/src/pages/capa/components/CapaGrid.tsx | 315 |
 | g | cellEditEnded | cellEditEnded | addHandler | features/supply/src/pages/capa/components/CapaGrid.tsx | 316 |
@@ -98,7 +101,7 @@
 |---|---|
 | Grid | 13 |
 | FormItem | 13 |
-| Checkbox | 9 |
+| Checkbox | 12 |
 | CustomDropdown | 6 |
 | InputField | 3 |
 | Button | 3 |
@@ -218,6 +221,7 @@
 | code | INSERT/DELETE = 명시적 무동작(R4·R5 — false·키생략 금지). => INSERT/DELETE 삭제 EDIT 미등록(§11). SEARCH/SAVE 실핸들러. | features/supply/src/pages/capa/Capa.tsx | 403 |
 | jsx | WijmoRowItem 확장(전역 index = WijmoPrimitive) — DataGrid<CapaRow>/EditTracker<CapaRow> 제약 충족. | features/supply/src/pages/capa/capa.types.ts | 6 |
 | code | return (REQUEST_CHK_LOSS_CODES as readonly string[]).includes(String(row.LOSS_CODE ?? '')); -- 26.10.19 TO-BE MailReq 안쓰는다고 해서 false 처리. | features/supply/src/pages/capa/utils/capa.editLock.ts | 233 |
+| code | return String(row.ROW_RANKING ?? '') === '1'; | features/supply/src/pages/capa/utils/capa.editLock.ts | 243 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

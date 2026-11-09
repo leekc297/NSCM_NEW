@@ -37,7 +37,16 @@ export const isMainGridCellEditable = (params: {
   confirmDay?: string;
 }): boolean => {
   const { columnBinding, crudType, isEditMode, measure, bucketType, confirmDay } = params;
-  if (crudType === 'I') return INSERT_EDITABLE_COLUMNS_MAIN.includes(columnBinding);
+  if (crudType === 'I') {
+    // 정적 화이트리스트(Model/From/To/FcstType/TrMode/Incoterms) + SHIP_REQ 신규행의 확정일 이후 D_
+    //   날짜셀(비-SUM) 도 수량 입력 가능(AS-IS InsertRow cs:2160-2183). W_/M_(SUM 집계)·확정일 이하·
+    //   他 measure 는 잠금 — 정적+동적을 합쳐 신규행 편집면을 AS-IS 와 일치시킨다(GAP-B1 해소).
+    if (INSERT_EDITABLE_COLUMNS_MAIN.includes(columnBinding)) return true;
+    if (!MAIN_EDITABLE_MEASURE.includes(measure ?? '')) return false;
+    const insTag = parseDynamicColumnTag(columnBinding);
+    if (!insTag || insTag.bucket !== 'D') return false; // D_ 만(W_/M_ = SUM → 잠금)
+    return !isMainGridDateConfirmed(columnBinding, confirmDay); // 확정일 이하 잠금
+  }
   if (!isEditMode) return false;
   if (!MAIN_EDITABLE_MEASURE.includes(measure ?? '')) return false; // SHIP_REQ 행만
   const tag = parseDynamicColumnTag(columnBinding);

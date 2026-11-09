@@ -10,6 +10,7 @@ import {
   COLUMN,
   COLUMN_WIDTH_EDIT,
   COLUMN_WIDTH_VIEW,
+  HEADER_DEPTH,
   HEADER_ROW_HEIGHT,
   HIDDEN_COLUMN_WIDTH,
   MEASURE_COLOR,
@@ -120,6 +121,8 @@ export const CapaLossPlanGrid = ({
   lockInputRef.current = { progressStatus, sheetType, divisionType, editableMeasures, scpPlanFixedColumns };
   const editEndedRef = useRef(onCellEditEnded);
   editEndedRef.current = onCellEditEnded;
+  // 편집 진입 시점의 원래 값 — 이탈 시 '실제 변경 여부' 판정에 쓴다(값 무변경 시 재계산/마킹 skip).
+  const editOldValueRef = useRef<unknown>(undefined);
 
   /** 공통 잠금 판정 — `beginningEdit`/`formatItem`/`cellEditEnded` 가 같은 함수를 쓴다. */
   const canEdit = (binding: string, row: Scp0106Row | undefined): boolean =>
@@ -176,11 +179,25 @@ export const CapaLossPlanGrid = ({
         binding === COLUMN.BASE_QTY ||
         isEditablePeriodColumn(binding)
       ) {
+        // 편집 중인 셀은 textContent 를 덮지 않는다 — Wijmo 인라인 편집기(input)가 셀의 자식이라
+        //   textContent 대입이 편집기를 파괴해 직접 입력이 사라진다(값 있는 셀에서 "직접 입력 안 됨,
+        //   백스페이스 후 입력됨" 증상). handleCellEditEnded 의 grid.invalidate() 등 refresh 가
+        //   편집 중 셀에 formatItem 을 재호출해도 편집기가 살아남도록 건너뛴다. 콤마/소수 포맷(AS-IS
+        //   파리티)은 뷰 셀에만 적용되고, 편집 확정 후 formatItem 재호출로 다시 그려진다.
+        if (sender.editRange?.contains(event.row, event.col)) return;
         const raw = row[binding];
         if (raw !== null && raw !== undefined && raw !== '') {
           const numeric = Number(raw);
           if (Number.isFinite(numeric)) {
-            const scale = editModeRef.current ? SCALE_EDIT : SCALE_VIEW;
+            // 소수 2모드(PI 2026-11-04 확정): 데이터는 10자리 보존, **표시는 평상시 1자리 반올림**,
+            //   **포커스(선택)된 편집가능 셀만 10자리**로 전개한다. 과거의 "그리드 전체 editMode 기준
+            //   일괄 1/10"에서 **셀 단위(활성셀)**로 바꿨다. 선택 이동 시 옛/새 활성셀 재포맷은 아래
+            //   selectionChanged → invalidate 가 유발한다. (editable = 위 canEdit 결과 재사용)
+            const isActiveEditable =
+              editable &&
+              sender.selection.row === event.row &&
+              sender.selection.col === event.col;
+            const scale = isActiveEditable ? SCALE_EDIT : SCALE_VIEW;
             event.cell.textContent = numeric.toLocaleString(undefined, {
               minimumFractionDigits: scale,
               maximumFractionDigits: scale,
@@ -205,6 +222,8 @@ export const CapaLossPlanGrid = ({
       const binding = sender.columns[event.col]?.binding ?? '';
       const row = sender.rows[event.row]?.dataItem as Scp0106Row | undefined;
       event.cancel = !canEdit(binding, row);
+      // 편집 진입 시 원래 값을 기억 — 이탈 시 값이 그대로면 재계산을 건너뛴다(아래 cellEditEnded).
+      if (!event.cancel) editOldValueRef.current = row ? row[binding] : undefined;
     };
     grid.beginningEdit.addHandler(beginningEditHandler);
 
@@ -233,9 +252,24 @@ export const CapaLossPlanGrid = ({
       const binding = sender.columns[event.col]?.binding ?? '';
       const row = sender.rows[event.row]?.dataItem as Scp0106Row | undefined;
       if (!canEdit(binding, row)) return;
+      // 값이 실제로 바뀌지 않았으면 재계산/마킹을 건너뛴다 — 편집 진입·이탈만으로(값 무변경) derived
+      //   measure 가 (부동소수 재계산 미세차로) '변경'으로 빨갛게 표시되는 오마킹 방지(신고 2026-11-04).
+      if (row && String(editOldValueRef.current ?? '') === String(row[binding] ?? '')) return;
       editEndedRef.current(event.row, binding);
     };
     grid.cellEditEnded.addHandler(cellEditEndedHandler);
+
+    /**
+     * 소수 2모드(PI 2026-11-04) — 포커스(선택)된 편집가능 셀만 10자리로 보이게 하는 재포맷 트리거.
+     * 선택이 바뀌면 formatItem 이 새 활성셀(10자리)·옛 활성셀(1자리)을 다시 평가하도록 가시영역을
+     * refresh 한다. Wijmo `invalidate` 는 다음 애니메이션 프레임에 병합돼 **가시 셀만** 다시 그리므로
+     * 화살표 연속 이동/대용량(5,659행)에서도 부담이 작다. 편집 중 셀은 formatItem 의 editRange 가드가
+     * 건너뛰므로 인라인 편집기는 유지된다.
+     */
+    const selectionChangedHandler = (sender: FlexGridType) => {
+      sender.invalidate();
+    };
+    grid.selectionChanged.addHandler(selectionChangedHandler);
 
     /**
      * (g) `Delete` 키 = 선택 범위에 **`0.0` 일괄 기입**(행 삭제도 DBNull 도 아니다) + `Ctrl+Z` 차단
@@ -271,12 +305,42 @@ export const CapaLossPlanGrid = ({
     };
     grid.hostElement?.addEventListener('keydown', keyDownHandler);
 
+    /**
+     * 다단 헤더 높이 강제 — `headerRowHeight` prop 은 `columnHeaders.rows.defaultSize` 만 세팅해서
+     * 정적 컬럼/그룹 헤더 행이 그 값을 무시하고 각 48px 로 벌어진다(3단 = 144px, 데이터 조회 시
+     * 헤더만 과도하게 높아지는 신고 2026-11-04). 실제 렌더된 tier 수로 총높이
+     * (HEADER_ROW_HEIGHT*HEADER_DEPTH=48)를 균등배분해 각 헤더 행·defaultSize 에 박는다
+     * (형제 `CapaLobReportGrid.applyHeaderHeight` 정본, hook #93 / 메모리
+     * multi-tier-dyn-header-height-balloons). 목표값과 같으면 skip → updatedLayout 무한루프 방지.
+     */
+    const applyHeaderHeight = () => {
+      const headerRows = grid.columnHeaders?.rows;
+      if (!headerRows || headerRows.length === 0) return;
+      const target = (HEADER_ROW_HEIGHT * HEADER_DEPTH) / headerRows.length;
+      let changed = false;
+      for (let i = 0; i < headerRows.length; i += 1) {
+        if (Math.round(headerRows[i].height ?? headerRows.defaultSize) !== Math.round(target)) {
+          headerRows[i].height = target;
+          changed = true;
+        }
+      }
+      if (Math.round(headerRows.defaultSize) !== Math.round(target)) {
+        headerRows.defaultSize = target;
+        changed = true;
+      }
+      if (changed) grid.invalidate(true);
+    };
+    grid.updatedLayout.addHandler(applyHeaderHeight);
+    applyHeaderHeight();
+
     return () => {
       try {
         grid.formatItem?.removeHandler(formatItemHandler);
+        grid.updatedLayout?.removeHandler(applyHeaderHeight);
         grid.beginningEdit?.removeHandler(beginningEditHandler);
         grid.pastingCell?.removeHandler(pastingCellHandler);
         grid.cellEditEnded?.removeHandler(cellEditEndedHandler);
+        grid.selectionChanged?.removeHandler(selectionChangedHandler);
         grid.hostElement?.removeEventListener('keydown', keyDownHandler);
       } catch {
         /* unmount race */

@@ -195,7 +195,10 @@ export const MSG = {
   REJECT_CONFIRM: 'MSG01204', // "Are you sure you want to Reject?" (AS-IS MSG00191)
   SELF_REJECT_CONFIRM: 'MSG01205', // "Are you sure you want to your request Self Reject?" (AS-IS MSG00192)
   REJECT_REASON_REQUIRED: 'MSG00181', // "Please enter the reason for rejection." (AS-IS MSG00181, EN 실측 일치)
-  ERP_BLOCK: 'MSG01395', // "Due to ERP I/F, changes can be made after 2 minutes..." (AS-IS MSG00267)
+  // ERP 차단 안내 — "...ERP 시스템 중단으로 SSP 출하요청 변경 및 승인 화면을 사용하실 수 없습니다 + 기간:{0}"
+  //   (AS-IS chkERPIFBlockYn MSG00267 파리티). 종전 MSG01395("이전 작업 2분 이후...")는 차단 기간과 무관한
+  //   오매핑이라 교체(사용자 신고 2026-11-06). MSG01498 신규 등록: design/05_register_msg.sql.
+  ERP_BLOCK: 'MSG01498',
   ENGINE_PROCESSING: 'MSG01294', // "SSP Daily Plan Processing now. Please, Try again after {0} minutes." (AS-IS MSG00291)
   CONFIRM_ID_EXISTS: 'MSG01356', // "The Shipment performance based on the Confirm ID occurred in SCS..." (AS-IS MSG00362)
   SAVE_SUCCESS: 'MSG00002', // "Saved successfully."

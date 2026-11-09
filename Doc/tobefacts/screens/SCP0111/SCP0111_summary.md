@@ -8,18 +8,18 @@
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/integration-psi/components/IntegrationPsiForm.tsx | component | 343 |
-| features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | component | 570 |
+| features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | component | 576 |
 | features/supply/src/pages/integration-psi/index.ts | index | 2 |
 | features/supply/src/pages/integration-psi/integration-psi.constants.ts | constants | 232 |
 | features/supply/src/pages/integration-psi/integration-psi.types.ts | types | 23 |
 | features/supply/src/pages/integration-psi/IntegrationPsi.module.scss | style | 12 |
-| features/supply/src/pages/integration-psi/IntegrationPsi.tsx | page | 531 |
+| features/supply/src/pages/integration-psi/IntegrationPsi.tsx | page | 532 |
 | features/supply/src/pages/integration-psi/useIntegrationPsiStore.ts | store | 275 |
 | features/supply/src/pages/integration-psi/utils/integrationPsiApi.ts | api | 72 |
 | features/supply/src/pages/integration-psi/utils/integrationPsiColumns.test.ts | test | 65 |
 | features/supply/src/pages/integration-psi/utils/integrationPsiColumns.ts | util | 108 |
-| features/supply/src/pages/integration-psi/utils/integrationPsiEditLock.test.ts | test | 85 |
-| features/supply/src/pages/integration-psi/utils/integrationPsiEditLock.ts | util | 174 |
+| features/supply/src/pages/integration-psi/utils/integrationPsiEditLock.test.ts | test | 114 |
+| features/supply/src/pages/integration-psi/utils/integrationPsiEditLock.ts | util | 181 |
 | features/supply/src/pages/integration-psi/utils/integrationPsiSave.test.ts | test | 306 |
 | features/supply/src/pages/integration-psi/utils/integrationPsiSave.ts | util | 260 |
 | features/supply/src/pages/integration-psi/__asis-mapping__.md | mapping | 370 |
@@ -49,18 +49,18 @@
 | InputField | onChange | <arrow> set | jsx | features/supply/src/pages/integration-psi/components/IntegrationPsiForm.tsx | 290 |
 | Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/integration-psi/components/IntegrationPsiForm.tsx | 333 |
 | g | updatedLayout | apply | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 280 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 352 |
-| g | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 364 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 415 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 416 |
-| g | formatItem | formatHandler | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 477 |
-| g.hostElement | dblclick | dblclickHandler | addEventListener | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 495 |
-| g.hostElement | keydown | blockNonIntegerKey | addEventListener | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 508 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 543 |
-| IntegrationPsiForm | onSearch | handleSearch | jsx | features/supply/src/pages/integration-psi/IntegrationPsi.tsx | 459 |
-| IntegrationPsiForm | onItemSearch | <arrow> setOpenItemModal | jsx | features/supply/src/pages/integration-psi/IntegrationPsi.tsx | 460 |
-| IntegrationPsiGrid | onDerivMismatch | <arrow> setToast,t | jsx | features/supply/src/pages/integration-psi/IntegrationPsi.tsx | 499 |
-| IntegrationPsiGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/integration-psi/IntegrationPsi.tsx | 505 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 357 |
+| g | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 369 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 420 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 421 |
+| g | formatItem | formatHandler | addHandler | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 483 |
+| g.hostElement | dblclick | dblclickHandler | addEventListener | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 501 |
+| g.hostElement | keydown | blockNonIntegerKey | addEventListener | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 514 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx | 549 |
+| IntegrationPsiForm | onSearch | handleSearch | jsx | features/supply/src/pages/integration-psi/IntegrationPsi.tsx | 460 |
+| IntegrationPsiForm | onItemSearch | <arrow> setOpenItemModal | jsx | features/supply/src/pages/integration-psi/IntegrationPsi.tsx | 461 |
+| IntegrationPsiGrid | onDerivMismatch | <arrow> setToast,t | jsx | features/supply/src/pages/integration-psi/IntegrationPsi.tsx | 500 |
+| IntegrationPsiGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/integration-psi/IntegrationPsi.tsx | 506 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

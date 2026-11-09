@@ -92,11 +92,13 @@ const toNumber = (v: unknown): number => {
 };
 
 // ⭐ 행별 NOTATION 숫자 포맷 (AS-IS Draw L1696~1762 SetRowFormat — INTEGER/POINT/POINT3, 82 메저별 표기
-//   [E20231128-000738]). 0/null/빈 셀 = 빈칸.
+//   [E20231128-000738]). null/빈 셀 = 빈칸, 0 은 '0' — 입력한 0 과 빈칸을 구분한다(2026-11-06 사용자 요청,
+//   DMF0003 Mkt Fcst formatQtyByNotation 과 같은 기준).
 const formatByNotation = (v: unknown, notation: string): string => {
-  if (v == null || v === '' || v === 0) return '';
+  if (v == null || v === '') return '';
   const n = toNumber(v);
-  if (n === 0) return '';
+  // POINT3 도 0 은 '0.000' 이 아니라 '0' (Mkt Fcst 와 같게).
+  if (n === 0) return '0';
   if (notation === 'INTEGER') return Math.trunc(n).toLocaleString();
   if (notation === 'POINT3')
     return n.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 });
@@ -1241,6 +1243,8 @@ export const SalesPlanGrid = ({
       comboParams={{ divisionId: `'${division || 'ALL'}'`, mnuId: `'${MENU_ID}'` }}
       // 이 그리드의 셀 콤보에 시트 스코프 sheetName 을 함께 실어 @sheetName 을 해소한다(mnuId 와 짝).
       sheetName={SHEETS.MAIN}
+      // 읽기전용 자동 잠금을 Sales Plan 시트 SAVE 권한으로 판정(메뉴 단위면 titleSet SAVE 와 섞임)
+      saveAuth={{ sheetName: SHEETS.MAIN }}
       itemsSource={rows as unknown as WijmoRowItem[]}
       autoGenerateColumns={false}
       // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo

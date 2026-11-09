@@ -7,7 +7,7 @@ import {
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, type MutableRefObject } from 'react';
 
-import { GridUtils } from '@foundation/utils';
+import { GridUtils, paintNegativeText, toGridNumber } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import {
@@ -59,6 +59,7 @@ export const EndingInventoryGrid = ({
   //     - 재고월령 39컬럼: Devaluation Age 체크 시만 표시(chkDetail 토글, cs:506 ChkDetail_CheckedChanged)
   //     - 상세 3컬럼      : isHeaderViewDetail (초기 숨김, QUANTITY 헤더 더블클릭 토글)
   //     - YYYYMMDD        : DAILY 모드만 표시(SetHeaderDaily, cs:563~576)
+  //     - VALUATION_TYPE  : MONTH 모드만 표시(일별 숨김) — AS-IS RdoMonth.Checked 분기(cs:702~711, E20250214-001628)
   //     - CELL_TYPE_GR    : div∋'40'/All 만 표시(SetHeaderDivision, cs:578~596)
   useEffect(() => {
     const g = gridRef.current;
@@ -73,6 +74,7 @@ export const EndingInventoryGrid = ({
         if (agingSet.has(b)) want = devaluationAge;
         else if (detailSet.has(b)) want = isHeaderViewDetail;
         else if (b === COL.YYYYMMDD) want = isDaily;
+        else if (b === COL.VALUATION_TYPE) want = !isDaily;
         else if (b === COL.CELL_TYPE_GR) want = showCellTypeGr;
         if (want !== undefined && col.visible !== want) {
           col.visible = want;
@@ -123,9 +125,11 @@ export const EndingInventoryGrid = ({
     };
   }, [gridRef, staticColumns, data, isDaily]);
 
-  // 조건부 셀 배경색 — USE_CELL_CF_BOM='Y' 행의 CELL_CONVER_FACTOR/QUANTITY 셀 Yellow(cs:256/257).
-  //   DataGrid 는 formatItem prop 을 노출하지 않아 셀 DOM 에 직접 style 을 세팅한다(bod 선례).
+  // 조건부 셀 서식 — DataGrid 는 formatItem prop 을 노출하지 않아 셀 DOM 에 직접 style 을 세팅한다(bod 선례).
   //   셀 DOM 재사용 대비 미해당 시 반드시 '' 로 해제한다.
+  //   1) 배경색 : USE_CELL_CF_BOM='Y' 행의 CELL_CONVER_FACTOR/QUANTITY 셀 Yellow(cs:256/257).
+  //   2) 글자색 : 음수 = 빨강 — AS-IS NumberCellType.NegativeRed=true(전 수치 셀 공통) 그리드 공통 규약.
+  //              공용 paintNegativeText(해제·!important 처리 포함)로 전 데이터 셀에 적용.
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
@@ -133,10 +137,13 @@ export const EndingInventoryGrid = ({
     const handler = (s: FlexGrid<EndingInventoryRow>, e: FormatItemEventArgs) => {
       if (e.panel.cellType !== CellType.Cell) return;
       const binding = s.columns[e.col]?.binding;
-      if (!binding || !yellowSet.has(binding)) return;
+      if (!binding) return;
       const dataItem = GridUtils.getRow(s, e.row) as WijmoRowItem | undefined;
-      const useBom = String(dataItem?.[COL.USE_CELL_CF_BOM] ?? '') === 'Y';
-      e.cell.style.backgroundColor = useBom ? CELL_CF_YELLOW : '';
+      if (yellowSet.has(binding)) {
+        const useBom = String(dataItem?.[COL.USE_CELL_CF_BOM] ?? '') === 'Y';
+        e.cell.style.backgroundColor = useBom ? CELL_CF_YELLOW : '';
+      }
+      paintNegativeText(e.cell, toGridNumber(dataItem?.[binding]));
     };
     g.formatItem.addHandler(handler);
     g.invalidate();

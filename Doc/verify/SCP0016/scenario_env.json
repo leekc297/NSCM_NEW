@@ -1,0 +1,125 @@
+{
+ "menu_id": "SCP0016",
+ "asis_id": "SCP0016",
+ "area": "SCP",
+ "generated": "2026-11-08 16:12:33",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Div"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "SCP Planner": "dana.robot",
+   "SCP Tester": "lucky-alex",
+   "SCM Viewer": "zhangjiali",
+   "ADMIN": "jooyong026",
+   "SCM PI Admin": "jinseon_ahn"
+  },
+  "81": {
+   "SCP Planner": "jsh96",
+   "SCP Tester": "lucky-alex",
+   "SCM Viewer": "popiel",
+   "ADMIN": "jooyong026",
+   "SCM PI Admin": "wangyucnb"
+  },
+  "82": {
+   "SCP Planner": "jsh96",
+   "SCP Tester": "lucky-alex",
+   "SCM Viewer": "kang_huichan",
+   "ADMIN": "jooyong026",
+   "SCM PI Admin": "wangyucnb"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "MEASURE_SELECT",
+   "SEARCH"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [
+  {
+   "label": "Div",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Ver.",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Operation group",
+   "source": "search_cond.csv"
+  }
+ ],
+ "popup_conds": [
+  {
+   "label": "PJT",
+   "popup": "프2",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  }
+ ],
+ "bucket_cond": "Bucket",
+ "observed": {
+  "source": "e2e_results.json 2026-11-07 22:52 · 행 수 근거 15행",
+  "max_rows_after_search": 436,
+  "zero_row_failures": [
+   {
+    "row_id": "EG-9de2d8f2",
+    "via": "기대 권한 Div 행 · 실제 기본 조회 0행 · 기본 조회 0행 · 대안 기간 "
+   },
+   {
+    "row_id": "EG-9de2d8f2",
+    "via": "기대 권한 Div 행 · 실제 기본 조회 0행 · 기본 조회 0행 · 대안 기간 2년 확대(2024."
+   },
+   {
+    "row_id": "EG-46c911aa",
+    "via": "기대 권한 Div 행 · 실제 기본 조회 0행 · 기본 조회 0행 · 대안 기간 "
+   },
+   {
+    "row_id": "EG-46c911aa",
+    "via": "기대 권한 Div 행 · 실제 기본 조회 0행 · 기본 조회 0행 · 대안 기간 2년 확대(2024."
+   },
+   {
+    "row_id": "EG-87bbbde4",
+    "via": "기대 권한 Div 행 · 실제 기본 조회 0행 · 기본 조회 0행 · 대안 기간 "
+   },
+   {
+    "row_id": "EG-87bbbde4",
+    "via": "기대 권한 Div 행 · 실제 기본 조회 0행 · 기본 조회 0행 · 대안 기간 2년 확대(2024."
+   }
+  ],
+  "zero_row_count": 6
+ },
+ "warnings": []
+}

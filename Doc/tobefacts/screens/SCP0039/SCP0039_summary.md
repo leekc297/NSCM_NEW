@@ -1,7 +1,7 @@
 # SCP0039 — To-Be Fact Pack 요약
 
 - page_key: `supply/master-validation` · feature: supply · As-is Fact Pack 있음
-- 파일 11 · 엔드포인트 호출 6 (미해결 1, 주석 속 3) · 이벤트 15 · 컴포넌트 사용 24 · 하드코딩 컬럼 0 · 메시지 6
+- 파일 11 · 엔드포인트 호출 6 (미해결 1, 주석 속 3) · 이벤트 15 · 컴포넌트 사용 26 · 하드코딩 컬럼 0 · 메시지 6
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
@@ -15,7 +15,7 @@
 | features/supply/src/pages/master-validation/master-validation.constants.ts | constants | 166 |
 | features/supply/src/pages/master-validation/master-validation.types.ts | types | 32 |
 | features/supply/src/pages/master-validation/MasterValidation.module.scss | style | 61 |
-| features/supply/src/pages/master-validation/MasterValidation.tsx | page | 270 |
+| features/supply/src/pages/master-validation/MasterValidation.tsx | page | 346 |
 | features/supply/src/pages/master-validation/useMasterValidationStore.ts | store | 140 |
 | features/supply/src/pages/master-validation/__asis-mapping__.md | mapping | 61 |
 
@@ -23,8 +23,8 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 2 | Y | MasterValidationForm.tsx:35 MasterValidationForm.tsx:41 |
-| (useTabLookupQueries) | hook | 1 | Y | MasterValidation.tsx:62 |
-| SCP0039/{?spec.sheet}/SEARCH/call-proc | callProc | 1 | N | MasterValidation.tsx:128 |
+| (useTabLookupQueries) | hook | 1 | Y | MasterValidation.tsx:67 |
+| SCP0039/{?spec.sheet}/SEARCH/call-proc | callProc | 1 | N | MasterValidation.tsx:155 |
 | /admin/menu/SCP0039/column | http | 1 | Y | useMasterValidationStore.ts:62 |
 | /admin/menu/SCP0039/search-conditions | http | 1 | Y | useMasterValidationStore.ts:119 |
 
@@ -57,12 +57,12 @@
 | grid | formatItem | <arrow> (row?.PROCEDURE_NAME??'').trim,(row?.PROGRAM_ID??'').trim,e.cell.replaceChildren,globalThis.document.createElement | addHandler | features/supply/src/pages/master-validation/components/MasterValidationMasterGrid.tsx | 43 |
 | DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/master-validation/components/MasterValidationMasterGrid.tsx | 97 |
 | DataGrid | gotFocus | gotFocus | jsx | features/supply/src/pages/master-validation/components/MasterValidationMasterGrid.tsx | 99 |
-| MasterValidationForm | onSearch | handleSearch | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 230 |
-| MasterValidationMasterGrid | onQuery | handleQuery | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 250 |
-| MasterValidationMasterGrid | onOpen | handleOpen | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 251 |
-| MasterValidationMasterGrid | onRowSelect | handleRowSelect | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 252 |
-| MasterValidationMasterGrid | gotFocus | <arrow> setFocusDetail | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 253 |
-| MasterValidationDetailGrid | gotFocus | <arrow> setFocusDetail | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 263 |
+| MasterValidationForm | onSearch | handleSearch | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 293 |
+| MasterValidationMasterGrid | onQuery | handleQuery | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 316 |
+| MasterValidationMasterGrid | onOpen | handleOpen | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 317 |
+| MasterValidationMasterGrid | onRowSelect | handleRowSelect | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 318 |
+| MasterValidationMasterGrid | gotFocus | <arrow> setFocusDetail | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 319 |
+| MasterValidationDetailGrid | gotFocus | <arrow> setFocusDetail | jsx | features/supply/src/pages/master-validation/MasterValidation.tsx | 335 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -83,6 +83,8 @@
 | PanelGroup | 1 |
 | MasterValidationMasterGrid | 1 |
 | PanelSeparator | 1 |
+| TabWrapper | 1 |
+| TabItem | 1 |
 | MasterValidationDetailGrid | 1 |
 
 ## 6. 하드코딩 Grid 컬럼
@@ -103,7 +105,9 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| endpoint | 마스터 "Validation Info" 컬럼 메타는 admin fetch(하드코딩 금지). mount 1회 + F10 리셋 자가복구. | features/supply/src/pages/master-validation/MasterValidation.tsx | 64 |
+| code | const [lastQueryCount, setLastQueryCount] = useState(0); | features/supply/src/pages/master-validation/MasterValidation.tsx | 60 |
+| endpoint | 마스터 "Validation Info" 컬럼 메타는 admin fetch(하드코딩 금지). mount 1회 + F10 리셋 자가복구. | features/supply/src/pages/master-validation/MasterValidation.tsx | 69 |
+| code | const activeTabCount = activeSheet ? (detailRowsBySheet[activeSheet]?.length ?? 0) : 0; | features/supply/src/pages/master-validation/MasterValidation.tsx | 275 |
 | endpoint | detail(결과) 그리드 컬럼 메타 캐시 — 검증유형별 sheetNm 로 admin fetch(design 03 §5 #03). | features/supply/src/pages/master-validation/useMasterValidationStore.ts | 9 |
 | endpoint | 마스터 "Validation Info" 메타 fetch(mount 1회). 이미 있으면 재조회 생략(정적 메타). | features/supply/src/pages/master-validation/useMasterValidationStore.ts | 90 |
 

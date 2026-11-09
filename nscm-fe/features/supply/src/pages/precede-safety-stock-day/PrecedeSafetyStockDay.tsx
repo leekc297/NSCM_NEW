@@ -15,6 +15,10 @@ import { MENU_ID, MSG, SHEETS } from './precede-safety-stock-day.constants';
 import { usePrecedeSafetyStockDayStore } from './usePrecedeSafetyStockDayStore';
 import { missingRequiredSearchLabel, toGridDate } from './utils/precede-safety-stock-day.util';
 import { precedeSafetyStockDayInsertDefaults } from './utils/precedeSafetyStockDayEditLock';
+import {
+  fetchValidItemIds,
+  findInvalidItemIdRow,
+} from './utils/precedeSafetyStockDayItemValidation';
 import { submitPrecedeSafetyStockDaySave } from './utils/precedeSafetyStockDaySaveRequest';
 import {
   findDuplicatePrecedeSafetyStockDayRows,
@@ -148,21 +152,16 @@ export const PrecedeSafetyStockDay = ({ tabId, title }: PageProps<MENU_ID>) => {
     void refetch();
   };
 
-  const onSave = () => {
-    const dirtyRows = (
-      (gridRef.current?.collectionView?.sourceCollection ?? [])
-    ).filter(row => row.CRUD_TYPE);
+  const onSave = async () => {
+    const allRows = gridRef.current?.collectionView?.sourceCollection ?? [];
+    const dirtyRows = allRows.filter(row => row.CRUD_TYPE);
     if (dirtyRows.length === 0) {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_수정한 내용이 없습니다.') });
       return;
     }
 
-    // 00_checklist.md §3b 커스텀 검증 13건 재현 — #2(중복) 는 행 조합 대사, 나머지는 행별 가드.
-    const duplicate = findDuplicatePrecedeSafetyStockDayRows(dirtyRows);
-    if (duplicate) {
-      void setAlert({ type: 'alert', content: t(duplicate.msgId, duplicate.message) });
-      return;
-    }
+    // 00_checklist.md §3b 커스텀 검증 13건 재현 — 행별 가드(필수→날짜형식→From>To→음수).
+    //   AS-IS SaveData 순서(필수 공백 먼저, 그다음 중복)를 따라 중복 검증은 이 루프 뒤에 둔다.
     for (const row of dirtyRows) {
       const violation = validatePrecedeSafetyStockDayRow(row);
       if (violation) {
@@ -183,12 +182,56 @@ export const PrecedeSafetyStockDay = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
     }
 
+    // #2 MSG00428(AS-IS MSG00260 재번호) — 중복 저장 방지. 신규/수정행의 PK 조합이 그리드에 이미 로드된 다른 행(기존 포함)과
+    //   겹치면 막는다(AS-IS dtPreSafeStockAll 대조 재현). 전체 행(allRows)을 넘겨야 기존 행과의 충돌을
+    //   잡는다 — dirtyRows 만으로는 "같은 조합 신규 1건" 을 놓쳐 SP ORA-20010 원문이 뜬다.
+    const duplicate = findDuplicatePrecedeSafetyStockDayRows(allRows);
+    if (duplicate) {
+      void setAlert({ type: 'alert', content: t(duplicate.msgId, duplicate.message) });
+      return;
+    }
+
+    // #6 MSG00458 — 품목 미존재. AS-IS SaveData(.cs:730~735) dtItemAll 대조 재현. Division별 유효 품목
+    //   집합(품목 팝업 COM0013 과 동일 원천)을 조회해 입력 ITEM_ID 를 대조한다(삭제행 제외). 그리드
+    //   DIVISION_ID 는 조회 Division 에 잠겨 보통 1건이나, 혹시 여러 Division 이 섞여도 각각 조회한다.
+    const divisionIds = [
+      ...new Set(
+        dirtyRows
+          .filter(row => row.CRUD_TYPE !== 'D')
+          .map(row => String(row.DIVISION_ID ?? ''))
+          .filter(Boolean)
+      ),
+    ];
+    let validByDivision: Map<string, Set<string>>;
+    try {
+      const entries = await Promise.all(
+        divisionIds.map(async divisionId => [divisionId, await fetchValidItemIds(divisionId)] as const)
+      );
+      validByDivision = new Map(entries);
+    } catch {
+      // 유효 품목 조회 실패 시 저장을 진행하지 않는다 — SP 가 무효 품목을 거르지 않아(사용자 신고
+      //   2026-11-03) FE 가 유일한 방어선이므로, 검증을 못 한 채 통과시키지 않는다(console 금지 룰).
+      void setAlert({ type: 'alert', content: t('', '_품목 검증 중 오류가 발생했습니다.') });
+      return;
+    }
+    const invalidItem = findInvalidItemIdRow(dirtyRows, validByDivision);
+    if (invalidItem) {
+      void setAlert({
+        type: 'alert',
+        content: t(invalidItem.msgId, '_MODEL:{0}\r\n유효하지 않은 모델입니다!').replace(
+          '{0}',
+          invalidItem.itemId
+        ),
+      });
+      return;
+    }
+
     saveWithValidation(dirtyRows, staticColumns, rows => void submitSave(rows), dirtyRows);
   };
 
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? onSearch : false,
-    save: hasButton('SAVE') ? onSave : false,
+    save: hasButton('SAVE') ? () => void onSave() : false,
     delete: hasButton('DELETE') ? onDelete : false,
     // InsertButton — AS-IS Insert_Row 실동작 확정(GSCM SCP0127.cs:352·504 실측). INSERT 권한 등록 완료.
     insert: hasButton('INSERT') ? onInsert : false,

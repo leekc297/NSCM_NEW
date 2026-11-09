@@ -9,6 +9,7 @@
 자기 칸 비우기(입력 검증)·원천 분기 없는 문장은 제외. 컬럼 존재 확인 분기(GetColumnIndex > 0 등)는 조건으로 보지 않는다.
 """
 import csv, os, re, sys
+from asis_variant import is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
 csv.field_size_limit(10 ** 8)
@@ -46,7 +47,7 @@ def const_map(file_rel):
 
 def main(sid):
     d = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', sid)
-    files = {f['file'] for f in rd(os.path.join(d, 'files.csv')) if f.get('variant') in ('current', 'shared')}
+    files = {f['file'] for f in rd(os.path.join(d, 'files.csv')) if is_cur(f)}
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from asis_live import dead_methods
     dead = dead_methods(sid)

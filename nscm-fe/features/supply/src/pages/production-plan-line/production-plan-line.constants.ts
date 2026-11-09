@@ -92,6 +92,14 @@ export const OP_GROUP_ELECTRODE = 'E'; // Electrode
 export const ELECTRODE_LOCK_OP_GROUPS = [OP_GROUP_CELL, OP_GROUP_PACK] as const;
 // Plan Type 확정/임시 — Fix/Unfix/New 불가 (design 01 D1 / 02 §4.4).
 export const PLAN_TYPE_EXCLUDE_FIX = ['FN', 'TE'] as const;
+// Plan Type 계획 진행순서 — TE → PR → MA → SE → FN (테스터 신고 2026-11-05 순서 정정).
+//   TE 가 최초 단계, FN 이 최종 단계다. 그리드 편집잠금 판정 전용: 선택한 plan type 보다 "다음 단계"
+//   (이 배열에서 더 뒤) 가 조회조건 콤보에 있으면 수정 불가(예: PR 은 MA/SE/FN 존재 시 잠금). FN 은 그
+//   자체로 수정 불가. 배열 인덱스가 곧 단계 순번(앞설수록 이른 단계). (종전 ['FN','SE','MA','PR','TE']
+//   역순이라 TE 가 PR 존재 시가 아니라 그 반대로 잠겨 동작이 뒤집혀 있었다 — 배열만 바로잡아 해소.)
+export const PLAN_TYPE_STAGE_ORDER = ['TE', 'PR', 'MA', 'SE', 'FN'] as const;
+// 그 자체로 수정 불가한 plan type(첫 계획 단계) — 사용자 지시 2026-11-04.
+export const PLAN_TYPE_READONLY = 'FN';
 // W-last 프리셋 숨김 기준 주차 (design 01 A3 — GetLastRange(division)==52 면 btnWLast 숨김).
 export const W_LAST_HIDE_PERIOD = '52';
 

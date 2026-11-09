@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 288,
+  "at": "2026-11-07T08:49:00.309Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"APCAN0506B\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3020,
+  "dur": 287,
+  "at": "2026-11-07T08:49:01.603Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"apcan0506b\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3020,
+  "dur": 282,
+  "at": "2026-11-07T08:49:02.594Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"PCAN0506\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3017,
+  "dur": 263,
+  "at": "2026-11-07T08:49:03.498Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"APCAN0506B,APCAN0507B\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3022,
+  "dur": 289,
+  "at": "2026-11-07T08:49:34.780Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ }
+]

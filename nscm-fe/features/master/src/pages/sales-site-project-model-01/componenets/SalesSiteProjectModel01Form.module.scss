@@ -1,0 +1,40 @@
+body .formItem {
+  @include respond-to('HD') {
+    grid-template-columns: 50px auto;
+
+    & > div:first-of-type {
+      width: 50px;
+    }
+  }
+
+  @include respond-to('FHD') {
+    grid-template-columns: 140px auto;
+
+    & > div:first-of-type {
+      width: 140px;
+    }
+  }
+}
+
+.customCheckbox {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.customGrid {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inputWithSearch {
+  & > div:first-child {
+    display: flex;
+    align-items: center;
+  }
+  & button {
+    position: absolute;
+    right: -40px;
+  }
+}

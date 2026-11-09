@@ -17,7 +17,7 @@
 | features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx | component | 301 |
 | features/demand/src/pages/metal-link-price/components/modals/metalLinkVersionModalStore.ts | store | 57 |
 | features/demand/src/pages/metal-link-price/index.ts | index | 2 |
-| features/demand/src/pages/metal-link-price/metal-link-price.constants.ts | constants | 327 |
+| features/demand/src/pages/metal-link-price/metal-link-price.constants.ts | constants | 313 |
 | features/demand/src/pages/metal-link-price/metal-link-price.types.ts | types | 42 |
 | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | page | 406 |
 | features/demand/src/pages/metal-link-price/useMetalLinkPriceStore.ts | store | 176 |
@@ -146,7 +146,7 @@
 | MSG01015 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0020(6), DMF0074_40(5), DMF0014(3), DMF0074(3), DMF0021(2), DMF0082(2), DMF0045(1), DMF0053(1)
+- 화면ID: DMF0020(6), DMF0074_40(5), DMF0014(3), DMF0021(2), DMF0082(2), DMF0074(2), DMF0045(1), DMF0053(1)
 - SP/PKG: PKG_DMF0074(9), P_DMF0074_GET_METAL_LINK_TEMPLATE(4), P_DMF0074_GET_METAL_LINK_PRICE(4), DMF0073_GET_VERSION_SALESPRICE(3), P_DMF0074_EXCEL_UPLOAD(2), P_FROM(2), DMF0000_GET_COMMON_SPREAD_TITLE(1), P_MODE(1), P_PROGRAM_ID(1), P_CREATED_BY(1), PKG_NSCM_UI_COM_MENU(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

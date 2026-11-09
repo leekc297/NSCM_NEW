@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SCP0108",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"fromYyyymm\":\"202611\",\"programId\":\"SCP0108\",\"sheetName\":\"MAIN\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 136,
+  "at": "2026-11-09T01:41:12.211Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 757,
+  "dur": 349,
+  "at": "2026-11-09T01:41:13.991Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"FMC-U611\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 5,
+  "dur": 240,
+  "at": "2026-11-09T01:41:14.675Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"fmc-u611\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 237,
+  "at": "2026-11-09T01:41:15.351Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"MC-U61\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 240,
+  "at": "2026-11-09T01:41:46.111Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"FMC-U611,FMC-CX482\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 9,
+  "dur": 243,
+  "at": "2026-11-09T01:42:17.352Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ }
+]

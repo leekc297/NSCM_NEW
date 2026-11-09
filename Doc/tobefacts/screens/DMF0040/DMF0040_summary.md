@@ -17,7 +17,7 @@
 | features/demand/src/pages/mkt-fcst-comparison/mkt-fcst-comparison.constants.ts | constants | 106 |
 | features/demand/src/pages/mkt-fcst-comparison/mkt-fcst-comparison.types.ts | types | 47 |
 | features/demand/src/pages/mkt-fcst-comparison/MktFcstComparison.tsx | page | 300 |
-| features/demand/src/pages/mkt-fcst-comparison/useMktFcstComparisonStore.ts | store | 449 |
+| features/demand/src/pages/mkt-fcst-comparison/useMktFcstComparisonStore.ts | store | 433 |
 | features/demand/src/pages/mkt-fcst-comparison/utils/mkt-fcst-comparison.api.ts | api | 51 |
 | features/demand/src/pages/mkt-fcst-comparison/utils/mkt-fcst-comparison.searchCombos.ts | util | 70 |
 | features/demand/src/pages/mkt-fcst-comparison/__asis-mapping__.md | mapping | 188 |
@@ -29,10 +29,10 @@
 | DMF0040/version//call-proc | hook | 1 | Y | ComparisonVersionModal.tsx:139 |
 | DMF0040/mktFcstComparison//call-proc | hook | 1 | Y | MktFcstComparison.tsx:65 |
 | DMF0040/spreadTitle//call-proc | hook | 1 | Y | MktFcstComparison.tsx:72 |
-| /admin/menu/DMF0040/search-conditions | http | 1 | Y | useMktFcstComparisonStore.ts:238 |
-| /admin/menu/DMF0040/column | http | 1 | Y | useMktFcstComparisonStore.ts:319 |
-| DMF0040/titleSet/SEARCH/call-proc | http | 1 | Y | useMktFcstComparisonStore.ts:348 |
-| /admin/menu/DMF0040/measure | http | 1 | Y | useMktFcstComparisonStore.ts:404 |
+| /admin/menu/DMF0040/search-conditions | http | 1 | Y | useMktFcstComparisonStore.ts:230 |
+| /admin/menu/DMF0040/column | http | 1 | Y | useMktFcstComparisonStore.ts:308 |
+| DMF0040/titleSet/SEARCH/call-proc | http | 1 | Y | useMktFcstComparisonStore.ts:337 |
+| /admin/menu/DMF0040/measure | http | 1 | Y | useMktFcstComparisonStore.ts:390 |
 | /DMF0040/titleSet/SAVE/call-proc | http | 1 | Y | mkt-fcst-comparison.api.ts:40 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -135,9 +135,9 @@
 | LBL00608 | 1 |
 | LBL00627 | 1 |
 | LBL00112 | 1 |
-| LBL00502 | 1 |
+| LBL00044 | 1 |
 | LBL00080 | 1 |
-| LBL00506 | 1 |
+| LBL00011 | 1 |
 | LBL00085 | 1 |
 | LBL00005 | 1 |
 | LBL00710 | 1 |
@@ -176,7 +176,7 @@
 | code | onClick={() => setOpenVersionModal(true)} | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonForm.tsx | 422 |
 | code | onClick={() => setOpenVersionModal(true)} | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonForm.tsx | 428 |
 | code | onKeyDown={() => setOpenVersionModal(true)} // AS-IS txtVersion_KeyDown L1670 — 키 = 팝업 | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonForm.tsx | 429 |
-| code | 저장된 컬럼 개인화(titleSet 'C') 복원 — userColumnLayout 세팅. fetchStaticColumns 가 먼저 await 해 override 를 확보한 뒤 admin 메타에 적용한다(별도 effect 로 분리하면 응답 순서 경쟁 사고). | features/demand/src/pages/mkt-fcst-comparison/useMktFcstComparisonStore.ts | 57 |
+| code | 저장된 컬럼 개인화(titleSet 'C') 복원 — userColumnLayout 세팅. fetchStaticColumns 가 먼저 await 해 override 를 확보한 뒤 admin 메타에 적용한다(별도 effect 로 분리하면 응답 순서 경쟁 사고). | features/demand/src/pages/mkt-fcst-comparison/useMktFcstComparisonStore.ts | 51 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

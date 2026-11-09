@@ -16,6 +16,7 @@ import {
   isPivotColumn,
   isPivotVisible,
   isRowEditable,
+  isStageEditableFor,
   pivotKind,
 } from './productionPlanLineEditLock';
 
@@ -54,10 +55,36 @@ describe('productionPlanLineEditLock', () => {
     expect(isPivotVisible('B_202601', BUCKET_TYPE.DAILY, true)).toBe(false);
   });
 
-  it('editablePivotKindForBucket — SUM 컬럼 잠금 규칙', () => {
+  it('isStageEditableFor — FN 또는 콤보에 다음 단계 존재 시 잠금 (순서 TE→PR→MA→SE→FN, 테스터 2026-11-05)', () => {
+    // 순서 TE<PR<MA<SE<FN. 선택보다 '뒤(later)' 단계가 옵션에 있으면 잠금 + FN 은 그 자체로 잠금.
+    // {PR,MA,FN}: FN 이 최후 → PR·MA 는 뒤 단계 존재로 잠금.
+    expect(isStageEditableFor('PR', ['PR', 'MA', 'FN'])).toBe(false); // 뒤 단계 MA/FN 존재
+    expect(isStageEditableFor('MA', ['PR', 'MA', 'FN'])).toBe(false); // 뒤 단계 FN 존재
+    expect(isStageEditableFor('FN', ['PR', 'MA', 'FN'])).toBe(false); // (1) FN 조회
+    // {TE,PR,MA,FN}: FN 이 최후 → TE·PR 잠금.
+    expect(isStageEditableFor('TE', ['TE', 'PR', 'MA', 'FN'])).toBe(false); // 뒤 단계 PR/MA/FN 존재
+    expect(isStageEditableFor('PR', ['TE', 'PR', 'MA', 'FN'])).toBe(false); // 뒤 단계 MA/FN 존재
+    // 테스터 시나리오: SE 가 있으면 MA·PR 잠금, SE 는 (최후면) 편집가능.
+    expect(isStageEditableFor('PR', ['PR', 'MA', 'SE'])).toBe(false); // 뒤 단계 MA/SE
+    expect(isStageEditableFor('MA', ['PR', 'MA', 'SE'])).toBe(false); // 뒤 단계 SE
+    expect(isStageEditableFor('SE', ['PR', 'MA', 'SE'])).toBe(true); // SE 가 최후 → 편집가능
+    // 테스터 시나리오: MA 가 있으면 PR 잠금, MA 는 최후면 편집가능.
+    expect(isStageEditableFor('PR', ['PR', 'MA'])).toBe(false); // 뒤 단계 MA 존재
+    expect(isStageEditableFor('MA', ['PR', 'MA'])).toBe(true); // MA 가 최후(PR 은 앞) → 편집가능
+    // 단일 비-FN 최후 → 편집가능.
+    expect(isStageEditableFor('MA', ['MA'])).toBe(true);
+    // 단일 FN(최종 단계) → 잠금.
+    expect(isStageEditableFor('FN', ['FN'])).toBe(false);
+    // 빈 선택/순서 미등록 type → false.
+    expect(isStageEditableFor('', ['PR', 'MA'])).toBe(false);
+    expect(isStageEditableFor('ZZ', ['ZZ'])).toBe(false);
+  });
+
+  it('editablePivotKindForBucket — SUM 컬럼 잠금 규칙 (Monthly=읽기전용, AS-IS cs:1155)', () => {
     expect(editablePivotKindForBucket(BUCKET_TYPE.DAILY)).toBe('D');
     expect(editablePivotKindForBucket(BUCKET_TYPE.WEEKLY)).toBe('W');
-    expect(editablePivotKindForBucket(BUCKET_TYPE.MONTHLY)).toBe('M');
+    // Monthly 는 M_(월SUM)이 항상 잠겨 편집 가능한 kind 가 없다 → null (AS-IS 전 bucket M_ 잠금).
+    expect(editablePivotKindForBucket(BUCKET_TYPE.MONTHLY)).toBeNull();
   });
 
   it('isPastPivot — 이번 주 월요일 cutoff', () => {
@@ -97,7 +124,7 @@ describe('productionPlanLineEditLock', () => {
   });
 
   it('isRowEditable — EDIT_INFO + new_edit_mode override + 화면규칙 (AS-IS EditButton cs:715~741)', () => {
-    const ctx = { lastPlanType: 'MA', hasFn: false };
+    const ctx = { lastPlanType: 'MA', hasFn: false, isStageEditable: true };
     // AMEND + is_editable=Y(CP1) + 마지막 PlanType(MA) → Y
     expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP1' }, ctx, editInfo)).toBe(true);
     // 비 AMEND measure → N (measure 게이트)
@@ -110,18 +137,28 @@ describe('productionPlanLineEditLock', () => {
     expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'PR', CP_KEY: 'CP1' }, ctx, editInfo)).toBe(true);
     // (b) FN 존재해도 new_edit_mode='Y' 가 (b)를 덮어 → Y (다음단계 저장차단은 SAVE_YN 담당)
     expect(
-      isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP1' }, { lastPlanType: 'MA', hasFn: true }, editInfo)
+      isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP1' }, { lastPlanType: 'MA', hasFn: true, isStageEditable: true }, editInfo)
     ).toBe(true);
     // new_edit_mode='N' + 서버 N(CPNN) → N (override 없음)
     expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CPNN' }, ctx, editInfo)).toBe(false);
     // (d) TE → N (new_edit_mode='Y' 여도 TE 가 최종 override)
     expect(
-      isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'TE', CP_KEY: 'CP1' }, { lastPlanType: 'TE', hasFn: false }, editInfo)
+      isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'TE', CP_KEY: 'CP1' }, { lastPlanType: 'TE', hasFn: false, isStageEditable: true }, editInfo)
+    ).toBe(false);
+  });
+
+  it('isRowEditable — stage 잠금(isStageEditable=false) 면 전건 잠금 (FN·다음단계 존재, 사용자 지시 2026-11-04)', () => {
+    // isStageEditable=false(FN 조회 또는 콤보에 다음 단계 존재) → new_edit_mode='Y' 여도 편집 불가.
+    const lockedCtx = { lastPlanType: 'MA', hasFn: false, isStageEditable: false };
+    expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP1' }, lockedCtx, editInfo)).toBe(false);
+    // isPivotCellEditable 도 동일하게 전건 잠금(셀 컬러/beginningEdit 게이트 공유).
+    expect(
+      isPivotCellEditable('W_209901', { MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP1' }, BUCKET_TYPE.WEEKLY, lockedCtx, '20260105', editInfo)
     ).toBe(false);
   });
 
   it('isPivotCellEditable — 종합 판정', () => {
-    const ctx = { lastPlanType: 'MA', hasFn: false };
+    const ctx = { lastPlanType: 'MA', hasFn: false, isStageEditable: true };
     const row = { MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP1' };
     // Weekly: W_ 미래 셀 + 편집가능 행 → true
     expect(isPivotCellEditable('W_209901', row, BUCKET_TYPE.WEEKLY, ctx, '20260105', editInfo)).toBe(true);
@@ -131,10 +168,12 @@ describe('productionPlanLineEditLock', () => {
     expect(isPivotCellEditable('W_202001', row, BUCKET_TYPE.WEEKLY, ctx, '20260105', editInfo)).toBe(false);
     // 고정 컬럼 → 잠금
     expect(isPivotCellEditable('LINE_ID', row, BUCKET_TYPE.WEEKLY, ctx, '20260105', editInfo)).toBe(false);
+    // Monthly: 보이는 M_(월SUM)도 편집불가 — Monthly 는 집계 조회 전용(AS-IS cs:1155 전 bucket M_ 잠금).
+    expect(isPivotCellEditable('M_209901', row, BUCKET_TYPE.MONTHLY, ctx, '20260105', editInfo)).toBe(false);
   });
 
   it('isPivotCellEditable — 서버 EDIT_START_DATE 로 편집시작 전 셀 잠금 (L8 / design 03 §3.6 #33)', () => {
-    const ctx = { lastPlanType: 'MA', hasFn: false };
+    const ctx = { lastPlanType: 'MA', hasFn: false, isStageEditable: true };
     const row = { MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP2' };
     // 서버 편집시작일 20260201 — 전역 cutoff(20260101)보다 뒤.
     const info: EditInfoMap = new Map([

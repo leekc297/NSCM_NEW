@@ -2247,6 +2247,8 @@ export const MktFcstGrid = ({
         comboParams={gridComboParams}
         // 이 그리드의 셀 콤보에 시트 스코프 sheetName 을 함께 실어 @sheetName 을 해소한다(mnuId 와 짝).
         sheetName={SHEETS.MAIN}
+        // 읽기전용 자동 잠금을 Mkt Fcst 시트 SAVE 권한으로 판정(메뉴 단위면 다른 시트 SAVE 와 섞임)
+        saveAuth={{ sheetName: SHEETS.MAIN }}
         itemsSource={rows}
         autoGenerateColumns={false}
         // allowSorting 을 넘기지 않는다. 이 prop 은 공용 DataGrid 의 정렬(F3 + 헤더 클릭)과 무관하다

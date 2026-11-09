@@ -58,6 +58,9 @@ def c_reasons(V, rules, refs):
             if x not in st:
                 continue
             e = r.get('evidence') or ''
+            if r.get('applicable') == 'N':  # W8-A(플랜 1-7): 이 화면에 대상 기능 없음(applicability) — 측정 0 원인이 아니라 대상 밖
+                st[x]['적용불가'] += 1
+                continue
             if '자동 검사기 없음' in e:
                 st[x]['검사기없음'] += 1
                 scr[x]['검사기없음'].add(m)
@@ -83,7 +86,7 @@ def c_reasons(V, rules, refs):
                     auto[x] += 1
     with open(os.path.join(V, '_doc_proof_c.csv'), 'w', encoding='utf-8-sig', newline='') as fo:
         w = csv.writer(fo)
-        w.writerow(['rule_id', 'doc_rows', '미실행', '대상없음', '경로오류', '판정필요', '검사기없음', '집계행', '자동행대기_화면', 'next', 'top_evidence'])
+        w.writerow(['rule_id', 'doc_rows', '미실행', '대상없음', '경로오류', '판정필요', '검사기없음', '집계행', '적용불가', '자동행대기_화면', 'next', 'top_evidence'])
         for x in rules:
             c = st[x]
             nxt = []
@@ -97,7 +100,7 @@ def c_reasons(V, rules, refs):
                 nxt.append('자동 검사기 없음 — 검사기 신설 또는 수동 검수')
             if c['대상없음'] and not nxt:
                 nxt.append(f"측정 화면 {len(scr[x]['대상없음'])}개 모두 대상 없음 — 대상 요소 있는 화면에서 실측 필요")
-            w.writerow([x, refs[x], c['미실행'], c['대상없음'], c['경로오류'], c['판정필요'], c['검사기없음'], c['집계행'],
+            w.writerow([x, refs[x], c['미실행'], c['대상없음'], c['경로오류'], c['판정필요'], c['검사기없음'], c['집계행'], c['적용불가'],
                         auto[x] if pat is not None else '미측정(생성기 import 실패)', ' / '.join(nxt), ' ‖ '.join(f'{k}({n})' for k, n in ev[x].most_common(3))[:400]])
     print(f"  C 등급 {len(rules)}개 원인 → {os.path.relpath(os.path.join(V, '_doc_proof_c.csv'), ROOT)}")
 

@@ -149,10 +149,7 @@
 - 정적 42 = admin 'MDF Reports' 메타 100%(hook #113) / 동적 M_yyyymm **1단 평면 헤더**(라벨 `2025-01`, 2026-08-11 전환 — 아래 H-1) ✅
 - **세트행**: 40=3(SalesAmt_LOC→KRW→RTF_SYS_RP)/81(startsWith)=2/82=1 — Insert/Delete 블록 단위(INSERT_GROUP_ID), 저장 = 세트×채택월×행 emit ✅
 - **G0**: DM Planner && Div≠82 → MSG00096 (Insert/Save 진입 + 셀 전면 잠금 — L341~345) ✅
-- **시점축**: baseYm = BP '201801' / SP_W 당월. Plan: 과거년도 전체 잠금[C20201223]·과거 구간 잠금·창 내 = 40 무관 개방·비40 = MEASURE===sEditMeasure(DM_LOOKUP_DIV×DM_SR_ETC_CURRENCY — 82='SalesAmt_KRW'뿐·81 빈값=전잠금). Result: 미래 잠금·과거 = 동일 개방 ✅
-  - ⭐ [2026-09-22 정정 — 사용자 지적] 구 "BP Result = 전체 잠금(보수 확정 D-6)" 폐기. AS-IS 잠금은 전부 `GetColumnIndex("M_"+기준월) > 0`
-    조건부라, 기준월 컬럼이 그리드에 없으면(BP 기준월 201801 을 2018 외 연도로 조회 / SP_W 를 당해 외 연도로 조회) 잠금이 걸리지 않는다.
-    → BP×Result = 전 구간·전 메저 편집, BP×Plan = 과거년도만 전체 잠금·그 외 전 구간 편집. `etc-sales-reports.editLock.ts` evalEtcReportCell 이 L414~460 을 1:1 재현.
+- **시점축**: baseYm = BP '201801' / SP_W 당월. Plan: 과거년도 전체 잠금[C20201223]·과거 구간 잠금·창 내 = 40 무관 개방·비40 = MEASURE===sEditMeasure(DM_LOOKUP_DIV×DM_SR_ETC_CURRENCY — 82='SalesAmt_KRW'뿐·81 빈값=전잠금). Result: 미래 잠금·과거 = 동일 개방·BP=전체 잠금(보수 확정) ✅
 - ⚠ **EDIT_FLAG 동적 셀 미사용** (EditButton 루프 값 비교 없음 — DMF0044와 정반대. §2.3 비대칭 실측) ✅
 - 정적 컬럼 편집 = **UI Category Setup `INPUT_TP_CD` 단일 원천**(2026-08-11 전환 — 아래 H-5). AS-IS 신규행 division 분기 잠금(공통 7 + 81: FCST_TYPE·CELL_MODEL_INFO / 82: ITEM_ID·CELL_MODEL_INFO / 40: SCM_SITE_ID)·기존행 전량 잠금은 **메타 값('S')으로 보존**한다 ✅
 - cascade 3종: C1 40 DEPARTMENT_ID→DEPT_ID(CMBO DMF0049_DEPARTMENT_TEAM — SEGMENT3 cascade)+하위 clear / C2 DEPT_ID→END_CUST_REPORT·ReportGroup3·DMF0005_REPORT_GROUP2(GRID_EDIT_COMBO) / C3 END_CUSTOMER→SiteByEndCustomer ✅

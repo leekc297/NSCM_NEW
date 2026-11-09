@@ -9,13 +9,13 @@
 |---|---|---|
 | features/demand/src/pages/sales-plan/components/SalesPlanForm.module.scss | component | 8 |
 | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | component | 462 |
-| features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | component | 1255 |
+| features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | component | 1259 |
 | features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx | component | 305 |
 | features/demand/src/pages/sales-plan/index.ts | index | 2 |
 | features/demand/src/pages/sales-plan/sales-plan.constants.ts | constants | 227 |
 | features/demand/src/pages/sales-plan/sales-plan.types.ts | types | 59 |
 | features/demand/src/pages/sales-plan/SalesPlan.module.scss | style | 72 |
-| features/demand/src/pages/sales-plan/SalesPlan.tsx | page | 609 |
+| features/demand/src/pages/sales-plan/SalesPlan.tsx | page | 611 |
 | features/demand/src/pages/sales-plan/useSalesPlanStore.test.tsx | test | 256 |
 | features/demand/src/pages/sales-plan/useSalesPlanStore.ts | store | 595 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.api.ts | api | 158 |
@@ -29,7 +29,7 @@
 | features/demand/src/pages/sales-plan/utils/sales-plan.insertAnchor.ts | util | 68 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.merge.ts | util | 193 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.save.test.ts | test | 67 |
-| features/demand/src/pages/sales-plan/utils/sales-plan.save.ts | util | 203 |
+| features/demand/src/pages/sales-plan/utils/sales-plan.save.ts | util | 207 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.searchCombos.ts | util | 78 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.validate.ts | util | 132 |
 | features/demand/src/pages/sales-plan/__asis-analysis__.md | other | 261 |
@@ -38,7 +38,7 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 5 | Y | SalesPlanForm.tsx:93 SalesPlanForm.tsx:110 SalesPlanGrid.tsx:137 SalesPlan.tsx:69 SalesPlan.tsx:162 |
+| (useTabComboQueries) | hook | 5 | Y | SalesPlanForm.tsx:93 SalesPlanForm.tsx:110 SalesPlanGrid.tsx:139 SalesPlan.tsx:69 SalesPlan.tsx:162 |
 | DMF0021/dayRange//call-proc | hook | 1 | Y | SalesPlan.tsx:102 |
 | DMF0021/Sales Plan//call-proc | hook | 1 | Y | SalesPlan.tsx:121 |
 | DMF0021/spreadTitle//call-proc | hook | 1 | Y | SalesPlan.tsx:130 |
@@ -71,24 +71,24 @@
 | ItemField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 411 |
 | OwnerField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 434 |
 | Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 452 |
-| g | updatedLayout | attach | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 277 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 749 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 824 |
-| g | pastingCell | beginningEditHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 826 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 942 |
-| g | pastedCell | pastedCellHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 956 |
-| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1002 |
-| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1006 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1091 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1141 |
-| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1210 |
+| g | updatedLayout | attach | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 279 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 751 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 826 |
+| g | pastingCell | beginningEditHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 828 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 944 |
+| g | pastedCell | pastedCellHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 958 |
+| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1004 |
+| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1008 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1093 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1143 |
+| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1212 |
 | ColumnLayoutModal | onSave | <arrow> onSettingChanged,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx | 233 |
 | MeasureSelectModal | onApply | <arrow> onSettingChanged,applyVisibleMeasures,staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx | 280 |
-| SalesPlanForm | onSearch | handleSearch | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 530 |
-| SalesPlanForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 531 |
-| SalesPlanGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 566 |
-| SalesPlanModals | onClose | <arrow> ({PROJECT:setOpenProject,ITEM:setOpenItem,TEAM:setOpenTeam,COLUMN:setOpenColumnSetting,MEASURE:setOpenMeasureSelect,})[key] | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 578 |
-| SalesPlanModals | onSettingChanged | clearGridOnSettingChange | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 600 |
+| SalesPlanForm | onSearch | handleSearch | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 532 |
+| SalesPlanForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 533 |
+| SalesPlanGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 568 |
+| SalesPlanModals | onClose | <arrow> ({PROJECT:setOpenProject,ITEM:setOpenItem,TEAM:setOpenTeam,COLUMN:setOpenColumnSetting,MEASURE:setOpenMeasureSelect,})[key] | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 580 |
+| SalesPlanModals | onSettingChanged | clearGridOnSettingChange | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 602 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -120,7 +120,7 @@
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| mainDynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| m.small \|\| 'SUM' : 'SUM' | 90 | true |  |  | object | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 472 |
+| mainDynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| m.small \|\| 'SUM' : 'SUM' | 90 | true |  |  | object | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 474 |
 | buildGroupKeyOf | column?.binding ?? '' |  |  | column?.visible !== false |  |  | object | features/demand/src/pages/sales-plan/SalesPlan.tsx | 320 |
 | col | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER |  |  | visible |  |  | object | features/demand/src/pages/sales-plan/utils/sales-plan.insertAnchor.test.ts | 11 |
 
@@ -162,12 +162,12 @@
 | LBL00024 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0003(16), DMF0021(14), DMF0082(7), DMF0020(4), DMF0014(3), DMF0040(2), DMF0053(2), SCM0001(1), SYS0004(1), COM0008(1), DMF0005(1), DMF0048(1)
+- 화면ID: DMF0003(17), DMF0021(14), DMF0082(6), DMF0020(4), DMF0014(3), DMF0042(3), DMF0040(2), DMF0053(2), SCM0001(1), SYS0004(1), COM0008(1), DMF0005(1), DMF0048(1)
 - SP/PKG: P_DMF0021_GET_SPREAD_TITLE(6), PR_GET_DAY_RANGE(6), P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX(5), P_USERINFO(3), DMF0003_GET_BUCKET_TYPE_CODE(2), P_DMF0021_GET_SALES_PLAN_MEASUREINFO(2), P_USER_DEPT_ID(2), PR_GET_SHEET_COLUMN_LIST(1), P_BUCKET(1), P_BUCKET_TYPE(1), PKG_DMF0021(1), P_DMF0021_SAVE_DM_PLN_SALES_PLAN_ALL(1), P_CREATED_BY(1), DMF0002_GET_TITLESET_POPUP(1), DMF0003_GET_SPREAD_TITLE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | 개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 (동적 기간 컬럼은 위에서 return). | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 723 |
+| code | 개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 (동적 기간 컬럼은 위에서 return). | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 725 |
 | endpoint | ⭐ mount 시 1회 admin 메타 fetch (#42/#65 동적 속성관리 baseline) + persist 된 이전 filters 무효화. | features/demand/src/pages/sales-plan/SalesPlan.tsx | 209 |
 | code | 저장된 컬럼 개인화(titleSet) 복원 — fetchStaticColumns 가 await 후 메타에 적용. | features/demand/src/pages/sales-plan/useSalesPlanStore.ts | 102 |
 | endpoint | ⭐ master hook §2.3 "UI 생성의 동적 속성관리" — Column 동적 fetch (SHEET_COLUMNS 66건, division 서버 필터). | features/demand/src/pages/sales-plan/useSalesPlanStore.ts | 406 |

@@ -48,6 +48,7 @@ export const ScpIfBlocking = ({ tabId, title }: PageProps<MENU_ID>) => {
   const isOpenSearchArea = useScpIfBlockingStore(s => s.isOpenSearchArea);
   const setOpenSearchArea = useScpIfBlockingStore(s => s.setOpenSearchArea);
   const applyPeriodDefault = useScpIfBlockingStore(s => s.applyPeriodDefault);
+  const setAuthDivisions = useScpIfBlockingStore(s => s.setAuthDivisions);
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   // AS-IS 편집모드 토글 미이식(convert-core §2.4): 편집모드 상태 신설 금지. EDIT 권한축 1회 치환.
@@ -71,6 +72,12 @@ export const ScpIfBlocking = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
   // R1 — 권한 Division 0건이면 조회영역 disable + 안내(AS-IS SetDivisionAuthCheck, design 01 §2 R1).
   const noAuth = !divisionResult?.isPending && divisionOptions.length === 0;
+
+  // 권한 Division 코드를 store 로 올린다 — Division 미선택 조회 시 setFilters 가 'ALL'(권한 밖 노출) 대신
+  //   이 코드를 열거해 IN(auth) 가드를 태운다(인가 우회 차단, AS-IS GetCheckedListValue 2-arg 등가).
+  useEffect(() => {
+    setAuthDivisions(divisionOptions.map(o => o.value));
+  }, [divisionOptions, setAuthDivisions]);
 
   const { data } = useTabProcQuery<MENU_ID>({
     menuId: MENU_ID,

@@ -1,0 +1,7 @@
+﻿method,line,api,scope,locked,lock_expr,columns,expand,cond,guard,control,raw
+EditButton,371,SwitchLock,MODE,TOGGLE,,,,,if (spdMain != null),siMain,siMain.SwitchLock()
+EditButton,372,LockColumn,ALL_ROWS,Y,,DIVISION_ID,ONE,,if (spdMain != null),siMain,"siMain.LockColumn(siMain.GetColumnIndex(DefColumns.DIVISION_ID), siMain.GetColumnIndex(DefColumns.DIVISION_ID), true)"
+EditButton,374,LockColumn,ALL_ROWS,Y,,CREATED_BY;CREATION_DATE;LAST_UPDATED_BY;LAST_UPDATE_DATE;PRE_KEY_VALUES,RANGE,,if (spdMain != null),siMain,"siMain.LockColumn(siMain.GetColumnIndex(DefColumns.CREATED_BY), siMain.GetColumnIndex(DefColumns.PRE_KEY_VALUES), true)"
+FindData_Main,463,LockColumn,ALL_ROWS,Y,,VALUE_TYPE;DIVISION_ID;OPMZ_PLAN_GR_NAME;OPMZ_PLAN_GR_ID;SCM_SITE_ID;ITEM_ID;STAGE;FROM_YYYYMMDD;TO_YYYYMMDD;TYPE_APPLY_DAY;VALUE_DESCRIPTION;VALID_YN;CREATED_BY;CREATION_DATE;LAST_UPDATED_BY;LAST_UPDATE_DATE;PRE_KEY_VALUES,ALL,,try,siMain,"siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)"
+Insert_Row,519,LockRange,NEW_ROW,Y,,DIVISION_ID,ONE,,if (siMain != null && siMain.IsLock(siMain.SheetName) == false),siMain,"siMain.LockRange(insCell, siMain.GetColumnIndex(DefColumns.DIVISION_ID), siMain.GetColumnIndex(DefColumns.DIVISION_ID), true)"
+Insert_Row,520,LockRange,NEW_ROW,Y,,CREATED_BY;CREATION_DATE;LAST_UPDATED_BY;LAST_UPDATE_DATE,RANGE,,if (siMain != null && siMain.IsLock(siMain.SheetName) == false),siMain,"siMain.LockRange(insCell, siMain.GetColumnIndex(DefColumns.CREATED_BY), siMain.GetColumnIndex(DefColumns.LAST_UPDATE_DATE), true)"

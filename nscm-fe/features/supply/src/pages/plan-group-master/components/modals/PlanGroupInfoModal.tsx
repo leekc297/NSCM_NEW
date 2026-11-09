@@ -12,6 +12,7 @@ import { Button, ProgressIndicator } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
 
 import { DIVISION_COMBO_ID, MENU_ID, MSG } from '../../plan-group-master.constants';
+import { toSaveErrorMessage } from '../../utils/plan-group-master.save';
 
 import { OwnerSelectModal } from './OwnerSelectModal';
 import styles from './PlanGroupInfoModal.module.scss';
@@ -149,6 +150,12 @@ export const PlanGroupInfoModal = ({
       editTrackerRef.current?.clearChanges();
       await fetchRows();
       onRegistered(); // 부모 조회조건/셀콤보 갱신 (R3).
+    } catch (error) {
+      // 저장 거부(결과 커서 CODE ≠ 0) — 공용 응답 처리가 오류로 던진다. 변경 표시는 그대로 둔다(갭분석 C-20).
+      void setAlert({
+        type: 'alert',
+        content: toSaveErrorMessage(error) ?? t(MSG.SAVE_FAIL, '_An error occurred while saving.'),
+      });
     } finally {
       savingRef.current = false;
     }

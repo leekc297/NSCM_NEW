@@ -14,8 +14,8 @@ import { GridUtils, parseComboFilterBindings } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import { RegionModal } from '../../../components';
-import type { MENU_ID, SHEETS } from '../sales-site.constants';
-import { RESPONSE_SET, SHEET_INDEX } from '../sales-site.constants';
+import type { MENU_ID } from '../sales-site.constants';
+import { RESPONSE_SET, SHEET_INDEX, SHEETS } from '../sales-site.constants';
 import { useSalesSiteStore } from '../useSalesSiteStore';
 import { applySalesSite, resolveComboCodeByDivision } from '../utils/sales-site.util';
 
@@ -151,6 +151,8 @@ export const SalesSiteGrid = ({
         staticColumns={salesSiteColumns}
         allowMerging={AllowMerging.Cells}
         alternatingRowStep={0}
+        // 읽기전용 자동 잠금을 site 시트 SAVE 권한으로 판정(메뉴 단위면 다른 시트 SAVE 와 섞임)
+        saveAuth={{ sheetName: SHEETS.SITE }}
         gotFocus={handleFocus}
         cellEditEnded={handleAutoSalesSite}
         dblClick={handleGridDblClick}

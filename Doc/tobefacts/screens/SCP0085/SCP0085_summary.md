@@ -1,17 +1,17 @@
 # SCP0085 — To-Be Fact Pack 요약
 
 - page_key: `supply/ending-inventory` · feature: supply · As-is Fact Pack 있음
-- 파일 8 · 엔드포인트 호출 6 (미해결 0, 주석 속 0) · 이벤트 18 · 컴포넌트 사용 37 · 하드코딩 컬럼 0 · 메시지 16
+- 파일 8 · 엔드포인트 호출 6 (미해결 0, 주석 속 0) · 이벤트 19 · 컴포넌트 사용 37 · 하드코딩 컬럼 0 · 메시지 17
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | component | 332 |
-| features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | component | 169 |
-| features/supply/src/pages/ending-inventory/ending-inventory.constants.ts | constants | 140 |
+| features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | component | 384 |
+| features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | component | 176 |
+| features/supply/src/pages/ending-inventory/ending-inventory.constants.ts | constants | 151 |
 | features/supply/src/pages/ending-inventory/ending-inventory.types.ts | types | 20 |
-| features/supply/src/pages/ending-inventory/EndingInventory.tsx | page | 167 |
+| features/supply/src/pages/ending-inventory/EndingInventory.tsx | page | 179 |
 | features/supply/src/pages/ending-inventory/index.ts | index | 2 |
 | features/supply/src/pages/ending-inventory/useEndingInventoryStore.ts | store | 171 |
 | features/supply/src/pages/ending-inventory/__asis-mapping__.md | mapping | 73 |
@@ -19,8 +19,8 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 1 | Y | EndingInventoryForm.tsx:75 |
-| (useTabLookupQueries) | hook | 1 | Y | EndingInventoryForm.tsx:92 |
+| (useTabComboQueries) | hook | 1 | Y | EndingInventoryForm.tsx:76 |
+| (useTabLookupQueries) | hook | 1 | Y | EndingInventoryForm.tsx:113 |
 | SCP0085/main//call-proc | hook | 1 | Y | EndingInventory.tsx:51 |
 | SCP0085/daily//call-proc | hook | 1 | Y | EndingInventory.tsx:58 |
 | /admin/menu/SCP0085/search-conditions | http | 1 | Y | useEndingInventoryStore.ts:102 |
@@ -35,24 +35,25 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 115 |
-| Radio | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 126 |
-| DatePickerCalendar | onChange | <arrow> set,date?.format | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 144 |
-| DatePickerCalendar | onChange | <arrow> set,date?.format | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 160 |
-| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 186 |
-| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 205 |
-| Radio | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 219 |
-| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 236 |
-| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 255 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 284 |
-| Button | onClick | onItemSearch | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 280 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 306 |
-| g | updatedLayout | apply | addHandler | features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | 84 |
-| g | updatedLayout | apply | addHandler | features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | 119 |
-| g | formatItem | handler | addHandler | features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | 141 |
-| EndingInventoryForm | onSearch | handleSearch | jsx | features/supply/src/pages/ending-inventory/EndingInventory.tsx | 127 |
-| EndingInventoryForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/ending-inventory/EndingInventory.tsx | 127 |
-| EndingInventoryGrid | onToggleDetail | toggleHeaderViewDetail | jsx | features/supply/src/pages/ending-inventory/EndingInventory.tsx | 145 |
+| input | input | onInput | addEventListener | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 144 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 152 |
+| Radio | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 163 |
+| DatePickerCalendar | onChange | <arrow> set,date?.isValid,date.format | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 181 |
+| DatePickerCalendar | onChange | <arrow> date?.isValid,date.format,set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 201 |
+| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 238 |
+| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 257 |
+| Radio | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 271 |
+| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 288 |
+| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 307 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 336 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 332 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 358 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | 86 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | 121 |
+| g | formatItem | handler | addHandler | features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | 148 |
+| EndingInventoryForm | onSearch | handleSearch | jsx | features/supply/src/pages/ending-inventory/EndingInventory.tsx | 139 |
+| EndingInventoryForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/ending-inventory/EndingInventory.tsx | 139 |
+| EndingInventoryGrid | onToggleDetail | toggleHeaderViewDetail | jsx | features/supply/src/pages/ending-inventory/EndingInventory.tsx | 157 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -82,6 +83,7 @@
 |---|---|
 | MSG00097 | 1 |
 | MSG00719 | 1 |
+| MSG00429 | 1 |
 | MSG01371 | 1 |
 | MSG01370 | 1 |
 | LBL00112 | 1 |
@@ -98,10 +100,12 @@
 | LBL01138 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0085(2)
-- SP/PKG: SCP0085_GET_SEARCH_INFO(2), P_YYYYMMDD(1), SCP0084_GET_MONTH_RANGE(1), PKG_SCP0084(1), PKG_SCP0085(1)
+- 화면ID: SCP0085(3), SCP0084(2)
+- SP/PKG: SCP0085_GET_SEARCH_INFO(2), SCP0084_GET_MONTH_RANGE(2), P_YYYYMMDD(1), PKG_SCP0084(1), PKG_SCP0085(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
-(없음)
+| kind | snippet | file | line |
+|---|---|---|---|
+| code | `(v) => v && dayjs.isDayjs(v) && …` 가드라 키보드로 기간을 지우면(빈값) onChange 를 호출하지 | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 133 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

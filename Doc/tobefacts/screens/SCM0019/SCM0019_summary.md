@@ -12,18 +12,18 @@
 | features/admin/src/pages/scp-if-blocking/index.ts | index | 2 |
 | features/admin/src/pages/scp-if-blocking/scp-if-blocking.constants.ts | constants | 57 |
 | features/admin/src/pages/scp-if-blocking/scp-if-blocking.types.ts | types | 15 |
-| features/admin/src/pages/scp-if-blocking/ScpIfBlocking.tsx | page | 204 |
-| features/admin/src/pages/scp-if-blocking/useScpIfBlockingStore.ts | store | 131 |
+| features/admin/src/pages/scp-if-blocking/ScpIfBlocking.tsx | page | 211 |
+| features/admin/src/pages/scp-if-blocking/useScpIfBlockingStore.ts | store | 146 |
 | features/admin/src/pages/scp-if-blocking/__asis-mapping__.md | mapping | 88 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueryResults) | hook | 1 | Y | ScpIfBlocking.tsx:62 |
-| SCM0019/main//call-proc | hook | 1 | Y | ScpIfBlocking.tsx:75 |
-| /SCM0019/main/SAVE/call-proc | http | 1 | Y | ScpIfBlocking.tsx:107 |
-| /admin/menu/SCM0019/column | http | 1 | Y | useScpIfBlockingStore.ts:91 |
-| /admin/menu/SCM0019/search-conditions | http | 1 | Y | useScpIfBlockingStore.ts:109 |
+| (useTabComboQueryResults) | hook | 1 | Y | ScpIfBlocking.tsx:63 |
+| SCM0019/main//call-proc | hook | 1 | Y | ScpIfBlocking.tsx:82 |
+| /SCM0019/main/SAVE/call-proc | http | 1 | Y | ScpIfBlocking.tsx:114 |
+| /admin/menu/SCM0019/column | http | 1 | Y | useScpIfBlockingStore.ts:106 |
+| /admin/menu/SCM0019/search-conditions | http | 1 | Y | useScpIfBlockingStore.ts:124 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -34,7 +34,7 @@
 | SearchArea | onSearch | onSearch | jsx | features/admin/src/pages/scp-if-blocking/components/ScpIfBlockingForm.tsx | 36 |
 | CustomDropdown | onChange | <arrow> String(picked??'').split(',').filter,String(picked??'').split,String,tokens.includes,divisionOptions.map,setSearch | jsx | features/admin/src/pages/scp-if-blocking/components/ScpIfBlockingForm.tsx | 56 |
 | PeriodField | onChange | <arrow> setSearch | jsx | features/admin/src/pages/scp-if-blocking/components/ScpIfBlockingForm.tsx | 83 |
-| ScpIfBlockingForm | onSearch | handleSearch | jsx | features/admin/src/pages/scp-if-blocking/ScpIfBlocking.tsx | 190 |
+| ScpIfBlockingForm | onSearch | handleSearch | jsx | features/admin/src/pages/scp-if-blocking/ScpIfBlocking.tsx | 197 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -66,8 +66,8 @@
 | MSG00004 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCM0019(3), SCP0121(1), SSP0020(1), SCP0125(1), DMF0014(1), SSP0003(1)
-- SP/PKG: PKG_SCM0019(3), P_USER_ID(1), P_SCM0019_SAVE(1)
+- 화면ID: SCM0019(3), SCP0121(1), SSP0020(1), SCP0125(1), DMF0014(1), SCP0101(1), SCP0084(1)
+- SP/PKG: PKG_SCM0019(4), P_USER_ID(1), P_SCM0019_SAVE(1), P_DIVISION_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)
 

@@ -11,12 +11,12 @@
 | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstTemplateModal.tsx | component | 303 |
 | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadForm.module.scss | component | 70 |
 | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadForm.tsx | component | 396 |
-| features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | component | 328 |
+| features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | component | 329 |
 | features/demand/src/pages/customer-fcst-upload/customer-fcst-upload.constant.ts | constants | 102 |
 | features/demand/src/pages/customer-fcst-upload/customer-fcst-upload.types.ts | types | 68 |
-| features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | page | 624 |
+| features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | page | 627 |
 | features/demand/src/pages/customer-fcst-upload/index.ts | index | 2 |
-| features/demand/src/pages/customer-fcst-upload/useCustomerFcstUploadStore.ts | store | 252 |
+| features/demand/src/pages/customer-fcst-upload/useCustomerFcstUploadStore.ts | store | 260 |
 | features/demand/src/pages/customer-fcst-upload/utils/customer-fcst-upload.api.ts | api | 52 |
 | features/demand/src/pages/customer-fcst-upload/utils/customer-fcst-upload.excelForm.ts | util | 223 |
 | features/demand/src/pages/customer-fcst-upload/__asis-mapping__.md | mapping | 108 |
@@ -28,11 +28,11 @@
 | DMF0014/FCST Upload//call-proc | hook | 1 | Y | CustomerFcstUpload.tsx:98 |
 | DMF0014/spreadTitle//call-proc | hook | 1 | Y | CustomerFcstUpload.tsx:107 |
 | DMF0014/dayRange//call-proc | hook | 1 | Y | CustomerFcstUpload.tsx:131 |
-| /DMF0014/FCST Upload/SAVE/call-proc | http | 1 | Y | CustomerFcstUpload.tsx:374 |
-| DMF0014/spreadTitle/SEARCH/call-proc | callProc | 1 | Y | CustomerFcstUpload.tsx:412 |
-| /DMF0014/FCST Upload/UPLOAD_SAVE/call-proc | http | 1 | Y | CustomerFcstUpload.tsx:597 |
-| /admin/menu/DMF0014/search-conditions | http | 1 | Y | useCustomerFcstUploadStore.ts:122 |
-| /admin/menu/DMF0014/column | http | 1 | Y | useCustomerFcstUploadStore.ts:218 |
+| /DMF0014/FCST Upload/SAVE/call-proc | http | 1 | Y | CustomerFcstUpload.tsx:377 |
+| DMF0014/spreadTitle/SEARCH/call-proc | callProc | 1 | Y | CustomerFcstUpload.tsx:415 |
+| /DMF0014/FCST Upload/UPLOAD_SAVE/call-proc | http | 1 | Y | CustomerFcstUpload.tsx:600 |
+| /admin/menu/DMF0014/search-conditions | http | 1 | Y | useCustomerFcstUploadStore.ts:127 |
+| /admin/menu/DMF0014/column | http | 1 | Y | useCustomerFcstUploadStore.ts:225 |
 | /DMF0014/FCST Upload/FORM_DATA/call-proc | http | 1 | Y | customer-fcst-upload.api.ts:24 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -59,16 +59,16 @@
 | InputField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadForm.tsx | 363 |
 | Button | onClick | <arrow> setOpenModelByDivisionModal | jsx | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadForm.tsx | 359 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadForm.tsx | 381 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 187 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 203 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 212 |
-| g | updatedLayout | onLayout | addHandler | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 268 |
-| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 295 |
-| CustomerFcstUploadForm | onSubmit | handleSearch | jsx | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 518 |
-| CustomerFcstUploadForm | onDivisionChange | resetGrid | jsx | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 519 |
-| CustomerFcstUploadGrid | onCellEdited | handleCellEdited | jsx | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 540 |
-| FcstUploadModal | onSave | <arrow> useSessionStore.getState,apiClient.post,Number | jsx | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 592 |
-| FcstUploadModal | onUploaded | <arrow> queryClient.invalidateQueries | jsx | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 616 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 188 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 204 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 213 |
+| g | updatedLayout | onLayout | addHandler | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 269 |
+| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 296 |
+| CustomerFcstUploadForm | onSubmit | handleSearch | jsx | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 521 |
+| CustomerFcstUploadForm | onDivisionChange | resetGrid | jsx | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 522 |
+| CustomerFcstUploadGrid | onCellEdited | handleCellEdited | jsx | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 543 |
+| FcstUploadModal | onSave | <arrow> useSessionStore.getState,apiClient.post,Number | jsx | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 595 |
+| FcstUploadModal | onUploaded | <arrow> queryClient.invalidateQueries | jsx | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 619 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -98,9 +98,9 @@
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| mergedColumns | col.colNm | col.colLblNm \|\| col.colNm | col.colWth ?? 100 | col.visible !== false |  |  | object | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 67 |
-| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 94 |
-| leaf | r.COLUMN_NAME | r.COLUMN_LABEL \|\| r.COLUMN_NAME.slice(2) | 100 | true |  |  | object | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 122 |
+| mergedColumns | col.colNm | col.colLblNm \|\| col.colNm | col.colWth ?? 100 | col.visible !== false |  |  | object | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 68 |
+| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 95 |
+| leaf | r.COLUMN_NAME | r.COLUMN_LABEL \|\| r.COLUMN_NAME.slice(2) | 100 | true |  |  | object | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | 123 |
 | toPreviewColumns | col.key | col.isValueSlot && col.bucket ? `${col.header} (${col.bucket | 90\|130 | true |  |  | meta-map | features/demand/src/pages/customer-fcst-upload/utils/customer-fcst-upload.excelForm.ts | 176 |
 
 ## 7. 메시지 코드
@@ -143,13 +143,13 @@
 |---|---|---|---|
 | code | import { CustomerFcstTemplateModal } from './components/CustomerFcstTemplateModal'; | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 19 |
 | code | const [openTemplateModal, setOpenTemplateModal] = useState<boolean>(false); | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 92 |
-| code | const handleInsert = () => { | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 457 |
-| code | }); | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 461 |
-| code | }; | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 462 |
-| code | const handleDelete = () => undefined; | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 466 |
-| code | if (!filters[SHEETS.MAIN]) setFilters(); | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 489 |
-| code | setOpenTemplateModal(true); | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 490 |
-| endpoint | ⭐ ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 15행, admin 즉시 반영) | features/demand/src/pages/customer-fcst-upload/useCustomerFcstUploadStore.ts | 215 |
+| code | const handleInsert = () => { | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 460 |
+| code | }); | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 464 |
+| code | }; | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 465 |
+| code | const handleDelete = () => undefined; | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 469 |
+| code | if (!filters[SHEETS.MAIN]) setFilters(); | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 492 |
+| code | setOpenTemplateModal(true); | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 493 |
+| endpoint | ⭐ ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 15행, admin 즉시 반영) | features/demand/src/pages/customer-fcst-upload/useCustomerFcstUploadStore.ts | 220 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

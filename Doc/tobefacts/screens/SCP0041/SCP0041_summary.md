@@ -1,7 +1,7 @@
 # SCP0041 — To-Be Fact Pack 요약
 
 - page_key: `supply/stock-osp` · feature: supply · As-is Fact Pack 있음
-- 파일 15 · 엔드포인트 호출 9 (미해결 2, 주석 속 1) · 이벤트 23 · 컴포넌트 사용 49 · 하드코딩 컬럼 2 · 메시지 33
+- 파일 15 · 엔드포인트 호출 9 (미해결 2, 주석 속 1) · 이벤트 23 · 컴포넌트 사용 50 · 하드코딩 컬럼 2 · 메시지 33
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
@@ -11,7 +11,7 @@
 | features/supply/src/pages/stock-osp/components/modals/ExcelUploadModal.tsx | component | 370 |
 | features/supply/src/pages/stock-osp/components/OspStockGrid.tsx | component | 43 |
 | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | component | 173 |
-| features/supply/src/pages/stock-osp/components/StockOspForm.tsx | component | 319 |
+| features/supply/src/pages/stock-osp/components/StockOspForm.tsx | component | 323 |
 | features/supply/src/pages/stock-osp/hooks/useStockOspValidation.ts | hook | 46 |
 | features/supply/src/pages/stock-osp/index.ts | index | 2 |
 | features/supply/src/pages/stock-osp/stock-osp.constants.ts | constants | 124 |
@@ -57,7 +57,7 @@
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 260 |
 | CustomDropdown | onChange | <arrow> onDivisionChange,str | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 275 |
 | CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 296 |
-| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 309 |
+| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 313 |
 | StockOspForm | onSearch | handleSearch | jsx | features/supply/src/pages/stock-osp/StockOspPage.tsx | 264 |
 | StockOspForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/stock-osp/StockOspPage.tsx | 265 |
 | StockOspForm | onDivisionAuth | setDivisionAuth | jsx | features/supply/src/pages/stock-osp/StockOspPage.tsx | 266 |
@@ -70,13 +70,12 @@
 | component | count |
 |---|---|
 | FormItem | 9 |
-| Grid | 5 |
+| Grid | 6 |
 | Button | 3 |
 | TextField | 3 |
 | DataGrid | 3 |
 | CustomDropdown | 3 |
 | InputField | 2 |
-| PeriodField | 2 |
 | TabItem | 2 |
 | CustomDialog | 1 |
 | ProgressIndicator | 1 |
@@ -84,7 +83,9 @@
 | ControlConfirmIcon | 1 |
 | Label | 1 |
 | FunctionSearchIcon | 1 |
+| PeriodField | 1 |
 | SearchArea | 1 |
+| PeriodRangePicker | 1 |
 | FileExceldownloadIcon | 1 |
 | FileExceluploadIcon | 1 |
 | MainTitle | 1 |

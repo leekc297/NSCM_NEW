@@ -20,12 +20,15 @@ export function judgeTabName(s: { tab: string; names: string[] }): J {
 }
 
 /** 돋보기 버튼 위치 — 입력칸 안쪽(오차 2px). pairs: 조건별 입력칸·버튼 사각형 */
-export function judgeSearchBtn(pairs: { label: string; input: R; btn: R }[]): J {
+export function judgeSearchBtn(pairs: { label: string; input: R; btn: R; slot?: R }[]): J {
   if (!pairs.length) return { result: 'NA', why: '돋보기 버튼 달린 입력칸 없음' };
   const inside = (i: R, b: R) => b.x >= i.x - 2 && b.y >= i.y - 2 && b.x + b.w <= i.x + i.w + 2 && b.y + b.h <= i.y + i.h + 2;
-  const bad = pairs.filter(p => !inside(p.input, p.btn));
+  // 2026-11-06(SCP0037·SCP0016·SCP0084 G4 허위 FAIL): 공용 popupSearchField 는 버튼을 입력 테두리 밖 오른쪽 40px 칸(right:-40px)에 둔다(DM-236 '안쪽' = FormItem 칸 안·입력 바로 옆) →
+  //   입력 오른쪽 끝과 버튼 왼쪽 간격 0~6px · 세로 겹침 · 칸(slot) 안이면 정상. 칸 밖으로 튀어나가거나 간격이 벌어지면 FAIL
+  const attached = (i: R, b: R, s?: R) => { const gap = b.x - (i.x + i.w); const vOverlap = b.y < i.y + i.h && b.y + b.h > i.y; const inSlot = !s || (b.x + b.w <= s.x + s.w + 2 && b.x >= s.x - 2); return gap >= -2 && gap <= 6 && vOverlap && inSlot; };
+  const bad = pairs.filter(p => !inside(p.input, p.btn) && !attached(p.input, p.btn, p.slot));
   if (bad.length) return { result: 'FAIL', why: `돋보기 버튼이 입력칸 밖 ${bad.length}/${pairs.length}: ${bad.slice(0, 4).map(p => p.label).join(', ')}` };
-  return { result: 'PASS', why: `돋보기 버튼 ${pairs.length}개 입력칸 안쪽` };
+  return { result: 'PASS', why: `돋보기 버튼 ${pairs.length}개 입력칸 안쪽 또는 입력 바로 옆 칸 안(공용 popupSearchField 배치)` };
 }
 
 /** 조회조건 초기값 — div 진입 시 Division 값 · divCands 후보 · year Year 값(없으면 null) · nowYear 현재 연도 (EG293·EG277) */

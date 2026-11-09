@@ -141,7 +141,7 @@ export const LBL = {
 export const BOD_POPUP_TITLE_KEY = 'MNU00158';
 
 // 선택 0건 안내 — 실측 존재(shipping SSP0045 동일).
-export const MSG_NO_ROWS_SELECTED = 'MSG00071';
+export const MSG_NO_ROWS_SELECTED = 'MSG00014';
 
 // TR_MODE(BOD) 팝업이 채우는 컬럼 묶음 (design 03 §3 셀 더블클릭 팝업 — DMF0046 반환).
 export const BOD_FILL_FIELDS = [

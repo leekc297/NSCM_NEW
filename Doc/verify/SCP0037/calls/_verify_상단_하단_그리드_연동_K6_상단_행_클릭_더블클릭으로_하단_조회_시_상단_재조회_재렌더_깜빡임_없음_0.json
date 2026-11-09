@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 285,
+  "at": "2026-11-07T08:47:38.206Z",
+  "user": "minyonglee1",
+  "test": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음"
+ }
+]

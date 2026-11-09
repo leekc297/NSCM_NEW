@@ -71,6 +71,7 @@ interface Action {
   setSearchCondition: (patch: Partial<SearchCondition>) => void;
   setDivision: (divisionId: string) => void;
   setDivisionType: (divisionType: DivisionType) => void;
+  setVersion: (version: string) => void;
   setDerivedVersionInfo: (planType: string, currVersionProgressStatus: string) => void;
   setFilters: (payload: Record<string, string>) => void;
   clearFilters: () => void;
@@ -275,6 +276,32 @@ export const useCapaSpeedPlanStore = createPersistedStoreWithTab<State & Action>
         };
         // 기간 헤더는 남긴다 — AS-IS 도 시트를 비운 뒤 곧바로 같은 헤더를 다시 만든다
         //   (`BeforeFindData` cs:2041~2048). `p_from_yyyymm` 은 DivisionType 과 무관하다.
+        const spreadTitle = state.filters[SHEETS.SPREAD_TITLE];
+        state.filters = spreadTitle ? { [SHEETS.SPREAD_TITLE]: spreadTitle } : {};
+        state.applied = null;
+      }),
+
+    /**
+     * Version(Plan Month, cboVersion) 변경 = 이후 조회조건 초기화(사용자 요청 2026-11-06).
+     * VersionSeq/Status 는 `''` 로 비워 combos effect(useCapaSpeedPlanCombos cs:223~255)가 새 Plan Month
+     * 기준 기본값을 다시 채우고, 하위 cascade 6축(Site~Line Type)은 ALL 로 되돌린다. 그리드도 비운다
+     * (setDivision/setDivisionType 와 동일 규약 — 기간 헤더 spreadTitle 은 남기고 conditionEffects (4)
+     * refreshSpreadTitle 이 새 버전 기준으로 갱신). 편집중 dirty 가드는 Form onChange 의 confirmIfDirtyKey 가 처리.
+     */
+    setVersion: version =>
+      set(state => {
+        state.searchCondition = {
+          ...get().searchCondition,
+          version,
+          versionSeq: '',
+          progressStatus: '',
+          siteId: 'ALL',
+          plantId: 'ALL',
+          factoryId: 'ALL',
+          lineId: 'ALL',
+          operationId: 'ALL',
+          electrodeType: 'ALL',
+        };
         const spreadTitle = state.filters[SHEETS.SPREAD_TITLE];
         state.filters = spreadTitle ? { [SHEETS.SPREAD_TITLE]: spreadTitle } : {};
         state.applied = null;

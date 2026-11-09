@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0108",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"fromYyyymm\":\"202611\",\"programId\":\"SCP0108\",\"sheetName\":\"MAIN\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 142,
+  "at": "2026-11-09T01:39:43.853Z",
+  "user": "minyonglee1",
+  "test": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음"
+ },
+ {
+  "menu": "SCP0108",
+  "sheet": "CURRENT",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0108/CURRENT/SEARCH/call-proc",
+  "postData": "{\"version\":\"202610\",\"versionSeq\":1,\"divisionId\":\"81\",\"siteId\":\"\",\"plantId\":\"\",\"factoryId\":\"\",\"lineId\":\"\",\"operationId\":\"\",\"nickName\":\"\",\"electrodeType\":\"\",\"bottleneckFlag\":\"\",\"programId\":\"SCP0108\",\"sheetName\":\"CURRENT\"}",
+  "status": 200,
+  "rows": 757,
+  "dur": 402,
+  "at": "2026-11-09T01:39:45.458Z",
+  "user": "minyonglee1",
+  "test": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음"
+ }
+]

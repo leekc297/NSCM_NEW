@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0131",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0131/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"\",\"scmSiteId\":\"\",\"itemId\":\"\",\"validYn\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 62,
+  "dur": 164,
+  "at": "2026-11-07T10:52:26.855Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"\"}",
+  "status": 200,
+  "rows": 9617,
+  "dur": 829,
+  "at": "2026-11-07T10:52:28.334Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"\"}",
+  "status": 200,
+  "rows": 9617,
+  "dur": 843,
+  "at": "2026-11-07T10:52:32.358Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"\"}",
+  "status": 200,
+  "rows": 9617,
+  "dur": 871,
+  "at": "2026-11-07T10:52:36.439Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ }
+]

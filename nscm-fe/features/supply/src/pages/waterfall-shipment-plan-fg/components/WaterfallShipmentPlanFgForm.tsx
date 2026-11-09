@@ -83,7 +83,7 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
   // Division 권한 게이트(design 01 D9, SetDivisionAuthCheck) — 권한 Division 0건이면 조회영역 disable +
   //   조회 미발사 + 권한없음 안내 1회. divisions 로드 완료(undefined 아님) 후에만 판정해 조회 중 오차단 방지.
   //   메시지 = MSG00667('No authority assigned.', AS-IS MSG00097 의도 매칭 TO-BE 코드, Hook #114 — 자매
-  //   inventory-trend/production-plan-waterfall 선례). MyDivisionInEE_SCP 는 EE 미제외라 클라 추가 필터 없음.
+  //   inventory-trend/production-plan-waterfall 선례). Division_SCP 는 EE 미제외라 클라 추가 필터 없음.
   const noDivisionAuth = divisions !== undefined && divisionOptions.length === 0;
   useEffect(() => {
     if (noDivisionAuth) {

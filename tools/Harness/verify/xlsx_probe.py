@@ -6,7 +6,7 @@
   python -I xlsx_probe.py formhead <파일>   → 병합 수·앞 2행·날짜형 칸 제목(EG283·EG344)
   python -I xlsx_probe.py content <파일>     → 첫 시트 머리글·앞 200행 값·틀 고정·숫자 서식(EG013·EG345·EG343·EG346·EG350)
 """
-import json, sys
+import json, re, sys
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')  # Windows 기본 인코딩(cp949)으로 쓰면 특수 문자에서 죽는다
 import openpyxl
 
@@ -28,9 +28,28 @@ def content(p):
     # read_only 는 freeze_panes·서식 일부를 못 읽는다 — 일반 모드
     wb = openpyxl.load_workbook(p, data_only=True); ws = wb.worksheets[0]
     head_row = next((i for i, r in enumerate(ws.iter_rows(values_only=True, max_row=10), 1) if any(v not in (None, '') for v in r)), 1)
-    hdr = [str(c.value) if c.value is not None else '' for c in ws[head_row]]
+    # 2026-11-06(SCP0016 H7 허위 FAIL): 다단 헤더(월→주차→일) 파일은 맨 위 행만 읽으면 화면 맨 아래 헤더('24'…)와 어긋난다 — 헤더 행 수 = 틀 고정 행(freeze) 또는 헤더 영역 병합 범위,
+    #   열마다 헤더 행들 중 맨 아래 비어 있지 않은 값을 머리글로 쓴다(화면 쪽 column.header 와 같은 단)
+    hrows = 1
+    try:
+        fz = ws.freeze_panes
+        if fz:
+            mm = re.search(r'(\d+)$', str(fz)); fr = int(mm.group(1)) - 1 if mm else 0
+            if head_row <= fr <= head_row + 5: hrows = fr - head_row + 1
+        if hrows == 1:
+            mx = max([rg.max_row for rg in ws.merged_cells.ranges if rg.min_row >= head_row and rg.min_row <= head_row + 5] or [head_row])
+            if mx > head_row: hrows = min(mx - head_row + 1, 6)
+    except Exception:
+        hrows = 1
+    hdr = []
+    for ci in range(1, ws.max_column + 1):
+        v = ''
+        for ri in range(head_row + hrows - 1, head_row - 1, -1):
+            cv = ws.cell(row=ri, column=ci).value
+            if cv is not None and str(cv) != '': v = str(cv); break
+        hdr.append(v)
     rows = []; num = gen = 0; fmts = []
-    for r in ws.iter_rows(min_row=head_row + 1, max_row=head_row + 200):
+    for r in ws.iter_rows(min_row=head_row + hrows, max_row=head_row + hrows + 199):
         rows.append([('' if c.value is None else str(c.value)) for c in r])
         for c in r:
             if isinstance(c.value, (int, float)) and not isinstance(c.value, bool):
@@ -39,7 +58,7 @@ def content(p):
                     gen += 1
                 elif c.number_format not in fmts:
                     fmts.append(c.number_format)
-    print(json.dumps({'sheet': ws.title, 'header': hdr, 'rows': rows, 'freeze': ws.freeze_panes, 'numCells': num, 'general': gen, 'samples': fmts[:5]}, ensure_ascii=False))
+    print(json.dumps({'sheet': ws.title, 'header': hdr, 'headerRows': hrows, 'rows': rows, 'freeze': ws.freeze_panes, 'numCells': num, 'general': gen, 'samples': fmts[:5]}, ensure_ascii=False))
 
 
 def badheader(p):

@@ -6,7 +6,7 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, useCallback, useEffect, useMemo } from 'react';
+import { type MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
@@ -58,6 +58,15 @@ export const PlanControlGrid = ({
     [staticColumns]
   );
 
+  // handleFormatItem 은 initialized 에서 그리드 생성 시 1회만 붙으므로, 렌더 가변값은 ref 로 최신값을 읽는다
+  //   (DataGrid.tsx "initialized 1회 closure 보완"과 같은 방식). 값을 클로저로 잡으면 그리드가 메타 응답보다
+  //   먼저 생성된 경우 isPlanIdEditableByMeta=false 가 고정돼 Plan ID 편집가능 색이 지워졌다 — 응답 순서에
+  //   따라 노란색이 보였다 안 보였다 하는 운영 실사고(2026-11-03, 로컬은 응답이 빨라 가려짐).
+  const isPlanIdEditableByMetaRef = useRef(isPlanIdEditableByMeta);
+  isPlanIdEditableByMetaRef.current = isPlanIdEditableByMeta;
+  const masterValidationRef = useRef(masterValidation);
+  masterValidationRef.current = masterValidation;
+
   // G06·G07·G09~G11·X03 — 셀 표현. 컬럼 메타에 없는 시각 규칙만 여기서 그린다.
   //   DETAIL·CONFIRM 은 SP 가 값을 주지 않는 코드 전용 컬럼이라 반드시 textContent 를 채워야 보인다.
   //   <DataGrid formatItem={...}> prop 이 아니라 아래 effect 에서 gridRef 에 직접 addHandler 한다 —
@@ -95,10 +104,11 @@ export const PlanControlGrid = ({
 
       if (binding === ACTION_COLUMN.DETAIL) {
         // A001 행 + Master Validation 조회 완료 상태일 때만 "Critical : n, Warning : m"(G06·G17).
+        const validation = masterValidationRef.current;
         const showDetail =
-          str(row.OPMZ_ACTV_CD) === ACTIVITY.MASTER_VALIDATION && masterValidation.isValidSearch;
+          str(row.OPMZ_ACTV_CD) === ACTIVITY.MASTER_VALIDATION && validation.isValidSearch;
         e.cell.textContent = showDetail
-          ? formatValidationDetail(masterValidation.criticalCnt, masterValidation.warningCnt)
+          ? formatValidationDetail(validation.criticalCnt, validation.warningCnt)
           : '';
         return;
       }
@@ -108,12 +118,17 @@ export const PlanControlGrid = ({
         //   셀만 편집가능 표준색(Yellow). 임의 hex 금지(hook #95).
         e.cell.classList.toggle(
           'wj-cell-editable',
-          isPlanIdEditableByMeta && str(row.OPMZ_PLAN_ID_INDP_YN) !== 'Y'
+          isPlanIdEditableByMetaRef.current && str(row.OPMZ_PLAN_ID_INDP_YN) !== 'Y'
         );
       }
     },
-    [isPlanIdEditableByMeta, masterValidation]
+    []
   );
+
+  // 메타 도착·Master Validation 조회로 위 ref 값이 바뀌면 이미 그려진 셀을 다시 칠한다.
+  useEffect(() => {
+    gridRef.current?.invalidate();
+  }, [gridRef, isPlanIdEditableByMeta, masterValidation]);
 
   // G08 — 행 조건부 편집잠금. 컬럼 축 잠금은 메타(INPUT_TP_CD)가 하고, 행 조건은 메타로 표현할 수
   //   없으므로 여기서 마지막에 override 한다(hook #70). Plan ID 외 컬럼은 메타가 이미 잠근다.
@@ -125,13 +140,34 @@ export const PlanControlGrid = ({
   //   그리드 인스턴스가 바뀌면 옛 그리드에 붙은 채로 남아 잠금이 다시 풀렸다(같은 날 재발).
   //   DataGrid 의 initialized prop 은 내부 설정(setEditableColumns 포함)이 끝난 뒤 그 그리드로 마지막에
   //   호출되므로, 여기서 걸면 항상 실제 그리드에, 항상 마지막 순서로 붙는다.
+  //   편집 전 Plan ID 도 여기서 기억해 둔다 — 아래 handleCellEditEnded(E07)가 변경 여부 판정에 쓴다.
+  const planIdBeforeEditRef = useRef<string | undefined>(undefined);
   const handleBeginningEdit = useCallback(
     (grid: FlexGrid<PlanControlRow>, e: CellRangeEventArgs) => {
       if (grid.columns[e.col]?.binding !== ACTION_COLUMN.PLAN_ID) return;
       const row = grid.rows[e.row]?.dataItem as PlanControlRow | undefined;
+      planIdBeforeEditRef.current = row ? str(row.OPMZ_PLAN_ID) : undefined;
       if (!row || str(row.OPMZ_PLAN_ID_INDP_YN) === 'Y' ) e.cancel = true;
     },
     []
+  );
+
+  // E07 — AS-IS SpdMain_ComboSelChange(cs:1290)는 콤보 선택이 바뀔 때만 발생한다. Wijmo cellEditEnded 는
+  //   값이 그대로여도 편집만 끝나면 발생해서, 드롭다운을 열었다 그냥 나가도 단건 재조회가 돌아
+  //   Update Time 이 찍히는 실사고(2026-11-05)가 있었다. 편집 전 값은 이벤트 인자로 받을 수 없다
+  //   (finishEditing 이 data 없이 인자를 만든다 — business-plan/BusinessPlanGrid.tsx 같은 기록) —
+  //   위 beginningEdit 에서 직접 기억해 두고(planIdBeforeEditRef), 값이 바뀐 경우에만 화면 핸들러로 넘긴다.
+  const handleCellEditEnded = useCallback(
+    (grid: FlexGrid<PlanControlRow>, e: CellRangeEventArgs) => {
+      if (grid.columns[e.col]?.binding === ACTION_COLUMN.PLAN_ID) {
+        const before = planIdBeforeEditRef.current;
+        planIdBeforeEditRef.current = undefined;
+        const row = grid.rows[e.row]?.dataItem as PlanControlRow | undefined;
+        if (e.cancel || !row || str(row.OPMZ_PLAN_ID) === before) return;
+      }
+      cellEditEnded(grid, e);
+    },
+    [cellEditEnded]
   );
 
   // handleFormatItem 도 handleBeginningEdit 과 같은 이유로 initialized 콜백에서 건다(바로 위 G08 주석).
@@ -186,7 +222,7 @@ export const PlanControlGrid = ({
       allowMerging={AllowMerging.Cells}
       click={click}
       dblClick={dblClick}
-      cellEditEnded={cellEditEnded}
+      cellEditEnded={handleCellEditEnded}
       gotFocus={gotFocus}
       initialized={handleInitialized}
     />

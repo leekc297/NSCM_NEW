@@ -11,7 +11,7 @@
 | features/shipping/src/pages/shipment-change-request-plan/components/modals/ApprovalUserModal.module.scss | component | 32 |
 | features/shipping/src/pages/shipment-change-request-plan/components/modals/ApprovalUserModal.tsx | component | 232 |
 | features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.module.scss | component | 23 |
-| features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx | component | 135 |
+| features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx | component | 141 |
 | features/shipping/src/pages/shipment-change-request-plan/components/modals/OrderDetailModal.tsx | component | 118 |
 | features/shipping/src/pages/shipment-change-request-plan/components/RequestActionBar.module.scss | component | 10 |
 | features/shipping/src/pages/shipment-change-request-plan/components/RequestActionBar.tsx | component | 45 |
@@ -94,10 +94,10 @@
 | Button | onClick | <arrow> findData | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/ApprovalUserModal.tsx | 202 |
 | Button | onClick | handleSelect | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/ApprovalUserModal.tsx | 220 |
 | Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/ApprovalUserModal.tsx | 223 |
-| InputField | onChange | <arrow> setCount,e.target.value.replace | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx | 98 |
-| InputField | onKeyDown | <arrow> e.preventDefault,handleSubmit | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx | 99 |
-| Button | onClick | handleSubmit | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx | 120 |
-| Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx | 127 |
+| InputField | onChange | <arrow> setCount,e.target.value.replace | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx | 104 |
+| InputField | onKeyDown | <arrow> e.preventDefault,handleSubmit | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx | 105 |
+| Button | onClick | handleSubmit | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx | 126 |
+| Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx | 133 |
 | Button | onClick | onClose | jsx | features/shipping/src/pages/shipment-change-request-plan/components/modals/OrderDetailModal.tsx | 110 |
 | Button | onClick | onRequestComplete | jsx | features/shipping/src/pages/shipment-change-request-plan/components/RequestActionBar.tsx | 33 |
 | Button | onClick | onCancel | jsx | features/shipping/src/pages/shipment-change-request-plan/components/RequestActionBar.tsx | 38 |

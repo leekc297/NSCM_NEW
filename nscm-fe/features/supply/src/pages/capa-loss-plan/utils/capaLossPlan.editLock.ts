@@ -81,20 +81,21 @@ export const isPriorityNone = (row: Scp0106Row | undefined, periodColumn: string
 };
 
 /**
- * 생산확정기간 잠금의 **AS-IS 리셋 누락(C-16)** 을 재현한 잠금 컬럼 집합.
+ * 생산확정기간 잠금의 **AS-IS 실동작을 정밀 재현**한 잠금 컬럼 집합
+ * (C-16 / I-04 — 2026-11-04 사용자 확정: "AS-IS 정밀 재현").
  *
- * AS-IS 는 `isScpPlanFixed` 를 행 루프 안에서 선언하고 **컬럼 루프 안에서 리셋하지 않는다**.
- * 그래서 한 번 확정기간에 들어간 뒤로는 그 행의 **이후 모든 기간 컬럼**이 계속 잠긴다 —
- * `SCP_PRDN_PLAN_REF_END_YM` 를 지난 달도, 4자리 `Y_yyyy` 연 컬럼도 잠긴다.
- * (설계 V-29 는 "확정기간 안에서만 잠금 · `Y_` 는 대상 아님" 이라는 **의도**를 적은 것이고,
- *  C-16 이 실제 동작은 다르다고 지적했다.)
+ * AS-IS(cs:2235~2280)는 `isScpPlanFixed` 를 행 루프 시작 시 `false` 로 두고(cs:2178),
+ * 컬럼 루프에서 **6자리(월) 컬럼일 때만** `(startYm <= 월 <= endYm)` 으로 **재계산**한다
+ * (cs:2258 `yyyymm.Length == 6` 가드). 즉:
+ *   - 확정기간 안 월 컬럼 → 잠금
+ *   - 확정기간 **이후** 월 컬럼 → 매번 재계산되어 **해제**(순수 latch 아님)
+ *   - 4자리 연(`Y_yyyy`) 컬럼 → 재계산하지 않아 **바로 앞 월 컬럼값을 상속**
+ *     (AS-IS 의 리셋 누락 quirk — 설계 V-29 의도와는 다르지만 AS-IS 파리티로 유지)
  *
- * **의도인지 버그인지 미확정**(goal BLK-13-④)이라 plan STEP0 ⑧ 의 잠정 방침대로
- * **AS-IS 실동작을 그대로 재현**한다 — 04 리포트 "확인필요(사용자 축)".
- * 사용자가 "버그"로 확정하면 이 함수를 `stYm <= key <= endYm` 단순 범위 판정으로 바꾸면 된다
- * (호출부 수정 불요 — 반환 계약이 같다).
+ * 과거 구현은 "한번 켜지면 끝까지"인 순수 latch 라 확정기간 이후 월까지 과잠금했으나,
+ * AS-IS 는 월 컬럼을 매번 재계산하므로 아래처럼 바로잡았다.
  *
- * 컬럼 순서에 의존하므로 순수 함수 인자로 **정렬된 기간 컬럼명 목록**을 받는다
+ * 컬럼 순서(월→연)에 의존하므로 순수 함수 인자로 **정렬된 기간 컬럼명 목록**을 받는다
  * (그리드 좌표를 읽지 않는다 — hook #130 유지).
  */
 export const buildScpPlanFixedColumns = (
@@ -104,14 +105,15 @@ export const buildScpPlanFixedColumns = (
 ): Set<string> => {
   const locked = new Set<string>();
   if (!startYm || !endYm) return locked;
-  let latched = false;
+  // AS-IS isScpPlanFixed: 행 시작 false → 6자리 월 컬럼마다 재계산, 4자리 연 컬럼은 앞 값 상속.
+  let isScpPlanFixed = false;
   for (const columnName of orderedPeriodColumns) {
-    if (!latched) {
-      const key = toPeriodKey(columnName);
-      // 6자리(월) 컬럼만 확정기간 판정 대상이다. 4자리 연 컬럼은 latch 를 **시작시키지 않는다**.
-      if (key.length === 6 && key >= startYm && key <= endYm) latched = true;
+    const key = toPeriodKey(columnName);
+    if (key.length === 6) {
+      isScpPlanFixed = key >= startYm && key <= endYm;
     }
-    if (latched) locked.add(columnName);
+    // key.length !== 6 (연 컬럼 등) 이면 재계산하지 않고 직전 월 컬럼값을 그대로 쓴다(상속).
+    if (isScpPlanFixed) locked.add(columnName);
   }
   return locked;
 };

@@ -255,52 +255,43 @@ export const MAIN_COLUMNS: MainColumnMeta[] = [
 export const TEMPLATE_EXCEL_PREFIX = 'DMF0074_Template';
 export const MAIN_EXCEL_PREFIX = 'DMF0074_MetalLinkPrice';
 
-// Excel Form / Upload 양식 — ⭐ [2026-09-14] AS-IS 양식(DMF0074_MetalLinkPricePopup export) 과 동일한 2단 병합 헤더.
-//   1행 = 단일 컬럼명(1~2행 세로 병합) 또는 메탈 그룹명(가로 병합) / 2행 = 원소명(Ni/Co/Li2CO3/LIOH/Al/Mn/Cu).
-//   컬럼 구성·순서·명칭 = AS-IS SCM_MST_SHEET_COLUMNS(DMF0074 'Metal Link Price') 표시 컬럼 1:1
-//   (DIV=40 = Project 2열 없음 53열 · formId 'DMF0074_40' / 그 외 55열).
-//   ⚠️ 'Div' 는 AS-IS 양식 원문 — SP 가 UPPER(ATTRIBUTE1)='DIV' 행을 헤더(@TITLE)로 판정하므로 'Division' 으로 바꾸면 안 된다.
-//   Upload 토큰 = SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT = group 있으면 "그룹명_하위명", 없으면 header
-//   (BE ExcelUtils.convertGroupedHeaderExcelToJson 합성 키와 1:1 — 1바이트 불일치 = 해당 열 전량 탈락).
+// Excel Upload 체인 — SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT 와 1:1 (2026-09-14 2단 헤더 전환 반영).
+//   DIV=40 은 formId 'DMF0074_40' (Project 2열 없는 53토막) / 그 외 55토막.
+//   필수: 아래 header 문자열은 HEADER_CONTENT 토큰과 1바이트도 달라선 안 된다.
+//   이 배열은 공용 FcstUploadModal 의 attributeHeaders(오류 목록 칸 제목)로만 쓰인다 — 파일 읽기는
+//   BE 가 HEADER_CONTENT 로 하므로 어긋나도 값은 맞게 들어가지만 오류 목록 칸 제목이 양식과 달라진다.
 export const UPLOAD_FORM_ID = { DEFAULT: 'DMF0074', DIV40: 'DMF0074_40' } as const;
 
 export interface UploadColumn {
   header: string;
   key: string;
-  // 2단 헤더 상단 그룹명 (메탈 42)
-  group?: string;
-  // 엑셀 열 너비 — AS-IS 양식 파일 실측값 - 0.71 (문자 단위). wijmo 는 'Nch' 에 셀 여백 0.71ch 를 더해 기록한다
-  //   (13ch → 13.71). AS-IS 파일 기록값(13.0 등)과 같게 하려고 미리 뺀다.
-  width?: string;
 }
 
 const UPLOAD_BASE_DEFAULT: UploadColumn[] = [
-  { header: 'Div', key: 'DIVISION_ID', width: '3.71ch' },
-  { header: 'Plan Date', key: 'PLAN_YYYYMM', width: '6.29ch' },
-  { header: 'Team', key: 'DEPT_NAME', width: '22.43ch' },
-  { header: 'End Customer', key: 'END_CUSTOMER', width: '12.43ch' },
-  { header: 'Project Code', key: 'PROJECT_CODE', width: '12.29ch' },
-  { header: 'Project', key: 'PROJECT_NAME', width: '12.29ch' },
-  { header: 'Model Code', key: 'ITEM_ID', width: '12.29ch' },
-  { header: 'Metal Link', key: 'METAL_LINK_YN', width: '5ch' },
-  { header: 'Sales Site', key: 'SCM_SITE_ID', width: '13.71ch' },
-  { header: 'Currency', key: 'CURRENCY', width: '7.43ch' },
-  { header: 'FCST type', key: 'FCST_TYPE', width: '12.29ch' },
-  { header: 'Exception', key: 'METAL_EXCEPTION_YN', width: '12.29ch' },
-  { header: 'Energy', key: 'ENERGY', width: '12.29ch' },
+  { header: 'Div', key: 'DIVISION_ID' },
+  { header: 'Plan Date', key: 'PLAN_YYYYMM' },
+  { header: 'Team', key: 'DEPT_NAME' },
+  { header: 'End Customer', key: 'END_CUSTOMER' },
+  { header: 'Project Code', key: 'PROJECT_CODE' },
+  { header: 'Project', key: 'PROJECT_NAME' },
+  { header: 'Model Code', key: 'ITEM_ID' },
+  { header: 'Metal Link', key: 'METAL_LINK_YN' },
+  { header: 'Sales Site', key: 'SCM_SITE_ID' },
+  { header: 'Currency', key: 'CURRENCY' },
+  { header: 'FCST type', key: 'FCST_TYPE' },
+  { header: 'Exception', key: 'METAL_EXCEPTION_YN' },
+  { header: 'Energy', key: 'ENERGY' },
 ];
 
-// 메탈 42 열 너비 — AS-IS 양식 파일 실측 (Key 그룹 7/13/13/9.43/7/13/9.43 · Period(Fr) Ni 7 · 그 외 13) - 0.71
-const METAL_UPLOAD_WIDTH: Record<string, string[]> = {
-  APPLY_PRICE_TYPE_CODE: ['6.29ch', '12.29ch', '12.29ch', '8.71ch', '6.29ch', '12.29ch', '8.71ch'],
-  FROM_PERIOD: ['6.29ch', '12.29ch', '12.29ch', '12.29ch', '12.29ch', '12.29ch', '12.29ch'],
-};
+// 메탈 42 — 토큰은 "그리드 그룹 헤더명_원소명" (예 `Period(Fr)_Ni`).
+//   Excel Form 양식이 메인 그리드 2단 헤더 그대로 내려가고, BE(ExcelUtils.convertExcelToJsonTwoHeaderRows)가
+//   1행 그룹명 + '_' + 2행 원소명으로 키를 만들며, HEADER_CONTENT 도 같은 형태로 등록돼 있다.
+//   그래서 별도 축약 토큰표(PeriodFr 등)를 두지 않고 METAL_GROUPS.group 을 그대로 써서
+//   양식 헤더, BE 읽기 키, 오류 목록 칸 제목이 한 소스에서 나오게 한다.
 const UPLOAD_METAL_COLUMNS: UploadColumn[] = METAL_GROUPS.flatMap(g =>
-  METAL_ELEMENTS.map<UploadColumn>((el, index) => ({
-    header: el.label,
+  METAL_ELEMENTS.map<UploadColumn>(el => ({
+    header: `${g.group}_${el.label}`,
     key: `${g.prefix}${el.suffix}`,
-    group: g.group,
-    width: METAL_UPLOAD_WIDTH[g.prefix]?.[index] ?? '12.29ch',
   }))
 );
 
@@ -313,13 +304,8 @@ export const UPLOAD_COLUMNS_DIV40: UploadColumn[] = [
   ...UPLOAD_METAL_COLUMNS,
 ];
 
-// HEADER_CONTENT 토큰 (Error Detail 라벨 — ATTRIBUTEn 순서 1:1)
-const toUploadToken = (c: UploadColumn) => (c.group ? `${c.group}_${c.header}` : c.header);
-export const UPLOAD_HEADERS_DEFAULT = UPLOAD_COLUMNS_DEFAULT.map(toUploadToken);
-export const UPLOAD_HEADERS_DIV40 = UPLOAD_COLUMNS_DIV40.map(toUploadToken);
-
-// AS-IS 양식 시트명 = 메인 시트명 (AS-IS 파일 실측 'Metal Link Price')
-export const TEMPLATE_SHEET_NAME = 'Metal Link Price';
+export const UPLOAD_HEADERS_DEFAULT = UPLOAD_COLUMNS_DEFAULT.map(c => c.header);
+export const UPLOAD_HEADERS_DIV40 = UPLOAD_COLUMNS_DIV40.map(c => c.header);
 
 // 템플릿 SP 는 사용자가 채울 열(Plan Date / Energy / 메탈 42)을 '-' 로 내려준다
 //   (PKG_DMF0074 L780 "날짜는 빈칸으로 내려받게"). 업로드 검증은 '-' 를 값으로 인식하므로 export 시 빈칸으로 치환한다.

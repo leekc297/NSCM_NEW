@@ -17,10 +17,10 @@
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
 |---|---|---|---|
-| ModelPopup | divisionId projectCode scmSiteId itemId | o_rc1 |  |
-| ElecPopup | divisionId companyId itemId | o_rc1 | P_SCM0002_GET_ITEM_ELEC |
-| ProjectByDivPopup | divisionId projectCode | o_rc1 | P_SCM0002_GET_PROJECT_BY_DIVISION_POPUP |
-| CapaItemPopup | divisionId itemId | o_rc1 | PKG_SCM0002 P_SCM0002_GET_CAPA_ITEM_POPUP |
+| ModelPopup | divisionId projectCode scmSiteId itemId | o_rc1 | PKG_SCM0002 P_SCM0002_GET_ITEM_BY_DIVISION_POPUP P_DIVISION_ID P_PROJECT_CODE P_SCM_SITE_ID P_ITEM_ID |
+| ElecPopup | divisionId companyId itemId | o_rc1 | P_SCM0002_GET_ITEM_ELEC PKG_SCM0002 P_SCM0002_GET_ITEM_BY_DIVISION_POPUP P_DIVISION_ID P_PROJECT_CODE P_SCM_SITE_ID P_ITEM_ID |
+| ProjectByDivPopup | divisionId projectCode | o_rc1 | P_SCM0002_GET_PROJECT_BY_DIVISION_POPUP PKG_SCM0002 P_SCM0002_GET_ITEM_BY_DIVISION_POPUP P_DIVISION_ID P_PROJECT_CODE P_SCM_SITE_ID P_ITEM_ID |
+| CapaItemPopup | divisionId itemId | o_rc1 | PKG_SCM0002 P_SCM0002_GET_CAPA_ITEM_POPUP P_SCM0002_GET_ITEM_BY_DIVISION_POPUP P_DIVISION_ID P_PROJECT_CODE P_SCM_SITE_ID P_ITEM_ID |
 
 ## 4. 이벤트 배선
 (없음)

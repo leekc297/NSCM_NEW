@@ -25,7 +25,8 @@ for (const x of process.argv.slice(2)) ids.add(x);
   }
   for (const a of acc.accounts) a.loginOk = !!ok[a.id];
   acc.loginProbe = { be: BE, at: new Date().toISOString(), ok: Object.keys(ok).filter(k => ok[k]) };
-  fs.writeFileSync(accF, JSON.stringify(acc, null, 2), 'utf8');
+  // 2026-11-06(동시 실행 영향 차단): 화면별 run-e2e 가 동시에 돌며 accounts.json 을 다시 쓴다 → 반쯤 쓰인 파일을 다른 실행(gen-e2e)이 읽지 않게 임시 파일 → 원자 교체(잠깐 열려 있으면 재시도)
+  { const t = `${accF}.${process.pid}.tmp`; fs.writeFileSync(t, JSON.stringify(acc, null, 2), 'utf8'); for (let i = 0; ; i++) { try { fs.renameSync(t, accF); break; } catch (e) { if (i >= 40 || !/^(EPERM|EBUSY|EACCES)$/.test(e.code || '')) { try { fs.unlinkSync(t); } catch { } throw e; } Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 250); } } }
   console.log(`로그인 가능 ${n}/${ids.size} → accounts.json loginOk/loginProbe 갱신`);
   if (!n) process.exit(1);
 })();

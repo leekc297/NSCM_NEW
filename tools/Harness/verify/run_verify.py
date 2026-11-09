@@ -32,9 +32,94 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 E2E = os.path.join(ROOT, 'tools', 'E2E')
 
 
+# 2026-11-06(사용자 지시): CheckList 진행 표시 — 전체 단계 안에서 지금 어디인지. 종전 VM 은 Playwright 'Running N tests' 만 보고 n/N 을 그려
+#   한 CheckList 안의 여러 Playwright 실행(smoke 3 → 검증엔진 72 → 팝업·권한 9)이 이어지면 '73/9' 처럼 전체가 사라졌다.
+#   대분류 '[단계 i/N] 이름' · 중분류 '[세부 j/M] 도구' 줄을 출력하고 VM Flow 카드가 읽는다(테스트 n/N 은 Playwright 실행마다 따로).
+#   세부 수(M)는 아래 STAGES 의 예정 수 — run() 을 추가·삭제하면 여기도 고친다(어긋나면 단계 끝에 [WARN] 으로 알린다 · 판정 영향 없음).
+#   사전 작업의 세부는 prereq.py 가 항목마다 '[세부 j/M]' 을 낸다(M=None). E2E 단계의 세부 = Playwright 테스트(M=0).
+STAGES = [('pre', '사전 작업(DB·Fact Pack·메타·스펙·smoke)', None),
+          ('facts', 'AS-IS 사실 보강·자동 기대 행·검증 원장', 11),
+          ('static', '정적 검사·골든·대조표 추적', 10),
+          ('e2e', 'E2E 검증엔진(@verify·@trace)', 0),
+          ('eg', 'E2E 팝업·권한 검사기(eg_chain)', 1),
+          ('diff', '차등 검증(AS-IS↔TO-BE 결과 비교)', 2),  # 2026-11-06 플랜 2-4: 포착 call-proc 인자로 AS-IS SP ↔ TO-BE PROC 실행·키 기반 비교 → 원장 ASIS_DIFF 행
+          ('post', '사후 검사·판정·추적', 29),  # +oracle_class --check(2026-11-06)
+          ('docs', '문서 생성·회귀 점검', 4)]  # +precision.py(2026-11-06)
+_PG = {'i': 0, 'j': 0, 'm': 0}
+
+
+def stage(key, note='', m=None):
+    """대분류 시작 줄 — '[단계 i/N] 이름 — 세부 M개 · 비고'"""
+    stage_end()
+    i = [s[0] for s in STAGES].index(key) + 1
+    mm = STAGES[i - 1][2] if m is None else m
+    _PG.update(i=i, j=0, m=mm or 0)
+    _TM.update(stage=key, stage_t0=time.time())
+    print(f"\n[단계 {i}/{len(STAGES)}] {STAGES[i - 1][1]}" + (f" — 세부 {mm}개" if mm else '') + (f" · {note}" if note else ''), flush=True)
+
+
+def stage_end():
+    if _TM['stage'] and _TM['stage_t0']:
+        print(f"[시간] 단계 {_TM['stage']} 끝 · {(time.time() - _TM['stage_t0']) / 60:.1f}분", flush=True)
+        _TM['stage_t0'] = 0.0
+    if _PG['m'] and _PG['j'] != _PG['m']:
+        print(f"[WARN] 진행 표시 — 단계 {_PG['i']} 세부 실행 {_PG['j']} ≠ 예정 {_PG['m']} (run_verify.py STAGES 예정 수 갱신 필요 · 판정 영향 없음)", flush=True)
+    _PG['m'] = 0
+
+
+def sub(name, skipped=''):
+    """중분류 줄 — '[세부 j/M] 도구' (건너뛴 조건부 도구도 번호를 쓴다 → 분모와 실제가 맞는다)"""
+    if not _PG['m']:
+        return
+    _PG['j'] += 1
+    print(f"[세부 {_PG['j']}/{_PG['m']}] {name}" + (f" — 건너뜀({skipped})" if skipped else ''), flush=True)
+
+
 def run(cmd, env=None, cwd=None):
+    name = next((os.path.basename(str(c)) for c in cmd[1:] if str(c).endswith(('.py', '.js'))), os.path.basename(str(cmd[0])))
+    if name == 'cli.js':  # Playwright — 어떤 스펙 묶음인지(_verify _trace / eg_popup …)
+        name = 'playwright ' + ' '.join(str(c) for c in cmd[3:] if not str(c).startswith(('-', '@')) and not str(c).isdigit() and '|' not in str(c) and ',' not in str(c))[:60]
+    sub(name)
     print(f"\n$ {' '.join(cmd)}", flush=True)
-    return subprocess.call(cmd, cwd=cwd or ROOT, env=env)
+    t0 = time.time()
+    rc = subprocess.call(cmd, cwd=cwd or ROOT, env=env)
+    timing_add(name, t0, rc)
+    return rc
+
+
+# 2026-11-06(속도 개선 ① 계측): 도구·단계별 실제 소요를 남긴다 — 개선 전후 비교의 유일한 근거(감·예측 금지 #126).
+#   로그 줄 '[시간] 도구 · 시작 HH:MM:SS · N.Ns · rc' + 끝에 Doc/verify/<ID>/_timing.csv(실행마다 누적: run_at,stage,tool,start,sec,rc).
+_TM = {'mid': '', 'run_at': time.strftime('%Y-%m-%d %H:%M:%S'), 'rows': [], 'stage': '', 'stage_t0': 0.0}
+
+
+def timing_add(name, t0, rc=''):
+    sec = time.time() - t0
+    _TM['rows'].append((_TM['stage'], name, time.strftime('%H:%M:%S', time.localtime(t0)), round(sec, 1), rc))
+    print(f"[시간] {name} · 시작 {time.strftime('%H:%M:%S', time.localtime(t0))} · {sec:.1f}s · rc={rc}", flush=True)
+
+
+def timing_write():
+    """실행 끝(정상·오류 모두)에 1회 — 화면 폴더 _timing.csv 에 이번 실행 행을 덧붙이고 단계 합계를 찍는다."""
+    if not _TM['mid'] or not _TM['rows']:
+        return
+    try:
+        d = os.path.join(ROOT, 'Doc', 'verify', _TM['mid'])
+        os.makedirs(d, exist_ok=True)
+        p = os.path.join(d, '_timing.csv')
+        new = not os.path.exists(p)
+        with open(p, 'a', encoding='utf-8-sig' if new else 'utf-8', newline='') as f:
+            w = csv.writer(f)
+            if new:
+                w.writerow(['run_at', 'stage', 'tool', 'start', 'sec', 'rc'])
+            for r in _TM['rows']:
+                w.writerow([_TM['run_at'], *r])
+        tot = {}
+        for st, _n, _s, sec, _rc in _TM['rows']:
+            tot[st] = tot.get(st, 0) + sec
+        print('[시간] 단계별 도구 시간 합 — ' + ' · '.join(f"{k or '-'} {v / 60:.1f}분" for k, v in tot.items())
+              + f" · 전체 {sum(tot.values()) / 60:.1f}분 → {os.path.relpath(p, ROOT)}", flush=True)
+    except OSError as e:
+        print(f"[WARN] 시간 기록 실패({e}) — 판정 영향 없음", flush=True)
 
 
 def asis_of(mid):
@@ -72,8 +157,24 @@ def main():
     ap.add_argument('--force-e2e', action='store_true', help='시노님·권한 누락(차단)이 있어도 E2E 를 실행')
     ap.add_argument('--scope', choices=['DB_ONLY', 'DB_FE'])
     ap.add_argument('--resume-docs', action='store_true', help='exit 8(문서 생성) 복구 — 원장·판정은 그대로 두고 make_verify_docs → regress 만 다시 실행(2026-10-30 SCP0100)')
+    ap.add_argument('--static', action='store_true', help='2026-11-08 정적 게이트 — 브라우저(E2E)·AS-IS SP 실행 없이 사전·사실·정적·판정까지만 돌리고 static_gate.md 로 요약(CheckList 판 생성 안 함) · exit 2 = 정적 FAIL ≥1 · 생성·자동보정 직후용')
+    ap.add_argument('--only', default='', help="2026-11-08 (b) 부분 재판정 — 쉼표 구분 규칙 ID(예 G9,F2). 그 규칙을 판정하는 @verify/@trace 테스트만 다시 실행하고(이전 E2E 결과는 보존·행 단위 병합) 판정·문서를 갱신한다. 팝업·권한(eg)·차등(diff)은 건너뜀 — 보완 뒤 전체 체인 재실행 대신 사용")
     a = ap.parse_args()
+    mid = a.menu_id.upper()  # (run_mode 기록이 mid 를 먼저 쓴다 — 2026-11-08 12:2x NameError 수정)
+    if a.static:
+        a.skip_e2e = True
+    only = {x.strip().upper() for x in a.only.split(',') if x.strip()}
+    if only and a.skip_e2e:
+        print('[FAIL] --only 는 E2E 재실행이 목적이라 --skip-e2e/--static 과 같이 쓸 수 없다'); return 3
+    # 2026-11-08: 실행 모드 기록 — CheckList 요약 시트가 '부분 재판정(--only …)' 임을 표기해 판 수치 오독을 막는다(사용자 11-07 '판 생성이 목적 아님')
+    try:
+        os.makedirs(os.path.join(ROOT, 'Doc', 'verify', mid), exist_ok=True)
+        with open(os.path.join(ROOT, 'Doc', 'verify', mid, 'run_mode.json'), 'w', encoding='utf-8') as _mf:
+            json.dump({'mode': 'static' if a.static else ('only' if only else ('skip-e2e' if a.skip_e2e else 'full')), 'rules': sorted(only), 'tier': a.tier, 'at': time.strftime('%Y-%m-%d %H:%M:%S')}, _mf, ensure_ascii=False)
+    except OSError:
+        pass
     mid = a.menu_id.upper()
+    _TM['mid'] = mid
     asis = (a.asis or asis_of(mid)).upper()
     py = sys.executable
     print(f'== UI CheckList {mid} (AS-IS {asis}) ==')
@@ -86,22 +187,35 @@ def main():
                 print(f'[FAIL] --resume-docs: Doc/verify/{mid}/{need} 없음 — 처음부터 실행(run_verify.py {mid})')
                 return 3
         print('[INFO] --resume-docs — 판정·추적 산출물은 그대로, 문서 생성(make_verify_docs)·회귀 게이트(regress)만 다시 실행')
+        stage('docs', '--resume-docs(앞 단계는 지난 실행 결과 사용)')
         cmd = [py, os.path.join(HERE, 'make_verify_docs.py'), mid] + (['--scope', a.scope] if a.scope else [])
         if run(cmd):
             return 8
+        made = docs_made_since(mid, STARTED)
+        if made is not True:
+            print(f'[ERROR] 문서 생성 확인 실패 — {made}')
+            return 8
         rc_reg = run([py, os.path.join(HERE, 'regress.py'), mid, '--harvest'])
-        if rc_reg: print('⚠ 검사기 회귀 위반 — Doc/verify/_regress_report.md 확인(검사기 결함 재발 가능성)')
+        run([py, os.path.join(HERE, 'checker_regress.py'), mid])  # P3 검사기 자체 회귀(골든 기준 있을 때만 대조 · 경고)
+        run([py, os.path.join(HERE, 'precision.py'), mid])  # 조치필요 정밀도 이력(2026-11-06 플랜 G1)
+        if rc_reg:
+            GATE_WARN.append(f'검사기 회귀 오라클 위반 — Doc/verify/{mid}/_regress_report.md 확인(검사기 결함 재발 가능성)')
+            print(f'⚠ 경고(오류 아님) — {GATE_WARN[-1]}')
+        stage_end()
+        print(f"[OK] CheckList 생성 완료 — {made_docs_text(mid)}")
         print('\n다음: ActionItemList xlsx 를 확인한 뒤 보완 범위(🧭 보완 범위 설정)를 정하고 🛠️/🧯 로 보완을 적용한다.')
         return 0
 
     # 0 사전 작업 점검·선수행(2026-10-28 사용자 요청) — Fact Pack·TO-BE 메타·TO-BE 인덱스·골든 케이스·E2E plan/스펙·smoke 가
     #   없거나 오래되면 생산자를 먼저 실행한다. 대조표·조회조건 기준표처럼 사람이 만드는 것은 MANUAL 로 prereq.json·실행 로그에만 남긴다(정합검증서 미포함)
+    stage('pre')
     rc_pre = run([py, os.path.join(HERE, 'prereq.py'), mid, '--asis', asis] + (['--skip-e2e'] if a.skip_e2e else []))
     if rc_pre:
         # 2026-10-30: E2E plan·스펙·smoke 가 없으면 FAIL(종전엔 MANUAL/ERROR 로 기록만 하고 진행 → SCP0111 smoke 근거 규칙 전부 미측정 · T13). rc 5 = 서버/잠금(환경)
         print(f"[FAIL] 사전 작업 미충족 — Doc/verify/{mid}/prereq.json 확인({'FE/BE 미기동 또는 다른 E2E 실행 중' if rc_pre == 5 else 'AS-IS Fact Pack·TO-BE 화면·E2E plan/스펙/smoke 중 생산 실패'})")
         return 5 if rc_pre == 5 else 6
     # 순서: gridcols(프레임워크 기본값 CSV 기록) → dyncols(기본값 인용) → cellrules/lockrules(동적 패밀리 키 공유) — 2026-10-30 WP1/WP7
+    stage('facts')
     for s in ('facts_gridcols.py', 'facts_dyncols.py', 'facts_cellclear.py', 'facts_cellrules.py', 'facts_lockrules.py', 'facts_combosrc.py', 'facts_combovalues.py', 'facts_sortrules.py'):  # combovalues = AS-IS 원천 후보 값(2026-10-28 C2 분기 후보 대조)
         if run([py, os.path.join(HERE, s), asis]):
             return 6
@@ -121,6 +235,7 @@ def main():
     #   syn_check: BE 계정(SCMP_APP)이 부르는 PKG·콤보 SQL 객체의 시노님/권한(Doc/verify/<ID>/syn_check.csv)
     #   mapping_trace --to-ledger: 대조표 행 × 검사 카탈로그 → 원장 연결 없는 검사 인스턴스를 source=TRACE 행으로 편입(정적 검사 결과 포함)
     #     → 아래 E2E 에서 검증 엔진(_trace.spec.ts @trace)이 실행 · judge 가 반입
+    stage('static')
     run([py, os.path.join(HERE, 'syn_check.py'), mid])
     # 차단 게이트(2026-10-29): 앱 계정이 접근 못 하는 객체(SYN_MISSING·PRIV_MISSING·TARGET_MISSING·INVALID)가 있으면 화면 조회·콤보가 ORA-00942 로 전부 막혀
     #   검증엔진 테스트가 줄줄이 중단되고(SCP0020 17/22 · SCP0111 18/22) 그 결과가 허위 FAIL 수백 건으로 번진다 → E2E 를 생략하고 차단 원인 1건을 조치 필요 1번으로 올린다(--force-e2e 로 강행 가능)
@@ -142,6 +257,8 @@ def main():
             pass
         if not blockers:
             print('   → 시노님 보완으로 해소 — E2E 진행(이력: Doc/verify/_synonym_history.csv)')
+    else:
+        sub('syn_fix.py', '앱 계정 접근 불가 객체 없음')
     # 2026-10-29(사용자 승인): 콤보 SQL 객체(kind=COMBO)만 문제면 메인 조회(DEFINER 패키지)는 정상이므로 E2E 를 진행하고 콤보 의존 검사만 차단 영향으로 — PROC·META 문제만 전면 차단
     hard_blockers = [x for x in blockers if x.get('kind') in ('PROC', 'META')]
     if blockers and not hard_blockers:
@@ -168,6 +285,17 @@ def main():
         return 9
 
     if not a.skip_e2e and not blocked:
+        stage('e2e', f'tier {a.tier}')
+        # 2026-11-09 T173(SSP0024·SSP0025 시험 저장 잔존): cleanup_spec.json 정의가 없는 화면은 E2E 실저장 뒤 restore_touched 가 'ERROR 표 없음'·cleanup_marker 가 SKIP 으로 끝나
+        #   사내 DB 에 시험 행(SSP0025 신규 1행)·감사 칸·이력 2행(SSP0024)이 남았다. 실저장 전에 저장 PROC DML 대상으로 정의를 자동 생성한다(수기 정의는 건드리지 않음)
+        try:
+            _has_spec = mid in json.load(open(os.path.join(HERE, 'cleanup_spec.json'), encoding='utf-8'))
+        except (OSError, ValueError):
+            _has_spec = False
+        if not _has_spec:
+            print(f'[cleanup_spec] {mid} 정의 없음 → gen_cleanup_spec.py --write (실저장 정리·복원 대상 표 자동 생성)')
+            if run([py, os.path.join(HERE, 'gen_cleanup_spec.py'), mid, '--write']):
+                print(f'[WARN] {mid} cleanup_spec 자동 생성 실패 — 실저장 시험 행이 남을 수 있음(체인 끝 restore_touched/cleanup_marker 결과 확인)')
         with open(os.path.join(E2E, 'e2e.config.json'), encoding='utf-8-sig') as f:
             cfg = json.load(f)
         urls = {'FE': cfg['feUrl'], 'BE': cfg['beUrl']}
@@ -190,9 +318,12 @@ def main():
         if waited: print(f'[INFO] {mid} 잠금 획득 — {waited // 60}분 대기 후 시작', flush=True)
         # 2026-10-29: 동시 E2E 상한(슬롯 잠금) — 5화면 동시 실행에서 BE 커넥션 풀(maxPoolSize 10) 고갈 → 로그인 401(-9998)·콤보 60초 대기 → 검증엔진(@trace) 미기동(SCP0020·SCP0096·SCP0111 21:24~26)
         #   + CPU 포화로 15분 타임아웃(SCP0111 B1·B2). e2e.config.json verifyMaxConcurrent(기본 3 · 환경변수 VERIFY_MAX_CONCURRENT) 개까지만 동시에 E2E 를 돌리고 넘치면 빈 슬롯까지 대기(30초 폴링 · 최대 120분).
-        max_par = int(os.environ.get('VERIFY_MAX_CONCURRENT') or cfg.get('verifyMaxConcurrent') or 3)
+        # 2026-11-05 사용자 지시: 동시 상한 해제 — 0(또는 음수) = 무제한(슬롯 잠금 생략). 값 미설정일 때만 기본 3.
+        _mp = os.environ.get('VERIFY_MAX_CONCURRENT')
+        if _mp is None or str(_mp).strip() == '': _mp = cfg.get('verifyMaxConcurrent', 3)
+        max_par = int(_mp)
         slot, waited = None, 0
-        while slot is None:
+        while max_par > 0 and slot is None:
             for i in range(max_par):
                 s = subprocess.run(['node', 'runlock.js', 'acquire', 'slot', str(i)], cwd=E2E, capture_output=True, text=True, encoding='utf-8')
                 if not s.returncode:
@@ -207,12 +338,19 @@ def main():
                 subprocess.run(['node', 'runlock.js', 'release', 'verify', mid], cwd=E2E, capture_output=True)
                 return 4
             time.sleep(30); waited += 30
-        if waited: print(f'[INFO] {mid} E2E 슬롯 {slot} 획득 — {waited // 60}분 대기 후 시작', flush=True)
+        if max_par <= 0:
+            # 2026-11-06 사용자 지시: "컴의 부하가 허용하면 멀티작업 · 동시 수행이 안 되는 항목은 대기 후 진행" — verifyMaxConcurrent 0 = 부하 기반 자동 입장
+            adm = admit_by_load(mid, cfg)
+            if adm is not True:
+                print(f'[FAIL] {mid} 부하 대기 초과 — {adm}')
+                subprocess.run(['node', 'runlock.js', 'release', 'verify', mid], cwd=E2E, capture_output=True)
+                return 4
+        elif waited: print(f'[INFO] {mid} E2E 슬롯 {slot} 획득 — {waited // 60}분 대기 후 시작', flush=True)
         else: print(f'[INFO] {mid} E2E 슬롯 {slot}/{max_par} 사용', flush=True)
         try:
             out_dir = os.path.join(ROOT, 'Doc', 'verify', mid)
             res_json = os.path.join(out_dir, 'e2e_results.json')
-            if os.path.exists(res_json) and a.tier != 'slow':  # slow 는 fast 결과에 합친다
+            if os.path.exists(res_json) and a.tier != 'slow' and not only:  # slow 는 fast 결과에 합친다 · --only 는 이전 결과 위에 행 단위 병합(flush)
                 os.replace(res_json, res_json + '.prev')  # 이전 실행 결과가 이번 판정에 섞이지 않게
             with open(os.path.join(out_dir, 'tier.json'), 'w', encoding='utf-8') as tf:
                 json.dump({'tier': a.tier, 'slow_pending': a.tier == 'fast'}, tf)
@@ -220,6 +358,10 @@ def main():
             if os.path.isdir(shots_dir):
                 import shutil
                 shutil.rmtree(shots_dir, ignore_errors=True)
+            calls_dir = os.path.join(out_dir, 'calls')  # 2026-11-06 플랜 2-1: 이전 실행의 call-proc 포착이 차등 검증에 섞이지 않게
+            if os.path.isdir(calls_dir) and a.tier != 'slow' and not only:  # --only 는 일부 테스트만 → 이전 포착 보존
+                import shutil
+                shutil.rmtree(calls_dir, ignore_errors=True)
             # 동적 포트 고갈이면 E2E·DB 가 전부 네트워크 오류로 무너져 측정이 무의미하다(2026-10-29·11-01 SMSNotifier 소켓 16,000+ 재발)
             #   2026-11-05: netstat 은 Bound 소켓을 안 보여 준다(SMSNotifier 16,161개 전부 Bound · netstat 184줄 → 게이트 통과 → Chromium ERR_CONNECTION_FAILED)
             #   → Get-NetTCPConnection 전체 수(Bound 포함)를 기준으로 하고, 실패할 때만 netstat 으로 대체
@@ -241,32 +383,83 @@ def main():
                 return 5
             env = dict(os.environ, VERIFY_ID=mid, E2E_RESULTS=os.path.join(out_dir, 'e2e'),
                        PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(out_dir, 'e2e', 'results.json'))
-            tier_args = ['--grep', 'W4c'] if a.tier == 'slow' else (['--grep', '@verify|@trace', '--grep-invert', 'W4c'] if a.tier == 'fast' else ['--grep', '@verify|@trace'])
-            rc = run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', '_verify', '_trace', *tier_args, '--workers', '1',
+            # 2026-11-06 플랜 3-5: 스냅샷 형상 검사(_snap.spec.ts @snap)를 같은 실행에(알파벳 순 _snap → _trace → _verify · 잠금·입장 동일)
+            tier_args = ['--grep', 'W4c'] if a.tier == 'slow' else (['--grep', '@verify|@trace|@snap', '--grep-invert', 'W4c'] if a.tier == 'fast' else ['--grep', '@verify|@trace|@snap'])
+            spec_files = ['_verify', '_trace', '_snap']
+            if only:
+                # 2026-11-08 (b) 부분 재판정: judge.test_ownership(스펙 본문의 rule_id === 'X' 비교)으로 그 규칙을 판정하는 테스트 제목만 골라 --grep · 스냅샷 규칙이면 _snap 포함
+                import re as _re
+                sys.path.insert(0, HERE); import judge as _judge
+                own = _judge.test_ownership([os.path.join(ROOT, 'Doc', 'e2e', 'specs', '_verify.spec.ts'), os.path.join(ROOT, 'Doc', 'e2e', 'specs', '_trace.spec.ts')])
+                titles = [k[1] for k, v in own.items() if isinstance(k, tuple) and k[0] in ('verify', 'trace') and (v.get('rules') or set()) & only]
+                titles += [pre for rn, pre, suf, v in own.get('_tmpl', []) if (v.get('rules') or set()) & only and pre]
+                # 제목 토큰 보강 — 본문이 rule_id 비교 없이 target 정규식으로 행을 고르는 테스트(저장 세부 'F1·F6' · CRUD '(F1·F2·F4·F6)')는 제목의 규칙 토큰으로 잡는다
+                titles += [k[1] for k in own if isinstance(k, tuple) and any(_re.search(rf'(?<![A-Z0-9]){_re.escape(r_)}(?![A-Z0-9])', k[1]) for r_ in only)]
+                snap_rules = {'H4', 'A5', 'G4', 'K4', 'H6'} & only
+                smoke_rules = {'SC1', 'SC2', 'G3', 'K1', 'K2', 'K4', 'H7', 'J1', 'J2', 'C1', 'I2', 'A5'} & only  # smoke/auth 요약으로 판정되는 규칙 — smoke 스펙을 다시 돌린다(prereq 는 최신이면 건너뛰므로)
+                if smoke_rules:
+                    # J1/J2/C1 은 auth·authcrud 스펙 결과로 판정된다 — smoke 만 돌리면 요약의 authcrud 행은 이전 실행 것이 남는다(2026-11-08 16:3x SCP0122 실측: 노트 없음 = 미실행)
+                    kinds = ['smoke'] + (['auth', 'authcrud'] if {'J1', 'J2', 'C1'} & smoke_rules else [])
+                    print(f"[INFO] --only {','.join(sorted(smoke_rules))} 는 smoke/auth 요약 판정 — {'·'.join(kinds)} 재실행", flush=True)
+                    for kind_ in kinds:
+                        run(['cmd', '/c', os.path.join(ROOT, 'tools', 'E2E', 'run-e2e.cmd'), kind_, mid])
+                if not titles and not snap_rules and smoke_rules:
+                    titles = ['__smoke_only__']  # @verify/@trace 는 돌릴 것이 없음 — grep 이 아무것도 안 고르게
+                if not titles and not snap_rules:
+                    print(f"[FAIL] --only {','.join(sorted(only))}: 이 규칙을 판정하는 @verify/@trace 테스트를 스펙 본문에서 찾지 못함(rule_id === 비교 없음) — 전체 실행(run_verify.py {mid}) 또는 규칙 ID 확인"); return 3
+                grep = '|'.join(_re.escape(t) for t in sorted(set(titles))) + ('|@snap' if snap_rules else '')
+                tier_args = ['--grep', grep]; spec_files = ['_verify', '_trace'] + (['_snap'] if snap_rules else [])
+                print(f"[INFO] --only {','.join(sorted(only))} → 테스트 {len(set(titles))}개{' + @snap' if snap_rules else ''} 만 재실행(이전 E2E 결과는 행 단위 병합 보존): " + ' | '.join(sorted(set(titles))[:6])[:400], flush=True)
+            rc = run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', *spec_files, *tier_args, '--workers', '1',
                       '--reporter=list,json'], env=env, cwd=E2E)
             if not os.path.exists(res_json):
                 print(f'[FAIL] E2E 결과 파일 없음({res_json}) — Playwright 가 판정 없이 끝남(rc={rc}). 로그 확인')
                 return 3
             print(f'E2E 종료 rc={rc} (테스트 실패는 판정 결과로 원장에 반영된다)')
-            if a.tier in ('all', 'slow'):  # 엔진 갭 팝업·권한 검사기 — 오래 걸려 fast 에서는 돌지 않는다. 화면 잠금을 쥔 채 실행(2026-11-01)
+            if only:
+                stage('eg', f"건너뜀(--only {','.join(sorted(only))} — 팝업·권한 검사기는 전체 실행에서만)", m=0)
+            elif a.tier in ('all', 'slow'):  # 엔진 갭 팝업·권한 검사기 — 오래 걸려 fast 에서는 돌지 않는다. 화면 잠금을 쥔 채 실행(2026-11-01)
+                stage('eg')
                 run([py, os.path.join(HERE, 'eg_chain.py'), mid, '--asis', asis])
+            else:
+                stage('eg', '건너뜀(--tier fast — 팝업·권한 검사기는 slow/all 에서만)', m=0)
         finally:
             subprocess.run(['node', 'runlock.js', 'release', 'verify', mid], cwd=E2E, capture_output=True)
-            subprocess.run(['node', 'runlock.js', 'release', 'slot', str(slot)], cwd=E2E, capture_output=True)
+            if slot is not None:
+                subprocess.run(['node', 'runlock.js', 'release', 'slot', str(slot)], cwd=E2E, capture_output=True)
     else:
-        print('\n[INFO] --skip-e2e — E2E 판정 행은 미검증(NOT_RUN)으로 남는다')
+        why = '--skip-e2e' if a.skip_e2e else '앱 계정 접근 불가 객체 차단'
+        stage('e2e', f'건너뜀({why})', m=0)
+        stage('eg', f'건너뜀({why})', m=0)
+        print('\n[INFO] --skip-e2e — E2E 판정 행은 미검증(NOT_RUN)으로 남는다' if a.skip_e2e else '\n[INFO] 차단 — E2E 판정 행은 미검증(차단)으로 남는다')
 
+    # 2026-11-06 플랜 2-4 차등 검증 — E2E 가 포착한 call-proc 인자(Doc/verify/<ID>/calls · a1_live 폴백)로 AS-IS SP ↔ TO-BE PROC 를 같은 조건으로 실행해 키 기반 비교.
+    #   AS-IS 는 readOnly 접속 · TO-BE 는 rollback · GET 만. --skip-e2e 여도 실행(포착이 없으면 SKIP 행). 결과는 원장 ASIS_DIFF 행 + e2e_results 로 반입(판정은 judge).
+    if a.static or only:
+        stage('diff', '건너뜀(--static — AS-IS SP 실행·포착 인자 없음)' if a.static else f"건너뜀(--only {','.join(sorted(only))} — 차등 검증은 전체 실행에서만)", m=0)
+    else:
+        stage('diff')
+        run([py, os.path.join(HERE, 'diff_verify.py'), mid])
+        run([py, os.path.join(HERE, 'diff_ingest.py'), mid])
     # W1 콤보 AS-IS 원천 비교 — E2E 덤프(combo_runtime.json)가 있으면 AS-IS DB 에서 원천을 실행해 B4·B3 판정 근거를 만든다(실패해도 다음 단계 진행 = 판정필요로 남음)
+    stage('post')
     if os.path.exists(os.path.join(ROOT, 'Doc', 'verify', mid, 'combo_runtime.json')):
         run([py, os.path.join(HERE, 'combo_oracle.py'), mid, '--asis', asis])
+    else:
+        sub('combo_oracle.py', 'E2E 콤보 덤프 combo_runtime.json 없음')
     # CRUD 실제 저장 마커 행 정리(사내 DB) — 백업·건수 단언·SQL 기록. 정의 없는 화면은 SKIP(2026-10-24 BOD 잔존 행 사고 재발 방지)
     if not a.skip_e2e and not blocked:
         run([py, os.path.join(HERE, 'restore_touched.py'), mid])  # 시험이 원복 못 한 기존 행 DB 복원(T39)
         run([py, os.path.join(HERE, 'cleanup_marker.py'), mid])
+    else:
+        sub('restore_touched.py', 'E2E 미실행'); sub('cleanup_marker.py', 'E2E 미실행')
     # F8 감사 필드 · F7 저장 연계 테이블 — 정리 백업(실제 저장이 남긴 행) ↔ AS-IS 저장 SP DML 대상 (2026-10-27)
     run([py, os.path.join(HERE, 'save_audit.py'), mid, '--asis', asis])
     run([py, os.path.join(HERE, 'sp_branch_check.py'), mid])  # 저장 SP 검증 분기 정적 대조(EG161)
-    run([py, os.path.join(HERE, 'a1_live.py'), mid])  # 화면 실전송 인자 AS-IS 조회 대조(EG006)
+    if a.static:
+        sub('a1_live.py', '--static(AS-IS SP 실행 없음)')
+    else:
+        run([py, os.path.join(HERE, 'a1_live.py'), mid])  # 화면 실전송 인자 AS-IS 조회 대조(EG006)
     run([py, os.path.join(HERE, 'sp_dml_check.py'), mid])  # 저장 SP 쓰기 컬럼 대조(EG238·EG230·EG223)
     run([py, os.path.join(HERE, 'i18n_static.py'), mid])  # 다국어 정적 점검(EG451·EG356·EG364)
     run([py, os.path.join(HERE, 'lookup_check.py'), mid])  # Lookup 편집 후보 ↔ 기준 코드(EG066)
@@ -282,6 +475,8 @@ def main():
     run([py, os.path.join(HERE, 'master_sweep.py'), mid])  # 기준정보 키 존재·활성 후보(EG455)
     run([py, os.path.join(HERE, 'titleset_check.py'), mid])  # 사용자 칸 설정 이관·필수 컬럼(EG025·EG399)
     run([py, os.path.join(HERE, 'eg_ingest.py'), mid])  # 팝업·권한 검사기 결과 → 원장 행·판정 입력
+    if run([py, os.path.join(HERE, 'oracle_class.py'), '--check', mid]):  # 2026-11-06 W8-A: 원장 규칙 ID 가 오라클 분류 마스터에 전부 있는지(없으면 HOLD → 판정필요 게이트)
+        GATE_WARN.append(f'오라클 분류 마스터 누락 — python tools/Harness/verify/oracle_class.py --init 으로 Doc/verify/_oracle_class.csv 갱신(미분류 규칙의 FAIL 은 판정필요로 내려감)')
     if run([py, os.path.join(HERE, 'judge.py'), mid]):
         return 7
     # 판정 반입 후 추적표 재계산 + 원장 TRACE 행(행·진입점 집계·정적 판정) 갱신 → 다시 반입(2026-10-27: E2E 전에 만든 집계 행이 낡은 채 남아 판정필요로 보이던 결함)
@@ -296,18 +491,44 @@ def main():
     # 커버리지(2026-10-30 WP8-b): 규칙별 측정/미실행/NA 집계 + AS-IS 에 기능이 있는데 측정 0 인 규칙(SUSPECT_NA100) — 봉투 summary.coverage · hold
     global COVERAGE_RC
     COVERAGE_RC = run([py, os.path.join(HERE, 'coverage.py'), mid, '--asis', asis])
+    if a.static:
+        # 2026-11-08 정적 게이트 — CheckList 판을 만들지 않고 정적 판정 요약만(static_gate.md/json) · exit 2 = 정적 FAIL ≥1(생성·보정 직후 게이트)
+        stage('docs', '--static(정적 게이트 요약 · CheckList 판 생성 안 함)', m=1)
+        rc_sg = run([py, os.path.join(HERE, 'static_gate.py'), mid])
+        stage_end()
+        print(f"[{'FAIL' if rc_sg == 2 else 'OK'}] 정적 게이트 — Doc/verify/{mid}/static_gate.md" + (' · 정적 FAIL 있음(보완 뒤 다시 --static)' if rc_sg == 2 else ' · 정적 FAIL 0 → E2E 포함 정규 실행(run_verify.py ' + mid + ') 가능'))
+        return rc_sg
+    stage('docs')
     cmd = [py, os.path.join(HERE, 'make_verify_docs.py'), mid] + (['--scope', a.scope] if a.scope else [])
     if run(cmd):
         return 8
-    # 검사기 회귀 게이트(2026-10-29): 사용자가 '판정오류/중복/대상아님' 으로 판정한 행이 검사기에서 다시 FAIL/별도 항목으로 나오면 여기서 드러난다(위반은 결과 봉투·콘솔)
-    #   2026-10-30: 놓친 결함 오라클(_missed_oracle.csv) 포함 — 위반이면 rc 10 으로 중단(CheckList 는 만들어졌지만 검사기가 알려진 결함을 못 잡거나 허위 FAIL 을 냈다는 뜻)
+    # 2026-11-06 사용자 지시: "CheckList 실제 생성 시 오류가 발생하면 오류로, 그 외에는 오류가 발생하지 않도록" —
+    #   종료코드 ≠ 0 은 CheckList·ActionItemList 를 못 만든 경우만. 문서 생성 여부는 make_verify_docs rc 가 아니라 이번 실행이 쓴 xlsx 로 확인한다.
+    made = docs_made_since(mid, STARTED)
+    if made is not True:
+        print(f'[ERROR] 문서 생성 확인 실패 — {made} (make_verify_docs rc 0 이지만 이번 실행의 CheckList·ActionItemList xlsx 없음)')
+        return 8
+    # 검사기 회귀 게이트(2026-10-29)·커버리지 게이트(2026-10-30) — 문서가 만들어진 뒤의 검사기 품질 신호다. 2026-11-06 부터 종료코드 10(오류)이 아니라 경고:
+    #   콘솔 '⚠ 경고(오류 아님)' + 결과 봉투 warnings[] 에 남긴다(VM 은 성공으로 표시 · 내용은 봉투·로그에서 확인).
     rc_reg = run([py, os.path.join(HERE, 'regress.py'), mid, '--harvest'])
+    rc_cr = run([py, os.path.join(HERE, 'checker_regress.py'), mid])  # P3 검사기 자체 회귀(골든 기준 있을 때만 대조 · 경고 · 2026-11-06: 승인 스냅샷 악화는 exit 2)
+    run([py, os.path.join(HERE, 'precision.py'), mid])  # 조치필요 정밀도 이력(2026-11-06 플랜 G1)
+    if rc_cr:
+        GATE_WARN.append(f'검사기 자체 회귀 — Doc/verify/{mid}/_checker_regress.md: 승인된 스냅샷(골든)이 FAIL 로 바뀜(화면 변경 또는 검사기 결함 — 사람 확인)')
     if rc_reg:
-        print('⚠ 검사기 회귀 위반 — Doc/verify/_regress_report.md 확인(검사기 결함 재발 또는 알려진 결함 미검출) — 이 CheckList 는 검사기 결함을 안고 있다')
-        return 10
+        GATE_WARN.append(f'검사기 회귀 오라클 위반 — Doc/verify/{mid}/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)')
     if COVERAGE_RC:
-        print(f'⚠ 커버리지 게이트 — Doc/verify/{mid}/coverage.csv SUSPECT_NA100: AS-IS 에 기능이 있는데 측정 0 인 규칙이 있다(검사기 대상 생성·측정 경로 누락)')
-        return 10
+        sus = []
+        try:
+            with open(os.path.join(ROOT, 'Doc', 'verify', mid, 'coverage.json'), encoding='utf-8') as f:
+                sus = json.load(f).get('suspect_na100') or []
+        except Exception:
+            pass
+        GATE_WARN.append(f"커버리지 게이트 SUSPECT_NA100 {', '.join(sus) or '(규칙 목록 읽기 실패)'} — Doc/verify/{mid}/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)")
+    stage_end()
+    for w in GATE_WARN:
+        print(f'⚠ 경고(오류 아님) — {w}')
+    print(f"[OK] CheckList 생성 완료 — {made_docs_text(mid)}")
     print('\n다음: ActionItemList xlsx 를 확인한 뒤 보완 범위(🧭 보완 범위 설정)를 정하고 🛠️/🧯 로 보완을 적용한다.')
     return 0
 
@@ -335,7 +556,7 @@ def write_envelope(rc):
         except Exception:
             pass
     base = {'producer': 'run_verify', 'id': mid, 'skip_e2e': skip, 'started': started}  # started = 정합검증 시작 시각(verify_if_stale 최신 판정 기준, 2026-10-28)
-    if rc != 0 and rc != 10:  # rc 10 = 문서까지 만든 뒤 회귀 오라클 위반 — 결과 봉투는 완료로 쓰되 note 에 위반을 남긴다(아래)
+    if rc != 0 and rc != 10:  # rc 10 = (2026-11-05 까지) 문서까지 만든 뒤 게이트 위반 — 2026-11-06 부터는 rc 0 + warnings[]
         envelope.write(out, dict(base, state='error' if rc in (2, 3, 4, 5) else 'failed', verdict=None, why=f"exit {rc} — 멈춘 단계: {STEP_OF_RC.get(rc, '?')}",
                                  evidence=[{'kind': 'exec', 'ref': 'tools/Harness/verify/run_verify.py'}]))
         return
@@ -365,21 +586,138 @@ def write_envelope(rc):
         pass
     verdict = 'fail' if cnt.get('FAIL', 0) else ('hold' if unv or pend or cov.get('suspect_na100') else 'pass')
     ev = [{'kind': 'exec', 'ref': 'tools/Harness/verify/run_verify.py'}] + ([{'kind': 'test', 'ref': f'Doc/verify/{mid}/e2e_results.json'}] if not skip else [])
-    envelope.write(out, dict(base, state='completed', verdict=verdict, issues=fails[:300],
+    envelope.write(out, dict(base, state='completed', verdict=verdict, issues=fails[:300], warnings=list(GATE_WARN),
                              summary={'rows': len(rows), 'PASS': cnt.get('PASS', 0), 'FAIL': cnt.get('FAIL', 0), '판정필요': pend, '미검증': unv, '해당없음': cnt.get('NA', 0),
                                       'AI판단만_강등': demoted, 'grade': gcnt, 'fail_listed': min(len(fails), 300), 'coverage': cov},
                              docs=docs, evidence=ev, note=('E2E 미실행(--skip-e2e) — E2E 행은 이전 결과 또는 미검증' if skip else '') + (f'문서 단계 재개(--resume-docs {STARTED}) — E2E·판정은 원 실행 {started} 결과' if resume else '')
-                             + ('⚠ 검사기 회귀 오라클 위반(rc 10) — Doc/verify/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발 · 이 CheckList 는 검사기 결함을 안고 있음' if rc == 10 else '')))
+                             + ('⚠ 경고(오류 아님): ' + ' / '.join(GATE_WARN) if GATE_WARN else '')))
     print(f"결과 봉투: {os.path.relpath(out, ROOT)} — verdict {verdict} · FAIL {cnt.get('FAIL', 0)} · 판정필요 {pend} · 미검증 {unv}" + (f' · AI 판단만 강등 {demoted}' if demoted else ''))
 
 
 STARTED = ''
 COVERAGE_RC = 0
+GATE_WARN = []  # 2026-11-06: 문서 생성 뒤 검사기 게이트 경고(종료코드에 반영하지 않음 · 봉투 warnings)
+
+
+def load_now():
+    """실측 (CPU 사용률 %, 여유 메모리 MB) — Win32_Processor.LoadPercentage 평균 · Win32_OperatingSystem.FreePhysicalMemory. 실패 = (None, None).
+    11-06 10:18:53 실측 1회 3.3초(CPU 21 · 여유 5,657MB / 32,327MB)."""
+    ps = ("$c=(Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average;"
+          "$o=Get-CimInstance Win32_OperatingSystem; '{0} {1}' -f $c,[int]($o.FreePhysicalMemory/1024)")
+    try:
+        o = subprocess.run(['powershell', '-NoProfile', '-Command', ps], capture_output=True, text=True, timeout=60).stdout.split()
+        return float(o[0]), int(o[1])
+    except Exception:
+        return None, None
+
+
+def _alive(pid):
+    if not pid:
+        return False
+    try:
+        return f'"{pid}"' in subprocess.run(['tasklist', '/FI', f'PID eq {pid}', '/FO', 'CSV', '/NH'], capture_output=True, text=True, timeout=20).stdout
+    except Exception:
+        return True  # 지연·오류를 '죽음' 으로 보지 않는다(runlock 과 같은 보수 판정)
+
+
+def running_e2e(mid):
+    """지금 E2E 를 돌리는 다른 화면(runlock 'verify <ID>' 잠금 · 주인 프로세스 생존)"""
+    import glob
+    out = []
+    for f in glob.glob(os.path.join(ROOT, 'Doc', 'e2e', '_run.verify.*.lock')):
+        k = os.path.basename(f)[len('_run.verify.'):-len('.lock')]
+        if k.upper() == mid.upper():
+            continue
+        try:
+            with open(f, encoding='utf-8') as fh:
+                if _alive(int(json.load(fh).get('pid') or 0)):
+                    out.append(k)
+        except Exception:
+            pass
+    return out
+
+
+def admit_by_load(mid, cfg):
+    """2026-11-06 부하 기반 동시 E2E 입장(verifyMaxConcurrent 0).
+    · 다른 E2E 가 없으면 즉시 입장
+    · 있으면 CPU 사용률 < verifyLoadCpuMax(기본 80%) 이고 여유 메모리 ≥ verifyLoadMemFreeMinMB(기본 3072MB) 일 때만 입장 — 아니면 30초마다 다시 잼
+    · 입장 잠금 Doc/e2e/_run.admit.lock(원자적 생성): 입장한 실행이 verifyAdmitRampSec(기본 120초) 동안 쥔다 — 방금 시작한 E2E 의 부하가 오르기 전에
+      다른 화면들이 같은 순간 '여유 있음' 을 보고 한꺼번에 들어오는 것을 막는다(주인 죽음·유효 시각 지남 = 해제)
+    · 최대 대기 verifyLoadWaitMaxMin(기본 240분) 초과 = 사유 문자열(호출자 rc 4). 측정 실패면 다른 E2E 가 1개 이하일 때만 입장(보수적)"""
+    cpu_max = float(cfg.get('verifyLoadCpuMax', 80)); mem_min = int(cfg.get('verifyLoadMemFreeMinMB', 3072))
+    ramp = int(cfg.get('verifyAdmitRampSec', 120)); wait_max = int(cfg.get('verifyLoadWaitMaxMin', 240)) * 60
+    adm = os.path.join(ROOT, 'Doc', 'e2e', '_run.admit.lock'); waited, last_why, last_print = 0, '', -1
+    while True:
+        got = False
+        try:
+            fd = os.open(adm, os.O_CREAT | os.O_EXCL | os.O_WRONLY); os.close(fd); got = True
+        except FileExistsError:
+            try:
+                with open(adm, encoding='utf-8') as fh:
+                    info = json.load(fh)
+                if time.time() > float(info.get('until') or 0) or not _alive(int(info.get('pid') or 0)):
+                    os.remove(adm); continue
+                why = f"다른 화면({info.get('id')})이 방금 시작해 부하 상승 대기 중({int(float(info['until']) - time.time())}초 남음)"
+            except (json.JSONDecodeError, ValueError):
+                why = '다른 화면이 입장 중'  # 막 생성되어 내용이 아직 없음
+            except FileNotFoundError:
+                continue
+        if got:
+            others = running_e2e(mid)
+            cpu, mem = load_now() if others else (None, None)
+            if not others:
+                ok, why = True, '다른 E2E 없음'
+            elif cpu is None:
+                ok, why = len(others) <= 1, f'부하 측정 실패 — 실행 중 {len(others)}개({",".join(others)})' + (' · 1개 이하라 입장' if len(others) <= 1 else ' · 측정 복구까지 대기')
+            else:
+                ok = cpu < cpu_max and mem >= mem_min
+                why = f'실행 중 {len(others)}개({",".join(others)}) · CPU {cpu:.0f}%(기준 <{cpu_max:.0f}) · 여유 메모리 {mem}MB(기준 ≥{mem_min})'
+            if ok:
+                with open(adm, 'w', encoding='utf-8') as fh:
+                    json.dump({'pid': os.getpid(), 'id': mid, 'at': time.time(), 'until': time.time() + ramp}, fh)
+                print(f"[INFO] {mid} E2E 시작 — {why}{f' · {waited // 60}분 {waited % 60}초 대기 후' if waited else ''} · 다음 화면 입장은 {ramp}초 뒤부터(부하 반영)", flush=True)
+                return True
+            os.remove(adm)
+        if why != last_why or waited - last_print >= 600:
+            print(f'[WAIT] {mid} 부하 기준 초과·입장 대기 — {why} · 30초 뒤 다시 잼(최대 {wait_max // 60}분)', flush=True)
+            last_why, last_print = why, waited
+        if waited >= wait_max:
+            return f'{wait_max // 60}분 대기 — 마지막 사유: {why}'
+        time.sleep(30); waited += 30
+
+
+def _latest_doc(mid, kind):
+    import glob
+    fs = sorted(glob.glob(os.path.join(ROOT, 'Doc', 'CheckList', f'{mid}_*_{kind}_v*.xlsx')), key=os.path.getmtime)
+    return fs[-1] if fs else ''
+
+
+def docs_made_since(mid, started):
+    """이번 실행(started 이후)이 CheckList·ActionItemList xlsx 를 둘 다 썼으면 True, 아니면 사유 문자열."""
+    import datetime
+    try:
+        t0 = datetime.datetime.strptime(started, '%Y-%m-%d %H:%M:%S').timestamp() - 2
+    except Exception:
+        t0 = 0
+    miss = []
+    for kind in ('CheckList', 'ActionItemList'):
+        f = _latest_doc(mid, kind)
+        if not f:
+            miss.append(f'{kind} 파일 없음')
+        elif os.path.getmtime(f) < t0:
+            miss.append(f"{kind} 최신본이 이번 실행 이전({datetime.datetime.fromtimestamp(os.path.getmtime(f)).strftime('%m-%d %H:%M')}) — {os.path.basename(f)}")
+    return True if not miss else ' · '.join(miss)
+
+
+def made_docs_text(mid):
+    return ' · '.join(os.path.relpath(_latest_doc(mid, k), ROOT).replace('\\', '/') for k in ('CheckList', 'ActionItemList') if _latest_doc(mid, k))
 
 if __name__ == '__main__':
     import datetime
     STARTED = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     rc = main()
+    stage_end()
+    timing_write()
     try:
         write_envelope(rc)
     except Exception as e:  # 봉투 기록 실패가 본 작업 결과를 바꾸지 않게 — 단, 알린다

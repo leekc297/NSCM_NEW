@@ -5,6 +5,7 @@ import { useClearAppData } from '@shared/hooks';
 import { InputField, Button } from '@shared/lges';
 import { useSessionStore } from '@shared/stores';
 
+import { goSsoLogin, IS_SSO_ONLY } from '../core/ssoLogin';
 import { useMDIStore } from '../mdi/useMDIStore';
 
 import styles from './Home.module.scss';
@@ -107,6 +108,18 @@ export const HomeNscm = () => {
   const handleDelete = (mnuId: string) => {
     toggleFavorite(mnuId, false);
   };
+
+  // 미로그인(운영): ID 로그인 폼은 BACKDOOR_PATH 로만 노출한다. 부팅 시 자동 SSO 이동이 막혔거나
+  //   로그아웃 직후에 여기 남으므로 SSO 진입 버튼만 둔다(core/ssoLogin.ts).
+  if (!isLogin && IS_SSO_ONLY) {
+    return (
+      <div className={styles.homeWrapper}>
+        <div className={styles.devLogin}>
+          <Button onClick={goSsoLogin}>SSO Login</Button>
+        </div>
+      </div>
+    );
+  }
 
   // 미로그인: 개발용 로그인 폼만 노출
   if (!isLogin) {

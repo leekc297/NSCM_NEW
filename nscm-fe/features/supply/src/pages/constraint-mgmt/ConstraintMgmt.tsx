@@ -118,7 +118,7 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.LOOKUP_MASTER],
   });
 
-  // 하단은 row-context lazy fetch — 마스터를 더블클릭해 filters 가 세팅될 때만 발사한다.
+  // 하단은 row-context lazy fetch — 마스터를 클릭해 filters 가 세팅될 때만 발사한다.
   const { data: detailData } = useTabProcQuery<MENU_ID, SHEETS.LOOKUP_DETAIL>({
     menuId: MENU_ID,
     sheetName: SHEETS.LOOKUP_DETAIL,
@@ -385,6 +385,18 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
+  /**
+   * 마스터에서 다른 Lookup Type 을 고르기 전 확인. 하단을 다시 조회하면 미저장 변경이 버려지므로
+   * 변경이 있을 때만 MSG00704 로 묻는다(AS-IS 에는 없는 확인, GRID-03).
+   */
+  const confirmDiscardDetail = async () => {
+    if (!GridUtils.isDirty(detailGridRef.current)) return true;
+    return setAlert({
+      type: 'confirm',
+      content: t(MSG.CONFIRM_DISCARD_DETAIL, '_There is data being modified. Would you like to retrieve it?'),
+    });
+  };
+
   const handleSave = () => {
     // dirty 는 react-query 데이터가 아니라 그리드 소스에서 읽는다 — GridAction.addRow 는
     // sourceCollection 에 splice 만 하고 React state 를 건드리지 않아, 응답 데이터로 읽으면
@@ -477,6 +489,7 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
             editTrackerRef={masterEditTrackerRef}
             data={masterRows}
             canEdit={canEdit}
+            confirmDiscardDetail={confirmDiscardDetail}
           />
         </Panel>
         <PanelSeparator className={styles.splitBar} />

@@ -1,0 +1,27 @@
+{
+ "screen": "SSP0025",
+ "generated": "2026-11-09 11:03:59",
+ "vars": {
+  "dtMyDivision": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "MyDivision",
+   "targets": [
+    "GRID:DIVISION_ID",
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SSP0025_ShipmentRequestorPIC.cs:133 ← SSP0025_ShipmentRequestorPIC.cs:45",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtToSite": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "PlantCell",
+   "targets": [
+    "GRID:SITE_DESCRIPTION",
+    "PARAM:PlantSiteByDivision",
+    "SEARCH:clbFromSite"
+   ],
+   "ref": "SSP0025_ShipmentRequestorPIC.cs:141 ← SSP0025_ShipmentRequestorPIC.cs:140",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1"
+  }
+ }
+}

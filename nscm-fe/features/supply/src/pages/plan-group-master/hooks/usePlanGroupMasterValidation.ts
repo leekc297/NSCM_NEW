@@ -1,4 +1,4 @@
-import { CRUD_MSG } from '@foundation/constants';
+import { CRUD_MSG, CRUD_TYPE } from '@foundation/constants';
 import { safeString } from '@foundation/utils';
 import { useMessageStore } from '@shared/stores';
 
@@ -33,6 +33,14 @@ const toGridKey = (row: PlanGroupRow): GridKey => {
     item: rawItem === '' ? ALL_MODEL : rawItem,
   };
 };
+
+// 신규 추가행(pre 둘 다 공백) 판정 — resolveAction 'I' 와 동일 기준(save.ts).
+//   AS-IS W11/W12 는 dtmain(= DB 조회 원본)을 세는데, FarPoint 신규 Insert 행은 저장 트리거 시점에
+//   그 카운트에 들어가지 않아 '기존행만' 기준으로 2개 이상인지 본다(사용자 실측 2026-11-03: AS-IS 는
+//   같은 Line 에 기존 1개 + 신규 1개는 통과, 기존 2개 + 신규 1개=3개째부터 차단). 이를 재현하려면
+//   신규행을 카운트 세트에서 빼야 한다 — 그러지 않으면 TO-BE 가 AS-IS 보다 한 개 일찍 걸린다.
+const isNewRow = (row: PlanGroupRow): boolean =>
+  str(row[COLUMNS.PRE_PLAN_GR_ID]) === '' && str(row[COLUMNS.PRE_PLAN_GR_ITEM_ID]) === '';
 
 const isAllModel = (item: string): boolean => item === ALL_MODEL || item === '';
 
@@ -74,33 +82,41 @@ export const usePlanGroupMasterValidation = () => {
     }
 
     // 그리드 전체(dtmain) 를 비교 세트로 준비 — 편집분이 반영된 현재 source 전체.
-    const gridKeys = allRows.map(toGridKey);
+    //   Delete(F9) 표시 행은 저장되면 사라지므로 뺀다(AS-IS 의 삭제 항목 대상 제외 cs:729 와 같은 뜻, 갭분석 C-17).
+    const liveRows = allRows.filter(
+      row => (row as { CRUD_TYPE?: string }).CRUD_TYPE !== CRUD_TYPE.DELETE
+    );
+    const gridKeys = liveRows.map(toGridKey);
+    // W11/W12 카운트 세트 — 신규 추가행(pre 둘 다 공백)을 제외한 '기존행'만. AS-IS 는 신규 Insert 행을
+    //   dtmain 카운트에 넣지 않아 기존행 기준 2개 이상일 때만 발동한다(isNewRow 주석 참조, 사용자 실측
+    //   2026-11-03). W10(중복키)은 신규행도 중복 대상이라 전체(gridKeys)를 그대로 쓴다.
+    const existingKeys = liveRows.filter(r => !isNewRow(r)).map(toGridKey);
 
     for (const a of triggers) {
       const lk = lineKeyOf(a.row);
       const planGr = str(a.row[COLUMNS.OPMZ_PLAN_GR_ID]);
 
-      // W10 동일키 중복 (TO-BE MSG00060 — AS-IS MSG00443 TO-BE 미등록, GAP-11) — dtmain 에서 Line+PlanGroup+ISNULL(Item,'-') 일치 행수>1 (cs:680-695).
+      // W10 동일키 중복 (TO-BE MSG01427 "중복된 항목이 있습니다." — AS-IS MSG00443 의 등가, 사용자 지정 2026-11-03) — dtmain 에서 Line+PlanGroup+ISNULL(Item,'-') 일치 행수>1 (cs:680-695).
       const dupCount = gridKeys.filter(
         g => g.lineKey === lk && g.planGr === planGr && g.item === a.itemId
       ).length;
-      if (dupCount > 1) return fail(t(MSG.DUPLICATE_KEY, '_Duplicated key exists.'));
+      if (dupCount > 1) return fail(t(MSG.DUPLICATE_KEY, '_Duplicated item exists.'));
 
       // W11 동일 Line·동일 Plan Group 에 All('-')+모델 혼재 금지 (cs:697-721).
-      //   dtmain 에서 Line+PlanGroup 일치 행수>1 이면서 그 중 item 이 '-'/'' 인 행이 있으면 금지.
-      const samePlanGr = gridKeys.filter(g => g.lineKey === lk && g.planGr === planGr);
+      //   기존행(existingKeys)에서 Line+PlanGroup 일치 행수>1 이면서 그 중 item 이 '-'/'' 인 행이 있으면 금지.
+      const samePlanGr = existingKeys.filter(g => g.lineKey === lk && g.planGr === planGr);
       if (samePlanGr.length > 1 && samePlanGr.some(g => isAllModel(g.item))) {
         return fail(
-          t(MSG.ALL_MODEL_MIX, '_Cannot mix All(-) and specific models for the same Line/Plan Group.')
+          t(MSG.ALL_MODEL_MIX, '_동일 Line에 동일Plan Group에 All(-)과 모델을 같이 지정할 수 없습니다.')
         );
       }
 
       // W12 동일 Line 에 Plan Group 2개 이상(지정된 행수>1)이면 All('-') 금지 (cs:723-745).
-      //   dtmain 에서 Line + PlanGroup<>'' 행수>1 이면서 그 중 item 이 '-'/'' 인 행이 있으면 금지.
-      const nonEmptyPlanGr = gridKeys.filter(g => g.lineKey === lk && g.planGr !== '');
+      //   기존행(existingKeys)에서 Line + PlanGroup<>'' 행수>1 이면서 그 중 item 이 '-'/'' 인 행이 있으면 금지.
+      const nonEmptyPlanGr = existingKeys.filter(g => g.lineKey === lk && g.planGr !== '');
       if (nonEmptyPlanGr.length > 1 && nonEmptyPlanGr.some(g => isAllModel(g.item))) {
         return fail(
-          t(MSG.MULTI_PLAN_GROUP_ALL, '_Cannot use All(-) when a Line has multiple Plan Groups.')
+          t(MSG.MULTI_PLAN_GROUP_ALL, '_동일 Line에 2개 이상의 Plan Group을 지정할 경우, All(-)을 사용할 수 없다.')
         );
       }
     }

@@ -1,25 +1,25 @@
 # SCP0007 — To-Be Fact Pack 요약
 
 - page_key: `supply/bod` · feature: supply · As-is Fact Pack 있음
-- 파일 13 · 엔드포인트 호출 11 (미해결 0, 주석 속 1) · 이벤트 24 · 컴포넌트 사용 59 · 하드코딩 컬럼 0 · 메시지 27
+- 파일 13 · 엔드포인트 호출 11 (미해결 0, 주석 속 1) · 이벤트 25 · 컴포넌트 사용 59 · 하드코딩 컬럼 0 · 메시지 27
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/bod/bod.constants.ts | constants | 161 |
-| features/supply/src/pages/bod/Bod.tsx | page | 330 |
+| features/supply/src/pages/bod/Bod.tsx | page | 331 |
 | features/supply/src/pages/bod/bod.types.ts | types | 30 |
 | features/supply/src/pages/bod/bod.util.ts | other | 173 |
 | features/supply/src/pages/bod/components/BodForm.tsx | component | 206 |
-| features/supply/src/pages/bod/components/BodGrid.tsx | component | 644 |
+| features/supply/src/pages/bod/components/BodGrid.tsx | component | 665 |
 | features/supply/src/pages/bod/components/modals/bod-distribution-route-popup.constants.ts | constants | 19 |
 | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.module.scss | component | 35 |
 | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | component | 320 |
 | features/supply/src/pages/bod/components/modals/bodDistributionRoutePopupStore.ts | store | 63 |
 | features/supply/src/pages/bod/index.ts | index | 2 |
 | features/supply/src/pages/bod/useBodStore.ts | store | 131 |
-| features/supply/src/pages/bod/__asis-mapping__.md | mapping | 230 |
+| features/supply/src/pages/bod/__asis-mapping__.md | mapping | 228 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
@@ -27,8 +27,8 @@
 | SCP0007/bod//call-proc | hook | 1 | Y | Bod.tsx:56 |
 | SCP0007/countryCity//call-proc | hook | 1 | Y | Bod.tsx:80 |
 | /SCP0007/bod/SAVE/call-proc | http | 1 | Y | Bod.tsx:111 |
-| (useTabComboQueries) | hook | 3 | Y | BodForm.tsx:37 BodGrid.tsx:166 BodDistributionRoutePopup.tsx:62 |
-| SCP0007/routeCnt/SEARCH/call-proc | callProc | 1 | Y | BodGrid.tsx:365 |
+| (useTabComboQueries) | hook | 3 | Y | BodForm.tsx:37 BodGrid.tsx:173 BodDistributionRoutePopup.tsx:62 |
+| SCP0007/routeCnt/SEARCH/call-proc | callProc | 1 | Y | BodGrid.tsx:383 |
 | SCP0005/route//call-proc | hook | 1 | Y | BodDistributionRoutePopup.tsx:116 |
 | /admin/menu/SCP0005/column | http | 1 | Y | bodDistributionRoutePopupStore.ts:50 |
 | /admin/menu/SCP0007/column | http | 1 | Y | useBodStore.ts:99 |
@@ -44,8 +44,8 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| BodGrid | onRouteCellDblClick | handleRouteCellDblClick | jsx | features/supply/src/pages/bod/Bod.tsx | 311 |
-| BodDistributionRoutePopup | onSelect | handleRouteSelect | jsx | features/supply/src/pages/bod/Bod.tsx | 325 |
+| BodGrid | onRouteCellDblClick | handleRouteCellDblClick | jsx | features/supply/src/pages/bod/Bod.tsx | 312 |
+| BodDistributionRoutePopup | onSelect | handleRouteSelect | jsx | features/supply/src/pages/bod/Bod.tsx | 326 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 71 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 86 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 102 |
@@ -55,12 +55,13 @@
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 166 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 180 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 196 |
-| g | updatedLayout | apply | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 255 |
-| g | updatedLayout | apply | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 275 |
-| grid | beginningEdit | handler | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 475 |
-| grid | formatItem | handler | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 596 |
-| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 638 |
-| DataGrid | pastedCell | handleCellEdit | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 639 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 262 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 282 |
+| grid | beginningEdit | handler | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 493 |
+| grid | formatItem | handler | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 616 |
+| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 658 |
+| DataGrid | pastedCell | handleCellEdit | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 659 |
+| DataGrid | initialized | <arrow> setGridReady | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 661 |
 | g.hostElement? | dblclick | onDbl | addEventListener | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 148 |
 | SearchArea | onSearch | handleSearch | jsx | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 174 |
 | Button | onClick | <arrow> setRegionMode | jsx | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 209 |
@@ -133,7 +134,7 @@
 | code | 저장 전 행 단위 업무 검증 — AS-IS SaveData_Main(SCP0007_BOD.cs L677-782) 중 필수값(공통 checkRequiredOfSpread 로 이미 커버되는 항목 제외) 이외의 BOD 고유 규칙만 이식한다. 첫 위반 1건만 반환(AS-IS 도 위반 즉시 return). Monday/Sunday 위반 시 AS-IS 처럼 해당 셀 값을 자동 보정(가까운 월/일요일)하고 실패를 반환 — 사용자가 보정된  | features/supply/src/pages/bod/bod.util.ts | 103 |
 
 ## 10. __asis-mapping__.md 상태
-- 구현: 84
+- 구현: 82
 - 해당없음: 18
 - 미구현: 17
 - 구현(max 99 제외): 1

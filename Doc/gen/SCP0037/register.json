@@ -1,0 +1,76 @@
+{
+  "menuId": "SCP0037",
+  "screenName": "OperationLT",
+  "feature": "supply",
+  "pageDir": "operation-lt",
+  "routePath": "supply/operation-lt",
+  "sheets": [
+    {
+      "sheetName": "Operation LT",
+      "rule": "META+코드연결",
+      "columns": 13,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "<field:dtPlantSiteByDivisionForSpread>",
+        "<field:dtOperationLT>"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0037.P_",
+      "sheet": "Operation LT",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "<field:dtYesOrNo>",
+        "InitControls"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0037.P_",
+      "sheet": "Operation LT",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0037_GET_OPERATION_LT",
+      "asis_sp": "SCP0037_GET_OPERATION_LT",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+      "sheet": "Operation LT",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0037_SAVE_OPERATION_LT",
+      "asis_sp": "SCP0037_SAVE_OPERATION_LT",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT",
+      "sheet": "Operation LT",
+      "btn": "SAVE"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

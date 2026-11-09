@@ -54,8 +54,11 @@ export const MSG = {
   COPY_MONTH: 'MSG01461', // 전 월 데이터를 금 월로 복사 (Copy Type 팝업 안내)
 } as const;
 
-/** Bucket — To-Be 문서(SCP0098)에서 조회조건이 삭제되어 DAILY 고정. */
-export const DEFAULT_BUCKET = 'DAILY' as const;
+/**
+ * Bucket — To-Be 문서(SCP0098)에서 조회조건이 삭제되어 고정. 사용자 지시 2026-11-04: MONTHLY(M) 로 변경
+ *   (이전 2026-10-28 DAILY 결정 폐기). SP p_bucket='M' + visibleKinds→M_ 단일(월) 컬럼 표시.
+ */
+export const DEFAULT_BUCKET = 'MONTHLY' as const;
 
 /** Measure 코드 — SCM_MST_SHEET_MEASURE 4행(DB 실측). 편집 축 분기(D_ / M_)의 단일 출처. */
 export const MEASURE = {

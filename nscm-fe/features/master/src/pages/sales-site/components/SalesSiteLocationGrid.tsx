@@ -89,6 +89,8 @@ export const SalesSiteLocationGrid = ({
         editTrackerRef={editTrackerRef}
         itemsSource={data}
         staticColumns={staticColumns[RESPONSE_SET.LOCATION] ?? []}
+        // 읽기전용 자동 잠금을 location 시트 SAVE 권한으로 판정(메뉴 단위면 다른 시트 SAVE 와 섞임)
+        saveAuth={{ sheetName: SHEETS.LOCATION }}
         gotFocus={handleFocus}
         dblClick={handleDblClick}
       />

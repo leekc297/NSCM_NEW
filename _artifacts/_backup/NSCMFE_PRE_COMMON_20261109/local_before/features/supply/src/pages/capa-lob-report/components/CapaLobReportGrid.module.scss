@@ -1,0 +1,14 @@
+// Bottleneck 셀 배경 — AS-IS `Color.LightPink`(cs:132) = #FFB6C1.
+//   화면설계서 `1.5 주요 업무 규칙` R63 "병목 공정 및 기간은 붉게 표시" 가 업무 요구사항으로 명시돼 있어
+//   편집 상태색(hook #95 White/Yellow/Gray) 적용 대상이 아니다 — Report 고유 의미색이다
+//   (goal.md BLK-9 RESOLVED 2026-09-25).
+//   inline style 금지 룰(convert-core §2.1 #5) 때문에 색값은 여기 SCSS 가 단일 출처다.
+.bottleneckCell {
+  background-color: #ffb6c1 !important;
+}
+
+// 음수 값 글자색 — AS-IS `CustomCell.NegativeRed=true`(SPEXT:8~65 / 03 R-08 / V-21).
+//   톤은 선례 화면(mkt-fcst / demand-manager / etc-sales-reports)과 동일한 #c0392b 를 쓴다.
+.negativeValue {
+  color: #c0392b !important;
+}

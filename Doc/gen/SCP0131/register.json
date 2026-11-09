@@ -1,0 +1,76 @@
+{
+  "menuId": "SCP0131",
+  "screenName": "SalesSitePriority",
+  "feature": "supply",
+  "pageDir": "sales-site-priority",
+  "routePath": "supply/sales-site-priority",
+  "sheets": [
+    {
+      "sheetName": "Sales Site Priority",
+      "rule": "META+코드연결",
+      "columns": 14,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "InitControls"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0131.P_",
+      "sheet": "Sales Site Priority",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0128_GET_SEARCH_INFO",
+      "asis_sp": "SCP0128_GET_SEARCH_INFO",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSearchInfo"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0131.P_SCP0128_GET_SEARCH_INFO",
+      "sheet": "Sales Site Priority",
+      "btn": "SEARCH_INFO",
+      "allowed_gap": "사용자별 조회조건 저장/복원(G1) → /admin/menu/{MENU}/search-conditions (store fetchStaticColumns 내장)"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0131_GET_SALES_SITE_PRIORITY",
+      "asis_sp": "SCP0131_GET_SALES_SITE_PRIORITY",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0131.P_SCP0131_GET_SALES_SITE_PRIORITY",
+      "sheet": "Sales Site Priority",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0131_SAVE_SALES_SITE_PRIORITY",
+      "asis_sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0131.P_SCP0131_SAVE_SALES_SITE_PRIORITY",
+      "sheet": "Sales Site Priority",
+      "btn": "SAVE"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

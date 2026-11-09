@@ -1,0 +1,619 @@
+{
+  "id": "SCP0016",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0016",
+  "divCascade": [
+    [
+      "Ver.",
+      "Version."
+    ]
+  ],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Ver.",
+    "Operation group",
+    "PJT",
+    "Model/Nickname",
+    "Electrode",
+    "Period",
+    "Bucket",
+    "Sum"
+  ],
+  "condGone": [],
+  "condNotUse": [
+    {
+      "asis": "clbVersion",
+      "key": "version",
+      "labels": [
+        "Ver.",
+        "Version."
+      ]
+    }
+  ],
+  "page": "WaterfallShipmentPlanFg",
+  "routePath": "supply/waterfall-shipment-plan-fg",
+  "asisName": "WaterfallShipmentPlanFG",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "Div → Div. · 명칭",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "version",
+      "label": "Ver.",
+      "lbl": "LBL00031",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbVersion",
+      "tobeLabel": "Version.",
+      "catalog": "",
+      "labels": [
+        "Ver.",
+        "Version."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "bizType",
+      "label": "Operation group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "BizTypeField",
+      "comboId": "BizTypeByDivision",
+      "popup": false,
+      "asis": "cboBizType",
+      "tobeLabel": "Operation group",
+      "catalog": "Operation group → Operation group",
+      "labels": [
+        "Operation group"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "projectCodes",
+      "label": "PJT",
+      "lbl": "LBL00617",
+      "kind": "popup",
+      "component": "ProjectField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtProject",
+      "tobeLabel": "Project",
+      "catalog": "",
+      "labels": [
+        "PJT",
+        "Project"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemId",
+      "label": "Model/Nickname",
+      "lbl": "LBL00618",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtItem_Id",
+      "tobeLabel": "Model/Nickname",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "elecType",
+      "label": "Electrode",
+      "lbl": "LBL00038",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbElecType",
+      "tobeLabel": "Electrode",
+      "catalog": "Electrode → Electrode",
+      "labels": [
+        "Electrode"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendar",
+      "tobeLabel": "Period",
+      "catalog": "Period → Period",
+      "labels": [
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "bucketType",
+      "label": "Bucket",
+      "lbl": "LBL00710",
+      "kind": "single",
+      "component": "BucketField",
+      "comboId": "BucketType",
+      "popup": false,
+      "asis": "cboBucketType",
+      "tobeLabel": "Bucket",
+      "catalog": "Bucket → Bucket",
+      "labels": [
+        "Bucket"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "sumYn",
+      "label": "Sum",
+      "lbl": "LBL00687",
+      "kind": "check",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkSum",
+      "tobeLabel": "Sum",
+      "catalog": "Sum → (없음) · 공통기능화 검토",
+      "labels": [
+        "Sum"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": {
+    "rows": 3,
+    "spans": 43,
+    "literals": [
+      "SUM"
+    ],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "Shipment Plan FG Waterfall",
+  "asisMapping": "features\\supply\\src\\pages\\waterfall-shipment-plan-fg\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "column",
+      "label": "Column",
+      "lbl": "LBL00711",
+      "kind": "subtitle-custom",
+      "tobe": "COLUMN_SETUP",
+      "asis": "btnColumn"
+    },
+    {
+      "key": "measure",
+      "label": "Measure",
+      "lbl": "LBL00310",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "itemId",
+      "label": "Item Id",
+      "lbl": "LBL01142",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnItem_Id"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Waterfall Shipment Plan",
+      "key": "WATERFALL_SHIPMENT_PLAN",
+      "labels": [
+        "biz_type",
+        "Operation Group",
+        "bod_id",
+        "BOH (To Site)",
+        "Team",
+        "Division",
+        "Electrode Type",
+        "from_site",
+        "From Site",
+        "Incoterms",
+        "Model",
+        "Item Type",
+        "KEY_IDX",
+        "L/T(Day)",
+        "measure",
+        "Measure",
+        "MEASURE_ORDER_NO",
+        "Nick Name",
+        "Origin From Div",
+        "Origin To Div",
+        "Project Code",
+        "Project",
+        "Project Owner",
+        "to_site",
+        "To Site",
+        "to_yyyymmdd",
+        "Trans Mode",
+        "Version"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": false,
+  "hasSpreadTitle": true,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Waterfall Shipment Plan",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0016.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+      "sheet": "Waterfall Shipment Plan",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0016.P_SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0016.P_SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+      "sheet": "spreadTitleIso",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0016.P_SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+      "entries": [
+        "event:this.Load",
+        "event:this.cboBucketType.SelectedIndexChanged",
+        "event:this.dCalendar.ValueChanged",
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0016.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.Load",
+        "event:this.cboBucketType.SelectedIndexChanged",
+        "event:this.dCalendar.ValueChanged",
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "button:FindButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Waterfall Shipment Plan": {
+      "40": [
+        "Div",
+        "Operation Group",
+        "Model",
+        "Nick Name",
+        "Electrode Type",
+        "Origin To Div",
+        "To Site",
+        "BOH (To Site)",
+        "Incoterms",
+        "Team",
+        "PJT Code",
+        "PJT",
+        "PJT Owner",
+        "Item Type",
+        "Origin From Div",
+        "From Site",
+        "Trans Mode",
+        "L/T(Day)",
+        "Ver.",
+        "Measure"
+      ],
+      "81": [
+        "Div",
+        "Operation Group",
+        "Model",
+        "Nick Name",
+        "Electrode Type",
+        "Origin To Div",
+        "To Site",
+        "BOH (To Site)",
+        "Incoterms",
+        "Team",
+        "PJT Code",
+        "PJT",
+        "PJT Owner",
+        "Item Type",
+        "Origin From Div",
+        "From Site",
+        "Trans Mode",
+        "L/T(Day)",
+        "Ver.",
+        "Measure"
+      ],
+      "82": [
+        "Div",
+        "Operation Group",
+        "Model",
+        "Nick Name",
+        "Electrode Type",
+        "Origin To Div",
+        "To Site",
+        "BOH (To Site)",
+        "Incoterms",
+        "Team",
+        "PJT Code",
+        "PJT",
+        "PJT Owner",
+        "Item Type",
+        "Origin From Div",
+        "From Site",
+        "Trans Mode",
+        "L/T(Day)",
+        "Ver.",
+        "Measure"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": {
+    "titles": [
+      {
+        "sp": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+        "members": [
+          "FindData_Main"
+        ]
+      },
+      {
+        "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+        "members": [
+          "GetSpdTitle"
+        ]
+      },
+      {
+        "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "members": [
+          "GetSpdTitle"
+        ]
+      }
+    ],
+    "dbLoop": [
+      "InitSpreadDateColumnISO:420",
+      "InitSpreadDateColumnNotISO:493",
+      "InitSpreadDateColumnNotISO:501"
+    ],
+    "titleSheets": [
+      "spreadTitleIso",
+      "spreadTitle"
+    ],
+    "titlePairs": [
+      {
+        "sheet": "spreadTitleIso",
+        "btn": "SEARCH"
+      },
+      {
+        "sheet": "spreadTitle",
+        "btn": "SEARCH"
+      }
+    ],
+    "staticBindings": [
+      "DIVISION_ID",
+      "BIZ_TYPE_NAME",
+      "ITEM_ID",
+      "NICK_NAME",
+      "ELECTRODE_TYPE",
+      "ORIGIN_TO_DIVISION_ID",
+      "TO_SITE_NAME",
+      "BOH",
+      "INCOTERMS",
+      "DEPT_NAME_KO",
+      "PROJECT_CODE",
+      "PROJECT_NAME",
+      "PROJECT_OWNER",
+      "ITEM_TYPE",
+      "ORIGIN_FROM_DIVISION_ID",
+      "FROM_SITE_NAME",
+      "TRANSPORT_MODE",
+      "LT_DAY",
+      "VERSION_NO",
+      "BIZ_TYPE",
+      "BOD_ID",
+      "FROM_SITE",
+      "KEY_IDX",
+      "MEASURE_ORDER_NO",
+      "TO_SITE",
+      "TO_YYYYMMDD",
+      "MEASURE",
+      "MEASURE_LABEL"
+    ]
+  },
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "MEASURE_SELECT",
+        "SEARCH"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "MEASURE_SELECT",
+      "SEARCH"
+    ],
+    "CAPA Planner": [
+      "SEARCH",
+      "MEASURE_SELECT"
+    ],
+    "DM ADMIN": [
+      "MEASURE_SELECT",
+      "SEARCH"
+    ],
+    "DM Planner": [
+      "MEASURE_SELECT",
+      "SEARCH"
+    ],
+    "DM Viewer": [
+      "MEASURE_SELECT",
+      "SEARCH"
+    ],
+    "FP Planner": [
+      "MEASURE_SELECT",
+      "SEARCH"
+    ],
+    "FP Viewer": [
+      "SEARCH",
+      "MEASURE_SELECT"
+    ],
+    "SCM PI Admin": [
+      "MEASURE_SELECT",
+      "SEARCH"
+    ],
+    "SCM Viewer": [
+      "SEARCH",
+      "MEASURE_SELECT"
+    ],
+    "SCP Planner": [
+      "MEASURE_SELECT",
+      "SEARCH"
+    ],
+    "SCP Tester": [
+      "MEASURE_SELECT",
+      "SEARCH"
+    ],
+    "SSP ADMIN": [
+      "SEARCH",
+      "MEASURE_SELECT"
+    ],
+    "SSP Planner": [
+      "MEASURE_SELECT",
+      "SEARCH"
+    ],
+    "SSP Viewer": [
+      "SEARCH",
+      "MEASURE_SELECT"
+    ]
+  },
+  "menuBtnCodes": [
+    "MEASURE_SELECT",
+    "SEARCH"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

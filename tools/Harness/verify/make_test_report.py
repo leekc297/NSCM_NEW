@@ -9,7 +9,7 @@
   Doc/verify/<ID>/e2e/results.json             Playwright 실행 테스트 목록(통과/실패/소요)
   Doc/verify/<ID>/e2e/shots/index_*.json       FAIL 행 캡처(테스트 종료 시점 화면 · _verify/_trace afterEach)
   Doc/verify/<ID>/run_verify.result.json       실행 시각·봉투
-  Doc/e2e/results/shots/<ID>_*.png             스모크 캡처(화면 진입·조회조건·조회 결과·공통 기능·권한별)
+  Doc/e2e/results/<ID>/shots/<ID>_*.png        스모크 캡처(2026-11-06 화면 폴더 · 없으면 공용 Doc/e2e/results/shots)(화면 진입·조회조건·조회 결과·공통 기능·권한별)
   tools/E2E/e2e.config.json                    테스트 환경(FE/BE URL·계정·Division)
 
 출력: Doc/테스트결과서/<ID>_<화면명>_테스트결과서_v<n>.xlsx (이전 판은 Doc/테스트결과서/old/)
@@ -178,13 +178,14 @@ SMOKE_CAP = [('open', '화면 진입 직후'), ('cond', '조회조건 입력 후
 
 
 def smoke_shots(mid):
-    d = P('Doc', 'e2e', 'results', 'shots')
+    # 2026-11-06: 화면 하나 smoke 의 캡처는 Doc/e2e/results/<ID>/shots — 화면 폴더 먼저, 같은 파일명이 공용 shots 에도 있으면 화면 폴더 것을 쓴다
+    import e2e_paths
     out = []
-    if not os.path.isdir(d):
-        return out
-    for f in sorted(os.listdir(d)):
-        if not (f.startswith(mid + '_') and f.endswith('.png')):
+    seen = set()
+    for d, f in [(d, f) for d in e2e_paths.shots_dirs(mid) for f in sorted(os.listdir(d))]:
+        if not (f.startswith(mid + '_') and f.endswith('.png')) or f in seen:
             continue
+        seen.add(f)
         key = f[len(mid) + 1:-4]
         cap = dict(SMOKE_CAP).get(key)
         if not cap:
@@ -472,7 +473,7 @@ def main():
         except Exception as ex:
             wc.cell(img_r, 3).value = f'(캡처 삽입 실패: {ex})'
     if ci == 0:
-        wc.append(['(캡처 없음 — 스모크 E2E 미실행이거나 Doc/e2e/results/shots 에 이 화면 파일 없음)'])
+        wc.append(['(캡처 없음 — 스모크 E2E 미실행이거나 Doc/e2e/results/<ID>/shots·Doc/e2e/results/shots 에 이 화면 파일 없음)'])
 
     # ════ 6. 용어 설명 ════
     wg = wb.create_sheet('용어 설명')

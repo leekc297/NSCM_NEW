@@ -166,6 +166,8 @@ async function collectInputs(task, preset) {
 }
 
 // ───────────────────────── 작업 실행 ─────────────────────────
+// 1.9.42(2026-11-06): 'E2E 결과 열기'·'HTML 리포트' 같은 Doc/e2e/results/<파일> 경로 — 현재 화면 ID 폴더(Doc/e2e/results/<ID>/<파일>)에 있으면 그것을 연다
+function e2eForId(target, p) { try { const id = String(workbench.currentId() || '').toUpperCase(); const base = path.join(p.e2eOutDir, 'results'); const t = path.normalize(String(target || '')); if (!id || !t.toLowerCase().startsWith(base.toLowerCase() + path.sep)) return target; const alt = path.join(base, id, t.slice(base.length + 1)); return fs.existsSync(alt) ? alt : target; } catch { return target; } }
 function pageDirOfId(id) { try { const p = paths(); const r = JSON.parse(fs.readFileSync(path.join(p.genDir, id, 'register.json'), 'utf8')); return path.join(p.tobeDir, 'features', r.feature, 'src', 'pages', r.pageDir); } catch { return ''; } }
 async function runTask(task, preset) {
   if (!task) { const items = allTasks().map(x => ({ label: x.task.title, description: x.step.title, task: x.task })); const pick = await vscode.window.showQuickPick(items, { placeHolder: '실행할 작업' }); if (!pick) return; task = pick.task; }
@@ -178,8 +180,8 @@ async function runTask(task, preset) {
     case 'python': return runShell(task, vars);
     case 'cmd': return runShell(task, vars);
     case 'claude': return runClaude(task, vars);
-    case 'open': return openPath(subst(task.path, vars));
-    case 'browser': return openBrowser(subst(task.path, vars));
+    case 'open': return openPath(e2eForId(subst(task.path, vars), p));
+    case 'browser': return openBrowser(e2eForId(subst(task.path, vars), p));
     case 'gateReport': return gateReport();
     case 'agentBatch': return agentBatch(task, vars);
     case 'diff': return showDiff(vars.inputs.dir);
@@ -430,11 +432,14 @@ class DodProvider {
     if (el.group === 'dod') return rd2('DOD.md').split(/\r?\n/).map(l => /^\|\s*(B\d\d)\s*\|\s*(✅|❌)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|$/.exec(l)).filter(Boolean).sort((x, y) => (x[2] === '❌' ? 0 : 1) - (y[2] === '❌' ? 0 : 1)).map(x => { const it = leaf(`${x[1]} ${x[3]}`, x[2] === '✅' ? 'pass-filled' : 'error', x[2] === '❌' ? x[4] : ''); it.tooltip = x[4]; return it; });
     if (el.group === 'chk' || el.group === 'pkg') { const txt = rd2(el.group === 'chk' ? 'CHECK.md' : 'CHECK_PKG.md'); const rows = txt.split(/\r?\n/).map(l => /^- (BLOCK|WARN) (\w+) (.*?)(?: @(\S+))?$/.exec(l)).filter(Boolean); const out = rows.filter(r => r[1] === 'BLOCK').concat(rows.filter(r => r[1] === 'WARN').slice(0, 40)).map(r => { const it = leaf(`${r[2]} ${r[3]}`, r[1] === 'BLOCK' ? 'error' : 'warning', r[4] || ''); it.command = openLine(r[4]); return it; }); return out.length ? out : [leaf(txt ? '지적 없음' : '게이트 미실행 — 5단계 게이트 판정', 'info')]; }
     if (el.group === 'pipe') { const items = []; for (const [f, label, icon] of [['PIPELINE.md', '파이프라인 결과', 'rocket'], ['REPAIR.md', 'FE 수선 기록', 'sync'], ['REPAIR_PKG.md', 'PKG 이식 기록', 'sync'], ['GEN_NOTES.md', '생성 메모(채울 것)', 'note'], [`${ID}_registration.sql`, '메타 등록 SQL', 'database'], [`${ID}_PKG.sql`, 'PKG 골격', 'database'], ['e2e_plan.json', 'E2E 플랜', 'beaker']]) { const full = path.join(g2, f); const it = leaf(label, icon, fs.existsSync(full) ? f : '없음'); if (fs.existsSync(full)) it.command = { command: 'vibeManager.openItem', title: '열기', arguments: [{ target: full }] }; items.push(it); }
-      const e2e = path.join(paths().e2eOutDir, 'results', '_summary.csv'); if (fs.existsSync(e2e)) { const rows = fs.readFileSync(e2e, 'utf8').split(/\r?\n/).filter(l => l.includes(`"${ID}"`)); const pass = rows.filter(l => l.includes('"PASS"')).length;
+      // 1.9.42(2026-11-06): 화면 폴더 Doc/e2e/results/<ID>/ 요약 우선 · 없으면(전환 전) 공용 색인
+      const e2eDirId = path.join(paths().e2eOutDir, 'results', String(ID).toUpperCase()); const e2eMd = fs.existsSync(path.join(e2eDirId, '_summary.md')) ? path.join(e2eDirId, '_summary.md') : path.join(paths().e2eOutDir, 'results', '_summary.md');
+      const e2e = fs.existsSync(path.join(e2eDirId, '_summary.csv')) ? path.join(e2eDirId, '_summary.csv') : path.join(paths().e2eOutDir, 'results', '_summary.csv'); if (fs.existsSync(e2e)) { const rows = fs.readFileSync(e2e, 'utf8').split(/\r?\n/).filter(l => l.includes(`"${ID}"`)); const pass = rows.filter(l => l.includes('"PASS"')).length;
         // 1.8.8: 종류별(smoke/crud/auth/authcrud) 합계 표기
         const per = ['smoke', 'crud', 'auth', 'authcrud'].map(k => { const r = rows.filter(l => l.includes(`"${k}"`)); return r.length ? `${k} ${r.filter(l => l.includes('"PASS"')).length}/${r.length}` : null; }).filter(Boolean).join(' · ');
-        const it = leaf(`E2E 결과 ${pass}/${rows.length}${per ? ` (${per})` : ''}`, rows.length && pass === rows.length ? 'pass-filled' : 'beaker'); it.command = { command: 'vibeManager.openItem', title: '열기', arguments: [{ target: path.join(paths().e2eOutDir, 'results', '_summary.md') }] }; items.push(it); }
-      const gold = path.join(paths().goldenDir, '_summary.csv'); if (fs.existsSync(gold)) { const rows = fs.readFileSync(gold, 'utf8').split(/\r?\n/).filter(l => l.startsWith(ID + ',')); const pass = rows.filter(l => /,PASS\s*$/.test(l)).length; items.push(leaf(`골든 테스트 ${pass}/${rows.length}`, rows.length && pass === rows.length ? 'pass-filled' : 'beaker')); }
+        const it = leaf(`E2E 결과 ${pass}/${rows.length}${per ? ` (${per})` : ''}`, rows.length && pass === rows.length ? 'pass-filled' : 'beaker'); it.command = { command: 'vibeManager.openItem', title: '열기', arguments: [{ target: e2eMd }] }; items.push(it); }
+      // 1.9.42(2026-11-06): 화면 폴더 골든 요약 Doc/golden/<ID>/_summary.csv 우선 · 없으면 공용 색인. PASS 는 verdict 열로 센다(종전 '줄 끝 ,PASS' 는 마지막 열 order(정렬 대조)를 세고 있었다)
+      const goldId = path.join(paths().goldenDir, String(ID).toUpperCase(), '_summary.csv'); const gold = fs.existsSync(goldId) ? goldId : path.join(paths().goldenDir, '_summary.csv'); if (fs.existsSync(gold)) { const gl = fs.readFileSync(gold, 'utf8').replace(/^﻿/, '').split(/\r?\n/); const vIx = (gl[0] || '').split(',').indexOf('verdict'); const rows = gl.filter(l => l.startsWith(ID + ',')); const pass = rows.filter(l => vIx >= 0 ? (l.split(',')[vIx] || '').trim() === 'PASS' : /,PASS\s*$/.test(l)).length; items.push(leaf(`골든 테스트 ${pass}/${rows.length}`, rows.length && pass === rows.length ? 'pass-filled' : 'beaker')); }
       items.push(Object.assign(leaf('ID 하나로 끝까지 (pipeline.js)', 'play'), { command: { command: 'vibeManager.runTask', title: '실행', arguments: ['S5.pipeline', { id: ID }] } }));
       return items; }
     return [];

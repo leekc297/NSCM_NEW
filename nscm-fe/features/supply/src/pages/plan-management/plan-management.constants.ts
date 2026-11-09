@@ -64,13 +64,17 @@ export type RevisionPlanType = keyof typeof REVISION_CANDIDATE_KEYS;
 // Final Plan PLAN_TYPE 코드 — Engine Run 버튼 활성 조건(Final Plan CONFIRM_YN='N')에 사용
 export const FINAL_PLAN_TYPE = 'FN';
 
-// 조회조건 콤보 — SCM_ADM_CMBO_SQL_M 실측 SQL_ID(사용자 2026-10-14 재지정 / 화면설계서 일치).
-//   Division: MyDivisionInEE_SCP 전용(표준 MyDivision=EE 제외와 정반대 의미라 재사용 금지).
+// 조회조건 콤보 — SCM_ADM_CMBO_SQL_M 실측 SQL_ID.
+//   Division: Division_SCP(= AS-IS SCP0015 가 쓰는 com_id 'Division' 등가 — UP_FX_GetCommonDataList_SCP
+//     @Code='Division' → FN_GET_DIVISION, ORDER BY ATTRIBUTE1). 권한 WHERE 는 MyDivisionInEE_SCP 와
+//     동일하고 정렬만 ATTRIBUTE1(표시순번 10·20·30…) → 기본값 81. 2026-10-14 에 지정했던
+//     MyDivisionInEE_SCP(ORDER BY DIVISION_ID, 기본 40)는 AS-IS 가 실제 호출하는 콤보가 아니라 교체
+//     (AS-IS 소스 dtMyDivision 변수명만 'MyDivision'일 뿐 호출은 Type.Division=133).
 //   Year: DB 콤보 아님 — 클라 당해년도 고정(PlanManagementForm, new Date().getFullYear()).
 //   PlanWeek: PlanWeekDate_SCP — @planYear(당해년도) 단일 토큰. 달력 SCM_SYS_CALENDAR_M 월요일 주차.
 //     응답 컬럼이 CODE/NAME 이 아니라 WEEK_LIST(라벨)/PLAN_WEEK(값) 이라 Form 에서 매핑한다.
 export const COMBO = {
-  DIVISION: 'MyDivisionInEE_SCP',
+  DIVISION: 'Division_SCP',
   PLAN_WEEK: 'PlanWeekDate_SCP',
 } as const;
 

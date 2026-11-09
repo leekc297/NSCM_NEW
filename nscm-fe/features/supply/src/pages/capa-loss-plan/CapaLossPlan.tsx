@@ -22,7 +22,7 @@ import { useCapaLossPlanQuery } from './hooks/useCapaLossPlanQuery';
 import { useCapaLossPlanSave } from './hooks/useCapaLossPlanSave';
 import { useCapaLossPlanStore } from './useCapaLossPlanStore';
 import { buildSpreadTitleFilters, toFromYyyymm } from './utils/capaLossPlan.dateColumns';
-import { toSheetName, toSheetStatus } from './utils/capaLossPlan.sheetKey';
+import { judgeEditGate, toSheetName, toSheetStatus } from './utils/capaLossPlan.sheetKey';
 
 /**
  * AS-IS GSCM.SCP.Forms.UIL Master/SCP0106_CAPA_Loss_Plan — CAPA Loss Plan.
@@ -43,9 +43,10 @@ export const CapaLossPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setAlert = useMessageStore.getState().setAlert;
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
-  // AS-IS Edit 모드토글(SwitchLock/IsLock) 미이식 — mount 시 편집권한 1회 판정으로만 갈린다
-  //   (convert-core §2.4, 선례 opt-capa / shipment-requestor-pic). grid `isEditMode` 배선은
-  //   유지하되 출처가 canEdit 이다. Save/Delete 가드도 `!canEdit` 로 판정한다.
+  // AS-IS Edit 모드토글(SwitchLock/IsLock) 어포던스는 미이식이다(convert-core §2.4, 선례 opt-capa /
+  //   shipment-requestor-pic). 편집 가능 여부는 편집권한(`canEdit`)에 더해 버전 진행상태 게이트
+  //   (judgeEditGate)를 AND 한 `isEditable`(아래)로 판정한다 — Pre/2차컷오프/(1차컷오프 x MODEL)는
+  //   권한이 있어도 읽기전용. `canEdit` 는 권한 가드(Save 훅)에만 남긴다.
   const canEdit = hasButton('EDIT');
 
   const gridRef = useRef<FlexGrid | undefined>(undefined);
@@ -76,6 +77,21 @@ export const CapaLossPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 조회조건을 바꾸는 동안에도 컬럼 메타는 "지금 고른" 시트를 따라가야 한다(BeforeFindData 재현).
   const pendingSheetName = toSheetName(sc.progressStatus, sc.sheetType, sc.divisionType);
 
+  /**
+   * Edit 진입 게이트(01 L-12~L-15, 03 R-20 / judgeEditGate). 버전의 **현재 진행상태**
+   * (`currVersionProgressStatus` = `dtVersionAll.PROG_STAT`)가 Pre / 2차컷오프 / (1차컷오프 x MODEL)
+   * 이면 편집권한(EDIT)이 있어도 읽기전용이다 — AS-IS 는 Edit(F2) 클릭 시점에 판정하나 토글 미이식이라
+   * 확정 조회조건 기준으로 편집가능 여부를 파생하고(그리드 전셀 잠금), 저장 시도 시 안내 메시지를 띄운다.
+   * `canEdit`(권한) 단독이던 기존 배선을 `isEditable`(권한 AND 게이트 통과)로 좁힌다.
+   */
+  const currVersionProgressStatus = useCapaLossPlanStore(state => state.currVersionProgressStatus);
+  const editGate = judgeEditGate(
+    currVersionProgressStatus,
+    condition.progressStatus,
+    condition.sheetType
+  );
+  const isEditable = canEdit && !editGate.blocked;
+
   // 조회 2종 + 파생값(결과셋 해체 · 기간컬럼 · 편집가능 measure · 확정기간 잠금 · DAY_CNT · DDN 분모).
   const {
     rows,
@@ -92,7 +108,7 @@ export const CapaLossPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     sheetName,
     progressStatus: condition.progressStatus,
     sheetType: condition.sheetType,
-    isEditMode: canEdit,
+    isEditMode: isEditable,
   });
 
   /**
@@ -214,7 +230,7 @@ export const CapaLossPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
    * 않으므로 **실질 무동작**이다 — 기존 행이 지워지지 않는 것이 핵심이다(V-53).
    */
   const handleDelete = () => {
-    if (!canEdit) return;
+    if (!isEditable) return;
     const grid = gridRef.current;
     if (!grid) return;
     if (grid.rows.length === 0) return;
@@ -247,6 +263,8 @@ export const CapaLossPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     sheetType: condition.sheetType,
     divisionType: condition.divisionType,
     canEdit,
+    // Edit 게이트 차단 메시지 — 저장 시도 시 읽기전용 안내(판정은 상단 judgeEditGate 단일 출처).
+    editBlockedMessageId: editGate.blocked ? editGate.messageId : undefined,
     staticColumns: staticColumns[sheetName] ?? [],
     // AS-IS 는 SAVE -> GET 을 연쇄 실행한다. filters 가 그대로라 refetch 가 맞다(V-51).
     refetch,
@@ -272,14 +290,12 @@ export const CapaLossPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
    * AS-IS `btnColumn`(조회영역 우측 아이콘) -> SubTitle 공용 아이콘으로 이동(01 L-34, V-21).
    * 순서 규약은 `환율 -> GridColumnSet -> Measure`(hook #120). 환율은 미사용.
    *
-   * **Measure 아이콘(`IcMeasureSelect`)은 이번 회차에 넣지 않았다 — 04 리포트 "확인필요".**
-   *   (1) AS-IS SCP0106 툴바에 Measure 버튼이 없다(캡처 실측 11종에도 없음, decisions §B-4).
-   *       L-34/V-21 의 "Measure 메타 109행 보유라 노출 대상" 은 AS-IS 파리티가 아니라 TO-BE 표준
-   *       **확장** 제안이다.
-   *   (2) 공용 `MeasureSelectModal` 은 `features/master/src/components` 에만 있다. supply 에서
-   *       가져오면 feature 간 직접 import(convert-core §2.1 Top11 #2) + Hard Boundary(§2.2) 위반이다.
-   *   해소 경로는 둘 중 하나다 — `MeasureSelectModal` 을 `packages/shared` 로 승격(분리 PR) 하거나,
-   *   AS-IS 버튼셋 그대로가 맞다고 사용자가 확정. 추측으로 반쪽 배선을 만들지 않는다.
+   * **Measure 아이콘(`IcMeasureSelect`)은 노출하지 않는다 — AS-IS 파리티(I-06 종결, 2026-11-04 사용자 확정).**
+   *   AS-IS SCP0106 툴바에 Measure 버튼이 없다(캡처 실측 11종에도 없음, decisions §B-4). 설계
+   *   L-34/V-21 의 "Measure 메타 109행 보유라 노출 대상" 은 AS-IS 가 아닌 TO-BE 표준 확장 제안이었고,
+   *   사용자가 **AS-IS 를 그대로 따른다**고 확정했다(의도적 차이 아님 = AS-IS 원본에 없어 미노출).
+   *   따라서 `MeasureSelectModal`(현재 features/master 전용) 을 packages/shared 로 승격하는 확장 PR 도
+   *   불요 — GridColumnSet 1종만 유지한다.
    */
   const customButtons = [
     // AS-IS Edit(F2) 토글 버튼은 미이식이다 — 편집 가능 여부는 `canEdit = hasButton('EDIT')`
@@ -325,7 +341,7 @@ export const CapaLossPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         rows={rows}
         staticColumns={staticColumns[sheetName] ?? []}
         periodColumns={periodColumns}
-        isEditMode={canEdit}
+        isEditMode={isEditable}
         progressStatus={condition.progressStatus}
         sheetType={condition.sheetType}
         divisionType={condition.divisionType}

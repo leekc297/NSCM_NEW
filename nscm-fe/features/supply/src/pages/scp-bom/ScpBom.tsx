@@ -24,7 +24,7 @@ import type { ScpBomRow } from './scp-bom.types';
 import { useScpBomStore } from './useScpBomStore';
 import { isRowLocked } from './utils/scp-bom.editLock';
 import { buildSavePayload, callSaveScpBom } from './utils/scp-bom.save';
-import { findInvalidScpYnParents } from './utils/scp-bom.scpYn';
+// import { findInvalidScpYnParents } from './utils/scp-bom.scpYn';
 
 // AS-IS GSCM.SCP.Master.UIL SCP0053_SCPBOM — 단일 그리드 마스터, UPDATE 전용(INSERT/DELETE NO-OP).
 //   설계: .atlas/gscm-design/SCP0053/design/00~03 · convert-flow/{goal,plan}.md. 매핑: __asis-mapping__.md.
@@ -131,32 +131,33 @@ export const ScpBom = ({ tabId, title }: PageProps<MENU_ID>) => {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes to save.') });
       return;
     }
-    // SCP YN 'Y' 는 같은 Plant + Parent Item 에 반드시 1개(0개, 2개 이상 차단).
-    const invalidParents = findInvalidScpYnParents(src);
-    if (invalidParents.length > 0) {
-      void setAlert({
-        type: 'alert',
-        // 메시지 코드 미등록 - 사용자 요청으로 문구 하드코딩.
-        // content: `같은 Parent Item 에 SCP YN Y 는 반드시 1개여야 합니다. PARENT ITEM : ${invalidParents.join(', ')}`,
-        // 위반 3건까지만 표시하고 나머지는 건수로 줄인다.
-        content: `SCP YN Y 는 Plant·Parent 별 1개만 가능합니다. (${invalidParents.slice(0, 3).join(', ')}${invalidParents.length > 3 ? ` 외 ${invalidParents.length - 3}건` : ''})`,
-      });
-      return;
-    }
+    // 기존 로직 주석 보존 (2026-11-03) 시작 - SCP YN Y 1개 검증 제거(사용자 요청)
+    // // SCP YN 'Y' 는 같은 Plant + Parent Item 에 반드시 1개(0개, 2개 이상 차단).
+    // const invalidParents = findInvalidScpYnParents(src);
+    // if (invalidParents.length > 0) {
+    //   void setAlert({
+    //     type: 'alert',
+    //     // 메시지 코드 미등록 - 사용자 요청으로 문구 하드코딩.
+    //     // content: `같은 Parent Item 에 SCP YN Y 는 반드시 1개여야 합니다. PARENT ITEM : ${invalidParents.join(', ')}`,
+    //     // 위반 3건까지만 표시하고 나머지는 건수로 줄인다.
+    //     content: `SCP YN Y 는 Plant·Parent 별 1개만 가능합니다. (${invalidParents.slice(0, 3).join(', ')}${invalidParents.length > 3 ? ` 외 ${invalidParents.length - 3}건` : ''})`,
+    //   });
+    //   return;
+    // }
+    // 기존 로직 주석 보존 (2026-11-03) 끝
     // 필수 컬럼(메타 M) 검증 통과 후 '^' bulk 저장. saveWithValidation 이 M 3종 빈값을 alert·차단.
     saveWithValidation(dirty as unknown as ScpBomRow[], staticColumns, () => {
       void doSave(dirty);
     });
   };
 
-  // INSERT/DELETE — 버튼 노출 + 클릭 무동작(design 01 R4/R5, cs 본문 전체 주석 NO-OP).
-  //   키 존재 + 명시 무동작 함수(공용 addRow/removeRow 부활 금지). hasButton 곱으로 권한 반영.
-  const noop = () => undefined;
+  // INSERT/DELETE — 버튼 숨김(사용자 지시 2026-11-03). AS-IS 가 둘 다 NO-OP(design 01 R4/R5, cs 본문 전체 주석)라
+  //   실질 작업이 없어 설계 기본 '노출+무동작' 대신 숨김 처리. 감사가 설계 기본으로 되돌리지 말 것(design §5#4 사용자 지시 우선).
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     save: hasButton('SAVE') ? handleSave : false,
-    insert: hasButton('INSERT') ? noop : false,
-    delete: hasButton('DELETE') ? noop : false,
+    insert: false,
+    delete: false,
     manual: false,
     upload: false,
   };

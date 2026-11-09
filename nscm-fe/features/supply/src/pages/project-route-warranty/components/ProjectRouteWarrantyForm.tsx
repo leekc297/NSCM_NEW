@@ -1,4 +1,4 @@
-import { ModelByDivisionPopup } from 'features/master/src/components';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -25,8 +25,9 @@ interface Props {
 }
 
 // 조회조건(design/02 §5) — Division*(Division_SCP+EE제외, cascade 최상위) / Plant Site
-//   (PlantSiteByDivision cascade, ALL) / Model(Item 픽커) / Valid(YesOrNo+ALL).
-//   cboOperationGroup(LookupCommon)은 AS-IS 도 UI 숨김·store-only 라 렌더하지 않는다(design/02 §5 #3).
+//   (PlantSiteByDivision cascade, ALL) / Model/Nickname(메1 MaterialByDivisionModal 픽커) /
+//   Active(YesOrNo+ALL). cboOperationGroup(LookupCommon)은 AS-IS 도 UI 숨김·store-only 라
+//   렌더하지 않는다(design/02 §5 #3).
 export const ProjectRouteWarrantyForm = ({ onSearch }: Props) => {
   const { t } = useTranslation();
 
@@ -34,6 +35,7 @@ export const ProjectRouteWarrantyForm = ({ onSearch }: Props) => {
   const setSearchParams = useProjectRouteWarrantyStore(state => state.setSearchParams);
   const openSearchArea = useProjectRouteWarrantyStore(state => state.openSearchArea);
   const clearMainFilter = useProjectRouteWarrantyStore(state => state.clearMainFilter);
+  const setAuthDivisions = useProjectRouteWarrantyStore(state => state.setAuthDivisions);
 
   const [openItemModal, setOpenItemModal] = useState(false);
 
@@ -55,6 +57,15 @@ export const ProjectRouteWarrantyForm = ({ onSearch }: Props) => {
   // BLUtils.GetDivisionWithoutEE 2단계 중 화면측 후처리 — EE 사업부 제외(constants COMBO 주석).
   //   참조 안정화(nscm-patterns §5-4) — 매 렌더 새 배열 방지.
   const divisions = useMemo(() => divisionsRaw?.filter(EXCLUDE_EE_DIVISION), [divisionsRaw]);
+  // 권한 Division 코드를 store 로 올린다 — Division 미선택/ALL 조회 시 setFilters 가 'ALL'(권한 밖 노출)
+  //   대신 이 코드를 열거해 IN(auth) 가드를 태운다(인가 우회 차단, AS-IS GetCheckedListValue 2-arg 등가).
+  const divisionCodesKey = (divisions ?? [])
+    .map(item => String(item.CODE ?? ''))
+    .filter(Boolean)
+    .join(',');
+  useEffect(() => {
+    setAuthDivisions(divisionCodesKey ? divisionCodesKey.split(',') : []);
+  }, [divisionCodesKey, setAuthDivisions]);
 
   // Division ALL/미선택 → 권한 division(EE 제외) 코드 전체를 CSV 로 확장해 cascade 에 넘긴다.
   //   AS-IS(cs L193 GetCheckedListValue(dtMyDivision, clbDivision))는 체크된 division 을 CODE CSV 로
@@ -167,7 +178,7 @@ export const ProjectRouteWarrantyForm = ({ onSearch }: Props) => {
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.MODEL, '_Model')}
+                label={t(LBL.MODEL, '_Model/Nickname')}
                 labelAlign='right'
                 render={() => (
                   <InputField
@@ -194,7 +205,7 @@ export const ProjectRouteWarrantyForm = ({ onSearch }: Props) => {
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.VALID, '_Valid')}
+                label={t(LBL.VALID, '_Active')}
                 labelAlign='right'
                 render={() => (
                   <CustomDropdown
@@ -212,18 +223,23 @@ export const ProjectRouteWarrantyForm = ({ onSearch }: Props) => {
         }
       />
 
-      {/* Model 픽커(btnItemId, design/02 §4.6) — SCM0002 ModelByDivisionPopup. 조회조건 Model 은
-          품번(ITEM_ID)만 필요하므로 onSelect 의 itemId 만 반영한다. */}
-      <ModelByDivisionPopup
+      {/* Model/Nickname 픽커(btnItemId, design/02 §4.6) — 사용자 지시(2026-11-03)로 모1(ModelByDivision
+          Popup, SCM0002 base)에서 메1(MaterialByDivisionModal, COM0013 = SCM0002_MaterialByDivisionPopup
+          공용)로 교체. 자매 SCP0006/SCP0027 ProjectRoute 계열 동일 패턴. 조회조건 Model 은 품번(ITEM_ID)만
+          쓰므로 반환 items 를 itemId 로 반영(단건 — GET SP p_item_id 단일, multiCheckbox 미사용).
+          Division 이 다중선택+ALL 이라 multiDivision 으로 CSV 미러 표시(plantSiteDivisionFilter 가
+          ALL→권한 division CSV 로 펼침). 단건 'ALL'→ SP 0건 회피. */}
+      <MaterialByDivisionModal
         open={openItemModal}
-        onClose={() => setOpenItemModal(false)}
-        onSelect={selected => setSearchParams({ itemId: selected.itemId })}
-        params={{
-          divisionId: searchParams.divisionId,
-          projectCode: '',
-          scmSiteId: '',
+        modalClose={() => setOpenItemModal(false)}
+        setSelectedValue={items => setSearchParams({ itemId: items })}
+        preSearchParams={{
+          divisionId: plantSiteDivisionFilter,
+          scpModuleType: MENU_ID,
+          operationGroup: '',
           itemId: searchParams.itemId ?? '',
         }}
+        multiDivision
       />
     </>
   );

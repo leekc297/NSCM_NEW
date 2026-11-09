@@ -170,6 +170,10 @@ export const PlanGroupDashboardForm = ({ onSearch }: PlanGroupDashboardFormProps
           </Grid>
           <Grid size={3}>
             <PeriodRangePicker
+              // 라벨 열 폭을 다른 조회조건(Div/PlanGroup/…)과 동일하게 맞춰 입력 시작선을 정렬한다
+              //   (PeriodRangePicker 내부 FormItem 이 className 을 그대로 쓴다 — 미지정 시 라벨 폭이
+              //   달라져 Div 와 세로선이 어긋났다, 사용자 지시 2026-11-05). DMF0045 PeriodField 와 동일 효과.
+              className={commonStyles.formItem}
               allowTextInput
               label={t('LBL00013', '_Period')}
               start={searchParams.startDate}

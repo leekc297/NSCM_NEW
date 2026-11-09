@@ -1,0 +1,398 @@
+{
+  "id": "SCP0037",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0037",
+  "divCascade": [
+    [
+      "Plant Site"
+    ]
+  ],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Operation",
+    "Plant Site",
+    "Material",
+    "Active"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "OperationLt",
+  "routePath": "supply/operation-lt",
+  "asisName": "OperationLT",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "Div → Div. · 명칭",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "ltOperation",
+      "label": "Operation",
+      "lbl": "LBL00009",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboLTOperation",
+      "tobeLabel": "Operation",
+      "catalog": "",
+      "labels": [
+        "Operation"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlantSite",
+      "tobeLabel": "Plant Site",
+      "catalog": "Plant Site → Plant Site",
+      "labels": [
+        "Plant Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Material",
+      "lbl": "LBL00021",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Material",
+      "catalog": "Material → Material",
+      "labels": [
+        "Material"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValid",
+      "tobeLabel": "Active",
+      "catalog": "",
+      "labels": [
+        "Active"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "Operation LT",
+  "asisMapping": "features\\supply\\src\\pages\\operation-lt\\__asis-mapping__.md",
+  "buttons": [],
+  "mainSheets": [
+    {
+      "name": "Operation LT",
+      "key": "OPERATION_LT",
+      "labels": [
+        "Created By",
+        "Creation Date",
+        "Division*",
+        "Inv Flag",
+        "Material*",
+        "Last Update Date",
+        "Last Updated By",
+        "LT(Day)*",
+        "LT Operation",
+        "Nick Name",
+        "Plant Site Code",
+        "Plant Site*",
+        "Site Item Valid"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Operation LT",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0037.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "Operation LT",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0037.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0037_GET_OPERATION_LT",
+      "sheet": "Operation LT",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0037_SAVE_OPERATION_LT",
+      "sheet": "Operation LT",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Operation LT": {
+      "40": [
+        "Div*",
+        "Plant Site Code",
+        "Plant Site*",
+        "Material*",
+        "Nick Name",
+        "LT Operation",
+        "LT(Day)*",
+        "Inv Flag",
+        "Site Item Valid",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Plant Site Code",
+        "Plant Site*",
+        "Material*",
+        "Nick Name",
+        "LT Operation",
+        "LT(Day)*",
+        "Inv Flag",
+        "Site Item Valid",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Plant Site Code",
+        "Plant Site*",
+        "Material*",
+        "Nick Name",
+        "LT Operation",
+        "LT(Day)*",
+        "Inv Flag",
+        "Site Item Valid",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "DELETE",
+        "INSERT",
+        "SEARCH",
+        "SAVE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "DELETE",
+      "INSERT",
+      "SEARCH",
+      "SAVE"
+    ],
+    "CAPA Planner": [
+      "DELETE",
+      "SEARCH",
+      "INSERT",
+      "SAVE"
+    ],
+    "DM ADMIN": [
+      "INSERT",
+      "DELETE",
+      "SAVE",
+      "SEARCH"
+    ],
+    "DM Planner": [
+      "SAVE",
+      "SEARCH",
+      "INSERT",
+      "DELETE"
+    ],
+    "DM Viewer": [
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
+    ],
+    "FP Planner": [
+      "SAVE",
+      "DELETE",
+      "SEARCH",
+      "INSERT"
+    ],
+    "FP Viewer": [
+      "SEARCH",
+      "SAVE",
+      "DELETE",
+      "INSERT"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
+    ],
+    "SCM Viewer": [
+      "DELETE",
+      "SAVE",
+      "SEARCH",
+      "INSERT"
+    ],
+    "SCP Planner": [
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "SEARCH"
+    ],
+    "SCP Tester": [
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
+    ],
+    "SSP ADMIN": [
+      "SAVE",
+      "SEARCH",
+      "DELETE",
+      "INSERT"
+    ],
+    "SSP Planner": [
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
+    ],
+    "SSP Viewer": [
+      "INSERT",
+      "SEARCH",
+      "SAVE",
+      "DELETE"
+    ]
+  },
+  "menuBtnCodes": [
+    "DELETE",
+    "INSERT",
+    "SEARCH",
+    "SAVE"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

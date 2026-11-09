@@ -1,7 +1,7 @@
 # SCP0126 — To-Be Fact Pack 요약
 
 - page_key: `supply/opt-capa` · feature: supply · As-is Fact Pack 있음
-- 파일 23 · 엔드포인트 호출 12 (미해결 4, 주석 속 2) · 이벤트 32 · 컴포넌트 사용 58 · 하드코딩 컬럼 2 · 메시지 49
+- 파일 24 · 엔드포인트 호출 12 (미해결 4, 주석 속 2) · 이벤트 42 · 컴포넌트 사용 64 · 하드코딩 컬럼 2 · 메시지 49
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
@@ -11,24 +11,25 @@
 | features/supply/src/pages/opt-capa/components/modals/NoWorkBatchModal.tsx | component | 484 |
 | features/supply/src/pages/opt-capa/components/modals/NoWorkExcelUploadModal.module.scss | component | 56 |
 | features/supply/src/pages/opt-capa/components/modals/NoWorkExcelUploadModal.tsx | component | 350 |
+| features/supply/src/pages/opt-capa/components/modals/NoWorkWeekModal.tsx | component | 73 |
 | features/supply/src/pages/opt-capa/components/OptCapaForm.tsx | component | 229 |
-| features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | component | 494 |
-| features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx | hook | 569 |
+| features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | component | 595 |
+| features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx | hook | 626 |
 | features/supply/src/pages/opt-capa/hooks/useOptCapaSave.ts | hook | 69 |
-| features/supply/src/pages/opt-capa/hooks/useOptCapaSheets.ts | hook | 182 |
-| features/supply/src/pages/opt-capa/hooks/useOptCapaValidation.ts | hook | 352 |
+| features/supply/src/pages/opt-capa/hooks/useOptCapaSheets.ts | hook | 193 |
+| features/supply/src/pages/opt-capa/hooks/useOptCapaValidation.ts | hook | 378 |
 | features/supply/src/pages/opt-capa/index.ts | index | 5 |
-| features/supply/src/pages/opt-capa/opt-capa.constants.ts | constants | 633 |
-| features/supply/src/pages/opt-capa/opt-capa.types.ts | types | 90 |
+| features/supply/src/pages/opt-capa/opt-capa.constants.ts | constants | 657 |
+| features/supply/src/pages/opt-capa/opt-capa.types.ts | types | 89 |
 | features/supply/src/pages/opt-capa/OptCapa.module.scss | style | 9 |
 | features/supply/src/pages/opt-capa/OptCapa.tsx | page | 412 |
 | features/supply/src/pages/opt-capa/useOptCapaStore.ts | store | 275 |
 | features/supply/src/pages/opt-capa/utils/optCapa.candidates.ts | util | 315 |
 | features/supply/src/pages/opt-capa/utils/optCapa.editLock.ts | util | 115 |
 | features/supply/src/pages/opt-capa/utils/optCapa.excelForm.ts | util | 21 |
-| features/supply/src/pages/opt-capa/utils/optCapa.save.ts | util | 383 |
-| features/supply/src/pages/opt-capa/utils/optCapa.sheetVisibility.ts | util | 86 |
-| features/supply/src/pages/opt-capa/utils/optCapa.week.ts | util | 49 |
+| features/supply/src/pages/opt-capa/utils/optCapa.save.ts | util | 395 |
+| features/supply/src/pages/opt-capa/utils/optCapa.sheetVisibility.ts | util | 125 |
+| features/supply/src/pages/opt-capa/utils/optCapa.week.ts | util | 30 |
 | features/supply/src/pages/opt-capa/__asis-mapping__.md | mapping | 438 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -38,12 +39,12 @@
 | /SCP0126/noWorkBatch/SAVE/call-proc | http | 1 | Y | NoWorkBatchModal.tsx:305 |
 | /SCP0126/{ADMIN_SHEET_NAME[SHEETS.NO_WORK]}/UPLOAD/excel-upload | http | 1 | N | NoWorkExcelUploadModal.tsx:159 |
 | /SCP0126/{sheet}/SAVE/call-proc | http | 1 | N | useOptCapaSave.ts:54 |
-| (useTabComboQueries) | hook | 2 | Y | useOptCapaSheets.ts:52 useOptCapaSheets.ts:56 |
-| SCP0126/init//call-proc | hook | 1 | Y | useOptCapaSheets.ts:93 |
+| (useTabComboQueries) | hook | 2 | Y | useOptCapaSheets.ts:57 useOptCapaSheets.ts:61 |
+| SCP0126/init//call-proc | hook | 1 | Y | useOptCapaSheets.ts:98 |
 | SCP0126/{?querySheet}//call-proc | hook | 1 | N | OptCapa.tsx:135 |
 | /SCP0126/{ADMIN_SHEET_NAME[SHEETS.NO_WORK]}/UPLOAD_SAVE/call-proc | http | 1 | N | OptCapa.tsx:362 |
 | /admin/menu/SCP0126/search-conditions | http | 1 | Y | useOptCapaStore.ts:251 |
-| /SCP0126/noWorkWeek\|noWork\|dailyCapa\|sopEop\|rampUp\|rampUpItvl\|prepRt\|utilRt\|yldElec/SAVE/call-proc | propagated | 1 | Y | useOptCapaActions.tsx:385 |
+| /SCP0126/noWorkWeek\|noWork\|dailyCapa\|sopEop\|rampUp\|rampUpItvl\|prepRt\|utilRt\|yldElec/SAVE/call-proc | propagated | 1 | Y | useOptCapaActions.tsx:397 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -73,6 +74,10 @@
 | FileUploader | onFileChange | <arrow> setAlert,t,setFiles,value.slice,resetResult | jsx | features/supply/src/pages/opt-capa/components/modals/NoWorkExcelUploadModal.tsx | 275 |
 | Button | onClick | <arrow> handleSave | jsx | features/supply/src/pages/opt-capa/components/modals/NoWorkExcelUploadModal.tsx | 299 |
 | Button | onClick | <arrow> handleClose | jsx | features/supply/src/pages/opt-capa/components/modals/NoWorkExcelUploadModal.tsx | 303 |
+| Popover | onClose | onClose | jsx | features/supply/src/pages/opt-capa/components/modals/NoWorkWeekModal.tsx | 37 |
+| DatePickerCalendar | onChange | <arrow> setDate | jsx | features/supply/src/pages/opt-capa/components/modals/NoWorkWeekModal.tsx | 47 |
+| Button | onClick | <arrow> onSelect,onClose | jsx | features/supply/src/pages/opt-capa/components/modals/NoWorkWeekModal.tsx | 56 |
+| Button | onClick | onClose | jsx | features/supply/src/pages/opt-capa/components/modals/NoWorkWeekModal.tsx | 66 |
 | CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/opt-capa/components/OptCapaForm.tsx | 92 |
 | CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/supply/src/pages/opt-capa/components/OptCapaForm.tsx | 122 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/opt-capa/components/OptCapaForm.tsx | 135 |
@@ -80,17 +85,23 @@
 | InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/opt-capa/components/OptCapaForm.tsx | 200 |
 | Button | onClick | onModelSearch | jsx | features/supply/src/pages/opt-capa/components/OptCapaForm.tsx | 195 |
 | PeriodField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/opt-capa/components/OptCapaForm.tsx | 214 |
-| grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 316 |
-| grid | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 347 |
-| grid | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 411 |
-| grid | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 420 |
-| grid | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 446 |
-| grid.hostElement | dblclick | dblClickHandler | addEventListener | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 464 |
-| OptCapaForm | onSearch | actions.handleSearch | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 274 |
-| OptCapaForm | onModelSearch | <arrow> setOpenModelPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 275 |
-| OptCapaGrid | onItemCellDblClick | actions.openItemPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 318 |
-| NoWorkBatchModal | onClose | actions.closeBatch | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 333 |
-| NoWorkBatchModal | onSaved | actions.refreshAfterExternalSave | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 334 |
+| grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 360 |
+| grid | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 391 |
+| grid | prepareCellForEdit | prepareCellForEditHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 406 |
+| input? | beforeinput | guardNumberCellMaxOnInput | addEventListener | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 419 |
+| grid | prepareCellForEdit | prepareNumberCellHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 421 |
+| grid | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 489 |
+| grid | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 508 |
+| grid | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 534 |
+| grid.hostElement | dblclick | dblClickHandler | addEventListener | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 563 |
+| OptCapaForm | onSearch | actions.handleSearch | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 266 |
+| OptCapaForm | onModelSearch | <arrow> setOpenModelPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 267 |
+| OptCapaGrid | onItemCellDblClick | actions.openItemPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 310 |
+| OptCapaGrid | onWeekCellDblClick | actions.showWeekPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 311 |
+| NoWorkBatchModal | onClose | actions.closeBatch | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 326 |
+| NoWorkBatchModal | onSaved | actions.refreshAfterExternalSave | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 327 |
+| NoWorkWeekModal | onClose | actions.closeWeekPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 349 |
+| NoWorkWeekModal | onSelect | actions.handleWeekSelect | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 350 |
 | NoWorkExcelUploadModal | onUploaded | actions.refreshAfterExternalSave | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 357 |
 | NoWorkExcelUploadModal | onSave | <arrow> apiClient.post,Number | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 358 |
 | ModelByDivisionPopup | onClose | actions.closeItemPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 397 |
@@ -101,7 +112,7 @@
 |---|---|
 | FormItem | 10 |
 | Grid | 7 |
-| Button | 5 |
+| Button | 7 |
 | CustomDropdown | 4 |
 | DataGrid | 3 |
 | TextField | 3 |
@@ -114,8 +125,11 @@
 | FileUploader | 1 |
 | ControlConfirmIcon | 1 |
 | Label | 1 |
+| Popover | 1 |
+| DatePickerCalendar | 1 |
 | FunctionSearchIcon | 1 |
 | PeriodField | 1 |
+| FileExceldownloadIcon | 1 |
 | FileExceluploadIcon | 1 |
 | MainTitle | 1 |
 | OptCapaForm | 1 |
@@ -125,6 +139,7 @@
 | OptCapaGrid | 1 |
 | NoWorkBatchModal | 1 |
 | MaterialByDivisionModal | 1 |
+| NoWorkWeekModal | 1 |
 | NoWorkExcelUploadModal | 1 |
 | ModelByDivisionPopup | 1 |
 
@@ -185,12 +200,12 @@
 | LBL00757 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0126(10), SCP0006(4), SCM0008(2), SCP0005(2), SCP0114(2), DMF0009(1), SCP0120(1), SSP0025(1), SCP0025(1)
+- 화면ID: SCP0126(10), SCP0006(4), SCP0005(3), SCM0008(2), SCP0114(2), DMF0009(1), SCP0120(1), SSP0025(1), SCP0025(1)
 - SP/PKG: PKG_SCP0126(10), P_SPLIT(4), P_SCP0126_SAVE_NO_WORK_BATCH(2), P_RESULT_ERR(1), P_RESULT_OK(1), P_SCP0126_GET(1), P_LINE_ID(1), P_VALUE(1), P_PLANT_ID(1), P_DIVISION_ID(1), P_SCP0126_SAVE_NO_WORK_WEEK(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| jsx | **버튼 가시성은 권한별이다** — 각 키에 `authorized && hasButton('<BTN_CD>')` 게이트를 곱한다. 권한(`SCM_ADM_USER_GR_MNU_BTN_MPG_M` → `/admin/menu/SCP0126/auth` → `hasButton`)이 있으면 실제 핸들러를, 없으면 `false` 를 둔다. 공용 `SubTitle` 은 값이 `false` 인 버튼을 렌더하지 않으므로 (`SubTitle.ts | features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx | 468 |
+| jsx | **버튼 가시성은 권한별이다** — 각 키에 `authorized && hasButton('<BTN_CD>')` 게이트를 곱한다. 권한(`SCM_ADM_USER_GR_MNU_BTN_MPG_M` → `/admin/menu/SCP0126/auth` → `hasButton`)이 있으면 실제 핸들러를, 없으면 `false` 를 둔다. 공용 `SubTitle` 은 값이 `false` 인 버튼을 렌더하지 않으므로 (`SubTitle.ts | features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx | 509 |
 | endpoint | admin `SCM_MST_SHEET_COLUMNS` 동적 fetch(8시트) — 미등록/실패 시 빈 배열 유지(hook #113 §1-3). | features/supply/src/pages/opt-capa/useOptCapaStore.ts | 36 |
 | endpoint | 저장 payload 조립 — SAVE SP 8종의 `all_arguments`/`SCM_ADM_PROC_M` 실측 계약 이식(design 03 §4.3). 전 SP 가 `activeFlag` 로 시작하는 **컬럼별 `'^'`-결합 CLOB** + 마지막 `sesUserId`(VARCHAR) 규약이다. 키명은 `SCM_ADM_PROC_M.COL_NM` **camelCase** 그대로다 (메모리 `scp-proc-m-colnm-i | features/supply/src/pages/opt-capa/utils/optCapa.save.ts | 20 |
 

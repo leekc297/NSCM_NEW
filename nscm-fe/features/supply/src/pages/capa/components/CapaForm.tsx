@@ -18,11 +18,13 @@ interface CapaFormProps {
 }
 
 /**
- * SCP0049 조회조건(Doc_lgc_bak/rules/domains/scp/SCP0049.md) — 2단 + extra. AS-IS 화면 순서 재현(현업 확인):
- * 1단 Div./Operation group/Plant/Building · 2단 Ver./Line/Operation/Model·Nickname ·
- * extra Material/Period/Bucket/Loss·RESULT·Empty Value.
- * Loss 는 체크박스(기본 해제, cs:352) 사용자 값을 checkLoss 로 전송한다.
- * Line Assign/Tact Time/Yield 는 UI 제거(Measure 셋팅 대체), CHECK_DEFAULTS(Y) 고정 전송.
+ * SCP0049 조회조건(Doc_lgc_bak/rules/domains/scp/SCP0049.md) — 2단 + extra.
+ * 1단 Div./Operation group/Plant/Building · 2단 Line/Operation/Model·Nickname/Material ·
+ * extra Period/Bucket/Version/체크박스 6종(Loss·Line Assign·Tact Time·Yield·RESULT·Empty Value).
+ * 주의: 사용자 지시(2026-11-04)로 Version 을 extra Bucket 다음으로, Material 을 2단 끝으로 이동
+ *   (원래 AS-IS 는 Ver.=2단 선두·Material=extra 선두). 그에 맞춰 extra 를 한 칸씩 당김.
+ * 체크박스 5종(Loss·Line Assign·Tact Time·Yield·Empty Value) 사용자 값을 p_check_* 로 전송.
+ *   Line Assign/Tact Time/Yield 는 2026-11-04 복원(기존 UI 제거·Y 고정에서 전환 — 설계 02 §7-3 승계 권고).
  * cascade 재조회형(useTabComboQueries + onChange 하위 ALL 리셋) — Division 변경은 store.changeDivision.
  */
 export const CapaForm = ({ onSearch }: CapaFormProps) => {
@@ -236,20 +238,6 @@ export const CapaForm = ({ onSearch }: CapaFormProps) => {
           {multiField(LBL.BUILDING, 'Building', searchParams.factoryIds, buildingOptions, v =>
             setSearchParams({ factoryIds: v, lineIds: [], operationIds: [] })
           )}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.VERSION, '_Version')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  value={searchParams.versionId}
-                  options={versionOptions.map(o => ({ label: o.name, value: o.code }))}
-                  onChange={(_, picked) => changeVersion(String(picked ?? ''))}
-                />
-              )}
-            />
-          </Grid>
           {multiField(LBL.LINE, 'Line', searchParams.lineIds, lineOptions, v =>
             setSearchParams({ lineIds: v, operationIds: [] })
           )}
@@ -263,10 +251,6 @@ export const CapaForm = ({ onSearch }: CapaFormProps) => {
             v => setSearchParams({ modelId: v }),
             () => setModelPopupOpen(true)
           )}
-        </>
-      }
-      extraConditions={
-        <>
           {popupTextField(
             LBL.MATERIAL,
             'Material',
@@ -274,6 +258,10 @@ export const CapaForm = ({ onSearch }: CapaFormProps) => {
             v => setSearchParams({ materialId: v }),
             () => setMaterialPopupOpen(true)
           )}
+        </>
+      }
+      extraConditions={
+        <>
           <PeriodField
             gridSize={3}
             mode='month'
@@ -288,30 +276,69 @@ export const CapaForm = ({ onSearch }: CapaFormProps) => {
               label={t(LBL.BUCKET, '_Bucket')}
               labelAlign='right'
               render={() => (
-                // 다중선택(Month/Day, W 없음, 02 §5). ALL = Month+Day('D,M'), Month 만 고르면 'M'.
-                //   Day 만 골라도 Month 가 함께 조회되므로(AS-IS SetValues("Month") 재강제) ALL 로 표시된다.
+                // 다중선택(Month/Day, W 없음, 02 §5). 전체선택 = Month+Day('M,D'), Month 만 고르면 'M'.
+                //   Day 만 골라도 Month 가 함께 조회되므로(AS-IS SetValues("Month") 재강제) 'M,D' 로 표시된다.
+                //   필수: value 는 실제 코드를 열거한다. 'ALL' 센티널을 넘기면 공통 CustomDropdown 이
+                //   매칭 0건이라 전체선택 칩이 사라진다(2026-10-23 센티널 표시 로직 폐기).
                 <CustomDropdown
                   multiple
                   allOption
                   limitTags={2}
-                  value={searchParams.bucketDay ? 'ALL' : 'M'}
+                  value={searchParams.bucketDay ? 'M,D' : 'M'}
                   options={BUCKET_OPTIONS.map(o => ({ ...o }))}
                   onChange={(_, picked) => {
+                    // 공통 CustomDropdown 은 선택 0개(SELECT ALL 재클릭=전체 해제)에 'ALL' 토큰을
+                    //   보낸다. Bucket 은 Month 가 바닥값('M' 항상 조회)이라 전체 해제는 'Day 제외'로
+                    //   수렴한다 → bucketDay=false. 'ALL' 을 true 로 받으면 재해제가 M,D 로 되튄다.
                     const codes = String(picked ?? '').split(',');
-                    setSearchParams({ bucketDay: codes.includes('D') || codes.includes('ALL') });
+                    setSearchParams({ bucketDay: codes.includes('D') });
                   }}
                 />
               )}
             />
           </Grid>
+          {/* Version — 사용자 지시(2026-11-04)로 Bucket 다음 위치로 이동(기존 2단 Building 다음에서). */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.VERSION, '_Version')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  value={searchParams.versionId}
+                  options={versionOptions.map(o => ({ label: o.name, value: o.code }))}
+                  onChange={(_, picked) => changeVersion(String(picked ?? ''))}
+                />
+              )}
+            />
+          </Grid>
+          {/* 체크박스 6종 — Version 오른쪽(같은 행) 배치(사용자 지시 2026-11-04). Version 뒤 남은 폭
+              (grow)에 들어가며 넘치면 flexWrap 으로 줄바꿈(1줄 고정 아님 — 사용자 OK).
+              AS-IS 순서(Loss·Line Assign·Tact Time·Yield·RESULT·Empty Value). Line Assign/Tact Time/Yield
+              는 2026-11-04 복원(기존 UI 제거·Y 고정에서 전환 — 설계 02 §7-3 승계 권고). p_check_* 사용자 값 전송. */}
           <Grid size={3} className={commonStyles.customGrid}>
             <div className={commonStyles.customCheckbox}>
-              <Stack direction='row' spacing={2} alignItems='center'>
+              <Stack direction='row' spacing={2} alignItems='center' useFlexGap flexWrap='wrap'>
                 {/* Loss — 체크 시 조회 인자 checkLoss='Y'. AS-IS 기본 N(cs:352). */}
                 <Checkbox
                   labelText={t(LBL.LOSS, '_Loss')}
                   checked={searchParams.checkLoss}
                   onChange={checked => setSearchParams({ checkLoss: checked })}
+                />
+                <Checkbox
+                  labelText={t(LBL.LINE_ASSIGN, '_Line Assign')}
+                  checked={searchParams.checkLine}
+                  onChange={checked => setSearchParams({ checkLine: checked })}
+                />
+                <Checkbox
+                  labelText={t(LBL.TACT_TIME, '_Tact Time')}
+                  checked={searchParams.checkTact}
+                  onChange={checked => setSearchParams({ checkTact: checked })}
+                />
+                <Checkbox
+                  labelText={t(LBL.YIELD, '_Yield')}
+                  checked={searchParams.checkYield}
+                  onChange={checked => setSearchParams({ checkYield: checked })}
                 />
                 <Checkbox
                   labelText={t(LBL.RESULT, '_RESULT')}

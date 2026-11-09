@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { ADMIN_SHEET_NAME, BUCKET_TYPE, MEASURE_SHEET_NAME, MENU_ID, SHEETS } from './production-plan-fix.constants';
 import type { SearchCondition } from './production-plan-fix.types';
@@ -51,8 +51,9 @@ const ARRAY_KEYS = new Set<string>(['plantSiteIds', 'lineIds', 'electrodeTypes']
 const BOOL_KEYS = new Set<string>(['chkSum']);
 
 const initSearch: SearchCondition = {
-  // 기본 division = 세션 division(권한 division 첫 행 근사). Form 이 콤보 옵션과 대조해 교정.
-  divisionId: useSessionStore.getState().session.div ?? '',
+  // 기본 division = Division 콤보 첫 항목(Form 자동선택). AS-IS SCP0024 는 GetDivision 바인딩 후 첫 행
+  //   선택(세션·MyDivision 미사용, cs:281·774) — session.div deviation 제거(2026-11-05).
+  divisionId: '',
   operationGroupId: '',
   plantSiteIds: [],
   lineIds: [],

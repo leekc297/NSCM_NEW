@@ -45,13 +45,17 @@ export const isDummyRow = (row: Record<string, unknown> | undefined): boolean =>
  * 셀 편집 가능 판정 — 이 화면의 편집 게이트 단일 원천.
  * beginningEdit(e.cancel) 과 formatItem(배경색)이 같은 함수를 써야 "노란칸인데 못 고치는" 상태가 안 생긴다.
  *
- * @param editingLevel 현재 편집모드인 레벨(없으면 null). 5그리드 중 동시 1개만(cs:490~502).
+ * AS-IS EditButton(수정 모드) 토글은 미이식한다 — 전 화면 공통 결정(asis_to_tobe.md §11, 2026-09-23 사용자).
+ *   편집 가능 여부는 "수정 모드 진입"이 아니라 EDIT 버튼 권한(canEdit = hasButton('EDIT')) 단일 축으로 판정한다.
+ *   권한이 있으면 조회 직후부터 편집 가능 셀(자기 NAME / 신규행 ID·NAME / L5 VALID_YN)이 상시 열려 있다.
+ *
+ * @param canEdit EDIT 버튼 권한 보유 여부(hasButton('EDIT')). 없으면 기존행 전열 읽기전용.
  */
 export const isCellEditable = (
   level: LevelNo,
   binding: string,
   row: Record<string, unknown> | undefined,
-  editingLevel: LevelNo | null
+  canEdit: boolean
 ): boolean => {
   if (!row || !binding) return false;
   // (e) DIVISION_ID / DUMMY_YN / SHOP_GROUP_ID / SORT_ORDER 는 어떤 상태에서도 잠금.
@@ -62,11 +66,12 @@ export const isCellEditable = (
   const isValidYnOfLevel5 = level === 5 && binding === VALID_YN_COLUMN;
 
   // (d) 신규행: 자기 ID + 자기 NAME (+L5 VALID_YN) 만 편집. 부모키는 상속값이라 잠금(cs:1265~1290).
+  //   신규행은 Insert(INSERT 권한)로만 생기므로 EDIT 권한과 무관하게 채워 넣을 수 있어야 한다.
   if (isInsertRow(row)) return binding === idColumn || binding === nameColumn || isValidYnOfLevel5;
 
-  // (a) 조회 직후(편집모드 아님) 또는 다른 레벨 편집중이면 전열 읽기전용.
-  if (editingLevel !== level) return false;
-  // (b) DUMMY_YN='N' 행은 편집모드여도 전열 잠금.
+  // (a) EDIT 버튼 권한이 없으면 기존행 전열 읽기전용.
+  if (!canEdit) return false;
+  // (b) DUMMY_YN='N' 행은 권한이 있어도 전열 잠금(FP 인터페이스 유입 데이터, 업무규칙 4).
   if (!isDummyRow(row)) return false;
   // (c) 자기 NAME (+L5 VALID_YN) 만 해제.
   return binding === nameColumn || isValidYnOfLevel5;
@@ -76,13 +81,14 @@ export const isCellEditable = (
  * 드릴다운 가능 판정 (design 01 §2 L6, 00 §4d #8~#12).
  * - L5 는 최하위라 재조회 없음(cs:1816~1833 은 ID 캐시만 하고 FindData 미호출).
  * - 해당 시트 `Rows.Count <= 0` 이면 무동작(cs:1745/1764/1781/1799).
- * - Action 컬럼 visible(=편집모드) 이면 억제(cs:1748/1767/1784/1802) -> TO-BE 는 editingLevel 로 판정.
+ * - AS-IS 는 Action 컬럼 visible(=수정 모드) 이면 드릴다운을 억제했으나(cs:1748~), 수정 모드 토글을
+ *   미이식(asis_to_tobe.md §11)하면서 그 억제축도 제거한다. 편집은 셀 단위 게이트(isCellEditable)가
+ *   담당하고, 드릴다운은 기존 데이터 행 더블클릭으로 항상 가능하다(편집가능 셀은 키인으로 편집).
+ * - 단 신규행('I')은 자기 레벨 ID 가 빈 값이라 드릴다운 대상에서 제외한다(핸들러에서 isInsertRow 가드) —
+ *   AS-IS 가 편집모드에서 드릴다운을 막던 의도를 신규행 범위로 좁혀 유지(사용자 확정 2026-11-06).
  */
-export const canDrillDown = (
-  level: LevelNo,
-  rowCount: number,
-  editingLevel: LevelNo | null
-): boolean => level < 5 && rowCount > 0 && editingLevel !== level;
+export const canDrillDown = (level: LevelNo, rowCount: number): boolean =>
+  level < 5 && rowCount > 0;
 
 // 기존 행들의 SORT_ORDER 최대값 + 1 (AS-IS cs:1206~1212 — ds 없으면 1).
 export const nextSortOrder = (rows: readonly Record<string, unknown>[]): number => {

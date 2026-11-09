@@ -140,8 +140,10 @@ export const MAIN_COLUMNS: ColumnMeta[] = [
 //       RowCount<=0(빈 그리드)다(cs:306~310). AS-IS 는 그리드에 행이 있는데 변경이 0건이면 cs:370 에서
 //       메시지 없이 조용히 빠진다. 즉 이 화면의 dirty 0 안내는 AS-IS MSG00059 의 이식이 아니라 TO-BE 표준
 //       (datagrid-nochange-save-toast-standard)을 따른 것이며, MSG00004("No changes to save.")가 의미상 맞다.
-//       빈 그리드에 "조회 후 추가" 안내를 따로 띄울지는 사용자 결정 대기(gap-resolve iter-1 notes).
-//       참고: MSG00059 는 TO-BE SCM_ADM_MSG_M 에 미등록(전 언어 0행)이라 어차피 그대로 쓸 수 없다.
+//       빈 그리드 저장(RowCount<=0)은 AS-IS 파리티로 재현한다(사용자 결정 2026-11-06, G27): AS-IS MSG00059 문구
+//       "Check before adding."("조회 후 추가하십시오.")는 TO-BE 에 MSG01091 로 재번호 등록돼 있어(CHECK_BEFORE_ADD)
+//       handleSave 가 빈 그리드일 때 alert 로 띄운다. (MSG00059 코드 자체는 TO-BE 미등록이라 문구 역조회로 MSG01091 사용.)
+//       행이 있는데 변경 0건인 경우만 위 MSG00004 toast(AS-IS 는 그 경우 무음, cs:370).
 //   REQUIRE_DIVISION(hook #114 실측): TO-BE MSG00097 의 등록 문구는 "Division 을 선택하세요."="Please select Division."
 //     (자매 SSP0024/SSP0025 + DMF0003 mkt-fcst 사내 DB 대조 EXACT). 신규행/팝업 Division 미선택 안내 전용.
 //   NO_DIVISION_AUTH(hook #114 실측, iter-2 G8): L1 권한게이트(권한 division 0건)는 "권한 없음" 의도이므로
@@ -175,4 +177,5 @@ export const MSG = {
   DUP_KEY: 'MSG00060', // "Duplicate key exists." (DIVISION_ID+ITEM_ID 중복) — AS-IS MSG00060
   REQUIRE_DIVISION: 'MSG00097', // "Please select Division." (신규행/팝업 Division 미선택 안내 전용) — AS-IS MSG00093
   NO_DIVISION_AUTH: 'MSG00667', // "No authority assigned." (L1 권한 division 0건 게이트) — iter-2 G8 분리
+  CHECK_BEFORE_ADD: 'MSG01091', // "Check before adding."/"조회 후 추가하십시오." (빈 그리드 저장 — AS-IS MSG00059 재번호, G27)
 } as const;

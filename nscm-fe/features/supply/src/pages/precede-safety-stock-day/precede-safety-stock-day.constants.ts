@@ -104,7 +104,10 @@ export const LBL = {
 
 export const MSG = {
   REQUIRED_FIELDS: 'MSG00013',
-  DUPLICATE_EXISTS: 'MSG00260',
+  // AS-IS GMessageBox("MSG00260") 문구 "신규 입력 데이터 중 중복된 데이터가 있습니다." — TO-BE Oracle
+  //   에서 MSG00260 은 무관한 "중복된 조합이 존재합니다(Division/Project/Item/일자/Measure)."로 재번호됨.
+  //   문구 역조회로 확정한 TO-BE 코드 = MSG00428(DB 실측 2026-11-05). 감사가 AS-IS 번호로 되돌리지 말 것.
+  DUPLICATE_EXISTS: 'MSG00428',
   NO_WORK_DATE: 'MSG00046',
   DATE_RANGE_INVALID: 'MSG01230',
   TYPE_APPLY_DAY_NEGATIVE: 'MSG00085',

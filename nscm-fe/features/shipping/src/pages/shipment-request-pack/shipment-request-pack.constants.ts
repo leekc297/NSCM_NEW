@@ -155,7 +155,15 @@ export const LBL = {
   MEASURE: 'LBL00310', // Measure 설정 버튼(btnMeasure)
   EXCEL_FORM: 'LBL00762', // Excel Form 양식 다운로드(formDown)
   EXCEL_UPLOAD: 'LBL00346', // Excel Upload 버튼(btnExcelUpload)
+  NO: 'LBL00674', // BOD 팝업 No. 컬럼
+  OK: 'LBL00716', // BOD 팝업 OK 버튼
+  CLOSE: 'LBL00627', // BOD 팝업 Close 버튼
 } as const;
+
+// TR_MODE 셀 BOD 팝업(DMF0045 파리티, 사용자 결정 2026-11-04) — 시트명 i18n·선택0건 안내.
+//   AS-IS 팝업 시트명 'BOD Item Master' 역조회 코드(MNU00158, shipping 선례) / 선택0건 MSG00014.
+export const BOD_POPUP_TITLE_KEY = 'MNU00158';
+export const MSG_NO_ROWS_SELECTED = 'MSG00014';
 
 // 조회 기간 검증(AS-IS DateUtil.Check_PeriodDate) — From>To, 기간 미입력, 최대기간(From+1년+7일) 초과.
 //   AS-IS MSG 번호(MSG00049/MSG00172)는 TO-BE 에서 뜻이 다르거나 미등록이라, 문구 역조회로 확정한

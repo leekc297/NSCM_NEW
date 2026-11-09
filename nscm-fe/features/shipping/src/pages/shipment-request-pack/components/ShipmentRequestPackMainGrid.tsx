@@ -2,6 +2,7 @@ import { toggleClass } from '@mescius/wijmo';
 import { AllowMerging, CellType } from '@mescius/wijmo.grid';
 import type { CellRangeEventArgs, FlexGrid as FlexGridType, FormatItemEventArgs } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import styles from 'features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.module.scss';
 import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
@@ -72,6 +73,12 @@ interface Props<Row extends PackRow | CellRow> {
   // SHIP_REQ 행 Measure/날짜 셀 더블클릭 → 하단 Request Detail 재조회(AS-IS FindData_Detail_DblClick).
   //   Pack 시트·읽기전용(isEditMode=false)에서만 발동. date=null 이면 상단 Period 전체.
   onDrillDetail?: (modelId: string, scmSiteId: string, date: string | null) => void;
+  // Cell Biz 신규행 Model 셀 더블클릭 → Item 팝업(AS-IS SpdMain_CellDoubleClick Cell 분기 cs:3848-3909,
+  //   cellTypeImage). Cell 시트 전용 — 페이지가 From/To Site 선검증 후 팝업을 연다.
+  onCellModelDblClick?: (row: Row) => void;
+  // Cell Biz 신규행 Trans Mode 셀 더블클릭 → BOD 팝업(DMF0045 파리티, 사용자 결정 2026-11-04). Cell 시트
+  //   전용 — 페이지가 Model(MODEL_ID) 선검증 후 팝업을 연다. 선택 시 From/To/Incoterms/TrMode/BOD_ID 세팅.
+  onBodCellDblClick?: (row: Row) => void;
   // 확정일(yyyymmdd) — Pack=Plan_InforPacker_SCP NAME / Cell=CONFIRM_DAY. 확정구간(D_ ≤ confirmDay)
   //   회색+잠금, 그 이후 SHIP_REQ 날짜셀만 편집(design 01 R7/R18). 미전달이면 확정구간 미표시.
   confirmDay?: string;
@@ -110,6 +117,8 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
   measures,
   spreadTitle,
   onDrillDetail,
+  onCellModelDblClick,
+  onBodCellDblClick,
   confirmDay,
   comboParams,
 }: Props<Row>) => {
@@ -156,6 +165,17 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
         | (Row & { CRUD_TYPE?: string; MEASURE?: string })
         | undefined;
       if (!binding || !dataItem) return;
+      // Cell Biz 신규행 Model·Trans Mode 셀은 팝업 전용(직접 타이핑/콤보 차단) — DMF0045 모달셀 패턴.
+      //   값은 더블클릭 팝업으로만 넣는다(Model=Item 팝업 / Trans Mode=BOD 팝업). 편집 하이라이트(노랑)·
+      //   팝업 아이콘은 유지되고 입력 경로만 막는다. Incoterms 는 콤보 유지(DMF0045 동일 — BOD 팝업이 채움).
+      if (
+        sheet === SHEETS.CELL &&
+        (binding === 'MODEL_ID' || binding === 'TR_MODE') &&
+        dataItem.CRUD_TYPE === 'I'
+      ) {
+        e.cancel = true;
+        return;
+      }
       // Pack Biz 상단은 AS-IS read-only(EditButton 에 Pack 분기 없음, FindData LockColumn2) — 편집 불가.
       //   편집은 Cell Biz 상단에서만(SHIP_REQ 날짜셀). 그래서 Cell 시트로 게이트한다.
       const editable =
@@ -291,28 +311,46 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
         e.cell.style.removeProperty('--sp-cell-bg');
         e.cell.classList.remove('sp-cell-bg');
       }
-      // 편집가능/확정구간 시각표시(design 01 R7/R18, DMF0045 wj-cell-editable/non-editable 동일).
-      //   동적(D_/W_/M_) 셀만: 편집가능=하이라이트, 확정구간(D_ ≤ confirmDay)=회색+잠금. 정적 셀은 미표시.
+      // 편집가능/확정구간 시각표시(design 01 R7/R9/R18, DMF0045 wj-cell-editable/non-editable 동일).
+      //   편집 하이라이트는 Cell Biz 상단에서만 — Pack Biz 는 AS-IS read-only(노란셀 없음). 정적·동적
+      //   모두 대상: 신규행은 화이트리스트 정적 셀(Model/From/To/FcstType/TrMode/Incoterms)도 편집가능
+      //   하이라이트가 떠야 한다(AS-IS InsertRow LockRange(false) 구간, 사용자 신고 2026-11-04 — 종전엔
+      //   동적 셀만 칠해 신규행 정적 편집셀이 무색이었다). 회색(확정구간)·음수글자는 동적 셀만.
+      const editable =
+        sheet === SHEETS.CELL &&
+        isMainGridCellEditable({
+          columnBinding: binding,
+          crudType: row.CRUD_TYPE,
+          isEditMode,
+          measure: row.MEASURE,
+          bucketType,
+          confirmDay,
+        });
+      toggleClass(e.cell, 'wj-cell-editable', editable);
       if (parseDynamicColumnTag(binding)) {
-        // 편집 하이라이트는 Cell Biz 상단에서만 — Pack Biz 는 AS-IS read-only(노란셀 없음).
-        //   회색(확정구간)은 양 시트 공통 표시(조회 시점).
-        const editable =
-          sheet === SHEETS.CELL &&
-          isMainGridCellEditable({
-            columnBinding: binding,
-            crudType: row.CRUD_TYPE,
-            isEditMode,
-            measure: row.MEASURE,
-            bucketType,
-            confirmDay,
-          });
-        toggleClass(e.cell, 'wj-cell-editable', editable);
         toggleClass(e.cell, 'wj-cell-non-editable', isMainGridDateConfirmed(binding, confirmDay));
         // 음수 = 빨간 글자(공용 paintNegativeText) — 동적 수량 셀만, 배경/하이라이트와 공존(글자색만).
         paintNegativeText(e.cell, toGridNumber((row as Record<string, unknown>)[binding]));
       } else {
-        toggleClass(e.cell, 'wj-cell-editable', false);
         toggleClass(e.cell, 'wj-cell-non-editable', false);
+      }
+      // Cell Biz 신규행 Model·Trans Mode 셀 — DMF0045 모달셀 패턴: 팝업 아이콘을 셀에 붙여 "팝업으로 값을
+      //   넣는 셀"임을 표시한다(직접 타이핑은 beginningEdit 에서 차단, 값 입력은 더블클릭 팝업 전용 —
+      //   Model=Item 팝업 / Trans Mode=BOD 팝업). 그 외 셀/행은 아이콘 제거(querySelector 가드로 멱등).
+      const isCellModelPopup =
+        sheet === SHEETS.CELL &&
+        (binding === 'MODEL_ID' || binding === 'TR_MODE') &&
+        row.CRUD_TYPE === 'I';
+      if (isCellModelPopup) {
+        e.cell.style.cursor = 'pointer';
+        e.cell.style.paddingRight = '20px';
+        if (!e.cell.querySelector('.popup-icon')) {
+          const icon = document.createElement('span');
+          icon.className = `popup-icon ${styles.popupIcon}`;
+          e.cell.appendChild(icon);
+        }
+      } else {
+        e.cell.querySelector('.popup-icon')?.remove();
       }
     };
     g.formatItem.addHandler(fmt);
@@ -465,30 +503,44 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
     const dblclickHandler = (ev: MouseEvent) => {
       const ht = g.hitTest(ev);
       // 데이터 셀 더블클릭 → 하단 Request Detail 재조회(AS-IS SpdMain_CellDoubleClick, Pack 시트 +
-      //   SHIP_REQ 행). Measure 셀=전체 기간(date null) / 동적(D_/W_/M_) 셀=그 값셀 기준(D_=그 하루,
-      //   W_/M_=상단 Period). AS-IS 는 값 가드가 없으나, 사용자 확인대로 동적 셀은 **0 아닌 값**일 때만
-      //   드릴한다(빈 셀 무의미 조회 방지). TO-BE 는 읽기전용 토글이 없어 isEditMode 로 막지 않는다.
+      //   SHIP_REQ 행). 드릴 대상 셀(AS-IS 파리티, 2026-11-04 사용자 확인):
+      //     - Measure 셀 / 정적 셀(Div·Model·From/To-Site·Team·Incoterms·Requestor 등) → 상단 Period 전체.
+      //       AS-IS 는 Ship Req 행이면 정적 셀도 vDate 공백으로 드릴한다(cs:3928-3931, else 분기 strDate=
+      //       정적컬럼 Tag=공백 → 전체 기간). 종전 TO-BE 는 정적 셀을 제외했으나 사용자 요청으로 복원.
+      //     - 동적(D_/W_/M_) 값 셀 → 그 값셀 기준(D_=그 하루, W_/M_=상단 Period). AS-IS 는 값 가드가
+      //       없으나, 사용자 확인대로 동적 셀은 **0 아닌 값**일 때만 드릴한다(빈 셀 무의미 조회 방지).
+      //   TO-BE 는 읽기전용 토글이 없어 isEditMode 로 막지 않는다.
       if (ht.cellType === CellType.Cell) {
-        if (sheet !== SHEETS.PACK || !onDrillDetail) return;
         const binding = g.columns[ht.col]?.binding ?? '';
         const row = g.rows[ht.row]?.dataItem as (Record<string, unknown> & {
           MEASURE?: string;
           MODEL_ID?: string;
           TO_SITE?: string;
+          CRUD_TYPE?: string;
         }) | undefined;
         if (!row) return;
+        // Cell Biz: 신규행 Model 셀 → Item 팝업 / Trans Mode 셀 → BOD 팝업(DMF0045 파리티). 그 외 Cell
+        //   셀은 no-op(드릴은 Pack 전용). Pack 과 배타 — Cell 처리 후 즉시 종료한다.
+        if (sheet === SHEETS.CELL) {
+          if (String(row.CRUD_TYPE ?? '') === 'I') {
+            if (binding === 'MODEL_ID') onCellModelDblClick?.(row as unknown as Row);
+            else if (binding === 'TR_MODE') onBodCellDblClick?.(row as unknown as Row);
+          }
+          return;
+        }
+        if (!onDrillDetail) return;
         const measure = String(row.MEASURE ?? '');
         if (measure !== 'SHIP_REQ' && measure !== 'Ship Req') return;
         const modelId = String(row.MODEL_ID ?? '');
         const toSite = String(row.TO_SITE ?? '');
-        if (binding === 'MEASURE') {
+        const tag = parseDynamicColumnTag(binding);
+        if (!tag) {
+          // Measure 셀 + 정적 셀 → 전체 기간 드릴(값 가드 없음 — 정적 셀은 수량이 아니다).
           onDrillDetail(modelId, toSite, null);
           return;
         }
-        const tag = parseDynamicColumnTag(binding);
-        if (!tag) return; // 정적 셀 비대상
         const num = Number(String(row[binding] ?? '').replace(/,/g, ''));
-        if (!Number.isFinite(num) || num === 0) return; // 0/빈 값 셀 제외
+        if (!Number.isFinite(num) || num === 0) return; // 0/빈 값 셀 제외(동적 수량 셀만)
         onDrillDetail(modelId, toSite, tag.bucket === 'D' ? tag.yyyymmdd : null);
         return;
       }
@@ -527,7 +579,7 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [staticColumns, sheet, onDrillDetail]);
+  }, [staticColumns, sheet, onDrillDetail, onCellModelDblClick, onBodCellDblClick]);
 
   return (
     <DataGrid<Row>

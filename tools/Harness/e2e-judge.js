@@ -29,14 +29,22 @@ const now = () => { const d = new Date(); const z = n => String(n).padStart(2, '
 const md = readT(repairMd); const secs = md.split(/^## /m); const lastSec = secs.length > 1 ? '## ' + secs[secs.length - 1] : '';
 const hm = /^## 수선\s+(\d+)/.exec(lastSec); const ROUND = Number(opt('--round', hm ? hm[1] : 0)) || null;
 const cm = /판정요약:\s*a=(\d+)\s*b=(\d+)\s*c=(\d+)/.exec(lastSec); const claim = cm ? { a: +cm[1], b: +cm[2], c: +cm[3] } : null;
-const sumRows = readT(path.join(E2E, 'results', '_summary.csv')).split(/\r?\n/).filter(l => l.startsWith(`"${ID}","${KIND}"`));
-const logs = (() => { try { return fs.readdirSync(path.join(E2E, 'logs')).filter(f => new RegExp(`^run_\\d+_\\d+_(${KIND}|all)\\.log$`).test(f)).sort().reverse(); } catch { return []; } })();
-const logRel = logs[0] ? `Doc/e2e/logs/${logs[0]}` : '(없음)';
+// 2026-11-06(사용자 지시): run-e2e.cmd <종류> <ID> 결과·로그는 화면 폴더 Doc/e2e/results/<ID>/·Doc/e2e/logs/<ID>/ — 화면 폴더 먼저, 없으면(전환 전) 공용 위치.
+//   공용 logs/ 는 첫 줄('==== … run-e2e <종류> … <ID>')이 이 화면인 것만 쓴다(종전: 화면 구분 없이 가장 최근 로그 — 다른 화면 로그를 읽을 수 있었다)
+const SUMF = [path.join(E2E, 'results', ID, '_summary.csv'), path.join(E2E, 'results', '_summary.csv')].find(f => fs.existsSync(f)) || path.join(E2E, 'results', '_summary.csv');
+const sumRows = readT(SUMF).split(/\r?\n/).filter(l => l.startsWith(`"${ID}","${KIND}"`));
+const logs = (() => {
+  const reF = new RegExp(`^run_\\d+_\\d+_(${KIND}|all)\\.log$`); const out = [];
+  const add = (dir, rel, need) => { try { for (const f of fs.readdirSync(dir)) { if (!reF.test(f)) continue; const p = path.join(dir, f); if (need && !new RegExp(`run-e2e\\b.*\\b${ID}\\b`, 'i').test(readT(p).split(/\r?\n/)[0] || '')) continue; out.push({ rel: rel + f, p, t: fs.statSync(p).mtimeMs }); } } catch { } };
+  add(path.join(E2E, 'logs', ID), `${ID}/`, false); add(path.join(E2E, 'logs'), '', true);
+  return out.sort((a, b) => b.t - a.t);
+})();
+const logRel = logs[0] ? `Doc/e2e/logs/${logs[0].rel}` : '(없음)';
 // 실패 원문은 스크립트가 직접 뽑아 프롬프트에 싣는다 — 판정 세션의 Read 가 큰 CSV·로그에서 EBADF 로 실패한 사례(2026-10-26 SCP0122 첫 실행)
 const csvCells = l => { const out = []; let cur = '', q = false; for (let i = 0; i < l.length; i++) { const ch = l[i]; if (q) { if (ch === '"' && l[i + 1] === '"') { cur += '"'; i++; } else if (ch === '"') q = false; else cur += ch; } else if (ch === '"') q = true; else if (ch === ',') { out.push(cur); cur = ''; } else cur += ch; } out.push(cur); return out; };
 const failRows = sumRows.map(csvCells).filter(c => c[3] === 'FAIL').map(c => ({ account: c[2], errors: c[6] || '', annotations: (c[7] || '').slice(0, 1500) }));
 const errText = failRows.map(r => r.errors).join(' || ');
-const logErr = (() => { if (!logs[0]) return ''; const L = readT(path.join(E2E, 'logs', logs[0])).split(/\r?\n/); const out = []; for (let i = 0; i < L.length && out.join('\n').length < 6000; i++) if (/\bError:/.test(L[i])) out.push(L.slice(i, i + 8).join('\n'), '---'); return out.join('\n'); })();
+const logErr = (() => { if (!logs[0]) return ''; const L = readT(logs[0].p).split(/\r?\n/); const out = []; for (let i = 0; i < L.length && out.join('\n').length < 6000; i++) if (/\bError:/.test(L[i])) out.push(L.slice(i, i + 8).join('\n'), '---'); return out.join('\n'); })();
 const normT = s => String(s || '').replace(/\[[^\]]*\]/g, ' ').replace(/\([^)]*\)/g, ' ').replace(/[`'"]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
 // 판정 항목이 실제 실패 목록(요약 errors 열)에 있는가 — 실패하지 않은 항목에 보정을 허용하지 않기 위함
 const inFailList = title => { const t = normT(title); if (!t || !errText) return false; const e = normT(errText); return e.includes(t) || t.split(' ').filter(w => w.length > 1).every(w => e.includes(w)); };
@@ -52,7 +60,7 @@ const PROMPT = `너는 NSCM E2E 실패의 **독립 판정자**다. 화면 ${ID} 
 너의 일은 **고치는 것이 아니라 판정만** 하는 것이다. 파일을 수정하거나 명령을 실행하지 마라(읽기·검색 도구만 쓸 수 있다).
 
 ## 판정 대상 — 실패 항목 = 아래 '실패 요약' 의 errors 에 있는 것만(여기 없는 항목을 새로 만들지 마라)
-- 실패 요약(Doc/e2e/results/_summary.csv 의 "${ID}","${KIND}" FAIL 행 — 스크립트가 옮김):
+- 실패 요약(${relp(SUMF)} 의 "${ID}","${KIND}" FAIL 행 — 스크립트가 옮김):
 ${failRows.length ? failRows.map((r, n) => `  ${n + 1}) account=${r.account || '-'} errors=${r.errors}\n     annotations=${r.annotations}`).join('\n') : '  (FAIL 행 없음 — 판정할 실패 항목이 없으면 items 를 비워라)'}
 - 실행 로그 ${logRel} 의 Error: 블록(스크립트가 옮김):
 ${logErr || '  (없음)'}

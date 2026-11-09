@@ -1,0 +1,22 @@
+// SCP0030 GetBodItemModal.module.scss 동일 — 검색영역 없이 그리드가 다이얼로그 높이를 flex 로 채운다.
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.buttonWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 8px;
+}

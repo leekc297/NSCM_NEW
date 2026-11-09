@@ -1,0 +1,93 @@
+[
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 397,
+  "at": "2026-11-09T02:15:08.113Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 191,
+  "dur": 381,
+  "at": "2026-11-09T02:15:09.139Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "popup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/popup/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"HQ07-E\",\"materialId\":\"\"}",
+  "status": 200,
+  "rows": 268,
+  "dur": 302,
+  "at": "2026-11-09T02:15:22.631Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "popup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/popup/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"HQ07-E\",\"materialId\":\"APCAN0506B\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 323,
+  "at": "2026-11-09T02:17:13.746Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "popup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/popup/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"HQ07-E\",\"materialId\":\"APCAN0506B\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 278,
+  "at": "2026-11-09T02:20:35.942Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "popup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/popup/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"HQ07-E\",\"materialId\":\"APCAN0506B\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 311,
+  "at": "2026-11-09T02:23:59.474Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "popup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/popup/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"HQ07-E\",\"materialId\":\"APCAN0506B\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 360,
+  "at": "2026-11-09T02:27:21.378Z",
+  "user": "minyonglee1",
+  "test": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+ }
+]

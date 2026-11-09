@@ -1,0 +1,45 @@
+{
+ "generated": "2026-11-09 13:09:09",
+ "db": "ZIOUI1",
+ "spec_ddl": "2026-11-04 16:00:18",
+ "body_ddl": "2026-11-06 06:09:06",
+ "orig_body_ddl": "2026-11-04 14:48:42",
+ "lines": {
+  "PACKAGE": 124,
+  "PACKAGE BODY": 28837
+ },
+ "fp_spec": [
+  104,
+  7660,
+  225891144160
+ ],
+ "fp_body": [
+  27888,
+  1548471,
+  60508527752322
+ ],
+ "fp_orig_gmd": [
+  5285,
+  323720,
+  11513597021521
+ ],
+ "deps": 128,
+ "deps_dyn": 3,
+ "cols": 2628,
+ "grants": [
+  {
+   "GRANTEE": "RL_SCM_DML",
+   "PRIVILEGE": "DEBUG"
+  },
+  {
+   "GRANTEE": "RL_SCM_DML",
+   "PRIVILEGE": "EXECUTE"
+  }
+ ],
+ "syns": [
+  {
+   "OWNER": "SCMP_APP",
+   "SYNONYM_NAME": "PKG_DMF0082_1104"
+  }
+ ]
+}

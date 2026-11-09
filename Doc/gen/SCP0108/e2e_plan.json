@@ -1,0 +1,488 @@
+{
+  "menuId": "SCP0108",
+  "page": "CapaLobReport",
+  "feature": "supply",
+  "routePath": "supply/capa-lob-report",
+  "asisName": "CAPA_LOB_Report",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "version",
+      "label": "Plan Month",
+      "lbl": "LBL00053",
+      "kind": "single",
+      "component": "VersionField",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboVersion"
+    },
+    {
+      "key": "versionSeq",
+      "label": "Ver.",
+      "lbl": "LBL00031",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboVersionSeq"
+    },
+    {
+      "key": "planType",
+      "label": "_plan_type",
+      "lbl": "LBL00040",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtPlanType"
+    },
+    {
+      "key": "divisionType",
+      "label": "Operation group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "RadioGroup",
+      "comboId": "",
+      "popup": false,
+      "asis": "rgrpDivisionType"
+    },
+    {
+      "key": "siteIds",
+      "label": "Site",
+      "lbl": "LBL00015",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbSite"
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant",
+      "lbl": "LBL00030",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlant"
+    },
+    {
+      "key": "factory",
+      "label": "Building",
+      "lbl": "LBL00008",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFactory"
+    },
+    {
+      "key": "line",
+      "label": "Line",
+      "lbl": "LBL00010",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbLine"
+    },
+    {
+      "key": "operation",
+      "label": "Operation",
+      "lbl": "LBL00009",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbOperation"
+    },
+    {
+      "key": "itemIds",
+      "label": "Basic Nickname",
+      "lbl": "LBL00054",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtItem"
+    },
+    {
+      "key": "bottleneck",
+      "label": "Bottleneck",
+      "lbl": "LBL00055",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboBottleneck"
+    },
+    {
+      "key": "electrodeType",
+      "label": "Line Type",
+      "lbl": "LBL00056",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbElectrodeType"
+    },
+    {
+      "key": "progressStatus",
+      "label": "Status",
+      "lbl": "LBL00014",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboProgressStatus"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "column",
+      "label": "Column",
+      "lbl": "LBL00711",
+      "kind": "subtitle-custom",
+      "tobe": "COLUMN_SETUP",
+      "asis": "btnColumn"
+    },
+    {
+      "key": "itemId",
+      "label": "Item Id",
+      "lbl": "LBL01142",
+      "kind": "field-popup",
+      "tobe": "FunctionSearchIcon",
+      "asis": "btnItemId"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "CURRENT",
+      "key": "CURRENT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "COMPANY_ID",
+        "DIVISION_ID",
+        "ELTR_LN_TP_CD",
+        "LINE_ID",
+        "LINE_NAME",
+        "NICK_NAME",
+        "OPERATION_ID",
+        "OPERATION_NAME",
+        "PLANT_ID",
+        "PLANT_NAME",
+        "SITE_ID",
+        "SITE_NAME",
+        "VER_ID",
+        "VER_SEQ"
+      ],
+      "labels": [
+        "Company",
+        "Div",
+        "Line Type",
+        "Line",
+        "Line Name",
+        "Basic Nickname",
+        "Operation",
+        "Operation Name",
+        "Plant",
+        "Plant Name",
+        "Site",
+        "Site Name",
+        "Ver",
+        "Seq"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "CUTOFF",
+      "key": "CUTOFF",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "COMPANY_ID",
+        "DIVISION_ID",
+        "DV",
+        "ELTR_LN_TP_CD",
+        "LINE_ID",
+        "LINE_NAME",
+        "NICK_NAME",
+        "OPERATION_ID",
+        "OPERATION_NAME",
+        "PLANT_ID",
+        "PLANT_NAME",
+        "SITE_ID",
+        "SITE_NAME",
+        "VER_ID",
+        "VER_SEQ"
+      ],
+      "labels": [
+        "Company",
+        "Div",
+        "DV",
+        "Line Type",
+        "Line",
+        "Line Name",
+        "Basic Nickname",
+        "Operation",
+        "Operation Name",
+        "Plant",
+        "Plant Name",
+        "Site",
+        "Site Name",
+        "Ver",
+        "Seq"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "MAIN",
+      "key": "MAIN",
+      "popup": false,
+      "rule": "메타 정의만, 코드 미참조(미사용 가능)",
+      "columns": [
+        "COMPANY_ID",
+        "DIVISION_ID",
+        "ELTR_LN_TP_CD",
+        "FACTORY_ID",
+        "FACTORY_NAME",
+        "LINE_ID",
+        "LINE_NAME",
+        "NICK_NAME",
+        "OPERATION_ID",
+        "PLANT_ID",
+        "PLANT_NAME",
+        "SITE_ID",
+        "SITE_NAME",
+        "VER_ID",
+        "VER_SEQ"
+      ],
+      "labels": [
+        "Company",
+        "Div",
+        "Line Type",
+        "Building",
+        "Building",
+        "Line",
+        "Line",
+        "Basic Nickname",
+        "Operation",
+        "Plant",
+        "Plant",
+        "Site",
+        "Site",
+        "Ver",
+        "Seq"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "CURRENT",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0108.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0104_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0108.P_SCP0104_GET_SPREAD_TITLE",
+      "entries": [
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:this.cboDivision.SelectedIndexChanged",
+        "event:this.cboVersion.SelectedIndexChanged",
+        "event:this.cboVersionSeq.SelectedIndexChanged",
+        "event:this.rgrpDivisionType.SelectedIndexChanged"
+      ]
+    }
+  ],
+  "hasSave": false,
+  "hasSpreadTitle": true,
+  "handlers": [
+    {
+      "name": "handleColumn",
+      "target": "this.btnColumn",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0104_GET_SPREAD_TITLE"
+      ]
+    },
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCP0104_GET_SPREAD_TITLE",
+        "biz:CommonData.YesOrNo"
+      ]
+    },
+    {
+      "name": "handleDivision",
+      "target": "this.cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0104_GET_SPREAD_TITLE"
+      ]
+    },
+    {
+      "name": "handleVersion",
+      "target": "this.cboVersion",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0104_GET_SPREAD_TITLE"
+      ]
+    },
+    {
+      "name": "handleVersionSeq",
+      "target": "this.cboVersionSeq",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0104_GET_SPREAD_TITLE"
+      ]
+    },
+    {
+      "name": "handleSite",
+      "target": "this.clbSite",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handlePlant",
+      "target": "this.clbPlant",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleFactory",
+      "target": "this.clbFactory",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleLine",
+      "target": "this.clbLine",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleOperation",
+      "target": "this.clbOperation",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handlergrpDivisionType",
+      "target": "this.rgrpDivisionType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0104_GET_SPREAD_TITLE"
+      ]
+    },
+    {
+      "name": "handleMainTopChange",
+      "target": "this.spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleItem",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

@@ -48,6 +48,7 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
   const setSearchCondition = useCapaSpeedPlanStore(state => state.setSearchCondition);
   const setDivision = useCapaSpeedPlanStore(state => state.setDivision);
   const setDivisionType = useCapaSpeedPlanStore(state => state.setDivisionType);
+  const setVersion = useCapaSpeedPlanStore(state => state.setVersion);
   const openSearchArea = useCapaSpeedPlanStore(state => state.openSearchArea);
   const planType = useCapaSpeedPlanStore(state => state.planType);
 
@@ -114,16 +115,13 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
               )}
             />
           </Grid>
-          {/* Item — 라벨이 Operation group(DivisionType)별 동적이다(AS-IS 01 L-03 파리티, 자매 SCP0104
-              동일): Cell/Module-Pack = Basic Nickname(LBL00054) / Electrode = Material(LBL00021).
-              조건은 `showOperation`(= divisionType !== ELTR). AS-IS Electrode 는 Model(LBL00669)이었으나
-              사용자 지시 2026-10-28 로 Electrode 라벨만 Material(LBL00021)로 변경(필드는 항상 노출, 라벨만 전환).
-              입력창 + 팝업 아이콘은 한 덩어리(hook #121 popupSearchField). 선택은 다중(팝업 multiSelect →
-              콤마결합) — CapaSpeedPlanItemPopup 참조. */}
+          {/* Model/Nickname — 사용자 지시 2026-11-09: 종전 Material/Basic Nickname(동적 라벨 + CapaItemPopup)을
+              SSP0014 Model/Nickname 조회조건으로 교체. 입력창 + 돋보기 → 공용 MaterialByDivisionModal(COM0013,
+              SCP0013 정합). 팝업 선택 결과 ITEM_ID 를 itemId(GET p_item_id)로 채운다 — CapaSpeedPlanItemPopup 참조. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={showOperation ? t('LBL00054', '_Basic Nickname') : t('LBL00021', '_Material')}
+              label={t('LBL00618', '_Model/Nickname')}
               labelAlign='right'
               render={() => (
                 <InputField
@@ -177,9 +175,9 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
                   disabled={disabled}
                   value={sc.version}
                   options={combos.versionOptions}
-                  onChange={(_, picked) =>
-                    guardDirty(() => setSearchCondition({ version: String(picked ?? '') }))
-                  }
+                  // Plan Month 변경 = 이후 조회조건 초기화(VersionSeq/Status 재시드 + 하위 cascade ALL,
+                  //   사용자 요청 2026-11-06). store setVersion 이 담당.
+                  onChange={(_, picked) => guardDirty(() => setVersion(String(picked ?? '')))}
                 />
               )}
             />

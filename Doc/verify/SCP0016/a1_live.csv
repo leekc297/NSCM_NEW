@@ -1,0 +1,4 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+SCP0016,main|같은 사용자,SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL,REVIEW,0,436,AS-IS 0행 · TO-BE 436행,사용자 lucky-alex(ADMIN) · 양쪽 직접 실행
+SCP0016,main|조회시간,SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL,PASS,0,436,조회 시간 TO-BE 3.2초(436행) · AS-IS 5.8초(0행),사용자 lucky-alex(ADMIN) · 양쪽 직접 실행
+SCP0016,main,SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL,REVIEW,0,436,"AS-IS 0행 · TO-BE 436행 · 키 ['BIZ_TYPE_NAME', 'PROJECT_CODE', 'ITEM_ID', 'NICK_NAME', 'TO_SITE_NAME', 'INCOTERMS', 'FROM_SITE_NAME', 'TRANSPORT_MODE'] AS-IS 전용 0 · TO-BE 전용 218 · 값 대조 0칸(숫자 컬럼 444) · 불일치 컬럼 0","미대응 인자 ['p_user_id', 'debug_mode']"

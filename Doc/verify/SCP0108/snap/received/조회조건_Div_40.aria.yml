@@ -1,0 +1,44 @@
+- text: Division
+- combobox: 81 Automotive Battery
+- button "Open"
+- text: Plan Month
+- combobox: "{YM}"
+- button "Open"
+- text: Version
+- combobox: "1"
+- button "Open"
+- textbox: RP
+- text: Status
+- combobox [disabled]: Current
+- button "Open" [disabled]
+- text: Site
+- combobox "ALL"
+- button "Open"
+- text: Plant
+- combobox "ALL"
+- button "Open"
+- text: Building
+- combobox "ALL"
+- button "Open"
+- text: Line
+- combobox "ALL"
+- button "Open"
+- button "Search(F5)"
+- button
+- separator
+- text: Operation group
+- combobox: Cell
+- button "Open"
+- text: Operation
+- combobox "ALL"
+- button "Open"
+- text: Line Type
+- combobox "ALL"
+- button "Open"
+- text: Basic Nickname
+- textbox
+- button
+- text: Bottleneck
+- combobox: ALL
+- button "Open"
+# visual-order: Division > Plan Month > Version > Status > Site > Plant > Plant > Building > Line > Operation group > Operation > Line Type > Basic Nickname > Bottleneck

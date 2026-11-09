@@ -1,0 +1,660 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "SCP0084",
+      "--grep",
+      "@smoke"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/e2e/results/SCP0084/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0084\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0084\\results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0084\\html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "SCP0084.smoke.spec.ts",
+      "file": "SCP0084.smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "SCP0084 LongTermStock 스모크 @smoke",
+          "file": "SCP0084.smoke.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "화면 열림 · 조회조건 · 조회 · 그리드 컬럼",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "console",
+                      "description": "열림 직후 오류 43(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                    },
+                    {
+                      "type": "labels",
+                      "description": "펼침=false 일치 4 / 누락 0"
+                    },
+                    {
+                      "type": "console",
+                      "description": "오류 53(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                    },
+                    {
+                      "type": "columns",
+                      "description": "시트 Long Term Stock(main) 헤더 46 / 기대 40 / 누락 0: "
+                    },
+                    {
+                      "type": "calls",
+                      "description": "[[\"main\",\"SEARCH\",200,2038,1048]]"
+                    },
+                    {
+                      "type": "i18n",
+                      "description": "'_' 노출 0"
+                    },
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5632,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T07:46:14.797Z",
+                      "annotations": [
+                        {
+                          "type": "console",
+                          "description": "열림 직후 오류 43(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                        },
+                        {
+                          "type": "labels",
+                          "description": "펼침=false 일치 4 / 누락 0"
+                        },
+                        {
+                          "type": "console",
+                          "description": "오류 53(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                        },
+                        {
+                          "type": "columns",
+                          "description": "시트 Long Term Stock(main) 헤더 46 / 기대 40 / 누락 0: "
+                        },
+                        {
+                          "type": "calls",
+                          "description": "[[\"main\",\"SEARCH\",200,2038,1048]]"
+                        },
+                        {
+                          "type": "i18n",
+                          "description": "'_' 노출 0"
+                        },
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d78240201136862a49e0-22fb85438dfc36c7fdcc",
+              "file": "SCP0084.smoke.spec.ts",
+              "line": 11,
+              "column": 7
+            },
+            {
+              "title": "조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [
+                    {
+                      "type": "cond",
+                      "description": "[OK] (기준 조회)(search) — call-proc 1"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[WARN] Div(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] Plant(combo) — 옵션 'AZ Arizona Mobile Prod' → 조회 정상 · 조회 인자 변화 있음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] Long Term Type(combo) — 옵션 '비대상' → 조회 정상 · 조회 인자 변화 있음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] Month(period) — 기간 '2026.09' ~ '' → 조회 정상"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] (기준표 순서)(order) — month → div → plant → longtermtype"
+                    },
+                    {
+                      "type": "condsum",
+                      "description": "5/6 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 0"
+                    },
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 26189,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T07:46:22.890Z",
+                      "annotations": [
+                        {
+                          "type": "cond",
+                          "description": "[OK] (기준 조회)(search) — call-proc 1"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[WARN] Div(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Plant(combo) — 옵션 'AZ Arizona Mobile Prod' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Long Term Type(combo) — 옵션 '비대상' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Month(period) — 기간 '2026.09' ~ '' → 조회 정상"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] (기준표 순서)(order) — month → div → plant → longtermtype"
+                        },
+                        {
+                          "type": "condsum",
+                          "description": "5/6 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 0"
+                        },
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d78240201136862a49e0-2a47c74bf64b364b5b5f",
+              "file": "SCP0084.smoke.spec.ts",
+              "line": 106,
+              "column": 7
+            },
+            {
+              "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
+              "ok": false,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "common",
+                      "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 2038"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 3"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 3개 중 기간 키 0 (divisionId, longTermTypeCode, plantId)"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 1개 재진입 후 그대로 복원"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 4개 유지"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] (저장 조회조건 복원)(common) — 테스트 전 저장값 3건 재저장 HTTP 200"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[FAIL] Excel 다운로드(common) — 다운로드 없음 — 알림 '조회된 데이터가 없습니다. Confirm'"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "commonsum",
+                      "description": "11/12 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
+                    },
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 95496,
+                      "error": {
+                        "message": "Error: 공통 기능 FAIL 1: Excel 다운로드\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
+                        "stack": "Error: 공통 기능 FAIL 1: Excel 다운로드\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts:121:121",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts",
+                          "column": 121,
+                          "line": 121
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'common'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_common`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 123 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 124 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts",
+                            "column": 121,
+                            "line": 121
+                          },
+                          "message": "Error: 공통 기능 FAIL 1: Excel 다운로드\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  119 |     const s = record(test.info(), 'common', items);\n  120 |     await nscm.snapshot(`${MENU}_common`);\n> 121 |     expect.soft(s.fail, `공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                         ^\n  122 |   });\n  123 | });\n  124 |\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts:121:121"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T07:46:51.893Z",
+                      "annotations": [
+                        {
+                          "type": "common",
+                          "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 2038"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 3"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 3개 중 기간 키 0 (divisionId, longTermTypeCode, plantId)"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 1개 재진입 후 그대로 복원"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 4개 유지"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] (저장 조회조건 복원)(common) — 테스트 전 저장값 3건 재저장 HTTP 200"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[FAIL] Excel 다운로드(common) — 다운로드 없음 — 알림 '조회된 데이터가 없습니다. Confirm'"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "commonsum",
+                          "description": "11/12 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
+                        },
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0084\\artifacts\\SCP0084.smoke-SCP0084-Long-47060-·Columns·Search-Area·Manual-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0084\\artifacts\\SCP0084.smoke-SCP0084-Long-47060-·Columns·Search-Area·Manual-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0084\\artifacts\\SCP0084.smoke-SCP0084-Long-47060-·Columns·Search-Area·Manual-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts",
+                        "column": 121,
+                        "line": 121
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 95636,
+                      "error": {
+                        "message": "Error: 공통 기능 FAIL 1: Excel 다운로드\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
+                        "stack": "Error: 공통 기능 FAIL 1: Excel 다운로드\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts:121:121",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts",
+                          "column": 121,
+                          "line": 121
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'common'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_common`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 123 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 124 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts",
+                            "column": 121,
+                            "line": 121
+                          },
+                          "message": "Error: 공통 기능 FAIL 1: Excel 다운로드\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  119 |     const s = record(test.info(), 'common', items);\n  120 |     await nscm.snapshot(`${MENU}_common`);\n> 121 |     expect.soft(s.fail, `공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                         ^\n  122 |   });\n  123 | });\n  124 |\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts:121:121"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-08T07:48:35.051Z",
+                      "annotations": [
+                        {
+                          "type": "common",
+                          "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 2038"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 3"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 3개 중 기간 키 0 (divisionId, longTermTypeCode, plantId)"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 1개 재진입 후 그대로 복원"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 4개 유지"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] (저장 조회조건 복원)(common) — 테스트 전 저장값 3건 재저장 HTTP 200"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[FAIL] Excel 다운로드(common) — 다운로드 없음 — 알림 '조회된 데이터가 없습니다. Confirm'"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "commonsum",
+                          "description": "11/12 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
+                        },
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0084\\artifacts\\SCP0084.smoke-SCP0084-Long-47060-·Columns·Search-Area·Manual-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0084\\artifacts\\SCP0084.smoke-SCP0084-Long-47060-·Columns·Search-Area·Manual-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0084\\artifacts\\SCP0084.smoke-SCP0084-Long-47060-·Columns·Search-Area·Manual-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts",
+                        "column": 121,
+                        "line": 121
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d78240201136862a49e0-ffe9b702ec85cbdd7ecb",
+              "file": "SCP0084.smoke.spec.ts",
+              "line": 115,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T07:46:14.405Z",
+    "duration": 246686.49,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

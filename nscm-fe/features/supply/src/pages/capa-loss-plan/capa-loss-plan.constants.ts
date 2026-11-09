@@ -82,14 +82,15 @@ export const DIVISION_TYPE = {
 export type DivisionType = (typeof DIVISION_TYPE)[keyof typeof DIVISION_TYPE];
 
 /**
- * 초기 선택값 = Cell.
+ * 초기 선택값 = Electrode(ELTR).
  *
  * AS-IS Designer 는 `SelectedIndex` 를 세팅하지 않아 `-1`(무선택)로 시작하고, 그 상태는
- * `GetDivisionTypeName(-1)='ELTR'` 인데 `GetShopGroupId(-1)='P'` 라는 비정합이다(01 L-32).
- * **AS-IS 실행화면 캡처 실측**(`human-doc/asis-screenshot.png` — 라디오가 `⦿ Cell`)으로
- * `Cell` 을 확정했다(decisions.md §B-1). 재판단 금지.
+ * `GetDivisionTypeName(-1)='ELTR'` 로 귀결된다(01 L-32). **사용자가 제시한 현재 AS-IS 조회조건
+ * 캡처(2026-11-03)에서 라디오가 `⦿ Electrode`** 로, 화면 기동 기본값이 Electrode 임이 확정됐다.
+ * 설계 세션이 근거로 삼은 구(舊) 캡처(`human-doc/asis-screenshot.png`, `⦿ Cell`)는 사용 중 화면이라
+ * 기동 기본값이 아니었다 — 사용자 지시로 ELTR 로 정정(decisions.md §B-1 Cell 결정을 override).
  */
-export const DEFAULT_DIVISION_TYPE: DivisionType = DIVISION_TYPE.CELL;
+export const DEFAULT_DIVISION_TYPE: DivisionType = DIVISION_TYPE.ELTR;
 
 /** AS-IS ScpCapa.GetShopGroupId(CAPA:111~135) — 마스터 슬라이스의 SHOP_GROUP_ID 필터축. */
 export const SHOP_GROUP_ID: Record<DivisionType, string> = {
@@ -423,9 +424,11 @@ export const MEASURE_COLOR_BY_CODE: Readonly<Record<string, MeasureColor>> = {
 // ====================================================================================
 // 숫자 포맷 (design 03 R-07 / V-33)
 // ====================================================================================
-//   메타 `DATA_SCALE_NUMBER` 가 226행 전건 NULL 이라 메타로 풀 수 없다(C-05, 메타 정비 대상).
-//   AS-IS 는 measure 26종에 대해 조회 1자리 / 편집 10자리를 건다. 자릿수가 measure 별로 다르지
-//   않고 **모드로만 갈리므로** 상수 배열이 아니라 모드 상수 2개로 충분하다(컬럼명 배열 이식 아님).
+//   화면상수 유지 파리티 확정(C-05 / I-05 — 2026-11-04 사용자 확정). 메타는 소수 컬럼이
+//   `DATA_SCALE_NUMBER` 1개뿐이라 AS-IS 의 2모드(조회 1 / 편집 10)를 **담을 수 없고**(ora.py 실측:
+//   스케일 컬럼 1개 · SCP0106 226행 전건 NULL), 전 컬럼 동일 스케일이라 per-column 메타가 더해줄
+//   값도 없다. AS-IS 는 measure 26종에 대해 조회 1자리 / 편집 10자리를 **모드로만** 가르므로
+//   상수 배열이 아니라 모드 상수 2개로 충분하다(컬럼명 배열 이식 아님).
 export const SCALE_VIEW = 1;
 export const SCALE_EDIT = 10;
 
@@ -439,6 +442,7 @@ export const COLUMN_WIDTH_EDIT = 140;
 // 헤더는 3단이다(1단 LARGE / 2단 SMALL / 3단 COLUMN_LABEL). depth 를 별도 상수로 두지 않는다 —
 //   단 수는 `buildPeriodColumns` 의 중첩 구조가 곧 표현이고, 높이만 아래 prop 단일 출처로 준다.
 export const HEADER_ROW_HEIGHT = 16; // 3단 x 16 = 총높이 48px (AS-IS 20x3=60 이식 금지)
+export const HEADER_DEPTH = 3; // 3단 헤더(LARGE/SMALL/leaf). 총높이 = HEADER_ROW_HEIGHT x HEADER_DEPTH = 48px
 
 // ====================================================================================
 // 저장 직렬화 (design 03 §3.5 — AS-IS SetQueryInfoSave)
@@ -474,13 +478,15 @@ export const RATE_DIVISOR = 100;
 //     "Please select Division." 로 전혀 다르다(메모리 msg00097-tobe-select-division-not-permission).
 //   - AS-IS MSG00004(저장 {0}건) -> TO-BE 는 **MSG00672** "{0} data saved.".
 //     TO-BE MSG00004 는 "No changes to save." 라 번호를 그대로 쓰면 뜻이 뒤집힌다.
-//   - AS-IS MSG00109 -> **MSG01454**("Read-only.") 문구 완전일치 채택(사용자 확정, decisions §A BLK-5).
-//     자매 SCP0105 는 `MSG00109`("Read-only mode.")를 쓰고 있어 현재 두 화면이 갈린다 —
-//     SCP0105 폴더는 Hard Boundary 밖이라 이번 회차에 고치지 않고 04 리포트에 후속 정합으로 올린다.
+//   - AS-IS MSG00109("Read-only."/"읽기 전용입니다", asis.py TB_FX_MessageInfo 실측, 소스 cs:2504/2513)
+//     -> TO-BE **MSG00109**("Read-only mode."/"읽기전용 상태입니다", 동일 의미 1:1). I-20 — 2026-11-04
+//     AS-IS 따라가기 확정. 이전엔 MSG01454 를 "Read-only" 로 오인해 매핑했으나, DB 재측정 결과
+//     MSG01454 는 "There is a request form currently being drafted.(작성중인 요청 품의가 있습니다)"
+//     로 전혀 다른 문구였다(AGENT.md 룰4). 자매 SCP0105·line-assign·speed-plan·line-master 도 전부 MSG00109.
 export const MSG = {
   NO_DIVISION_AUTH: 'MSG00667', // "No authority assigned." (AS-IS MSG00097, 01 L-07)
   PRE_READ_ONLY: 'MSG01406', // "Only inquiries are allowed when the status is Pre." (AS-IS MSG00419, L-12)
-  READ_ONLY: 'MSG01454', // "Read-only." (AS-IS MSG00109, L-13/L-15)
+  READ_ONLY: 'MSG00109', // "Read-only mode."/"읽기전용 상태입니다" (AS-IS MSG00109 동일 의미 1:1, L-13/L-15)
   NO_PERMISSION: 'MSG00096', // "No permission." (AS-IS MSG00096 동일 의미, L-22)
   SAVE_SUCCESS: 'MSG00672', // "{0} data saved." (AS-IS MSG00004)
   SAVE_FAIL: 'MSG00006', // "Failed to save." (AS-IS MSG00006 동일 의미)

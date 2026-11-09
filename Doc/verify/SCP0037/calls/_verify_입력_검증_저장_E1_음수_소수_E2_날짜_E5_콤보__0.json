@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 284,
+  "at": "2026-11-07T08:33:24.756Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 318,
+  "at": "2026-11-07T08:33:59.632Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SCP0037",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0037/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"scmSiteId\":\"ALL\",\"itemId\":\"ALL\",\"scmValidYn\":\"ALL\",\"ltOperation\":\"SLITTING\"}",
+  "status": 200,
+  "rows": 3345,
+  "dur": 292,
+  "at": "2026-11-07T08:34:53.476Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ }
+]

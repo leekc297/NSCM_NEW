@@ -18,6 +18,7 @@ import json
 import os
 import re
 import sys
+from asis_variant import is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
@@ -125,7 +126,7 @@ def asis_facts(sid):
     acts, ents, props = rd(os.path.join(sd, 'actions.csv')), rd(os.path.join(sd, 'actions_entries.csv')), rd(os.path.join(sd, 'props.csv'))
     if not acts: return None
     files = {f['file']: f.get('variant') for f in rd(os.path.join(sd, 'files.csv'))}
-    cur = {f for f, v in files.items() if v in ('current', 'shared')}
+    cur = {f for f, v in files.items() if is_cur({'variant': v})}  # T172: only 포함
     try:
         from asis_live import dead_methods
         dead = dead_methods(sid)
@@ -145,7 +146,7 @@ def asis_facts(sid):
     # 라벨: layout item → Control → Text
     ctrl_of, text_of = {}, {}
     for p in props:
-        if p['variant'] not in ('current', 'shared'): continue
+        if not is_cur(p): continue
         if p['prop'] == 'Control': ctrl_of[p['target']] = p['value'].replace('this.', '').strip()
         if p['prop'] in ('Text', 'Caption', 'CustomizationFormText'):
             v = p['value'].strip().strip('"')
@@ -205,7 +206,11 @@ def asis_facts(sid):
         if r['method'] in ins_methods and r['kind'] in ('MESSAGE', 'RETURN', 'FLOW') and re.search(r'NowGroupID|GROUP', r['guard'] or ''):
             ins.append({'kind': r['kind'], 'raw': r['raw'][:220], 'cond': norm_guard(r['guard'], cases.get((r['class'], r['method']), {})), 'value': (r['value'] or '')[:120], 'ref': f"{os.path.basename(r['file'])}:{r['line']}"})
     ins_stmts = [{'kind': r['kind'], 'raw': r['raw'][:160], 'ref': f"{os.path.basename(r['file'])}:{r['line']}", 'method': r['method']} for r in live if r['method'] in ins_methods and re.search(r'(?i)ActiveRow|AddRow|AddRows|InsertRow|Rows\.Add|GetSelection', r['raw'])]
-    hspan = [{'raw': r['raw'][:120], 'ref': f"{os.path.basename(r['file'])}:{r['line']}", 'method': r['method']} for r in live if re.search(r'ColumnHeaderSpan|AddColumnHeaderSpanCell|ColumnHeader\.(?:Cells\[.*\]\.(?:ColumnSpan|RowSpan))', r['raw']) and r['kind'] != 'BRANCH']
+    # 2026-11-06(SCP0016 EG315 허위 FAIL): ColumnHeaderSpan(row, col, 1, 1, …) 처럼 rowSpan·colSpan 이 모두 1인 문장은 병합이 아니다 → 기대에서 제외
+    def _is_1x1(raw):
+        m = re.search(r'ColumnHeaderSpan\s*\(\s*[^,]+,\s*[^,]+,\s*(\d+)\s*,\s*(\d+)', raw)
+        return bool(m and m.group(1) == '1' and m.group(2) == '1')
+    hspan = [{'raw': r['raw'][:120], 'ref': f"{os.path.basename(r['file'])}:{r['line']}", 'method': r['method']} for r in live if re.search(r'ColumnHeaderSpan|AddColumnHeaderSpanCell|ColumnHeader\.(?:Cells\[.*\]\.(?:ColumnSpan|RowSpan))', r['raw']) and r['kind'] != 'BRANCH' and not _is_1x1(r['raw'])]
     excl = sorted(k for k, v in plan_f.items() if v.get('excluded'))
     edit_rules = [{'column': e['column'], 'cond': e['existing_cond'], 'ref': e.get('ref', '')} for e in rd(os.path.join(sd, 'edit_expect.csv')) if (e.get('existing_cond') or '').startswith('RULES:')]
     return {'insertStmts': ins_stmts, 'headerSpan': hspan, 'planExcluded': excl, 'editRules': edit_rules, 'mainClass': main, 'divControls': div_ctl, 'changeMethods': sorted(change), 'loadMethods': sorted(load), 'states': branching, 'stateCountAll': len(states), 'defaults': defaults, 'insertGuards': ins,

@@ -121,6 +121,9 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   //   셀 단위는 추가로 행 EDIT_YN('Y') × 당월 이후(ym >= curYm — AS-IS EditButton L271~280) 게이트.
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   const canEdit = hasButton('EDIT') && divisionId === '40';
+  // Save 는 저장 시트(futurePriceInfo) SAVE 권한도 본다 — EDIT 만 보면 group menu 에서 futurePriceInfo
+  //   SAVE 를 꺼도 버튼이 남고 서버가 거절한다.
+  const canSave = canEdit && hasButton('SAVE', SHEETS.FUTURE_PRICE_INFO);
 
   // 당월 기준 잠금 경계 (AS-IS this_YYYYMM = DateTime.Today "yyyyMM")
   const curYm = useMemo(() => {
@@ -841,6 +844,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 //   계층 머지를 담당하나, prop 미전달 시 wrapper 가 매 렌더 g.allowMerging 을 기본(ColumnHeaders)으로
                 //   되돌려 셀 머지가 꺼짐. 형제 PriceBatchInputModal 과 동일하게 All 전달로 일관 적용.
                 allowMerging={AllowMerging.All}
+                // 읽기전용 자동 잠금을 futurePriceInfo 시트 SAVE 권한으로 판정(메뉴 단위면 FcstNPrice SAVE 와 섞임)
+                saveAuth={{ menuId: MENU_ID, sheetName: SHEETS.FUTURE_PRICE_INFO }}
               />
             </ResultArea>
           </div>
@@ -870,7 +875,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 onClick={handleInsert}
               />
             )}
-            {canEdit && (
+            {canSave && (
               <Button
                 appearance='contained'
                 priority='primary'

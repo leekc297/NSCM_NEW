@@ -12,7 +12,7 @@
 | features/supply/src/pages/plan-management/components/PlanManagementGrid.module.scss | component | 41 |
 | features/supply/src/pages/plan-management/components/PlanManagementGrid.tsx | component | 203 |
 | features/supply/src/pages/plan-management/index.ts | index | 3 |
-| features/supply/src/pages/plan-management/plan-management.constants.ts | constants | 110 |
+| features/supply/src/pages/plan-management/plan-management.constants.ts | constants | 114 |
 | features/supply/src/pages/plan-management/plan-management.types.ts | types | 18 |
 | features/supply/src/pages/plan-management/PlanManagement.module.scss | style | 63 |
 | features/supply/src/pages/plan-management/PlanManagement.tsx | page | 291 |
@@ -89,8 +89,8 @@
 | MSG01471 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0134(3), SCP0015(1)
-- SP/PKG: PKG_SCP0134(4), P_SCP0134_SAVE_PLAN_MANAGEMENT_ACTV_RUN(3), P_ACTV_CD(1), P_SCP0134_GET_PLAN_MST(1), P_USER_ID(1), P_GROUP_ID(1)
+- 화면ID: SCP0134(3), SCP0015(2)
+- SP/PKG: PKG_SCP0134(4), P_SCP0134_SAVE_PLAN_MANAGEMENT_ACTV_RUN(3), P_ACTV_CD(1), FN_GET_DIVISION(1), P_SCP0134_GET_PLAN_MST(1), P_USER_ID(1), P_GROUP_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)
 

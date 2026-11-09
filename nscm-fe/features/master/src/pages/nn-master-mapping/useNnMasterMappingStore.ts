@@ -86,11 +86,14 @@ export const useNnMasterMappingStore = createPersistedStoreWithTab<State & Actio
      * BE: POST /admin/menu/{MENU_ID}/column { sheetNm }
      */
     fetchStaticColumns: async () => {
+      // 현재 사업부를 넘긴다 — UI Category 의 컬럼 사업부 지정(DIVISION_ID)이 적용되도록(예: PROJECT_CODE
+      //   40 제외, 2026-11-06). 비어 있으면 종전처럼 보내지 않는다(사업부 지정 무시 = 전체 컬럼).
+      const divisionId = get().searchCondition.divisionId || undefined;
       const fetchOne = async (sheetNm: string): Promise<RawFlexGridColumnConfig[]> => {
         try {
           const res = await apiClient.post<RawFlexGridColumnConfig[]>(
             `/admin/menu/${MENU_ID}/column`,
-            { sheetNm }
+            { sheetNm, divisionId }
           );
           const result = res.data?.result;
           if (!Array.isArray(result)) return [];

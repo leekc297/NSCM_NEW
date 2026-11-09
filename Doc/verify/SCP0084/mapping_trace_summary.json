@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SCP0084",
  "asis_id": "SCP0084",
- "generated": "2026-11-05T07:51:32",
+ "generated": "2026-11-08T17:05:49",
  "mapping_file": "nscm-fe\\features\\supply\\src\\pages\\long-term-stock\\__asis-mapping__.md",
  "rows": 372,
  "fe_rows": 22,
@@ -10,59 +10,56 @@
  "fe_page": "nscm-fe\\features\\supply\\src\\pages\\long-term-stock",
  "fe_mapping_missing": false,
  "verdict": {
-  "FAIL": 298,
-  "미검증": 21,
-  "검증완료": 53
+  "FAIL": 9,
+  "미검증": 274,
+  "검증완료": 89
  },
  "instances": 212,
  "instance_result": {
-  "NA": 72,
-  "PASS": 74,
-  "FAIL": 36,
-  "ERROR": 16,
-  "REVIEW": 12,
+  "NA": 83,
+  "PASS": 88,
+  "FAIL": 3,
+  "ERROR": 23,
+  "REVIEW": 13,
   "NOPATH": 2
  },
  "by_layer": {
   "동적 생성·조회": {
-   "NA": 27,
-   "ERROR": 13,
-   "REVIEW": 12,
-   "PASS": 10,
+   "NA": 29,
+   "ERROR": 17,
+   "REVIEW": 10,
+   "PASS": 11,
    "NOPATH": 1,
-   "FAIL": 7
+   "FAIL": 2
   },
   "정적 디자인": {
-   "PASS": 37,
-   "FAIL": 13,
-   "ERROR": 1
+   "PASS": 47,
+   "FAIL": 1,
+   "ERROR": 1,
+   "NA": 2
   },
   "DB 실행·접근": {
-   "FAIL": 4,
+   "PASS": 6,
    "NOPATH": 1,
-   "NA": 2,
-   "PASS": 3
+   "NA": 3
   },
   "권한": {
-   "FAIL": 1,
-   "PASS": 1
-  },
-  "콤보 후보": {
-   "NA": 3,
-   "PASS": 3
-  },
-  "편집·검증": {
-   "NA": 30,
-   "PASS": 16,
-   "FAIL": 8
-  },
-  "공통 기능": {
    "ERROR": 1,
    "PASS": 1
   },
+  "콤보 후보": {
+   "REVIEW": 3,
+   "PASS": 3
+  },
+  "편집·검증": {
+   "NA": 39,
+   "PASS": 15
+  },
+  "공통 기능": {
+   "PASS": 2
+  },
   "CRUD": {
-   "FAIL": 3,
-   "ERROR": 1
+   "ERROR": 4
   },
   "Cascade": {
    "NA": 8,
@@ -74,23 +71,25 @@
  },
  "by_check": {
   "A1": {
-   "REVIEW": 10
+   "REVIEW": 9,
+   "PASS": 1
   },
   "A10": {
    "PASS": 1
   },
   "A5": {
-   "PASS": 13
+   "PASS": 11,
+   "NA": 2
   },
   "A6": {
    "REVIEW": 1,
-   "PASS": 1
+   "FAIL": 1
   },
   "B3": {
    "PASS": 3
   },
   "B4": {
-   "NA": 3
+   "REVIEW": 3
   },
   "C1": {
    "PASS": 3
@@ -105,11 +104,11 @@
    "NA": 1
   },
   "D1": {
-   "PASS": 11,
-   "NA": 1
+   "PASS": 10,
+   "NA": 2
   },
   "D3": {
-   "FAIL": 8
+   "NA": 8
   },
   "D4": {
    "NA": 2
@@ -136,20 +135,20 @@
    "NA": 22
   },
   "F1": {
-   "FAIL": 1
+   "ERROR": 1
   },
   "F2": {
-   "FAIL": 1
+   "ERROR": 1
   },
   "F3": {
    "ERROR": 1
   },
   "F4": {
-   "FAIL": 4,
-   "PASS": 1
+   "PASS": 4,
+   "NA": 1
   },
   "F6": {
-   "FAIL": 1
+   "ERROR": 1
   },
   "G03-WIRE": {
    "NOPATH": 1
@@ -173,11 +172,10 @@
    "PASS": 3
   },
   "H10": {
-   "ERROR": 1
+   "PASS": 1
   },
   "H2": {
-   "FAIL": 11,
-   "PASS": 2
+   "PASS": 13
   },
   "H3": {
    "PASS": 2
@@ -189,16 +187,16 @@
    "NA": 1
   },
   "I1": {
-   "FAIL": 1
+   "ERROR": 1
   },
   "J1": {
    "PASS": 1
   },
   "J2": {
-   "FAIL": 1
+   "ERROR": 1
   },
   "K-SA": {
-   "ERROR": 1
+   "PASS": 1
   },
   "SC1": {
    "FAIL": 1
@@ -207,19 +205,19 @@
    "NA": 22
   },
   "X-REOPEN": {
-   "FAIL": 1
+   "PASS": 1
   },
   "X-ROW": {
-   "ERROR": 6,
-   "FAIL": 6,
-   "REVIEW": 1,
-   "PASS": 3
+   "ERROR": 10,
+   "FAIL": 1,
+   "PASS": 3,
+   "NA": 2
   }
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "NOPATH": 5,
-  "ERROR": 14,
-  "REVIEW": 3
+  "ERROR": 454,
+  "REVIEW": 6,
+  "NOPATH": 6
  }
 }

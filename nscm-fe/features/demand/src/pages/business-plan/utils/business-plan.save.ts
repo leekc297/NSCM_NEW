@@ -130,7 +130,8 @@ export const buildUnfoldRows = (params: {
     const qty = qtyOf(row[binding]);
     out.push({
       // 0 도 값으로 저장한다 (사용자 요청 2026-10-01 — 종전 '0' → 'D' 셀 단위 삭제 전환 제거).
-      //   빈칸으로 지운 셀도 qtyOf 가 '0' 으로 바꿔 0 으로 저장된다. 삭제는 Delete 행 표시로만 한다.
+      //   빈칸으로 지운 셀도 qtyOf 가 '0' 으로 바꿔 0 으로 저장된다. 저장된 데이터는 삭제하지 않는다 —
+      //   Delete 버튼은 저장 전 신규 행만 지운다(handleDelete, AS-IS L527).
       activeFlag: rowFlag,
       ...identityOf(row, divisionId),
       yyyymm,

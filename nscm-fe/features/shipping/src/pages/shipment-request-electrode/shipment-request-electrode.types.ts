@@ -49,6 +49,35 @@ export type RequestDetailExcelRow = ResponseData<MENU_ID, SHEETS.REQUEST_DETAIL_
 /** SSP0022_BodItemPopup 원천 행(P_SSP0022_GET_ITEM_POPUP) — ITEM_ID 더블클릭/붙여넣기 팝업(design 01 §5b#1,#15). */
 export type BodItemPopupRow = ResponseData<MENU_ID, SHEETS.BOD_ITEM_POPUP>;
 
+/**
+ * ETA 요청 팝업(SSP0022_ShipmentRequestPopup "Shipment Request Insert") 단일 입력행.
+ *   AS-IS InsertRow 1행(cs:319-332) — 더블클릭한 메인 pivot 행(R_SHIP_REQ_ETA)의 Div/Site/Model/Material/
+ *   Incoterms/TransMode/BOD/ConfirmDay 를 그대로 싣고(locked), 사용자는 Shipment Date·Qty 만 편집한다.
+ *   저장은 P_SSP0022_SAVE_SHIPMENT_REQUEST(p_active_flag='M', 단일행, cs:539-583).
+ *   WijmoRowItem(=Record<string, WijmoPrimitive>) 확장 — DataGrid<T> 제약 충족.
+ */
+export interface ShipmentRequestInsertRow extends WijmoRowItem {
+  // AS-IS siMain.Insert() — 팝업 열자마자 행 액션 'I'(cs:324). NSCM 은 insert 행을 dirty 로 보지만,
+  //   이 팝업은 AS-IS 처럼 닫기 경고가 없어야 하므로 DataGrid 에 excludeFromDirtyCheck 를 켜 dirty 집계에서
+  //   뺀다(그 prop 공식 용도 = "CRUD_TYPE 세팅하되 dirty 로 세지 않는 그리드"). 저장은 activeFlag='M' 고정.
+  CRUD_TYPE: 'I';
+  DIVISION_ID: string; // 표시용(Div 셀) — clbDivision 선택 division
+  DIVISION_ORG: string; // 저장 p_division_id — AS-IS _pDivision_org(siMain TEMPCOLUMN)
+  SCM_SITE_ID: string; // 저장 p_scm_site_id(parent, hidden)
+  PLANT_ID: string; // 저장 p_plant_id(parent, hidden)
+  FROM_SITE: string;
+  TO_SITE: string;
+  MODEL_ID: string;
+  ITEM_ID: string;
+  NICK_NAME: string;
+  SHIPMENT_DATE: string; // 편집 대상(FPDate) — p_eta_date
+  SHIPMENT_QTY: string; // 편집 대상(FPNumber) — p_qty
+  INCOTERMS: string;
+  TRANSPORT_MODE: string;
+  BOD_ID: string; // hidden — 저장 p_bod_id
+  CONFIRM_DAY: string; // hidden — ConfirmDayChk 비교용(cs:720-755)
+}
+
 /** 동적 pivot 컬럼 태그 파싱 결과(design 03 §2.2 정규식). */
 export interface DynamicColumnTag {
   bohMode: 'X' | 'Y' | 'Z';

@@ -238,6 +238,9 @@ export const ShipmentPlanConfirmDetail = ({ tabId, title }: PageProps<MENU_ID>) 
         title={t(LBL.COLUMN_SETTING, '_Column Setting')}
         leftTitle={t('LBL00764', '_Invisible')}
         rightTitle={t('LBL00765', '_Visible')}
+        // 2단 머지헤더(Departure/Arrival Port·Departure days·Lead Time)라 leaf 라벨이 중복된다
+        //   (Port*/Country*/Port Code* 가 양쪽, Mon~Sun 요일 등). 목록에 소분류 열을 함께 띄워 구분.
+        showSmallClass
         onSave={settings => {
           // (1) 로컬 즉시 반영 — store 가 표시/순서/폭/색을 staticColumns[MAIN] 에 적용 → grid 즉시 갱신.
           //   BE 재조회로는 개인화가 돌아오지 않으므로 grid 반영은 store 가 담당(forecast-price 선례 동일).

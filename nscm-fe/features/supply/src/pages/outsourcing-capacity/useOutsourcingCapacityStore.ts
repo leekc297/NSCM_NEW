@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { ADMIN_SHEET_NAME, MENU_ID, SHEETS } from './outsourcing-capacity.constants';
 import type { SearchCondition } from './outsourcing-capacity.types';
@@ -41,8 +41,10 @@ interface Action {
 const ARRAY_KEYS = new Set<string>(['plantSiteIds']);
 
 const initSearch: SearchCondition = {
-  // 기본 사업부 = 세션 division (supply 표준, formation/tact-time 동일). Division 콤보가 첫 옵션으로 교정.
-  divisionId: useSessionStore.getState().session.div ?? '',
+  // 기본 사업부 = AS-IS 와 동일하게 Division 콤보(EE 제외) 첫 항목(Form useEffect 자동선택). AS-IS
+  //   SCP0023 은 GetDivisionWithoutEE 바인딩 후 세션/특정값 지정 없이 첫 행이 선택된다(cs:50·135, MyDivision
+  //   라인은 주석). 세션 division 우선은 AS-IS 에 없어 제거(사용자 지시 2026-11-05).
+  divisionId: '',
   plantSiteIds: [],
   itemId: '',
   nickName: '',

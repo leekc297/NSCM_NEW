@@ -1,0 +1,17 @@
+{
+  "id": "SCP0122",
+  "task": "chain_testreport",
+  "scope": "none",
+  "note": "📋 테스트결과서 (CheckList 결과 → 그룹별 테스트 내역·결과 Excel · 캡처 포함)",
+  "start": "2026-11-06T12:45:58+09:00",
+  "end": "2026-11-06T12:46:04+09:00",
+  "exit": 0,
+  "sources": [],
+  "source": "menu",
+  "label": "📋 테스트결과서 (CheckList 결과 → 그룹별 테스트 내역·결과 Excel · 캡처 포함)",
+  "text": "1. CheckList 최신 확인 — 없거나 오래됐으면 E2E 포함 전체 실행(최신이면 건너뜀)\n2. 테스트결과서 Excel (Doc/테스트결과서)",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "changed": []
+}

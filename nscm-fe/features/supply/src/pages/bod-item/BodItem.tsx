@@ -5,16 +5,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CRUD_MSG } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import { useQueryClient } from '@foundation/query-client';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import {
-  useProcMutation,
-  useSaveWithValidation,
-  useStreamProcQuery,
-  useTabBtnPermissions,
-  useTabProcQuery,
-} from '@shared/hooks';
+import { useProcMutation, useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import {
@@ -69,31 +62,13 @@ export const BodItem = ({ tabId, title }: PageProps<MENU_ID>) => {
   const staticColumns = useBodItemStore(state => state.staticColumns);
   const searchParams = useBodItemStore(state => state.searchParams);
 
-  const queryClient = useQueryClient();
-
-  // [E20261015-STREAMPROC] BOD ITEM 은 대량(조건 ALL 28.9만 행)이라 스트리밍 조회 — 첫 묶음(약 1,000행)부터
-  //   그리드에 표시하고 나머지는 수신되는 대로 이어 붙인다(전량 대기 50~85초 → 첫 표시 약 3초).
-  //   From/To(FROM_YYYYMMDD·TO_YYYYMMDD)는 FPDateText 라 BE 의 datetime 을 date-only 로 정규화(기존과 동일).
-  const bodItemStream = useStreamProcQuery<BodItemRow>({
+  const { data: bodItemData } = useTabProcQuery<MENU_ID, SHEETS.BOD_ITEM>({
     menuId: MENU_ID,
     sheetName: SHEETS.BOD_ITEM,
-    gridRef: gridRefs[SHEET_INDEX.BOD_ITEM],
-    transformRow: row => ({
-      ...row,
-      [BOD_ITEM_COLUMN.FROM_YYYYMMDD]: toDateOnly(row[BOD_ITEM_COLUMN.FROM_YYYYMMDD]),
-      [BOD_ITEM_COLUMN.TO_YYYYMMDD]: toDateOnly(row[BOD_ITEM_COLUMN.TO_YYYYMMDD]),
-    }),
-    onError: error =>
-      void setAlert({ type: 'alert', content: error.message || t('', '_데이터 조회 실패.') }),
+    tabId,
+    filters: filters[SHEETS.BOD_ITEM],
+    enabled: !!filters[SHEETS.BOD_ITEM],
   });
-  const startBodItemStream = bodItemStream.start;
-  const isBodItemStreaming = bodItemStream.isStreaming;
-  // Search(=setFilters 가 새 filters 객체를 만듦)마다 재조회 — 기존 useTabProcQuery(filters 참조 변경 시 조회)와 같은 규약.
-  const bodItemFilter = filters[SHEETS.BOD_ITEM];
-  useEffect(() => {
-    if (bodItemFilter) startBodItemStream(bodItemFilter);
-  }, [bodItemFilter, startBodItemStream]);
-
   const { data: excludedData } = useTabProcQuery<MENU_ID, SHEETS.BOD_EXCLUDED>({
     menuId: MENU_ID,
     sheetName: SHEETS.BOD_EXCLUDED,
@@ -106,12 +81,6 @@ export const BodItem = ({ tabId, title }: PageProps<MENU_ID>) => {
     menuId: MENU_ID,
     sheetName: SHEETS.BOD_ITEM,
     tabId,
-    // 기본 onSuccess(탭 쿼리 무효화 + 성공 토스트)와 같고, BOD ITEM 은 스트리밍 조회라 같은 조건으로 다시 받는다.
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: [tabId] });
-      if (bodItemFilter) startBodItemStream(bodItemFilter);
-      void setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
-    },
   });
   const { mutate: mutateExcluded } = useProcMutation<MENU_ID, SHEETS.BOD_EXCLUDED>({
     menuId: MENU_ID,
@@ -124,8 +93,16 @@ export const BodItem = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   것만으로는(Search 를 누르기 전) 그리드를 건드리지 않는다. 과거 여기 deps 에 섞여 있던
   //   searchParams.divisionId 가 체크 즉시 새 배열 참조를 만들어 DataGrid itemsSource 를
   //   바꿔치기했고, 그 결과 편집·Insert 중인 행이 화면에서 사라졌다(사용자 리포트 2026-10-06).
-  // BOD ITEM 행 = 스트리밍 훅이 들고 있는 배열(첫 묶음 이후 같은 배열에 이어 붙임 → 참조 불변, 재바인딩 없음).
-  const bodItemRows = bodItemStream.data;
+  const bodItemRows = useMemo(
+    // From/To(FROM_YYYYMMDD·TO_YYYYMMDD)는 FPDateText 라 BE 의 datetime 을 date-only 로 정규화.
+    () =>
+      (bodItemData?.o_rc1 ?? []).map(row => ({
+        ...row,
+        [BOD_ITEM_COLUMN.FROM_YYYYMMDD]: toDateOnly(row[BOD_ITEM_COLUMN.FROM_YYYYMMDD]),
+        [BOD_ITEM_COLUMN.TO_YYYYMMDD]: toDateOnly(row[BOD_ITEM_COLUMN.TO_YYYYMMDD]),
+      })),
+    [bodItemData]
+  );
   const excludedRows = useMemo(
     // From/To(BOD_EX_FROM/TO_YYYYMMDD)는 FPDateText 라 BE datetime 을 date-only 로 정규화(마스크·저장 계약 정합).
     () =>
@@ -142,7 +119,7 @@ export const BodItem = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
 
   const rowCountByTab: Record<number, number> = {
-    [SHEET_INDEX.BOD_ITEM]: bodItemStream.loadedCount,
+    [SHEET_INDEX.BOD_ITEM]: bodItemRows.length,
     [SHEET_INDEX.BOD_EXCLUDED]: excludedRows.length,
   };
 
@@ -318,9 +295,7 @@ export const BodItem = ({ tabId, title }: PageProps<MENU_ID>) => {
     insert: canSave && activeTab === SHEET_INDEX.BOD_EXCLUDED ? handleInsert : false,
     // DELETE 도 Excluded 전용 — BOD Item 은 Insert 없음 → 신규행 없음 → AS-IS DeleteButton(action!='I' return)상 삭제 불가(cs:239-245).
     delete: canSave && activeTab === SHEET_INDEX.BOD_EXCLUDED ? handleDelete : false,
-    // 스트리밍 수신 중(BOD ITEM)에는 데이터가 아직 불완전 → 저장·엑셀을 잠시 막는다(수신 완료 시 자동 복귀).
-    save: canSave && !(activeTab === SHEET_INDEX.BOD_ITEM && isBodItemStreaming) ? handleSave : false,
-    ...(activeTab === SHEET_INDEX.BOD_ITEM && isBodItemStreaming ? { excel: false } : {}),
+    save: canSave ? handleSave : false,
     manual: false,
     upload: false,
   };
@@ -354,14 +329,6 @@ export const BodItem = ({ tabId, title }: PageProps<MENU_ID>) => {
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
       />
-      {activeTab === SHEET_INDEX.BOD_ITEM && isBodItemStreaming && (
-        <div className={styles.streamStatus}>
-          {t('', '_데이터 수신 중입니다. 표시된 행부터 조회할 수 있으며, 수신이 끝나면 저장·엑셀이 가능합니다. ({0}건)').replace(
-            '{0}',
-            bodItemStream.loadedCount.toLocaleString()
-          )}
-        </div>
-      )}
       <div className={styles.gridWrapper}>
         <TabWrapper persist activeTabIndex={activeTab} setActiveTabIndex={handleTabChange}>
           <TabItem label='BOD ITEM'>

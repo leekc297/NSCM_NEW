@@ -47,7 +47,7 @@ const initState: State = {
   isOpenSearchArea: true,
   searchParams: {
     mode: SEARCH_MODE.MONTH, // designer:341 RdoMonth.Checked=true → 기본 MONTH
-    month: dayjs().format('YYYYMM'), // 기본 최신월(SCP0084 미배포 폴백 — goal.md C1)
+    month: dayjs().format('YYYYMM'), // 폴백 — Form 월범위 effect 가 MAX_YYYYMM 도착 시 덮음(AS-IS InitValue=MAX)
     date: dayjs().format('YYYYMMDD'), // datePicker 기본=오늘(cs:200)
     divisionId: 'ALL', // MyDivision 기본 ALL(designer NoneString="ALL")
     plantId: 'ALL', // PlantByGroup_SCP 기본 ALL

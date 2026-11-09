@@ -15,20 +15,20 @@
 | features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx | component | 1445 |
 | features/master/src/pages/sales-future-price/components/modals/priceBatchInputModalStore.ts | store | 33 |
 | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.module.scss | component | 48 |
-| features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | component | 314 |
+| features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | component | 323 |
 | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.module.scss | component | 40 |
 | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | component | 323 |
 | features/master/src/pages/sales-future-price/components/modals/salesPriceVersionModalStore.ts | store | 48 |
 | features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.module.scss | component | 18 |
 | features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.tsx | component | 341 |
-| features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | component | 1300 |
+| features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | component | 1314 |
 | features/master/src/pages/sales-future-price/hooks/useSalesFuturePriceExpression.ts | hook | 97 |
 | features/master/src/pages/sales-future-price/hooks/useSalesFuturePriceValidation.ts | hook | 206 |
 | features/master/src/pages/sales-future-price/index.ts | index | 2 |
 | features/master/src/pages/sales-future-price/sales-future-price.constants.ts | constants | 432 |
 | features/master/src/pages/sales-future-price/sales-future-price.types.ts | types | 82 |
 | features/master/src/pages/sales-future-price/SalesFuturePrice.module.scss | style | 148 |
-| features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | page | 1161 |
+| features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | page | 1164 |
 | features/master/src/pages/sales-future-price/salesPriceExchange.ts | other | 107 |
 | features/master/src/pages/sales-future-price/useSalesFuturePriceStore.ts | store | 464 |
 | features/master/src/pages/sales-future-price/utils/cellBackground.ts | util | 25 |
@@ -50,7 +50,7 @@
 | DMF0020/exchange//call-proc | hook | 3 | Y | ExchangeRateModal.tsx:120 PriceBatchInputModal.tsx:490 SalesFuturePrice.tsx:240 |
 | DMF0020/priceBatch//call-proc | hook | 1 | Y | PriceBatchInputModal.tsx:469 |
 | /DMF0020/main/SAVE/call-proc | http | 2 | Y | PriceBatchInputModal.tsx:838 SalesFuturePrice.tsx:778 |
-| /DMF0020/priceBatch/SAVE/call-proc | http | 1 | Y | SalesPriceRangeModal.tsx:198 |
+| /DMF0020/priceBatch/SAVE/call-proc | http | 1 | Y | SalesPriceRangeModal.tsx:203 |
 | DMF0020/version//call-proc | hook | 1 | Y | SalesPriceVersionModal.tsx:141 |
 | DMF0020/main//call-proc | hook | 1 | Y | SalesFuturePrice.tsx:193 |
 | /DMF0020/main/SPREAD_TITLE_DATE/call-proc | http | 1 | Y | SalesFuturePrice.tsx:216 |
@@ -102,10 +102,10 @@
 | Button | onClick | handleExcel | jsx | features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx | 1374 |
 | Button | onClick | handleSave | jsx | features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx | 1384 |
 | Button | onClick | modalClose | jsx | features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx | 1391 |
-| g | formatItem | formatHandler | addHandler | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 128 |
-| Button | onClick | handleExcel | jsx | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 289 |
-| Button | onClick | handleSave | jsx | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 299 |
-| Button | onClick | modalClose | jsx | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 306 |
+| g | formatItem | formatHandler | addHandler | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 133 |
+| Button | onClick | handleExcel | jsx | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 296 |
+| Button | onClick | handleSave | jsx | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 307 |
+| Button | onClick | modalClose | jsx | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 315 |
 | g.hostElement? | dblclick | onDbl | addEventListener | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 198 |
 | SearchArea | onSearch | handleFind | jsx | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 230 |
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 243 |
@@ -123,23 +123,23 @@
 | BucketField | onChange | <arrow> validate.validateBucketChange,set | jsx | features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.tsx | 308 |
 | VersionField | onOpenPopup | onVersionOpen | jsx | features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.tsx | 314 |
 | SearchOverRangeField | onChange | <arrow> thisWeekMonday,end.setDate,start.getDate,set,yyyymmddOf | jsx | features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.tsx | 320 |
-| g | formatItem | formatHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 601 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 755 |
-| g | pastingCell | pastingCellHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 780 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 945 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 946 |
-| g.hostElement | click | clickAsDblHandler | addEventListener | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 990 |
-| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 996 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1208 |
-| f | filterApplied | onFilterApplied | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1234 |
-| SalesFuturePriceForm | onSearch | handleSearch | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 889 |
-| SalesFuturePriceForm | onVersionOpen | <arrow> setOpenVersion | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 890 |
-| SalesFuturePriceGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 953 |
-| PriceBatchInputModal | onSaveResult | <arrow> refetch | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 974 |
-| PriceBatchInputModal | onRangeOver | <arrow> setRangeRows,setOpenRange | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 976 |
-| SalesPriceVersionModal | onApply | <arrow> setSearchCondition,normalizeVersionIds | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 986 |
-| SalesPriceRangeModal | onSaved | <arrow> refetch | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 994 |
-| ColumnLayoutModal | onSave | <arrow> clearGridOnSettingChange,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,//⚠️팝업이조회에쓰는값과동일해야한다—상수한곳에서만가져온다.sheetName:TITLESET_SHEET,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 1013 |
+| g | formatItem | formatHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 606 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 760 |
+| g | pastingCell | pastingCellHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 790 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 955 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 956 |
+| g.hostElement | click | clickAsDblHandler | addEventListener | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1002 |
+| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1008 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1220 |
+| f | filterApplied | onFilterApplied | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1246 |
+| SalesFuturePriceForm | onSearch | handleSearch | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 891 |
+| SalesFuturePriceForm | onVersionOpen | <arrow> setOpenVersion | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 892 |
+| SalesFuturePriceGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 956 |
+| PriceBatchInputModal | onSaveResult | <arrow> refetch | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 977 |
+| PriceBatchInputModal | onRangeOver | <arrow> setRangeRows,setOpenRange | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 979 |
+| SalesPriceVersionModal | onApply | <arrow> setSearchCondition,normalizeVersionIds | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 989 |
+| SalesPriceRangeModal | onSaved | <arrow> refetch | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 997 |
+| ColumnLayoutModal | onSave | <arrow> clearGridOnSettingChange,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,//⚠️팝업이조회에쓰는값과동일해야한다—상수한곳에서만가져온다.sheetName:TITLESET_SHEET,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 1016 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -199,29 +199,29 @@
 | PRICE_ALL_COL | PRICE_ALL | Batch Price | 130 | true |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx | 135 |
 | base | c.colNm | c.colLblNm \|\| c.colNm | c.colWth ?? 90 | true |  |  | meta-map | features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx | 404 |
 | dynamicColumns | b | mmdd | 80 | true |  |  | object | features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx | 591 |
-| RANGE_COLUMNS | DIVISION_ID | Div. | 60 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 73 |
-| RANGE_COLUMNS | END_CUSTOMER | End Customer | 120 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 74 |
-| RANGE_COLUMNS | PROJECT_CODE | Project Code | 110 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 75 |
-| RANGE_COLUMNS | SCM_SITE_ID | Sales Site | 140 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 76 |
-| RANGE_COLUMNS | ITEM_ID | Model | 150 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 77 |
-| RANGE_COLUMNS | INCOTERMS | Incoterms | 80 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 78 |
-| RANGE_COLUMNS | FCST_TYPE | FCST Type | 90 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 79 |
-| RANGE_COLUMNS | DOM_EXP | Customs Handbook | 110 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 80 |
-| RANGE_COLUMNS | CURRENCY | Currency | 80 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 81 |
-| RANGE_COLUMNS | CH_YYYYMMDD | YYYYMMDD | 100 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 82 |
-| RANGE_COLUMNS | CH_PRICE | Price | 110 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 83 |
-| RANGE_COLUMNS | ST_YYYYMMDD | YYYYMMDD | 100 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 84 |
-| RANGE_COLUMNS | ST_PRICE | Price | 110 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 85 |
+| RANGE_COLUMNS | DIVISION_ID | Div. | 60 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 74 |
+| RANGE_COLUMNS | END_CUSTOMER | End Customer | 120 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 75 |
+| RANGE_COLUMNS | PROJECT_CODE | Project Code | 110 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 76 |
+| RANGE_COLUMNS | SCM_SITE_ID | Sales Site | 140 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 77 |
+| RANGE_COLUMNS | ITEM_ID | Model | 150 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 78 |
+| RANGE_COLUMNS | INCOTERMS | Incoterms | 80 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 79 |
+| RANGE_COLUMNS | FCST_TYPE | FCST Type | 90 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 80 |
+| RANGE_COLUMNS | DOM_EXP | Customs Handbook | 110 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 81 |
+| RANGE_COLUMNS | CURRENCY | Currency | 80 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 82 |
+| RANGE_COLUMNS | CH_YYYYMMDD | YYYYMMDD | 100 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 83 |
+| RANGE_COLUMNS | CH_PRICE | Price | 110 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 84 |
+| RANGE_COLUMNS | ST_YYYYMMDD | YYYYMMDD | 100 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 85 |
+| RANGE_COLUMNS | ST_PRICE | Price | 110 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx | 86 |
 | VERSION_COLUMNS | VERSION_NO | Version | 240 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 71 |
 | VERSION_COLUMNS | VERSION_DESCRIPTION | Details | 300 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 72 |
 | VERSION_COLUMNS | VERSION_TYPE | Type | 90 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 73 |
 | VERSION_COLUMNS | MONTHLY_ROLLING_FCST | Monthly Rolling Forecast | 170 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 74 |
 | VERSION_COLUMNS | CREATED_BY | Create By | 110 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 75 |
 | VERSION_COLUMNS | CREATION_DATE | Create Date | 150 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 76 |
-| mergedColumns | c.key | c.header | c.width ?? 100 | true |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 207 |
-| mergedColumns | sc.colNm | sc.colLblNm \|\| fb?.header \|\| sc.colNm | sc.colWth ?? fb?.width ?? 100 | sc.visible !== false |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 224 |
-| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 361 |
-| mainDynamicColumns | b | mmdd | 90 | true |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 433 |
+| mergedColumns | c.key | c.header | c.width ?? 100 | true |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 208 |
+| mergedColumns | sc.colNm | sc.colLblNm \|\| fb?.header \|\| sc.colNm | sc.colWth ?? fb?.width ?? 100 | sc.visible !== false |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 225 |
+| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 362 |
+| mainDynamicColumns | b | mmdd | 90 | true |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 434 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -263,12 +263,12 @@
 | MSG00448 | 2 |
 | MSG00412 | 2 |
 | MSG00227 | 2 |
-| MSG00002 | 1 |
+| MSG00013 | 1 |
 | MSG00001 | 1 |
 | MSG00135 | 1 |
 | MSG00137 | 2 |
 | MSG00142 | 1 |
-| MSG00143 | 1 |
+| MSG01161 | 1 |
 | MSG00265 | 1 |
 | MSG00408 | 1 |
 | MSG00414 | 1 |
@@ -287,8 +287,8 @@
 | code | DMF0073_VersionBySalesPricePopup popVersion = new DMF0073_VersionBySalesPricePopup(); | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 23 |
 | code | popVersion.Form_Load(true, "SP", sDivision, sStartDate, sEndDate); | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 24 |
 | code | popVersion.ShowDialog(); | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 25 |
-| code | AS-IS EditButton `if(!isCurVersion) return` 과 동일) + 편집가능(노란) 표시 안 함. 기본 true(호환). | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 60 |
-| code | 과거 버전 조회 — 편집 진입 자체를 막는다(AS-IS EditButton `if(!isCurVersion) return`, 안내 없음). | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 662 |
+| code | AS-IS EditButton `if(!isCurVersion) return` 과 동일) + 편집가능(노란) 표시 안 함. 기본 true(호환). | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 61 |
+| code | 과거 버전 조회 — 편집 진입 자체를 막는다(AS-IS EditButton `if(!isCurVersion) return`, 안내 없음). | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 667 |
 | code | const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용) | features/master/src/pages/sales-future-price/sales-future-price.constants.ts | 22 |
 | jsx | To-Be: react FlexGrid <Col binding=BASIS_START_DATE2 header=MMDD> + 3단 group header | features/master/src/pages/sales-future-price/sales-future-price.types.ts | 41 |
 | endpoint | ⭐ master hook §2.3 — Column/Measure 동적 fetch (admin SYS0004 UI Category Setup 변경 즉시 반영) | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 100 |

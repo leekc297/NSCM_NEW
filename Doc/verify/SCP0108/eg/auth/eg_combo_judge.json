@@ -1,0 +1,992 @@
+[
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Division",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plan Month",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 232개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Version",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 1건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Site",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 2건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plant",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Building",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 6000개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 13건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation group",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line Type",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 6000개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Bottleneck",
+"ctx": "SCP/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Division",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 8개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plan Month",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 232개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Version",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 1건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Site",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 4건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plant",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 6건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Building",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 12건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 13건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation group",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 7건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line Type",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 9건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Bottleneck",
+"ctx": "SCP/40/SCP Tester · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Division",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plan Month",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 232개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Version",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 1건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Site",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 2건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plant",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Building",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 6000개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 13건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation group",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line Type",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 6000개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Bottleneck",
+"ctx": "SCP/40/SCM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Division",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 13개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plan Month",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 232개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Version",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 1건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Site",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 4건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plant",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 6건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Building",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 12건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 13건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation group",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 7건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line Type",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 9건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Bottleneck",
+"ctx": "SCP/40/ADMIN · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Division",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 14개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plan Month",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 232개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Version",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 1건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Site",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 4건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plant",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 6건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Building",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 12건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 13건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation group",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 7건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line Type",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 9건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Bottleneck",
+"ctx": "SCP/40/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Division",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 7개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plan Month",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 232개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Version",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 1건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Site",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 4건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plant",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 6건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Building",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 12건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 13건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation group",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 7건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line Type",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 9건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Bottleneck",
+"ctx": "SCP/81/SCP Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Division",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plan Month",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 232개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Version",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 1건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Site",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 4건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plant",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 6건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Building",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 12건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 13건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation group",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 7건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line Type",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 9건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Bottleneck",
+"ctx": "SCP/81/SCM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Division",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plan Month",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 232개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Version",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 1건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Site",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 4건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plant",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 6건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Building",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 12건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 13건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation group",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 7건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line Type",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 9건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Bottleneck",
+"ctx": "SCP/81/SCM PI Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Division",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plan Month",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 232개"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Version",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 1건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Site",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 4건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Plant",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 5건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Building",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 6건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 13건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation group",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 3건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Operation",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 5건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Line Type",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 4건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SCP0108",
+"target": "Bottleneck",
+"ctx": "SCP/82/SCM Viewer · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
+}
+]

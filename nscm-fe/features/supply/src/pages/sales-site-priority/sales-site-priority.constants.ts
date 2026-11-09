@@ -46,8 +46,8 @@ export const COMBO = {
 export const MSG = {
   REQUIRED_FIELDS: 'MSG00013', // "Please enter the required fields." (AS-IS MSG00001 필수값 8종)
   SAVE_CONFIRM: 'MSG00001', // "Would you like to save it?" (AS-IS MSG00046 저장 확인)
-  PERIOD_INVALID: 'MSG01135', // "The start date can not be later than the end date." (AS-IS MSG00219 From>To)
-  PRIO_MIN: 'MSG00699', // "Please enter an integer greater than 0." (AS-IS MSG00175 PRIO_RANK<1)
+  PERIOD_INVALID: 'MSG01230', // "시작일자가 종료일자보다 늦을 수 없습니다.\n\r리스트 확인 후 입력하십시오." (From>To, 사용자요청 2026-11-03)
+  PRIO_MIN: 'MSG01190', // "{0} must be an integer greater than 0." (AS-IS MSG00175 PRIO_RANK<1, {0}=PRIORITY)
   ITEM_NOT_EXIST: 'MSG01366', // "ITEM_ID does not exist." (AS-IS MSG00458 item 유효성)
   SAVE_SUCCESS: 'MSG00672', // "{0} data saved." (AS-IS MSG00004 저장 성공 건수)
   NO_CHANGE: 'MSG00004', // "No changes to save." (저장 대상 0건 — 공통 규약, AS-IS 대응 없음)

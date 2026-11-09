@@ -9,7 +9,7 @@
 |---|---|---|
 | features/demand/src/pages/mkt-fcst/components/MktFcstForm.module.scss | component | 60 |
 | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx | component | 452 |
-| features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | component | 2263 |
+| features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | component | 2265 |
 | features/demand/src/pages/mkt-fcst/components/modals/index.ts | index | 8 |
 | features/demand/src/pages/mkt-fcst/components/modals/mkt-fcst-modals.constants.ts | constants | 376 |
 | features/demand/src/pages/mkt-fcst/components/modals/PrHistoryModal.tsx | component | 216 |
@@ -20,8 +20,8 @@
 | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts | constants | 400 |
 | features/demand/src/pages/mkt-fcst/mkt-fcst.types.ts | types | 72 |
 | features/demand/src/pages/mkt-fcst/MktFcst.module.scss | style | 101 |
-| features/demand/src/pages/mkt-fcst/MktFcst.tsx | page | 1221 |
-| features/demand/src/pages/mkt-fcst/useMktFcstStore.ts | store | 563 |
+| features/demand/src/pages/mkt-fcst/MktFcst.tsx | page | 1223 |
+| features/demand/src/pages/mkt-fcst/useMktFcstStore.ts | store | 565 |
 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.comboDebug.ts | util | 261 |
 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.core.test.ts | test | 285 |
 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.division.ts | util | 160 |
@@ -53,10 +53,10 @@
 | DMF0003/Mkt Fcst//call-proc | hook | 1 | Y | MktFcst.tsx:282 |
 | DMF0003/spreadTitle//call-proc | hook | 1 | Y | MktFcst.tsx:292 |
 | /DMF0003/Mkt Fcst/SAVE/call-proc | http | 1 | Y | MktFcst.tsx:764 |
-| /admin/menu/DMF0003/column | http | 1 | Y | useMktFcstStore.ts:345 |
-| DMF0003/titleSet/SEARCH/call-proc | http | 1 | Y | useMktFcstStore.ts:379 |
-| /admin/menu/DMF0003/measure | http | 1 | Y | useMktFcstStore.ts:435 |
-| /admin/menu/DMF0003/search-conditions | http | 1 | Y | useMktFcstStore.ts:453 |
+| /admin/menu/DMF0003/column | http | 1 | Y | useMktFcstStore.ts:347 |
+| DMF0003/titleSet/SEARCH/call-proc | http | 1 | Y | useMktFcstStore.ts:381 |
+| /admin/menu/DMF0003/measure | http | 1 | Y | useMktFcstStore.ts:437 |
+| /admin/menu/DMF0003/search-conditions | http | 1 | Y | useMktFcstStore.ts:455 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -111,13 +111,13 @@
 | Button | onClick | modalClose | jsx | features/demand/src/pages/mkt-fcst/components/modals/PrModal.tsx | 347 |
 | Button | onClick | modalClose | jsx | features/demand/src/pages/mkt-fcst/components/modals/SspSyncCompareModal.tsx | 115 |
 | Button | onClick | modalClose | jsx | features/demand/src/pages/mkt-fcst/components/modals/SspSyncResultModal.tsx | 75 |
-| MktFcstForm | onSearch | handleSearch | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 903 |
-| MktFcstGrid | onPopupCellDblClick | <arrow> toCellStr,isEssItemPopupBlocked,cell,setAlert,t,setPopupGroupId | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 933 |
-| MktFcstGrid | onPrContext | handlePrContext | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 964 |
-| MktFcstGrid | onSspCompare | handleSspCompare | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 965 |
-| PrModal | onSaved | <arrow> refetch | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1112 |
-| ColumnLayoutModal | onSave | <arrow> clearGridOnSettingChange,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,//⚠️팝업조회(위sheetName/columnType)와반드시같은값이어야한다.sheetName:SHEETS.MAIN,columnType:'C',rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1139 |
-| MeasureSelectModal | onApply | <arrow> clearGridOnSettingChange,applyVisibleMeasures,staticMeasures[SHEETS.MAIN].map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:'M',rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1191 |
+| MktFcstForm | onSearch | handleSearch | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 905 |
+| MktFcstGrid | onPopupCellDblClick | <arrow> toCellStr,isEssItemPopupBlocked,cell,setAlert,t,setPopupGroupId | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 935 |
+| MktFcstGrid | onPrContext | handlePrContext | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 966 |
+| MktFcstGrid | onSspCompare | handleSspCompare | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 967 |
+| PrModal | onSaved | <arrow> refetch | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1114 |
+| ColumnLayoutModal | onSave | <arrow> clearGridOnSettingChange,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,//⚠️팝업조회(위sheetName/columnType)와반드시같은값이어야한다.sheetName:SHEETS.MAIN,columnType:'C',rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1141 |
+| MeasureSelectModal | onApply | <arrow> clearGridOnSettingChange,applyVisibleMeasures,staticMeasures[SHEETS.MAIN].map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:'M',rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1193 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -288,7 +288,7 @@
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: DMF0003(25), DMF0020(19), DMF0021(8), DMF0082(8), DMF0040(2), SYS0004(1), DMF0005(1), DMF0053(1), DMF0042(1), DMF0004(1)
-- SP/PKG: DMF0003_GET_MKT_FCST_DATA(8), DMF0003_GET_SPREAD_TITLE(6), PR_HEADER(4), DMF0003_SAVE_PRPOPUP(2), DMF0003_GET_MKT_FCST_COMPARE_POPUP(2), DMF0003_SAVE_MKT_FCST(2), PKG_DMF0003(2), DMF0002_GET_TITLESET_POPUP(2), PR_GET_SHEET_COLUMN_LIST(2), DMF0003_GET_PR_HISTORY_POPUP(1), DMF0003_GET_PRPOPUP(1), DMF0003_GET_BUCKET_TYPE_CODE(1), PR_GET_SHEET_MEASURE_LIST(1), PR_GET_DAY_RANGE(1), P_USER_GROUP(1), SCM0002_SET_TITLESET_POPUP(1), P_CREATED_BY(1), P_BUCKET(1)
+- SP/PKG: DMF0003_GET_MKT_FCST_DATA(8), DMF0003_GET_SPREAD_TITLE(6), PR_HEADER(4), DMF0003_SAVE_PRPOPUP(2), DMF0003_GET_MKT_FCST_COMPARE_POPUP(2), DMF0003_SAVE_MKT_FCST(2), PKG_DMF0003(2), DMF0002_GET_TITLESET_POPUP(2), PR_GET_SHEET_COLUMN_LIST(2), DMF0003_GET_PR_HISTORY_POPUP(1), DMF0003_GET_PRPOPUP(1), DMF0003_GET_BUCKET_TYPE_CODE(1), PR_GET_SHEET_MEASURE_LIST(1), PR_GET_DAY_RANGE(1), P_USER_GROUP(1), P_TEAM_ID(1), SCM0002_SET_TITLESET_POPUP(1), P_CREATED_BY(1), P_BUCKET(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
@@ -308,7 +308,7 @@
 | code | void setAlert({ type: 'alert', content: msg }); | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 521 |
 | code | 반환값 = 복원된 개인화(없으면 null). fetchStaticColumns 가 await 후 override 적용. | features/demand/src/pages/mkt-fcst/useMktFcstStore.ts | 110 |
 | code | display 도 함께 맞춰 공통 DataGrid(.filter(c => c.display)) 경로와도 정합. | features/demand/src/pages/mkt-fcst/useMktFcstStore.ts | 215 |
-| endpoint | ⭐ master hook §5 — Measure 동적 fetch (PIVOT 화면 의무) | features/demand/src/pages/mkt-fcst/useMktFcstStore.ts | 429 |
+| endpoint | ⭐ master hook §5 — Measure 동적 fetch (PIVOT 화면 의무) | features/demand/src/pages/mkt-fcst/useMktFcstStore.ts | 431 |
 | code | 머지 범위를 가르는 키 컬럼 — 표시 순서에서 0번부터 클릭한 컬럼까지의 정적 컬럼. 근거: 아래 HierarchicalMergeManager 의 데이터 셀 머지는 계층형이다. 컬럼 c 의 머지 키가 fixedBindings.slice(0, idx + 1) 값 전부(sameRow)라, 어떤 컬럼의 셀이 위아래로 붙어 보이려면 그 왼쪽 컬럼이 전부 같아야 한다. 즉 컬럼 c 의 병합 범위 = 0..c 값이 모두 같은 연속 행이고 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.merge.ts | 76 |
 | jsx | AS-IS: D_<YYYYMMDD> 컬럼 셀에만 색 적용 (.cs L1430). Division 40·82 만 (.cs L1415). | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.sspSync.ts | 8 |
 | code | if (!str(c.divisionId)) { void setAlert({ type: 'alert', content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.'), }); return { ok: false, msgId: MSG.REQUIRE_DIVISION }; } | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.validate.ts | 41 |

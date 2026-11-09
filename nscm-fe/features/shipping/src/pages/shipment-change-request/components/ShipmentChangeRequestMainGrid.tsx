@@ -70,6 +70,8 @@ interface Props {
   onEndCustomerCellFocus: (row: Record<string, unknown>) => void;
   // 변경 차단·선행값 안내 alert. defaultValue 미등록 시 fallback 문구, arg 는 "{0}" 치환값(MSG00098).
   onBlockedEdit: (msgKey: string, defaultValue?: string, arg?: string) => void;
+  // 그리드 포커스 획득 시 — 공통 툴바 Sort(F3)/Filter(F4) 타깃을 이 그리드로(페이지가 추적).
+  onGridFocus?: () => void;
 }
 
 const str = (v: unknown): string =>
@@ -92,6 +94,7 @@ export const ShipmentChangeRequestMainGrid = ({
   onEndCustomerSourceChanged,
   onEndCustomerCellFocus,
   onBlockedEdit,
+  onGridFocus,
 }: Props) => {
   const { t } = useTranslation();
   // staticColumns = admin 메타(단일 헤더). + Division 40/EE 상호배타 가시성을 **여기서** 굽는다
@@ -485,6 +488,7 @@ export const ShipmentChangeRequestMainGrid = ({
          자매 화면과의 동작 일치를 우선한 사용자 결정이다. 되살리려면 `AllowMerging.Cells` 로 되돌린다. */
       allowMerging={AllowMerging.ColumnHeaders}
       dblClick={handleDblClick}
+      gotFocus={onGridFocus}
     />
   );
 };

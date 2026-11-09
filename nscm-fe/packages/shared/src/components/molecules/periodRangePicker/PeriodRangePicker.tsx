@@ -11,6 +11,7 @@ import {
   ControlConfirmIcon,
   FunctionCalendarIcon,
 } from '@shared/lges-icons';
+import { useMessageStore } from '@shared/stores';
 
 import styles from './PeriodRangePicker.module.scss';
 
@@ -259,7 +260,13 @@ export const PeriodRangePicker = ({
   allowTextInput,
   monthOnly,
 }: PeriodRangePickerProps) => {
+  const { t } = useTranslation();
+  const setAlert = useMessageStore(state => state.setAlert);
   const anchorRef = useRef<HTMLDivElement>(null);
+  // 기간 역전 안내(setAlert)가 떠 있는 동안은 click-away 로 달력을 닫지 않기 위한 억제 플래그.
+  //   setAlert 는 MUI Dialog(포털)로 뜨므로 그 버튼/백드롭 클릭이 Popper 바깥 클릭으로 잡혀
+  //   ClickAwayListener 가 handleCancel 을 불러 달력까지 닫아버린다 → 알림 동안/직후 1회 억제한다.
+  const suppressClickAwayRef = useRef(false);
   // 트리거 날짜 박스 색상은 테마 토큰에서 끌어온다(라이트/다크 자동). .dateBox 에 #fff/#d9d9d9 를
   //   하드코딩하면 다크 테마 조회영역(commonBgDeep)에서 혼자 흰색으로 튄다 — DMF0003 PeriodField 가
   //   쓰는 design-system DatePickerCalendar 처럼 테마를 따르게 한다. (레이아웃은 .dateBox scss 가 담당)
@@ -326,7 +333,11 @@ export const PeriodRangePicker = ({
     setOpen(true);
   };
 
-  const handleCancel = () => setOpen(false);
+  const handleCancel = () => {
+    // 알림이 떠 있는 동안의 click-away(알림 버튼/백드롭 클릭)로는 달력을 닫지 않는다.
+    if (suppressClickAwayRef.current) return;
+    setOpen(false);
+  };
 
   const handleOk = () => {
     if (draftStart && draftEnd) {
@@ -349,8 +360,23 @@ export const PeriodRangePicker = ({
   };
 
   const handleEndDayClick = (day: Dayjs) => {
+    // To 를 From 보다 앞선 날짜로 고르면 방금 찍은 To 만 해제(From 유지)하고 안내만 한다. 달력은 닫지 않는다.
+    //   기간 역전(시작일 > 종료일) 금지는 사내 등록 코드 MSG00108 로 알린다(같은 날은 허용).
+    if (draftStart && day.isBefore(draftStart, 'day')) {
+      setDraftEnd(null);
+      suppressClickAwayRef.current = true;
+      // 알림이 닫힌 뒤(= 닫기 클릭이 유발하는 click-away 까지) 억제를 유지하고, 그다음 틱에 해제한다.
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00108', '_The end date must be on or after the start date.'),
+      }).finally(() => {
+        setTimeout(() => {
+          suppressClickAwayRef.current = false;
+        }, 0);
+      });
+      return;
+    }
     setDraftEnd(day);
-    if (draftStart && day.isBefore(draftStart, 'day')) setDraftStart(null);
   };
 
   // Today — From 만 오늘 날짜로 이동(To 는 그대로, 단 오늘이 기존 To 보다 뒤면 To 는 재선택하도록 비운다).

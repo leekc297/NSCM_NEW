@@ -27,6 +27,7 @@ import type { CapaLineRow } from './capa-line-master.types';
 import styles from './CapaLineMaster.module.scss';
 import { CapaLineMasterForm } from './components/CapaLineMasterForm';
 import { CapaLineMasterLevelGrid } from './components/CapaLineMasterLevelGrid';
+import { CapaLineMasterProductGroupBar } from './components/CapaLineMasterProductGroupBar';
 import { useCapaLineMasterValidation } from './hooks/useCapaLineMasterValidation';
 import { useCapaLineMasterStore } from './useCapaLineMasterStore';
 import { buildInsertRow, hasParentContext } from './utils/capaLineMaster.editLock';
@@ -93,9 +94,9 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const drillDown = useCapaLineMasterStore(s => s.drillDown);
   const activeLevel = useCapaLineMasterStore(s => s.activeLevel);
   const setActiveLevel = useCapaLineMasterStore(s => s.setActiveLevel);
-  const editingLevel = useCapaLineMasterStore(s => s.editingLevel);
-  const toggleEditingLevel = useCapaLineMasterStore(s => s.toggleEditingLevel);
-  const clearEditingLevel = useCapaLineMasterStore(s => s.clearEditingLevel);
+  // AS-IS 수정(Edit) 모드 토글은 미이식한다(asis_to_tobe.md §11, 전 화면 공통 2026-09-23 사용자 결정).
+  //   편집은 EDIT 버튼 권한(canEdit) 단일 축 — 권한이 있으면 조회 직후부터 편집가능 셀이 상시 열린다.
+  const canEdit = hasButton('EDIT');
   const openSearchArea = useCapaLineMasterStore(s => s.openSearchArea);
   const setOpenSearchArea = useCapaLineMasterStore(s => s.setOpenSearchArea);
   const staticColumns = useCapaLineMasterStore(s => s.staticColumns);
@@ -218,19 +219,9 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticColumns(sc.divisionId);
   };
 
-  // Edit — 활성 그리드의 편집모드 토글. AS-IS EditButton(cs:462~502):
-  //   (1) 활성 그리드에 'I'/'M' 행이 남아 있으면 return(미저장 편집 중 토글 차단, cs:478~486)
-  //   (2) 토글 후 편집중 레벨이 2개 이상이면 되돌리고 return(동시 1개만, cs:498~502) -> store 가 담당
-  const handleEdit = () => {
-    const grid = gridRefs[activeLevel].current;
-    const source = (grid?.collectionView?.sourceCollection ?? []) as Record<string, unknown>[];
-    if (source.some(row => row.CRUD_TYPE === 'I' || row.CRUD_TYPE === 'M')) return;
-    toggleEditingLevel(activeLevel);
-  };
-
   // Insert — 활성 그리드에 신규행 추가. AS-IS InsertRow(cs:1196~1296):
-  //   사전조건 `spreadLevel.IsLock(SheetName) == false` = 그 레벨이 편집모드여야 한다(cs:1202).
-  //   신규행 기본값 = 부모키 상속 + VALID_YN='Y' + DUMMY_YN='Y' + SORT_ORDER=Max+1.
+  //   AS-IS 사전조건 `spreadLevel.IsLock(SheetName) == false`(수정 모드)는 미이식(§11) — 대신 조회(applied)
+  //   + 부모 컨텍스트 확정만 본다. 신규행 기본값 = 부모키 상속 + VALID_YN='Y' + DUMMY_YN='Y' + SORT_ORDER=Max+1.
   //   부모키는 드릴다운으로 확정된 컨텍스트에서만 온다 — 빈 값 폴백 금지(convert-core §2.4).
   const handleInsert = () => {
     const grid = gridRefs[activeLevel].current;
@@ -240,8 +231,7 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         type: 'alert',
         content: t(MSG.EDIT_AFTER_SEARCH, '_Edit mode is available after search.'),
       });
-    // AS-IS 는 IsLock 시 조용히 아무것도 하지 않는다. TO-BE 는 동작(삽입 안 함)은 같게 두고 안내만 더한다.
-    if (editingLevel !== activeLevel) return guideAlert();
+    // 미조회(applied 없음) 상태 삽입 차단 — AS-IS 는 무언 return, TO-BE 는 동작 동일 + 안내만 더한다.
     if (!applied) return guideAlert();
     // 부모 컨텍스트 미확정(= 해당 레벨을 드릴다운으로 연 적 없음) 상태의 삽입은 데이터 결함이다.
     if (!hasParentContext(activeLevel, drill)) return guideAlert();
@@ -337,21 +327,31 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
           });
           return;
         }
-        // SAVE SP 는 `SELECT result_code, result_cnt` 를 돌려주고 AS-IS 는 첫 행 [0]=='S' 만 성공으로 본다
-        //   (cs:930). 'S' 가 아닌 유일한 경로가 중복 THROW 99020 이다(07 §3 S3) — 서버 메시지를 그대로
-        //   표면화하고, 메시지가 비면 중복 안내로 대체한다.
+        // SAVE SP 는 결과 커서로 { RESULT_CODE, RESULT_CNT | ERR_MESSAGE } 를 돌려준다. 성공만 'S' 이고
+        //   (cs:930), TO-BE SP 는 중복 시 THROW 가 아니라 RESULT_CODE='N' + ERR_MESSAGE('중복 데이터가
+        //   있습니다.') + ROLLBACK 을 반환한다(PKG_SCP0114 line 505~523, 2026-11-02 실측). 예외는 'F'.
+        //   BaseResponse.code/message 는 SP 예외가 없으면 늘 "0"/"success" 라, 성공 판정을 top-level 로
+        //   하면 중복이 success 로 샌다 — 성공 판정은 오직 이 RESULT_CODE 로 한다.
+        //   주의: result 에는 빈 DATARESULT:[] 와 복수 커서(o_rc1·o_result_cursor)가 섞여 온다. '첫 배열'
+        //   (find(Array.isArray))을 쓰면 빈 DATARESULT 를 잡아 RESULT_CODE 가 비고, 중복이 success 로
+        //   새는 실결함이 있었다(2026-11-02 네트워크 실측). 전 커서를 펼쳐 RESULT_CODE 를 담은 행을 찾는다.
         const body = res.data?.result as Record<string, unknown> | undefined;
-        const firstSet = body
-          ? (Object.values(body).find(Array.isArray) as Record<string, unknown>[] | undefined)
-          : undefined;
-        const head = firstSet?.[0];
+        const resultRows = body
+          ? (Object.values(body).filter(Array.isArray) as Record<string, unknown>[][]).flat()
+          : [];
+        const head = resultRows.find(row => row && (row.result_code != null || row.RESULT_CODE != null));
         const resultCode = head ? str(head.result_code ?? head.RESULT_CODE) : '';
-        if (resultCode && resultCode !== 'S') {
+        if (resultCode !== 'S') {
+          // 성공('S')이 아니면 전부 실패 — 중복('N')은 DUP_KEY, 그 외('F'·결과미반환)는 SAVE_FAIL 로 대체.
+          //   서버 ERR_MESSAGE(커서 컬럼)가 있으면 그걸 우선 표면화한다(top-level message="success" 는 안 쓴다).
+          const serverMsg = head ? str(head.err_message ?? head.ERR_MESSAGE).trim() : '';
           void setAlert({
             type: 'alert',
             content:
-              (res.data as { message?: string })?.message?.trim() ||
-              t(MSG.DUP_KEY, '_Duplicate key exists.'),
+              serverMsg ||
+              (resultCode === 'N'
+                ? t(MSG.DUP_KEY, '_Duplicate key exists.')
+                : t(MSG.SAVE_FAIL, '_Failed to save.')),
           });
           return; // 편집 유지 — 사용자가 수정 후 재저장.
         }
@@ -366,7 +366,6 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
           ),
         });
         trackerRefs[level].current?.clearChanges();
-        clearEditingLevel();
         // 저장 성공 후 AS-IS 는 FindData(activeLevel)(cs:935~954)을 부른다 — 활성 레벨 재조회 +
         //   InitSpread(activeLevel..5)로 하위 레벨 비움(cs:689~721). 하위를 남기면 방금 바뀐 부모
         //   기준으로는 맞지 않는 행이 그대로 보인다. 하위 레벨의 편집 마킹도 함께 걷어낸다.
@@ -399,9 +398,6 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       setToast({ type: 'error', message: t(MSG.NO_DATA, '_No changes to save.') });
       return;
     }
-    // AS-IS 는 저장 직전에도 `IsLock == false`(편집모드) 를 확인한다(cs:784). 편집모드가 아니면 마킹행이
-    //   생길 수 없으므로 실질 no-op 이지만 파리티로 유지한다.
-    if (editingLevel !== level) return;
 
     // 화면 커스텀 필수검증 — AS-IS CheckDummyDuplication(cs:769, 공백 검사) 등가.
     //   admin 이 INPUT_TP_CD 를 전건 'S' 로 등록하면 공용 검증이 사문화되므로 이 경로를 함께 건다
@@ -437,7 +433,7 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       gridRef={gridRefs[level]}
       gridFilterRef={filterRefs[level]}
       editTrackerRef={trackerRefs[level]}
-      editingLevel={editingLevel}
+      canEdit={canEdit}
       adminColumns={staticColumns[SHEET_BY_LEVEL[level]]}
       onDrillDown={row => drillDown(level, row)}
       onFocus={() => setActiveLevel(level)}
@@ -462,53 +458,44 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
-        customButtons={
-          hasButton('EDIT')
-            ? [
-                {
-                  // Edit 라벨 = LBL00414(EN 'Edit'). LBL00654 는 등록문구 'M$' 라 재사용 금지(hook #114).
-                  // 금지: buttonLabel 을 넘기지 않는다. SubTitle 은 `buttonLabel={label}` 뒤에
-                  //   `{...buttonProps}` 를 전개하므로(SubTitle.tsx:307~309) 화면이 buttonLabel 을 주면
-                  //   그 값이 label 을 덮어쓴다. 빈 문자열을 주면 텍스트 없는 빈 버튼이 되고, 이 화면은
-                  //   Edit 가 유일한 편집모드 진입점이라 Insert/Save/셀편집이 전부 도달 불가해진다.
-                  //   buttonLabel:'' 은 iconComponent 를 함께 주는 아이콘 전용 버튼에서만 쓰는 관용구다.
-                  label: t('LBL00414', '_Edit'),
-                  title: t('LBL00414', '_Edit'),
-                  action: handleEdit,
-                },
-              ]
-            : []
-        }
       />
 
       {/* design 01 §1 — splitContainer1(Horizontal): 상단 L1|L2|L3 3분할 / 하단 L4|L5 2분할. */}
       <PanelGroup className={styles.tableWrapper} orientation='vertical'>
         <Panel defaultSize={50} minSize={20}>
+          {/* AS-IS Panel1: L1 고정 468 | L2 고정 454 | L3 Fill(나머지) → 넓은 화면 기준 ~25/25/50
+              (Designer.cs splitContainer1, 01_layout.md §1). L3(Plant)이 가장 넓다. */}
           <PanelGroup className={styles.rowGroup} orientation='horizontal'>
-            <Panel defaultSize={34} minSize={10}>
+            <Panel defaultSize={25} minSize={10}>
               {renderGrid(1)}
             </Panel>
             <PanelSeparator className={styles.colSplitBar} />
-            <Panel defaultSize={33} minSize={10}>
+            <Panel defaultSize={25} minSize={10}>
               {renderGrid(2)}
             </Panel>
             <PanelSeparator className={styles.colSplitBar} />
-            <Panel defaultSize={33} minSize={10}>
+            <Panel defaultSize={50} minSize={10}>
               {renderGrid(3)}
             </Panel>
           </PanelGroup>
         </Panel>
         <PanelSeparator className={styles.splitBar} />
         <Panel defaultSize={50} minSize={20}>
-          <PanelGroup className={styles.rowGroup} orientation='horizontal'>
-            <Panel defaultSize={50} minSize={10}>
-              {renderGrid(4)}
-            </Panel>
-            <PanelSeparator className={styles.colSplitBar} />
-            <Panel defaultSize={50} minSize={10}>
-              {renderGrid(5)}
-            </Panel>
-          </PanelGroup>
+          {/* 하단 영역 = Product Group 조회조건 바 + L4|L5 그리드. AS-IS 는 Product Group(rgrpSearchLevel)이
+              Level1~3 과 Level4~5 사이에 위치(design 01 §1) — 바를 하단 Panel 최상단에 둬 재현한다. */}
+          <div className={styles.bottomPane}>
+            <CapaLineMasterProductGroupBar />
+            {/* AS-IS Panel2: L4 고정 468 | L5 Fill(나머지) → 넓은 화면 기준 ~25/75. L5(Line, 5컬럼)가 넓다. */}
+            <PanelGroup className={styles.bottomRowGroup} orientation='horizontal'>
+              <Panel defaultSize={25} minSize={10}>
+                {renderGrid(4)}
+              </Panel>
+              <PanelSeparator className={styles.colSplitBar} />
+              <Panel defaultSize={75} minSize={10}>
+                {renderGrid(5)}
+              </Panel>
+            </PanelGroup>
+          </div>
         </Panel>
       </PanelGroup>
     </>

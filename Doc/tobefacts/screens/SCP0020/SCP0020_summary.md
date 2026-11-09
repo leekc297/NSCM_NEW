@@ -17,7 +17,7 @@
 | features/supply/src/pages/tact-time/tact-time.types.ts | types | 23 |
 | features/supply/src/pages/tact-time/TactTime.module.scss | style | 53 |
 | features/supply/src/pages/tact-time/TactTime.tsx | page | 348 |
-| features/supply/src/pages/tact-time/useTactTimeStore.ts | store | 227 |
+| features/supply/src/pages/tact-time/useTactTimeStore.ts | store | 228 |
 | features/supply/src/pages/tact-time/utils/tactTimeColumns.ts | util | 34 |
 | features/supply/src/pages/tact-time/utils/tactTimeDerive.test.ts | test | 58 |
 | features/supply/src/pages/tact-time/utils/tactTimeDerive.ts | util | 57 |
@@ -33,8 +33,8 @@
 | SCP0020/plant//call-proc | hook | 2 | Y | TactTime.tsx:82 TactTime.tsx:104 |
 | SCP0020/packer//call-proc | hook | 2 | Y | TactTime.tsx:89 TactTime.tsx:109 |
 | SCP0020/except//call-proc | hook | 2 | Y | TactTime.tsx:96 TactTime.tsx:114 |
-| /admin/menu/SCP0020/column | http | 1 | Y | useTactTimeStore.ts:176 |
-| /admin/menu/SCP0020/search-conditions | http | 1 | Y | useTactTimeStore.ts:206 |
+| /admin/menu/SCP0020/column | http | 1 | Y | useTactTimeStore.ts:177 |
+| /admin/menu/SCP0020/search-conditions | http | 1 | Y | useTactTimeStore.ts:207 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -113,7 +113,7 @@
 | MSG00611 | 1 |
 | MSG01036 | 1 |
 | MSG00085 | 1 |
-| MSG00105 | 1 |
+| MSG00700 | 1 |
 | MSG00108 | 1 |
 | MSG00109 | 1 |
 | MSG00662 | 1 |
@@ -124,7 +124,7 @@
 | MSG00004 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0020(9), SCM0002(1)
+- 화면ID: SCP0020(10), SCM0002(1)
 - SP/PKG: SCP0020_GET_TACT_TIME(1), SCP0020_SAVE_TACT_TIME(1), FN_GET_DIVISION(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

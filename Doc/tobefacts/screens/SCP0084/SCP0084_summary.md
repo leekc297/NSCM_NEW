@@ -13,7 +13,7 @@
 | features/supply/src/pages/long-term-stock/index.ts | index | 2 |
 | features/supply/src/pages/long-term-stock/long-term-stock.constants.ts | constants | 123 |
 | features/supply/src/pages/long-term-stock/long-term-stock.types.ts | types | 15 |
-| features/supply/src/pages/long-term-stock/LongTermStock.tsx | page | 186 |
+| features/supply/src/pages/long-term-stock/LongTermStock.tsx | page | 188 |
 | features/supply/src/pages/long-term-stock/useLongTermStockStore.ts | store | 155 |
 | features/supply/src/pages/long-term-stock/__asis-mapping__.md | mapping | 58 |
 
@@ -43,7 +43,7 @@
 | g | beginningEdit | handler | addHandler | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 111 |
 | g | formatItem | handler | addHandler | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 127 |
 | DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 141 |
-| LongTermStockForm | onSearch | handleSearch | jsx | features/supply/src/pages/long-term-stock/LongTermStock.tsx | 162 |
+| LongTermStockForm | onSearch | handleSearch | jsx | features/supply/src/pages/long-term-stock/LongTermStock.tsx | 164 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -101,6 +101,8 @@
 | code | }; | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 82 |
 | code | export const MERGE_COLUMNS: ReadonlySet<string> = new Set([ | features/supply/src/pages/long-term-stock/long-term-stock.constants.ts | 102 |
 | code | ]); | features/supply/src/pages/long-term-stock/long-term-stock.constants.ts | 107 |
+| code | insert: () => undefined, | features/supply/src/pages/long-term-stock/LongTermStock.tsx | 148 |
+| code | delete: () => undefined, | features/supply/src/pages/long-term-stock/LongTermStock.tsx | 149 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

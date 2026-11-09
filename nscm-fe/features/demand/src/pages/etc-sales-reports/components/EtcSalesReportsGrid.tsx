@@ -11,7 +11,12 @@ import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
-import { dataScaleOf, DEFAULT_DATA_SCALE, excelNumberFormat } from '../etc-sales-reports.constants';
+import {
+  dataScaleOf,
+  DEFAULT_DATA_SCALE,
+  excelNumberFormat,
+  SHEETS,
+} from '../etc-sales-reports.constants';
 import type { EtcSalesReportRow, SpreadTitleRow } from '../etc-sales-reports.types';
 import styles from '../EtcSalesReports.module.scss';
 import {
@@ -502,7 +507,8 @@ const EtcSalesReportsGridBase = ({
         //   DMF0044 가 모두 같은 가드를 갖고 있다.
         if (g.editRange?.contains(e.row, e.col)) return; // 편집 중 셀은 건드리지 않는다
         const st = evalDyn(binding, rowItem);
-        toggleClass(e.cell, 'wj-cell-editable', st.editable);
+        // 그리드가 읽기전용(main SAVE 권한 없음, saveAuth 자동 잠금)이면 편집가능(노란) 표시를 하지 않는다.
+        toggleClass(e.cell, 'wj-cell-editable', st.editable && !g.isReadOnly);
         toggleClass(e.cell, 'wj-cell-non-editable', !st.editable && st.isPast);
         // 숫자 표시 — 0/빈 = 빈칸, 콤마 포맷 + 메타 자릿수 고정 소수 (REQ:CHAT-20260820-16).
         //   ⚠ **0 은 계속 빈칸**이다(2026-08-20 사용자 확정 — 현행 동작 보존). '0.000' 을 찍지 않는다.
@@ -521,7 +527,7 @@ const EtcSalesReportsGridBase = ({
       if (staticBindingSet.has(binding) && rowItem) {
         // 색상 판정도 편집 게이트와 **같은 함수**를 쓴다 — 두 곳이 갈리면 노란칸인데 못 고치는 상태가 생긴다
         const editable = staticEditableByMeta(inputTpRef.current.get(binding), rowItem);
-        toggleClass(e.cell, 'wj-cell-editable', editable);
+        toggleClass(e.cell, 'wj-cell-editable', editable && !g.isReadOnly);
       }
     };
     g.formatItem.addHandler(formatHandler);
@@ -534,6 +540,11 @@ const EtcSalesReportsGridBase = ({
     ) => {
       const binding = s.columns[e.col]?.binding ?? '';
       const row = s.rows[e.row]?.dataItem as EtcSalesReportRow | undefined;
+      // 읽기전용(main SAVE 권한 없음) — 아래 동적 분기의 e.cancel=false 가 붙여넣기 잠금을 뒤집지 않도록 먼저 차단.
+      if (s.isReadOnly) {
+        e.cancel = true;
+        return;
+      }
       if (staticBindingSet.has(binding)) {
         // UI Category Setup `INPUT_TP_CD` 단일 원천 (IM/IO=신규행만, M/O=전 행, S=불가).
         //   AS-IS InsertRow(L965~1024)·EditButton 키영역(L399~412) 잠금 파리티는 메타 값('S')으로
@@ -727,11 +738,17 @@ const EtcSalesReportsGridBase = ({
 
     // PROJECT_CODE 셀 더블클릭 — SCM0002 Project 팝업 ETC=true (L1428~1457. ITEM 팝업은 dead — 콤보로 변경)
     const dblclickHandler = (ev: MouseEvent) => {
+      // 읽기전용(main SAVE 권한 없음)이면 Project 입력 팝업을 띄우지 않는다.
+      if (g.isReadOnly) return;
       const ht = g.hitTest(ev);
       if (!ht || ht.panel !== g.cells) return;
       const binding = g.columns[ht.col]?.binding ?? '';
       const row = g.rows[ht.row]?.dataItem as EtcSalesReportRow | undefined;
       if (!row || binding !== 'PROJECT_CODE') return;
+      // 행 잠금(EDIT_FLAG='N')이면 셀 편집과 같이 팝업도 막는다 — 팝업은 선택값을 행에 직접 넣으므로
+      //   여기서 거르지 않으면 잠긴 행도 팝업으로 바뀐다. 입력 구분(INPUT_TP_CD)은 보지 않는다 — AS-IS 는
+      //   편집 중 신규·기존 행 모두에서 이 팝업을 열었다(설계서 §4.2·§6.3).
+      if (row.EDIT_FLAG === 'N') return;
       onProjectCellDblClick?.(row);
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
@@ -864,6 +881,8 @@ const EtcSalesReportsGridBase = ({
         dynamicColumns={mainDynamicColumns}
         itemsSource={rows as unknown as WijmoRowItem[]}
         autoGenerateColumns={false}
+        // 읽기전용 자동 잠금을 MDF Reports 시트 SAVE 권한으로 판정(메뉴 단위면 titleSet SAVE 와 섞임)
+        saveAuth={{ sheetName: SHEETS.MAIN }}
         // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
         //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
         //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.

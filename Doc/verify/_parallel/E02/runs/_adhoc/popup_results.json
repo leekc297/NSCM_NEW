@@ -1,0 +1,129 @@
+[
+ {
+  "screen": "SCP0127",
+  "call": 0,
+  "cls": "SCM0002_MaterialByDivisionPopup",
+  "trig": "CELL:ITEM_ID",
+  "check": "CELL_TYPE",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 더블클릭 팝업 컬럼(SCP0127_PrecedeSafetyStockDay.cs:982) → 메타 FPModal/FPTextModal",
+  "actual": "ITEM_ID 메타 입력 방식 [FPTextModal] · 직접 편집 true (행 0)",
+  "basis": "문서 GAPPI-1·GAPPI-16 · SCP0127_PrecedeSafetyStockDay.cs:982",
+  "at": "2026-11-06T14:28:44.609Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0127",
+  "call": 0,
+  "cls": "SCM0002_MaterialByDivisionPopup",
+  "trig": "CELL:ITEM_ID",
+  "check": "CELL_KEYIN",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "FPTextModal = 키인 가능 + 팝업",
+  "actual": "editor 열림 true(행 0) — 행 조건 잠금이면 다른 행 필요",
+  "basis": "문서 GAPPI-16",
+  "at": "2026-11-06T14:28:44.609Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0127",
+  "call": 0,
+  "cls": "SCM0002_MaterialByDivisionPopup",
+  "trig": "CELL:ITEM_ID",
+  "check": "CELL_ICON",
+  "egs": [
+   "EG137"
+  ],
+  "result": "판정필요",
+  "expected": "팝업 셀 아이콘 표시",
+  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-state-selected wj-state-active wj-align-left wj-cell-editable wj-cell' · 메타 [FPTextModal]",
+  "basis": "",
+  "at": "2026-11-06T14:28:44.752Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0127",
+  "call": 0,
+  "cls": "SCM0002_MaterialByDivisionPopup",
+  "trig": "CELL:ITEM_ID",
+  "check": "CELL_DELETE",
+  "egs": [
+   "EG104"
+  ],
+  "result": "NA",
+  "expected": "Delete 키 값 삭제 허용",
+  "actual": "'AAEN4128I-A1-000'→'AAEN4128I-A1-000'",
+  "basis": "문서 DM-18",
+  "at": "2026-11-06T14:28:45.298Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0127",
+  "call": 0,
+  "cls": "SCM0002_MaterialByDivisionPopup",
+  "trig": "CELL:ITEM_ID",
+  "check": "CELL_PASTE",
+  "egs": [
+   "EG104",
+   "EG159"
+  ],
+  "result": "PASS",
+  "expected": "붙여넣기 → ITEM_ID = 원천값 · 코드 컬럼 동반(문서 DM-18)",
+  "actual": "값 ''→'AAEN4129I-A1-300' (원천 'AAEN4129I-A1-300') · 바뀐 컬럼 [ITEM_ID] · 원천과 같은 [ITEM_ID]",
+  "basis": "문서 DM-18",
+  "at": "2026-11-06T14:28:46.781Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0127",
+  "call": 0,
+  "cls": "SCM0002_MaterialByDivisionPopup",
+  "trig": "CELL:ITEM_ID",
+  "check": "CELL_BADKEY",
+  "egs": [
+   "EG176"
+  ],
+  "result": "FAIL",
+  "expected": "팝업 셀 Key-in 잘못된 값 → 되돌림/메시지 · 저장 본문에 안 실림(서버 검증 거부 포함)",
+  "actual": "입력 'ZZ_E2E_BAD_KEY' → 값 'ZZ_E2E_BAD_KEY' · 메시지 '' · Save 요청 1건(응답 200) · 잘못된 값 포함 true · 알림 ''",
+  "basis": "문서 SSP45REQ-23",
+  "at": "2026-11-06T14:28:50.722Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 2835,
+   "req": 0
+  }
+ }
+]

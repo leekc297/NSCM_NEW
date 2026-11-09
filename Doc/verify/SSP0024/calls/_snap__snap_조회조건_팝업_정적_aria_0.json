@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 311,
+  "at": "2026-11-09T02:06:42.525Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"\",\"scpModuleType\":\"SSP0024\"}",
+  "status": 200,
+  "rows": 9617,
+  "dur": 1313,
+  "at": "2026-11-09T02:06:44.728Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"\",\"scpModuleType\":\"SSP0024\"}",
+  "status": 200,
+  "rows": 9617,
+  "dur": 1098,
+  "at": "2026-11-09T02:06:45.781Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ }
+]

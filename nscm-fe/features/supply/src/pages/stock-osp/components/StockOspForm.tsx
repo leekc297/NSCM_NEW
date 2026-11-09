@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react';
 
 import type { ComboResponse, LookupResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, SearchArea } from '@shared/components';
+import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
@@ -301,14 +301,18 @@ export const StockOspForm = ({ onSearch, onItemSearch, onDivisionAuth }: Props) 
           {/* Model/Nickname — 텍스트 + 돋보기(메1 MaterialByDivisionModal, 사용자 지시 2026-10-14) */}
           {model}
           {/* Inventory Date — 조회 기간(design 02 §1, Osp=재고일자 YYYYMMDD / Pack=HOLD 날짜 필터).
-              사용자 지시 2026-10-14: Period→Inventory Date 로 표기. 다국어 미처리·영문 고정(LBL 신규생성 안 함). */}
-          <PeriodField
-            gridSize={3}
-            start={sc.fromYyyymmdd}
-            end={sc.toYyyymmdd}
-            onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
-            label='Inventory Date'
-          />
+              사용자 지시 2026-10-14: Period→Inventory Date 로 표기. 다국어 미처리·영문 고정(LBL 신규생성 안 함).
+              사용자 지시 2026-11-05: PeriodField→공용 PeriodRangePicker 로 교체(자체 Grid 없어 Grid size=3 래핑). */}
+          <Grid size={3}>
+            <PeriodRangePicker
+              className={commonStyles.formItem}
+              label='Inventory Date'
+              required
+              start={sc.fromYyyymmdd}
+              end={sc.toYyyymmdd}
+              onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
+            />
+          </Grid>
           {/* Pack 전용(Cutoff Date/Inspection/Status) — Pack 탭에서만 2행째로 노출(Osp 탭=undefined) */}
           {packExtra}
         </>

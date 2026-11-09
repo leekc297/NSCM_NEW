@@ -70,6 +70,9 @@ export const ShipmentWorkingDayOspInputModal = ({ open, onClose, onConfirm }: Pr
     <CustomDialog
       size={520}
       height={280}
+      // 배율 미적용(disableScale) — 입력 2칸 + 버튼뿐이라 1.5배 확대 없이 원본 크기(520x280)로 띄운다.
+      //   샘플 capa-mobility-it BulkUpdateModal 과 동일 처리(2026-11-04 사용자 지시).
+      disableScale
       minWidth={520}
       minHeight={280}
       type='modaless'
@@ -80,7 +83,7 @@ export const ShipmentWorkingDayOspInputModal = ({ open, onClose, onConfirm }: Pr
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t(LBL.INPUT, '_Input')}</h2>
+          <h2 className='headerTitle'>Bulk Update</h2>
         </div>
       }
       customContentArea={

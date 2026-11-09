@@ -1,0 +1,178 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-08T02:50:31.619Z",
+ "producer": "check.js",
+ "id": "SCP0037",
+ "final": true,
+ "page": "nscm-fe/features/supply/src/pages/operation-lt",
+ "state": "completed",
+ "verdict": "fail",
+ "summary": {
+  "block": 12,
+  "warn": 26
+ },
+ "issues": [
+  {
+   "id": "V01",
+   "class": "BLOCK",
+   "msg": "Validation 마커 누락 3/3: V-001(Lundefined) V-002(Lundefined) V-003(Lundefined)",
+   "where": "hooks/useOperationLTValidation.ts",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js V01"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V01",
+   "class": "BLOCK",
+   "msg": "As-is Expression 24건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js V01"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "VC1",
+   "class": "BLOCK",
+   "msg": "대조표 FAIL 44행 (Doc/verify/SCP0037/mapping_trace.md §FAIL)",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js VC1"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "VC1",
+   "class": "BLOCK",
+   "msg": "대조표 미검증 263행 — 검사 사유 REVIEW 40 · ERROR 310 · NOPATH 51 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js VC1"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "VC1",
+   "class": "BLOCK",
+   "msg": "작업 원장 미완료 62건 / 검사 인스턴스 337 — W3 5 · W5 16 · W7 21 · W9 20 · 구현 의심 1 (Doc/verify/SCP0037/work_ledger.md)",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js VC1"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "R05",
+   "class": "BLOCK",
+   "msg": "`any` / `as unknown as` 금지 (#73 procedure-dts-ssot)",
+   "where": "components/OperationLTGrid.tsx:278",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js R05"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "R09",
+   "class": "BLOCK",
+   "msg": "자체 행상태 필드 금지 — CRUD_TYPE 전용 (#99 §0)",
+   "where": "components/OperationLTGrid.tsx:22",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js R09"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "R03",
+   "class": "BLOCK",
+   "msg": "window.alert/confirm → useMessageStore (#26 messaging-api)",
+   "where": "hooks/useOperationLTValidation.ts:48",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js R03"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "R05",
+   "class": "BLOCK",
+   "msg": "`any` / `as unknown as` 금지 (#73 procedure-dts-ssot)",
+   "where": "OperationLT.tsx:147",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js R05"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "R05",
+   "class": "BLOCK",
+   "msg": "`any` / `as unknown as` 금지 (#73 procedure-dts-ssot)",
+   "where": "useOperationLTStore.ts:146",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js R05"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "R09",
+   "class": "BLOCK",
+   "msg": "자체 행상태 필드 금지 — CRUD_TYPE 전용 (#99 §0)",
+   "where": "utils/operation-lt.editLock.ts:14",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js R09"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B19",
+   "class": "BLOCK",
+   "msg": "expressions.md 24행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B19"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "check.js --final"
+  }
+ ]
+}

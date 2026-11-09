@@ -12,6 +12,7 @@ import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { attachRowNoHeader, GridAction } from '@foundation/utils';
 import { CustomDialog, DataGrid, ResultArea } from '@shared/components';
+import { useTabBtnPermissions } from '@shared/hooks';
 import { Button } from '@shared/lges';
 import { ControlConfirmIcon, FileExceldownloadIcon } from '@shared/lges-icons';
 import { useMessageStore, useSessionStore } from '@shared/stores';
@@ -105,6 +106,10 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
   //   저장에 성공하면 AS-IS 와 동일하게 팝업을 닫으므로 이 작업본은 다음 open 때 새로 채워진다.
   const [localRows, setLocalRows] = useState<SalesPriceRangeRow[]>([]);
   const [saving, setSaving] = useState(false);
+  // Save 노출 = priceBatch 시트 SAVE 권한(시트 단위). 저장은 priceBatch/SAVE 로 가는데 메뉴 단위로 보면
+  //   main 등 다른 시트 SAVE 와 합쳐져 group menu 에서 priceBatch SAVE 를 꺼도 버튼이 남는다.
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID, enabled: open });
+  const canSave = hasButton('SAVE', SHEETS.PRICE_BATCH);
 
   useEffect(() => {
     if (open) setLocalRows(rows);
@@ -273,6 +278,8 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
                 staticColumns={RANGE_COLUMNS}
                 autoGenerateColumns={false}
                 className={styles.grid}
+                // 읽기전용 자동 잠금을 priceBatch 시트 SAVE 권한으로 판정(메뉴 단위면 main SAVE 와 섞임)
+                saveAuth={{ menuId: MENU_ID, sheetName: SHEETS.PRICE_BATCH }}
               />
             </ResultArea>
           </div>
@@ -288,16 +295,18 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
               disabled={localRows.length === 0}
               onClick={handleExcel}
             />
-            <Button
-              appearance='contained'
-              priority='primary'
-              size='medium'
-              buttonLabel={t('LBL00111', 'Save')}
-              iconComponent={<ControlConfirmIcon size='small' />}
-              iconPosition='leading'
-              disabled={saving || localRows.length === 0}
-              onClick={handleSave}
-            />
+            {canSave && (
+              <Button
+                appearance='contained'
+                priority='primary'
+                size='medium'
+                buttonLabel={t('LBL00111', 'Save')}
+                iconComponent={<ControlConfirmIcon size='small' />}
+                iconPosition='leading'
+                disabled={saving || localRows.length === 0}
+                onClick={handleSave}
+              />
+            )}
             <Button
               appearance='outlined'
               priority='normal'

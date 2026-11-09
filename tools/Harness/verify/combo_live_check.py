@@ -109,7 +109,12 @@ def main(mid, res_dir=None, user=None):
             except Exception as e:
                 res.append({'combo_id': cid, 'body': body[:300], 'resp_n': c.get('n'), 'db_n': '', 'missing': '', 'extra': '', 'result': 'ERROR', 'why': f'[확인 대상] 치환 SQL 실행 오류 {str(e)[:120]}{note} · 미치환 키 {miss_keys}'}); continue
             cols = [d[0].upper() for d in cur.description]
-            ci = cols.index('CODE') if 'CODE' in cols else 0
+            # 2026-11-06(SCP0084 조치 필요 29번 허위 FAIL): CODE 열이 없는 콤보(MIN_YYYYMM/MAX_YYYYMM 한 행 같은 범위 조회)는
+            #   응답 쪽 코드 = 응답 JSON 첫 키(nscm.ts pairs: code 열 없으면 keys[0] = MAX_YYYYMM), DB 쪽 = SELECT 첫 열(MIN_YYYYMM) 로 서로 다른 열을 비교했다
+            #   → 응답이 코드로 쓴 열 이름을 DB 결과에서 같은 이름으로 찾는다(없을 때만 첫 열).
+            rk = [str(k).upper() for k in (c.get('keys') or [])]
+            resp_key = 'CODE' if 'CODE' in rk else (rk[0] if rk else '')
+            ci = cols.index('CODE') if 'CODE' in cols else (cols.index(resp_key) if resp_key in cols else 0)
             db_codes = {str(r[ci]) if r[ci] is not None else '' for r in rows}
             resp_rows = c.get('rows') or []
             if mutate and resp_rows: resp_rows = resp_rows[1:]

@@ -1,0 +1,111 @@
+{
+ "menu_id": "SCP0037",
+ "asis_id": "SCP0037",
+ "generated": "2026-11-08 11:48:06",
+ "a": {
+  "verdict": "판정필요",
+  "note": "저장 SP SCP0037_SAVE_OPERATION_LT 대상 SCP_MST_OPERATION_LT, SCP_MST_OPERATION_LT_H 와 콤보 원천 10종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 2종: DIVISION_ID, SCM_SITE_ID",
+  "save_tables": [
+   "SCP_MST_OPERATION_LT",
+   "SCP_MST_OPERATION_LT_H"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "cboDivision",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=Division 분기 + FN_GET_DIVISION 원문",
+    "tables": [
+     "FN_GET_DIVISION",
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboLTOperation",
+    "label": "LT Operation",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbPlantSite",
+    "label": "Plant Site",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=PlantByDivisionOperNonOsp1 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DIVISION_ID",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "SCM_SITE_ID",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "PlantByDivisionOperation",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=PlantSiteByDivision 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "INV_FLAG",
+    "label": "Inv Flag",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "LT_OPERATION",
+    "label": "LT Operation",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "SCM_SITE_ID",
+    "label": "Plant Site*",
+    "src": "UP_FX_GetCommonDataList @Code=PlantSiteByDivision 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "SITE_ITEM_VALID_YN",
+    "label": "Site Item Valid",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   }
+  ]
+ }
+}

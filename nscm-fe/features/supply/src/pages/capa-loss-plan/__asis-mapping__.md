@@ -205,9 +205,9 @@
 | 7 | `LockRange2` 좌표 잠금 | 스프레드 좌표 범위 | `beginningEdit` 마지막 override + 순수 판정 함수 | hook #130, 03 V-26 |
 | 8 | 편집가능 measure | (동일) GET `*_TARGET_YN` | 동일 — **코드 상수 배열을 두지 않는다**. SP 미배포로 결과셋이 비면 편집 0건(닫히는 쪽 실패) | 03 V-23 |
 | 9 | Measure 아이콘(`IcMeasureSelect`) | AS-IS 툴바에 **없음**(캡처 11종 실측) | **미노출** | L-34/V-21 은 TO-BE 확장 제안이고, 공용 `MeasureSelectModal` 이 `features/master` 에만 있어 supply 소비는 Top11 #2 위반. 04 "확인필요" |
-| 10 | `isScpPlanFixed` 리셋 누락(C-16) | 행 루프 내 리셋 없음 → 확정기간 이후·연 컬럼까지 계속 잠김 | **AS-IS 실동작 그대로 재현**(`buildScpPlanFixedColumns` latch) | plan STEP0 ⑧ 잠정 방침. 의도/버그 미확정(BLK-13-④) → 04 "확인필요". 버그로 확정되면 함수 1개만 단순 범위 판정으로 교체 |
+| 10 | `isScpPlanFixed` 리셋 누락(C-16) | 6자리 월 컬럼마다 재계산 / 4자리 연(`Y_`) 컬럼은 재계산 없이 앞 월값 상속(cs:2258 length==6 가드) | **AS-IS 정밀 재현**(`buildScpPlanFixedColumns` — 월별 재계산+연컬럼 상속) | I-04 — 2026-11-04 AS-IS 정밀 재현 확정. 과거 순수 latch 는 확정기간 이후 월까지 과잠금이라 AS-IS 와 달랐고, 월별 재계산으로 교정 |
 | 11 | `MC_RT` 색칠 | 라벨 NBSP(U+00A0)로 문자열 비교가 빗나가 **안 칠해짐** | **칠하지 않음**(색 맵에서 의도적 제외) | dec §A BLK-11 "AS-IS 실발현 그대로". 코드 기준으로 옮기면 AS-IS 에 없던 색이 생긴다 |
-| 12 | AS-IS MSG 번호 | MSG00419 / MSG00109 / MSG00097 / MSG00004 | **MSG01406 / MSG01454 / MSG00667 / MSG00672** | hook #114 + dec §A BLK-5. 번호 그대로 쓰면 뜻이 뒤집히거나 엉뚱한 문구가 뜬다 |
+| 12 | AS-IS MSG 번호 | MSG00419 / MSG00109 / MSG00097 / MSG00004 | **MSG01406 / MSG00109 / MSG00667 / MSG00672** | hook #114 + dec §A BLK-5. 읽기전용은 AS-IS MSG00109("Read-only.")→TO-BE MSG00109(동일 의미) 1:1(I-20, 2026-11-04 AS-IS 따라가기 확정 — 이전 MSG01454 는 "작성중인 요청 품의가 있습니다"로 오매핑이었음, DB 재측정으로 교정). 나머지는 번호 그대로 쓰면 뜻이 뒤집힌다 |
 
 ---
 

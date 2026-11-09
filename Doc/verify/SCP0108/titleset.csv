@@ -1,0 +1,5 @@
+﻿kind,target,result,why
+TITLESET_MIG,SCP0108,ERROR,"[확인 대상] 이관 대상 154행 중 TO-BE 없음 154행(예 [('blueeos', 'C', 'DIVISION_ID'), ('blueeos', 'C', 'ELTR_LN_TP_CD'), ('blueeos', 'C', 'LINE_NAME')]) · AS-IS 전체 154행 — AS-IS 접속이 개발 DB 라 이관 원천 일치 미확인"
+TITLESET_REQ,SCP0108.CURRENT,NA,전 Division 공통 필수 컬럼 없음(USER_SELECTABLE_FLAG=N)
+TITLESET_REQ,SCP0108.CUTOFF,NA,전 Division 공통 필수 컬럼 없음(USER_SELECTABLE_FLAG=N)
+MEASURE_ORDER,SCP0108.CURRENT,NA,Measure 칸이 없는 화면 · 사용자 

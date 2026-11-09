@@ -45,6 +45,7 @@ export const LineMasterForm = ({ onSearch }: Props) => {
   const openSearchArea = useLineMasterStore(s => s.openSearchArea);
   const authLocked = useLineMasterStore(s => s.authLocked);
   const setAuthLocked = useLineMasterStore(s => s.setAuthLocked);
+  const setOperationScope = useLineMasterStore(s => s.setOperationScope);
   const setAlert = useMessageStore.getState().setAlert;
 
   const isPlant = sc.mode === LINE_MODE.PLANT;
@@ -64,11 +65,18 @@ export const LineMasterForm = ({ onSearch }: Props) => {
       { comboId: COMBO.BUILDING, divisionId: sc.divisionId },
       // clbOperation(LocationGroupByCapa) — 파라미터 없는 전량(AS-IS 동일).
       COMBO.OPERATION,
-      // clbLine — AS-IS: Plant=LineByOperation(@divisionId), Packer=LineByPlantPacker(@Param1=division/@Param2=scmSite).
-      //   Packer 콤보를 AS-IS 로 정렬(권한필터 제거·division/scmSite 토큰 추가)했으므로 두 토큰 전달.
-      //   scmSiteId 는 선택 plantSite 콤마연결(미선택 시 '' → NULL 취급 = 전량, AS-IS @Param2='' 동일).
+      // clbLine — AS-IS: Plant=LineByOperation(division, factory, operation, plantSite 5축), Packer=LineByPlantPacker(@Param1=division/@Param2=scmSite).
+      //   AS-IS RefreshLine(src 187) 는 Line 전량을 Building(FACTORY_ID)+Operation(OPERATION_ID)+PlantSite 로 좁힌다 — Building/Operation 축을
+      //   서버 @factoryId/@operationId 로 전달해 cascade 를 재현한다(FACTORY_ID 는 콤보가 반환하지 않아 클라 필터 불가 → 서버 필터 필수).
+      //   Packer 콤보는 AS-IS 로 정렬(권한필터 제거·division/scmSite 토큰 추가)했으므로 두 토큰 전달.
+      //   각 토큰은 선택값 콤마연결(미선택 시 '' → NULL 취급 = 전량, AS-IS 빈 파라미터 동일).
       isPlant
-        ? { comboId: COMBO.LINE_PLANT, divisionId: sc.divisionId }
+        ? {
+            comboId: COMBO.LINE_PLANT,
+            divisionId: sc.divisionId,
+            factoryId: sc.buildingIds.join(','),
+            operationId: sc.operationIds.join(','),
+          }
         : { comboId: COMBO.LINE_PACKER, divisionId: sc.divisionId, scmSiteId: sc.plantSiteIds.join(',') },
     ],
   });
@@ -132,7 +140,15 @@ export const LineMasterForm = ({ onSearch }: Props) => {
   const buildingOptions = toOptions(buildings ?? []);
   // clbOperation = LocationGroupByCapa param-less 전량 (design 02 filter/requery — 전량 노출)
   const operationOptions = toOptions(operations);
-  // clbLine = division + 선택 plantSite/operation 하위 (design 02 §2.3)
+  // Operation 콤보(route operation = LOCATION_GROUP_ROUTE 등록분) 코드를 store 로 올린다 — setFilter(Plant)가
+  //   Operation 미선택 시 이 목록을 열거해 p_operation_id 로 보낸다(AS-IS GetCheckedListValue 펼침 파리티,
+  //   그리드를 route operation 으로 좁혀 룩업 밖 A5000 등 제외). 로드 전(빈)엔 setFilter 가 'ALL' 로 폴백.
+  const operationCodesKey = operationOptions.map(o => o.value).join(',');
+  useEffect(() => {
+    setOperationScope(operationCodesKey ? operationCodesKey.split(',') : []);
+  }, [operationCodesKey, setOperationScope]);
+  // clbLine = division + 선택 plantSite 하위 (design 02 §2.3). Building(FACTORY_ID)/Operation(OPERATION_ID)
+  //   cascade 는 콤보 쿼리의 @factoryId/@operationId 로 서버에서 이미 좁혀 내려온다(위 useTabComboQueries).
   const lineOptions = toOptions(
     (lines ?? []).filter(
       r =>
@@ -230,19 +246,24 @@ export const LineMasterForm = ({ onSearch }: Props) => {
             />
           </Grid>
 
+          {/* PlantSite 변경 = 하위(Building/Operation/Line) 선택 전부 초기화 (AS-IS 계층 cascade:
+              ClbPlantSite_SelectedIndexChanged → RefreshBuildingByPlantSite + RefreshOperationByBuilding +
+              RefreshLine, cs:741~753 — setListBox 가 하위 체크선택을 ALL 로 되돌림). Division>PlantSite>Building>
+              Operation>Line 계층에서 상위 변경 시 하위 선택을 ALL 로 리셋한다(사용자 지시 2026-11-09). */}
           {multi(LBL.PLANT_SITE, '_Plant Site', sc.plantSiteIds, plantSiteOptions, plantSiteIds =>
-            // plantSite 변경 = line 초기화 (design 02 §3)
-            set({ plantSiteIds, lineIds: [] })
+            set({ plantSiteIds, buildingIds: [], operationIds: [], lineIds: [] })
           )}
 
-          {/* Building / Operation 은 Plant 시트에서만 노출 (Packer 조회 SP 입력에 없음 — design 03 §4.3) */}
+          {/* Building / Operation 은 Plant 시트에서만 노출 (Packer 조회 SP 입력에 없음 — design 03 §4.3).
+              Building 변경 = 하위(Operation/Line) 선택 초기화 (AS-IS ClbBuilding_SelectedIndexChanged →
+              RefreshOperationByBuilding + RefreshLine, cs:761~766). */}
           {isPlant &&
             multi(LBL.BUILDING, '_Building', sc.buildingIds, buildingOptions, buildingIds =>
-              set({ buildingIds })
+              set({ buildingIds, operationIds: [], lineIds: [] })
             )}
           {isPlant &&
             multi(LBL.OPERATION, '_Operation', sc.operationIds, operationOptions, operationIds =>
-              set({ operationIds })
+              set({ operationIds, lineIds: [] })
             )}
 
           {multi(LBL.LINE, '_Line', sc.lineIds, lineOptions, lineIds => set({ lineIds }))}

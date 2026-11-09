@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { ADMIN_SHEET_NAME, MENU_ID, SHEETS } from './warehouse-capacity.constants';
 import type { SearchCondition } from './warehouse-capacity.types';
@@ -52,8 +52,9 @@ const defaultPeriod = (): { from: string; to: string } => {
 const DEFAULT_PERIOD = defaultPeriod();
 
 const initSearch: SearchCondition = {
-  // 기본 사업부 = 세션 division (supply 표준, outsourcing-capacity/formation 동일 관례).
-  divisionId: useSessionStore.getState().session.div ?? '',
+  // 기본 사업부 = Division 콤보 첫 항목(Form 자동선택). AS-IS SCP0133 은 GetDivision 바인딩 후 첫 행
+  //   선택(세션 미사용, cs:182) — session.div deviation 제거(2026-11-05).
+  divisionId: '',
   planGroupIds: [],
   siteIds: [],
   // Stage 는 단일선택(AS-IS cboStage, UsrComboBox). 기본 'ALL'(Valid 와 동형).

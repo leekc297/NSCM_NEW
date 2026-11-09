@@ -209,6 +209,20 @@ def collect_db(c, ID, ctx):
                       AND D.REFERENCED_TYPE IN ('TABLE','VIEW','PACKAGE','PROCEDURE','FUNCTION','TYPE','SEQUENCE','SYNONYM')
                     ORDER BY 1, 2""")
     deps = [d for d in deps if not (d['RO'] == OWNER and d['RN'] in names)]
+    # 2026-11-06 W8: 동적 SQL(문자열) 안의 참조는 ALL_DEPENDENCIES 에 없다(SCP0016 WATERFALL 의 재고 뷰 SCP_PLN_SALES_ONHAND_V·SCP_OPT_PLANT_ONHAND_V)
+    #   → 화면 코드 원문의 식별자 토큰 중 SCM_MGR 실존 객체를 공용 의존(DYN=Y)으로 추가 — H14 패치 파일 매칭·00 PRECHECK 대상이 된다
+    try:
+        toks = set()
+        for src in D['code'].values():
+            toks |= set(re.findall(r'\b([A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+)\b', src or ''))
+        have = {d['RN'] for d in deps} | set(names)
+        cand = sorted(t for t in toks if t not in have and len(t) >= 8)
+        for i in range(0, len(cand), 500):
+            for r in c.q(f"""SELECT OBJECT_NAME RN, OBJECT_TYPE RT FROM ALL_OBJECTS WHERE OWNER = '{OWNER}'
+                              AND OBJECT_TYPE IN ('TABLE','VIEW','PACKAGE','PROCEDURE','FUNCTION','TYPE','SEQUENCE') AND OBJECT_NAME IN ({inlist(cand[i:i + 500])})"""):
+                deps.append({'RO': OWNER, 'RN': r['RN'], 'RT': r['RT'], 'DYN': 'Y'})
+    except Exception as _ex:
+        print(f'[WARN] 동적 SQL 참조 수집 실패(ALL_DEPENDENCIES 만 사용): {_ex}')
     for d in deps:
         st = c.q("""SELECT MAX(STATUS) ST, TO_CHAR(MAX(LAST_DDL_TIME),'YYYY-MM-DD HH24:MI:SS') LD FROM ALL_OBJECTS
                      WHERE OWNER = :o AND OBJECT_NAME = :n AND OBJECT_TYPE IN (:t, :t || ' BODY')""", o=d['RO'], n=d['RN'], t=d['RT'])

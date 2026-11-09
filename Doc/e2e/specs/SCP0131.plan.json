@@ -1,0 +1,352 @@
+{
+  "id": "SCP0131",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0131",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plan Group",
+    "SCM Site",
+    "Model/Nickname",
+    "Period",
+    "Active"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "SalesSitePriority",
+  "routePath": "supply/sales-site-priority",
+  "asisName": "SalesSitePriority",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "Div → Div. · 명칭",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "planGroups",
+      "label": "Plan Group",
+      "lbl": "LBL00002",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbPlanGroup",
+      "tobeLabel": "Plan Group",
+      "catalog": "Plan Group → Plan Group",
+      "labels": [
+        "Plan Group"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "siteIds",
+      "label": "SCM Site",
+      "lbl": "LBL00016",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbSite",
+      "tobeLabel": "SCM Site",
+      "catalog": "SCM Site → SCM Site",
+      "labels": [
+        "SCM Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendar",
+      "tobeLabel": "Period",
+      "catalog": "Period → Period",
+      "labels": [
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValid",
+      "tobeLabel": "Active",
+      "catalog": "",
+      "labels": [
+        "Active"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "Sales Site Priority",
+  "asisMapping": "features\\supply\\src\\pages\\sales-site-priority\\__asis-mapping__.md",
+  "buttons": [],
+  "mainSheets": [
+    {
+      "name": "Sales Site Priority",
+      "key": "SALES_SITE_PRIORITY",
+      "labels": [
+        "Create By",
+        "Creation Date",
+        "Division*",
+        "Valid From*",
+        "Model*",
+        "Last Update Date",
+        "Last Update By",
+        "Plan Group*",
+        "PRE_KEY_VALUES",
+        "Priority*",
+        "SCM site*",
+        "Valid To*",
+        "Valid",
+        "Description"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Sales Site Priority",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0131.P_",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCP0128_GET_SEARCH_INFO",
+      "sheet": "Sales Site Priority",
+      "btn": "SEARCH_INFO",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0131.P_SCP0128_GET_SEARCH_INFO",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0131_GET_SALES_SITE_PRIORITY",
+      "sheet": "Sales Site Priority",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0131.P_SCP0131_GET_SALES_SITE_PRIORITY",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+      "sheet": "Sales Site Priority",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0131.P_SCP0131_SAVE_SALES_SITE_PRIORITY",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Sales Site Priority": {
+      "40": [
+        "Div*",
+        "Plan Group*",
+        "SCM site*",
+        "Model*",
+        "Priority*",
+        "Valid From*",
+        "Valid To*",
+        "Description",
+        "Active",
+        "Create By",
+        "Creation Date",
+        "Last Update By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Plan Group*",
+        "SCM site*",
+        "Model*",
+        "Priority*",
+        "Valid From*",
+        "Valid To*",
+        "Description",
+        "Active",
+        "Create By",
+        "Creation Date",
+        "Last Update By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Plan Group*",
+        "SCM site*",
+        "Model*",
+        "Priority*",
+        "Valid From*",
+        "Valid To*",
+        "Description",
+        "Active",
+        "Create By",
+        "Creation Date",
+        "Last Update By",
+        "Last Update Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "INSERT",
+        "DELETE",
+        "SAVE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "INSERT",
+      "SAVE",
+      "DELETE"
+    ],
+    "SCP Planner": [
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "SAVE"
+    ]
+  },
+  "menuBtnCodes": [
+    "SEARCH",
+    "INSERT",
+    "DELETE",
+    "SAVE"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

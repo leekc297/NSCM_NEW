@@ -27,6 +27,7 @@ interface ScheduledReceiptInformationAction {
   setOpenSearchArea: (open?: boolean) => void;
   setSearchParams: (searchParams: Partial<SearchCondition>) => void;
   setDivision: (divisionId: string) => void;
+  clearGrid: () => void;
   setFilters: () => void;
   fetchStaticColumns: () => Promise<void>;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchParams 패치(1회).
@@ -85,6 +86,14 @@ export const useScheduledReceiptInformationStore = createPersistedStoreWithTab<
           divisionId,
           fromDate: cur.fromDate,
         };
+        state.filters = {};
+      });
+    },
+    // AS-IS CboPlanGroup_SelectedIndexChanged(.cs:1301) SpreadInfo.ClearDataSource(spdMain) 재현 —
+    //   Plan Group 변경 시 조건(searchParams)은 그대로 두고 그리드만 비운다(filters={} → 두 시트 조회키가
+    //   바뀌어 재조회(Search) 전까지 빈 상태). Division 변경(setDivision)이 조건까지 리셋하는 것과 구분된다.
+    clearGrid: () => {
+      set(state => {
         state.filters = {};
       });
     },

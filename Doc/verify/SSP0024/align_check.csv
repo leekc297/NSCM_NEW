@@ -1,0 +1,37 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+SSP0024,,DIVISION_ID,division,C,SSP0024_ItembyDivisionPopup.cs:214,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,,DIVISION_NAME,division,,SSP0024_ItembyDivisionPopup.cs:215,SSP0024,Ship Master Elec,,메타 SSP0024/Ship Master Elec,NA,AS-IS 정렬 근거 없음
+SSP0024,,PLANT_SITE_CODE,Plant Site Code,,SSP0024_ItembyDivisionPopup.cs:216,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,NA,AS-IS 정렬 근거 없음
+SSP0024,,PLANT_SITE_ID,Plant Site,C,SSP0024_ItembyDivisionPopup.cs:217,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,,MATERIAL_ID,Material,C,SSP0024_ItembyDivisionPopup.cs:218,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,,MODEL_ID,Model,C,SSP0024_ItembyDivisionPopup.cs:219,SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,FAIL,AS-IS center ↔ TO-BE left — 정렬 다름
+SSP0024,,CELL_TYPE,Cell Type,C,SSP0024_ItembyDivisionPopup.cs:220,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,,NICK_NAME,Nick Name,C,SSP0024_ItembyDivisionPopup.cs:221,SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,FAIL,AS-IS center ↔ TO-BE left — 정렬 다름
+SSP0024,,ELECTRODE_TYPE,Electrode Type,C,SSP0024_ItembyDivisionPopup.cs:222,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,,ITEM_UOM,UOM,C,SSP0024_ItembyDivisionPopup.cs:223,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,,UOM_CONVERT_IN_TACT_TIME,Pancake (m/cell),,SSP0024_ItembyDivisionPopup.cs:224,SSP0024,Ship Master Elec,R,메타 SSP0024/Ship Master Elec,NA,AS-IS 정렬 근거 없음
+SSP0024,Ship Master Elec,BOX_PER_CUT,Box/Cut*,R,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,R,메타 SSP0024/Ship Master Elec,PASS,AS-IS right ↔ TO-BE right
+SSP0024,Ship Master Elec,BUILDING,Building*,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,BUILDING_DESC,Building Desc.,L,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,PASS,AS-IS left ↔ TO-BE left
+SSP0024,Ship Master Elec,CELL_TYPE,Cell Type,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,CREATED_BY,Created By,L,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,PASS,AS-IS left ↔ TO-BE left
+SSP0024,Ship Master Elec,CREATION_DATE,Creation Date,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,DIVISION_ID,Div*,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,DOM_EXP_TYPE_CODE,DOM/EXP.*,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,ELECTRODE_TYPE,Electrode Type,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,ITEM_UOM,UOM,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,LAST_UPDATED_BY,Last Updated By,L,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,PASS,AS-IS left ↔ TO-BE left
+SSP0024,Ship Master Elec,LAST_UPDATE_DATE,Last Update Date,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,MATERIAL_ID,Material*,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,MODEL_ID,Model,L,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,PASS,AS-IS left ↔ TO-BE left
+SSP0024,Ship Master Elec,NICK_NAME,Nick Name,L,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,PASS,AS-IS left ↔ TO-BE left
+SSP0024,Ship Master Elec,PACKAGE_TYPE_CODE,Package Type*,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,PC_ROLL_LENGTH,Pancake Roll Length,R,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,R,메타 SSP0024/Ship Master Elec,PASS,AS-IS right ↔ TO-BE right
+SSP0024,Ship Master Elec,PLANT_SITE_CODE,Plant Site Code,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,PLANT_SITE_ID,Plant Site*,C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,POST_OPER,Post Oper.*,L,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,PASS,AS-IS left ↔ TO-BE left
+SSP0024,Ship Master Elec,POST_OPER_LT,Post Oper.LT(Day),C,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
+SSP0024,Ship Master Elec,REMARKS,Remarks,L,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,PASS,AS-IS left ↔ TO-BE left
+SSP0024,Ship Master Elec,STEELCRATE_PER_CUT,Steelcrate/Cut*,R,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,R,메타 SSP0024/Ship Master Elec,PASS,AS-IS right ↔ TO-BE right
+SSP0024,Ship Master Elec,STEELRACK_PER_CUT,Steelrack/Cut*,R,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,R,메타 SSP0024/Ship Master Elec,PASS,AS-IS right ↔ TO-BE right
+SSP0024,Ship Master Elec,UOM_CONVERT_IN_TACT_TIME,Pancake (m/cell),R,META SCM_MST_SHEET_COLUMNS(SSP0024/Ship Master Elec),SSP0024,Ship Master Elec,R,메타 SSP0024/Ship Master Elec,PASS,AS-IS right ↔ TO-BE right

@@ -10,6 +10,7 @@ import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
+import { SHEETS } from '../sales-reports.constants';
 import type { SalesReportRow, SpreadTitleRow } from '../sales-reports.types';
 import styles from '../SalesReports.module.scss';
 import {
@@ -667,12 +668,18 @@ const SalesReportsGridComponent = ({
 
     // ITEM_ID 셀 더블클릭 — 값 '기타매출' 제외 (제약매트릭스 M-8 L93 — DM0002 Item 팝업)
     const dblclickHandler = (ev: MouseEvent) => {
+      // 읽기전용(MDF Reports SAVE 권한 없음)이면 Item 입력 팝업을 띄우지 않는다.
+      if (g.isReadOnly) return;
       const ht = g.hitTest(ev);
       if (!ht || ht.panel !== g.cells) return;
       const binding = g.columns[ht.col]?.binding ?? '';
       const row = g.rows[ht.row]?.dataItem as SalesReportRow | undefined;
       if (!row || binding !== 'ITEM_ID') return;
       if (toCellStr(row.ITEM_ID).trim() === ETC_SALES_ITEM) return;
+      // 행 잠금(EDIT_FLAG='N')이면 셀 편집과 같이 팝업도 막는다 — 팝업은 선택값을 행에 직접 넣으므로
+      //   여기서 거르지 않으면 잠긴 행도 팝업으로 바뀐다. 입력 구분(INPUT_TP_CD)은 보지 않는다 — AS-IS 는
+      //   편집 중 신규·기존 행 모두에서 이 팝업을 열었다(설계서 §4.2·§6.3).
+      if (row.EDIT_FLAG === 'N') return;
       onItemCellDblClickRef.current?.(row);
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
@@ -812,6 +819,8 @@ const SalesReportsGridComponent = ({
       dynamicColumns={mainDynamicColumns}
       itemsSource={rows as unknown as WijmoRowItem[]}
       autoGenerateColumns={false}
+      // 읽기전용 자동 잠금을 MDF Reports 시트 SAVE 권한으로 판정(메뉴 단위면 titleSet SAVE 와 섞임)
+      saveAuth={{ sheetName: SHEETS.MAIN }}
       // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
       //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
       //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.

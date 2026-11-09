@@ -7,9 +7,9 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | component | 309 |
+| features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | component | 311 |
 | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyGrid.tsx | component | 143 |
-| features/supply/src/pages/constraint-of-shipment-qty/constraint-of-shipment-qty.constants.ts | constants | 158 |
+| features/supply/src/pages/constraint-of-shipment-qty/constraint-of-shipment-qty.constants.ts | constants | 162 |
 | features/supply/src/pages/constraint-of-shipment-qty/constraint-of-shipment-qty.types.ts | types | 30 |
 | features/supply/src/pages/constraint-of-shipment-qty/ConstraintOfShipmentQty.tsx | page | 208 |
 | features/supply/src/pages/constraint-of-shipment-qty/hooks/useConstraintOfShipmentQtyValidation.ts | hook | 108 |
@@ -45,11 +45,11 @@
 | InputField | onChange | <arrow>  | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 178 |
 | Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 174 |
 | CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 197 |
-| CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 216 |
-| CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 235 |
-| CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 255 |
-| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 269 |
-| CustomDropdown | onChange | <arrow> set,str | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 286 |
+| CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 218 |
+| CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 237 |
+| CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 257 |
+| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 271 |
+| CustomDropdown | onChange | <arrow> set,str | jsx | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyForm.tsx | 288 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyGrid.tsx | 61 |
 | g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyGrid.tsx | 71 |
 | g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyGrid.tsx | 83 |
@@ -94,7 +94,7 @@
 | LBL00002 | 1 |
 | LBL00022 | 1 |
 | LBL00023 | 1 |
-| LBL01092 | 1 |
+| LBL00063 | 1 |
 | LBL00061 | 1 |
 | LBL00007 | 1 |
 | LBL00618 | 1 |

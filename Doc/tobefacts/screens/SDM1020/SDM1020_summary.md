@@ -41,8 +41,8 @@
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
 |---|---|---|---|
-| Project List | divisionId endCustomer dpjtAuthType dpjtRegStatus regCompDateFr regCompDateTo | data | PKG_SDM1020 P_SDM1020_GET_PJT_LIST PR_GET_DAY_RANGE P_FR_BUCKET P_SDM1020_BTN_REQ_PJT_REG P_SDM1020_REQ_PJT_AUTH |
-| period | createdBy month | o_rc1 o_rc2 | PKG_SDM1020 P_SDM1020_GET_PJT_LIST PR_GET_DAY_RANGE P_FR_BUCKET P_SDM1020_BTN_REQ_PJT_REG P_SDM1020_REQ_PJT_AUTH |
+| Project List | divisionId endCustomer dpjtAuthType dpjtRegStatus regCompDateFr regCompDateTo | data |  |
+| period | createdBy month | o_rc1 o_rc2 |  |
 
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |

@@ -222,8 +222,8 @@ export const HEADER_ROW_HEIGHT = 16; // 3단 x 16 = 총높이 48px
 export const MSG = {
   NO_DIVISION_AUTH: 'MSG00667', // "No authority assigned." (AS-IS MSG00097, 01 L-04)
   PRE_VERSION_BLOCKED: 'MSG01410', // "... before {0}" (AS-IS MSG00423, 01 L-22)
-  CANNOT_INSERT: 'MSG01044', // "Can not add as it is not in modify mode." (AS-IS MSG00008, 01 L-27)
-  CANNOT_DELETE: 'MSG01045', // "... delete ..." (AS-IS MSG00009, 01 L-32)
+  // (제거 2026-11-04) CANNOT_INSERT/CANNOT_DELETE(MSG01044/45) — Insert/Delete 버튼을 숨기면서
+  //   alert 핸들러가 사라져 미사용. AS-IS 가 두 기능을 실제로 쓰지 않아 버튼 비노출로 전환(CapaLobReport.tsx).
   NO_PERMISSION: 'MSG00096', // "No permission." (AS-IS MSG00096 동일 의미, 01 L-28)
   // 콤보 조회 실패 — "권한 0건(MSG00667)" 과 반드시 구분한다. 실패를 권한 없음으로 오판하면
   //   네트워크 오류에 조회영역이 잠긴다(iter-1 G-03). 문구 역조회 실측:

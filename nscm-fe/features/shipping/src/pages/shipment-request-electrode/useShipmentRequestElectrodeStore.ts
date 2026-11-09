@@ -35,6 +35,9 @@ interface ShipmentRequestElectrodeState {
   activeDetailTab: 'requestDetail' | 'stockDetail';
   // 활성 그리드(design 01 R8/R5 — Save/btnMeasure 라우팅 기준. 없음(null)=포커스 이탈).
   activeGrid: 'spdMain' | 'spdDetail' | null;
+  // bRealFlag(AS-IS cs:308/3743-3750) — cboPlanDate 최신(index0) 선택 여부. 메인 pivot 편집·ETA 팝업 가드(MSG00312)
+  //   + 조회 SP P_REAL_FLAG 축. AS-IS 초기값 true(로드 시 Form 이 최신 Plan Date 를 자동 선택).
+  realFlag: boolean;
 }
 
 interface ShipmentRequestElectrodeAction {
@@ -53,6 +56,7 @@ interface ShipmentRequestElectrodeAction {
   setBohMode: (mode: ShipmentRequestElectrodeState['bohMode']) => void;
   setActiveDetailTab: (tab: ShipmentRequestElectrodeState['activeDetailTab']) => void;
   setActiveGrid: (grid: ShipmentRequestElectrodeState['activeGrid']) => void;
+  setRealFlag: (realFlag: boolean) => void;
   fetchStaticColumns: () => void;
   fetchStaticMeasures: () => void;
   applyVisibleMeasures: (codes: string[] | null) => void;
@@ -61,7 +65,9 @@ interface ShipmentRequestElectrodeAction {
 // 세션 스코프 함수(모듈 상수 아님) — division 등 세션값을 스토어 생성 시점에 읽어야 재로그인 시 얼어붙지 않는다
 //   (forecast-price useForecastPriceStore.makeInitSearchParams 선례 1:1).
 const makeInitSearchParams = (): SearchParamProps => ({
-  divisionId: useSessionStore.getState().session.div ?? '',
+  // 기본 사업부 = Division 콤보 첫 항목(Form 자동선택). AS-IS SSP0022 는 MyDivision 목록 바인딩 후 첫 행
+  //   선택(세션 미사용) — session.div deviation 제거(2026-11-05).
+  divisionId: '',
   companyId: '',
   plantSiteIds: [],
   planDate: '',
@@ -102,6 +108,7 @@ const makeInitState = (): ShipmentRequestElectrodeState => ({
   visibleMeasures: null,
   activeDetailTab: 'stockDetail', // AS-IS 기본 활성 시트 = Stock Detail(CreateSpread cs:595)
   activeGrid: null,
+  realFlag: true, // AS-IS bRealFlag 초기값 true(cs:308) — 로드 시 Form 이 최신 Plan Date(index0) 자동 선택.
 });
 
 // 4개 체크박스 전부 미체크(design 02 §6-4, P_NON_CHK='Y' 재현) 판정.
@@ -196,13 +203,21 @@ export const useShipmentRequestElectrodeStore = createPersistedStoreWithTab<
         state.activeGrid = grid;
       });
     },
+    // bRealFlag(cs:3743-3750) — Form 의 PlanDate 선택 핸들러가 index0(최신) 여부로 세팅.
+    setRealFlag: realFlag => {
+      set(state => {
+        state.realFlag = realFlag;
+      });
+    },
     setOpenSearchArea: open => {
       set(state => {
         state.isOpenSearchArea = open ?? !state.isOpenSearchArea;
       });
     },
-    // AS-IS FindData_Main 파라미터 조립(design 02 §5, cs L2110-2185) — SP 미배포(확인 필요, 04 참조)라
-    //   필터 셋만 정확히 재현하고 실제 커서 반환은 확인하지 못했다.
+    // AS-IS FindButton() → FindData_Main() 단일 호출(cs:1435-1440) — 상단 Find 는 메인 pivot(+3SPAN 헤더)만
+    //   재조회한다. 상세(요청/재고)는 하단 2차 Search(setDetailFilters)·엑셀 업로드 경로에서만 조회한다
+    //   (자매 SSP0023 setMainFilters/setDetailFilter 분리와 동일 — 상단 Search 가 하단까지 조회하던 AS-IS 이탈
+    //   교정 2026-11-03). 파라미터 셋은 design 02 §5, cs L2110-2185.
     setFilters: () => {
       const sesUserId = useSessionStore.getState().session.userId ?? '';
       const sp: SearchParamProps = { ...makeInitSearchParams(), ...get().searchParams };
@@ -223,39 +238,12 @@ export const useShipmentRequestElectrodeStore = createPersistedStoreWithTab<
         sesUserId,
         mnuId: MENU_ID,
         sheetName: ADMIN_SHEET_NAME[SHEETS.MAIN] ?? '',
-        realFlag: 'Y', // bRealFlag(design 01 §5-6, cboPlanDate SelectedIndex===0 여부) — Form 배선에서 재계산
+        realFlag: get().realFlag ? 'Y' : 'N', // bRealFlag(cs:3743-3750) — Form PlanDate 선택(index0 여부)이 세팅
         myModelChk: yn(sp.myModelChk),
         partLeaderChk: yn(sp.partLeaderChk),
         teamLeaderChk: yn(sp.teamLeaderChk),
         delegateChk: yn(sp.delegateModelChk),
         nonChk,
-      };
-      const newRequestDetailFilters: ProcRequest<MENU_ID, SHEETS.REQUEST_DETAIL> = {
-        divisionId: sp.divisionId,
-        companyId: sp.companyId,
-        modelId: sp.modelId2,
-        itemId: sp.itemId2,
-        nickName: sp.nickName2,
-        fromYyyymmdd: sp.fromYyyymmdd2,
-        toYyyymmdd: sp.toYyyymmdd2,
-        sesUserId,
-        mnuId: MENU_ID,
-      };
-      const newStockDetailFilters: ProcRequest<MENU_ID, SHEETS.STOCK_DETAIL> = {
-        divisionId: sp.divisionId,
-        companyId: sp.companyId,
-        // 재고상세 SP(P_SSP0022_GET_STOCK_DETAIL)는 PLAN_START_YYYYMMDD 등가가 가드 없는 필수 조건이라 상단
-        //   조회조건의 Plan Date 를 반드시 넘긴다 — 누락하면 P_PLAN_START_YYYYMMDD=NULL → 항상 0행(2026-10-28
-        //   FE 배선 갭 교정). Plant(From Site)/Cell Type 도 AS-IS FindData_Detail(cs:2466-2470)과 동일하게
-        //   상단 필터값을 함께 전달해 등가(둘 다 비면 SP 가 NULL/ALL 가드로 전체 조회).
-        planStartYyyymmdd: sp.planDate,
-        plantId: joinComma(sp.plantSiteIds),
-        cellType: joinComma(sp.cellTypes),
-        modelId: sp.modelId2,
-        itemId: sp.itemId2,
-        lotId: sp.lotId,
-        sesUserId,
-        mnuId: MENU_ID,
       };
       const newSpreadTitleFilters: ProcRequest<MENU_ID, SHEETS.SPREAD_TITLE> = {
         fromYyyymmdd: sp.fromYyyymmdd,
@@ -264,23 +252,17 @@ export const useShipmentRequestElectrodeStore = createPersistedStoreWithTab<
 
       const cur = get();
       const sameMain = JSON.stringify(cur.filters) === JSON.stringify(newFilters);
-      const sameReq =
-        JSON.stringify(cur.requestDetailFilters) === JSON.stringify(newRequestDetailFilters);
-      const sameStock =
-        JSON.stringify(cur.stockDetailFilters) === JSON.stringify(newStockDetailFilters);
       const sameTitle =
         JSON.stringify(cur.spreadTitleFilters) === JSON.stringify(newSpreadTitleFilters);
 
       // 변경된 slice 만 재할당해 참조를 보존한다 — useTabProcQuery 는 filters '참조' 변경에 removeQueries→
-      //   재조회(useLayoutEffect, useCustomQueryClient). 매번 전부 새 객체로 덮으면 하단 Search(상세 조건만
-      //   바뀜)에도 main/spreadTitle 참조가 바뀌어 상단 그리드가 재조회되는 오동작이 난다(사용자 신고 2026-10-26).
+      //   재조회(useLayoutEffect, useCustomQueryClient). 상세(requestDetail/stockDetail) filters 는 여기서
+      //   건드리지 않는다 — 하단 2차 Search(setDetailFilters) 전용. 상단 Find 로 하단이 딸려 조회되던 이탈 교정.
       set(state => {
         if (!sameMain) state.filters = newFilters;
-        if (!sameReq) state.requestDetailFilters = newRequestDetailFilters;
-        if (!sameStock) state.stockDetailFilters = newStockDetailFilters;
         if (!sameTitle) state.spreadTitleFilters = newSpreadTitleFilters;
       });
-      return sameMain && sameReq && sameStock && sameTitle;
+      return sameMain && sameTitle;
     },
     // 하단 2차 Search(btnSearch, Lot Id 옆) — AS-IS BtnSearch_Click(cs:3785-3803)은 활성 상세 시트만 재조회.
     //   상단 main(state.filters)·spreadTitleFilters 는 **절대 재할당하지 않는다** → useTabProcQuery 의 filters
@@ -302,6 +284,9 @@ export const useShipmentRequestElectrodeStore = createPersistedStoreWithTab<
           nickName: sp.nickName2,
           fromYyyymmdd: sp.fromYyyymmdd2,
           toYyyymmdd: sp.toYyyymmdd2,
+          // Requestor(txtRequestor) — AS-IS FindData_Request_Detail 가 P_REQUESTOR_ID 로 넘긴다(cs:2294,2355).
+          //   요청상세 탭 전용 2차 조건(재고상세는 Lot ID 기반이라 미사용 — AS-IS p_lot_id="" cs:2291-2292).
+          requestorId: sp.requestor,
           sesUserId,
           mnuId: MENU_ID,
         };

@@ -1,0 +1,124 @@
+{
+ "menu_id": "SCP0016",
+ "rows": 2079,
+ "static_judged": 1389,
+ "runtime_pending": 0,
+ "dist": {
+  "PASS": 401,
+  "FAIL": 7,
+  "NA": 882,
+  "판정필요": 42,
+  "ERROR": 57
+ },
+ "fail_direct": 1,
+ "fail_user": 2,
+ "fail_by_rule": {
+  "I4": 1
+ },
+ "error_by_prefix": {
+  "규칙 A5 판정 32행 중 FAIL ": 7,
+  "진입점 집계 3검사 — NOT_RUN": 5,
+  "규칙 N1 판정 4행 중 FAIL 0": 4,
+  "규칙 N1 판정 3행 중 FAIL 0": 4,
+  "규칙 H6 판정 19행 중 FAIL ": 3,
+  "규칙 B8 판정 2행 중 FAIL 0": 2,
+  "규칙 G1 판정 5행 중 FAIL 0": 2,
+  "행 집계 — 대조표 D00-4e-00": 2,
+  "규칙 N1 판정 5행 중 FAIL 0": 1,
+  "규칙 A5 판정 36행 중 FAIL ": 1,
+  "규칙 G1 판정 1행 중 FAIL 0": 1,
+  "규칙 G1 판정 2행 중 FAIL 0": 1
+ },
+ "runtime_fail_prev": 6,
+ "runtime_fail_rows": [
+  {
+   "row_id": "V-4c0ea927",
+   "rule_id": "K3",
+   "target": "SCP0016 화면",
+   "evidence": "copy PASS: 선택 0,22,0,22 · 0행 D_20260824 표시값 '0' · Ctrl+C 클립보드 '0'(일치) · 우클릭 Copy '0'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(D_20260824) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(D"
+  },
+  {
+   "row_id": "V-41c3986c",
+   "rule_id": "SC1",
+   "target": "SCP0016 화면",
+   "evidence": "조회조건 순서가 Excel 과 다름 — 화면 div → operationgroup → pjt → modelnickname → electrode → ver → bucket → period → sum ↔ Excel(List 시트 순서 · SCP_화면별 조회조건 정리_260731_v0.5.xlsx 538행) 순서·구성: Div → Ver. → Operation "
+  },
+  {
+   "row_id": "V-e0565aea",
+   "rule_id": "K3",
+   "target": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": "hide FAIL: 헤더(D_20260824) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행), 동적 Bucket 컬럼"
+  },
+  {
+   "row_id": "V-eeadaa8c",
+   "rule_id": "K3",
+   "target": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+   "evidence": "copy PASS: 선택 0,22,0,22 · 0행 D_20260824 표시값 '0' · Ctrl+C 클립보드 '0'(일치) · 우클릭 Copy '0'(일치) | hide FAIL: 헤더(D_20260824) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행"
+  },
+  {
+   "row_id": "V-74b29c26",
+   "rule_id": "H4",
+   "target": "SCP0016 스냅샷 화면샷 1920",
+   "evidence": "[재실측 스냅샷 화면샷] 기준 Doc\\verify\\SCP0016\\snap\\golden\\화면샷_1920.png ↔ 실측 C:\\Projects\\NSCM\\Doc\\verify\\SCP0016\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 차이 1줄(C:\\Projects\\NSCM\\D"
+  },
+  {
+   "row_id": "V-7753e74e",
+   "rule_id": "H4",
+   "target": "SCP0016 스냅샷 화면샷 1366",
+   "evidence": "[재실측 스냅샷 화면샷] 기준 Doc\\verify\\SCP0016\\snap\\golden\\화면샷_1366.png ↔ 실측 C:\\Projects\\NSCM\\Doc\\verify\\SCP0016\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 차이 1줄(C:\\Projects\\NSCM\\D"
+  }
+ ],
+ "rules_static_measured": [
+  "A5",
+  "A6",
+  "A9",
+  "B2",
+  "B3",
+  "B4",
+  "B6",
+  "C1",
+  "C4",
+  "D1",
+  "D5",
+  "DB-SYN",
+  "F4",
+  "G1",
+  "G4",
+  "G5",
+  "G6",
+  "G7",
+  "G8",
+  "G9",
+  "H1",
+  "H10",
+  "H11",
+  "H4",
+  "H5",
+  "H6",
+  "H7",
+  "I1",
+  "I4",
+  "J1",
+  "J2",
+  "J4",
+  "K-SA",
+  "K1",
+  "K2",
+  "K4",
+  "M3",
+  "M4",
+  "X-LOC",
+  "X-REASON",
+  "X-ROW"
+ ],
+ "fails": [
+  {
+   "row_id": "V-c34ab6ef",
+   "rule_id": "I4",
+   "target": "SCP0016 화면",
+   "expect_src": "DOC:규칙 I4 정의 · 결함원장 유형(Doc/verify/_engine_gap.csv)",
+   "evidence": "t() 코드 16개 중 같은 문구의 앞선 코드가 있는데 새로 채번 1: LBL00711↔LBL00309",
+   "tobe_ref": "META SCM_ADM_MSG_M 중복 문구 · nscm-fe\\features\\supply\\src\\pages"
+  }
+ ]
+}

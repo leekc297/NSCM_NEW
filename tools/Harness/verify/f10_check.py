@@ -41,8 +41,33 @@ def bad_hits(chain):
                 line = b[:mm.start()].count('\n') + 1
                 ctx = b[max(0, mm.start() - 40):mm.end() + 40].replace('\n', ' ')
                 if lab == 'ROLLBACK(전체)' and re.search(r'(?i)EXCEPTION', b[:mm.start()][-400:]): continue  # 예외 처리의 ROLLBACK 은 원자성 보장(허용)
+                if lab == 'ROLLBACK(전체)' and depth == 0 and not re.search(r'(?i)(?<![A-Z_])COMMIT\s*;', b[:mm.start()]): continue  # T71: 최상위 저장 PROC 의 ROLLBACK(앞에 COMMIT 없음) = 이번 저장 전체 취소(업무 검증 실패 분기 · SCP0037:114) — 부분 저장 없음
+                if lab == 'COMMIT' and depth == 0 and benign_commit(b, mm.start()): continue  # T71 — 최상위 저장 PROC 만(하위 PROC 끝 COMMIT 은 상위 반복 안에서 중간 확정)
                 hits.append(f'{name}:{line} {lab} «{ctx.strip()[:90]}»')
     return hits
+
+
+RX_DML = re.compile(r'(?i)\b(INSERT\s+INTO|UPDATE\s+[A-Z0-9_.]+\s+SET|DELETE\s+FROM|MERGE\s+INTO)\b')
+RX_SUBCALL = re.compile(r'(?i)\b((?:[A-Z0-9_]+\.)?P_[A-Z0-9_]+|PR_[A-Z0-9_]+)\s*\(')
+
+
+def benign_commit(b, pos):
+    """2026-11-06 T71(SCP0122 F10 허위 FAIL): 원자성을 깨지 않는 COMMIT —
+    ① ROLLBACK 뒤 예외 처리부의 COMMIT(오류 로그 확정 · 업무 변경은 이미 롤백) ② 최종 COMMIT = 열린 LOOP 밖이고, 뒤(예외부 전까지)에 DML·로그 외 하위 호출이 없음.
+    반복 안·중간 COMMIT(뒤에 DML 이 남음)은 계속 FAIL."""
+    before = b[:pos]
+    if re.search(r'(?i)\bEXCEPTION\b', before[-600:]) and re.search(r'(?i)\bROLLBACK\s*;', before[-600:]):
+        return True
+    opens = len(re.findall(r'(?i)\bLOOP\b', before)) - 2 * len(re.findall(r'(?i)\bEND\s+LOOP\b', before))
+    if opens > 0:
+        return False
+    after = b[pos:]
+    mex = re.search(r'(?i)\bEXCEPTION\b', after)
+    seg = after[:mex.start()] if mex else after
+    if RX_DML.search(seg):
+        return False
+    calls = [c for c in RX_SUBCALL.findall(seg) if not re.search(r'(?i)LOG|(^|\.)P_OPEN_', c)]  # 로그·결과 커서 열기(P_OPEN_SUCCESS — SCP0084:78)는 업무 변경 아님
+    return not calls
 
 
 def walk_calls(root_name, root_pkg, root_body, resolve, limit=8):
@@ -72,6 +97,11 @@ def selftest():
     B = {('', 'A'): 'begin P_B(1); end;', ('', 'P_B'): 'begin PR_C(1); end;', ('', 'PR_C'): 'begin COMMIT; P_B(1); end;'}
     ch = walk_calls('A', '', B[('', 'A')], lambda p, q: B.get((p, q), ''))
     cases = [('2단계 아래까지 도달', [d for d, _, _ in ch] == [0, 1, 2], True), ('순환 멈춤', len(ch) == 3, True), ('깊은 COMMIT 검출', any(RX_BAD[0][1].search(b) for _, _, b in ch), True), ('상한', len(walk_calls('A', '', B[('', 'A')], lambda p, q: B.get((p, q), ''), limit=1)) == 2, True), ('자율 트랜잭션 하위 제외', bad_hits([(0, 'A', 'begin null; end;'), (1, 'LOG', 'pragma autonomous_transaction; begin commit; end;')]) == [], True), ('일반 하위 COMMIT 검출', len(bad_hits([(0, 'A', 'x'), (1, 'B', 'begin commit; end;')])) == 1, True), ('미발견 호출 무시', len(walk_calls('A', '', 'begin P_X(1); end;', lambda p, q: '')) == 1, True)]
+    # T71 — 최종 COMMIT·예외부 COMMIT 은 허용, 반복 안·중간 COMMIT 은 검출
+    fin = 'BEGIN FOR I IN 1..N LOOP UPDATE T SET A=1; END LOOP; PR_SCM_SYS_LOG_BATCH(1); COMMIT; OPEN O_RC1 FOR SELECT 1 FROM DUAL; EXCEPTION WHEN OTHERS THEN ROLLBACK; PR_SCM_SYS_LOG_BATCH(2); COMMIT; END;'
+    inloop = 'BEGIN FOR I IN 1..N LOOP UPDATE T SET A=1; COMMIT; END LOOP; END;'
+    mid_ = 'BEGIN UPDATE T SET A=1; COMMIT; DELETE FROM T2; END;'
+    cases += [('최종 COMMIT 허용', bad_hits([(0, 'X', fin)]) == [], True), ('반복 안 COMMIT 검출', len(bad_hits([(0, 'X', inloop)])) == 1, True), ('중간 COMMIT(뒤 DML) 검출', len(bad_hits([(0, 'X', mid_)])) == 1, True)]
     bad = 0
     for nm, got, want in cases:
         k = got == want

@@ -52,7 +52,8 @@ export const CustomerFcstUploadGrid = ({
   spreadTitle,
   onCellEdited,
 }: CustomerFcstUploadGridProps) => {
-  const staticColumn = useCustomerFcstUploadStore(state => state.staticColumn);
+  // 그리드는 현재 사업부 기준 메타(gridColumn)를 쓴다 — 엑셀 양식은 전체 메타(staticColumn) 그대로.
+  const staticColumn = useCustomerFcstUploadStore(state => state.gridColumn);
 
   // 컬럼 메타 정본 = admin `/column` 응답(SCM_MST_SHEET_COLUMNS) 단일 원천.
   //   admin UI Category Setup 변경이 코드 수정 없이 그대로 반영된다.

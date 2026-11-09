@@ -283,11 +283,16 @@ export const ShipmentSemiDeptDay = ({ tabId, title }: PageProps<MENU_ID>) => {
     const grid = gridRef.current;
     grid?.finishEditing();
     const src = (grid?.collectionView?.sourceCollection ?? []) as Record<string, unknown>[];
+    // AS-IS 파리티(cs:307~310, G27): 빈 그리드(행 0)에서 저장 -> AS-IS MSG00059("Check before adding.") 재현.
+    //   문구는 TO-BE 에 MSG01091 로 재번호 등록돼 있어 alert 로 띄운다(AS-IS GMessageBox 등가). 상세 constants.ts.
+    if (src.length === 0) {
+      void setAlert({ type: 'alert', content: t(MSG.CHECK_BEFORE_ADD, '_Check before adding.') });
+      return;
+    }
     // I/M 만 전송(D 미전송 — SAVE SP 에 D 분기 없음, design 03 §4.3).
     const dirty = src.filter(r => r.CRUD_TYPE === 'I' || r.CRUD_TYPE === 'M');
     if (dirty.length === 0) {
-      // 저장대상 0건(dirty 0 = 무변경) 안내. AS-IS 는 MSG00059("No data to save." cs:308)이나 TO-BE 미등록이라
-      //   등록된 MSG00004("No changes to save.")로 환원(iter-2 G9, hook #114, 무변경 의미 정합).
+      // 행 있고 변경 0건 = 무변경 TO-BE 표준 toast(datagrid-nochange-save-toast-standard). AS-IS 는 이 경우 무음(cs:370).
       setToast({ type: 'error', message: t(MSG.NO_DATA, '_No changes to save.') });
       return;
     }
@@ -352,14 +357,13 @@ export const ShipmentSemiDeptDay = ({ tabId, title }: PageProps<MENU_ID>) => {
           gridFilterRef={gridFilterRef}
           editTrackerRef={editTrackerRef}
           // 상시 편집(사용자 지시 2026-09-23) — Edit 버튼 없이 진입부터 편집 가능.
-          //   단 **수정 권한 게이트는 유지한다**: AS-IS 도 BaseForm.OnClickEditButton(cs:3664~3672)이
-          //   `!ViewModel.SecurityContext.CanUpdate` 면 MSG00096 후 EditButton() 자체를 부르지 않는다.
-          //   TO-BE 의 그 축이 hasButton('EDIT')(SCM_ADM_USER_GR_MNU_BTN_MPG_M)이므로, 버튼만 없애고
-          //   권한 판정은 남긴다 — 없애면 수정 권한 없는 사용자도 셀을 편집하게 된다.
+          //   수정 권한 게이트 = SAVE 권한(사용자 지시 2026-11-06): EDIT 권한은 보지 않는다.
+          //   SAVE 권한이 있으면 수정 가능, 없으면 전 셀 잠금. 메타상 INSERT 보유 그룹은 전부 SAVE=Y 라
+          //   신규행 추가·편집과도 일관된다(CAPA Planner·SSP ADMIN 등 — SCM_ADM_USER_GR_MNU_BTN_MPG_M 실측).
           //   권한 미도착 중에는 false(잠김)에서 시작해 도착 시 열린다(안전한 방향).
           //   열리는 셀 범위는 그대로 editLock 이 행상태로 판정(기존행 DEPARTURE_DAY/VALID_YN,
           //   신규행 +DIVISION_ID/ITEM_ID). AS-IS 의 "조회직후 전잠금 -> Edit 로 개방" 단계만 없앤 것이다.
-          isEditMode={hasButton('EDIT')}
+          isEditMode={hasButton('SAVE')}
           adminColumns={staticColumns[SHEETS.MAIN]}
           onItemCellDblClick={handleItemCellDblClick}
           onDivisionRequired={() =>

@@ -101,7 +101,10 @@ export const ElectrodeItemByDivisionModal = ({
       setFilters(undefined);
       return;
     }
-    const mat = preSearchParams.materialId ?? '';
+    // 셀 재오픈(callFromCell): 기존 Material 로 선필터하면 결과가 1건이라 아래 auto-pick 이 즉시
+    //   선택+닫아 "다시 안 열린다"(사용자 신고 2026-11-06). 항상 div+plant 전체 목록으로 열어 다른
+    //   Material 로 교체할 수 있게 한다(materialId 선필터 제거). 버튼 경로(callFromCell=false)는 종전대로.
+    const mat = callFromCell ? '' : (preSearchParams.materialId ?? '');
     setMaterialId(mat);
     setFilters({
       divisionId: preSearchParams.divisionId ?? '',

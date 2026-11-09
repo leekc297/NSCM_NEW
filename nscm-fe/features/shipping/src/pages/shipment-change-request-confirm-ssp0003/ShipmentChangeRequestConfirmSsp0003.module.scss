@@ -1,16 +1,62 @@
 // SSP0003 레이아웃 — splitContainer(상 마스터 그리드 / 하 디테일 폼 + 디테일 그리드), AS-IS 상하 분할(design 01 §1).
-.mainGrid {
-  height: 40%;
-  min-height: 200px;
+//   PanelGroup 2분할로 경계 드래그 리사이즈. 구성은 자매 SSP0200(ShipmentChangeRequestPlan.module.scss)과 같다.
+.splitWrapper {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+}
+
+// PanelGroup 은 basis 0 이어야 뷰포트 높이를 즉시 확정받아 채운다(basis auto 면 내용 높이로 잡혀 분배가 어긋난다).
+.panelGroup {
+  flex: 1 1 0;
+  min-height: 0;
+
+  // Wijmo 그리드가 Panel 높이를 넘지 않게 — Panel 이 준 높이 안에서 내부 스크롤이 생긴다.
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+
+  // Group > 각 Panel 내부 콘텐츠 래퍼를 flex column 으로 — Panel 높이가 mainPane/detailPane 로 전파된다.
+  > div > div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.splitBar {
+  height: 6px;
+  cursor: row-resize;
+}
+
+// 상단 Panel = 마스터 그리드 전용.
+.mainPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+// 하단 Panel = 디테일 폼(자연 높이) + 디테일 그리드(나머지). 패널이 폼보다 작아지면 넘치는 부분은 잘린다.
+.detailPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .detailForm {
+  flex: 0 0 auto;
   padding: 8px 12px;
 }
 
-.subGrid {
-  height: 30%;
-  min-height: 140px;
+// 디테일 그리드 — flex 컨테이너 + basis 0 이어야 공용 DataGrid 가 초기 높이를 0 으로 측정하지 않는다.
+.subPane {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
 }
 
 // 액션(승인/반려) 진행 스피너 — 조회 로딩(전역 MDIContainer .spinner)과 동일한 딤 오버레이 + 중앙 원형.

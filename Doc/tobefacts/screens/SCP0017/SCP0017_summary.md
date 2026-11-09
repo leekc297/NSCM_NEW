@@ -7,14 +7,14 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | component | 379 |
+| features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | component | 399 |
 | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallGrid.tsx | component | 375 |
 | features/supply/src/pages/production-plan-waterfall/index.ts | index | 2 |
-| features/supply/src/pages/production-plan-waterfall/production-plan-waterfall.constants.ts | constants | 183 |
+| features/supply/src/pages/production-plan-waterfall/production-plan-waterfall.constants.ts | constants | 186 |
 | features/supply/src/pages/production-plan-waterfall/production-plan-waterfall.types.ts | types | 26 |
 | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.module.scss | style | 12 |
-| features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | page | 381 |
-| features/supply/src/pages/production-plan-waterfall/useProductionPlanWaterfallStore.ts | store | 383 |
+| features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | page | 384 |
+| features/supply/src/pages/production-plan-waterfall/useProductionPlanWaterfallStore.ts | store | 374 |
 | features/supply/src/pages/production-plan-waterfall/utils/waterfall.columns.ts | util | 267 |
 | features/supply/src/pages/production-plan-waterfall/utils/waterfall.merge.ts | util | 124 |
 | features/supply/src/pages/production-plan-waterfall/utils/waterfall.periods.test.ts | test | 42 |
@@ -24,13 +24,13 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 1 | Y | ProductionPlanWaterfallForm.tsx:68 |
-| (useTabLookupQueries) | hook | 1 | Y | ProductionPlanWaterfallForm.tsx:82 |
+| (useTabComboQueries) | hook | 1 | Y | ProductionPlanWaterfallForm.tsx:73 |
+| (useTabLookupQueries) | hook | 1 | Y | ProductionPlanWaterfallForm.tsx:92 |
 | SCP0017/title//call-proc | hook | 1 | Y | ProductionPlanWaterfallGrid.tsx:72 |
-| SCP0017/main//call-proc | hook | 1 | Y | ProductionPlanWaterfall.tsx:101 |
-| /admin/menu/SCP0017/column | http | 1 | Y | useProductionPlanWaterfallStore.ts:296 |
-| /admin/menu/SCP0017/measure | http | 1 | Y | useProductionPlanWaterfallStore.ts:322 |
-| /admin/menu/SCP0017/search-conditions | http | 1 | Y | useProductionPlanWaterfallStore.ts:359 |
+| SCP0017/main//call-proc | hook | 1 | Y | ProductionPlanWaterfall.tsx:104 |
+| /admin/menu/SCP0017/column | http | 1 | Y | useProductionPlanWaterfallStore.ts:287 |
+| /admin/menu/SCP0017/measure | http | 1 | Y | useProductionPlanWaterfallStore.ts:313 |
+| /admin/menu/SCP0017/search-conditions | http | 1 | Y | useProductionPlanWaterfallStore.ts:350 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -41,27 +41,27 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 176 |
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 203 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 214 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 276 |
-| Button | onClick | onModelSearch | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 272 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 304 |
-| Button | onClick | onNickNameSearch | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 300 |
-| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 321 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 351 |
-| Checkbox | onChange | <arrow> setChkAll | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 357 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 362 |
+| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 190 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 217 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 228 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 294 |
+| Button | onClick | onModelSearch | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 290 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 322 |
+| Button | onClick | onNickNameSearch | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 318 |
+| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 341 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 371 |
+| Checkbox | onChange | <arrow> setChkAll | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 377 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | 382 |
 | g | updatedLayout | applyDynVisibility | addHandler | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallGrid.tsx | 163 |
 | g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallGrid.tsx | 197 |
 | g | scrollPositionChanged | onScroll | addHandler | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallGrid.tsx | 236 |
 | host | dblclick | onDblClick | addEventListener | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallGrid.tsx | 291 |
 | g | formatItem | handler | addHandler | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallGrid.tsx | 343 |
-| ProductionPlanWaterfallForm | onSearch | handleSearch | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 286 |
-| ProductionPlanWaterfallForm | onModelSearch | <arrow> setOpenModel | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 287 |
-| ProductionPlanWaterfallForm | onNickNameSearch | <arrow> setOpenNickNamePopup | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 288 |
-| ColumnLayoutModal | onSave | handleSaveColumnLayout | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 366 |
-| MeasureSelectModal | onApply | handleApplyMeasures | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 376 |
+| ProductionPlanWaterfallForm | onSearch | handleSearch | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 289 |
+| ProductionPlanWaterfallForm | onModelSearch | <arrow> setOpenModel | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 290 |
+| ProductionPlanWaterfallForm | onNickNameSearch | <arrow> setOpenNickNamePopup | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 291 |
+| ColumnLayoutModal | onSave | handleSaveColumnLayout | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 369 |
+| MeasureSelectModal | onApply | handleApplyMeasures | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 379 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

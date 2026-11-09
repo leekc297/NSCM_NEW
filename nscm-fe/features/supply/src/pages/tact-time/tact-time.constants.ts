@@ -229,7 +229,7 @@ export const MSG = {
   DATE_FORMAT: 'MSG00611', // 유효한 날짜 형식이 아닙니다. (YYYYMMDD)
   RANGE_MAX: 'MSG01036', // {0} 이하의 값만 입력 가능합니다. (SCM_ADM_MSG_M 등록 2026-09-15 KO/EN/CN — AS-IS 이하 규칙, YIELD 상한 100)
   RANGE_MIN: 'MSG00085', // {0} 이상의 값만 입력 가능합니다.
-  PERIOD_OVERLAP: 'MSG00105', // SCM_ADM_MSG_M 등록 확인(2026-09-25 ora.py 실측 KO/EN/CN) — 영문 defaultValue 는 미조회 대비 fallback
+  PERIOD_OVERLAP: 'MSG00700', // SCM_ADM_MSG_M 등록 확인(2026-09-25 ora.py 실측 KO/EN/CN) — 영문 defaultValue 는 미조회 대비 fallback
   START_END_ORDER: 'MSG00108', // 조회 기간이 잘못되었습니다 (시작일 > 종료일).
   READ_ONLY: 'MSG00109', // 읽기전용 상태입니다.
   INSERT_GUIDE: 'MSG00662', // 조회 후 수정 모드로 가능합니다. (SCM_ADM_MSG_M 실측 2026-09-14 KO/EN/CN 등록 — 신규행 추가 사전조건 안내)

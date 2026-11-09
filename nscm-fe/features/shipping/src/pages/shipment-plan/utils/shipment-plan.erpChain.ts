@@ -245,15 +245,17 @@ export const checkErpSoCount = async (
 
 /**
  * 2분 재변경 잠금 — AS-IS ChkConfirmChangeTime(cs:7957~7980 / RP:1726~1748). Rows[0][0]=='S' 만 통과,
- *   그 외(SP 가 2분 안이면 'X') MSG00404(→MSG01395). AS-IS 와 같은 단독 SCM_SSP_CHECK_CONFIRM_CHANGETIME
- *   (main/CHECK_CONFIRM_CHANGETIME, 01 SQL)을 쓴다 — _DE 판은 항상 'S' 인 빈 껍데기라 쓰지 않는다.
+ *   그 외(SP 가 2분 안이면 'X') MSG00404(→MSG01395).
+ *   btn: 하단 Plan Detail 은 CHECK_CONFIRM_CHANGETIME(요청 DE 기준), Request 팝업은 CHECK_CONFIRM_CHANGETIME_DE(확정 원장 기준).
+ *   AS-IS 와 같은 분리. 둘 다 o_rc1.RESULT_CODE 'S'/'X'.
  */
 export const checkConfirmChangeTime = async (
   deps: ErpChainDeps,
-  confirmIds: string[]
+  confirmIds: string[],
+  btn: string = ERP_CHAIN_BTN.CHECK_CONFIRM_CHANGETIME
 ): Promise<boolean> => {
   if (confirmIds.length === 0) return true;
-  const res = await callProc(deps, ERP_CHAIN_BTN.CHECK_CONFIRM_CHANGETIME, {
+  const res = await callProc(deps, btn, {
     confirmId: confirmIds.join('^'),
   });
   const first = cursor(res, 'o_rc1')[0];
@@ -737,7 +739,7 @@ export const runRequestPreChecks = async (
 
 /**
  * 팝업 저장 연쇄 — AS-IS GetERPInterface(RP:894~1106), Non-SO 행만(SO 행은 splitRequestRowsBySo 로 보류).
- *   행별: 날짜 형식(RP:945~950) → 2분 잠금(RP:957~966, CHECK_CONFIRM_CHANGETIME) →
+ *   행별: 날짜 형식(RP:945~950) → 2분 잠금(RP:957~966, CHECK_CONFIRM_CHANGETIME_DE) →
  *   행마다 [DRAFTING_MAIN(requestDraftingMain/SAVE, RP:1385) → CHG_BATCH_NEW_C('C')(RP:1408) →
  *   erpIf → CHG_BATCH_NEW_C('B')(RP:1551/1582) → 2차 송신 | 보상] → 마무리.
  *   상태 재검증은 확인창 전에 전 행으로 이미 했다(runRequestPreChecks) — AS-IS 가 여기서 한 번 더 하는 중복은 생략.
@@ -756,7 +758,7 @@ export const runRequestErpChain = async (
         return stopped();
       }
     }
-    if (!(await checkConfirmChangeTime(deps, confirmIdsOf(rows)))) return stopped();
+    if (!(await checkConfirmChangeTime(deps, confirmIdsOf(rows), ERP_CHAIN_BTN.CHECK_CONFIRM_CHANGETIME_DE))) return stopped();
   } catch (error) {
     await alertChainError(deps, error);
     return stopped();

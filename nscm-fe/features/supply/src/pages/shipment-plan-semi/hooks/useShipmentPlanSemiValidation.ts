@@ -20,10 +20,10 @@ export interface ValidationResult {
 export const useShipmentPlanSemiValidation = () => {
   const validateSearch = (sc: SearchCondition): ValidationResult => {
     if (!sc.divisionId || !sc.operationGroupId || !sc.planStartYyyymmdd || !sc.planType || !sc.planSeq) {
-      return { ok: false, messageKey: 'MSG00002', defaultMessage: '_Required field missing.' };
+      return { ok: false, messageKey: 'MSG00013', defaultMessage: '_Required field missing.' };
     }
     if (!sc.fromYyyymmdd || !sc.toYyyymmdd) {
-      return { ok: false, messageKey: 'MSG00049', defaultMessage: '_Period is required.' };
+      return { ok: false, messageKey: 'MSG00665', defaultMessage: '_Period is required.' };
     }
     if (Number(sc.fromYyyymmdd) > Number(sc.toYyyymmdd)) {
       return { ok: false, messageKey: 'MSG00108', defaultMessage: '_Period From must not be after To.' };

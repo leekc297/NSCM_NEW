@@ -109,3 +109,11 @@
 - GT_DMF0082_* GTT 통계 없음(10-09 SHARED 고정 통계 현재 DB 미확인) — 재적용 여부는 원본 계획도 바꾸므로 **사용자 결정 사항**(미적용)
 - minyonglee1/81 Current 1104 가 원본보다 느림 — 04:00 측정 1.09배(proc 11.6→13.1) · 07:13 측정 1.10배(proc 12.0→13.3) 재현 · 원인 미측정(S2-ALL-81 vs 원문 L1441~ arm 문장별 프로파일 대조 필요)
 - 원본 PKG_DMF0082 반영 · 클라우드 QA/DEV 패키지 — 사용자 결정 후
+
+## 4. 2026-11-09 재확인 · 클라우드 이관 패키지 (사내 ZIOUI1 · 원본/1104 무변경)
+| 시각 | 작업 | 결과 | 기록 |
+|---|---|---|---|
+| 11:21:58 | 객체 상태 확인 | 원본 BODY 2026-11-04 14:48:42 · 1104 BODY 2026-11-06 06:09:06 · 둘 다 VALID · V$ACCESS 0 | — |
+| 11:23~11:29 | 원본 ↔ 1104 전 행·전 열 직접 대조 1차(`_coldiff_full.py r1109`) | 커서3 `TODAY_TIME`(SYSDATE 시분 · 원본 L5372 = 1104 L16271 동일식)만 호출 시각 차이로 다름 → 판정식 보정 위해 중단 | `_coldiff_full_r1109_aborted.*` |
+| 11:31~ | 대조 2차(`r1109b` · TODAY_TIME = 호출 전후 DB 시각 범위 검사 · 나머지 전 열 값 원값 비교) | 진행 중 — 결과는 `_coldiff_full_r1109b.out` 끝 합계 줄 | `_coldiff_full_r1109b.*` |
+| 11:54~11:57 · 12:00~12:03 · 13:09~13:32 | 클라우드 패키지 사내 리허설 3회(`DMF0082_1104_CLOUD_20261109/build_package.py --rehearse`) — 사내에 `PKG_DMF0082_1104R` 생성 · `GRANT EXECUTE/DEBUG … TO RL_SCM_DML` · `GRANT EXECUTE … TO SCMP_APP` · `SCMP_APP.PKG_DMF0082_1104R` 시노님 · `ZB_DMF0082_1104R_BAK/_SPEED` 표 → 99 로 전부 삭제 | 문장 실패 0 · 남은 객체 0 · 남은 표 0 · 원문 글자 단위 동일 · QA 형 세션(3회) 6커서 SAME · 속도 비 0.88/0.80/0.72 | `_deploy_packages/DMF0082_1104_CLOUD_20261109/_rehearsal_*.log` |

@@ -1,3 +1,4 @@
+import { DataType } from '@mescius/wijmo';
 import { CellType, DataMap, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
@@ -10,10 +11,12 @@ import {
   ADMIN_SHEET_NAME,
   BUCKET,
   COLUMN,
+  DATE_DISPLAY_COLUMNS,
   DAY_OF_WEEK_LABELS,
   EXCEL_FILE_NAME,
   FIX_CANDIDATES,
   MENU_ID,
+  NUMBER_CELL_MAX,
   SHEETS,
   SOP_EOP_TYPE_CANDIDATES,
   type GridSheet,
@@ -43,6 +46,22 @@ import {
   isRowConditionalLock,
 } from '../utils/optCapa.editLock';
 
+/** 입력값이 AS-IS 숫자 칸 상한을 넘는가 — 숫자가 아닌 값은 여기서 판정하지 않는다(저장 검증 몫). */
+const exceedsNumberCellMax = (text: string): boolean => {
+  const parsed = Number(text.replace(/,/g, '').trim());
+  return !Number.isNaN(parsed) && Math.abs(parsed) > NUMBER_CELL_MAX;
+};
+
+/** 숫자 칸 입력 시점 차단 — 상한을 넘게 되는 키 입력을 취소한다. 삭제(`data` 없음)는 통과. */
+const guardNumberCellMaxOnInput = (event: InputEvent) => {
+  if (event.data == null) return;
+  const input = event.target as HTMLInputElement;
+  const start = input.selectionStart ?? input.value.length;
+  const end = input.selectionEnd ?? input.value.length;
+  const next = input.value.slice(0, start) + event.data + input.value.slice(end);
+  if (exceedsNumberCellMax(next)) event.preventDefault();
+};
+
 export interface CellComboSources {
   plantAll: PlantRow[];
   lineAll: LineRow[];
@@ -55,8 +74,6 @@ export interface CellComboSources {
   /** 조회조건 Plant/Line 후보 — `LINE_ID`→`OPERATION_ID` 2단 조회의 원천이다(R-09). */
   plantCandidates: PlantRow[];
   lineCandidates: LineRow[];
-  /** Week 모드 `WEEK_NAME` 셀 콤보 후보 — 조회 Period 가 걸치는 ISO 주차 라벨('2026-W40'). */
-  weekCandidates: string[];
 }
 
 interface Props {
@@ -83,6 +100,8 @@ interface Props {
    * EditTracker/grid 에 결과를 반영한다.
    */
   onItemCellDblClick: (row: GridRow, sheet: GridSheet) => void;
+  /** `WEEK_NAME` 더블클릭 → 셀 바로 밑 달력. `anchor` 는 셀 아래쪽 좌표(viewport 기준)다. */
+  onWeekCellDblClick: (row: GridRow, anchor: { top: number; left: number }) => void;
 }
 
 // Wijmo 는 셀 DOM 을 재사용하므로 조건 미해당 시에도 클래스를 반드시 해제한다(hook #95 §1-4).
@@ -92,6 +111,13 @@ const toggleClass = (element: HTMLElement, className: string, on: boolean): void
 };
 
 /** `YYYY-MM-DD` 표시값 → 요일 3글자 대문자. locale 의존 금지(AS-IS `InvariantCulture`, cs:3630). */
+/** 달력 편집기 값(yyyy.MM.dd)을 조회 표시와 같은 yyyy-MM-dd 로 맞춘다. 8자리가 아니면 그대로 둔다. */
+const toDisplayDate = (value: string): string => {
+  const stored = value.replace(/\D/g, '');
+  if (stored.length !== 8) return value;
+  return `${stored.slice(0, 4)}-${stored.slice(4, 6)}-${stored.slice(6, 8)}`;
+};
+
 const dayOfWeekOf = (displayDate: string): string | undefined => {
   // 날짜 셀 표시 포맷이 'yyyy.MM.dd'(점)라 편집 시 점 구분자가 섞인다 — 숫자만 추려 8자리로 본다
   //   (저장 {@link toStoredDateValue} 와 동일 규약).
@@ -134,6 +160,7 @@ export const OptCapaGrid = ({
   divisionId,
   comboSources,
   onItemCellDblClick,
+  onWeekCellDblClick,
 }: Props) => {
   // 셀 콤보 @토큰(@mnuId) 해소 — `VALID_YN`/`WIDE_YN` 의 `YesOrNo` 는 메타 구동이라 이 경로를 쓴다.
   const comboParams = useMemo(() => ({ mnuId: `'${MENU_ID}'` }), []);
@@ -149,6 +176,8 @@ export const OptCapaGrid = ({
   sourcesRef.current = comboSources;
   const itemDblClickRef = useRef(onItemCellDblClick);
   itemDblClickRef.current = onItemCellDblClick;
+  const weekDblClickRef = useRef(onWeekCellDblClick);
+  weekDblClickRef.current = onWeekCellDblClick;
 
   // 그리드 인스턴스 준비 신호 — 아래 핸들러 effect 가 deps 로 들고 있다.
   //   Wijmo React wrapper 는 initialized 를 setTimeout 으로 미뤄 부르고 공용 DataGrid 는 그 콜백
@@ -190,6 +219,19 @@ export const OptCapaGrid = ({
         monthColumn.format = 'yyyy-MM';
         monthColumn.mask = '0000-00';
         monthColumn.editor = null;
+      }
+    }
+
+    /**
+     * No Work `NO_WORK_DATE`(Day 모드 Date 칸) — AS-IS 는 달력 없이 직접 입력만 한다. 메타 `FPDate`
+     * 가 붙이는 `InputDate`(셀 밑 드롭다운 달력)를 이 화면 한정으로 떼고 `0000-00-00` 마스크 텍스트로
+     * 받는다(저장 시 `toStoredDateValue` 가 숫자만 추린다). Yield(Elec.) `YYYYMM` 과 같은 방식이다.
+     */
+    if (sheet === SHEETS.NO_WORK) {
+      const dateColumn = grid.getColumn(COLUMN.NO_WORK_DATE);
+      if (dateColumn) {
+        dateColumn.mask = '0000-00-00';
+        dateColumn.editor = null;
       }
     }
 
@@ -262,10 +304,9 @@ export const OptCapaGrid = ({
           if (sheet !== SHEETS.NO_WORK) return undefined;
           return sources.noWorkTypeAll.map(row => str(row.CODE)).filter(Boolean);
         case COLUMN.WEEK_NAME:
-          // Week 모드(No Work)에서만 편집 셀 콤보다 — 조회 Period 가 걸치는 ISO 주차 라벨('2026-W40').
-          //   Day 모드의 `WEEK_NAME` 은 날짜 파생 표시값(static)이라 콤보를 주입하지 않는다.
-          if (sheet !== SHEETS.NO_WORK || bucketRef.current !== BUCKET.WEEK) return undefined;
-          return sources.weekCandidates;
+          // AS-IS(`SCP0126_SingleDatePopup`)는 더블클릭 달력 팝업만 있고 셀 드롭다운이 없다 — 콤보를
+          //   주입하지 않는다(dblClickHandler 의 `NoWorkWeekModal` 팝업으로만 값을 설정).
+          return undefined;
         default:
           return undefined;
       }
@@ -301,6 +342,9 @@ export const OptCapaGrid = ({
           row: rowOf(e.row),
           divisionId: divisionIdRef.current,
         });
+      // AS-IS 숫자 칸 음수 빨간 글자(NegativeRed) — 이 화면 그리드에만 적용한다.
+      const cellValue = sender.getCellData(e.row, e.col, false);
+      e.cell.style.color = typeof cellValue === 'number' && cellValue < 0 ? 'red' : '';
       toggleClass(e.cell, 'wj-cell-editable', editableAt(e.col, e.row));
       toggleClass(e.cell, 'wj-cell-non-editable', grayed);
       // `ITEM_ID` 는 메타 ctrlType 이 공백이라 공용 팝업 아이콘 조건에 걸리지 않는다. 더블클릭 팝업
@@ -346,6 +390,36 @@ export const OptCapaGrid = ({
     };
     grid.beginningEdit.addHandler(beginningEditHandler);
 
+    // 빈 날짜 칸을 열고 값 없이 벗어날 때 편집기 값(오늘 · 직전 값)이 들어가지 않게 한다.
+    const prepareCellForEditHandler = (
+      sender: FlexGridType,
+      e: { row: number; col: number }
+    ) => {
+      const column = sender.columns[e.col];
+      const binding = column?.binding ?? '';
+      if (!DATE_DISPLAY_COLUMNS.includes(binding)) return;
+      const editor = column?.editor as { isRequired: boolean; value: Date | null } | null;
+      if (!editor) return;
+      editor.isRequired = false;
+      if (!str(rowOf(e.row)?.[binding])) editor.value = null;
+    };
+    grid.prepareCellForEdit.addHandler(prepareCellForEditHandler);
+
+    /**
+     * 숫자 칸 입력 상한 — AS-IS 는 모든 숫자 칸이 ±99,999,999,999,999 까지만 입력된다.
+     * `InputNumber` 편집기 셀은 `activeEditor` 가 비어 있어 편집기의 `inputElement` 에 직접 단다.
+     * 같은 함수 참조라 재등록해도 리스너가 쌓이지 않는다.
+     */
+    const prepareNumberCellHandler = (sender: FlexGridType, e: { col: number }) => {
+      const column = sender.columns[e.col];
+      if (column?.dataType !== DataType.Number) return;
+      const input =
+        (column.editor as { inputElement?: HTMLInputElement } | null)?.inputElement ??
+        sender.activeEditor;
+      input?.addEventListener('beforeinput', guardNumberCellMaxOnInput as EventListener, true);
+    };
+    grid.prepareCellForEdit.addHandler(prepareNumberCellHandler);
+
     /**
      * 파생 2종 — **편집 종료와 붙여넣기가 같은 함수를 쓴다**(iter-3 감사 G3-7).
      *
@@ -387,6 +461,10 @@ export const OptCapaGrid = ({
       const sources = sourcesRef.current;
       const division = divisionIdRef.current;
 
+      if (DATE_DISPLAY_COLUMNS.includes(binding) && str(row[binding])) {
+        row[binding] = toDisplayDate(str(row[binding]));
+      }
+
       if (binding === COLUMN.PLANT_ID) {
         const lineId = str(row[COLUMN.LINE_ID]);
         if (shouldClearLineOnPlantChange(sources.lineAll, division, rowPlantIdOf(row), lineId)) {
@@ -413,9 +491,19 @@ export const OptCapaGrid = ({
     // (a) 붙여넣기도 같은 게이트 — AS-IS 가 이미 잠근 셀에 값이 들어가면 안 된다.
     const pastingCellHandler = (
       sender: FlexGridType,
-      e: { cancel: boolean; row: number; col: number }
+      e: { cancel: boolean; row: number; col: number; data?: unknown }
     ) => {
-      if (!editableAt(e.col, e.row)) e.cancel = true;
+      if (!editableAt(e.col, e.row)) {
+        e.cancel = true;
+        return;
+      }
+      if (
+        sender.columns[e.col]?.dataType === DataType.Number &&
+        typeof e.data === 'string' &&
+        exceedsNumberCellMax(e.data)
+      ) {
+        e.cancel = true;
+      }
     };
     grid.pastingCell.addHandler(pastingCellHandler);
 
@@ -455,11 +543,22 @@ export const OptCapaGrid = ({
       if (!editModeRef.current) return;
       const hit = grid.hitTest(event);
       if (hit.cellType !== CellType.Cell) return;
-      if (grid.columns[hit.col]?.binding !== COLUMN.ITEM_ID) return;
+      const binding = grid.columns[hit.col]?.binding;
+      const isWeekCell =
+        binding === COLUMN.WEEK_NAME && sheet === SHEETS.NO_WORK && bucketRef.current === BUCKET.WEEK;
+      if (binding !== COLUMN.ITEM_ID && !isWeekCell) return;
       const row = GridUtils.getRow(grid, hit.row) as GridRow | undefined;
       if (!row) return;
       grid.finishEditing(true);
-      itemDblClickRef.current(row, sheet);
+      if (isWeekCell) {
+        // 셀 DOM 은 Wijmo 가 재사용하므로 요소 대신 열 때의 좌표만 넘긴다.
+        const cell = (event.target as HTMLElement).closest<HTMLElement>('.wj-cell');
+        const rect = cell?.getBoundingClientRect();
+        weekDblClickRef.current(row, {
+          top: rect?.bottom ?? event.clientY,
+          left: rect?.left ?? event.clientX,
+        });
+      } else itemDblClickRef.current(row, sheet);
     };
     grid.hostElement.addEventListener('dblclick', dblClickHandler);
 
@@ -467,6 +566,8 @@ export const OptCapaGrid = ({
       try {
         grid.formatItem?.removeHandler(formatItemHandler);
         grid.beginningEdit?.removeHandler(beginningEditHandler);
+        grid.prepareCellForEdit?.removeHandler(prepareCellForEditHandler);
+        grid.prepareCellForEdit?.removeHandler(prepareNumberCellHandler);
         grid.cellEditEnded?.removeHandler(cellEditEndedHandler);
         grid.pastingCell?.removeHandler(pastingCellHandler);
         grid.pastedCell?.removeHandler(pastedCellHandler);

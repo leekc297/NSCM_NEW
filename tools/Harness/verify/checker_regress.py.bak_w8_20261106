@@ -1,0 +1,65 @@
+# -*- coding: utf-8 -*-
+"""검사기 자체 회귀(P3 · 2026-11-06 근본 보완) — 골든 화면의 원장 판정 스냅숏을 기준으로, 검사기·공용 컴포넌트를 고친 뒤 판정이 어떻게 바뀌었는지 대조한다.
+
+  python tools/Harness/verify/checker_regress.py <ID>             # 기준(Doc/verify/_checker_golden/<ID>.csv)과 현재 원장 대조 → Doc/verify/<ID>/_checker_regress.md · 종료코드 0(경고만)
+  python tools/Harness/verify/checker_regress.py <ID> --baseline  # 현재 원장을 기준으로 저장(사용자가 판정을 확인한 실행에서만)
+  기준이 없으면 '기준 없음' 을 찍고 끝낸다(오류 아님). regress.py(사용자 판정 회귀)와 다르다 — 이것은 '검사기 결과가 바뀌었는가' 만 본다.
+"""
+import csv, os, sys, datetime
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+csv.field_size_limit(10 ** 8)
+GOLD = os.path.join(ROOT, 'Doc', 'verify', '_checker_golden')
+BAD = ('FAIL',)
+
+
+def rd(p):
+    with open(p, encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+
+def main():
+    a = [x for x in sys.argv[1:] if not x.startswith('--')]
+    if not a:
+        print(__doc__); return 2
+    mid = a[0].upper(); led = os.path.join(ROOT, 'Doc', 'verify', mid, 'verify_ledger.csv')
+    if not os.path.exists(led):
+        print(f'[checker_regress] {mid}: 원장 없음'); return 0
+    cur = {r['row_id']: r for r in rd(led)}
+    gp = os.path.join(GOLD, f'{mid}.csv')
+    if '--baseline' in sys.argv:
+        os.makedirs(GOLD, exist_ok=True)
+        with open(gp, 'w', encoding='utf-8-sig', newline='') as f:
+            w = csv.writer(f); w.writerow(['row_id', 'rule_id', 'target', 'result', 'evidence_head', 'saved_at'])
+            now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+            for r in cur.values():
+                w.writerow([r['row_id'], r['rule_id'], r['target'][:80], r['result'], (r.get('evidence') or '')[:80].replace('\n', ' '), now])
+        print(f'[checker_regress] {mid}: 기준 저장 {len(cur)}행 → {os.path.relpath(gp, ROOT)}'); return 0
+    if not os.path.exists(gp):
+        print(f'[checker_regress] {mid}: 기준 없음(골든 화면 아님) — 대조 생략'); return 0
+    base = {r['row_id']: r for r in rd(gp)}
+    worse, better, changed = [], [], []
+    for rid, b in base.items():
+        c = cur.get(rid)
+        if not c: continue
+        if b['result'] == c['result']: continue
+        rec = (rid, c['rule_id'], c['target'][:60], b['result'], c['result'], (c.get('evidence') or '')[:100].replace('\n', ' '))
+        if c['result'] in BAD and b['result'] not in BAD: worse.append(rec)
+        elif b['result'] in BAD and c['result'] not in BAD: better.append(rec)
+        else: changed.append(rec)
+    gone = [rid for rid in base if rid not in cur]; new = [rid for rid in cur if rid not in base]
+    saved = next(iter(base.values()), {}).get('saved_at', '')
+    out = [f'# 검사기 회귀 대조 {mid} — 기준 {saved} ({len(base)}행) ↔ 현재 {datetime.datetime.now().strftime("%Y-%m-%d %H:%M")} ({len(cur)}행)', '',
+           f'- 악화(기준 비FAIL → 현재 FAIL): **{len(worse)}** · 개선(FAIL → 비FAIL): {len(better)} · 그 외 변경: {len(changed)} · 기준에만 있는 행 {len(gone)} · 새 행 {len(new)}', '']
+    for title, lst in (('## 악화 — 검사기 수정이 허위 FAIL 을 만들었는지 확인', worse), ('## 개선', better), ('## 그 외 변경', changed)):
+        out.append(title); out.append('')
+        out.append('| row_id | 규칙 | 대상 | 기준 | 현재 | 현재 증거 |'); out.append('|---|---|---|---|---|---|')
+        for rec in lst[:200]: out.append('| ' + ' | '.join(str(x).replace('|', '／') for x in rec) + ' |')
+        out.append('')
+    vd = os.path.join(ROOT, 'Doc', 'verify', mid); os.makedirs(vd, exist_ok=True)
+    with open(os.path.join(vd, '_checker_regress.md'), 'w', encoding='utf-8') as f: f.write('\n'.join(out))
+    print(f'[checker_regress] {mid}: 악화 {len(worse)} · 개선 {len(better)} · 변경 {len(changed)} → Doc/verify/{mid}/_checker_regress.md' + (' ⚠ 악화 행 확인' if worse else ''))
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

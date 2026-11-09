@@ -1,0 +1,22 @@
+// ETA 요청 팝업(Shipment Request Insert) — AS-IS SSP0022_ShipmentRequestPopup(FpSpread 단일 입력행)을
+//   공용 CustomDialog + DataGrid 로 재현. 상단 Save/Cancel 툴바 + 단일행 편집 그리드(flex 채움).
+//   선례: features/supply/.../ProductionPlanInsertModal.module.scss(동일 구조).
+.contentWrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// 상단 툴바 — AS-IS btnButtonList Save/Cancel(우측 정렬, cs:812-828).
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  padding-bottom: 8px;
+}
+
+// DataGrid 컨테이너 — 남는 높이를 채운다(공용 DataGrid 는 부모 높이를 채우므로 min-height 확보).
+.gridWrap {
+  flex: 1;
+  min-height: 0;
+}

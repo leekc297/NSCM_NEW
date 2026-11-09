@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 157,
+  "at": "2026-11-07T10:27:30.531Z",
+  "user": "minyonglee1",
+  "test": "선택 조회 복수·단일·전체 왕복(G2·B6)"
+ },
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 154,
+  "at": "2026-11-07T10:27:33.078Z",
+  "user": "minyonglee1",
+  "test": "선택 조회 복수·단일·전체 왕복(G2·B6)"
+ },
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 148,
+  "at": "2026-11-07T10:27:35.711Z",
+  "user": "minyonglee1",
+  "test": "선택 조회 복수·단일·전체 왕복(G2·B6)"
+ }
+]

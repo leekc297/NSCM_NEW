@@ -122,6 +122,18 @@ export const isElectrodeCapaRow = (row: GridRow): boolean => {
   );
 };
 
+/**
+ * No Work Week 모드 키 — Day 키의 `NO_WORK_DATE` 자리를 `WEEK_NAME`(표시 라벨 '2026-W40')으로 바꾼다.
+ * Week 행은 `NO_WORK_DATE` 가 비어 있고 Week SAVE SP 에 `pre*` 가 없어 {@link currentKeyOf}·
+ * {@link previousKeyOf} 로는 중복을 가릴 수 없다. `weekName` 을 주면 셀 값 대신 그 값으로 키를 만든다.
+ */
+export const weekKeyOf = (row: GridRow, weekName?: string): string =>
+  PRE_KEY_COLUMNS[SHEETS.NO_WORK]
+    .map(column =>
+      column === COLUMN.NO_WORK_DATE ? (weekName ?? str(row[COLUMN.WEEK_NAME])) : str(row[column])
+    )
+    .join(PRE_KEY_DELIMITER);
+
 /** 직전 키(원본 포맷) — 신규행이면 구분자만 남은 문자열이라 `currentKeyOf` 와 결코 같지 않다. */
 export const previousKeyOf = (sheet: GridSheet, row: GridRow): string => {
   const keys = parsePreKeys(sheet, row);

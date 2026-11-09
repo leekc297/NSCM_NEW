@@ -45,7 +45,7 @@ export const VALIDATION_MSG = {
   REQUIRED_DIVISION: 'MSG01310', // "구분값을 입력해 주세요." (ValidChk2 — 기여율이 있는 기간의 구분(RBU_0999) 칸 공란)
   SAVE_CONFIRM: 'MSG00001', // 저장 전 확인
   VERSION_REQUIRED: 'MSG00283', // FindData — 버전 미선택
-  NOT_LOCK: 'MSG00266', // chkYear — sheet 잠금 상태 확인
+  NOT_LOCK: 'MSG00662', // chkYear — sheet 잠금 상태 확인
 } as const;
 
 // 구분(RBU_0999) 컬럼 입력 제한 안내 — AS-IS 코드에는 없던 TO-BE 전용 메시지.

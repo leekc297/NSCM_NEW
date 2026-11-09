@@ -25,8 +25,15 @@ export default defineConfig({
     //   2026-10-31 2560 은 그리드 프로브·K1·W4c 가 극단적으로 느려져 타임아웃 → FHD(1920×1080). 고정 영역이 가시 폭을 넘는 그리드는 probe.unfreezeIfNeeded 가 측정 동안 고정을 푼다
     viewport: { width: Number(process.env.E2E_VIEWPORT_W || 1920), height: Number(process.env.E2E_VIEWPORT_H || 1080) },
     locale: 'ko-KR',
+    // 2026-11-06(SCP0131 smoke 2번 20분 타임아웃 2일 연속): timeout 없는 click()/fill() 이 가려진·불안정한 요소에서 테스트 타임아웃(20분)까지 매달리고 재시도로 2배 —
+    //   모든 액션의 기본 상한을 둔다(명시한 timeout 이 우선). 긴 대기는 waitForResponse/waitFor 에 timeout 을 명시해 두었다.
+    actionTimeout: 20_000,
+    navigationTimeout: 60_000,
   },
   outputDir: path.join(results, 'artifacts'),
+  // 2026-11-06 플랜 3-2: 스냅샷 골든 위치 — toHaveScreenshot('<ID>/snap/golden/<key>.png') → Doc/verify/<ID>/snap/golden/<key>.png (testDir=Doc/e2e/specs 기준 ../../verify)
+  //   승인은 snap_approve.py 가 한다(--update-snapshots 금지 · 승인 게이트 우회)
+  snapshotPathTemplate: '{testDir}/../../verify/{arg}{ext}',
   // 브라우저: 노트북에 설치된 Chrome(channel 'chrome')을 쓴다 — Playwright chromium 다운로드(외부망) 불필요. Edge 로 바꾸려면 E2E_CHANNEL=msedge
   projects: [{ name: 'chromium', use: { browserName: 'chromium', channel: process.env.E2E_CHANNEL || 'chrome' } }],
 });

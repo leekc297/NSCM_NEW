@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"planGroupId\":\"PG0014\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 156,
+  "at": "2026-11-07T10:16:14.738Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 171,
+  "at": "2026-11-07T10:16:18.111Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"planGroupId\":\"PG0054\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 4,
+  "dur": 149,
+  "at": "2026-11-07T10:16:21.437Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ }
+]

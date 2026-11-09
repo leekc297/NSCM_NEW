@@ -6,6 +6,7 @@
 //   exit 0 = 통과, 1 = 경고만, 2 = 차단(BLOCK)
 const fs = require('fs'); const path = require('path');
 const { readCsv } = require('../TobeFacts/src/util');
+const VARIANT = require('./lib/variant');  // 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행
 const a = process.argv.slice(2); const opt = (k, d) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : d; };
 const cfg = JSON.parse(fs.readFileSync(opt('--config', path.join(__dirname, 'harness.json')), 'utf8').replace(/^﻿/, ''));
 const R = cfg.rulesDir || path.join(__dirname, 'rules');
@@ -263,6 +264,7 @@ if (ID) {
 //    SC1 = 조회조건 순서가 기준표와 다름 · SC2 = 기준표가 제외/통합한 AS-IS 조건이 Form 에 남아 있음.
 //    gen.js 산출(Form 주석 '기준표 #n' 표지 + Doc/gen/<ID>/search_cond.json)이 있는 페이지 = BLOCK(생성 후 손으로 순서·제외를 되돌린 것),
 //    표지 없는 기존 화면 = WARN(라벨 문자열로 대조 — 기준표 반영 검토). 의도된 차이는 해당 줄 `SC-OK` 주석.
+//    2026-11-09 CR-098(사용자 지시 · SCP0084): 조회조건 순서는 판정 대상 제외 — SC1(순서)은 생성본도 BLOCK 이 아니라 참고 WARN. 판정 축 = 사용여부(SC2)·EDIT 형태.
 if (ID) {
   const SC = require('./lib/searchcond'); const ref = SC.forScreen(R, ID);
   if (ref) {
@@ -273,7 +275,7 @@ if (ID) {
       for (const [f, t] of forms) {
         const lines = t.split(/\r?\n/); const posOf = ctl => lines.findIndex(l => new RegExp(`AS-IS ${ctl} /`).test(l) && !/SC-OK/.test(l));
         const seq = J.order.map(o => ({ ...o, at: posOf(o.ctl) })).filter(o => o.at >= 0);
-        for (let i = 1; i < seq.length; i++) if (seq[i].at < seq[i - 1].at) { F(lv, 'SC1', `조회조건 순서가 기준표(${J.domain} ${J.src})와 다름: '${seq[i].label}'(기준 ${seq[i].seq}번) 이 '${seq[i - 1].label}'(기준 ${seq[i - 1].seq}번) 보다 앞 — 기준 순서: ${J.order.map(o => o.label).join(' → ')}`, `${rel(f)}:${seq[i].at + 1}`); break; }
+        for (let i = 1; i < seq.length; i++) if (seq[i].at < seq[i - 1].at) { F('WARN', 'SC1', `[판정 제외·참고 CR-098] ` + `조회조건 순서가 기준표(${J.domain} ${J.src})와 다름: '${seq[i].label}'(기준 ${seq[i].seq}번) 이 '${seq[i - 1].label}'(기준 ${seq[i - 1].seq}번) 보다 앞 — 기준 순서: ${J.order.map(o => o.label).join(' → ')}`, `${rel(f)}:${seq[i].at + 1}`); break; }
         for (const x of J.excluded) { const at = posOf(x.ctl); if (at >= 0) F(lv, 'SC2', `기준표가 ${x.usage}(${x.reason}) 로 정한 AS-IS 조회조건 ${x.ctl} 가 Form 에 남아 있음 — 제거(BUTTON_AREA 면 버튼 영역으로 이식)`, `${rel(f)}:${at + 1}`); }
       }
     } else if (forms.length) {
@@ -510,7 +512,7 @@ const DOD = []; const dod = (code, ok, what, how, level) => { DOD.push({ code, o
   }
   // B24: As-is Form_Load/InitControls 초기 조회조건(InitValue · DateUtil.GetDayRange → SCM0001_GET_SCP_MONTH_PERIOD 등) — 프레임워크 유틸 호출이라 flow.csv 에 없다 → .cs 원문 대조
   if (sdir && cfg.asisSrcRoot && fs.existsSync(path.join(sdir, 'files.csv'))) {
-    const csFiles = readCsv(path.join(sdir, 'files.csv')).filter(r => r.variant === 'current' && /\.cs$/i.test(r.file) && !/Designer\.cs$/i.test(r.file)).map(r => path.join(cfg.asisSrcRoot, r.file)).filter(f => fs.existsSync(f));
+    const csFiles = readCsv(path.join(sdir, 'files.csv')).filter(r => VARIANT.isMain(r, sdir) && /\.cs$/i.test(r.file) && !/Designer\.cs$/i.test(r.file)).map(r => path.join(cfg.asisSrcRoot, r.file)).filter(f => fs.existsSync(f));
     if (csFiles.length) {
       const cs = csFiles.map(f => stripComments(read(f))).join('\n');
       const hits = [...cs.matchAll(/\b(\w+)\.InitValue\s*=\s*([^;]+);|\b(\w+)\.(Text1|Text2|Text|Value)\s*=\s*((DateUtil|DateTime)\.[^;]+);/g)].map(m => m[0].trim().replace(/\s+/g, ' '));
@@ -590,6 +592,19 @@ const DOD = []; const dod = (code, ok, what, how, level) => { DOD.push({ code, o
       }
     }
   }
+  // S01 정적 게이트(2026-11-08 사용자 결정 '순차 진행' (d)): --final 에서 검사엔진 정적 층(run_verify.py <ID> --static · 브라우저 없음 · 1~3분)을 돌려 직접 FAIL 0 을 DoD 로 요구.
+  //   --no-static 으로 끌 수 있다(환경 미비 시). 결과 = Doc/verify/<ID>/static_gate.json(fail_direct) · 실행 실패도 미통과(정직 보고 — 측정 못 함 ≠ PASS)
+  if (FINAL && ID && !a.includes('--no-static')) {
+    try {
+      const cp2 = require('child_process'); const rv = path.join(__dirname, 'verify', 'run_verify.py');
+      const r = cp2.spawnSync('python', [rv, ID, '--static'], { encoding: 'utf8', timeout: 15 * 60 * 1000, cwd: path.resolve(__dirname, '..', '..') });
+      const sg = path.join(path.resolve(__dirname, '..', '..'), 'Doc', 'verify', ID, 'static_gate.json');
+      const j = fs.existsSync(sg) ? JSON.parse(fs.readFileSync(sg, 'utf8')) : null;
+      const fresh = j && (Date.now() - fs.statSync(sg).mtimeMs) < 30 * 60 * 1000;
+      if (!fresh) dod('S01', false, '정적 게이트(run_verify.py --static) 실행', `실행 결과 없음(rc=${r.status}) — ${String(r.stderr || r.stdout || '').trim().split(/\r?\n/).slice(-2).join(' | ').slice(0, 200)}`);
+      else dod('S01', (j.fail_direct || 0) === 0, `정적 게이트 직접 FAIL 0(정적 판정 ${j.static_judged}행 · ERROR ${j.dist && j.dist.ERROR || 0})`, (j.fail_direct || 0) ? `FAIL ${j.fail_direct}: ${Object.entries(j.fail_by_rule || {}).map(([k, v]) => `${k}×${v}`).join(', ')} — Doc/verify/${ID}/static_gate.md` : `Doc/verify/${ID}/static_gate.md`);
+    } catch (e) { dod('S01', false, '정적 게이트(run_verify.py --static) 실행', `예외: ${String(e).slice(0, 160)}`); }
+  } else if (FINAL && ID) F('WARN', 'S01', '정적 게이트 생략(--no-static)', 'Doc/verify/' + ID + '/static_gate.md');
   // DoD 리포트
   try { const rep = path.join(cfg.genOutDir, ID || path.basename(pageDir)); fs.mkdirSync(rep, { recursive: true }); fs.writeFileSync(path.join(rep, 'DOD.md'), `# 완료 정의(DoD) — ${ID || path.basename(pageDir)} ${new Date().toISOString().slice(0, 16).replace('T', ' ')}\n\n${DOD.filter(d => d.ok).length}/${DOD.length} 충족\n\n| 코드 | 상태 | 항목 | 근거 |\n|---|---|---|---|\n` + DOD.map(d => `| ${d.code} | ${d.ok ? '✅' : '❌'} | ${d.what} | ${d.how} |`).join('\n') + '\n', 'utf8'); } catch { }
 }

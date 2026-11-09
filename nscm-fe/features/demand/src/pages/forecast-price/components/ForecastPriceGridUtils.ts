@@ -4,7 +4,7 @@ import dayjs from '@foundation/dayjs';
 import isoWeek from '@foundation/isoWeek';
 import { type EditTracker } from '@foundation/utils';
 
-import { REFERENCE_ONLY_BINDINGS } from '../forecast-price.constants';
+import { NON_GROUPING_BINDINGS } from '../forecast-price.constants';
 import { isPastPeriodLocked } from '../utils/forecast-price.editLock';
 
 dayjs.extend(isoWeek);
@@ -486,9 +486,6 @@ export const compareForecastRows = (
 ): number => {
   for (const col of sortCols) {
     if (col === 'MEASURE') continue; // 메저는 measureOrder(팝업 순서)로만 — 아래 tiebreaker 참조
-    // 참고값 컬럼(LAST_UPDATED_BY · LAST_UPDATE_DATE)은 정렬 키가 아니다 (2026-10-27 · SP ORDER BY [LASTUPDORD] 와 같은 기준).
-    //   Column Set 에 넣어도 줄 순서는 키 컬럼으로만 정한다 — 넣지 않았을 때와 같은 순서.
-    if (REFERENCE_ONLY_BINDINGS.has(col)) continue;
     const av = String(a[col] ?? '');
     const bv = String(b[col] ?? '');
     if (av < bv) return -1;
@@ -537,13 +534,13 @@ export const groupKeyBindings = (
   columnsInOrder: readonly GroupKeyColumn[],
   clickedIndex: number
 ): string[] => {
-  // 참고값 컬럼(LAST_UPDATED_BY · LAST_UPDATE_DATE)은 병합 키가 아니다 — FcstHeaderMergeManager 의 셀 병합 키와 같은 기준 (2026-10-27).
+  // 수정자·수정일(NON_GROUPING_BINDINGS)은 키에서 뺀다 — 셀 병합·표시 정렬과 같은 기준(그 상수 주석 참조).
   const usable = (column: GroupKeyColumn | undefined): boolean =>
     !!column &&
     column.visible &&
     !!column.binding &&
     !isDynamicBinding(column.binding) &&
-    !REFERENCE_ONLY_BINDINGS.has(column.binding);
+    !NON_GROUPING_BINDINGS.has(column.binding);
 
   const clicked = columnsInOrder[clickedIndex];
   let end: number;

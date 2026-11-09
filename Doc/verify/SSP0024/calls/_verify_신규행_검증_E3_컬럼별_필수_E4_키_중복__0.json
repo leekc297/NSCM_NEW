@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 310,
+  "at": "2026-11-09T02:33:08.484Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 191,
+  "dur": 331,
+  "at": "2026-11-09T02:33:09.656Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "SSP0024",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0024/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"materialId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 191,
+  "dur": 338,
+  "at": "2026-11-09T02:33:10.628Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ }
+]

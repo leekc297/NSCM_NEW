@@ -78,7 +78,8 @@ export const SalesSiteProjectModelPurchaseGrid = ({
 
   const handleUserIdCellClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
-    if (!grid) return;
+    // 읽기전용(production SAVE 권한 없음)이면 Owner 입력 팝업을 띄우지 않는다.
+    if (!grid || grid.isReadOnly) return;
     const ht = grid.hitTest(mouseEvent);
     if (ht.cellType !== CellType.Cell) return;
 
@@ -86,6 +87,8 @@ export const SalesSiteProjectModelPurchaseGrid = ({
     const binding = GridUtils.getBinding(grid, ht.col);
 
     if (!dataItem || !binding) return;
+    // 행 잠금(EDIT_FLAG='N' — SP 사업부 권한·SCP Planner 가드)이면 셀 편집과 같이 팝업도 막는다.
+    if (dataItem.EDIT_FLAG === 'N') return;
 
     if (binding === 'OWNER') {
       setClickedRow(ht.row);
@@ -101,6 +104,9 @@ export const SalesSiteProjectModelPurchaseGrid = ({
         editTrackerRef={editTrackerRef}
         itemsSource={data}
         staticColumns={staticColumns[SHEETS.PURCHASE]}
+        // 하단 저장도 production/SAVE 로 나가므로(SalesSiteProjectModel mutatePurchase) 잠금도 production 기준.
+        //   purchase 시트에는 SAVE 가 등록돼 있지 않아 purchase 로 판정하면 잠금이 걸리지 않는다.
+        saveAuth={{ sheetName: SHEETS.PRODUCTION }}
         gotFocus={handleFocus}
         dblClick={handleUserIdCellClick}
       />

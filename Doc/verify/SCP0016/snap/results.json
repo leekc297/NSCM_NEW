@@ -1,0 +1,86 @@
+[
+ {
+  "key": "조회조건_Div_40",
+  "kind": "조회조건",
+  "scope": "Div 40",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SCP0016\\snap\\received\\조회조건_Div_40.aria.yml",
+  "diff": "",
+  "lines": 35,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0016\\snap\\received\\조회조건_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 조회영역 aria(36줄 · formItem 공통 조상) · 시각 순서 9칸",
+  "at": "2026-11-07T12:44:34.128Z"
+ },
+ {
+  "key": "버튼_Div_40",
+  "kind": "버튼",
+  "scope": "Div 40",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SCP0016\\snap\\golden\\버튼_Div_40.aria.yml",
+  "received": "Doc\\verify\\SCP0016\\snap\\received\\버튼_Div_40.aria.yml",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SCP0016\\snap\\golden\\버튼_Div_40.aria.yml 와 일치 · 버튼 바 aria(10줄) · 보이는 버튼 KOR,이 이민용,Home,Shipment Plan FG Waterfall,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Column Setting,Measure,Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel",
+  "at": "2026-11-07T12:44:34.274Z"
+ },
+ {
+  "key": "헤더_Waterfall_Shipment_Plan",
+  "kind": "헤더",
+  "scope": "Waterfall Shipment Plan",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SCP0016\\snap\\received\\헤더_Waterfall_Shipment_Plan.txt",
+  "diff": "",
+  "lines": 3,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0016\\snap\\received\\헤더_Waterfall_Shipment_Plan.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 3행 · 칸 384",
+  "at": "2026-11-07T12:44:43.385Z"
+ },
+ {
+  "key": "팝업_PJT",
+  "kind": "팝업",
+  "scope": "PJT",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SCP0016\\snap\\golden\\팝업_PJT.aria.yml",
+  "received": "Doc\\verify\\SCP0016\\snap\\received\\팝업_PJT.aria.yml",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SCP0016\\snap\\golden\\팝업_PJT.aria.yml 와 일치 · 팝업 aria(42줄)",
+  "at": "2026-11-07T12:45:00.579Z"
+ },
+ {
+  "key": "팝업_Model_Nickname",
+  "kind": "팝업",
+  "scope": "Model/Nickname",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SCP0016\\snap\\golden\\팝업_Model_Nickname.aria.yml",
+  "received": "Doc\\verify\\SCP0016\\snap\\received\\팝업_Model_Nickname.aria.yml",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SCP0016\\snap\\golden\\팝업_Model_Nickname.aria.yml 와 일치 · 팝업 aria(29줄)",
+  "at": "2026-11-07T12:45:02.221Z"
+ },
+ {
+  "key": "화면샷_1920",
+  "kind": "화면샷",
+  "scope": "1920",
+  "status": "DIFF",
+  "golden": "Doc\\verify\\SCP0016\\snap\\golden\\화면샷_1920.png",
+  "received": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0016\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "diff": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0016\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "lines": 1,
+  "detail": "화면샷 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 5704 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SCP0016\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0016\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "at": ""
+ },
+ {
+  "key": "화면샷_1366",
+  "kind": "화면샷",
+  "scope": "1366",
+  "status": "DIFF",
+  "golden": "Doc\\verify\\SCP0016\\snap\\golden\\화면샷_1366.png",
+  "received": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0016\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "diff": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0016\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "lines": 1,
+  "detail": "화면샷 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 4070 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SCP0016\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0016\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "at": ""
+ }
+]

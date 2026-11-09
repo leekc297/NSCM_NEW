@@ -1,0 +1,78 @@
+{
+ "menu_id": "SCP0108",
+ "asis_id": "SCP0108",
+ "generated": "2026-11-09 10:06:57",
+ "rc": 0,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(SCP0108)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "OK",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "4.2시간 전 export(기준 12시간)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
+   "status": "OK",
+   "producer": "tools/TobeFacts/run.ps1",
+   "evidence": "nscm-fe\\features\\supply\\src\\pages\\capa-lob-report · 인덱스 최신"
+  },
+  {
+   "key": "mapping_md",
+   "what": "FE 대조표(__asis-mapping__.md)",
+   "status": "OK",
+   "producer": "화면 개발 시 작성(하네스 gen.js 초안 = Doc/gen/<ID>)",
+   "evidence": "nscm-fe\\features\\supply\\src\\pages\\capa-lob-report\\__asis-mapping__.md"
+  },
+  {
+   "key": "search_cond",
+   "what": "조회조건 기준표(search_cond.csv)",
+   "status": "OK",
+   "producer": "tools/Harness/refs/build_search_cond.py(원천 = 사용자 xlsx)",
+   "evidence": "화면 행 있음"
+  },
+  {
+   "key": "golden",
+   "what": "골든 케이스(golden_cases.csv)",
+   "status": "DONE",
+   "producer": "tools/DbConn/gen_golden_cases.py <ID>",
+   "evidence": "1건 생성 (GET 1 · SAVE 0) · rc=0 · 1s · 골든 케이스 118건 → C:\\Projects\\NSCM\\Doc\\golden\\golden_cases.csv (To-Be 매칭 87 / 파라미터 완비 18 / 수동보존 4)"
+  },
+  {
+   "key": "e2e_plan",
+   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
+   "status": "DONE",
+   "producer": "tools/Harness/gen.js <ID> --plan-only",
+   "evidence": "plan-only 생성 · rc=0 · 0s ·  Report(SCP_화면별 조회조건 정리_260731_v0.5.xlsx 412~424행) — 적용 13 · 제외 0 · 통합 0 · 검토중 0 · 기준표에 없음 1 · AS-IS 컨트롤 없음 0 VALIDATION 취합: Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0108.md (차단 3행 · 보정_필터 5행 · 제외 0행) — TO-BE 적용여부: 적용 3 / 적용 TAG: [메시지 불일치] 1 액션 대조표: 216행 · 의미 확인 필요 63 SCP0108 --plan-only → C:\\Projects\\NSCM\\Doc\\gen\\SCP0108 (e2e_plan.json, register.json) fields=14 buttons=2 sheets=3+0popup procs=2"
+  },
+  {
+   "key": "e2e_spec",
+   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
+   "status": "DONE",
+   "producer": "tools/E2E/gen-e2e.js <ID>",
+   "evidence": "rc=0 · 0s · SCP0108 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: jooyong026 SCP0108 → SCP0108 smoke/crud(read-only)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행 · 색인 전체 7화면/8행)"
+  },
+  {
+   "key": "smoke",
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 161s · \\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:106:7 › SCP0108 CAPA_LOB_Report 스모크 @smoke › 조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인 1 passed (2.4m) # E2E 결과 — 2026-11-09 10:06 테스트 3 · PASS 1 · FAIL 2 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0108\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0108\\run_20261109_100416_smoke.log"
+  }
+ ]
+}

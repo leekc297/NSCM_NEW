@@ -1,0 +1,98 @@
+[
+ {
+  "row_id": "V-cc7abdd9",
+  "result": "PASS",
+  "evidence": "콤보 조건 6개 후보 정상",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "0e28e42c",
+  "mctx": {
+   "calls": 1,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-e6f8e28b",
+  "result": "PASS",
+  "evidence": "ALL(SCM Site,Type,Stage,Plan Group) 조회 534행 · 필수 안내 없음",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "a795772a",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-2b8fd1c5",
+  "result": "PASS",
+  "evidence": "조회 534행 · 페이지·그리드 바깥 스크롤 없음",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "f4868673",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-b5743aa7",
+  "result": "PASS",
+  "evidence": "렌더된 헤더 14개 글자 잘림 0",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "1d68df2e",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-6f29575f",
+  "result": "PASS",
+  "evidence": "칸 15개 폭 = 메타",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "eb4c5cfa",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-3d16b2fb",
+  "result": "PASS",
+  "evidence": "조건 입력 중 그리드 변화 0회(입력 없을 때 0회) · 이동 없음",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "ae5f8b8d",
+  "mctx": {
+   "calls": 2,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-ae313949",
+  "result": "PASS",
+  "evidence": "헤더 높이 유지 — 조회 전 48 · 조회 뒤 48 · Div 전환 조회 뒤 48",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "70c8b29c",
+  "mctx": {
+   "calls": 3,
+   "rows": 2835,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "V-7cf8cf31",
+  "result": "PASS",
+  "evidence": "필수 조건 자동 채움 0건 — 조회가 기본값으로 바로 됨",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 3,
+   "rows": 2835,
+   "req": 0
+  }
+ }
+]

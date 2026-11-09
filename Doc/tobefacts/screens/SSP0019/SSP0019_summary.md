@@ -16,7 +16,7 @@
 | features/shipping/src/pages/shipment-change-history/shipment-change-history.types.ts | types | 25 |
 | features/shipping/src/pages/shipment-change-history/ShipmentChangeHistory.module.scss | style | 24 |
 | features/shipping/src/pages/shipment-change-history/ShipmentChangeHistory.tsx | page | 277 |
-| features/shipping/src/pages/shipment-change-history/useShipmentChangeHistoryStore.ts | store | 206 |
+| features/shipping/src/pages/shipment-change-history/useShipmentChangeHistoryStore.ts | store | 218 |
 | features/shipping/src/pages/shipment-change-history/utils/shipmentChangeHistoryColumns.ts | util | 72 |
 | features/shipping/src/pages/shipment-change-history/__asis-mapping__.md | mapping | 181 |
 
@@ -27,8 +27,8 @@
 | (useTabComboQueries) | hook | 1 | Y | ShipmentChangeHistoryForm.tsx:69 |
 | (useTabLookupQueries) | hook | 1 | Y | ShipmentChangeHistoryGrid.tsx:71 |
 | SSP0019/main//call-proc | hook | 1 | Y | ShipmentChangeHistory.tsx:77 |
-| /admin/menu/SSP0019/search-conditions | http | 1 | Y | useShipmentChangeHistoryStore.ts:160 |
-| /admin/menu/SSP0019/column | http | 1 | Y | useShipmentChangeHistoryStore.ts:184 |
+| /admin/menu/SSP0019/search-conditions | http | 1 | Y | useShipmentChangeHistoryStore.ts:172 |
+| /admin/menu/SSP0019/column | http | 1 | Y | useShipmentChangeHistoryStore.ts:196 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -126,7 +126,7 @@
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: SSP0019(10), SCM0002(7), SSP0003(4), SSP0012(3), SSP0015(2), SCP0033(1), SSP0005(1)
-- SP/PKG: P_SSP0003_GET_REQ_DRAFTING(3), PKG_SSP0019(3), P_SSP0019_GET_SHIPMENT_CHANGE_HISTORY(3), PKG_SSP0003(2), SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(2), P_SSP0003_GET_DRAFTING(2), P_CHANGE_REQUEST_NO(1), P_LANGUAGE(1), P_SCM0002_GET_MATERIAL_BY_DIVISION(1), P_DIVISION_ID(1)
+- SP/PKG: PKG_SSP0019(4), P_SSP0003_GET_REQ_DRAFTING(3), P_SSP0019_GET_SHIPMENT_CHANGE_HISTORY(3), PKG_SSP0003(2), SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(2), P_SSP0003_GET_DRAFTING(2), P_CHANGE_REQUEST_NO(1), P_LANGUAGE(1), P_SCM0002_GET_MATERIAL_BY_DIVISION(1), P_DIVISION_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

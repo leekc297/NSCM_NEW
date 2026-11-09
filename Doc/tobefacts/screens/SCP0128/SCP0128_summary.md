@@ -7,25 +7,25 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | component | 272 |
-| features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | component | 220 |
+| features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | component | 284 |
+| features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | component | 221 |
 | features/supply/src/pages/safety-stock/index.ts | index | 2 |
-| features/supply/src/pages/safety-stock/safety-stock.constants.ts | constants | 90 |
+| features/supply/src/pages/safety-stock/safety-stock.constants.ts | constants | 92 |
 | features/supply/src/pages/safety-stock/safety-stock.types.ts | types | 26 |
-| features/supply/src/pages/safety-stock/SafetyStock.tsx | page | 218 |
+| features/supply/src/pages/safety-stock/SafetyStock.tsx | page | 219 |
 | features/supply/src/pages/safety-stock/useSafetyStockStore.ts | store | 174 |
 | features/supply/src/pages/safety-stock/utils/safety-stock.util.ts | util | 73 |
 | features/supply/src/pages/safety-stock/utils/safetyStockDivisionMap.ts | util | 22 |
 | features/supply/src/pages/safety-stock/utils/safetyStockEditLock.ts | util | 56 |
 | features/supply/src/pages/safety-stock/utils/safetyStockSaveRequest.ts | util | 119 |
-| features/supply/src/pages/safety-stock/utils/safetyStockSaveValidation.ts | util | 108 |
+| features/supply/src/pages/safety-stock/utils/safetyStockSaveValidation.ts | util | 128 |
 | features/supply/src/pages/safety-stock/__asis-mapping__.md | mapping | 177 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 3 | Y | SafetyStockForm.tsx:43 SafetyStockForm.tsx:46 SafetyStockGrid.tsx:82 |
-| SCP0128/init//call-proc | hook | 2 | Y | SafetyStockForm.tsx:51 SafetyStockGrid.tsx:94 |
+| (useTabComboQueries) | hook | 3 | Y | SafetyStockForm.tsx:43 SafetyStockForm.tsx:46 SafetyStockGrid.tsx:83 |
+| SCP0128/init//call-proc | hook | 2 | Y | SafetyStockForm.tsx:51 SafetyStockGrid.tsx:95 |
 | SCP0128/main//call-proc | hook | 1 | Y | SafetyStock.tsx:66 |
 | /admin/menu/SCP0128/column | http | 1 | Y | useSafetyStockStore.ts:132 |
 | /admin/menu/SCP0128/search-conditions | http | 1 | Y | useSafetyStockStore.ts:153 |
@@ -41,21 +41,21 @@
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 113 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 126 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 145 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 160 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 175 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 199 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 226 |
-| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 222 |
-| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 236 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 251 |
-| g | updatedLayout | apply | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 118 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 139 |
-| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 140 |
-| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 156 |
-| g | updatedLayout | applyDateColumnTypes | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 160 |
-| SafetyStockGrid | onItemModalOpenChange | setItemModalOpen | jsx | features/supply/src/pages/safety-stock/SafetyStock.tsx | 213 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 126 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 155 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 170 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 185 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 209 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 236 |
+| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 232 |
+| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 248 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 263 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 119 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 140 |
+| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 141 |
+| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 157 |
+| g | updatedLayout | applyDateColumnTypes | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 161 |
+| SafetyStockGrid | onItemModalOpenChange | setItemModalOpen | jsx | features/supply/src/pages/safety-stock/SafetyStock.tsx | 214 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -92,8 +92,8 @@
 | LBL00007 | 1 |
 | LBL00618 | 1 |
 | MSG00001 | 1 |
-| MSG00260 | 1 |
-| MSG00046 | 1 |
+| MSG00428 | 1 |
+| MSG00611 | 1 |
 | MSG00219 | 1 |
 | MSG00085 | 1 |
 | MSG00458 | 1 |
@@ -101,7 +101,7 @@
 | MSG00002 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0127(9), SCP0128(6), SCP0001(2), SDM5010(2), SCP0122(2), SCP0006(2), SCP0011(2), SCP0125(1), SCP0126(1), SCP0002(1)
+- 화면ID: SCP0127(13), SCP0128(6), SCP0001(2), SDM5010(2), SCP0122(2), SCP0006(2), SCP0011(2), SCP0125(1), SCP0126(1), SCP0002(1)
 - SP/PKG: PKG_SCP0128(10), P_SCP0128_GET_SEARCH_INFO(5), P_SCP0128_SAVE_SAFETY_STOCK(2), P_SCP0128_GET_SAFETY_STOCK(1), SCP0128_GET_SEARCH_INFO(1), P_USER_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

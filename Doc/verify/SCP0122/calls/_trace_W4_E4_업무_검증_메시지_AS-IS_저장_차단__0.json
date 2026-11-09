@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0122",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0122/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"PG0003\",\"prsCd\":\"P001\"}",
+  "status": 200,
+  "rows": 8,
+  "dur": 159,
+  "at": "2026-11-07T10:00:34.708Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ }
+]

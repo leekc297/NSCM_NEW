@@ -78,7 +78,11 @@ export const LBL = {
   PLAN_GROUP: 'LBL00002',
   FROM_SITE: 'LBL00022',
   TO_SITE: 'LBL00023',
-  MODEL_GROUP: 'LBL01092',
+  // Item Group — 사용자 지시(2026-11-05) 조회조건 명칭 "Model Group" -> "Item Group" 변경(다국어).
+  //   기등록 LBL00063("Item Group", KO/EN/CN USE_YN=Y)로 교체. LBL01092("Model Group")는 의미가
+  //   달라 재사용/덮어쓰기 금지(messaging-i18n MSG-06). 라벨 표기만 바뀌며 backing 데이터는
+  //   모델그룹(MDL_GR_NM)/INIT_SET.MODEL_GROUP cascade 그대로다.
+  ITEM_GROUP: 'LBL00063',
   STAGE: 'LBL00061',
   // Valid — AS-IS lblValid "Active"(사용자 지정 LBL00007). 이전 LBL00639("Valid")에서 교체.
   VALID: 'LBL00007',

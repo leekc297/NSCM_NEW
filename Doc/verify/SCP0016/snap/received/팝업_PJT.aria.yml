@@ -1,0 +1,41 @@
+- dialog:
+  - heading "Project Popup" [level=2]
+  - text: Div
+  - combobox [disabled]: 40 Mobility & IT Battery
+  - button "Open" [disabled]
+  - img
+  - text: Team
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - img
+  - text: End Customer
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - text: Sales Site
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - text: PJT
+  - textbox
+  - button "Search"
+  - paragraph
+  - grid:
+    - rowgroup:
+      - row "No Div. Team End Customer PJT Code PJT Name Status Biz. Type Code Biz. Type Currency Owner":
+        - columnheader "No"
+        - columnheader "Div."
+        - columnheader "Team"
+        - columnheader "End Customer"
+        - columnheader "PJT Code"
+        - columnheader "PJT Name"
+        - columnheader "Status"
+        - columnheader "Biz. Type Code"
+        - columnheader "Biz. Type"
+        - columnheader "Currency"
+        - columnheader "Owner"
+    - rowgroup:
+      - row "Focus helper":
+        - gridcell "Focus helper"
+  - status
+  - text: "0"
+  - button "OK"
+  - button "Close"

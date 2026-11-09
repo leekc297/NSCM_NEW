@@ -43,10 +43,13 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
 
   const isEE = searchParams.divisionId.trim().toUpperCase().startsWith('EE');
 
-  // Division — MyDivisionInEE_SCP(cascade 루트, EE 포함 — 02_search-combo.md §2.1).
+  // Division — Division_SCP(cascade 루트, EE 포함 — 02_search-combo.md §2.1).
+  //   AS-IS SCP0018 = BLUtils.GetDivision(false,"") → Type.Division(133) → UP_FX_GetCommonDataList_SCP
+  //   @Code='Division' → FN_GET_DIVISION, ORDER BY ATTRIBUTE1(기본 81). 권한 WHERE 는 MyDivisionInEE_SCP
+  //   와 동일하고 정렬만 ATTRIBUTE1 → Division_SCP 가 등가(이전 MyDivisionInEE_SCP 는 ORDER BY DIVISION_ID·기본 40 로 불일치).
   const [divisions, bucketTypes, versions, electrodeTypes] = useTabComboQueries({
     filters: [
-      'MyDivisionInEE_SCP',
+      'Division_SCP',
       'BucketISO_SCP',
       { comboId: 'WaterfallVer_FG2_SCP', divisionId: searchParams.divisionId },
       { comboId: 'LookupCommon', lookupType: 'ELECTRODE_TYPE' },

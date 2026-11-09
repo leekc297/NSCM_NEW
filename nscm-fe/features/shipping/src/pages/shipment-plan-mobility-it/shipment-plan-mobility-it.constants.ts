@@ -225,7 +225,7 @@ export const MSG = {
   // Confirm 변경 2분 이내 재변경 LOCK (AS-IS MSG00404 → TO-BE MSG01395). SCM_SSP_CHECK_CONFIRM_CHANGETIME='X'.
   CONFIRM_CHANGETIME_LOCK: 'MSG01395',
   // ERP SO No 동일 건수 불일치 (AS-IS MSG00247 → TO-BE MSG00247, 문구 역조회 동일). 같은 SO 는 전건이 한 화면에.
-  SO_NO_COUNT_MISMATCH: 'MSG00247',
+  SO_NO_COUNT_MISMATCH: 'MSG01257',
   // 날짜 형식 오류 (AS-IS MSG00049 "유효한 날짜 형식..."). 재번호 코드 MSG01081 은 {0} 자리표시가 있어
   //   AS-IS 처럼 빈 인자로 호출하는 자리에 맞지 않는다. 자리표시 없는 MSG00611 을 쓴다(KO/EN/CN 등록 확인).
   INVALID_DATE_FORMAT: 'MSG00611',

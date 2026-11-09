@@ -3,7 +3,8 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef } from 'react';
 
-import { IcMeasureSelect } from '@foundation/assets';
+// Measure 버튼 숨김(2026-10-29, 아래 customButtons 주석 참조) 동안 미사용 — 복원 시 함께 해제.
+// import { IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
@@ -88,12 +89,14 @@ export const InventoryRaw = ({ tabId, title }: PageProps<MENU_ID>) => {
     setFilters();
   };
 
-  // Insert/Delete/Save = AS-IS override NO-OP(design 01 §2#2~#5, cs:268-341) — 버튼 노출 유지 +
-  //   명시적 무동작 함수로 배선(키 생략=공용 addRow/removeRow 활성화, false=버튼 숨김 둘 다 금지,
-  //   CLAUDE.md §2 체크4 / convert-core §2.4). Edit 은 TO-BE Hotkeys 자체에 대응 키가 없다
-  //   (F2 는 `_F2_Unused` 로 예약 — asis_to_tobe.md §11 "AS-IS UI 모드토글(EditButton 등) 미이식
-  //   결정"과 동일 처리, 이 화면 그리드도 편집모드 전환 없이 처음부터 전 컬럼 잠금이라 정합).
-  //   2026-10-26 TO-BE 룰: 기능이 없는 공통버튼은 노출하지 않는다 — AS-IS NO-OP 버튼(Insert/Delete/Save)은 false.
+  // Insert/Delete/Save = AS-IS override 본문이 전부 비어 있는 무동작 버튼이고(design 00_checklist §4d,
+  //   cs:268-341), 이 화면은 순수 조회 전용(LockColumn 으로 전 컬럼 조회직후 편집잠금)이라 노출할 이유가
+  //   없다. Upload 도 AS-IS 에 없는 TO-BE 표준버튼이다. 네 버튼 모두 `false` 로 숨긴다 —
+  //   표준(auth-button AUTH-01 "미등록 버튼은 false"·AUTH-09 "빈 override=등록 대상 아님",
+  //   2026-10-20 사용자 결정 "무동작 버튼 미노출", 자매 ShipmentWorkingDay/SSP0202 선례)에 따라
+  //   admin 메타에서도 네 버튼을 삭제했다(design/08_cleanup_readonly_buttons.sql). hasButton 으로
+  //   감싸지 않는다 — AUTH-09 가 미등록 버튼의 hasButton 사용을 금지한다.
+  //   Edit 은 TO-BE Hotkeys 에 대응 키가 없다(F2=`_F2_Unused`). Manual 도 이 화면엔 기능이 없어 false.
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     insert: false,
@@ -103,24 +106,29 @@ export const InventoryRaw = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  // btnMeasure(design 03 §2/§4) — AS-IS 는 이 버튼을 누르면 자기 자신이 아니라 SSP0001의
-  //   Measure 설정 팝업을 여는 결함(프로그램 ID 리터럴 "SSP0001")이 있다. 그대로 재현하면 이
-  //   화면에서 다른 화면의 컬럼/measure 메타를 실수로 바꾸는 위험이 있어, 사용자 결정 전까지는
-  //   버튼만 노출하고 클릭 시 미결정 상태임을 알린다(임의로 열거나 숨기지 않음, anti-simplification §1).
-  const customButtons = [
-    {
-      label: t(LBL.MEASURE, '_Measure'),
-      title: t(LBL.MEASURE, '_Measure'),
-      action: () =>
-        void setAlert({
-          type: 'alert',
-          content:
-            'AS-IS Measure 설정 버튼은 SSP0001 화면 메타를 여는 결함이 있어 재현 여부가 확정되지 않았습니다. (design/03_grid-columns.md §2 참조)',
-        }),
-      iconComponent: <IcMeasureSelect />,
-      buttonLabel: '',
-    },
-  ];
+  // btnMeasure(Measure 설정 버튼) — 숨김 처리(사용자 결정 2026-10-29). AS-IS 화면 검토 결과 불필요한
+  //   버튼으로 판단: 이 버튼은 자기 화면이 아니라 SSP0001("Shipment Plan Confirm")의 타이틀셋 설정을
+  //   여는 복붙 잔재(cs:326 리터럴 "SSP0001")이고, SSP0017 은 자기 measure 가 0건이라 이 화면엔
+  //   measure/설정 개념 자체가 없다(저장해도 SSP0001 에만 반영돼 이 화면엔 효과 없음). 삭제하지 않고
+  //   로직을 아래에 보존하며, 나중에 이 화면에 measure/컬럼 설정이 필요해지면 복원하라 — 복원 시
+  //   위 IcMeasureSelect import 주석을 풀고 아래 customButtons 를 되살린 뒤 SubTitle 에
+  //   `customButtons={customButtons}` 프로퍼티를 다시 추가하고, 하드코딩 안내 문구는 MSG 코드로
+  //   (MSG-02), customButtons 는 hasButton 게이트로(AUTH-01) 바꿔야 한다.
+  //   결정 상세 기록: design/03_grid-columns.md §6 #4.
+  // const customButtons = [
+  //   {
+  //     label: t(LBL.MEASURE, '_Measure'),
+  //     title: t(LBL.MEASURE, '_Measure'),
+  //     action: () =>
+  //       void setAlert({
+  //         type: 'alert',
+  //         content:
+  //           'AS-IS Measure 설정 버튼은 SSP0001 화면 메타를 여는 결함이 있어 재현 여부가 확정되지 않았습니다. (design/03_grid-columns.md §2 참조)',
+  //       }),
+  //     iconComponent: <IcMeasureSelect />,
+  //     buttonLabel: '',
+  //   },
+  // ];
 
   return (
     <>
@@ -141,8 +149,12 @@ export const InventoryRaw = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='InventoryRaw'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
-        customButtons={customButtons}
         searchParam={sc}
+        // F10(조회조건 초기화) 직후 화면 조회조건도 즉시 기본값으로 되돌린다(사용자 요청 2026-11-05).
+        //   프레임워크 기본(false)은 서버 저장분만 지우므로 opt-in. Division 은 DIVISION_FIXED('40') 고정이라
+        //   store reset(initState) 이 같은 값으로 되돌려 사실상 보존되고, 나머지(Plant Site/Inventory Type/
+        //   Plan Date/Item)만 초기화된다("div 제외 초기화"). staticColumns 는 MotherStore 가 보존.
+        resetConditionOnClient
       />
       <InventoryRawGrid
         rows={rows}

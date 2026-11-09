@@ -1,0 +1,338 @@
+- dialog:
+  - heading "Item by DivisionPopup" [level=2]
+  - text: Div
+  - combobox [disabled]: Automotive Battery
+  - button "Open" [disabled]
+  - text: Item
+  - textbox
+  - button "Search"
+  - paragraph
+  - text: 총{N}건
+  - grid:
+    - rowgroup:
+      - row "No Div Operation Group Operation Item Id Item Name Nickname Deselect All Rows":
+        - columnheader "No"
+        - columnheader "Div"
+        - columnheader "Operation Group"
+        - columnheader "Operation"
+        - columnheader "Item Id"
+        - columnheader "Item Name"
+        - columnheader "Nickname"
+        - gridcell "Deselect All Rows":
+          - checkbox "Deselect All Rows"
+    - rowgroup:
+      - row "1 81 A A9000 AALT2012I-A1 ACLT2012I-A1 P LV12A Deselect Row":
+        - gridcell "1" [selected]
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AALT2012I-A1"
+        - gridcell "ACLT2012I-A1 P"
+        - gridcell "LV12A"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "2 81 A A9000 AALT2012U-A1 ACLT2012U-A1 P LV12 Deselect Row":
+        - gridcell "2"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AALT2012U-A1"
+        - gridcell "ACLT2012U-A1 P"
+        - gridcell "LV12"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "3 81 A A9000 AAPN4056I-A1T003 ACPN4056I-A1T003 P P56A-T003 Deselect Row":
+        - gridcell "3"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN4056I-A1T003"
+        - gridcell "ACPN4056I-A1T003 P"
+        - gridcell "P56A-T003"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "4 81 A A9000 AAPN4056I-A1T009 ACPN4056I-A1T009 P P56A-T009 Deselect Row":
+        - gridcell "4"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN4056I-A1T009"
+        - gridcell "ACPN4056I-A1T009 P"
+        - gridcell "P56A-T009"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "5 81 A A9000 AAPN1030U-B3 ACPN1030U-B3 P P30 Deselect Row":
+        - gridcell "5"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN1030U-B3"
+        - gridcell "ACPN1030U-B3 P"
+        - gridcell "P30"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "6 81 A A9000 AAPN1033I-A1-001 ACPN1033I-A1-001 P P33-001 Deselect Row":
+        - gridcell "6"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN1033I-A1-001"
+        - gridcell "ACPN1033I-A1-001 P"
+        - gridcell "P33-001"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "7 81 A A9000 AAPN1033I-A1-100 ACPN1033I-A1-100 P P33-100 Deselect Row":
+        - gridcell "7"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN1033I-A1-100"
+        - gridcell "ACPN1033I-A1-100 P"
+        - gridcell "P33-100"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "8 81 A A9000 AAPP1026U-B1-D01 ACPP1026U-B1-D01 P P2.7-D01 Deselect Row":
+        - gridcell "8"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPP1026U-B1-D01"
+        - gridcell "ACPP1026U-B1-D01 P"
+        - gridcell "P2.7-D01"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "9 81 A A9000 AAPN1034U-A1-110 ACPN1034U-A1-110 P P34-110 Deselect Row":
+        - gridcell "9"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN1034U-A1-110"
+        - gridcell "ACPN1034U-A1-110 P"
+        - gridcell "P34-110"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "10 81 A A9000 AAPN1034U-A1T002 ACPN1034U-A1T002 P P34-T002 Deselect Row":
+        - gridcell "10"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN1034U-A1T002"
+        - gridcell "ACPN1034U-A1T002 P"
+        - gridcell "P34-T002"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "11 81 A A9000 AALN1010I-A1-D02 ACLN1010I-A1-D02 P LV9.8-D02 Deselect Row":
+        - gridcell "11"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AALN1010I-A1-D02"
+        - gridcell "ACLN1010I-A1-D02 P"
+        - gridcell "LV9.8-D02"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "12 81 A A9000 AAPN1036I-C1 ACPN1036I-C1 P P36B Deselect Row":
+        - gridcell "12"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN1036I-C1"
+        - gridcell "ACPN1036I-C1 P"
+        - gridcell "P36B"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "13 81 A A9000 AAPN1037I-A1 ACPN1037I-A1 P A5-C Deselect Row":
+        - gridcell "13"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN1037I-A1"
+        - gridcell "ACPN1037I-A1 P"
+        - gridcell "A5-C"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "14 81 A A9000 AALN1010I-A1T006 ACLN1010I-A1T006 P LV9.8-T006 Deselect Row":
+        - gridcell "14"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AALN1010I-A1T006"
+        - gridcell "ACLN1010I-A1T006 P"
+        - gridcell "LV9.8-T006"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "15 81 A A9000 AAPN1038I-B1-300 ACPN1038I-B1-300 P P37B-300 Deselect Row":
+        - gridcell "15"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN1038I-B1-300"
+        - gridcell "ACPN1038I-B1-300 P"
+        - gridcell "P37B-300"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "16 81 A A9000 AAPN1038I-B1-D06 ACPN1038I-B1-D06 P P37B-D06 Deselect Row":
+        - gridcell "16"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN1038I-B1-D06"
+        - gridcell "ACPN1038I-B1-D06 P"
+        - gridcell "P37B-D06"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "17 81 A A9000 AALN1010I-B1T001 ACLN1010I-B1T001 P LV9.8A-T001 Deselect Row":
+        - gridcell "17"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AALN1010I-B1T001"
+        - gridcell "ACLN1010I-B1T001 P"
+        - gridcell "LV9.8A-T001"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "18 81 A A9000 AALS1020U-A1T002 ACLS1020U-A1T002 P LV20B-T002 Deselect Row":
+        - gridcell "18"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AALS1020U-A1T002"
+        - gridcell "ACLS1020U-A1T002 P"
+        - gridcell "LV20B-T002"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "19 81 A A9000 AALT1005I-A1 ACLT1005I-A1 P LV4.5 Deselect Row":
+        - gridcell "19"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AALT1005I-A1"
+        - gridcell "ACLT1005I-A1 P"
+        - gridcell "LV4.5"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "20 81 A A9000 AALT1010I-A1 ACLT1010I-A1 P LV10C Deselect Row":
+        - gridcell "20"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AALT1010I-A1"
+        - gridcell "ACLT1010I-A1 P"
+        - gridcell "LV10C"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "21 81 A A9000 AAPN1046I-A1 ACPN1046I-A1 P A7 Deselect Row":
+        - gridcell "21"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "AAPN1046I-A1"
+        - gridcell "ACPN1046I-A1 P"
+        - gridcell "A7"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "22 81 A A9000 ACLT1010U-A1-003 AC,L,T1,10Ah,U,A1 L10D-003 Deselect Row":
+        - gridcell "22"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "ACLT1010U-A1-003"
+        - gridcell "AC,L,T1,10Ah,U,A1"
+        - gridcell "L10D-003"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "23 81 A A9000 ACPN1038I-B1T001 AC,P,N1,38Ah,I,B1 P37B-T001 Deselect Row":
+        - gridcell "23"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "ACPN1038I-B1T001"
+        - gridcell "AC,P,N1,38Ah,I,B1"
+        - gridcell "P37B-T001"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "24 81 A A9000 ACLT1010U-A1-D03 AC,L,T1,10Ah,U,A1 L10D-3 Deselect Row":
+        - gridcell "24"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "ACLT1010U-A1-D03"
+        - gridcell "AC,L,T1,10Ah,U,A1"
+        - gridcell "L10D-3"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "25 81 A A9000 ACLT1010U-A1T001 AC,L,T1,10Ah,U,A1 L10D-T001 Deselect Row":
+        - gridcell "25"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "ACLT1010U-A1T001"
+        - gridcell "AC,L,T1,10Ah,U,A1"
+        - gridcell "L10D-T001"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "26 81 A A9000 ACLT1010U-A2 AC,L,T1,10Ah,U,A2 L10B-TE Deselect Row":
+        - gridcell "26"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "ACLT1010U-A2"
+        - gridcell "AC,L,T1,10Ah,U,A2"
+        - gridcell "L10B-TE"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "27 81 A A9000 ACPN1039I-A2T003 AC,P,N1,39Ah,I,A2 P39-T003 Deselect Row":
+        - gridcell "27"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "ACPN1039I-A2T003"
+        - gridcell "AC,P,N1,39Ah,I,A2"
+        - gridcell "P39-T003"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "28 81 A A9000 ACPN1029I-A1-D01 AC,P,N1,29Ah,I,A1 P28.5-D01 Deselect Row":
+        - gridcell "28"
+        - gridcell "81"
+        - gridcell "A"
+        - gridcell "A9000"
+        - gridcell "ACPN1029I-A1-D01"
+        - gridcell "AC,P,N1,29Ah,I,A1"
+        - gridcell "P28.5-D01"
+        - gridcell "Deselect Row":
+          - checkbox "Deselect Row"
+      - row "Focus helper":
+        - gridcell "Focus helper"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect All Rows"
+  - status
+  - text: "0"
+  - button "OK"
+  - button "Close"

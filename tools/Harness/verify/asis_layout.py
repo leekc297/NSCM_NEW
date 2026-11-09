@@ -17,6 +17,7 @@ import json
 import os
 import re
 import sys
+from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 P = lambda *a: os.path.join(ROOT, *a)
@@ -37,7 +38,7 @@ def read_csv(p):
 def designer_path(asis_id):
     for r in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'controls.csv')):
         f = (r.get('file') or '').replace('\\', '/')
-        if r.get('variant') == 'current' and f.lower().endswith('.designer.cs'):
+        if is_main(r, P('Doc', 'asisfacts', 'screens', asis_id)) and f.lower().endswith('.designer.cs'):
             for base in (P('GSCM'), ROOT):
                 fp = os.path.join(base, f)
                 if os.path.exists(fp):

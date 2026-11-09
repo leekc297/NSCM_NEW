@@ -115,7 +115,7 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
           {/* 공용 카탈로그 PeriodField(@master/searchFields) — 라벨만 'Request Date'로 오버라이드. */}
           <PeriodField
             gridSize={3}
-            label={t('LBL00747', 'Request Date')}
+            label={t('LBL00677', 'Request Date')}
             start={sc.startDate}
             end={sc.endDate}
             onChange={(start, end) => setSc({ startDate: start, endDate: end })}

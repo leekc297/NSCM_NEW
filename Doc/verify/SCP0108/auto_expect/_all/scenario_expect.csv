@@ -1,0 +1,5 @@
+﻿menu_id,name,steps,msg_re,no_save,no_editor,rule,source,user,pattern_id,basis,key
+SCP0108,[자동] CN 언어 조회 건수 총/건 표기,"lang:CN;search;pagetext:(总|共|合计)\s*[\d,]+\s*(条|行|件|个)",,,,I1,자동 생성 P02 · btn_auth SEARCH,,P02,btn_auth SEARCH,I1|lang-cn-count
+SCP0108,[자동] 조회 중 Loading 토스트 없음,noload,,,,H10,자동 생성 P03 · btn_auth SEARCH,,P03,btn_auth SEARCH,H10|noload
+SCP0108,[자동] 선택 행 위로 Insert,search;insertat:3,,,,D6,자동 생성 P05 · btn_auth INSERT · D6 확정 요구(O2),,P05,btn_auth INSERT · D6 확정 요구(O2),D6|insertat
+SCP0108,[자동] 조회조건 콤보 12종 = 콤보,iscombo:Div;iscombo:Plan\ Month;iscombo:Ver\.;iscombo:Status;iscombo:Operation\ group;iscombo:Site;iscombo:Plant;iscombo:Building;iscombo:Line;iscombo:Operation;iscombo:Bottleneck;iscombo:Line\ Type,,,,B1,"자동 생성 P21 · 조회조건 기준표(search_cond.csv) TO-BE 선택 Div, Plan Month, Ver., Status, Operation group, Site",,P21,"조회조건 기준표(search_cond.csv) TO-BE 선택 Div, Plan Month, Ver., Status, Operation group, Site",B1|iscombo|bottleneck + B1|iscombo|building + B1|iscombo|div + B1|iscombo|line + B1|iscombo|line\type + B1|iscombo|operation + B1|iscombo|operation\group + B1|iscombo|plan\month + B1|iscombo|plant + B1|iscombo|site + B1|iscombo|status + B1|iscombo|ver\

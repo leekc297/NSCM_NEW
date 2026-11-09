@@ -1,0 +1,19 @@
+// Model(ITEM_ID) 더블클릭 팝업 진입 어포던스 아이콘 — admin 메타 CELL_CONTROL_OBJECT_TYPE_CODE 가
+//   비어 있어(AS-IS 도 동일, FPModal 미등록) 공용 formatPopupIcon(dataGridUtils.ts) 대상이 아니다.
+//   shipment-plan/ShipmentPlanDetailGrid 와 동일 선례로 직접 그린다(사용자 지시 2026-11-05).
+.popupIcon {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-color: #5b5c5b;
+  pointer-events: none;
+
+  $svg-path: "M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z";
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}

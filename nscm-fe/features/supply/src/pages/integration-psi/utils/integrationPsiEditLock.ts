@@ -129,8 +129,15 @@ export const INSERT_ROW_ONLY_EDITABLE = 'LINE_ID';
 export const isInsertRowCellEditable = (binding: string, auth: AuthContext): boolean =>
   auth.isAdmin ? binding !== 'DIVISION_ID' : binding === INSERT_ROW_ONLY_EDITABLE;
 
-// BOH_QTY 셀 편집 판정 (design 03 §3-Lock L8/L12/L17 — measure=INV & seqFlag[1]=6 & isEdit 권한).
+// BOH_QTY 셀 편집 판정 — AS-IS EditButton 권한 2-분기 (SCP0111_IntegrationPSI.cs 실측).
+//   ① ADMIN(System Administrator, nowGroupID=="ADMIN", cs:573): LockColumn(PLAN_TYPE..INCOTERMS)+
+//      (UOM..TO_SITE) 만 잠그고 **BOH_QTY(sort160, INCOTERMS150~UOM170 사이)는 미잠금** → 전 행 편집.
+//      주석 "Admin 권한의 경우 전체 컬럼 edit 가능"(2024-07-31) 그대로.
+//   ② 그 외(일반/SCM PI Admin/SCP Planner, cs:600/650-652): LockColumn(BOH_QTY..TO_SITE) 전잠금 후
+//      measureFlag=6(INV) 행만 LockRange(BOH, !isEdit) 로 해제 → **INV & mf6 & isEdit(PI Admin/Planner)**.
 export const isBohCellEditable = (row: Row, ctx: EditLockContext): boolean => {
+  if (ctx.auth.isAdmin) return true; // ① ADMIN: 전 행 BOH 편집(cs:573 분기, BOH 미잠금)
+  // ② 그 외: measure=INV & seqFlag[1]=6 & isEdit 권한(SCM PI Admin/SCP Planner)
   if (s(row.MEASURE) !== MEASURE.INV) return false;
   if (measureFlag(row) !== '6') return false;
   return isBohEditableAuth(ctx.auth);

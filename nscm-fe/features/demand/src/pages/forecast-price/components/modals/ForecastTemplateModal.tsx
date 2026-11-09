@@ -19,7 +19,6 @@ import { fetchExcelFormData } from '../../utils/forecast-price.api';
 import {
   buildExcelFormColumns,
   buildExcelFormRows,
-  pruneEmptyInfoColumns,
   toPreviewColumns,
 } from '../../utils/forecast-price.excelForm';
 
@@ -37,12 +36,8 @@ import styles from './ForecastTemplateModal.module.scss';
 //   - 0건 = MSG01023 (MSG00705 는 '업로드분 없음' 이라 의미가 반대라 재사용 금지)
 //     ⚠ 구 코드 MSG00718 은 2026-08-21 클라우드 동기화로 '권한 요청을 반려하시겠습니까?' 로 재정의됨
 //
-//   [Excel Download] ⭐ [E20260921-XLSFORMASIS] AS-IS DMF0020 파리티 — 평탄 1행 헤더 19컬럼:
-//     Div / Team / End Customer / Project Code / Currency / Model / M0 ... M12
-//   컬럼 정의 원천 = admin 메타 `SCM_MST_SHEET_COLUMNS`(DMF0082, 'Sales Price Template') 19행.
-//   주의: 헤더 문자열은 원형 유지 의무 — BE cvtListUploadRows 가 HEADER_CONTENT 문자열 일치로 컬럼을 찾는다.
-//   ⭐ M0~M12 는 **조회해도 항상 빈칸**이다 (사용자 지시 2026-09-21 · AS-IS SP 도 `'' AS M0..M12`).
-//     SP 측에서도 구 LOC 단가 프리필을 제거했고, FE 도 buildExcelFormRows 가 월 컬럼을 비운다(이중 보장).
+//   Excel Download와 미리보기는 Sales Price Template 메타의 헤더·순서·폭을 공유한다.
+//   메타는 모달 오픈 시 조회하고 행 데이터는 Search 시에만 조회한다.
 interface ForecastTemplateModalProps {
   open: boolean;
   modalClose: () => void;
@@ -54,8 +49,7 @@ interface ForecastTemplateModalProps {
   filters?: Record<string, unknown>;
 }
 
-/** [E20260907-XLSMONTH] 미리보기 라벨 — AS-IS DMF0020 템플릿처럼 월 토큰(M4..M16) 원형 그대로 표시.
- *  (참고용 실제 월은 monthTokenLabel 로 산출 가능 — 현재는 AS-IS 파리티로 토큰 표기 우선.) */
+/** 미리보기에도 메타의 업로드 헤더를 그대로 표시한다. */
 const monthLabel = (token: string): string => token;
 
 export const ForecastTemplateModal = ({
@@ -96,21 +90,24 @@ export const ForecastTemplateModal = ({
     if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
   }, [gridRef, t, rows]);
 
-  // ⭐ [E20260921-XLSFORMASIS] 양식 컬럼 = **admin 메타 주도** (SHEET_NAME='Sales Price Template').
-  //   AS-IS DMF0020_SalesPriceTemplatePopup 이 DMF0000_GET_COMMON_SPREAD_TITLE 로 메타 헤더를
-  //   가져와 CreateSheetHeaderColumn 하는 구조와 동일([PJ2024-50611]). 컬럼 변경은 DB 메타만 고친다.
-  //   헤더 문자열 = 메타 COLUMN_LABEL_NAME = SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT 토큰 (1:1 의무).
-  //   메타 조회 실패/미적재 시 buildExcelFormColumns 가 FALLBACK_TEMPLATE_COLUMNS 로 폴백한다.
   const templateColumns = useForecastPriceStore(s => s.templateColumns);
   const fetchTemplateColumns = useForecastPriceStore(s => s.fetchTemplateColumns);
+  const [isLoadingColumns, setIsLoadingColumns] = useState(true);
   useEffect(() => {
-    if (open && divisionId) fetchTemplateColumns(divisionId);
+    if (!open) return;
+    let cancelled = false;
+    setIsLoadingColumns(true);
+    void fetchTemplateColumns(divisionId).finally(() => {
+      if (!cancelled) setIsLoadingColumns(false);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [open, divisionId, fetchTemplateColumns]);
 
-  const formColumns = useMemo(
-    () => pruneEmptyInfoColumns(buildExcelFormColumns(templateColumns), rows),
-    [templateColumns, rows]
-  );
+  // 정보성 컬럼을 데이터 유무로 제거하지 않고 메타의 양식 구성을 유지한다.
+  const formColumns = useMemo(() => buildExcelFormColumns(templateColumns), [templateColumns]);
+  const previewRows = useMemo(() => buildExcelFormRows(rows, formColumns), [rows, formColumns]);
 
   // 미리보기 그리드 = 다운로드 결과와 1:1 (조회 전/후 컬럼이 갈리지 않는다)
   const gridColumns = useMemo<RawFlexGridColumnConfig[]>(
@@ -178,6 +175,7 @@ export const ForecastTemplateModal = ({
 
   // 양식 다운로드 — 평탄 1행 헤더(토큰 원형) + 정보성 컬럼 + 월 버킷(입력용 빈칸).
   const handleExcel = () => {
+    if (isLoadingColumns) return;
     if (formColumns.length === 0) {
       void setAlert({
         type: 'alert',
@@ -188,7 +186,7 @@ export const ForecastTemplateModal = ({
     const exportRows = buildExcelFormRows(rows, formColumns);
     void GridAction.flatExcelDownload(
       exportRows,
-      formColumns.map(c => ({ header: c.header, key: c.key })),
+      formColumns.map(c => ({ header: c.header, key: c.key, width: c.width })),
       TEMPLATE_EXCEL_PREFIX
     ).catch(() => {
       void setAlert({ type: 'alert', content: t(MSG.SAVE_ERROR, '_Excel download failed.') });
@@ -238,15 +236,20 @@ export const ForecastTemplateModal = ({
               }
             />
           </div>
-          {/* 조회 전 = 업로드 양식 미리보기(헤더만) / 조회 후 = 최종 업로드분 Daily 분배 미리보기 */}
+          {/* 조회 전에는 헤더만, 조회 후에는 양식 행과 비어 있는 월 입력칸을 표시 */}
           <div className={styles.gridWrapper}>
-            <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
+            <ResultArea
+              title=''
+              count={rows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
               <DataGrid
                 gridRef={gridRef}
                 gridFilterRef={gridFilterRef}
                 isReadOnly
                 staticColumns={gridColumns}
-                itemsSource={rows}
+                itemsSource={previewRows}
               />
             </ResultArea>
           </div>
@@ -259,6 +262,7 @@ export const ForecastTemplateModal = ({
                   priority='normal'
                   size='medium'
                   iconComponent={<FileExceldownloadIcon />}
+                  disabled={isLoadingColumns}
                   onClick={handleExcel}
                 />
               </div>

@@ -16,6 +16,25 @@ sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
 ACCOUNT = (os.environ.get('E2E_RESTORE_ACCOUNT') or 'minyonglee1').lower()  # 2026-11-03 명부 계정 실저장(시나리오 user 열) 복원
 
 
+def _key_value(v, col, data_type):
+    """2026-11-07 T158: 기록 값(그리드 dataItem)을 DB 키 컬럼 타입에 맞춘다.
+    · Date 객체는 JSON 에 ISO(UTC) 로 남는다('2026-12-31T15:00:00.000Z' = 로컬 2027-01-01) → 로컬 날짜로 바꿔 VARCHAR2 는 'YYYYMMDD'(컬럼명에 YYYYMMDD) 또는 'YYYY-MM-DD', DATE 는 datetime
+    · 그 밖은 문자열 그대로"""
+    import re
+    s = '' if v is None else str(v)
+    m = re.match(r'^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?(Z|[+-]\d{2}:\d{2})$', s)
+    if not m:
+        return s
+    iso = s.replace('Z', '+00:00')
+    try:
+        d = datetime.datetime.fromisoformat(iso[:26] + iso[26:] if '.' not in iso else re.sub(r'\.(\d{1,6})\d*', lambda x: '.' + x.group(1).ljust(6, '0'), iso)).astimezone()
+    except ValueError:
+        return s
+    if data_type.upper().startswith('DATE') or data_type.upper().startswith('TIMESTAMP'):
+        return d.replace(tzinfo=None)
+    return d.strftime('%Y%m%d') if 'YYYYMMDD' in col.upper() or 'YMD' in col.upper() else d.strftime('%Y-%m-%d')
+
+
 def decide(cur, old, at):
     """cur·old = 컬럼 사전 · at = 기록 시각. 반환 (동작, 사유) — RESTORE | SAME | SKIP"""
     diff = sorted(k for k in cur if str(cur.get(k)) != str(old.get(k)))
@@ -126,11 +145,13 @@ def main(mid):
                 tkeys = (spec.get('table_keys') or {}).get(t) or keys
                 if any(not str(e['item'].get(k) or '').strip() for k in tkeys):
                     continue  # 이 기록 행에 이 표 키가 없음(다른 그리드 행)
-                kv = {f'k{i}': str(e['item'].get(k) or '') for i, k in enumerate(tkeys)}
-                where = ' AND '.join(f'{k}=:k{i}' for i, k in enumerate(tkeys))
-                cur.execute('SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=:t', t=t); cols = {x[0] for x in cur.fetchall()}
+                cur.execute('SELECT COLUMN_NAME, DATA_TYPE FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=:t', t=t); ctype = {x[0]: x[1] for x in cur.fetchall()}; cols = set(ctype)
                 if not set(tkeys) <= cols:
                     continue
+                # 2026-11-07 T158(SCP0127): 그리드 행의 날짜 칸은 Date 객체라 기록이 ISO(UTC) '2026-12-31T15:00:00.000Z' 로 남는데 DB 키는 VARCHAR2 'YYYYMMDD'(또는 DATE)
+                #   → WHERE 불일치로 '행 수 0 · SAME' 이 나와 안전망이 행을 못 찾았다. 키 값을 DB 컬럼 타입에 맞춰 정규화한다(UTC → 로컬 날짜)
+                kv = {f'k{i}': _key_value(e['item'].get(k), k, ctype.get(k, '')) for i, k in enumerate(tkeys)}
+                where = ' AND '.join(f'{k}=:k{i}' for i, k in enumerate(tkeys))
                 if t.endswith('_H'):
                     cur.execute(f"DELETE FROM {t} WHERE {where} AND LOWER(LAST_UPDATED_BY)=:u AND LAST_UPDATE_DATE>=:a", {**kv, 'u': ACCOUNT, 'a': at})
                     print(f'[restore_touched] {t} {list(kv.values())}: 이력 삭제 {cur.rowcount}건')

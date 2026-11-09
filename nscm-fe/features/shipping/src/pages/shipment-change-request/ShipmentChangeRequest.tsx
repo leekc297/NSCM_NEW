@@ -156,6 +156,14 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
   const subGridRef = useRef<FlexGrid>();
   const subFilterRef = useRef<FlexGridFilter>();
   const editTrackerRef = useRef<EditTracker>();
+  // 공통 툴바 Sort(F3)/Filter(F4)·Excel 대상 = **포커스된 그리드**(상단 main / 하단 sub). DMF0008 패턴:
+  //   각 그리드 onGridFocus 로 포커스 시트를 추적하고, SubTitle 의 grid/gridFilter 에 그 그리드 ref 를
+  //   넘긴다 — 그래야 키보드 F3/F4 가드(grid.containsFocus())까지 포커스 그리드를 봐 **버튼·단축키 양쪽**이
+  //   동작한다(종전엔 main 고정이라 하단 포커스 시 키보드가 막혔다, 사용자 요청 2026-11-06).
+  //   건수 배지는 main 고정(SubTitle countGrid). 기본값 main.
+  const [focusedSheet, setFocusedSheet] = useState<'main' | 'sub'>('main');
+  const focusedGridRef = focusedSheet === 'sub' ? subGridRef : mainGridRef;
+  const focusedGridFilterRef = focusedSheet === 'sub' ? subFilterRef : mainFilterRef;
   const savingRef = useRef(false);
   // 이미지셀 팝업 대상(더블클릭한 행/컬럼) 기억 — 팝업 setSelectedValue 가 이 셀에 write.
   const popupTargetRef = useRef<{ row: Record<string, unknown>; binding: string } | null>(null);
@@ -233,6 +241,11 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const mainRows = useMemo<MainRow[]>(() => mainData?.o_rc1 ?? [], [mainData]);
   const subRows = useMemo<SubRow[]>(() => subData?.o_rc1 ?? [], [subData]);
+  // 작성 중인 변경요청(하단 행)이 있으면 상단 그리드 수정·추가를 막는다(사용자 요청 2026-11-05,
+  //   자매 SSP0200 과 동일 — AS-IS EditButton 이 siSub.RowCount==0 일 때만 편집모드로 들어가던 등가).
+  //   안내 메시지가 없는 것도 AS-IS 그대로다. 요청정보 패널·액션바에는 canEdit 을 그대로 준다
+  //   (하단 요청을 확정/취소하려면 그쪽은 입력돼야 한다).
+  const canEditMain = canEdit && subRows.length === 0;
 
   // 저장은 `useProcMutation` 을 쓰지 않는다 — 공용 mutation 은 `{ data: [행…] }` 로 보내는데
   //   DRAFTING SP 의 PROC_M 에 `JVARCHAR` 가 없어 37 인자가 전부 NULL 로 바인딩됐다. 저장이 안 됐는데
@@ -337,7 +350,7 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleInsert = () => {
     if (savingRef.current) return; // 저장 중 신규행 추가 금지 — 저장 대상 집합이 전송 중에 바뀐다.
     const g = mainGridRef.current;
-    if (!g || !canEdit) return;
+    if (!g || !canEditMain) return;
     const base = copySourceRow();
     if (!base) return; // RowCount>0 가드 — 조회 전/빈 그리드에서는 조용히 끝낸다(AS-IS 동일)
     const newRow = buildCopiedRow(base, sc.divisionId);
@@ -355,7 +368,7 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleNew = () => {
     if (savingRef.current) return; // 저장 중 신규행 추가 금지 — 저장 대상 집합이 전송 중에 바뀐다.
     const g = mainGridRef.current;
-    if (!g || !canEdit) return;
+    if (!g || !canEditMain) return;
     GridAction.addRow(g, buildNewRow(sc.divisionId) as never, 'above', true);
   };
 
@@ -772,6 +785,8 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   `SSP0201/main/DELETE`(API_ID 없음)는 등록 완료다(ora.py 실측 2026-10-13, 자매 SSP0200 과
     //   동일 모양) — 다른 키와 같은 권한 축으로 둔다. 하드코딩 노출 금지(CLAUDE.md §2 체크3).
     delete: hasButton('DELETE') ? handleDelete : false,
+    // Sort(F3)/Filter(F4) 는 SubTitle 기본 동작이 **포커스된 그리드**(grid prop=focusedGridRef)에 적용되므로
+    //   별도 override 불필요 — 포커스 추적은 각 그리드 onGridFocus 가 담당(상단 주석).
     manual: false,
     upload: false,
     // Excel 도 권한 메타로만 노출한다. 키를 생략하면 공용 기본 엑셀 핸들러가 살아나 admin 에서 끄지 않은
@@ -816,8 +831,11 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
       )}
       <SubTitle
         menuId={MENU_ID}
-        grid={mainGridRef}
-        gridFilter={mainFilterRef}
+        // Sort/Filter/Excel 은 포커스된 그리드(focusedGridRef)에 적용 — 키보드 F3/F4 가드까지 그 그리드를
+        //   본다. 건수 배지는 상단 main 그리드로 고정(countGrid).
+        grid={focusedGridRef}
+        gridFilter={focusedGridFilterRef}
+        countGrid={mainGridRef}
         dataCount={mainRows.length}
         excelFileName='ShipmentChangeRequest'
         useHotkey={true}
@@ -852,13 +870,14 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
                 editTrackerRef={editTrackerRef}
                 division={sc.divisionId}
                 changeType={sc.changeType}
-                canEdit={canEdit}
+                canEdit={canEditMain}
                 adminColumns={staticColumns[SHEETS.MAIN]}
                 cellDataMaps={cellDataMaps}
                 onPopupCellDblClick={handlePopupCellDblClick}
                 onEndCustomerSourceChanged={applyEndCustomer}
                 onEndCustomerCellFocus={focusEndCustomer}
                 onBlockedEdit={onBlockedEdit}
+                onGridFocus={() => setFocusedSheet('main')}
               />
             </div>
           </Panel>
@@ -904,6 +923,7 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
                 division={sc.divisionId}
                 changeType={sc.changeType}
                 adminColumns={staticColumns[SHEETS.SUB]}
+                onGridFocus={() => setFocusedSheet('sub')}
               />
             </div>
           </Panel>

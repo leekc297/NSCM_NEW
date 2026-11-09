@@ -136,7 +136,7 @@ export const MSG = {
   //   TO-BE SCM_ADM_MSG_M 미등록(ora.py 실측 0행, 공유 메시지). FE 는 AS-IS(TB_FX_MessageInfo) 실측 영문을
   //   defaultValue 로 병기해 i18n fallback 으로 표시한다(코드베이스 {0}/{1} .replace 규약, 예 MSG.PERIOD_MAX
   //   WaterfallShipmentPlanFg). DB 등록은 공유 메시지 후속(04 명시) — 미등록이어도 기능 정상.
-  PERIOD_EXCEEDS: 'MSG00402',
+  PERIOD_EXCEEDS: 'MSG01393',
   // 기간 시작 > 종료 — AS-IS FindData_Main 기간 검사(MSG00108) 후 조회 중단(갭분석 F-02).
   PERIOD_INVALID: 'MSG00108',
 } as const;

@@ -1,0 +1,12 @@
+// 메인 그리드 — 셀 색(wj-cell-editable / wj-cell-non-editable)은 foundation _grid.scss 공용 규칙을 쓴다(UI-03).
+//   여기서는 3단 머리글(16px 행)에 글자가 들어가도록 머리글 글자만 줄인다. 행 높이는 그리드 effect 가 맞춘다(UI-04).
+.grid {
+  width: 100%;
+  height: 100%;
+
+  :global(.wj-colheaders .wj-cell) {
+    line-height: 14px;
+    padding: 1px 4px;
+    font-size: 11px;
+  }
+}

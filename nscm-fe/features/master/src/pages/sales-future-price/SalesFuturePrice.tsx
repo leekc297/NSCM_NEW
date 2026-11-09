@@ -827,7 +827,9 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     insert: hasButton('INSERT') && editable ? handleInsert : false,
-    save: hasButton('SAVE') && editable ? handleSave : false,
+    // Save 는 시트 단위 — 메뉴 단위면 팝업 시트(exchange/priceBatch 등) SAVE 와 합쳐져 group menu 에서
+    //   main SAVE 만 꺼도 버튼이 남는다(저장은 main/SAVE 로 간다).
+    save: hasButton('SAVE', SHEETS.MAIN) && editable ? handleSave : false,
     delete: hasButton('DELETE') && editable ? handleDelete : false,
     manual: false,
     upload: false,
@@ -921,7 +923,8 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           },
           // Price Batch Input - 편집가능 division(현행 82)에서만 노출. 편집제약 division(40/81 계열)은
           //   셀 편집/Insert/Delete/Save 가 모두 막혀 있으므로 일괄입력 진입점도 함께 숨긴다.
-          ...(editable
+          //   팝업 저장은 main/SAVE 로 가므로 main 시트 SAVE 권한(시트 단위)이 없으면 숨긴다.
+          ...(editable && hasButton('SAVE', SHEETS.MAIN)
             ? [
                 {
                   label: t('LBL00662', 'Price Batch Input'),

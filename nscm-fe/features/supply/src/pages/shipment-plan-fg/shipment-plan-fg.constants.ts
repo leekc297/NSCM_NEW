@@ -111,8 +111,8 @@ export const MSG = {
   //   따른다(convert-core §2.3 — 신규 번역 금지, 기존 등록행 재사용만 허용).
   QTY_NEGATIVE: 'MSG00225', // Quantity must be 0 or greater.(구 MSG00084 미등록 — production-plan-line 미러링)
   QTY_MAX: 'MSG00165', // You have exceeded the number of digits you can enter.(구 MSG00317 미등록 — production-plan-line 미러링)
-  PERIOD_FROM_REQUIRED: 'MSG00720', // 기간 시작일 필수 — AS-IS MSG00171 대응, 신규 채번 등록(G21b)
-  PERIOD_OVER_365: 'MSG00721', // 조회기간 초과 {0}일 — AS-IS MSG00172 대응, 신규 채번 등록(G21b)
+  PERIOD_FROM_REQUIRED: 'MSG01488', // 기간 시작일 필수 — AS-IS MSG00171 대응, 신규 채번 등록(G21b)
+  PERIOD_OVER_365: 'MSG01187', // 조회기간 초과 {0}일 — AS-IS MSG00172 대응, 신규 채번 등록(G21b)
   NO_CHANGE: 'MSG00004', // 변경사항 없음(공용) — useProcMutation 표준 경로 사용 시 해당없음
   // New Plan 팝업(SCM0002_ShipmentPlanInsertPopup) — AS-IS ID 가 TO-BE 에 없거나 다른 문구라 대체한 ID(2026-10-07 SCM_ADM_MSG_M 조회).
   //   대응표: .atlas/gscm-design/SCM0002/design/00_checklist.md §4.

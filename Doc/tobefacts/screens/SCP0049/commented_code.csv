@@ -4,3 +4,4 @@
 "supply/capa","SCP0049","features/supply/src/pages/capa/Capa.tsx","403","code","INSERT/DELETE = 명시적 무동작(R4·R5 — false·키생략 금지). => INSERT/DELETE 삭제 EDIT 미등록(§11). SEARCH/SAVE 실핸들러."
 "supply/capa","SCP0049","features/supply/src/pages/capa/capa.types.ts","6","jsx","WijmoRowItem 확장(전역 index = WijmoPrimitive) — DataGrid<CapaRow>/EditTracker<CapaRow> 제약 충족."
 "supply/capa","SCP0049","features/supply/src/pages/capa/utils/capa.editLock.ts","233","code","return (REQUEST_CHK_LOSS_CODES as readonly string[]).includes(String(row.LOSS_CODE ?? '')); -- 26.10.19 TO-BE MailReq 안쓰는다고 해서 false 처리."
+"supply/capa","SCP0049","features/supply/src/pages/capa/utils/capa.editLock.ts","243","code","return String(row.ROW_RANKING ?? '') === '1';"

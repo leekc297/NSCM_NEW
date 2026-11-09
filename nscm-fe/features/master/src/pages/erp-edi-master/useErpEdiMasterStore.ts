@@ -304,9 +304,13 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
       };
       const divId = get().searchParams.divisionId === '40' ? '40' : undefined;
       const sspmDivId = get().searchParams.divisionId || undefined;
+      // repair 도 현재 사업부를 넘긴다 — 안 넘기면 컬럼 메타 SP 가 UI Category 의 컬럼 사업부
+      //   지정(DIVISION_ID)을 무시한다(예: repair PROJECT_STATUS = 40 전용인데 81 · 82 에도 보임, 2026-11-06).
+      // 주의: salesSite 는 넘기지 않는다. PR_GET_SHEET_COLUMN_LIST 가 '시트명_사업부' 시트 존재를 PROGRAM_ID 없이
+      //   확인해서, 40 을 넘기면 DMF0004 의 salesSite_40 시트를 골라 이 화면 컬럼이 0개가 된다(2026-11-06 실측).
       const [summary, repair, salesSite, sspm] = await Promise.all([
         fetchOne(SHEETS.SUMMARY, { divisionId: divId }),
-        fetchOne(SHEETS.REPAIR),
+        fetchOne(SHEETS.REPAIR, { divisionId: sspmDivId }),
         fetchOne(SHEETS.SALES_SITE),
         fetchOne(SHEETS.SSPM, { divisionId: sspmDivId }),
       ]);

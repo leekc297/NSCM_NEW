@@ -137,7 +137,7 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleSearch = () => {
     const result = validateSearch(sc);
     if (!result.ok) {
-      void setAlert({ type: 'alert', content: t(result.messageKey ?? 'MSG00002', result.defaultMessage ?? '') });
+      void setAlert({ type: 'alert', content: t(result.messageKey ?? 'MSG00013', result.defaultMessage ?? '') });
       return;
     }
     setFilter();

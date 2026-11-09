@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0127",
+  "sheet": "init",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/init/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 2835,
+  "dur": 293,
+  "at": "2026-11-07T11:38:23.299Z",
+  "user": "minyonglee1",
+  "test": "W4 M4 팝업 선택값 반영 = AS-IS"
+ },
+ {
+  "menu": "SCP0127",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "status": 200,
+  "rows": 535,
+  "dur": 213,
+  "at": "2026-11-07T11:38:26.438Z",
+  "user": "minyonglee1",
+  "test": "W4 M4 팝업 선택값 반영 = AS-IS"
+ },
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"\",\"scpModuleType\":\"SCP0127\"}",
+  "status": 200,
+  "rows": 9617,
+  "dur": 849,
+  "at": "2026-11-07T11:38:28.067Z",
+  "user": "minyonglee1",
+  "test": "W4 M4 팝업 선택값 반영 = AS-IS"
+ },
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"\",\"scpModuleType\":\"SCP0127\"}",
+  "status": 200,
+  "rows": 9617,
+  "dur": 851,
+  "at": "2026-11-07T11:38:28.311Z",
+  "user": "minyonglee1",
+  "test": "W4 M4 팝업 선택값 반영 = AS-IS"
+ }
+]

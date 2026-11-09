@@ -76,21 +76,29 @@ export const validateSafetyStockRow = (
 };
 
 /**
- * MSG00260(line690) — 중복 저장 방지(dtPreSafeStock.Rows.Count>0 && action!=Delete).
+ * MSG00428(AS-IS MSG00260 재번호, line690) — 중복 저장 방지. AS-IS `SaveData`(.cs:651~693)는 각
+ * 변경행(action!=Delete)의 조합을 조회결과 스냅샷 `dtPreSafeStockAll`(DBUtils.Filter, line686)과
+ * 대조해 이미 존재하면 AS-IS `GMessageBox("MSG00260")`("신규 입력 데이터 중 중복된 데이터가
+ * 있습니다.")로 막는다. TO-BE Oracle 에서 MSG00260 은 무관한 "중복된 조합이 존재합니다…"로 재번호돼
+ * 문구 역조회로 MSG00428 확정(DB 실측 2026-11-05, 자매 SCP0127 동일). TO-BE 는 그리드에 로드된
+ * 전체 행(기존 미변경 + 신규/수정)을 받아 이
+ * "조회결과 대조"를 재현한다 — 종전엔 신규행끼리만 대조해 기존 행과 같은 조합의 신규행 1건을 놓쳐
+ * SP 가 거부했다(자매 SCP0127 와 동일 결함·수정, 사용자 신고 2026-11-05).
  *
- * AS-IS `filterCalls#5`(line686, `sb.ToString()` 동적 조합식)는 원식 미상(design/03_grid-columns.md
- * §3.2 확인 필요) — `SCP_OPMZ_SAFETY_STOCK` PK 8컬럼(DIVISION_ID/SCM_SITE_ID/OPMZ_PLAN_GR_ID/
- * STAGE/ITEM_ID/VALUE_TYPE/FROM_YYYYMMDD/TO_YYYYMMDD, DDL 실측 확정)이 저장 대상 신규행 사이에서
- * 같은 조합으로 2건 이상이면 화면 로컬에서만 중복을 재현한다(서버 SP 실측 전 best-evidence).
- * SP 배포 후 서버측 유니크 검증과 대사 필요(§6 확인 필요).
+ * 비교 키는 SAVE SP/DB 유니크인 `SCP_OPMZ_SAFETY_STOCK` PK 8칼럼(DIVISION_ID/SCM_SITE_ID/
+ * OPMZ_PLAN_GR_ID/STAGE/ITEM_ID/VALUE_TYPE/FROM_YYYYMMDD/TO_YYYYMMDD, DDL 실측 확정). AS-IS 는
+ * Insert 는 8칼럼·Modify 는 값칼럼 포함 11칼럼 전체일치였으나 DB 유니크는 이 8칼럼이라, 같은 PK·
+ * 다른 값인 행은 AS-IS 가 놓치고 SP 가 거부한다 — PK 로 좁혀 "SP 가 거부할 조합" 을 FE 가 먼저
+ * MSG00428 로 막는다(자매 SCP0127 findDuplicatePrecedeSafetyStockDayRows 동형).
+ *   - 삭제행(CRUD_TYPE='D')은 제외: 저장 후 사라져 PK 를 점유하지 않는다.
+ *   - 변경행(I/C/M)의 PK 가 살아남는 다른 행과 겹치면 중복(기존행 복제·신규행 충돌·키편집 충돌 포함).
+ *     count>1 로 자기자신만 매칭되는 무변경 수정행의 오탐은 배제한다.
  */
 export const findDuplicateSafetyStockRows = (
-  rows: WijmoRowItem[]
+  allRows: WijmoRowItem[]
 ): { msgId: string; message: string } | null => {
-  const insertRows = rows.filter(row => row.CRUD_TYPE === 'I' || row.CRUD_TYPE === 'C');
-  const seen = new Set<string>();
-  for (const row of insertRows) {
-    const key = [
+  const pkOf = (row: WijmoRowItem): string =>
+    [
       str(row.DIVISION_ID),
       str(row.SCM_SITE_ID),
       str(row.OPMZ_PLAN_GR_ID),
@@ -100,8 +108,20 @@ export const findDuplicateSafetyStockRows = (
       toYmd8(row.FROM_YYYYMMDD),
       toYmd8(row.TO_YYYYMMDD),
     ].join('\x1f');
-    if (seen.has(key)) return { msgId: MSG.DUPLICATE_EXISTS, message: '_이미 존재하는 데이터입니다.' };
-    seen.add(key);
+
+  // 저장 후 살아남을 행(삭제 아님)만 PK 빈도를 센다.
+  const survivors = allRows.filter(row => str(row.CRUD_TYPE) !== 'D');
+  const keyCount = new Map<string, number>();
+  for (const row of survivors) {
+    const key = pkOf(row);
+    keyCount.set(key, (keyCount.get(key) ?? 0) + 1);
+  }
+  // 변경행(I/C/M) 중 PK 가 둘 이상 존재하면 중복.
+  for (const row of survivors) {
+    if (!str(row.CRUD_TYPE)) continue;
+    if ((keyCount.get(pkOf(row)) ?? 0) > 1) {
+      return { msgId: MSG.DUPLICATE_EXISTS, message: '_신규 입력 데이터 중 중복된 데이터가 있습니다.' };
+    }
   }
   return null;
 };

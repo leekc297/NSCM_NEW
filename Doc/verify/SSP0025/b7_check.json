@@ -1,0 +1,74 @@
+{
+ "menu_id": "SSP0025",
+ "asis_id": "SSP0025",
+ "generated": "2026-11-09 11:04:14",
+ "a": {
+  "verdict": "NA",
+  "note": "저장 SP SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC 대상 SSP_MST_MODEL_USER_EE 와 콤보 원천 6종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "save_tables": [
+   "SSP_MST_MODEL_USER_EE"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "cboDivision",
+    "label": "Div*",
+    "src": "UP_FX_GetCommonDataList @Code=MyDivision 분기",
+    "tables": [
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbFromSite",
+    "label": "Plant Site",
+    "src": "UP_FX_GetCommonDataList @Code=PlantCell 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DIVISION_ID",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=MyDivision 분기",
+    "tables": [
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "SITE_DESCRIPTION",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=PlantCell 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "PlantSiteByDivision",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=PlantCell 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "VALID_YN",
+    "label": "Valid*",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   }
+  ]
+ }
+}

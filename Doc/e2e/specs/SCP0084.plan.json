@@ -3,16 +3,20 @@
   "mode": "single",
   "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
   "menuId": "SCP0084",
-  "divCascade": [],
+  "divCascade": [
+    [
+      ""
+    ]
+  ],
   "divLabels": [
     "Div",
     "Div."
   ],
   "condOrder": [
+    "Month",
     "Div",
     "Plant",
-    "Long Term Type",
-    "Month"
+    "Long Term Type"
   ],
   "condGone": [],
   "condNotUse": [],
@@ -396,44 +400,44 @@
       "SEARCH"
     ],
     "CAPA Planner": [
-      "SEARCH",
-      "SAVE"
+      "SAVE",
+      "SEARCH"
     ],
     "DM ADMIN": [
       "SEARCH",
       "SAVE"
     ],
     "DM Planner": [
-      "SAVE",
-      "SEARCH"
+      "SEARCH",
+      "SAVE"
     ],
     "DM Planner (W/S)": [
-      "SAVE",
-      "SEARCH"
+      "SEARCH",
+      "SAVE"
     ],
     "DM Viewer": [
-      "SAVE",
-      "SEARCH"
+      "SEARCH",
+      "SAVE"
     ],
     "FP Planner": [
       "SAVE",
       "SEARCH"
     ],
     "FP Viewer": [
-      "SEARCH",
-      "SAVE"
-    ],
-    "SCM PI Admin": [
-      "SEARCH",
-      "SAVE"
-    ],
-    "SCM Viewer": [
-      "SEARCH",
-      "SAVE"
-    ],
-    "SCP Planner": [
       "SAVE",
       "SEARCH"
+    ],
+    "SCM PI Admin": [
+      "SAVE",
+      "SEARCH"
+    ],
+    "SCM Viewer": [
+      "SAVE",
+      "SEARCH"
+    ],
+    "SCP Planner": [
+      "SEARCH",
+      "SAVE"
     ],
     "SCP Tester": [
       "SEARCH",

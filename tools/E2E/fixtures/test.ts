@@ -4,6 +4,67 @@ import { test as base } from '@playwright/test';
 import { Nscm, CFG, beLogMark, beLogErrors } from '../lib/nscm';
 import { installRequestMutations, flushMutationLog } from '../lib/mutate';
 export type Opts = { account: string; division: string };
+
+// 2026-11-06(속도 개선 ① 계측): 테스트 1건의 시간을 구간별로 잰다 — 로그인 · 화면 열기 · 조회 · 고정 대기(page.waitForTimeout) · 나머지(본문).
+//   판정·동작은 바꾸지 않는다(원 함수를 그대로 부르고 걸린 시간만 더함). 결과 = 한 줄 JSON 을 _test_timing.jsonl 에 덧붙인다
+//   (VERIFY_ID 있으면 Doc/verify/<ID>/ · 없으면 E2E_RESULTS 또는 Doc/e2e/results/). 팝업으로 새로 뜬 page 의 대기는 세지 않는다(한계).
+const TIMING_RUN = new Date().toISOString();
+// 시간초과로 끝난 locator.waitFor(= '나타나면 쓰고 아니면 넘어가는' 탐침이 시간을 다 쓴 경우)를 위치별로 센다 — 'miss@파일:줄'.
+//   Locator 프로토타입을 워커당 1회 감싼다(원 함수 그대로 호출 · 예외도 그대로 던짐). 현재 테스트의 기록 함수는 CUR_SITE 로 연결.
+//   ⚠ 한계: Promise.race 에서 진 쪽(다른 쪽이 먼저 성공)의 시간초과도 miss 로 잡힌다 — 이 대기는 뒤에서 혼자 끝나 실제 시간을 쓰지 않는다
+//     (실측 13:54 SCP0127 smoke: miss@nscm.ts:174 = activateScreenTab body() 의 SearchArea 쪽 8.0s, 그 테스트의 open 은 1.9s). miss 는 '후보 위치' 로만 읽는다.
+let CUR_SITE: ((k: string, ms: number, stack?: string) => void) | null = null;
+let LOCATOR_WRAPPED = false;
+function wrapLocatorWaitFor(page: import('@playwright/test').Page) {
+  if (LOCATOR_WRAPPED) return; LOCATOR_WRAPPED = true;
+  const proto = Object.getPrototypeOf(page.locator('body')) as { waitFor: (...a: unknown[]) => Promise<void> };
+  const orig = proto.waitFor;
+  proto.waitFor = async function (this: unknown, ...a: unknown[]) {
+    const s = Date.now(); const st = CUR_SITE ? new Error().stack : '';  // 호출 위치는 await 전에 잡는다(Promise.race 안 호출은 await 뒤 스택에 호출자가 없다)
+    try { return await orig.apply(this, a); } catch (e) { if (CUR_SITE) CUR_SITE('miss', Date.now() - s, st); throw e; }
+  };
+}
+function timingProbe(n: Nscm, page: import('@playwright/test').Page) {
+  const t0 = Date.now();
+  const acc: Record<string, number> = { login: 0, open: 0, search: 0, wait: 0 };
+  const cnt: Record<string, number> = { login: 0, open: 0, search: 0, wait: 0 };
+  const add = (k: string, ms: number) => { acc[k] = (acc[k] || 0) + ms; cnt[k] = (cnt[k] || 0) + 1; };
+  // 호출 위치(스펙·lib 파일:줄)별 누적 — 긴 테스트(W4c 등) 안에서 어느 줄의 대기·조회가 시간을 쓰는지(상위 15곳만 기록)
+  const sites: Record<string, number> = {};
+  const site = (k: string, ms: number, stack?: string) => {
+    const ln = (stack || new Error().stack || '').split(/\r?\n/).slice(2).find(l => /\.spec\.ts:|[\\/]lib[\\/][a-z0-9-]+\.ts:/i.test(l) && !/fixtures[\\/]test\.ts/.test(l)) || '';
+    const m = /([A-Za-z0-9_.-]+\.ts):(\d+)/.exec(ln); const key = k + '@' + (m ? m[1] + ':' + m[2] : '?');
+    sites[key] = (sites[key] || 0) + ms;
+  };
+  const wrap = <K extends 'loginAs' | 'openScreen' | 'search'>(name: K, key: string) => {
+    const orig = (n[name] as unknown as (...a: unknown[]) => Promise<unknown>).bind(n);
+    (n as unknown as Record<string, unknown>)[name] = async (...a: unknown[]) => { const s = Date.now(); try { return await orig(...a); } finally { add(key, Date.now() - s); site(key, Date.now() - s); } };
+  };
+  wrap('openScreen', 'open'); wrap('search', 'search');
+  wrapLocatorWaitFor(page); CUR_SITE = (k, ms, st) => { add(k, ms); site(k, ms, st); };
+  const origWait = page.waitForTimeout.bind(page);
+  page.waitForTimeout = async (ms: number) => { const s = Date.now(); try { return await origWait(ms); } finally { add('wait', Date.now() - s); site('wait', Date.now() - s); } };
+  let wrappedLogin = false;
+  return {
+    add: (k: string, ms: number) => { add(k, ms); if (!wrappedLogin) { wrappedLogin = true; wrap('loginAs', 'login'); } },  // 픽스처 첫 로그인 뒤부터 본문 안 재로그인(계정 순회)도 센다
+    flush(testInfo: import('@playwright/test').TestInfo) {
+      CUR_SITE = null;
+      try {
+        const total = Date.now() - t0;
+        // open 안의 대기·search 안의 대기는 wait 에도 잡힌다(겹침) — 나머지(body)는 겹침을 빼지 않은 보수 값이므로 0 미만이면 0
+        const body = Math.max(0, total - acc.login - acc.open - acc.search);
+        const id = (process.env.VERIFY_ID || '').toUpperCase();
+        const dir = id ? path.join(__dirname, '..', '..', '..', 'Doc', 'verify', id) : (process.env.E2E_RESULTS || path.join(__dirname, '..', '..', '..', 'Doc', 'e2e', 'results'));
+        fs.mkdirSync(dir, { recursive: true });
+        const row = { run: TIMING_RUN, at: new Date().toISOString(), file: path.basename(testInfo.file), title: testInfo.title, status: testInfo.status, retry: testInfo.retry,
+          ms: { total, login: acc.login, open: acc.open, search: acc.search, wait: acc.wait, miss: acc.miss || 0, body }, n: cnt,
+          parts: n.tparts, reqs: n.reqs,
+          sites: Object.fromEntries(Object.entries(sites).sort((x, y) => y[1] - x[1]).slice(0, 15)) };
+        fs.appendFileSync(path.join(dir, '_test_timing.jsonl'), JSON.stringify(row) + '\n', 'utf8');
+      } catch { /* 계측 실패는 판정에 영향 없음 */ }
+    },
+  };
+}
 export const test = base.extend<{ nscm: Nscm } & Opts>({
   account: [process.env.E2E_ACCOUNT || CFG.defaultAccount, { option: true }],
   division: [process.env.E2E_DIVISION || CFG.defaultDivision, { option: true }],
@@ -14,7 +75,23 @@ export const test = base.extend<{ nscm: Nscm } & Opts>({
     await installRequestMutations(page);  // CheckList 자기검증 요청 변이(CL_MUTATE 지정 시만, 2026-10-28)
     // VERIFY_NO_SAVE=1 — 저장 계열 call-proc 를 서버로 보내지 않고 가짜 응답으로 돌려준다(요청 자체는 nscm.calls 에 남아 '저장 요청이 나갔다' 는 사실은 측정된다) · 정리 정의 없는 화면 일괄 실행용
     if (process.env.VERIFY_NO_SAVE || process.env.CL_FAKE_SAVE) await page.route(/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i, r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: [], message: '[VERIFY_NO_SAVE] 서버 미전송' }) }));
-    const n = new Nscm(page); await n.loginAs(account); await use(n);
+    const n = new Nscm(page);
+    const tm = timingProbe(n, page);
+    const tl = Date.now(); await n.loginAs(account); tm.add('login', Date.now() - tl);
+    await use(n);
+    tm.flush(testInfo);
+    // 2026-11-06 플랜 2-1: 이 테스트가 보낸 모든 non-SAVE call-proc 본문 → Doc/verify/<ID>/calls/<spec>_<test>_<retry>.json (a1_live.json 은 마지막 1건만) · diff_verify.py 입력
+    try {
+      const vid = (process.env.VERIFY_ID || '').toUpperCase();
+      if (vid && !(process.env.CL_MUTATE || process.env.CL_SELFTEST_BASE)) {
+        const recs = n.allCalls.filter(c => !/SAVE|INS|UPD|DEL/i.test(c.btn) && !!c.body).map(c => ({ menu: c.menu, sheet: c.sheet, btn: c.btn, url: c.url.slice(0, 200), postData: c.body, status: c.status, rows: c.rows, dur: c.dur ?? null, at: c.at || '', user: n.curUser, test: testInfo.title }));
+        if (recs.length) {
+          const d = path.join(__dirname, '..', '..', '..', 'Doc', 'verify', vid, 'calls'); fs.mkdirSync(d, { recursive: true });
+          const slug = (testInfo.title || 'test').replace(/[^A-Za-z0-9가-힣._-]+/g, '_').slice(0, 60);
+          fs.writeFileSync(path.join(d, `${path.basename(testInfo.file, '.spec.ts')}_${slug}_${testInfo.retry}.json`), JSON.stringify(recs, null, 1), 'utf8');
+        }
+      }
+    } catch { /* 포착 실패는 판정에 영향 없음 */ }
     await flushMutationLog(page, testInfo.title);
     const errs = beLogErrors(mark);
     if (errs.length || n.serverErrors.length) {

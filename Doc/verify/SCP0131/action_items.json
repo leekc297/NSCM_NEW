@@ -1,0 +1,40 @@
+[
+ {
+  "row_id": "V-c8cd860a",
+  "rule_id": "G3",
+  "target": "SCP0131 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-11d9fee9",
+  "rule_id": "F2",
+  "target": "SCP0131 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I",
+  "same": []
+ },
+ {
+  "row_id": "V-2bcf7fcf",
+  "rule_id": "E7",
+  "target": "Sales Site Priority.ITEM_ID (Model*)",
+  "same": [
+   "V-8e911390"
+  ]
+ },
+ {
+  "row_id": "V-637991ac",
+  "rule_id": "E1",
+  "target": "Sales Site Priority.PRIO_RANK (Priority*)",
+  "same": []
+ },
+ {
+  "row_id": "V-e5dd5abc",
+  "rule_id": "H13",
+  "target": "Sales Site Priority.PRIO_RANK (Priority*)",
+  "same": []
+ },
+ {
+  "row_id": "V-8e911390",
+  "rule_id": "E7",
+  "target": "",
+  "folded_into": "V-2bcf7fcf"
+ }
+]

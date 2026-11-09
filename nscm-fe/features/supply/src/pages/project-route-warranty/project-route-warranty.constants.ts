@@ -55,7 +55,7 @@ export const NO_VALUE_PLACEHOLDER = '/';
 //   의 등가). placeholder 가 그대로 넘어가면 그 값으로 좁혀 조회가 0건이 된다. 신규 규약 '/' 와
 //   기존 데이터의 '-' 를 둘 다 제거한다(저장검증 isSalesSiteBlank 와 동일 하위호환 규약).
 //   placeholder 만으로 채워진 값은 undefined 로 떨궈 조회조건에서 아예 뺀다.
-export const stripNoValuePlaceholder = (v: unknown): string | undefined => {
+export const stripNoValuePlaceholder = (v: WijmoPrimitive | undefined): string | undefined => {
   const s = String(v ?? '').replace(/[-/]/g, '');
   return s || undefined;
 };
@@ -81,6 +81,11 @@ export const NEW_ROW_DEFAULT_OPERATION_GROUP_NAME = 'Warranty';
 // 저장검증 실패 셀 배경 강조(design/03 §3.4 R-B1/R-B2, AS-IS SetBGColor(InvalidColor)).
 //   자매 BOD(BodGrid SAVE_ERROR_BG_COLOR)와 동일 푸른계통 값 준용.
 export const INVALID_CELL_BG_COLOR = '#cce5ff';
+
+// 행-조건부 잠금 셀 배경(design/03 §3.3). 공용 DataGrid 가 메타 INPUT_TP_CD='M' 컬럼에 편집 스타일
+//   (wj-cell-editable=#fff8cd 노랑)을 붙이므로, R-L2/R-L3 로 잠긴 M 셀은 이 흰색을 inline 으로 덮어
+//   그리드 기본 컬럼처럼 보이게 한다(wj-cell-editable 은 !important 아님 → inline 우선, 자매 SCP0027 준용).
+export const DEFAULT_CELL_BG_COLOR = '#ffffff';
 
 // 조건부 편집잠금 컬럼 범위(design/03 §3.3, R-L2/R-L3). 메타 INPUT_TP_CD 는 정적 editable 만
 //   표현한다(실측 S22/IM3/IO2/M4) — 행-조건부(opGroup·PRIORITY_SEQ) 잠금은 메타로 표현 불가해
@@ -208,13 +213,15 @@ export const SAVE_VALIDATION_FALLBACK: Record<string, string> = {
 //   EDIT/CANCEL(Edit 토글 버튼)은 전사 공통 등록코드를 쓴다 — LBL00414='Edit'/'수정', LBL00394='Cancel'/'취소'
 //   3언어 등록 실측(2026-09-25 ora.py). iter-1 이 임의로 쓰던 LBL00114(미등록)/LBL00113(실제=Label '라벨')
 //   은 오코드라 폐기. 신규 INSERT 없이 기등록 코드 재사용(G-7).
+//   MODEL/VALID 명칭 변경(사용자 지시 2026-11-03, 메1 교체 동반): Model→Model/Nickname(LBL00618,
+//   자매 SCP0006 동일), Valid→Active(LBL00007). 둘 다 KO/EN/CN·USE_YN=Y 기등록 실측(ora.py 2026-11-03).
 export const LBL = {
   SEARCH: 'LBL00112',
   DIVISION: 'LBL00001',
   PLANT_SITE: 'LBL00005',
   OPERATION_GROUP: 'LBL00027',
-  MODEL: 'LBL00669',
-  VALID: 'LBL00639',
+  MODEL: 'LBL00618', // Model/Nickname(메1 픽커). 구 LBL00669='Model' 에서 변경
+  VALID: 'LBL00007', // Active. 구 LBL00639='Valid' 에서 변경
   EDIT: 'LBL00414',
   CANCEL: 'LBL00394',
 } as const;

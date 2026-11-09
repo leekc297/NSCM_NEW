@@ -17,6 +17,7 @@ import {
   LBL,
   MENU_ID,
   MSG,
+  MSG_CHAIN,
   SCREEN_TEXT,
   SHEETS,
   STANDARD_MANUAL_URL,
@@ -31,6 +32,7 @@ import { useShipmentPlanLookups } from '../../utils/shipment-plan.lookups';
 import {
   collectRequestConfirmSaveRows,
   isRequestRowChanged,
+  toYmd8,
 } from '../../utils/shipment-plan.save';
 
 interface Props {
@@ -395,6 +397,24 @@ export const ShipmentRequestModal = ({ open, modalClose, tabId }: Props) => {
   const handleSave = async () => {
     gridRef.current?.finishEditing();
     const src = sourceRows();
+    // 변경 행의 Change Shipment Date 형식 선검사 (사용자 요청 2026-11-06).
+    //   AS-IS 는 확인창 이후 GetERPInterface(RP:945~950)에서야 검사해, 잘못된 날짜도 서버 사전검사·확인창을
+    //   다 거친 뒤에 막혔다. 같은 판정(toYmd8)·같은 메시지(MSG01081)를 Save 클릭 첫 단계로 앞당긴다.
+    //   runRequestErpChain 의 기존 검사는 방어용으로 그대로 둔다. {0} 에는 행 번호와 입력값을 넣는다.
+    for (let i = 0; i < src.length; i += 1) {
+      const r = src[i];
+      if (!isRequestRowChanged(r)) continue;
+      if (!toYmd8(r.NEW_SHIPMENT_DATE)) {
+        void setAlert({
+          type: 'alert',
+          content: t(MSG_CHAIN.INVALID_DATE_FORMAT, '__This is not a valid date format. {0}').replace(
+            '{0}',
+            `[${i + 1}] ${str(r.NEW_SHIPMENT_DATE)}`
+          ),
+        });
+        return;
+      }
+    }
     // 검증 (AS-IS Validation_Check L777~809): 변경 행은 Change Reason 코드(≠''/'-') + Reason Detail 필수.
     for (let i = 0; i < src.length; i += 1) {
       const r = src[i];

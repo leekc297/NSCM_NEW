@@ -1,0 +1,238 @@
+[
+ {
+  "row_id": "V-ba998255",
+  "rule_id": "F1",
+  "target": "SSP0025 화면",
+  "same": [
+   "V-0834b71f",
+   "T-e53b2a1c",
+   "V-9ae33640",
+   "T-51aa1216"
+  ]
+ },
+ {
+  "row_id": "V-73ae37f0",
+  "rule_id": "F5",
+  "target": "SSP0025 화면",
+  "same": [
+   "T-1f4e30ba"
+  ]
+ },
+ {
+  "row_id": "V-a5043f1c",
+  "rule_id": "D6",
+  "target": "SSP0025 시나리오 [자동] 선택 행 위로 Insert",
+  "same": []
+ },
+ {
+  "row_id": "V-e401c028",
+  "rule_id": "F1",
+  "target": "SSP0025 시나리오 [자동] 기존 행 Delete → D 저장 요청",
+  "same": []
+ },
+ {
+  "row_id": "V-58e57a6b",
+  "rule_id": "G8",
+  "target": "조회조건 Material",
+  "same": []
+ },
+ {
+  "row_id": "V-f743fe58",
+  "rule_id": "B2",
+  "target": "Shipment Requestor PIC.SITE_DESCRIPTION (Plant Site*)",
+  "same": []
+ },
+ {
+  "row_id": "V-f8e3734d",
+  "rule_id": "E7",
+  "target": "Shipment Requestor PIC.USER_ID (User ID*)",
+  "same": [
+   "V-159f0981"
+  ]
+ },
+ {
+  "row_id": "V-540b5971",
+  "rule_id": "E7",
+  "target": "Shipment Requestor PIC.PART_LEADER (Part Leader)",
+  "same": [
+   "V-d6dfabeb"
+  ]
+ },
+ {
+  "row_id": "V-92c4580d",
+  "rule_id": "E7",
+  "target": "Shipment Requestor PIC.TEAM_LEADER (Team Leader)",
+  "same": [
+   "V-1463d632"
+  ]
+ },
+ {
+  "row_id": "V-fa5d4af0",
+  "rule_id": "H1",
+  "target": ".MODEL_ID (Model)",
+  "same": []
+ },
+ {
+  "row_id": "V-e2ffc896",
+  "rule_id": "H6",
+  "target": "popup.ShowDialog()",
+  "same": [
+   "V-81497250",
+   "V-466afccb",
+   "V-883bdd72",
+   "V-97ed4734",
+   "V-ed6e2a1b",
+   "V-a1a6a97f"
+  ]
+ },
+ {
+  "row_id": "T-f95e2155",
+  "rule_id": "C3",
+  "target": "SITE_DESCRIPTION",
+  "same": []
+ },
+ {
+  "row_id": "T-da75f148",
+  "rule_id": "A10",
+  "target": "SSP0025 화면",
+  "same": []
+ },
+ {
+  "row_id": "T-24b369d1",
+  "rule_id": "C3",
+  "target": "ITEM_ID",
+  "same": []
+ },
+ {
+  "row_id": "EG-786b2fac",
+  "rule_id": "H6",
+  "target": "SSP0025 팝업 UserInfoPopup CELL:USER_ID COUNT",
+  "same": [
+   "EG-244c827a",
+   "EG-2ca884c2"
+  ]
+ },
+ {
+  "row_id": "EG-b6f614de",
+  "rule_id": "K3",
+  "target": "SSP0025 팝업 UserInfoPopup CELL:USER_ID GRID_KEYS",
+  "same": [
+   "EG-e58cdda7",
+   "EG-b2e8d4ac"
+  ]
+ },
+ {
+  "row_id": "EG-75b8b6b9",
+  "rule_id": "H5",
+  "target": "SSP0025 팝업 (TO-BE 메타 팝업) CELL:ITEM_ID TITLE",
+  "same": []
+ },
+ {
+  "row_id": "V-0834b71f",
+  "rule_id": "F1",
+  "target": "",
+  "folded_into": "V-ba998255"
+ },
+ {
+  "row_id": "T-e53b2a1c",
+  "rule_id": "F1",
+  "target": "",
+  "folded_into": "V-ba998255"
+ },
+ {
+  "row_id": "V-9ae33640",
+  "rule_id": "F1",
+  "target": "",
+  "folded_into": "V-ba998255"
+ },
+ {
+  "row_id": "T-51aa1216",
+  "rule_id": "F1",
+  "target": "",
+  "folded_into": "V-ba998255"
+ },
+ {
+  "row_id": "T-1f4e30ba",
+  "rule_id": "F5",
+  "target": "",
+  "folded_into": "V-73ae37f0"
+ },
+ {
+  "row_id": "V-159f0981",
+  "rule_id": "E7",
+  "target": "",
+  "folded_into": "V-f8e3734d"
+ },
+ {
+  "row_id": "V-d6dfabeb",
+  "rule_id": "E7",
+  "target": "",
+  "folded_into": "V-540b5971"
+ },
+ {
+  "row_id": "V-1463d632",
+  "rule_id": "E7",
+  "target": "",
+  "folded_into": "V-92c4580d"
+ },
+ {
+  "row_id": "V-81497250",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-e2ffc896"
+ },
+ {
+  "row_id": "V-466afccb",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-e2ffc896"
+ },
+ {
+  "row_id": "V-883bdd72",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-e2ffc896"
+ },
+ {
+  "row_id": "V-97ed4734",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-e2ffc896"
+ },
+ {
+  "row_id": "V-ed6e2a1b",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-e2ffc896"
+ },
+ {
+  "row_id": "V-a1a6a97f",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-e2ffc896"
+ },
+ {
+  "row_id": "EG-244c827a",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "EG-786b2fac"
+ },
+ {
+  "row_id": "EG-2ca884c2",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "EG-786b2fac"
+ },
+ {
+  "row_id": "EG-e58cdda7",
+  "rule_id": "K3",
+  "target": "",
+  "folded_into": "EG-b6f614de"
+ },
+ {
+  "row_id": "EG-b2e8d4ac",
+  "rule_id": "K3",
+  "target": "",
+  "folded_into": "EG-b6f614de"
+ }
+]

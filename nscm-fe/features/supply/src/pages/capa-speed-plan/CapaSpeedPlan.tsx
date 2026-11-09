@@ -273,6 +273,11 @@ export const CapaSpeedPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
+        // F10(조회조건 초기화) — 사용자 요청 2026-11-06: 서버 개인화 초기화에 더해 **즉시 한번** 화면
+        //   조회조건도 기본값으로 되돌린다(store reset() → combos effect 가 Division/Plan Month/VersionSeq/
+        //   Status 기본값 재시드, 하위 cascade ALL, 그리드 비움). staticColumns/measures/개인화는
+        //   MotherStore.resetSearchCondition 가 보존(SCP0124/SSP0024 동일 패턴).
+        resetConditionOnClient
         customButtons={customButtons}
       />
       <CapaSpeedPlanGrid

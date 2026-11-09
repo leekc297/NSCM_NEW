@@ -21,6 +21,8 @@ interface Props {
   division: string;
   changeType: string; // 선택 마스터행 CHANGE_TYPE — 'P'(Plan) 시 컬럼세트 분기(design 03 §2)
   adminColumns?: RawFlexGridColumnConfig[];
+  // 그리드 포커스 획득 시 — 공통 툴바 Sort(F3)/Filter(F4) 타깃을 이 하단 그리드로(페이지가 추적).
+  onGridFocus?: () => void;
 }
 
 // _sChangeType='P'(Plan): 그룹라벨 "Confirmed"->"Plan"/"Change"->"Confirm"(메타에 없어 FE 오버라이드).
@@ -54,6 +56,7 @@ export const ShipmentChangeRequestConfirmSubGrid = ({
   division,
   changeType,
   adminColumns,
+  onGridFocus,
 }: Props) => {
   const columns = useMemo(
     () => applyChangeTypeBranch(buildColumns(adminColumns, true), changeType),
@@ -109,6 +112,7 @@ export const ShipmentChangeRequestConfirmSubGrid = ({
       staticColumns={columns}
       comboParams={comboParams}
       initialized={handleInitialized}
+      gotFocus={onGridFocus}
       /* 2단 헤더 그룹라벨(Confirmed/Change)을 **가로로 병합**하려면 헤더 병합 모드여야 한다.
          종전 `AllowMerging.Cells` 는 데이터 셀 전용이라 헤더 병합 경로가 즉시 null 을 반환했고
          (mergeManager.ts:167~172 — All/AllHeaders/ColumnHeaders 만 허용) 그룹라벨이 열마다 반복돼 보였다

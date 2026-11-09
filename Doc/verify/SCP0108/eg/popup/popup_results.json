@@ -1,0 +1,24 @@
+[
+ {
+  "screen": "SCP0108",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "OPEN",
+  "egs": [
+   "EG441",
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS btnColumn_Click 팝업(SCM002_CAPAColumnPopup) 열림",
+  "actual": "BTN: 버튼 [Column/Column] 비노출 — 화면 버튼 [KOR, 이\n\n이민용, Home, LOB Report, Close others, Close All, Search(F5), Insert(F8), Delete(F9), Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10)]",
+  "basis": "SCP0108_CAPA_LOB_Report.cs:1616",
+  "at": "2026-11-09T01:43:09.716Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ }
+]

@@ -11,17 +11,17 @@
 | features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx | component | 936 |
 | features/demand/src/pages/sales-reports/components/modals/exchangeRateModalStore.ts | store | 32 |
 | features/demand/src/pages/sales-reports/components/modals/index.ts | index | 3 |
-| features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx | component | 204 |
+| features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx | component | 210 |
 | features/demand/src/pages/sales-reports/components/modals/textboxModalStore.ts | store | 23 |
 | features/demand/src/pages/sales-reports/components/SalesReportsForm.module.scss | component | 193 |
 | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | component | 165 |
-| features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | component | 827 |
+| features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | component | 836 |
 | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | component | 245 |
 | features/demand/src/pages/sales-reports/index.ts | index | 2 |
 | features/demand/src/pages/sales-reports/sales-reports.constants.ts | constants | 106 |
 | features/demand/src/pages/sales-reports/sales-reports.types.ts | types | 48 |
 | features/demand/src/pages/sales-reports/SalesReports.module.scss | style | 148 |
-| features/demand/src/pages/sales-reports/SalesReports.tsx | page | 754 |
+| features/demand/src/pages/sales-reports/SalesReports.tsx | page | 759 |
 | features/demand/src/pages/sales-reports/useSalesReportsStore.test.tsx | test | 182 |
 | features/demand/src/pages/sales-reports/useSalesReportsStore.ts | store | 354 |
 | features/demand/src/pages/sales-reports/utils/sales-reports.api.test.ts | test | 111 |
@@ -46,8 +46,8 @@
 | DMF0044/exchangeRate/SEARCH_DATA/call-proc | hook | 1 | Y | ExchangeRateModal.tsx:220 |
 | DMF0044/exchangeRate/TITLE/call-proc | hook | 1 | Y | ExchangeRateModal.tsx:234 |
 | /admin/menu/DMF0044/column | http | 2 | Y | ExchangeRateModal.tsx:334 useSalesReportsStore.ts:291 |
-| DMF0044/textbox//call-proc | hook | 1 | Y | TextboxModal.tsx:48 |
-| (useTabComboQueries) | hook | 4 | Y | SalesReportsForm.tsx:50 SalesReportsGrid.tsx:151 SalesReportsGrid.tsx:201 SalesReports.tsx:73 |
+| DMF0044/textbox//call-proc | hook | 1 | Y | TextboxModal.tsx:52 |
+| (useTabComboQueries) | hook | 4 | Y | SalesReportsForm.tsx:50 SalesReportsGrid.tsx:152 SalesReportsGrid.tsx:202 SalesReports.tsx:73 |
 | DMF0044/MDF Reports//call-proc | hook | 1 | Y | SalesReports.tsx:97 |
 | DMF0044/spreadTitle//call-proc | hook | 1 | Y | SalesReports.tsx:106 |
 | DMF0044/measure//call-proc | hook | 1 | Y | SalesReports.tsx:121 |
@@ -90,9 +90,9 @@
 | Button | onClick | handleExcel | jsx | features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx | 910 |
 | Button | onClick | <arrow> handleSave | jsx | features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx | 920 |
 | Button | onClick | modalClose | jsx | features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx | 928 |
-| InputField | onChange | <arrow> setValue | jsx | features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx | 172 |
-| Button | onClick | <arrow> handleSave | jsx | features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx | 189 |
-| Button | onClick | modalClose | jsx | features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx | 196 |
+| InputField | onChange | <arrow> setValue | jsx | features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx | 176 |
+| Button | onClick | <arrow> handleSave | jsx | features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx | 194 |
+| Button | onClick | modalClose | jsx | features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx | 202 |
 | SearchArea | onSearch | onSearch | jsx | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | 64 |
 | DivisionField | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,dayjs().format,dayjs | jsx | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | 71 |
 | CustomDropdown | onChange | <arrow> set,String,onReportTypeChange | jsx | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | 96 |
@@ -100,31 +100,31 @@
 | CustomDropdown | onChange | <arrow> set,String | jsx | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | 129 |
 | VersionField | onOpenPopup | onOpenVersionModal | jsx | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | 144 |
 | VersionField | onValueChange | <arrow> set | jsx | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | 149 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 523 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 553 |
-| g | pastingCell | beginningEditHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 554 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 606 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 607 |
-| g | pastingCell | capturePasteRange | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 665 |
-| g | pastedCell | propagatePaste | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 666 |
-| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 678 |
-| g.hostElement | mousedown | mouseDownCapture | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 693 |
-| g.hostElement | keydown | keyDownCapture | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 704 |
-| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 712 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 769 |
-| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 791 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 524 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 554 |
+| g | pastingCell | beginningEditHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 555 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 607 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 608 |
+| g | pastingCell | capturePasteRange | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 666 |
+| g | pastedCell | propagatePaste | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 667 |
+| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 685 |
+| g.hostElement | mousedown | mouseDownCapture | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 700 |
+| g.hostElement | keydown | keyDownCapture | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 711 |
+| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 719 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 776 |
+| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 798 |
 | ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet,visible.map,onClose | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 164 |
 | MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,staticMeasures.map,saveTitleSet('M',selected.map((name,i)=>({name,sortOrderNo:i+1}))).then,saveTitleSet,selected.map,fetchStaticMeasures | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 198 |
 | VersionModal | onSelect | onVersionSelect | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 223 |
-| SalesReportsForm | onSearch | handleSearch | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 692 |
-| SalesReportsForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 693 |
-| SalesReportsForm | onReportTypeChange | handleReportTypeChange | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 694 |
-| SalesReportsForm | onOpenVersionModal | <arrow> setOpenModal | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 695 |
-| SalesReportsGrid | onItemCellDblClick | <arrow> setItemTargetRow,setOpenModal | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 725 |
-| SalesReportsModals | onClose | <arrow> setOpenModal | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 741 |
-| SalesReportsModals | onItemSelect | applyPopupSelection | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 743 |
-| SalesReportsModals | onMeasureApply | resetGrid | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 746 |
-| SalesReportsModals | onVersionSelect | <arrow> setSearchCondition | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 747 |
+| SalesReportsForm | onSearch | handleSearch | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 697 |
+| SalesReportsForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 698 |
+| SalesReportsForm | onReportTypeChange | handleReportTypeChange | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 699 |
+| SalesReportsForm | onOpenVersionModal | <arrow> setOpenModal | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 700 |
+| SalesReportsGrid | onItemCellDblClick | <arrow> setItemTargetRow,setOpenModal | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 730 |
+| SalesReportsModals | onClose | <arrow> setOpenModal | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 746 |
+| SalesReportsModals | onItemSelect | applyPopupSelection | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 748 |
+| SalesReportsModals | onMeasureApply | resetGrid | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 751 |
+| SalesReportsModals | onVersionSelect | <arrow> setSearchCondition | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 752 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -162,8 +162,8 @@
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
 | dynamicColumns | c.binding | c.mm | 120 | true |  |  | object | features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx | 351 |
-| mainDynamicColumns | m.binding | m.label | 225 | true |  |  | object | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 327 |
-| evalDyn | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER |  |  |  |  | lockCtxRef.current.dataType | object | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 356 |
+| mainDynamicColumns | m.binding | m.label | 225 | true |  |  | object | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 328 |
+| evalDyn | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER |  |  |  |  | lockCtxRef.current.dataType | object | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 357 |
 | readGridGroupInput | column?.binding ?? '' |  |  | column?.visible !== false |  |  | object | features/demand/src/pages/sales-reports/SalesReports.tsx | 233 |
 | cell | params.binding ?? 'M_202607' |  |  |  |  | params.dataType ?? DATA_TYPE.CUTOFF | object | features/demand/src/pages/sales-reports/utils/sales-reports.editLock.test.ts | 17 |
 
@@ -207,13 +207,13 @@
 | kind | snippet | file | line |
 |---|---|---|---|
 | code | [문제] 종전에는 `if (!gridRef.current) return;` 으로 끝냈다. 그런데 이 모달은 다이얼로그 | features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx | 523 |
-| code | 편집 중인 셀(editRange 가드로 조기 return)과 정적/동적 어디에도 안 걸리는 컬럼 | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 456 |
+| code | 편집 중인 셀(editRange 가드로 조기 return)과 정적/동적 어디에도 안 걸리는 컬럼 | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 457 |
 | code | F8 Insert — Data Type=2(ETC) 전용 (AS-IS InsertRow L973 분기 return). | features/demand/src/pages/sales-reports/SalesReports.tsx | 300 |
 | code | silent (AS-IS 분기 return 파리티) | features/demand/src/pages/sales-reports/SalesReports.tsx | 304 |
 | code | *주석 처리돼 있다**(`//if (GetText(ActiveRowIndex, Action) != "I") return;`) — 즉 AS-IS 는 | features/demand/src/pages/sales-reports/SalesReports.tsx | 365 |
 | code | silent (AS-IS 분기 return 파리티) | features/demand/src/pages/sales-reports/SalesReports.tsx | 378 |
 | jsx | `SubTitle.tsx` 가 `{buttonActions.save === false \|\| (<Button .../>)}` 로 그린다. | features/demand/src/pages/sales-reports/SalesReports.tsx | 622 |
-| jsx | action: () => setOpenModal('COLUMN'), iconComponent: <IcGridColumnSetup />, | features/demand/src/pages/sales-reports/SalesReports.tsx | 665 |
+| jsx | action: () => setOpenModal('COLUMN'), iconComponent: <IcGridColumnSetup />, | features/demand/src/pages/sales-reports/SalesReports.tsx | 670 |
 | endpoint | ⭐ master hook §2.3 — Column 동적 fetch (SHEET_COLUMNS 46건 'MDF Reports', hook #113 서버 직접 비교) | features/demand/src/pages/sales-reports/useSalesReportsStore.ts | 288 |
 | endpoint | ⭐ master hook §5 — Measure 동적 fetch (SHEET_MEASURE 18건 — Measure Select 팝업 대상) | features/demand/src/pages/sales-reports/useSalesReportsStore.ts | 306 |
 

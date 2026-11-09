@@ -53,36 +53,38 @@ export type GridSheet =
   | SHEETS.YLD_ELEC;
 
 /**
- * 탭 순서 — **운영 AS-IS 화면 캡처 기준**(사용자 지시 2026-10-20: 스테일 소스보다 실화면 우선).
- * 구 소스 `CreateSpread` AddSheet 순서(Daily Capa 2번째)와 달리, 운영 AS-IS 는
- *   No Work · SOP/EOP · Ramp-up(From/To) · Ramp-up(Interval) · Daily Capa · Utilization Rate ·
- *   Preparation Rate · Yield(Elec.) 순이다(전체 노출 div 캡처 EE_HD/EE_HG/81_HD/EE_HM/81_ST/EE_ST).
+ * 탭 순서 — AS-IS `CreateSpread`·`_spdSheets`(cs:300-307) 기준 :
+ *   No Work · Daily Capa · SOP/EOP · Ramp-up(From/To) · Ramp-up(Interval) · Utilization Rate ·
+ *   Preparation Rate · Yield(Elec.) 순이다.
+ * 실제 탭 순서는 AS-IS 와 같이 Division 이동 이력에 따라 달라진다(`optCapa.sheetVisibility.ts`).
  */
 export const GRID_SHEETS: readonly GridSheet[] = [
   SHEETS.NO_WORK,
+  SHEETS.DAILY_CAPA,
   SHEETS.SOP_EOP,
   SHEETS.RAMP_UP,
   SHEETS.RAMP_UP_ITVL,
-  SHEETS.DAILY_CAPA,
   SHEETS.UTIL_RT,
   SHEETS.PREP_RT,
   SHEETS.YLD_ELEC,
 ];
 
 /**
- * Division 변경 시 빠진 탭을 다시 붙이는 순서 — 탭 순서는 운영 AS-IS 캡처 기준으로 `GRID_SHEETS` 와 통일.
- * 제외됐다가 돌아온 탭도 같은 순서로 끼워 탭 위치가 Division 이동과 무관하게 일정하다(design 01 R13·R14).
+ * Division 변경 시 빠진 탭을 맨 뒤에 다시 붙이는 순서 — AS-IS `_spdSheets`(cs:300-307).
  */
 export const SPD_SHEET_ORDER: readonly GridSheet[] = [
   SHEETS.NO_WORK,
+  SHEETS.DAILY_CAPA,
   SHEETS.SOP_EOP,
   SHEETS.RAMP_UP,
   SHEETS.RAMP_UP_ITVL,
-  SHEETS.DAILY_CAPA,
   SHEETS.UTIL_RT,
   SHEETS.PREP_RT,
   SHEETS.YLD_ELEC,
 ];
+
+/** 숫자 칸 입력 상한(절댓값) — AS-IS `NumberCellType.MaximumValue`·`MinimumValue`(SpreadInfo.cs:4144-4145). */
+export const NUMBER_CELL_MAX = 99999999999999;
 
 /** 초기 활성 시트 — AS-IS `_sActiveSheetName = "No Work"`(cs:249) + `ChangeSheet()`(cs:615). */
 export const DEFAULT_SHEET: GridSheet = SHEETS.NO_WORK;
@@ -422,6 +424,7 @@ export const NON_NEGATIVE_COLUMNS: readonly string[] = [
  * (AS-IS 가 `CheckDouble(m_min)` 을 전극 분기 안에서만 부른다, cs:1573-1603).
  */
 export const DECIMAL_SCALE_COLUMNS: readonly string[] = [
+  COLUMN.OFF_TIME,
   COLUMN.M_MIN,
   COLUMN.ELEC_POST,
   COLUMN.ASSY,
@@ -437,6 +440,27 @@ export const DECIMAL_SCALE_COLUMNS: readonly string[] = [
  * DB 가 VARCHAR 라 2차 방어도 없음). **음수는 통과**시킨다(AS-IS CheckDouble 도 음수는 허용 — 추가
  * 차단 금지). `M_MIN` 은 Daily Capa 전극분기 한정(`isRowConditionalLock` 축과 동일 — 호출부 `inAsisBranch`).
  */
+export const INTEGER_COLUMNS: readonly string[] = [
+  COLUMN.CAPA,
+  COLUMN.LANE,
+  COLUMN.ITVL1,
+  COLUMN.ITVL2,
+  COLUMN.ITVL3,
+  COLUMN.ITVL4,
+];
+
+/** 시트별 날짜 형식 검사 칸 — 붙여넣기는 편집기를 거치지 않아 저장 전에 전 칸을 검사한다. */
+export const DATE_VALIDATE_COLUMNS: Record<GridSheet, readonly string[]> = {
+  [SHEETS.NO_WORK]: [COLUMN.NO_WORK_DATE],
+  [SHEETS.DAILY_CAPA]: [],
+  [SHEETS.SOP_EOP]: [COLUMN.DATE],
+  [SHEETS.RAMP_UP]: [COLUMN.START_DATE, COLUMN.END_DATE],
+  [SHEETS.RAMP_UP_ITVL]: [COLUMN.START_DATE],
+  [SHEETS.PREP_RT]: [COLUMN.FROM_DATE, COLUMN.TO_DATE],
+  [SHEETS.UTIL_RT]: [COLUMN.FROM_DATE, COLUMN.TO_DATE],
+  [SHEETS.YLD_ELEC]: [],
+};
+
 export const NUMERIC_PARSE_COLUMNS: readonly string[] = [
   COLUMN.M_MIN,
   COLUMN.PRDN_OPER_RT,

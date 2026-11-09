@@ -1,0 +1,14 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+DIVISION_ID,Y,N,N,잠금 (InsertRow:403),잠금 (EditButton:280),,기존행 SCP0037_OperationLT:280 LockColumn | 신규행 SCP0037_OperationLT:403 LockRange,,Operation LT
+PLANT_SITE_ID,Y,N,N,잠금 (InsertRow:404),잠금 (EditButton:280),,기존행 SCP0037_OperationLT:280 LockColumn | 신규행 SCP0037_OperationLT:404 LockRange,,Operation LT
+SCM_SITE_ID,Y,Y,N,,잠금 (EditButton:280),,기존행 SCP0037_OperationLT:280 LockColumn,,Operation LT
+ITEM_ID,Y,Y,N,,잠금 (EditButton:280),,기존행 SCP0037_OperationLT:280 LockColumn,,Operation LT
+NICK_NAME,Y,N,N,잠금 (InsertRow:405),잠금 (EditButton:280),,기존행 SCP0037_OperationLT:280 LockColumn | 신규행 SCP0037_OperationLT:405 LockRange,,Operation LT
+LT_OPERATION,Y,N,N,잠금 (InsertRow:405),잠금 (EditButton:280),,기존행 SCP0037_OperationLT:280 LockColumn | 신규행 SCP0037_OperationLT:405 LockRange,,Operation LT
+LT_DAY,Y,Y,Y,,,,,,Operation LT
+INV_FLAG,Y,Y,Y,,,,,,Operation LT
+SITE_ITEM_VALID_YN,Y,N,N,잠금 (InsertRow:406),잠금 (EditButton:281),,기존행 SCP0037_OperationLT:281 LockColumn | 신규행 SCP0037_OperationLT:406 LockRange,,Operation LT
+CREATED_BY,Y,N,N,잠금 (InsertRow:406),잠금 (EditButton:281),,기존행 SCP0037_OperationLT:281 LockColumn | 신규행 SCP0037_OperationLT:406 LockRange,,Operation LT
+CREATION_DATE,Y,N,N,잠금 (InsertRow:406),잠금 (EditButton:281),,기존행 SCP0037_OperationLT:281 LockColumn | 신규행 SCP0037_OperationLT:406 LockRange,,Operation LT
+LAST_UPDATED_BY,Y,N,N,잠금 (InsertRow:406),잠금 (EditButton:281),,기존행 SCP0037_OperationLT:281 LockColumn | 신규행 SCP0037_OperationLT:406 LockRange,,Operation LT
+LAST_UPDATE_DATE,Y,N,N,잠금 (InsertRow:406),잠금 (EditButton:281),,기존행 SCP0037_OperationLT:281 LockColumn | 신규행 SCP0037_OperationLT:406 LockRange,,Operation LT

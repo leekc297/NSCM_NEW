@@ -1,0 +1,200 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-08T21:12:31+09:00",
+ "producer": "run_verify",
+ "id": "SCP0127",
+ "skip_e2e": false,
+ "started": "2026-11-08 20:53:21",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-e385fc64",
+   "class": "SC1",
+   "msg": "SCP0127 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E smoke/auth 요약 + Excel 조회조건 정리(List 시트)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b2ba2199",
+   "class": "F2",
+   "msg": "SCP0127 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-08 21:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-357a89e6",
+   "class": "G5",
+   "msg": "[DMF0042 결함 유형] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5d1e8243",
+   "class": "F2",
+   "msg": "[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-773db191",
+   "class": "G5",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-646c5ae6",
+   "class": "G5",
+   "msg": "[SCP0006 결함 유형] Capa New Model 팝업 조건(Group/Plant)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fc1383d6",
+   "class": "G5",
+   "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-545779a9",
+   "class": "G5",
+   "msg": "검색 팝업(공용 모달) 호출 인자",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2180ea12",
+   "class": "X-ROW",
+   "msg": "SCP0127_PrecedeSafetyStockDay.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6d4f4de1",
+   "class": "X-ROW",
+   "msg": "SCP0127_PrecedeSafetyStockDay.FindData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d9bcbc79",
+   "class": "X-ROW",
+   "msg": "SCP0127_PrecedeSafetyStockDay.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-629cff83",
+   "class": "E7",
+   "msg": "SCP0127 팝업 SCM0002_MaterialByDivisionPopup CELL:ITEM_ID CELL_BADKEY",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "수동 사용자판정(CheckList)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 H13 — Doc/verify/SCP0127/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 1629,
+  "PASS": 644,
+  "FAIL": 12,
+  "판정필요": 15,
+  "미검증": 83,
+  "해당없음": 875,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1154,
+   "없음(미검증)": 83,
+   "사람": 3,
+   "없음(판정 대기)": 15,
+   "기계(상속·집계)": 374
+  },
+  "fail_listed": 12,
+  "coverage": {
+   "rules": 90,
+   "measured": 463,
+   "not_run_error": 48,
+   "na": 255,
+   "suspect_na100": [
+    "H13"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0127_PrecedeSafetyStockDay_CheckList_v20.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0127_PrecedeSafetyStockDay_ActionItemList_v20.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0127/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 H13 — Doc/verify/SCP0127/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+}

@@ -1,21 +1,21 @@
 # SCP0129 — To-Be Fact Pack 요약
 
-- page_key: `supply/demand-exception` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `supply/demand-exception` · feature: supply · As-is Fact Pack 있음
 - 파일 13 · 엔드포인트 호출 9 (미해결 0, 주석 속 2) · 이벤트 17 · 컴포넌트 사용 30 · 하드코딩 컬럼 0 · 메시지 16
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | component | 253 |
-| features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | component | 272 |
+| features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | component | 250 |
+| features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | component | 276 |
 | features/supply/src/pages/demand-exception/demand-exception.constants.ts | constants | 72 |
 | features/supply/src/pages/demand-exception/demand-exception.types.ts | types | 25 |
 | features/supply/src/pages/demand-exception/DemandException.tsx | page | 216 |
 | features/supply/src/pages/demand-exception/index.ts | index | 2 |
 | features/supply/src/pages/demand-exception/useDemandExceptionStore.ts | store | 159 |
 | features/supply/src/pages/demand-exception/utils/demand-exception.util.ts | util | 34 |
-| features/supply/src/pages/demand-exception/utils/demandExceptionEditLock.ts | util | 55 |
+| features/supply/src/pages/demand-exception/utils/demandExceptionEditLock.ts | util | 67 |
 | features/supply/src/pages/demand-exception/utils/demandExceptionSaveRequest.ts | util | 109 |
 | features/supply/src/pages/demand-exception/utils/demandExceptionSaveValidation.ts | util | 97 |
 | features/supply/src/pages/demand-exception/utils/demandExceptionSiteCascade.ts | util | 25 |
@@ -24,8 +24,8 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 3 | Y | DemandExceptionForm.tsx:45 DemandExceptionForm.tsx:46 DemandExceptionGrid.tsx:93 |
-| SCP0129/init//call-proc | hook | 2 | Y | DemandExceptionForm.tsx:51 DemandExceptionGrid.tsx:106 |
+| (useTabComboQueries) | hook | 3 | Y | DemandExceptionForm.tsx:45 DemandExceptionForm.tsx:46 DemandExceptionGrid.tsx:95 |
+| SCP0129/init//call-proc | hook | 2 | Y | DemandExceptionForm.tsx:51 DemandExceptionGrid.tsx:108 |
 | SCP0129/main//call-proc | hook | 1 | Y | DemandException.tsx:69 |
 | /admin/menu/SCP0129/column | http | 1 | Y | useDemandExceptionStore.ts:115 |
 | /admin/menu/SCP0129/search-conditions | http | 1 | Y | useDemandExceptionStore.ts:139 |
@@ -46,16 +46,16 @@
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 158 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 175 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 193 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 225 |
-| FunctionSearchIcon | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 219 |
-| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 235 |
-| g | updatedLayout | apply | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 130 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 151 |
-| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 152 |
-| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 167 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 190 |
-| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 206 |
-| g | updatedLayout | applyDateColumnTypes | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 210 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 221 |
+| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 217 |
+| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 232 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 132 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 153 |
+| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 154 |
+| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 171 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 194 |
+| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 210 |
+| g | updatedLayout | applyDateColumnTypes | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 214 |
 | DemandExceptionGrid | onItemModalOpenChange | setItemModalOpen | jsx | features/supply/src/pages/demand-exception/DemandException.tsx | 211 |
 
 ## 5. 컴포넌트 사용 집계
@@ -84,9 +84,9 @@
 |---|---|
 | LBL00112 | 1 |
 | LBL00001 | 1 |
-| LBL00015 | 1 |
+| LBL00016 | 1 |
 | LBL00061 | 1 |
-| LBL00639 | 1 |
+| LBL00007 | 1 |
 | LBL00002 | 1 |
 | LBL00618 | 1 |
 | LBL00013 | 1 |

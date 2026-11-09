@@ -622,7 +622,7 @@ export const NoticeRichTextEditor = () => {
         contentEditable
         role='textbox'
         aria-multiline='true'
-        aria-label={t('LBL00826', '_Notice Content')}
+        aria-label={t('LBL00386', '_Notice Content')}
         suppressContentEditableWarning
         onInput={handleInput}
         onPaste={handlePaste}

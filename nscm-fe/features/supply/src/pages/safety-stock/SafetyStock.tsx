@@ -137,17 +137,18 @@ export const SafetyStock = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   const onSave = () => {
-    const dirtyRows = (gridRef.current?.collectionView?.sourceCollection ?? []).filter(
-      row => row.CRUD_TYPE
-    );
+    const allRows = gridRef.current?.collectionView?.sourceCollection ?? [];
+    const dirtyRows = allRows.filter(row => row.CRUD_TYPE);
     if (dirtyRows.length === 0) {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_수정한 내용이 없습니다.') });
       return;
     }
 
     // design/03_grid-columns.md §3.2/00_checklist.md §4d 검증 재현 — 중복은 행 조합 대사,
-    //   나머지는 행별 가드.
-    const duplicate = findDuplicateSafetyStockRows(dirtyRows);
+    //   나머지는 행별 가드. 전체 행(allRows)을 넘겨야 기존(미변경) 행과 같은 조합의 신규행을
+    //   잡는다 — dirtyRows 만으로는 "같은 조합 신규 1건" 을 놓쳐 SP 가 거부한다(AS-IS
+    //   dtPreSafeStockAll 대조 재현, 자매 SCP0127 동형).
+    const duplicate = findDuplicateSafetyStockRows(allRows);
     if (duplicate) {
       void setAlert({ type: 'alert', content: t(duplicate.msgId, duplicate.message) });
       return;

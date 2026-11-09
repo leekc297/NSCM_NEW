@@ -9,7 +9,7 @@ import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction } from '@foundation/utils';
 import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
-import { useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import {
@@ -21,6 +21,7 @@ import {
 
 import {
   MODAL_SHEET_DATA,
+  MODAL_SHEET_SAVE,
   MODAL_SHEET_YEAR,
   MODAL_VERSION,
 } from './contribute-version-modal.constants';
@@ -107,6 +108,13 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
   const gridFilterRef = useRef<FlexGridFilter | undefined>();
   const editTrackerRef = useRef<EditTracker<VersionRow> | undefined>();
   const savingRef = useRef(false);
+
+  // Insert/Delete/Save 노출 = version 시트 버튼 권한(시트 단위). 메뉴 단위 hasButton('SAVE') 는
+  //   ContributeMain SAVE 를 가진 DM Viewer 에게도 true 라 group menu 설정이 팝업에 반영되지 않는다.
+  const { hasButton } = useTabBtnPermissions({ menuId: MODAL_VERSION, enabled: open });
+  const canInsert = hasButton('INSERT', MODAL_SHEET_SAVE);
+  const canDelete = hasButton('DELETE', MODAL_SHEET_SAVE);
+  const canSave = hasButton('SAVE', MODAL_SHEET_SAVE);
 
   const { data: yearData } = useTabProcQuery<MODAL_VERSION>({
     menuId: MODAL_VERSION,
@@ -211,7 +219,8 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
 
   const handleInsert = () => {
     const grid = gridRef.current;
-    if (!grid) return;
+    // F8 단축키도 버튼과 같은 권한으로 막는다.
+    if (!grid || !canInsert) return;
     const defaultYYYY = /^\d{4}$/.test(selectedYear) ? selectedYear : '';
     GridAction.addRow(grid, {
       VER_SEQ: '',
@@ -224,7 +233,8 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
 
   const handleDelete = () => {
     const grid = gridRef.current;
-    if (!grid) return;
+    // F9 단축키도 버튼과 같은 권한으로 막는다.
+    if (!grid || !canDelete) return;
     // 선택 행이 없으면 공용 SubTitle 의 F9 와 같은 안내를 낸다 (조용한 무동작 방지).
     if (!GridAction.removeRow(grid)) {
       void setAlert({ type: 'alert', content: t('MSG00014', '_No selection') });
@@ -320,7 +330,7 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
     const trim = (s: string) => (s.startsWith('^') ? s.substring(1) : s);
 
     try {
-      await apiClient.post(`/${MODAL_VERSION}/version/SAVE/call-proc`, {
+      await apiClient.post(`/${MODAL_VERSION}/${MODAL_SHEET_SAVE}/SAVE/call-proc`, {
         activeFlag: trim(buf.activeFlag),
         verSeq: trim(buf.verSeq),
         yyyy: trim(buf.yyyy),
@@ -408,33 +418,41 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
                 editTrackerRef={editTrackerRef}
                 staticColumns={staticColumns}
                 itemsSource={itemsSource}
+                // 읽기전용 자동 잠금을 version 시트 SAVE 권한으로 판정(메뉴 단위면 ContributeMain SAVE 와 섞임)
+                saveAuth={{ menuId: MODAL_VERSION, sheetName: MODAL_SHEET_SAVE }}
               />
             </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00121', '_Insert')}
-              onClick={handleInsert}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00108', '_Delete')}
-              onClick={handleDelete}
-            />
-            <Button
-              appearance='contained'
-              buttonLabel={t('LBL00111', '_Save')}
-              iconComponent={<ControlConfirmIcon size='small' />}
-              iconPosition='leading'
-              priority='primary'
-              size='medium'
-              onClick={() => void handleSave()}
-            />
+            {canInsert && (
+              <Button
+                appearance='outlined'
+                priority='normal'
+                size='medium'
+                buttonLabel={t('LBL00121', '_Insert')}
+                onClick={handleInsert}
+              />
+            )}
+            {canDelete && (
+              <Button
+                appearance='outlined'
+                priority='normal'
+                size='medium'
+                buttonLabel={t('LBL00108', '_Delete')}
+                onClick={handleDelete}
+              />
+            )}
+            {canSave && (
+              <Button
+                appearance='contained'
+                buttonLabel={t('LBL00111', '_Save')}
+                iconComponent={<ControlConfirmIcon size='small' />}
+                iconPosition='leading'
+                priority='primary'
+                size='medium'
+                onClick={() => void handleSave()}
+              />
+            )}
             <Button
               appearance='outlined'
               priority='normal'

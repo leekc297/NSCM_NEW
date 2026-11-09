@@ -15,6 +15,8 @@ import {
 import { ThemeSwitchProvider } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
+import { redirectToSsoOnBoot } from './ssoLogin';
+
 // 공통 캐시(IndexedDB 영속화) 사용 여부. 테스트를 위해 임시로 끈 상태다.
 // true 로 되돌리면 PersistQueryClientProvider 로 IndexedDB persist/restore 가 다시 붙는다.
 // false 면 인메모리 쿼리 캐시만 남고 IndexedDB 읽기/쓰기는 일어나지 않는다.
@@ -127,8 +129,14 @@ export const Providers = ({ children }: ProvidersProps) => {
   // - 서버 세션 생존(쿠키): sessionStorage 유무와 무관하게 isLogin=true + 최신 권한 메뉴로 갱신
   //   (새 탭/브라우저 재시작에도 로그인 유지, 권한 변경분 반영)
   // - 서버 세션 없음: isLogin=false → 로그인 폼 (만료 세션의 스테일 isLogin=true 도 여기서 정리)
+  //   운영은 로그인 폼 대신 SSO 로 보낸다(ssoLogin.ts).
   useEffect(() => {
-    void useSessionStore.getState().fetchSession();
+    void useSessionStore
+      .getState()
+      .fetchSession()
+      .then(() => {
+        if (!useSessionStore.getState().isLogin) redirectToSsoOnBoot();
+      });
   }, []);
 
   // 유휴 세션 확인 — 8시간 무활동이면 서버 세션이 끊기므로, 그 시점에 확인해 로그인 화면으로 유도한다.
@@ -136,7 +144,7 @@ export const Providers = ({ children }: ProvidersProps) => {
 
   const inner = (
     <I18nextProvider i18n={i18n}>
-      <ThemeSwitchProvider initialThemeMode='system'>{children}</ThemeSwitchProvider>
+      <ThemeSwitchProvider initialThemeMode='light'>{children}</ThemeSwitchProvider>
     </I18nextProvider>
   );
 

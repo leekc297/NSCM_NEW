@@ -69,7 +69,13 @@ export const InsertMultipleModal = ({ open, modalClose, onConfirm }: Props) => {
       type='modal'
       position='basic'
       size={420}
+      // height 미지정 시 기본 '50vh' 라 내용(질문 1줄 + 입력 1칸 + 버튼)에 비해 세로로 과도하게 커진다
+      //   (사용자 신고 2026-11-04). 내용 높이에 맞춰 고정하고, 리사이즈 최소값도 초기 크기와 같게 둬
+      //   첫 드래그 시 기본 최소값(800x300)으로 튀지 않게 한다(BulkUpdateModal 동형).
+      height={260}
       disableScale
+      minWidth={420}
+      minHeight={260}
       handleClose={modalClose}
       handleSubmit={handleSubmit}
       title={t(SCREEN_TEXT.INSERT_MULTIPLE, { defaultValue: 'Insert Multiple' })}

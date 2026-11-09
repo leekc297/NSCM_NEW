@@ -47,7 +47,7 @@ export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 // AS-IS DMF0043_Contribute_View.cs 의 Validation MSG codes (.cs L287, L335)
 export const VALIDATION_MSG = {
   VERSION_REQUIRED: 'MSG00283', // FindData — Version 미선택 (.cs L287)
-  NO_RESULT: 'MSG00307', // FindData — 조회 결과 없음 (.cs L335)
+  NO_RESULT: 'MSG01023', // FindData — 조회 결과 없음 (.cs L335)
 } as const;
 
 // AS-IS .cs L234: siMain.Freeze(0, siMain.GetColumnIndex(DefColumns.EDIT_FLAG))

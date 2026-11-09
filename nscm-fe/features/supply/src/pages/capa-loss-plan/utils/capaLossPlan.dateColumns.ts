@@ -99,6 +99,10 @@ export const buildSpreadTitleFilters = (
  * 3단 동적 컬럼 그룹 — 1단 `LARGE_CLASS_LABEL_NAME`(`Operation Plan`) > 2단
  * `SMALL_CLASS_LABEL_NAME`(연도) > 3단 `COLUMN_LABEL_NAME`(`2026-03` / `2029`).
  *
+ * 메타 기준 **선언적 그룹핑**이라 AS-IS `MergeKeyColumns` 의 "루프 종료 후 flush 누락 →
+ * 마지막 동일라벨 그룹 span 누락" 시각 결함(C-08)을 **재현하지 않는다**(마지막 그룹도 정상 머지).
+ * I-15 — 2026-11-04 사용자 확정: AS-IS 결함을 재현하지 않고 고친 현행을 유지한다.
+ *
  * SCP0105 와 달리 이 화면은 lookup `SCP_CAPA_RPT_CODE` 에 행이 있어 **1단에 `Operation Plan` 이
  * 실제로 온다** — 빈 값이면 오류다(03 V-17). 값을 코드로 채우지 않는다(하드코딩 금지, 메타가 원천).
  *

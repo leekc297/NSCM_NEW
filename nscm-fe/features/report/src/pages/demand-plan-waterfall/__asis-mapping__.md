@@ -293,20 +293,7 @@
 | bizPlanWaterfall | PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL | AS-IS 17+2 = 19 (재변환 — Phase B) |
 | *SpreadTitle ×3 | 각 PKG GET_SPREAD_TITLE | 5 |
 | version | DMF0073_GET_VERSION_SALESPRICE | 9-arg 공유(DMF0082 선례) |
-| version (SAVE) | PKG_DMF0035.P_DMF0035_SAVE_VERSION_MRF | 4 IN(divisionId/versionNo^/monthlyRollingFcst^/sesUserId) + o_result_cursor — [E20260922-VERMRF] |
 
-- ⭐ **[E20260922-VERMRF] SALES Version 팝업 Monthly Rolling Forecast** (사용자 요청 2026-09-22) — AS-IS `DMF0073_VersionBySalesPricePopup`
-  GridEdit(.cs L410~436) + SaveData(L231~304) + `dbo.DMF0073_SAVE_VERSION_SALESPRICE` 1:1:
-  | AS-IS | TO-BE | 비고 |
-  |---|---|---|
-  | MONTHLY_ROLLING_FCST 컬럼(DMF0073 팝업) | `WaterfallVersionModal` **SALES 전용** 컬럼(Type 뒤, 170) | **MKT/BIZ = 컬럼 미표시 · 저장 불가**(사용자 확정) — FE `canSaveMrf=SALES×SAVE` + SP `VERSION_TYPE LIKE 'SP\_%'` |
-  | Edit 버튼 → `EDITABLE='Y'` 행만 셀 해제 | 행 `EDIT_FLAG` = SAVE권한 × `EDITABLE` × `EDIT_YN` × 기준일 이번 주 → 공용 `isEditableCell`(inputTpCd 'O') | Edit 토글 없이 직접 편집(TO-BE 표준). **연도 포함 당주**로 강화(AS-IS 는 주차 번호만 비교) |
-  | 셀 입력(자유) | Y/N 콤보 — 공용 CMBO `YesOrNo` | 사용자 요청 |
-  | MSG00002 필수 입력 | MSG00614 (`{0}`=MONTHLY_ROLLING_FCST) | TO-BE 의미 1:1 |
-  | 저장결과 MSG00004 / 오류 MSG00284 | 완료 토스트 MSG00606 / 오류 SP MSG·EVENT 또는 MSG00618, 변경 없음 MSG00004 | 저장 전 확인 MSG00001 |
-  | 팝업 버튼 권한 없음(진입자 전원) | BTN `version/SAVE` — ADMIN·DM ADMIN·DM Planner·SCP Planner (**DM Viewer 제외**) | 그룹 변경 = USER_GR_MNU_BTN_MPG_M 만 조정 |
-  | UPDATE `DM_MST_VERSION.ATTRIBUTE7`/LAST_UPDATED_BY/LAST_UPDATE_DATE (DIVISION_ID = 단일값) | 동일 UPDATE + 서버 재검증(Y/N·SP_ 버전·당주 ISO_YYYYWW·사업부 PR_SCM_EDIT_YN) · Division 콤마 분할 IN | AS-IS 복수 Division 0건 결함 해소 |
-  | 저장 후 FindButton | 저장 후 재조회(refetch) | |
 - `p_now`(SALES/BIZ): **이번주 월요일 + from/to 경계 보정**(AS-IS .cs:1077-1081 1:1 — `calcNowYyyymmdd`). dayjs() 단순 대입(구 오구현) 승계 금지.
 - dead 쌍 `p_user_dept_id/p_group_id`: SP 본문 미사용 실측 — 시그니처 유지용 빈값(주석 명기).
 
@@ -571,20 +558,7 @@
 | bizPlanWaterfall | PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL | AS-IS 17+2 = 19 (재변환 — Phase B) |
 | *SpreadTitle ×3 | 각 PKG GET_SPREAD_TITLE | 5 |
 | version | DMF0073_GET_VERSION_SALESPRICE | 9-arg 공유(DMF0082 선례) |
-| version (SAVE) | PKG_DMF0035.P_DMF0035_SAVE_VERSION_MRF | 4 IN(divisionId/versionNo^/monthlyRollingFcst^/sesUserId) + o_result_cursor — [E20260922-VERMRF] |
 
-- ⭐ **[E20260922-VERMRF] SALES Version 팝업 Monthly Rolling Forecast** (사용자 요청 2026-09-22) — AS-IS `DMF0073_VersionBySalesPricePopup`
-  GridEdit(.cs L410~436) + SaveData(L231~304) + `dbo.DMF0073_SAVE_VERSION_SALESPRICE` 1:1:
-  | AS-IS | TO-BE | 비고 |
-  |---|---|---|
-  | MONTHLY_ROLLING_FCST 컬럼(DMF0073 팝업) | `WaterfallVersionModal` **SALES 전용** 컬럼(Type 뒤, 170) | **MKT/BIZ = 컬럼 미표시 · 저장 불가**(사용자 확정) — FE `canSaveMrf=SALES×SAVE` + SP `VERSION_TYPE LIKE 'SP\_%'` |
-  | Edit 버튼 → `EDITABLE='Y'` 행만 셀 해제 | 행 `EDIT_FLAG` = SAVE권한 × `EDITABLE` × `EDIT_YN` × 기준일 이번 주 → 공용 `isEditableCell`(inputTpCd 'O') | Edit 토글 없이 직접 편집(TO-BE 표준). **연도 포함 당주**로 강화(AS-IS 는 주차 번호만 비교) |
-  | 셀 입력(자유) | Y/N 콤보 — 공용 CMBO `YesOrNo` | 사용자 요청 |
-  | MSG00002 필수 입력 | MSG00614 (`{0}`=MONTHLY_ROLLING_FCST) | TO-BE 의미 1:1 |
-  | 저장결과 MSG00004 / 오류 MSG00284 | 완료 토스트 MSG00606 / 오류 SP MSG·EVENT 또는 MSG00618, 변경 없음 MSG00004 | 저장 전 확인 MSG00001 |
-  | 팝업 버튼 권한 없음(진입자 전원) | BTN `version/SAVE` — ADMIN·DM ADMIN·DM Planner·SCP Planner (**DM Viewer 제외**) | 그룹 변경 = USER_GR_MNU_BTN_MPG_M 만 조정 |
-  | UPDATE `DM_MST_VERSION.ATTRIBUTE7`/LAST_UPDATED_BY/LAST_UPDATE_DATE (DIVISION_ID = 단일값) | 동일 UPDATE + 서버 재검증(Y/N·SP_ 버전·당주 ISO_YYYYWW·사업부 PR_SCM_EDIT_YN) · Division 콤마 분할 IN | AS-IS 복수 Division 0건 결함 해소 |
-  | 저장 후 FindButton | 저장 후 재조회(refetch) | |
 - `p_now`(SALES/BIZ): **이번주 월요일 + from/to 경계 보정**(AS-IS .cs:1077-1081 1:1 — `calcNowYyyymmdd`). dayjs() 단순 대입(구 오구현) 승계 금지.
 - dead 쌍 `p_user_dept_id/p_group_id`: SP 본문 미사용 실측 — 시그니처 유지용 빈값(주석 명기).
 
